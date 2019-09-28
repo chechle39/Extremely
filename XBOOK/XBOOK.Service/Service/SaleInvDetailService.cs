@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Service.Interfaces;
@@ -18,17 +20,15 @@ namespace XBOOK.Service.Service
             _uow = uow;
             _saleInvDetailUowRepository = _uow.GetRepository<IRepository<SaleInvDetail>>();
         }
-        public bool CreateSaleInvDetail(SaleInvDetailViewModel saleInvoiceViewModel)
+        public async Task CreateSaleInvDetail(SaleInvDetailViewModel saleInvoiceViewModel)
         {
             var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleInvoiceViewModel);
-            _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
-            _uow.SaveChanges();
-            return true;
+            await _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
         }
 
-        public IEnumerable<SaleInvDetailViewModel> GetAllSaleInvoiceDetail()
+        public async Task<IEnumerable<SaleInvDetailViewModel>> GetAllSaleInvoiceDetail()
         {
-            return _saleInvDetailUowRepository.GetAll().ProjectTo<SaleInvDetailViewModel>().ToList();
+            return await _saleInvDetailUowRepository.GetAll().ProjectTo<SaleInvDetailViewModel>().ToListAsync();
         }
     }
 }

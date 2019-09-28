@@ -10,7 +10,7 @@ namespace XBOOK.Service.Interfaces
     public interface IClientService
     {
         Task CreateClient(ClientCreateRequet request);
-        IEnumerable<ClientViewModel> GetClientById(int id);
+        Task<IEnumerable<ClientViewModel>> GetClientById(int id);
         Task<IEnumerable<ClientViewModel>> GetAllClient();
         Task<IEnumerable<ClientViewModel>> SerchClient(string keyword);
 

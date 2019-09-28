@@ -32,9 +32,9 @@ namespace XBOOK.Service.Service
             return await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToListAsync();
         }
 
-        public IEnumerable<ClientViewModel> GetClientById(int id)
+        public async Task<IEnumerable<ClientViewModel>> GetClientById(int id)
         {
-            return _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToList().Where(x => x.ClientId == id);
+            return await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Where(x => x.ClientId == id).ToListAsync();
         }
 
         public async Task<IEnumerable<ClientViewModel>> SerchClient(string keyword)

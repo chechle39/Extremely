@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Service.Interfaces
 {
     public interface ISaleInvDetailService
     {
-        bool CreateSaleInvDetail(SaleInvDetailViewModel saleInvoiceViewModel);
-        IEnumerable<SaleInvDetailViewModel> GetAllSaleInvoiceDetail();
+        Task CreateSaleInvDetail(SaleInvDetailViewModel saleInvoiceViewModel);
+        Task<IEnumerable<SaleInvDetailViewModel>> GetAllSaleInvoiceDetail();
     }
 }

@@ -15,17 +15,18 @@ namespace XBOOK.Web.Controllers
         {
             _saleInvoiceService = saleInvoiceService;
         }
-        [HttpGet]
-        public async Task<IActionResult> Get(string keyword, string startDate, string endDate, bool searchConditions)
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetAllSaleInvoice([FromBody]SaleInvoiceListRequest request)
         {
-            var saleListInvoice = await _saleInvoiceService.GetAllSaleInvoice(keyword, startDate, endDate, searchConditions);
+            var saleListInvoice = await _saleInvoiceService.GetAllSaleInvoice(request);
             return Ok(saleListInvoice);
         }
 
         [HttpPut]
-        public ActionResult UpdateSaleInvoice(SaleInvoiceViewModel request)
+        public async Task<ActionResult> UpdateSaleInvoice(SaleInvoiceViewModel request)
         {
-            var updateData = _saleInvoiceService.Update(request);
+            await _saleInvoiceService.Update(request);
             return Ok(request);
         }
         [HttpPost]

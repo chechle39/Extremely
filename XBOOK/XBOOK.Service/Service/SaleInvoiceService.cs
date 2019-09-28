@@ -112,10 +112,10 @@ namespace XBOOK.Service.Service
 
             return true;
         }
-        public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(string keyword, string startDate, string endDate, bool searchConditions)
+        public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request)
         {
             var saleInvoie = await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToListAsync();
-            saleInvoie = SerchData(keyword, startDate, endDate, saleInvoie, searchConditions);
+            saleInvoie = SerchData(request.Keyword, request.StartDate, request.EndDate, saleInvoie, request.SearchConditions);
             var listData = new List<SaleInvoiceViewModel>();
             foreach (var item in saleInvoie)
             {
@@ -224,13 +224,11 @@ namespace XBOOK.Service.Service
             return listInDetail;
         }
 
-        public bool Update(SaleInvoiceViewModel saleInvoiceViewModel)
+        public async Task Update(SaleInvoiceViewModel saleInvoiceViewModel)
         {
             var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
             var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
-            saleInvoiceList.Update(saleInvoice);
-            _uow.SaveChanges();
-            return true;
+            await saleInvoiceList.Update(saleInvoice);
         }
     }
 }
