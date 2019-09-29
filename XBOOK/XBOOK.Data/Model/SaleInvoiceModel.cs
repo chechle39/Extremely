@@ -26,4 +26,12 @@ namespace XBOOK.Data.Model
         public string ContactName { get; set; }
         public string Email { get; set; }
     }
+
+    public class SaleInvoiceListRequest
+    {
+        public string Keyword { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public bool SearchConditions { get; set; }
+    }
 }

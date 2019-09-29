@@ -1,0 +1,21 @@
+<div class="header-container">
+  <div class="logo-container">
+    <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
+      <nb-icon icon="menu-2-outline"></nb-icon>
+    </a>
+    <a class="logo" href="#" (click)="navigateHome()">XBOOK</a>
+    
+  </div>
+
+</div>
+
+<div class="header-container">
+  <nb-actions size="small">
+    <nb-action><a class="logo" href="#" (click)="navigateHome()"><img src="assets/images/vu.png" alt="manual" class="pic" /></a></nb-action>
+    <nb-action class="user-action" *nbIsGranted="['view', 'user']">
+      <nb-user [nbContextMenu]="userMenu" [onlyPicture]="userPictureOnly" [name]="welcomeLogin"
+        [picture]="user?.picture">
+      </nb-user>
+    </nb-action>
+  </nb-actions>
+</div>

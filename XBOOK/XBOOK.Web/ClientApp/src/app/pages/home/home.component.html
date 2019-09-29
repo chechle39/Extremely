@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        <span>Home</span>
+
+      </nb-card-header>
+      <nb-card-body>
+        <button class="x-1px" type="button" mdbBtn color="primary" mdbWavesEffect>Create Invoice</button>
+        <br/>
+       
+        <nb-action>
+            <div class="btn-group" x-10px mdbDropdown>
+                <a mdbDropdownToggle type="button" mdbBtn color="primary" class="dropdown-toggle waves-light" size="sm"
+                  mdbWavesEffect>
+                  Bulk Actions
+                </a>
+                <div class="dropdown-menu dropdown-primary">
+                  <a class="dropdown-item">Add aPayment</a>
+                  <a class="dropdown-item">Deleted</a>
+                </div>
+            </div>
+            <div class="mr-20px form-inline md-form mr-auto mb-4">
+              
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button mdbBtn size="sm" gradient="aqua" rounded="true" class="my-0 waves-light" mdbWavesEffect type="submit">Search</button>
+            </div>
+        </nb-action>
+       
+
+
+        <table mdbTable bordered="true" hover="true">
+          <thead class="default-color">
+            <tr>
+              <th>
+                  <nb-checkbox (checkedChange)="getCheckboxesValue(isCheck)" status="info" [value]="isCheck"></nb-checkbox>
+              </th>
+              <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCol *ngFor="let el of saleInvList">
+              <td><mdb-checkbox [checked]="false" [default]="true"></mdb-checkbox></td>
+              <td><span class="font-weight-bold">{{el.clientData[0].clientName}}</span> <br>{{el.invoiceNumber}}</td>
+              <td><span>{{el.note}}</span></td>
+              <td><span class="font-weight-bold">{{el.issueDate}}</span> <br>{{el.dueDate}}</td>
+              <td><span class="font-weight-bold">{{el.amountPaid}}</span> <br>{{el.status}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="float-right">Grant Total:</span>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

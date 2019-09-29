@@ -56,7 +56,12 @@ namespace XBOOK.Web
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
-            services.AddSignalR();
+          //  services.AddSignalR();
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +91,20 @@ namespace XBOOK.Web
                 app.UseHsts();
             }
             app.UseMvc();
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    //spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
+
         }
     }
 }
