@@ -5,7 +5,7 @@ namespace XBOOK.Data.Entities
     public partial class SaleInvDetail
     {
         public SaleInvDetail() { }
-        public SaleInvDetail(long invoiceId, decimal? price, int productId, string productName, decimal? qty, decimal? vat, long id)
+        public SaleInvDetail(long invoiceId, decimal? price, int productId, string productName, decimal? qty, decimal? vat, long id,decimal? amount)
         {
             invoiceID = invoiceId;
             this.price = price;
@@ -14,6 +14,7 @@ namespace XBOOK.Data.Entities
             this.qty = qty;
             this.vat = vat;
             ID = id;
+            this.amount = amount;
         }
 
         public long ID { get; set; }

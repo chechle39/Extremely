@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,23 +57,23 @@ namespace XBOOK.Web
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
-          //  services.AddSignalR();
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
+            services.AddSignalR();
+            services.AddAuthentication(IISServerDefaults.AuthenticationScheme);
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var options = new RewriteOptions()
-                .AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 44317);
-            app.UseRewriter(options);
-            app.UseStaticFiles();
+            //var options = new RewriteOptions()
+            //    .AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 44317);
+            //app.UseRewriter(options);
+            //app.UseStaticFiles();
+            //app.UseAuthentication();
             app.UseAuthentication();
+
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -91,20 +92,6 @@ namespace XBOOK.Web
                 app.UseHsts();
             }
             app.UseMvc();
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                    //spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
-
         }
     }
 }

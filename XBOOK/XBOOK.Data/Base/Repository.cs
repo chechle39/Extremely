@@ -35,12 +35,13 @@ namespace XBOOK.Data.Base
             await _dbContext.SaveChangesAsync();
         }
 
-        public virtual void Add(IEnumerable<TEntity> entities)
+        public async Task Add(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
 
             Entities.AddRange(entities);
+            await _dbContext.SaveChangesAsync();
         }
 
         public virtual TEntity GetById(object id)
@@ -62,12 +63,13 @@ namespace XBOOK.Data.Base
             await _dbContext.SaveChangesAsync();
         }
 
-        public virtual void Update(IEnumerable<TEntity> entities)
+        public async Task  Update(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
 
             Entities.UpdateRange(entities);
+            await _dbContext.SaveChangesAsync();
         }
 
         public void Remove(int id)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using XBOOK.Service.Interfaces;
 using XBOOK.Service.ViewModels;
@@ -27,6 +28,20 @@ namespace XBOOK.Web.Controllers
         {
             var listSaleInvDetail = await _iSaleInvDetailService.GetAllSaleInvoiceDetail();
             return Ok(listSaleInvDetail);
+        }
+
+        [HttpPost("CreateListSaleDetail")]
+        public IActionResult CreateListSaleDetail(List<SaleInvDetailViewModel> request)
+        {
+            _iSaleInvDetailService.CreateListSaleDetail(request);
+            return Ok(request);
+        }
+
+        [HttpPost("UpdateSaleDetail")]
+        public IActionResult UpdateSaleDetail(List<SaleInvDetailViewModel> request)
+        {
+            _iSaleInvDetailService.UpdateListSaleDetail(request);
+            return Ok(request);
         }
     }
 }

@@ -31,7 +31,11 @@ namespace XBOOK.Data.Model
     {
         public string Keyword { get; set; }
         public string StartDate { get; set; }
+
         public string EndDate { get; set; }
+
         public bool SearchConditions { get; set; }
+
     }
+
 }

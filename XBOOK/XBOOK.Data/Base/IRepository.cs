@@ -14,7 +14,7 @@ namespace XBOOK.Data.Base
 
         Task Add(TEntity entity);
 
-        void Add(IEnumerable<TEntity> entities);
+        Task Add(IEnumerable<TEntity> entities);
 
         TEntity GetById(object id);
 
@@ -22,7 +22,7 @@ namespace XBOOK.Data.Base
 
         Task Update(TEntity entity);
 
-        void Update(IEnumerable<TEntity> entities);
+        Task Update(IEnumerable<TEntity> entities);
 
         Task Remove(long id);
 

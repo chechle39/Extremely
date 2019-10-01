@@ -31,7 +31,7 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<PaymentViewModel, Payments>().ConstructUsing(x => new Payments(x.Amount, x.BankAccount, x.Id, x.InvoiceId,
                 x.Note, x.PayDate, x.PayType, x.PayTypeID));
             CreateMap<SaleInvDetailViewModel, SaleInvDetail>().ConstructUsing(x => new SaleInvDetail(x.InvoiceId,x.Price,x.ProductId
-                ,x.ProductName,x.Qty,x.Vat,x.Id));
+                ,x.ProductName,x.Qty,x.Vat,x.Id,x.Amount));
 
 
         }
