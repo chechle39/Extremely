@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Service.AutoMapper
@@ -33,6 +34,8 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<SaleInvDetailViewModel, SaleInvDetail>().ConstructUsing(x => new SaleInvDetail(x.InvoiceId,x.Price,x.ProductId
                 ,x.ProductName,x.Qty,x.Vat,x.Id,x.Amount));
 
+            CreateMap<TaxViewModel, Tax>().ConstructUsing(x => new Tax(x.ID,x.TaxName,x.TaxRate));
+            CreateMap<ProductViewModel, Product>().ConstructUsing(x => new Product(x.categoryID, x.productID, x.productName,x.unitPrice,x.description));
 
         }
     }

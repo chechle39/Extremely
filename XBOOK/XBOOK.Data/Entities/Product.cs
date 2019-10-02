@@ -10,7 +10,16 @@ namespace XBOOK.Data.Entities
         {
             this.SaleInvDetails = new HashSet<SaleInvDetail>();
         }
-    
+
+        public Product(int? categoryID, int productID, string productName, decimal? unitPrice, string description)
+        {
+            this.categoryID = categoryID;
+            this.productID = productID;
+            this.productName = productName;
+            this.unitPrice = unitPrice;
+            this.description = description;
+        }
+
         public int productID { get; set; }
         public string productName { get; set; }
         public string description { get; set; }

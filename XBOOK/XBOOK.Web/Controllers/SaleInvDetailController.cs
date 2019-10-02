@@ -16,7 +16,7 @@ namespace XBOOK.Web.Controllers
             _iSaleInvDetailService = iSaleInvDetailService;
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public IActionResult CreateSeleInvDetail(SaleInvDetailViewModel request)
         {
             _iSaleInvDetailService.CreateSaleInvDetail(request);

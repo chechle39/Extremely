@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Service.AutoMapper
@@ -18,6 +16,8 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<SaleInvoice, SaleInvoiceViewModel>();
             CreateMap<Payments, PaymentViewModel>();
             CreateMap<SaleInvDetail, SaleInvDetailViewModel>();
+            CreateMap<Tax, TaxViewModel>();
+            CreateMap<Product, ProductViewModel>();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace XBOOK.Web.Controllers
             _paymentsService = paymentsService;
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> CreatePayments(PaymentViewModel request)
         {
             await _paymentsService.SavePayMent(request);
@@ -43,10 +43,17 @@ namespace XBOOK.Web.Controllers
             return Ok();
         }
 
-        [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> GetPaymentById(long id)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetPaymentById([FromBody] long id)
         {
             var paymentData = await _paymentsService.GetPaymentByIdAsync(id);
+            return Ok(paymentData);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetPaymentByInv([FromBody] long id)
+        {
+            var paymentData = await _paymentsService.GetAllPaymentsByInv(id);
             return Ok(paymentData);
         }
     }

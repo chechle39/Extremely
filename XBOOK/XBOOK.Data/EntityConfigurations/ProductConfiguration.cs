@@ -8,7 +8,7 @@ namespace XBOOK.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.Property(e => e.productID).ValueGeneratedNever();
+            builder.Property(e => e.productID).ValueGeneratedOnAdd();
         }
     }
 }

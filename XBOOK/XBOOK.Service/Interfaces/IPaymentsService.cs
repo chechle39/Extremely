@@ -11,5 +11,6 @@ namespace XBOOK.Service.Interfaces
         Task UpdatePayMent(PaymentViewModel id);
         Task<IEnumerable<PaymentViewModel>> GetAllPayments();
         Task<PaymentViewModel> GetPaymentByIdAsync(long id);
+        Task<IEnumerable<PaymentViewModel>> GetAllPaymentsByInv(long id);
     }
 }

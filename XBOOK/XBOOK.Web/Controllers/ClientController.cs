@@ -15,7 +15,7 @@ namespace XBOOK.Web.Controllers
             _iClientService = iClientService;
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> GetAllClientAsync()
         {
             var clientList = await _iClientService.GetAllClient();

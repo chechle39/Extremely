@@ -23,13 +23,13 @@ namespace XBOOK.Web.Controllers
             return Ok(saleListInvoice);
         }
 
-        [HttpPut]
+        [HttpPut("[action]")]
         public async Task<ActionResult> UpdateSaleInvoice(SaleInvoiceViewModel request)
         {
             await _saleInvoiceService.Update(request);
             return Ok(request);
         }
-        [HttpPost]
+        [HttpPost("[action]")]
         public ActionResult CreateSaleInvoice(SaleInvoiceModelRequest request)
         {
             var CreateData = _saleInvoiceService.CreateSaleInvoice(request);

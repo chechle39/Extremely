@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace XBOOK.Service.ViewModels
+﻿namespace XBOOK.Service.ViewModels
 {
     public class ClientViewModel
     {

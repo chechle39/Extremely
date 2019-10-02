@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace XBOOK.Data.Base
+﻿namespace XBOOK.Data.Base
 {
     public interface IUnitOfWork
     {

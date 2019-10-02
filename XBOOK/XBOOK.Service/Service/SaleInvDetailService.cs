@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 using XBOOK.Service.ViewModels;
 
@@ -15,16 +16,19 @@ namespace XBOOK.Service.Service
     {
         private readonly IRepository<SaleInvDetail> _saleInvDetailUowRepository;
         private readonly IUnitOfWork _uow;
-        public SaleInvDetailService(IUnitOfWork uow)
+        IProductService _iProductService;
+
+        public SaleInvDetailService(IUnitOfWork uow, IProductService iProductService)
         {
             _uow = uow;
             _saleInvDetailUowRepository = _uow.GetRepository<IRepository<SaleInvDetail>>();
+            _iProductService = iProductService;
         }
 
-        public async Task CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
+        public bool CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
         {
-            var saleDetail = new List<SaleInvDetailViewModel>();
-            foreach(var item in saleInvoiceViewModel)
+            var clientUOW = _uow.GetRepository<IRepository<Product>>();
+            foreach (var item in saleInvoiceViewModel)
             {
                 var saleDetailData = new SaleInvDetailViewModel
                 {
@@ -38,10 +42,42 @@ namespace XBOOK.Service.Service
                     ProductName = item.ProductName,
                     Vat = item.Vat
                 };
-                saleDetail.Add(saleDetailData);
+                if(saleDetailData.ProductId != 0)
+                {
+                    var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailData);
+                    _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
+                }
+
+                if(saleDetailData.ProductId == 0)
+                {
+                    var product = new ProductViewModel()
+                    {
+                        description = saleDetailData.Description,
+                        productID = saleDetailData.ProductId,
+                        productName = saleDetailData.ProductName,
+                        unitPrice = saleDetailData.Price
+                    };
+                    var productCreate = Mapper.Map<ProductViewModel, Product>(product);
+                    clientUOW.Add(productCreate);
+                    var serchData = clientUOW.GetAll().ProjectTo<ProductViewModel>().Where(x => x.productName == saleDetailData.ProductName).ToList();
+                    var saleDetailPrd = new SaleInvDetailViewModel
+                    {
+                        Amount = item.Price * item.Qty,
+                        Qty = item.Qty,
+                        Price = item.Price,
+                        Description = item.Description,
+                        Id = item.Id,
+                        InvoiceId = item.InvoiceId,
+                        ProductId = serchData[0].productID,
+                        ProductName = item.ProductName,
+                        Vat = item.Vat
+                    };
+                    var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailPrd);
+                    _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
+                }
             }
-            var saleInvoiceDetailCreate = Mapper.Map<List<SaleInvDetailViewModel>, List<SaleInvDetail>>(saleDetail);
-            await _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
+            return true;
+            //var saleInvoiceDetailCreate = Mapper.Map<List<SaleInvDetailViewModel>, List<SaleInvDetail>>(saleDetail);
         }
 
         public async Task CreateSaleInvDetail(SaleInvDetailViewModel saleInvoiceViewModel)

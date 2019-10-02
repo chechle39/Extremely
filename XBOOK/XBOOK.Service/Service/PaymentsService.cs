@@ -26,6 +26,13 @@ namespace XBOOK.Service.Service
             return await _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().ToListAsync();
         }
 
+        public async Task<IEnumerable<PaymentViewModel>> GetAllPaymentsByInv(long id)
+        {
+            var listData = await _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().ToListAsync();
+            var dataListPayments = listData.Where(x => x.InvoiceId == id);
+            return dataListPayments;
+        }
+
         public async Task<PaymentViewModel> GetPaymentByIdAsync(long id)
         {
             var listData = await _paymentUowRepository.GetByIdDataAsync(id);

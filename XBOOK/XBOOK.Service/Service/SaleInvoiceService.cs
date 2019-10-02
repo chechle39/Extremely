@@ -34,9 +34,8 @@ namespace XBOOK.Service.Service
 
         public bool CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
         {
-            var xx = _uow.GetRepository<IRepository<Client>>();
-            var clientById = xx.GetAll().ProjectTo<ClientViewModel>().Where(x => x.ClientName == saleInvoiceViewModel.ClientName).ToList();
-            if (clientById.Count > 0)
+            var clientUOW = _uow.GetRepository<IRepository<Client>>();
+            if (saleInvoiceViewModel.ClientId != 0)
             {
                 var saleInvoiceModelRequest = new SaleInvoiceModelRequest()
                 {
@@ -60,12 +59,12 @@ namespace XBOOK.Service.Service
                     TaxCode = saleInvoiceViewModel.TaxCode,
                     Term = saleInvoiceViewModel.Term,
                     VatTax = saleInvoiceViewModel.VatTax,
-                    ClientId = clientById[0].ClientId,
+                    ClientId = saleInvoiceViewModel.ClientId,
                 };
                 var saleInvoiceCreate = Mapper.Map<SaleInvoiceModelRequest, SaleInvoice>(saleInvoiceModelRequest);
                 _saleInvoiceUowRepository.Add(saleInvoiceCreate);
             }
-            else if (clientById.Count == 0 && saleInvoiceViewModel.ClientName != null)
+            else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientName != null)
             {
                 var ClientViewModel = new ClientCreateRequet()
                 {
@@ -76,11 +75,11 @@ namespace XBOOK.Service.Service
                     Note = saleInvoiceViewModel.Note,
                     Tag = saleInvoiceViewModel.Tag,
                     TaxCode = saleInvoiceViewModel.TaxCode,
-                    ClientId = 0
+                    ClientId = saleInvoiceViewModel.ClientId
                 };
                 _iClientService.CreateClient(ClientViewModel);
 
-                var serchData = xx.GetAll().ProjectTo<ClientViewModel>().Where(x => x.ClientName == saleInvoiceViewModel.ClientName).ToList();
+                var serchData = clientUOW.GetAll().ProjectTo<ClientViewModel>().Where(x => x.ClientName == saleInvoiceViewModel.ClientName).ToList();
                 var saleInvoiceModelRequest = new SaleInvoiceModelRequest()
                 {
                     Address = saleInvoiceViewModel.Address,

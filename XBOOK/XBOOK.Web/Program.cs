@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace XBOOK.Web
@@ -21,12 +17,6 @@ namespace XBOOK.Web
                  .AddJsonFile($"appsettings.{environment}.json", optional: true);
 
             builder.AddEnvironmentVariables();
-
-            //Log.Logger = new LoggerConfiguration()
-            //.MinimumLevel.Debug()
-            //.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            //.ReadFrom.Configuration(builder.Build())
-            //.CreateLogger();
             CreateWebHostBuilder(args).Build().Run();
         }
 

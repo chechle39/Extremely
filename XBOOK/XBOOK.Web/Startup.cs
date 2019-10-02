@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -51,6 +49,8 @@ namespace XBOOK.Web
             services.AddTransient<IPaymentsService, PaymentsService>();
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<ISaleInvDetailService, SaleInvDetailService>();
+            services.AddTransient<ITaxService, TaxService>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IClientRepository, ClientRepository>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>
@@ -91,7 +91,12 @@ namespace XBOOK.Web
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller}/{action=Index}/{id?}");
+            });
         }
     }
 }

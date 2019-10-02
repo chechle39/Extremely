@@ -3,6 +3,7 @@
     public class TaxViewModel
     {
         public int ID { get; set; }
-        public string taxName { get; set; }
+        public string TaxName { get; set; }
+        public decimal? TaxRate { get; set; }
     }
 }
