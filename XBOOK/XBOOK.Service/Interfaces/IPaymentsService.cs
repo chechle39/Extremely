@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using XBOOK.Service.ViewModels;
+using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Service.Interfaces
 {
     public interface IPaymentsService
     {
-        Task SavePayMent(PaymentViewModel saleInvoiceViewModel);
+        bool SavePayMent(PaymentViewModel saleInvoiceViewModel);
         Task RemovePayMent(long id);
         Task UpdatePayMent(PaymentViewModel id);
         Task<IEnumerable<PaymentViewModel>> GetAllPayments();

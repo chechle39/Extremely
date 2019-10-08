@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
@@ -16,9 +17,9 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> GetAllClientAsync()
+        public async Task<IActionResult> GetAllClientAsync([FromBody]ClientSerchRequest request)
         {
-            var clientList = await _iClientService.GetAllClient();
+            var clientList = await _iClientService.GetAllClient(request);
             return Ok(clientList);
         }
 

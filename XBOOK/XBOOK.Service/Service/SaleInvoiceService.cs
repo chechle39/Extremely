@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Service.Service
 {
@@ -34,6 +35,10 @@ namespace XBOOK.Service.Service
 
         public bool CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
         {
+            char matchChar = '0';
+            var saleInvoie = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
+            var countZero = saleInvoie.InvoiceNumber.Count(x => x == matchChar);
+            string DZr = "D" + (countZero + 1);
             var clientUOW = _uow.GetRepository<IRepository<Client>>();
             if (saleInvoiceViewModel.ClientId != 0)
             {
@@ -48,6 +53,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
+                    //InvoiceNumber = int.Parse(saleInvoiceViewModel.InvoiceNumber).ToString(DZr),
                     InvoiceNumber = saleInvoiceViewModel.InvoiceNumber,
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
@@ -62,7 +68,8 @@ namespace XBOOK.Service.Service
                     ClientId = saleInvoiceViewModel.ClientId,
                 };
                 var saleInvoiceCreate = Mapper.Map<SaleInvoiceModelRequest, SaleInvoice>(saleInvoiceModelRequest);
-                _saleInvoiceUowRepository.Add(saleInvoiceCreate);
+                _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
+                _uow.SaveChanges();
             }
             else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientName != null)
             {
@@ -91,7 +98,8 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    InvoiceNumber = saleInvoiceViewModel.InvoiceNumber,
+                    //InvoiceNumber = int.Parse(saleInvoiceViewModel.InvoiceNumber).ToString(DZr),
+                    InvoiceNumber =saleInvoiceViewModel.InvoiceNumber,
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -105,42 +113,75 @@ namespace XBOOK.Service.Service
                     ClientId = serchData[0].ClientId,
                 };
                 var saleInvoiceCreate = Mapper.Map<SaleInvoiceModelRequest, SaleInvoice>(saleInvoiceModelRequest);
-                _saleInvoiceUowRepository.Add(saleInvoiceCreate);
+                _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
+                _uow.SaveChanges();
             }
-
-
+            var saleInvoice = new List<SaleInvoiceViewModel>();
+            saleInvoice.Add(saleInvoie);
+            var saleInvoieLast = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
+            var obj = new List<SaleInvoiceViewModel>()
+            {
+                new SaleInvoiceViewModel()
+                {
+                    VatTax = saleInvoieLast.VatTax,
+                    AmountPaid = saleInvoieLast.VatTax,
+                    ClientData = saleInvoieLast.ClientData,
+                    ClientId = saleInvoieLast.ClientId,
+                    Discount = saleInvoieLast.Discount,
+                    DiscRate = saleInvoieLast.DiscRate,
+                    DueDate = saleInvoieLast.DueDate,
+                    InvoiceId = saleInvoieLast.InvoiceId,
+                    InvoiceNumber = saleInvoieLast.InvoiceNumber,
+                    InvoiceSerial = saleInvoieLast.InvoiceSerial,
+                    IssueDate = saleInvoieLast.IssueDate,
+                    Note = saleInvoieLast.Note,
+                    PaymentView = saleInvoieLast.PaymentView,
+                    Reference = saleInvoieLast.Reference,
+                    SaleInvDetailView = saleInvoieLast.SaleInvDetailView,
+                    Status =saleInvoieLast.Status,
+                    SubTotal = saleInvoieLast.SubTotal,
+                    Term = saleInvoieLast.Term,
+                }
+            };
+            var listData = GetAllSaleInv(obj);
+            var saleInvoiceGL = new SaleInvoiceGL();
+            var objData = new SaleInvoiceViewModel()
+            {
+                VatTax = listData[0].VatTax,
+                AmountPaid = listData[0].VatTax,
+                ClientData = listData[0].ClientData,
+                ClientId = listData[0].ClientId,
+                Discount = listData[0].Discount,
+                DiscRate = listData[0].DiscRate,
+                DueDate = listData[0].DueDate,
+                InvoiceId = listData[0].InvoiceId,
+                InvoiceNumber = listData[0].InvoiceNumber,
+                InvoiceSerial = listData[0].InvoiceSerial,
+                IssueDate = listData[0].IssueDate,
+                Note = listData[0].Note,
+                PaymentView = listData[0].PaymentView,
+                Reference = listData[0].Reference,
+                SaleInvDetailView = listData[0].SaleInvDetailView,
+                Status = listData[0].Status,
+                SubTotal = listData[0].SubTotal,
+                Term = listData[0].Term,
+            };
+            saleInvoiceGL.InvoiceGL(objData);
             return true;
         }
+
+        public async Task Update(SaleInvoiceViewModel saleInvoiceViewModel)
+        {
+            var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
+            var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
+            await saleInvoiceList.Update(saleInvoice);
+        }
+
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request)
         {
             var saleInvoie = await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToListAsync();
-            saleInvoie = SerchData(request.Keyword, request.StartDate, request.EndDate, saleInvoie, request.SearchConditions);
-            var listData = new List<SaleInvoiceViewModel>();
-            foreach (var item in saleInvoie)
-            {
-                var listInvo = new SaleInvoiceViewModel()
-                {
-                    InvoiceId = item.InvoiceId,
-                    AmountPaid = item.AmountPaid,
-                    ClientId = item.ClientId,
-                    Discount = item.Discount,
-                    DiscRate = item.DiscRate,
-                    DueDate = item.DueDate,
-                    InvoiceNumber = item.InvoiceNumber,
-                    InvoiceSerial = item.InvoiceSerial,
-                    IssueDate = item.IssueDate,
-                    Note = item.Note,
-                    Reference = item.Reference,
-                    SaleInvDetailView = GetByIDInDetail(item.InvoiceId).ToList(),
-                    Status = item.Status,
-                    SubTotal = item.SubTotal,
-                    Term = item.Term,
-                    VatTax = item.VatTax,
-                    PaymentView = GetByIDPay(item.InvoiceId).ToList(),
-                    ClientData = (item.ClientId != null)? GetClientByID(item.ClientId).ToList():null
-                };
-                listData.Add(listInvo);
-            }
+            saleInvoie = SerchData(request.Keyword, request.StartDate, request.EndDate, saleInvoie, request.isIssueDate);
+            List<SaleInvoiceViewModel> listData = GetAllSaleInv(saleInvoie);
             return listData;
         }
 
@@ -223,11 +264,36 @@ namespace XBOOK.Service.Service
             return listInDetail;
         }
 
-        public async Task Update(SaleInvoiceViewModel saleInvoiceViewModel)
+        private List<SaleInvoiceViewModel> GetAllSaleInv(List<SaleInvoiceViewModel> saleInvoie)
         {
-            var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
-            var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
-            await saleInvoiceList.Update(saleInvoice);
+            var listData = new List<SaleInvoiceViewModel>();
+            foreach (var item in saleInvoie)
+            {
+                var listInvo = new SaleInvoiceViewModel()
+                {
+                    InvoiceId = item.InvoiceId,
+                    AmountPaid = item.AmountPaid,
+                    ClientId = item.ClientId,
+                    Discount = item.Discount,
+                    DiscRate = item.DiscRate,
+                    DueDate = item.DueDate,
+                    InvoiceNumber = item.InvoiceNumber,
+                    InvoiceSerial = item.InvoiceSerial,
+                    IssueDate = item.IssueDate,
+                    Note = item.Note,
+                    Reference = item.Reference,
+                    SaleInvDetailView = GetByIDInDetail(item.InvoiceId).ToList(),
+                    Status = item.Status,
+                    SubTotal = item.SubTotal,
+                    Term = item.Term,
+                    VatTax = item.VatTax,
+                    PaymentView = GetByIDPay(item.InvoiceId).ToList(),
+                    ClientData = (item.ClientId != null) ? GetClientByID(item.ClientId).ToList() : null
+                };
+                listData.Add(listInvo);
+            }
+
+            return listData;
         }
     }
 }

@@ -8,7 +8,6 @@ using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Service.Service
 {

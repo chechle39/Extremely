@@ -4,7 +4,18 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <!--<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>-->
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="ClientApp\.vscode\launch.json" />
+    <Content Include="ClientApp\.vscode\settings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ClientApp\.github\ISSUE_TEMPLATE.md" />
+    <None Include="ClientApp\.github\PULL_REQUEST_TEMPLATE.md" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.1.0" />

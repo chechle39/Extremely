@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Service.Service
 {
@@ -21,15 +21,26 @@ namespace XBOOK.Service.Service
             _uow = uow;
             _clientUowRepository = _uow.GetRepository<IRepository<Client>>();
         }
-        public async Task CreateClient(ClientCreateRequet request)
+        public bool CreateClient(ClientCreateRequet request)
         {
             var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
-            await _clientUowRepository.Add(clientCreate);
+            _clientUowRepository.AddData(clientCreate);
+            _uow.SaveChanges();
+            return true;
         }
 
-        public async Task<IEnumerable<ClientViewModel>> GetAllClient()
+        public async Task<IEnumerable<ClientViewModel>> GetAllClient(ClientSerchRequest request)
         {
-            return await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToListAsync();
+            if (!string.IsNullOrEmpty(request.ClientKeyword))
+            {
+                var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToListAsync();
+                var query = listData.Where(x => x.ClientName.Contains(request.ClientKeyword) || x.Address.Contains(request.ClientKeyword)|| x.Email.Contains(request.ClientKeyword)).ToList();
+                return query;
+            }
+            else
+            {
+                return await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<ClientViewModel>> GetClientById(int id)

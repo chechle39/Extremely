@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using XAccLib.Payment;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Service.Service
 {
@@ -55,10 +56,15 @@ namespace XBOOK.Service.Service
              await _paymentUowRepository.Remove(id);
         }
 
-        public async Task SavePayMent(PaymentViewModel saleInvoiceViewModel)
+        public bool SavePayMent(PaymentViewModel saleInvoiceViewModel)
         {
             var saleInvoice = Mapper.Map<PaymentViewModel, Payments>(saleInvoiceViewModel);
-            await _paymentUowRepository.Add(saleInvoice);
+             _paymentUowRepository.AddData(saleInvoice);
+            _uow.SaveChanges();
+            var dataAsign = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().LastOrDefault();
+            var paymentGL = new PaymentGL();
+            paymentGL.PaymentGLData(dataAsign);
+            return true;
         }
 
         public async Task UpdatePayMent(PaymentViewModel request)

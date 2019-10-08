@@ -1,4 +1,4 @@
-﻿namespace XBOOK.Service.ViewModels
+﻿namespace XBOOK.Data.ViewModels
 {
     public class ClientViewModel
     {

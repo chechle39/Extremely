@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XBOOK.Service.ViewModels
+namespace XBOOK.Data.ViewModels
 {
     public class PaymentViewModel
     {

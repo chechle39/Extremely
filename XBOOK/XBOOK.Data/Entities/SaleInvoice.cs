@@ -7,9 +7,9 @@ namespace XBOOK.Data.Entities
 
     public partial class SaleInvoice
     {
-        private string clientName;
-        private string email;
-        private string clientId;
+        //private string clientName;
+        //private string email;
+        //private string clientId;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SaleInvoice()

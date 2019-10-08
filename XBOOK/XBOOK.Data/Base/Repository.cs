@@ -34,6 +34,13 @@ namespace XBOOK.Data.Base
             await _dbContext.SaveChangesAsync();
         }
 
+        public void AddData(TEntity entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            Entities.Add(entity);
+        }
         public async Task Add(IEnumerable<TEntity> entities)
         {
             if (entities == null)

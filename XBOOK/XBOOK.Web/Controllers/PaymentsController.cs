@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Web.Controllers
 {
@@ -16,9 +16,9 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreatePayments(PaymentViewModel request)
+        public IActionResult CreatePayments(PaymentViewModel request)
         {
-            await _paymentsService.SavePayMent(request);
+             _paymentsService.SavePayMent(request);
             return Ok(request);
         }
 

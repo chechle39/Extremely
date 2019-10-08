@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XBOOK.Service.ViewModels
+namespace XBOOK.Data.ViewModels
 {
     public class SaleInvoiceViewModel
     {

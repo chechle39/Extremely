@@ -34,7 +34,7 @@ namespace XBOOK.Data.Model
 
         public string EndDate { get; set; }
 
-        public bool SearchConditions { get; set; }
+        public bool isIssueDate { get; set; }
 
     }
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Service.ViewModels;
 
 namespace XBOOK.Web.Controllers
 {
@@ -37,7 +37,7 @@ namespace XBOOK.Web.Controllers
             return Ok(request);
         }
 
-        [HttpPost("UpdateSaleDetail")]
+        [HttpPut("UpdateSaleDetail")]
         public IActionResult UpdateSaleDetail(List<SaleInvDetailViewModel> request)
         {
             _iSaleInvDetailService.UpdateListSaleDetail(request);

@@ -11,4 +11,8 @@
         public string Email { get; set; }
         public string Note { get; set; }
     }
+    public class ClientSerchRequest
+    {
+        public string ClientKeyword { get; set; }
+    }
 }

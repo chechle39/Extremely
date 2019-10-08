@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using XBOOK.Data.Model;
-using XBOOK.Service.ViewModels;
+using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Service.Interfaces
 {

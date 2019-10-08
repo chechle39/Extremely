@@ -40,7 +40,7 @@
           </thead>
           <tbody>
             <tr mdbTableCol *ngFor="let el of saleInvList">
-              <td><mdb-checkbox [checked]="false" [default]="true"></mdb-checkbox></td>
+              <td><nb-checkbox #xx (checkedChange)="countAmount(el.isCheck,el)" status="info" [value]="el.isCheck"></nb-checkbox></td>
               <td><span class="font-weight-bold">{{el.clientData[0].clientName}}</span> <br>{{el.invoiceNumber}}</td>
               <td><span>{{el.note}}</span></td>
               <td><span class="font-weight-bold">{{el.issueDate}}</span> <br>{{el.dueDate}}</td>
@@ -48,7 +48,7 @@
             </tr>
           </tbody>
         </table>
-        <span class="float-right">Grant Total:</span>
+        <span class="float-right">Grant Total:{{Count}}</span>
       </nb-card-body>
     </nb-card>
   </div>

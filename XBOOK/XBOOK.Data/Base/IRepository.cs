@@ -11,6 +11,7 @@ namespace XBOOK.Data.Base
         IQueryable<TEntity> AsQueryable();
 
         Task Add(TEntity entity);
+        void AddData(TEntity entity);
 
         Task Add(IEnumerable<TEntity> entities);
 

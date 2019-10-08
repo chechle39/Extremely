@@ -31,8 +31,6 @@ namespace XBOOK.Web
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -51,6 +49,7 @@ namespace XBOOK.Web
             services.AddTransient<ISaleInvDetailService, SaleInvDetailService>();
             services.AddTransient<ITaxService, TaxService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IClientRepository, ClientRepository>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>
@@ -59,19 +58,14 @@ namespace XBOOK.Web
             });
             services.AddSignalR();
             services.AddAuthentication(IISServerDefaults.AuthenticationScheme);
-
-
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //var options = new RewriteOptions()
-            //    .AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 44317);
-            //app.UseRewriter(options);
-            //app.UseStaticFiles();
-            //app.UseAuthentication();
             app.UseAuthentication();
 
             app.UseSwagger();
@@ -96,6 +90,19 @@ namespace XBOOK.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
+            });
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    //spa.UseAngularCliServer(npmScript: "start");
+                }
             });
         }
     }

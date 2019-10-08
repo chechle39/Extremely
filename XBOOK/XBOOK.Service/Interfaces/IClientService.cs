@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using XBOOK.Data.Model;
-using XBOOK.Service.ViewModels;
+using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Service.Interfaces
 {
     public interface IClientService
     {
-        Task CreateClient(ClientCreateRequet request);
+        bool CreateClient(ClientCreateRequet request);
         Task<IEnumerable<ClientViewModel>> GetClientById(int id);
-        Task<IEnumerable<ClientViewModel>> GetAllClient();
+        Task<IEnumerable<ClientViewModel>> GetAllClient(ClientSerchRequest request);
         Task<IEnumerable<ClientViewModel>> SerchClient(string keyword);
 
     }
