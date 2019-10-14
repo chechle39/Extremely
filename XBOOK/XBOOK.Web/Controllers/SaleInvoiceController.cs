@@ -35,5 +35,12 @@ namespace XBOOK.Web.Controllers
             var CreateData = _saleInvoiceService.CreateSaleInvoice(request);
             return Ok(request);
         }
+
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> GetSaleInvoiceById(long id)
+        {
+            var saleListInvoice = await _saleInvoiceService.GetSaleInvoiceById(id);
+            return Ok(saleListInvoice);
+        }
     }
 }

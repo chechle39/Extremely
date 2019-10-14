@@ -50,8 +50,8 @@ namespace XBOOK.Web.Controllers
             return Ok(paymentData);
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> GetPaymentByInv([FromBody] long id)
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> GetPaymentByInv(long id)
         {
             var paymentData = await _paymentsService.GetAllPaymentsByInv(id);
             return Ok(paymentData);

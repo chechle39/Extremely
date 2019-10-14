@@ -10,5 +10,6 @@ namespace XBOOK.Service.Interfaces
         Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request);
         Task Update(SaleInvoiceViewModel saleInvoiceViewModel);
         bool CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel);
+        Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id);
     }
 }

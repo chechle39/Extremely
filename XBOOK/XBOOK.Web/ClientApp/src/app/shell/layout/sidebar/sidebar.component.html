@@ -1,0 +1,41 @@
+<!-- Sidebar Header starts -->
+<!-- Sidebar Header starts-->
+<div class="sidebar-header">
+  <div class="logo clearfix">
+    <a href="/" class="logo-text float-left">
+      <div class="logo-img">
+        <img [src]="logoUrl" />
+      </div><span class="text align-middle">Xbook</span>
+    </a>
+    <a class="nav-toggle d-none d-sm-none d-md-none d-lg-block" id="sidebarToggle" href="javascript:;">
+      <i #toggleIcon appSidebarToggle class="ft-toggle-right toggle-icon" data-toggle="expanded"></i>
+    </a>
+    <a class="nav-close d-block d-md-block d-lg-none d-xl-none" id="sidebarClose" href="javascript:;">
+      <i class="ft-x"></i>
+    </a>
+  </div>
+</div>
+<!-- Sidebar Header Ends -->
+
+<!-- Sidebar Content starts -->
+<div class="sidebar-content">
+  <div class="nav-container">
+    <ul id="main-menu-navigation" data-menu="menu-navigation" data-scroll-to-active="true"
+      class="navigation navigation-main">
+      <li class=" nav-item"><a routerLink="/dashboard"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Dashboard</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/invoice"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Invoices</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/client"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Clients</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/product"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Products</span></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="sidebar-background"></div>
+<!-- Sidebar Content Ends -->

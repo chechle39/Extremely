@@ -16,7 +16,6 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Service.Service
 {
-
     public class SaleInvoiceService : ISaleInvoiceService
     {
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
@@ -35,10 +34,9 @@ namespace XBOOK.Service.Service
 
         public bool CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
         {
-            char matchChar = '0';
             var saleInvoie = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
-            var countZero = saleInvoie.InvoiceNumber.Count(x => x == matchChar);
-            string DZr = "D" + (countZero + 1);
+            //var countZero = saleInvoie.InvoiceNumber.Count(x => x == matchChar);
+            //string DZr = "D" + (countZero + 1);
             var clientUOW = _uow.GetRepository<IRepository<Client>>();
             if (saleInvoiceViewModel.ClientId != 0)
             {
@@ -53,8 +51,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    //InvoiceNumber = int.Parse(saleInvoiceViewModel.InvoiceNumber).ToString(DZr),
-                    InvoiceNumber = saleInvoiceViewModel.InvoiceNumber,
+                    InvoiceNumber = InputString(saleInvoie.InvoiceNumber),
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -98,8 +95,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    //InvoiceNumber = int.Parse(saleInvoiceViewModel.InvoiceNumber).ToString(DZr),
-                    InvoiceNumber =saleInvoiceViewModel.InvoiceNumber,
+                    InvoiceNumber = InputString(saleInvoie.InvoiceNumber),
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -116,8 +112,8 @@ namespace XBOOK.Service.Service
                 _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
                 _uow.SaveChanges();
             }
-            var saleInvoice = new List<SaleInvoiceViewModel>();
-            saleInvoice.Add(saleInvoie);
+            //var saleInvoice = new List<SaleInvoiceViewModel>();
+            //saleInvoice.Add(saleInvoie);
             var saleInvoieLast = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
             var obj = new List<SaleInvoiceViewModel>()
             {
@@ -185,7 +181,7 @@ namespace XBOOK.Service.Service
             return listData;
         }
 
-        private static List<SaleInvoiceViewModel> SerchData(string keyword, string startDate, string endDate, List<SaleInvoiceViewModel> saleInvoie,bool searchConditions)
+        private static List<SaleInvoiceViewModel> SerchData(string keyword, string startDate, string endDate, List<SaleInvoiceViewModel> saleInvoie,bool? searchConditions)
         {
             if (searchConditions == true)
             {
@@ -293,6 +289,55 @@ namespace XBOOK.Service.Service
                 listData.Add(listInvo);
             }
 
+            return listData;
+        }
+
+        public static string InputString(string value)
+        {
+            int carry = 1;
+            string res = "";
+            for (int i = value.Length - 1; i > 0; i--)
+            {
+                int chars = 0;
+                chars += ((int)value[i]);
+                chars += carry;
+                if (chars > 90)
+                {
+                    chars = 65;
+                    carry = 1;
+                }
+                else
+                {
+                    carry = 0;
+                }
+
+                if (chars > 57 && chars < 65)
+                {
+                    carry = 1;
+                }
+
+                res = Convert.ToChar(chars) + res;
+
+                if (carry != 1)
+                {
+                    res = value.Substring(0, i) + res;
+                    break;
+                }
+            }
+            if (carry == 1)
+            {
+                res = 'A' + res;
+            }
+            string resStr = res.Replace(":", "0");
+            return resStr;
+        }
+
+        public async Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id)
+        {
+
+            var saleInvoie=await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().Where(x => x.InvoiceId == id).ToListAsync();
+            saleInvoie = SerchData(null, null, null, saleInvoie, null);
+            List<SaleInvoiceViewModel> listData = GetAllSaleInv(saleInvoie);
             return listData;
         }
     }

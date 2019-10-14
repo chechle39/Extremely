@@ -1,0 +1,162 @@
+<div class="card">
+  <div class="card-content">
+    <div class="card-body">
+      <div class="row form-line">
+        <div class="col-md-4">
+          <h4 class="card-title">Danh Sách Khách Hàng</h4>
+        </div>
+        <div class="col-md-4">
+          <div ngbDropdown>
+            <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
+            </button>
+            <div ngbDropdownMenu aria-labelledby="bulkActions">
+              <button class="dropdown-item"><span class="icon-import"></span> Import Clients</button>
+              <button class="dropdown-item"><span class="icon-export"></span> Export Client</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <button (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right">New Client</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="media-body blue text-center mb-4">
+            <h3 class="font-large-1 mb-0 " style="text-decoration: underline">
+              {{ getOutstanding() | ThousandSuffixesPipe : 1 }}</h3>
+            <span class="text-muted font-small-3">total outstanding</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="media-body blue text-center mb-4">
+            <h3 class="font-large-1 mb-0 " style="text-decoration: underline">
+              {{ getOverduce() | ThousandSuffixesPipe : 1  }} </h3>
+            <span class="text-muted font-small-3">total overduce</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="row my-3">
+        <div class=" col-md-4">
+          <p class="label-blue">Khách Hàng</p>
+        </div>
+        <div class="col-md-4">
+          <div ngbDropdown>
+            <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Chức năng chung
+            </button>
+            <div ngbDropdownMenu aria-labelledby="bulkActions">
+              <button (click)="edit()" class="dropdown-item"><span class="icon-edit"></span> Edit</button>
+              <button (click)="delete()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 float-right">
+          <div class="navbar-form navbar-left mt-1">
+            <form class="form">
+              <div class="position-relative has-icon-left">
+                <input type="text" [(ngModel)]="keyword" name="keyword" autocomplete="off" (keyup)="refresh()"
+                  class="form-control round" placeholder="Search">
+                <div class="form-control-position">
+                  <i class="ft-search" (click)="refresh()"></i>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="clientViews"
+            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="5"
+            [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
+            (select)='onSelect($event)' [selectAllRowsOnPage]="false">
+
+            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+              [resizeable]="false">
+              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <div class="custom-control custom-checkbox m-0">
+                  <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                    (change)="selectFn(!allRowsSelected)" />
+                  <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+                </div>
+
+              </ng-template>
+              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+                <div class="custom-control custom-checkbox m-0">
+                  <input type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
+                    (change)="onCheckboxChangeFn($event)" />
+                  <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
+                </div>
+
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Client/ Address" prop="clientName">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div>{{row.clientName}}</div>
+                <div class="col-more-info font-small-3">{{row.address}}</div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Interal Notes" prop="note">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.note}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Outstanding / Overduce" prop="" [cellClass]="'col-right'"
+              [headerClass]="'col-right'">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="col-right">
+                  <div>{{24500000 | currency:'VND':''}}</div>
+                  <div class="col-more-info " style="color: #ed7d31">{{12000000 | currency:'VND':''}}</div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-footer>
+              <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+                <div class="row" style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px">
+                  <div class="row text-right">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right">
+                      Tổng sắp thu
+                    </div>
+                    <div class="col-md-3">
+                      {{getOutstanding()| currency:'VND':''}}
+                    </div>
+                  </div>
+                  <div class="row text-right">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right">
+                      Tổng quá hạn
+                    </div>
+                    <div class="col-md-3" style="color: #ed7d31">
+                      {{getOverduce()| currency:'VND':''}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="page-count col-md-6 pl-4">
+                      <span>Total: {{rowCount}} items </span>
+                    </div>
+                    <div class="col-md-6 text-right">
+                      <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                        [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                        [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage" [size]="pageSize"
+                        [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                      </datatable-pager>
+                    </div>
+                  </div>
+                </div>
+
+              </ng-template>
+            </ngx-datatable-footer>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
