@@ -9,8 +9,23 @@ import { Observable } from 'rxjs';
 export class ProductService extends BaseService {
 
   url = API_URI.product;
-  searchProduct(term: string) {
-    const products = this.get<ProductSearchModel[]>(`${this.url}/?q=${term}`)
+  // searchProduct(term: string) {
+  //   const products = this.get<ProductSearchModel[]>(`${this.url}/?q=${term}`)
+  //     .pipe(
+  //       debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
+  //       map(
+  //         (data: any) => {
+  //           return (
+  //             data.length !== 0 ? data as ProductSearchModel[] : new Array<ProductSearchModel>()
+  //           );
+  //         }
+  //       ));
+
+  //   return products;
+  // }
+
+  searchProduct(term: any) {
+    const products = this.post<ProductSearchModel[]>(`${API_URI.productGetAll}`, term)
       .pipe(
         debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
         map(

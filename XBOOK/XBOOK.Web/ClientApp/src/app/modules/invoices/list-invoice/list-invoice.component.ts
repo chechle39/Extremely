@@ -219,7 +219,6 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     }
   }
   sortClient() {
-    //debugger;
     this.invoiceViews.sort((l, r): number => {
       if (l.clientName < r.clientName) { return -1; }
       if (l.clientName > r.clientName) { return -1; }
@@ -228,4 +227,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.invoiceViews = [...this.invoiceViews];
   }
 
+  onSort(e: any) {
+
+  }
 }

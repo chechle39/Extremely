@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -16,9 +17,9 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> GetAllClientAsync()
+        public async Task<IActionResult> GetAllProductAsync(ProductSerchRequest request)
         {
-            var clientprd = await _iProductService.GetAllProduct();
+            var clientprd = await _iProductService.GetAllProduct(request);
             return Ok(clientprd);
         }
 

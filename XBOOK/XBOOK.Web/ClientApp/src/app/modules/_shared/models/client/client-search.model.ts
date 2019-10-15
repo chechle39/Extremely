@@ -1,6 +1,6 @@
 import { BaseModel } from '@shared/model/base.model';
 export class ClientSearchModel extends BaseModel {
-  clientId: string;
+  clientId: number;
   clientName: string;
   address: string;
   taxCode: string;

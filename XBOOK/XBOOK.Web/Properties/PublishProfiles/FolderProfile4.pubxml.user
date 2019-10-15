@@ -6,11 +6,203 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\inetpub\wwwroot\PrjDefaut</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\inetpub\wwwroot\XBOOK</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
-    <DestinationConnectionStrings Include="DefaultConnection">
-      <Value>Data Source=.%3bDatabase=X-BOOK%3bIntegrated Security=True%3bConnect Timeout=30%3bEncrypt=False%3bTrustServerCertificate=False%3bApplicationIntent=ReadWrite%3bMultiSubnetFailover=False</Value>
-    </DestinationConnectionStrings>
+    <File Include="appsettings.Development.json">
+      <publishTime>10/14/2019 13:04:36</publishTime>
+    </File>
+    <File Include="appsettings.json">
+      <publishTime>10/14/2019 13:04:36</publishTime>
+    </File>
+    <File Include="AutoMapper.dll">
+      <publishTime>06/26/2017 20:07:14</publishTime>
+    </File>
+    <File Include="AutoMapper.Extensions.Microsoft.DependencyInjection.dll">
+      <publishTime>10/26/2017 12:23:38</publishTime>
+    </File>
+    <File Include="ClientApp/.angulardoc.json">
+      <publishTime>10/12/2019 02:55:30</publishTime>
+    </File>
+    <File Include="ClientApp/angular.json">
+      <publishTime>10/12/2019 02:55:30</publishTime>
+    </File>
+    <File Include="ClientApp/dist/XBInvoice/assets/i18n/en.json">
+      <publishTime>10/15/2019 08:28:19</publishTime>
+    </File>
+    <File Include="ClientApp/dist/XBInvoice/assets/i18n/vi.json">
+      <publishTime>10/15/2019 08:28:19</publishTime>
+    </File>
+    <File Include="ClientApp/dist/XBInvoice/assets/sass/scss/fonts/fontawesome/metadata/icons.json">
+      <publishTime>10/15/2019 08:28:19</publishTime>
+    </File>
+    <File Include="ClientApp/dist/XBInvoice/assets/sass/scss/fonts/fontawesome/metadata/shims.json">
+      <publishTime>10/15/2019 08:28:19</publishTime>
+    </File>
+    <File Include="ClientApp/dist/XBInvoice/assets/vendor/pace/.bower.json">
+      <publishTime>10/15/2019 08:28:20</publishTime>
+    </File>
+    <File Include="ClientApp/dist/XBInvoice/assets/vendor/pace/bower.json">
+      <publishTime>10/15/2019 08:28:20</publishTime>
+    </File>
+    <File Include="ClientApp/dist/XBInvoice/assets/vendor/pace/install.json">
+      <publishTime>10/15/2019 08:28:20</publishTime>
+    </File>
+    <File Include="ClientApp/e2e/tsconfig.json">
+      <publishTime>10/12/2019 02:55:30</publishTime>
+    </File>
+    <File Include="ClientApp/package-lock.json">
+      <publishTime>10/14/2019 11:50:12</publishTime>
+    </File>
+    <File Include="ClientApp/package.json">
+      <publishTime>10/14/2019 11:28:26</publishTime>
+    </File>
+    <File Include="ClientApp/src/assets/i18n/en.json">
+      <publishTime>10/12/2019 02:55:30</publishTime>
+    </File>
+    <File Include="ClientApp/src/assets/i18n/vi.json">
+      <publishTime>10/12/2019 02:55:30</publishTime>
+    </File>
+    <File Include="ClientApp/src/assets/sass/scss/fonts/fontawesome/metadata/icons.json">
+      <publishTime>10/12/2019 02:55:32</publishTime>
+    </File>
+    <File Include="ClientApp/src/assets/sass/scss/fonts/fontawesome/metadata/shims.json">
+      <publishTime>10/12/2019 02:55:32</publishTime>
+    </File>
+    <File Include="ClientApp/src/assets/vendor/pace/.bower.json">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="ClientApp/src/assets/vendor/pace/bower.json">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="ClientApp/src/assets/vendor/pace/install.json">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="ClientApp/tsconfig.app.json">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="ClientApp/tsconfig.json">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="ClientApp/tsconfig.spec.json">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="ClientApp/tslint.json">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="ClientApp/web.config">
+      <publishTime>10/12/2019 02:55:34</publishTime>
+    </File>
+    <File Include="dotnet-aspnet-codegenerator-design.dll">
+      <publishTime>03/02/2019 19:52:30</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.CSharp.Workspaces.dll">
+      <publishTime>09/25/2019 14:20:10</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.Workspaces.dll">
+      <publishTime>09/25/2019 14:20:33</publishTime>
+    </File>
+    <File Include="Microsoft.EntityFrameworkCore.Abstractions.dll">
+      <publishTime>06/18/2019 21:21:18</publishTime>
+    </File>
+    <File Include="Microsoft.OpenApi.dll">
+      <publishTime>10/24/2018 18:48:08</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll">
+      <publishTime>03/02/2019 19:51:56</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Core.dll">
+      <publishTime>03/02/2019 19:52:00</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.dll">
+      <publishTime>03/02/2019 19:52:04</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll">
+      <publishTime>03/02/2019 19:52:02</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll">
+      <publishTime>03/02/2019 19:51:58</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll">
+      <publishTime>03/02/2019 19:51:56</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll">
+      <publishTime>03/02/2019 19:52:04</publishTime>
+    </File>
+    <File Include="Newtonsoft.Json.dll">
+      <publishTime>04/22/2019 01:06:16</publishTime>
+    </File>
+    <File Include="NuGet.Frameworks.dll">
+      <publishTime>09/25/2019 14:19:59</publishTime>
+    </File>
+    <File Include="Serilog.dll">
+      <publishTime>06/27/2016 22:28:34</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.dll">
+      <publishTime>03/22/2019 20:14:36</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.Swagger.dll">
+      <publishTime>03/22/2019 20:14:24</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.SwaggerGen.dll">
+      <publishTime>03/22/2019 20:14:34</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.SwaggerUI.dll">
+      <publishTime>03/22/2019 20:14:24</publishTime>
+    </File>
+    <File Include="System.Composition.AttributedModel.dll">
+      <publishTime>09/25/2019 14:22:38</publishTime>
+    </File>
+    <File Include="System.Composition.Convention.dll">
+      <publishTime>09/25/2019 14:22:38</publishTime>
+    </File>
+    <File Include="System.Composition.Hosting.dll">
+      <publishTime>09/25/2019 14:22:38</publishTime>
+    </File>
+    <File Include="System.Composition.Runtime.dll">
+      <publishTime>09/25/2019 14:22:38</publishTime>
+    </File>
+    <File Include="System.Composition.TypedParts.dll">
+      <publishTime>09/25/2019 14:22:38</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>10/15/2019 08:51:36</publishTime>
+    </File>
+    <File Include="XAccLib.dll">
+      <publishTime>10/15/2019 08:32:27</publishTime>
+    </File>
+    <File Include="XAccLib.pdb">
+      <publishTime>10/15/2019 08:32:27</publishTime>
+    </File>
+    <File Include="XBOOK.Common.dll">
+      <publishTime>10/15/2019 08:36:47</publishTime>
+    </File>
+    <File Include="XBOOK.Common.pdb">
+      <publishTime>10/15/2019 08:36:47</publishTime>
+    </File>
+    <File Include="XBOOK.Data.dll">
+      <publishTime>10/15/2019 08:36:48</publishTime>
+    </File>
+    <File Include="XBOOK.Data.pdb">
+      <publishTime>10/15/2019 08:36:48</publishTime>
+    </File>
+    <File Include="XBOOK.Service.dll">
+      <publishTime>10/15/2019 08:36:49</publishTime>
+    </File>
+    <File Include="XBOOK.Service.pdb">
+      <publishTime>10/15/2019 08:36:49</publishTime>
+    </File>
+    <File Include="XBOOK.Web.deps.json">
+      <publishTime>10/15/2019 08:51:36</publishTime>
+    </File>
+    <File Include="XBOOK.Web.dll">
+      <publishTime>10/15/2019 08:48:28</publishTime>
+    </File>
+    <File Include="XBOOK.Web.pdb">
+      <publishTime>10/15/2019 08:48:28</publishTime>
+    </File>
+    <File Include="XBOOK.Web.runtimeconfig.json">
+      <publishTime>10/15/2019 08:51:36</publishTime>
+    </File>
   </ItemGroup>
 </Project>

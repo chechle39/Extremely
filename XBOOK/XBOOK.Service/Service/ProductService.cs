@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -29,9 +30,18 @@ namespace XBOOK.Service.Service
             await _productUowRepository.Add(clientCreate);
         }
 
-        public async Task<IEnumerable<ProductViewModel>> GetAllProduct()
+        public async Task<IEnumerable<ProductViewModel>> GetAllProduct(ProductSerchRequest request)
         {
-            return await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().ToListAsync();
+            if (!string.IsNullOrEmpty(request.ProductKeyword))
+            {
+                var listData = await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().ToListAsync();
+                var query = listData.Where(x => x.productName.Contains(request.ProductKeyword)).ToList();
+                return query;
+            }
+            else
+            {
+                return await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetProductById(int id)

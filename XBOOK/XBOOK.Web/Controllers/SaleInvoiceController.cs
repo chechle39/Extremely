@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
+using XBOOK.Data.Base;
+using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
@@ -11,9 +15,14 @@ namespace XBOOK.Web.Controllers
     public class SaleInvoiceController : ControllerBase
     {
         ISaleInvoiceService _saleInvoiceService;
-        public SaleInvoiceController(ISaleInvoiceService saleInvoiceService)
+        private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
+        private readonly IUnitOfWork _uow;
+
+        public SaleInvoiceController(ISaleInvoiceService saleInvoiceService, IUnitOfWork uow)
         {
             _saleInvoiceService = saleInvoiceService;
+            _uow = uow;
+            _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
         }
 
         [HttpPost("[action]")]
@@ -33,7 +42,8 @@ namespace XBOOK.Web.Controllers
         public ActionResult CreateSaleInvoice(SaleInvoiceModelRequest request)
         {
             var CreateData = _saleInvoiceService.CreateSaleInvoice(request);
-            return Ok(request);
+            var saleInvoie = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
+            return Ok(saleInvoie);
         }
 
         [HttpPost("[action]/{id}")]

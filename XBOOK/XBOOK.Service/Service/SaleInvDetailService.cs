@@ -41,13 +41,13 @@ namespace XBOOK.Service.Service
                     ProductName = item.ProductName,
                     Vat = item.Vat
                 };
-                if(saleDetailData.ProductId != 0)
+                if(saleDetailData.ProductId > 0)
                 {
                     var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailData);
                     _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
                 }
-
-                if(saleDetailData.ProductId == 0)
+                else 
+                if(saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
                 {
                     var product = new ProductViewModel()
                     {
