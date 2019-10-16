@@ -40,6 +40,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
   }
   createPaymentFormGroup() {
     return this.fb.group({
+      id: [0],
       amount: ['', [Validators.required]],
       paymentMethods: [null, [Validators.required]],
       payDate: ['', [Validators.required]],
@@ -50,11 +51,12 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
   getPaymentToSave(submittedForm: FormGroup): PaymentView {
     // tslint:disable-next-line: no-unused-expression
     const payment = new PaymentView();
+    payment.id = submittedForm.controls.id.value;
     payment.invoiceId = this.invoiceId;
     payment.amount = Number(submittedForm.controls.amount.value.toString().replace(/,/g, ''));
     payment.bankAccount = submittedForm.controls.bankAccount.value;
     const paymentDate = submittedForm.controls.payDate.value;
-    payment.payDate = moment([paymentDate.year, paymentDate.month - 1, paymentDate.day]).format(AppConsts.defaultDateFormat);
+    payment.payDate = [paymentDate.year, paymentDate.month - 1, paymentDate.day].join('-');
     const paymentMethodId = submittedForm.controls.paymentMethods.value;
     payment.payTypeId = paymentMethodId;
     payment.payType = this.paymentMethods.find(x => x.payTypeId === paymentMethodId).payType;
@@ -63,18 +65,19 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
   }
   getPaymentDetail(id: number) {
     this.paymentService.getPayment(id).pipe(debounceTime(500), finalize(() => {
-    })).subscribe(payment => {
+    })).subscribe((payment: any) => {
       this.paymentForm.patchValue({
         amount: payment.amount,
         bankAccount: payment.bankAccount,
         note: payment.note,
-        paymentMethod: payment.payTypeId
+        paymentMethod: payment.payTypeID
       });
 
-      this.paymentForm.controls.paymentMethods.patchValue(payment.payTypeId);
+      this.paymentForm.controls.paymentMethods.patchValue(payment.payTypeID);
       if (payment.payDate !== '') {
-        const payDateSplit = payment.payDate.split('/');
-        const payDate = { 'year': Number(payDateSplit[2]), 'month': Number(payDateSplit[1]), 'day': Number(payDateSplit[0]) };
+        const payDateSplit = payment.payDate.split('-');
+        const dayx = payDateSplit[2].substring(0, 2);
+        const payDate = { 'year': Number(payDateSplit[0]), 'month': Number(payDateSplit[1]), 'day': Number(dayx) };
         this.paymentForm.controls.payDate.patchValue(payDate);
       }
     });
@@ -97,8 +100,8 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
           this.notify.info('Updated Successfully');
           this.close(true);
         });
-    }
-    this.paymentService
+    } else {
+      this.paymentService
       .createPayment(payment)
       .pipe(
         finalize(() => {
@@ -109,6 +112,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
         this.notify.info('Saved Successfully');
         this.close(true);
       });
+    }
   }
   close(result: boolean): void {
     this.activeModal.close(result);

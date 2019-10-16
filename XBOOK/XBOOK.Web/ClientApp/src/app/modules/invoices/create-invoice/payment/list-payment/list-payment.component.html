@@ -21,10 +21,10 @@
 </div>
 <div class="row px-4">
   <div class="col-md-12">
-    <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="paymentViews"
+    <ngx-datatable #xxx #myTable class="bootstrap hover no-striped flex" [rows]="paymentViews"
       [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
       [headerHeight]="60" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="5" [selected]="selected"
-      (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox" (select)='onSelect($event)'
+      [selectionType]="SelectionType.checkbox" (select)='onSelect($event)' (activate)="onActivate($event)" 
       [selectAllRowsOnPage]="false">
 
       <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"

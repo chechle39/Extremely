@@ -35,7 +35,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
     SharedModule,
     LoginModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

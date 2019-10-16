@@ -144,7 +144,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
 
     const dialog = this.modalService.open(AddPaymentComponent, AppConsts.modalOptionsSmallSize);
     dialog.componentInstance.outstandingAmount = this.selected[0].amountPaid;
-    dialog.componentInstance.invoiceId = this.selected[0].id;
+    dialog.componentInstance.invoiceId = this.selected[0].invoiceId;
     dialog.result.then(result => {
       if (result) {
         this.refresh();

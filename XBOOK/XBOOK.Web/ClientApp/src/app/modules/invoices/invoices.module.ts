@@ -3,7 +3,7 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { InvoicesComponent } from './invoices.component';
 import { InvoicesRoutingModule } from './invoices-routing.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ListInvoiceComponent } from './list-invoice/list-invoice.component';
 import { CreateInvoiceComponent } from './create-invoice/create-invoice.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -53,7 +53,7 @@ import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
     IntlModule,
     SharedModule
   ],
-  providers: [InvoiceService, ClientService, ProductService, PaymentService, CurrencyPipe],
+  providers: [InvoiceService, ClientService, ProductService, PaymentService, CurrencyPipe, NgbActiveModal],
   entryComponents: [AddPaymentComponent, AddTaxComponent]
 })
 export class InvoicesModule { }

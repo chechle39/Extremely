@@ -7,8 +7,12 @@ export const API_URI = {
   clientAll: 'api/Client/GetAllClientAsync',
   product: 'api/v1/product',
   productGetAll: 'api/Product/GetAllProductAsync',
-  payment: 'api/v1/payment',
+  payment: 'api/Payments/v1/CreatePayments',
+  paymentCreate: 'api/Payments/CreatePayments',
   paymentIvById: 'api/Payments/GetPaymentByInv',
+  paymentById: 'api/Payments/GetPaymentById',
+  updatePayment: 'api/Payments/UpdatePayment',
+  deletePayment: 'api/Payments/DeletePayment'
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

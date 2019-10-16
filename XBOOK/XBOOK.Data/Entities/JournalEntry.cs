@@ -2,12 +2,14 @@ namespace XBOOK.Data.Entities
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class JournalEntry
     {
-        public long ID { get; set; }
-        public string entryName { get; set; }
-        public string description { get; set; }
-        public System.DateTime dateCreate { get; set; }
+        [Key]
+        public long JournalID { get; set; }
+        public string accountNumber { get; set; }
+        public decimal debitAmount { get; set; }
+        public decimal creditAmount { get; set; }
     }
 }

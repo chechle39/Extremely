@@ -15,4 +15,8 @@
     {
         public string ClientKeyword { get; set; }
     }
+    public class ProductSerchRequest
+    {
+        public string ProductKeyword { get; set; }
+    }
 }

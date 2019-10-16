@@ -333,7 +333,7 @@
         </form>
       </div>
       <xb-list-payment *ngIf="viewMode" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"
-        (addNewPayment)="addPayment()" [paymentViews]="paymentViews" [outstandingAmount]="amountDue"
+        (addNewPayment)="addPayment()" [paymentViews]="paymentViews" [outstandingAmount]="amountDue" 
         [invoiceNumber]="invoiceNumber">
       </xb-list-payment>
     </div>

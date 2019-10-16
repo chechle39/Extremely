@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using XAccLib.SaleInvoice;
+ using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -112,8 +112,8 @@ namespace XBOOK.Service.Service
                 _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
                 _uow.SaveChanges();
             }
-            //var saleInvoice = new List<SaleInvoiceViewModel>();
-            //saleInvoice.Add(saleInvoie);
+            var saleInvoice = new List<SaleInvoiceViewModel>();
+            saleInvoice.Add(saleInvoie);
             var saleInvoieLast = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
             var obj = new List<SaleInvoiceViewModel>()
             {

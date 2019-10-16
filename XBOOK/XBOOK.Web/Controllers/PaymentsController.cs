@@ -22,7 +22,7 @@ namespace XBOOK.Web.Controllers
             return Ok(request);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("[action]/{id}")]
         public async Task<IActionResult> DeletePayment(long id)
         {
             await _paymentsService.RemovePayMent(id);
@@ -43,8 +43,8 @@ namespace XBOOK.Web.Controllers
             return Ok();
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> GetPaymentById([FromBody] long id)
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> GetPaymentById(long id)
         {
             var paymentData = await _paymentsService.GetPaymentByIdAsync(id);
             return Ok(paymentData);

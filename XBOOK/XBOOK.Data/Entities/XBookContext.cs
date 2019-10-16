@@ -20,6 +20,7 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new ProductConfiguration())
                 .ApplyConfiguration(new SaleInvDetailConfiguration())
                 .ApplyConfiguration(new SaleInvoiceConfiguration())
+                .ApplyConfiguration(new EntryPatternConfiguration())
                 .ApplyConfiguration(new TaxConfiguration());
 
             base.OnModelCreating(modelBuilder);

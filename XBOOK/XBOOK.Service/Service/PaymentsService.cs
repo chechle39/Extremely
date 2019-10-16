@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using XAccLib.Payment;
+// using XAccLib.Payment;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.ViewModels;
@@ -62,8 +62,8 @@ namespace XBOOK.Service.Service
              _paymentUowRepository.AddData(saleInvoice);
             _uow.SaveChanges();
             var dataAsign = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().LastOrDefault();
-            var paymentGL = new PaymentGL();
-            paymentGL.PaymentGLData(dataAsign);
+           // var paymentGL = new PaymentGL();
+          //  paymentGL.PaymentGLData(dataAsign);
             return true;
         }
 

@@ -16,7 +16,7 @@ import { ItemModel } from 'app/modules/_shared/models/invoice/item.model';
 import { ClientService } from 'app/modules/_shared/services/client.service';
 import { InvoiceService } from '@modules/_shared/services/invoice.service';
 import { AppComponentBase } from '@core/app-base.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddPaymentComponent } from './payment/add-payment/add-payment.component';
 import { AppConsts } from '@core/app.consts';
 import { PaymentView } from '@modules/_shared/models/invoice/payment-view.model';
@@ -74,6 +74,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     clientKeyword: ''
   };
   constructor(
+    public activeModal: NgbActiveModal,
     injector: Injector,
     private el: ElementRef,
     private clientService: ClientService,
@@ -287,13 +288,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       if (invoice[0].issueDate) {
         const issueDate = moment(invoice[0].issueDate).format(AppConsts.defaultDateFormat);
         const issueDateSplit = issueDate.split('/');
-        const issueDatePicker = { 'year': Number(issueDateSplit[2]), 'month': Number(issueDateSplit[1]), 'day': Number(issueDateSplit[0]) };
+        const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
         this.invoiceForm.controls.issueDate.patchValue(issueDatePicker);
       }
       if (invoice[0].dueDate) {
         const dueDate = moment(invoice[0].issueDate).format(AppConsts.defaultDateFormat);
         const dueDateSplit = dueDate.split('/');
-        const dueDatePicker = { 'year': Number(dueDateSplit[2]), 'month': Number(dueDateSplit[1]), 'day': Number(dueDateSplit[0]) };
+        const dueDatePicker = { year: Number(dueDateSplit[2]), month: Number(dueDateSplit[1]), day: Number(dueDateSplit[0]) };
         this.invoiceForm.controls.dueDate.patchValue(dueDatePicker);
       }
       detailInvoiceFormArray.controls.forEach((control, i) => {
@@ -436,6 +437,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
+    // tslint:disable-next-line:variable-name
     reader.onload = (_event) => {
       this.imgURL = reader.result;
     };
@@ -544,5 +546,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   redirectToEditInvoice() {
     this.invoiceForm.enable();
     this.router.navigate([`/invoice/${this.invoiceId}/${ActionType.Edit}`]);
+  }
+  close(result: boolean): void {
+    this.activeModal.close(result);
   }
 }

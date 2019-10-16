@@ -17,16 +17,16 @@ export class PaymentService extends BaseService {
     return this.post<PaymentView>(`${API_URI.paymentIvById}/${id}`, id);
   }
 
-  getPayment(id: number): Observable<PaymentView> {
-    return this.get<PaymentView>(`${this.url}/${id}`);
+  getPayment(id: any): Observable<PaymentView> {
+    return this.post<PaymentView>(`${API_URI.paymentById}/${id}`, id);
   }
   createPayment(payment: PaymentView): Observable<PaymentView> {
-    return this.post<PaymentView>(`${this.url}`, payment);
+    return this.post<PaymentView>(`${API_URI.paymentCreate}`, payment);
   }
   updatePayment(payment: PaymentView) {
-    return this.put<PaymentView>(`${this.url}/${payment.id}`, payment);
+    return this.put<PaymentView>(`${API_URI.updatePayment}`, payment);
   }
   deletePayment(id: number) {
-    return this.delete(`${this.url}/${id}`);
+    return this.post(`${API_URI.deletePayment}/${id}`, id );
   }
 }
