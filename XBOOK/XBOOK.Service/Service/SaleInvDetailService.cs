@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.Interfaces;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -15,20 +16,19 @@ namespace XBOOK.Service.Service
     {
         private readonly IRepository<SaleInvDetail> _saleInvDetailUowRepository;
         private readonly IUnitOfWork _uow;
-        IProductService _iProductService;
+        private readonly IProductRepository _iProductRepository;
         private readonly XBookContext _context;
-
-        public SaleInvDetailService(IUnitOfWork uow, IProductService iProductService, XBookContext context)
+        public SaleInvDetailService(IUnitOfWork uow, IProductRepository iProductRepository, XBookContext context)
         {
             _uow = uow;
             _saleInvDetailUowRepository = _uow.GetRepository<IRepository<SaleInvDetail>>();
-            _iProductService = iProductService;
+            _iProductRepository = iProductRepository;
             _context = context;
         }
 
-        public async Task<bool> CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
+        public  bool CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
         {
-            var clientUOW = _uow.GetRepository<IRepository<Product>>();
+            var productUOW = _uow.GetRepository<IRepository<Product>>();
             foreach (var item in saleInvoiceViewModel)
             {
                 var saleDetailData = new SaleInvDetailViewModel
@@ -59,8 +59,8 @@ namespace XBOOK.Service.Service
                         unitPrice = saleDetailData.Price
                     };
                     var productCreate = Mapper.Map<ProductViewModel, Product>(product);
-                    await clientUOW.Add(productCreate);
-                    var serchData = await _iProductService.GetALlPrDF();
+                    productUOW.Add(productCreate);
+                    var serchData = _iProductRepository.GetLDFProduct();
                     var saleDetailPrd = new SaleInvDetailViewModel
                     {
                         Amount = item.Price * item.Qty,
@@ -69,7 +69,7 @@ namespace XBOOK.Service.Service
                         Description = item.Description,
                         Id = item.Id,
                         InvoiceId = item.InvoiceId,
-                        ProductId = serchData.productID,
+                        ProductId = serchData.LastOrDefault().productID,
                         ProductName = item.ProductName,
                         Vat = item.Vat
                     };

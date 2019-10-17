@@ -12,6 +12,7 @@ export class InvoiceService extends BaseService {
   getAll(request: any): Observable<InvoiceView> {
     return this.post<InvoiceView>(`${this.url}`, request);
   }
+
   getDF(): Observable<InvoiceView> {
     return this.post<InvoiceView>(`${API_URI.invoiceDF}`, null);
   }
@@ -26,5 +27,9 @@ export class InvoiceService extends BaseService {
   }
   CreateSaleInvDetail(request: any): Observable<any> {
     return this.post<any>(`${API_URI.createSaleInvDetail}`, request);
- }
+  }
+
+  updateSaleInv(request: any) {
+    return this.put<any>(`${API_URI.updateSaleInv}`, request);
+  }
 }

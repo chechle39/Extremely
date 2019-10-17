@@ -12,7 +12,10 @@ export const API_URI = {
   paymentIvById: 'api/Payments/GetPaymentByInv',
   paymentById: 'api/Payments/GetPaymentById',
   updatePayment: 'api/Payments/UpdatePayment',
-  deletePayment: 'api/Payments/DeletePayment'
+  deletePayment: 'api/Payments/DeletePayment',
+  invoiceDF: 'api/SaleInvoice/GetDF',
+  deleteSaleInvoice: 'api/SaleInvoice/DeleteSaleInv',
+  updateSaleInv: 'api/SaleInvoice/UpdateSaleInvoice',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

@@ -53,6 +53,7 @@ namespace XBOOK.Web
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IClientRepository, ClientRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>
             {

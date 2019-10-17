@@ -6,7 +6,8 @@ import {
   Validators,
   FormArray,
   FormControl,
-  AbstractControl } from '@angular/forms';
+  AbstractControl
+} from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from 'app/modules/_shared/services/product.service';
@@ -74,6 +75,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     clientKeyword: ''
   };
   saleInvId: any;
+  oldClienName: any;
+  oldClientId: any;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -92,6 +95,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   }
   ngOnInit() {
+    this.canActionClient();
     // initialize stream on units
     const request = {
       productKeyword: ''
@@ -142,6 +146,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       invoiceSerial: [''],
       contactName: ['', [Validators.required]],
       clientName: [''],
+      clientId: [0],
       address: [''],
       taxCode: [''],
       email: [''],
@@ -254,14 +259,14 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.title = `Invoice ${this.invoiceNumber}`;
       this.clientSelected.id = invoice[0].clientId;
       this.clientSelected.clientName = invoice[0].clientData[0].clientName;
-      this.clientSelected.contactName =  invoice[0].clientData[0].contactName;
+      this.clientSelected.contactName = invoice[0].clientData[0].contactName;
       this.clientSelected.address = invoice[0].clientData[0].address;
       this.clientSelected.taxCode = invoice[0].clientData[0].taxCode;
       this.clientSelected.email = invoice[0].clientData[0].email;
       this.getFormArray().controls.splice(0);
       const detailInvoiceFormArray = this.getFormArray();
       // tslint:disable-next-line:prefer-for-of
-      for (let item = 0; item <  invoice[0].saleInvDetailView.length; item++) {
+      for (let item = 0; item < invoice[0].saleInvDetailView.length; item++) {
         detailInvoiceFormArray.push(this.getItem());
       }
 
@@ -282,6 +287,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         termCondition: invoice[0].term,
         items: invoice[0].saleInvDetailView
       });
+      this.oldClienName = invoice[0].clientData[0].clientName;
+      this.oldClientId = invoice[0].clientData[0].clientId;
       this.subTotalAmount = invoice[0].subTotal;
       this.subTotalDiscountIncl = invoice[0].discount;
       this.totalTaxAmount = invoice[0].vatTax;
@@ -322,10 +329,10 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         invoiceId: 0,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
-        issueDate: [ this.invoiceForm.value.issueDate.year,
-          this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
-        dueDate: [ this.invoiceForm.value.dueDate.year,
-          this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
+        issueDate: [this.invoiceForm.value.issueDate.year,
+        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
+        dueDate: [this.invoiceForm.value.dueDate.year,
+        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
         reference: this.invoiceForm.value.reference,
         subTotal: 0,
         discRate: 0,
@@ -342,14 +349,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         tag: this.invoiceForm.value.contactName.tag,
         contactName: this.invoiceForm.value.contactName.contactName,
         email: this.invoiceForm.value.contactName.email,
-  };
-      console.log(this.invoiceForm);
+      };
       const requestInvDt = [];
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         console.log(rs);
         this.invoiceService.getDF().subscribe((x: any) => {
           this.saleInvId = x.invoiceId;
-          // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
             const productId = this.invoiceForm.value.items[i].productName.productID;
             const productName = this.invoiceForm.value.items[i].productName.productName;
@@ -358,12 +363,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
               invoiceId: this.saleInvId,
               productId: productId > 0 ? this.invoiceForm.value.items[i].productName.productID : 0,
               productName: productName !== undefined ? this.invoiceForm.value.items[i].productName.productName
-              : this.invoiceForm.value.items[i].productName,
+                : this.invoiceForm.value.items[i].productName,
               description: this.invoiceForm.value.items[i].description,
               qty: this.invoiceForm.value.items[i].qty,
               price: this.invoiceForm.value.items[i].price,
               amount: this.invoiceForm.value.items[i].amount,
-              vat:  this.invoiceForm.value.items[i].vat
+              vat: this.invoiceForm.value.items[i].vat
             };
             requestInvDt.push(requestInvDetail);
           }
@@ -376,12 +381,55 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       return;
     }
     if (this.invoiceId > 0 && !this.invoiceForm.valid) {
+      if (this.invoiceForm.value.clientName !== this.oldClienName && this.oldClientId === this.invoiceForm.value.clientId){
+       this.invoiceForm.controls.clientId.reset();
+      }
+      console.log(this.invoiceForm);
+      const checkClientId = this.invoiceForm.value.clientId;
+      const request = {
+        invoiceId: 0,
+        invoiceSerial: this.invoiceForm.value.invoiceSerial,
+        invoiceNumber: this.invoiceForm.value.invoiceNumber,
+        issueDate: [this.invoiceForm.value.issueDate.year,
+        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
+        dueDate: [this.invoiceForm.value.dueDate.year,
+        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
+        reference: this.invoiceForm.value.reference,
+        subTotal: 0,
+        discRate: 0,
+        discount: 0,
+        vatTax: 0,
+        amountPaid: 0,
+        note: this.invoiceForm.value.notes,
+        term: this.invoiceForm.value.termCondition,
+        status: '',
+        clientId: checkClientId !== null ? this.invoiceForm.value.clientId : 0,
+        clientName: this.invoiceForm.value.clientName,
+        address: this.invoiceForm.value.address,
+        taxCode: this.invoiceForm.value.taxCode,
+        tag: null,
+        contactName: this.invoiceForm.value.contactName,
+        email: this.invoiceForm.value.email,
+        clientData: [{
+          clientId: checkClientId !== null ? this.invoiceForm.value.clientId : 0,
+          clientName: this.invoiceForm.value.clientName,
+          address: this.invoiceForm.value.address,
+          taxCode: this.invoiceForm.value.taxCode,
+          tag: null,
+          contactName: this.invoiceForm.value.contactName,
+          email: this.invoiceForm.value.email,
+          note: this.invoiceForm.value.notes,
+        }]
+      };
+      this.invoiceService.updateSaleInv(request).subscribe(rs => {
 
+      })
+      console.log(request);
     } else {
 
     }
-    console.log(JSON.stringify(this.invoiceForm.value));
-   // this.router.navigate([`/invoice`]);
+    // console.log(JSON.stringify(this.invoiceForm.value));
+    // this.router.navigate([`/invoice`]);
   }
 
   private updateTotalUnitPrice(items: any) {
