@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
- using XAccLib.SaleInvoice;
+// using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -23,8 +23,10 @@ namespace XBOOK.Service.Service
         private readonly IUnitOfWork _uow;
         public readonly IClientService _iClientService;
         public readonly ISaleInvDetailService _iSaleInvDetailService;
-        public SaleInvoiceService(IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService)
+        private readonly XBookContext _context;
+        public SaleInvoiceService(XBookContext context,IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService)
         {
+            _context = context;
             _iClientService = iClientService;
             _iSaleInvDetailService = iSaleInvDetailService;
             _uow = uow;
@@ -32,7 +34,7 @@ namespace XBOOK.Service.Service
             _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
         }
 
-        public bool CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
+        bool ISaleInvoiceService.CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
         {
             var saleInvoie = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
             //var countZero = saleInvoie.InvoiceNumber.Count(x => x == matchChar);
@@ -140,7 +142,7 @@ namespace XBOOK.Service.Service
                 }
             };
             var listData = GetAllSaleInv(obj);
-            var saleInvoiceGL = new SaleInvoiceGL();
+            // var saleInvoiceGL = new SaleInvoiceGL(_uow);
             var objData = new SaleInvoiceViewModel()
             {
                 VatTax = listData[0].VatTax,
@@ -162,7 +164,8 @@ namespace XBOOK.Service.Service
                 SubTotal = listData[0].SubTotal,
                 Term = listData[0].Term,
             };
-            saleInvoiceGL.InvoiceGL(objData);
+            //saleInvoiceGL.InvoiceGL(objData);
+
             return true;
         }
 
@@ -339,6 +342,17 @@ namespace XBOOK.Service.Service
             saleInvoie = SerchData(null, null, null, saleInvoie, null);
             List<SaleInvoiceViewModel> listData = GetAllSaleInv(saleInvoie);
             return listData;
+        }
+
+        public async Task DeletedSaleInv(long id)
+        {
+            await _saleInvoiceUowRepository.Remove(id);
+        }
+
+        public SaleInvoiceViewModel GetALlDF()
+        {
+            var data =  _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
+            return data;
         }
     }
 }

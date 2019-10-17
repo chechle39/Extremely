@@ -17,12 +17,13 @@ namespace XBOOK.Web.Controllers
         ISaleInvoiceService _saleInvoiceService;
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IUnitOfWork _uow;
-
-        public SaleInvoiceController(ISaleInvoiceService saleInvoiceService, IUnitOfWork uow)
+        private readonly XBookContext _context;
+        public SaleInvoiceController(ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, XBookContext context)
         {
             _saleInvoiceService = saleInvoiceService;
             _uow = uow;
             _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
+            _context = context;
         }
 
         [HttpPost("[action]")]
@@ -41,9 +42,8 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public ActionResult CreateSaleInvoice(SaleInvoiceModelRequest request)
         {
-            var CreateData = _saleInvoiceService.CreateSaleInvoice(request);
-            var saleInvoie = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
-            return Ok(saleInvoie);
+            var CreateData =  _saleInvoiceService.CreateSaleInvoice(request);
+            return Ok(CreateData);
         }
 
         [HttpPost("[action]/{id}")]
@@ -52,5 +52,20 @@ namespace XBOOK.Web.Controllers
             var saleListInvoice = await _saleInvoiceService.GetSaleInvoiceById(id);
             return Ok(saleListInvoice);
         }
+
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> DeleteSaleInv (long id)
+        {
+            await _saleInvoiceService.DeletedSaleInv(id);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public  IActionResult GetDF()
+        {
+            var saleListInvoice =  _saleInvoiceService.GetALlDF();
+            return Ok(saleListInvoice);
+        }
+
     }
 }

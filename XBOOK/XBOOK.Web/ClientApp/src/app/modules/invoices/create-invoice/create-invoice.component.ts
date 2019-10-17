@@ -73,6 +73,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   clientKey = {
     clientKeyword: ''
   };
+  saleInvId: any;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -316,7 +317,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.router.navigate([`/invoice`]);
   }
   save() {
-    if (!this.invoiceForm.valid) {
+    if (!this.invoiceForm.valid && this.invoiceId === 0) {
       const request = {
         invoiceId: 0,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
@@ -346,34 +347,41 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       const requestInvDt = [];
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         console.log(rs);
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-          const requestInvDetail = {
-            id: 0,
-            invoiceId: rs.invoiceId,
-            productId: this.invoiceForm.value.items[i].productName.productID,
-            productName: this.invoiceForm.value.items[i].productName.productName,
-            description: this.invoiceForm.value.items[i].description,
-            qty: this.invoiceForm.value.items[i].qty,
-            price: this.invoiceForm.value.items[i].price,
-            amount: this.invoiceForm.value.items[i].amount,
-            vat:  this.invoiceForm.value.items[i].vat
-          };
-          requestInvDt.push(requestInvDetail);
-        }
-        this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(x => {
-          console.log(x);
+        this.invoiceService.getDF().subscribe((x: any) => {
+          this.saleInvId = x.invoiceId;
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
+            const productId = this.invoiceForm.value.items[i].productName.productID;
+            const productName = this.invoiceForm.value.items[i].productName.productName;
+            const requestInvDetail = {
+              id: 0,
+              invoiceId: this.saleInvId,
+              productId: productId > 0 ? this.invoiceForm.value.items[i].productName.productID : 0,
+              productName: productName !== undefined ? this.invoiceForm.value.items[i].productName.productName
+              : this.invoiceForm.value.items[i].productName,
+              description: this.invoiceForm.value.items[i].description,
+              qty: this.invoiceForm.value.items[i].qty,
+              price: this.invoiceForm.value.items[i].price,
+              amount: this.invoiceForm.value.items[i].amount,
+              vat:  this.invoiceForm.value.items[i].vat
+            };
+            requestInvDt.push(requestInvDetail);
+          }
+          this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
+            this.notify.success('Successfully Deleted');
+            // this.router.navigate([`/invoice`]);
+          });
         });
       });
       return;
     }
-    if (this.invoiceId > 0) {
+    if (this.invoiceId > 0 && !this.invoiceForm.valid) {
 
     } else {
 
     }
     console.log(JSON.stringify(this.invoiceForm.value));
-    this.router.navigate([`/invoice`]);
+   // this.router.navigate([`/invoice`]);
   }
 
   private updateTotalUnitPrice(items: any) {

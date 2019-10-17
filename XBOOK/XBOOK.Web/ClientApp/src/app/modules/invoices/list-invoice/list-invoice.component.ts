@@ -83,7 +83,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       return;
     }
     this.selected.forEach(element => {
-      this.deleteInvoice(element.id);
+      this.deleteInvoice(element.invoiceId);
     });
     this.selected = [];
   }

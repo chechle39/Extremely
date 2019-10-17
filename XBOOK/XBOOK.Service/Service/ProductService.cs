@@ -18,16 +18,24 @@ namespace XBOOK.Service.Service
     {
         private readonly IRepository<Product> _productUowRepository;
         private readonly IUnitOfWork _uow;
-        public ProductService(IRepository<Product> productUowRepository, IUnitOfWork uow)
+        private readonly XBookContext _context;
+        public ProductService(IRepository<Product> productUowRepository, IUnitOfWork uow, XBookContext context)
         {
             _productUowRepository = productUowRepository;
             _uow = uow;
+            _context = context;
         }
 
         public async Task CreateProduct(ProductViewModel request)
         {
             var clientCreate = Mapper.Map<ProductViewModel, Product>(request);
             await _productUowRepository.Add(clientCreate);
+        }
+
+        public async Task<ProductViewModel> GetALlPrDF()
+        {
+            var data = await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().LastOrDefaultAsync();
+            return data;
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetAllProduct(ProductSerchRequest request)

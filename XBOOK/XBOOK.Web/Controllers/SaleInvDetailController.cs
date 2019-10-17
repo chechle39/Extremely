@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using XBOOK.Data.Entities;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -11,9 +12,11 @@ namespace XBOOK.Web.Controllers
     public class SaleInvDetailController : ControllerBase
     {
         ISaleInvDetailService _iSaleInvDetailService;
-        public SaleInvDetailController(ISaleInvDetailService iSaleInvDetailService)
+        private readonly XBookContext _context;
+        public SaleInvDetailController(ISaleInvDetailService iSaleInvDetailService, XBookContext context)
         {
             _iSaleInvDetailService = iSaleInvDetailService;
+            _context = context;
         }
 
         [HttpPost("[action]")]

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
@@ -11,9 +12,11 @@ namespace XBOOK.Web.Controllers
     public class ProductController : ControllerBase
     {
         IProductService _iProductService;
-        public ProductController(IProductService iProductService)
+        private readonly XBookContext _context;
+        public ProductController(IProductService iProductService, XBookContext context)
         {
             _iProductService = iProductService;
+            _context = context;
         }
 
         [HttpPost("[action]")]

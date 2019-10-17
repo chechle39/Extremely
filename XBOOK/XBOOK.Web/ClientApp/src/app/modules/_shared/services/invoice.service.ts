@@ -12,11 +12,14 @@ export class InvoiceService extends BaseService {
   getAll(request: any): Observable<InvoiceView> {
     return this.post<InvoiceView>(`${this.url}`, request);
   }
+  getDF(): Observable<InvoiceView> {
+    return this.post<InvoiceView>(`${API_URI.invoiceDF}`, null);
+  }
   getInvoice(id: any): Observable<InvoiceView> {
     return this.post<InvoiceView>(`${API_URI.invoiceById}/${id}`, id);
   }
   deleteInvoice(id: number) {
-    return this.delete(`${this.url}/${id}`);
+    return this.post(`${API_URI.deleteSaleInvoice}/${id}`, id);
   }
   CreateSaleInv(request: any): Observable<any> {
      return this.post<any>(`${API_URI.createSaleInv}`, request);

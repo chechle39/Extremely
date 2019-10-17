@@ -16,15 +16,17 @@ namespace XBOOK.Service.Service
         private readonly IRepository<SaleInvDetail> _saleInvDetailUowRepository;
         private readonly IUnitOfWork _uow;
         IProductService _iProductService;
+        private readonly XBookContext _context;
 
-        public SaleInvDetailService(IUnitOfWork uow, IProductService iProductService)
+        public SaleInvDetailService(IUnitOfWork uow, IProductService iProductService, XBookContext context)
         {
             _uow = uow;
             _saleInvDetailUowRepository = _uow.GetRepository<IRepository<SaleInvDetail>>();
             _iProductService = iProductService;
+            _context = context;
         }
 
-        public bool CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
+        public async Task<bool> CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
         {
             var clientUOW = _uow.GetRepository<IRepository<Product>>();
             foreach (var item in saleInvoiceViewModel)
@@ -57,8 +59,8 @@ namespace XBOOK.Service.Service
                         unitPrice = saleDetailData.Price
                     };
                     var productCreate = Mapper.Map<ProductViewModel, Product>(product);
-                    clientUOW.Add(productCreate);
-                    var serchData = clientUOW.GetAll().ProjectTo<ProductViewModel>().Where(x => x.productName == saleDetailData.ProductName).ToList();
+                    await clientUOW.Add(productCreate);
+                    var serchData = await _iProductService.GetALlPrDF();
                     var saleDetailPrd = new SaleInvDetailViewModel
                     {
                         Amount = item.Price * item.Qty,
@@ -67,7 +69,7 @@ namespace XBOOK.Service.Service
                         Description = item.Description,
                         Id = item.Id,
                         InvoiceId = item.InvoiceId,
-                        ProductId = serchData[0].productID,
+                        ProductId = serchData.productID,
                         ProductName = item.ProductName,
                         Vat = item.Vat
                     };
