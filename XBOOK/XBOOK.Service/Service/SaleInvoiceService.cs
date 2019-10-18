@@ -169,11 +169,48 @@ namespace XBOOK.Service.Service
             return true;
         }
 
-        public async Task Update(SaleInvoiceViewModel saleInvoiceViewModel)
+        public void Update(SaleInvoiceViewModel saleInvoiceViewModel)
         {
-            var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
-            var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
-            await saleInvoiceList.Update(saleInvoice);
+            if (saleInvoiceViewModel.ClientId > 0)
+            {
+                var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
+                var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
+                saleInvoiceList.Update(saleInvoice);
+                var clientUOW = _uow.GetRepository<IRepository<Client>>();
+                var requetsCl = new ClientCreateRequet
+                {
+                    Address = saleInvoiceViewModel.ClientData[0].Address,
+                    ClientId = saleInvoiceViewModel.ClientData[0].ClientId,
+                    ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
+                    ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
+                    Email = saleInvoiceViewModel.ClientData[0].Email,
+                    Note = saleInvoiceViewModel.ClientData[0].Note,
+                    Tag = saleInvoiceViewModel.ClientData[0].Tag,
+                    TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
+                };
+                var update = Mapper.Map<ClientCreateRequet, Client>(requetsCl);
+                clientUOW.Update(update);
+                _uow.SaveChanges();
+            }
+            else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientData.Count() > 0)
+            {
+                var requetsCl = new ClientCreateRequet
+                {
+                    Address = saleInvoiceViewModel.ClientData[0].Address,
+                    ClientId = saleInvoiceViewModel.ClientData[0].ClientId,
+                    ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
+                    ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
+                    Email = saleInvoiceViewModel.ClientData[0].Email,
+                    Note = saleInvoiceViewModel.ClientData[0].Note,
+                    Tag = saleInvoiceViewModel.ClientData[0].Tag,
+                    TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
+                };
+                var clientdata = _iClientService.CreateClient(requetsCl);
+                var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
+                var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
+                saleInvoice.clientID = clientdata.clientID;
+                saleInvoiceList.Update(saleInvoice);
+            }
         }
 
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request)

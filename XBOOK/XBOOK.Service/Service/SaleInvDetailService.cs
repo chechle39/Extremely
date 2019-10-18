@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,13 +18,15 @@ namespace XBOOK.Service.Service
         private readonly IRepository<SaleInvDetail> _saleInvDetailUowRepository;
         private readonly IUnitOfWork _uow;
         private readonly IProductRepository _iProductRepository;
+        private readonly ISaleInvoiceDetailRepository _iSaleInvoiceDetailRepository;
         private readonly XBookContext _context;
-        public SaleInvDetailService(IUnitOfWork uow, IProductRepository iProductRepository, XBookContext context)
+        public SaleInvDetailService(IUnitOfWork uow, IProductRepository iProductRepository, XBookContext context, ISaleInvoiceDetailRepository iSaleInvoiceDetailRepository)
         {
             _uow = uow;
             _saleInvDetailUowRepository = _uow.GetRepository<IRepository<SaleInvDetail>>();
             _iProductRepository = iProductRepository;
             _context = context;
+            _iSaleInvoiceDetailRepository = iSaleInvoiceDetailRepository;
         }
 
         public  bool CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
@@ -73,8 +76,18 @@ namespace XBOOK.Service.Service
                         ProductName = item.ProductName,
                         Vat = item.Vat
                     };
-                    var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailPrd);
-                    _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
+
+                    //var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailPrd);
+                    //_saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
+                    try
+                    {
+                        _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
+                        _uow.SaveChanges();
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
                 }
             }
             return true;

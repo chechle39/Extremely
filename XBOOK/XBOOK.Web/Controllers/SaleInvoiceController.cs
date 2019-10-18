@@ -34,9 +34,9 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPut("[action]")]
-        public async Task<ActionResult> UpdateSaleInvoice(SaleInvoiceViewModel request)
+        public ActionResult UpdateSaleInvoice(SaleInvoiceViewModel request)
         {
-            await _saleInvoiceService.Update(request);
+            _saleInvoiceService.Update(request);
             return Ok(request);
         }
         [HttpPost("[action]")]

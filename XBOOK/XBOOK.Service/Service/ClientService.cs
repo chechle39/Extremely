@@ -21,12 +21,23 @@ namespace XBOOK.Service.Service
             _uow = uow;
             _clientUowRepository = _uow.GetRepository<IRepository<Client>>();
         }
-        public bool CreateClient(ClientCreateRequet request)
+        public Client CreateClient(ClientCreateRequet request)
         {
             var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
-            _clientUowRepository.AddData(clientCreate);
+            var client = new Client()
+            {
+                clientID = 0,
+                address = request.Address,
+                clientName = request.ClientName,
+                contactName = request.ContactName,
+                email = request.Email,
+                note = request.Note,
+                Tag = request.Tag,
+                taxCode = request.TaxCode,
+            };
+            _clientUowRepository.AddData(client);
             _uow.SaveChanges();
-            return true;
+            return client;
         }
 
         public async Task<IEnumerable<ClientViewModel>> GetAllClient(ClientSerchRequest request)

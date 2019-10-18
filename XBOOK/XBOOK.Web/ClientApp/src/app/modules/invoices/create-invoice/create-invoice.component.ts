@@ -77,6 +77,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   saleInvId: any;
   oldClienName: any;
   oldClientId: any;
+  requestData: any;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -95,6 +96,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   }
   ngOnInit() {
+    if (!this.viewMode) {
+      this.invoiceForm.controls.clientName.disable();
+      this.invoiceForm.controls.contactName.disable();
+      this.invoiceForm.controls.email.disable();
+      this.invoiceForm.controls.address.disable();
+      this.invoiceForm.controls.taxCode.disable();
+    }
     this.canActionClient();
     // initialize stream on units
     const request = {
@@ -126,7 +134,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.addEventForInput();
   }
   canActionClient(): boolean {
-    return (!this.viewMode && this.clientSelected.clientId > 0);
+    return (!this.viewMode);
   }
   private addEventForInput() {
     const inputList = [].slice.call((this.el.nativeElement as HTMLElement).getElementsByTagName('input'));
@@ -161,7 +169,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       amountPaid: [''],
       notes: [''],
       termCondition: [''],
-      items: this.initItems()
+      items: this.initItems(),
+      invoiceId: [0],
     });
   }
 
@@ -285,7 +294,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         totalDiscount: invoice[0].discRate,
         notes: invoice[0].note,
         termCondition: invoice[0].term,
-        items: invoice[0].saleInvDetailView
+        items: invoice[0].saleInvDetailView,
       });
       this.oldClienName = invoice[0].clientData[0].clientName;
       this.oldClientId = invoice[0].clientData[0].clientId;
@@ -355,6 +364,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         console.log(rs);
         this.invoiceService.getDF().subscribe((x: any) => {
           this.saleInvId = x.invoiceId;
+          // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
             const productId = this.invoiceForm.value.items[i].productName.productID;
             const productName = this.invoiceForm.value.items[i].productName.productName;
@@ -381,13 +391,49 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       return;
     }
     if (this.invoiceId > 0 && !this.invoiceForm.valid) {
-      if (this.invoiceForm.value.clientName !== this.oldClienName && this.oldClientId === this.invoiceForm.value.clientId){
-       this.invoiceForm.controls.clientId.reset();
-      }
-      console.log(this.invoiceForm);
+      // if (this.invoiceForm.value.clientName !== this.oldClienName
+      //   && this.oldClientId === this.invoiceForm.value.clientId) {
+      //  this.invoiceForm.controls.clientId.reset();
+      // }
       const checkClientId = this.invoiceForm.value.clientId;
+      const request1 = {
+        invoiceId: this.invoiceForm.value.invoiceId,
+        invoiceSerial: this.invoiceForm.value.invoiceSerial,
+        invoiceNumber: this.invoiceForm.value.invoiceNumber,
+        issueDate: [this.invoiceForm.value.issueDate.year,
+        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
+        dueDate: [this.invoiceForm.value.dueDate.year,
+        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
+        reference: this.invoiceForm.value.reference,
+        subTotal: 0,
+        discRate: 0,
+        discount: 0,
+        vatTax: 0,
+        amountPaid: 0,
+        note: this.invoiceForm.value.notes,
+        term: this.invoiceForm.value.termCondition,
+        status: '',
+        clientId: this.invoiceForm.value.contactName.clientId !== null ? this.invoiceForm.value.contactName.clientId : 0,
+        clientName: this.invoiceForm.value.contactName.clientName,
+        address: this.invoiceForm.value.contactName.address,
+        taxCode: this.invoiceForm.value.taxCode,
+        tag: this.invoiceForm.value.contactName.tag,
+        contactName: this.invoiceForm.value.contactName.contactName,
+        email: this.invoiceForm.value.contactName.email,
+        clientData: [{
+          clientId: this.invoiceForm.value.contactName.clientId !== null ? this.invoiceForm.value.contactName.clientId : 0,
+          clientName: this.invoiceForm.value.contactName.clientName,
+          address: this.invoiceForm.value.contactName.address,
+          taxCode: this.invoiceForm.value.contactName.taxCode,
+          tag: null,
+          contactName: this.invoiceForm.value.contactName.contactName,
+          email: this.invoiceForm.value.contactName.email,
+          note: this.invoiceForm.value.notes,
+        }],
+        saleInvDetailView: this.invoiceForm.value.items,
+      };
       const request = {
-        invoiceId: 0,
+        invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
@@ -419,11 +465,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           contactName: this.invoiceForm.value.contactName,
           email: this.invoiceForm.value.email,
           note: this.invoiceForm.value.notes,
-        }]
+        }],
+        saleInvDetailView: this.invoiceForm.value.items,
       };
-      this.invoiceService.updateSaleInv(request).subscribe(rs => {
+      if (request1.clientId === undefined) {
+        this.requestData = request;
+      } else if (request1.clientId !== undefined) {
+        this.requestData = request1;
+      }
+      this.invoiceService.updateSaleInv(this.requestData).subscribe(rs => {
 
-      })
+      });
       console.log(request);
     } else {
 
@@ -594,10 +646,14 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
   editClient() {
     this.isEditClient = true;
+    // tslint:disable-next-line: no-unused-expression
+    this.invoiceForm.controls.clientName.disabled === false;
+    this.invoiceForm.enable();
   }
   deleteClient() {
     this.isEditClient = true;
     this.clientSelected = new ClientSearchModel();
+    this.invoiceForm.controls.clientId.reset();
   }
   redirectToEditInvoice() {
     this.invoiceForm.enable();

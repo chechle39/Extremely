@@ -29,5 +29,11 @@ namespace XBOOK.Web.Controllers
             var getCkientById = await _iClientService.GetClientById(id);
             return Ok(getCkientById);
         }
+        [HttpPost("[action]")]
+        public IActionResult SaveClient(ClientCreateRequet rs)
+        {
+            _iClientService.CreateClient(rs);
+            return Ok();
+        }
     }
 }
