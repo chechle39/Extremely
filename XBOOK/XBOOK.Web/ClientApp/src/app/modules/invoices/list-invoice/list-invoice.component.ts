@@ -63,7 +63,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       isIssueDate: true
     };
     this.invoiceService.getAll(requestList).pipe(
-      debounceTime(500),
+     // debounceTime(500),
       finalize(() => {
         finishedCallback();
       })

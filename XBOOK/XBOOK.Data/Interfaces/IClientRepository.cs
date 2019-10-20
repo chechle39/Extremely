@@ -9,5 +9,7 @@ namespace XBOOK.Data.Interfaces
     {
         IEnumerable<Client> GetAllClient();
         bool SaveClient(ClientCreateRequet rs);
+        bool UpdateCl(ClientCreateRequet rs);
+        bool remiveClient(long id);
     }
 }

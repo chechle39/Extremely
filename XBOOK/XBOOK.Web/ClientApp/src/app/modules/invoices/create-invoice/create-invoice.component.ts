@@ -34,7 +34,7 @@ import { SaleInvoiceCreateRequest } from '@modules/_shared/models/invoice/sale-i
   selector: 'xb-create-invoice',
   templateUrl: './create-invoice.component.html'
 })
-export class CreateInvoiceComponent extends AppComponentBase implements OnInit, AfterViewInit {
+export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   @ViewChild('productName', {
     static: true
   }) productNameField: ElementRef;
@@ -78,6 +78,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   oldClienName: any;
   oldClientId: any;
   requestData: any;
+  requestRemove: any[] = [];
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -96,13 +97,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   }
   ngOnInit() {
-    if (!this.viewMode) {
-      this.invoiceForm.controls.clientName.disable();
-      this.invoiceForm.controls.contactName.disable();
-      this.invoiceForm.controls.email.disable();
-      this.invoiceForm.controls.address.disable();
-      this.invoiceForm.controls.taxCode.disable();
-    }
+    // if (!this.viewMode) {
+    //   this.invoiceForm.controls.clientName.disable();
+    //   this.invoiceForm.controls.contactName.disable();
+    //   this.invoiceForm.controls.email.disable();
+    //   this.invoiceForm.controls.address.disable();
+    //   this.invoiceForm.controls.taxCode.disable();
+    // }
     this.canActionClient();
     // initialize stream on units
     const request = {
@@ -130,11 +131,18 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       }
     });
   }
-  ngAfterViewInit() {
-    this.addEventForInput();
-  }
+  // ngAfterViewInit() {
+  //   // if (!this.viewMode) {
+  //   //   this.invoiceForm.controls.clientName.disable();
+  //   //   this.invoiceForm.controls.contactName.disable();
+  //   //   this.invoiceForm.controls.email.disable();
+  //   //   this.invoiceForm.controls.address.disable();
+  //   //   this.invoiceForm.controls.taxCode.disable();
+  //   // }
+  //   this.addEventForInput();
+  // }
   canActionClient(): boolean {
-    return (!this.viewMode);
+    return (!this.viewMode && this.invoiceForm.value.clientId > 0);
   }
   private addEventForInput() {
     const inputList = [].slice.call((this.el.nativeElement as HTMLElement).getElementsByTagName('input'));
@@ -191,7 +199,25 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     // inputList[formArray.length - 2].nativeElement.addEventListener('focus', (e) => { });
   }
   removeItem(i: number) {
+    const saleInvDetailView = [];
     const controls = this.getFormArray();
+      if (controls.value[i].productId === undefined) {
+        const rs = {
+          amount: controls.value[i].amount,
+          qty: controls.value[i].qty,
+          price: controls.value[i].price,
+          description : controls.value[i].description,
+          id : controls.value[i].id,
+          invoiceId : controls.value[i].invoiceId,
+          productId :controls.value[i].productName.productID,
+          productName : controls.value[i].productName.productName,
+          vat : controls.value[i].vat,
+        }
+        this.requestRemove.push(rs);
+      }
+      if (controls.value[i].productId !== undefined) {
+        this.requestRemove.push(controls.value[i]);
+      }
     controls.removeAt(i);
   }
 
@@ -205,6 +231,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       qty: [1, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(10)]],
       vat: [0],
       amount: [0],
+      invoiceId: [0],
+      id: [0],
       vatAmount: [''],
       taxs: this.fb.array([])
     });
@@ -396,6 +424,26 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       //  this.invoiceForm.controls.clientId.reset();
       // }
       const checkClientId = this.invoiceForm.value.clientId;
+      const saleInvDetailView = [];
+      for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
+        if (this.invoiceForm.value.items[ii].productId === undefined) {
+          const rs = {
+            amount: this.invoiceForm.value.items[ii].amount,
+            qty: this.invoiceForm.value.items[ii].qty,
+            price: this.invoiceForm.value.items[ii].price,
+            description : this.invoiceForm.value.items[ii].description,
+            id : this.invoiceForm.value.items[ii].id,
+            invoiceId : this.invoiceForm.value.invoiceId,
+            productId :this.invoiceForm.value.items[ii].productName.productID,
+            productName : this.invoiceForm.value.items[ii].productName.productName,
+            vat : this.invoiceForm.value.items[ii].vat,
+          }
+          saleInvDetailView.push(rs);
+        }
+        if (this.invoiceForm.value.items[ii].productId !== undefined) {
+          saleInvDetailView.push(this.invoiceForm.value.items[ii]);
+        }
+      }
       const request1 = {
         invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
@@ -430,7 +478,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           email: this.invoiceForm.value.contactName.email,
           note: this.invoiceForm.value.notes,
         }],
-        saleInvDetailView: this.invoiceForm.value.items,
+        saleInvDetailView: saleInvDetailView,
       };
       const request = {
         invoiceId: this.invoiceForm.value.invoiceId,
@@ -466,17 +514,27 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           email: this.invoiceForm.value.email,
           note: this.invoiceForm.value.notes,
         }],
-        saleInvDetailView: this.invoiceForm.value.items,
+        saleInvDetailView: saleInvDetailView,
       };
       if (request1.clientId === undefined) {
         this.requestData = request;
       } else if (request1.clientId !== undefined) {
         this.requestData = request1;
       }
-      this.invoiceService.updateSaleInv(this.requestData).subscribe(rs => {
-
-      });
-      console.log(request);
+      this.invoiceService.updateSaleInv(this.requestData).pipe(
+        finalize(() => {
+        })).subscribe(rs => {
+          if (this.requestRemove.length > 0){
+            this.message.confirm('Do you want to delete those payment ?', 'Are you sure ?', () => {
+              this.requestRemove.forEach(element => {
+                this.invoiceService.deleteInvoiceDetail(element.id).subscribe(() => {
+                  this.notify.success('Successfully Deleted');
+                  this.getDataForEditMode();
+                });
+              });
+            });
+          }
+        });
     } else {
 
     }
@@ -565,10 +623,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     });
   }
   getPayments(invoiceId: number) {
-    this.paymentService.getPaymentIvByid(invoiceId).pipe(debounceTime(500), finalize(() => {
-    })).subscribe((i: any) => {
-      this.paymentViews = i;
-    });
+    this.paymentService.getPaymentIvByid(invoiceId).pipe(
+      //debounceTime(500), 
+      finalize(() => {
+      })).subscribe((i: any) => {
+        this.paymentViews = i;
+      });
   }
   deletePayment(payments: any) {
     if (payments.length === 0) { return; }
@@ -647,7 +707,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   editClient() {
     this.isEditClient = true;
     // tslint:disable-next-line: no-unused-expression
-    this.invoiceForm.controls.clientName.disabled === false;
+    // this.invoiceForm.controls.clientName.disabled === false;
     this.invoiceForm.enable();
   }
   deleteClient() {

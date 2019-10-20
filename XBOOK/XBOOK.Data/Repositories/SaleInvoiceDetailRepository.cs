@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -17,6 +18,30 @@ namespace XBOOK.Data.Repositories
         {
             var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(request);
             var createData = Entities.Add(saleInvoiceDetailCreate);
+            return true;
+        }
+
+        public bool RemoveAll(List<SaleInvDetailViewModel> request)
+        {
+            foreach(var item in request)
+            {
+                var dataRm = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(item);
+                if (item.ProductId > 0)
+                {
+                    var remove = Entities.Update(dataRm);
+                }
+                else if (item.ProductId == 0)
+                {
+                    var create = Entities.Add(dataRm);
+                }
+            }
+            return true;
+        }
+
+        public bool UpdateSaleInvDetail(SaleInvDetailViewModel rs)
+        {
+            var dataRm = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(rs);
+            Entities.Update(dataRm);
             return true;
         }
     }

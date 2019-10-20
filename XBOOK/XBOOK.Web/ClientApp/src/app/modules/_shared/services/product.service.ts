@@ -27,7 +27,7 @@ export class ProductService extends BaseService {
   searchProduct(term: any) {
     const products = this.post<ProductSearchModel[]>(`${API_URI.productGetAll}`, term)
       .pipe(
-        debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
+      //  debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
         map(
           (data: any) => {
             return (

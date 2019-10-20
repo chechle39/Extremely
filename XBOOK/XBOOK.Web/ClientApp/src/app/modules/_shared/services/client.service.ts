@@ -25,7 +25,7 @@ export class ClientService extends BaseService {
   searchClient(term: any) {
     const clients = this.post<ClientSearchModel[]>(`${API_URI.clientAll}`, term)
       .pipe(
-        debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
+      //  debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
         map(
           (data: any) => {
             return (
@@ -41,18 +41,17 @@ export class ClientService extends BaseService {
       `${this.url}/?q=${term}`
     );
   }
-  getClient(id: number): Observable<ClientView> {
-    return this.get<ClientView>(
-      `${this.url}/${id}`
+  getClient(id: any): Observable<ClientView> {
+    return this.post<ClientView>(
+      `${API_URI.clientById}/${id}`, id
     );
   }
   createClient(client: ClientView): Observable<ClientView> {
-    return this.post<ClientView>(`${this.url}`, client);
+    return this.post<ClientView>(`${API_URI.createClient}`, client);
   }
   updateClient(client: ClientView) {
-    return this.put<ClientView>(`${this.url}/${client.id}`, client);
+    return this.put<ClientView>(`${API_URI.updateClient}`, client);
   }
   deleteClient(id: number) {
-    return this.delete(`${this.url}/${id}`);
-  }
+    return this.post(`${API_URI.deleteClient}/${id}`, id );  }
 }

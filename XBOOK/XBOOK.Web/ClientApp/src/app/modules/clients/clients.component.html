@@ -86,9 +86,9 @@
               <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                 let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
                 <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
+                  <input type="checkbox" class="custom-control-input" id="{{row.clientId}}" [checked]="isSelected"
                     (change)="onCheckboxChangeFn($event)" />
-                  <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
+                  <label class="custom-control-label col-form-label" for="{{row.clientId}}"></label>
                 </div>
 
               </ng-template>

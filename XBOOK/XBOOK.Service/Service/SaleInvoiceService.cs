@@ -20,11 +20,14 @@ namespace XBOOK.Service.Service
     {
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IClientRepository _ClientRepository;
+        private readonly ISaleInvoiceRepository _SaleInvoiceRepository;
         private readonly IUnitOfWork _uow;
         public readonly IClientService _iClientService;
         public readonly ISaleInvDetailService _iSaleInvDetailService;
+        private readonly ISaleInvoiceDetailRepository _SaleInvoiceDetailRepository;
+
         private readonly XBookContext _context;
-        public SaleInvoiceService(XBookContext context,IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService)
+        public SaleInvoiceService(ISaleInvoiceRepository saleInvoiceRepository, XBookContext context,IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService, ISaleInvoiceDetailRepository saleInvoiceDetailRepository)
         {
             _context = context;
             _iClientService = iClientService;
@@ -32,6 +35,8 @@ namespace XBOOK.Service.Service
             _uow = uow;
             _ClientRepository = ClientRepository;
             _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
+            _SaleInvoiceDetailRepository = saleInvoiceDetailRepository;
+            _SaleInvoiceRepository = saleInvoiceRepository;
         }
 
         bool ISaleInvoiceService.CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
@@ -173,10 +178,12 @@ namespace XBOOK.Service.Service
         {
             if (saleInvoiceViewModel.ClientId > 0)
             {
+                _uow.BeginTransaction();
                 var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
                 var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
-                saleInvoiceList.Update(saleInvoice);
-                var clientUOW = _uow.GetRepository<IRepository<Client>>();
+                _SaleInvoiceRepository.UpdateSaleInv(saleInvoiceViewModel);
+                _uow.SaveChanges();
+                _uow.CommitTransaction();
                 var requetsCl = new ClientCreateRequet
                 {
                     Address = saleInvoiceViewModel.ClientData[0].Address,
@@ -188,9 +195,12 @@ namespace XBOOK.Service.Service
                     Tag = saleInvoiceViewModel.ClientData[0].Tag,
                     TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
                 };
-                var update = Mapper.Map<ClientCreateRequet, Client>(requetsCl);
-                clientUOW.Update(update);
+                //var update = Mapper.Map<ClientCreateRequet, Client>(requetsCl);
+                //clientUOW.Update(update);
+                _uow.BeginTransaction();
+                _ClientRepository.UpdateCl(requetsCl);
                 _uow.SaveChanges();
+                _uow.CommitTransaction();
             }
             else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientData.Count() > 0)
             {
@@ -211,6 +221,25 @@ namespace XBOOK.Service.Service
                 saleInvoice.clientID = clientdata.clientID;
                 saleInvoiceList.Update(saleInvoice);
             }
+            if (saleInvoiceViewModel.SaleInvDetailView.Count() > 0)
+            {
+                //_uow.BeginTransaction();
+                for (int i = 0; i <  saleInvoiceViewModel.SaleInvDetailView.Count; i++)
+                {
+                    if (saleInvoiceViewModel.SaleInvDetailView[i].Id > 0)
+                    {
+                        _SaleInvoiceDetailRepository.UpdateSaleInvDetail(saleInvoiceViewModel.SaleInvDetailView[i]);
+                        _uow.SaveChanges();
+                    }else
+                    {
+                        _SaleInvoiceDetailRepository.CreateSaleIvDetail(saleInvoiceViewModel.SaleInvDetailView[i]);
+                        _uow.SaveChanges();
+                    }
+                }
+               // _uow.CommitTransaction();
+
+            }
+            // _uow.SaveChanges();
         }
 
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request)

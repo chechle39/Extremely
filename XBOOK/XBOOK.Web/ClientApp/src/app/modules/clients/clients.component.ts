@@ -11,20 +11,23 @@ import { PagedListingComponentBase, PagedRequestDto } from '@core/paged-listing-
 import { finalize, debounceTime } from 'rxjs/operators';
 import * as _ from 'lodash';
 class PagedClientsRequestDto extends PagedRequestDto {
-  keyword: string;
+  clientKeyword: string;
 }
 @Component({
   selector: 'xb-clients',
   templateUrl: './clients.component.html'
 })
 export class ClientsComponent extends PagedListingComponentBase<ClientView> {
-  clientViews: ClientView[] = [];
+  clientViews: any;
   loadingIndicator = false;
   keyword = '';
   reorderable = true;
   selected = [];
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
+  clientKey = {
+    clientKeyword: ''
+  };
   constructor(
     injector: Injector,
     private clientService: ClientService,
@@ -38,12 +41,12 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     finishedCallback: () => void
   ): void {
 
-    request.keyword = this.keyword;
+    request.clientKeyword = this.keyword;
     this.loadingIndicator = true;
     this.clientService
-      .getAll(request.keyword)
+      .searchClient(this.clientKey)
       .pipe(
-        debounceTime(500),
+       // debounceTime(500),
         finalize(() => {
           finishedCallback();
         })
@@ -63,7 +66,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
       this.message.warning('Only one item selected to edit?');
       return;
     }
-    this.showCreateOrEditClientDialog(this.selected[0].id);
+    this.showCreateOrEditClientDialog(this.selected[0].clientId);
     this.selected = [];
   }
   delete(): void {
@@ -73,7 +76,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     }
     this.message.confirm('Do you want to delete clients ?', 'Are you sure ?', () => {
       this.selected.forEach(element => {
-        this.clientService.deleteClient(element.id).subscribe(() => {
+        this.clientService.deleteClient(element.clientId).subscribe(() => {
           this.notify.success('Successfully Deleted');
           this.refresh();
         });
@@ -111,7 +114,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     if (event.type === 'click' && event.value !== '') {
       event.cellElement.blur();
       const createOrEditClientDialog = this.modalService.open(EditClientComponent, AppConsts.modalOptionsCustomSize);
-      createOrEditClientDialog.componentInstance.id = event.row.id;
+      createOrEditClientDialog.componentInstance.id = event.row.clientId;
       createOrEditClientDialog.result.then(result => {
         if (result) {
           this.refresh();

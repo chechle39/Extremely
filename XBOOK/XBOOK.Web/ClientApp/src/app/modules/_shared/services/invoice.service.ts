@@ -32,4 +32,8 @@ export class InvoiceService extends BaseService {
   updateSaleInv(request: any) {
     return this.put<any>(`${API_URI.updateSaleInv}`, request);
   }
+
+  deleteInvoiceDetail(id: number) {
+    return this.post(`${API_URI.deleteSaleInvoiceDetail}/${id}`, id);
+  }
 }

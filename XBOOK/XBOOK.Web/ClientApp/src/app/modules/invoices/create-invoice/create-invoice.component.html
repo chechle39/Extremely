@@ -227,7 +227,7 @@
                           </div>
                           <div *ngIf="!viewMode" [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
                             class="text-right d-inline-grid pr-0"> <a class="item-delete mt-2"
-                              *ngIf="getFormArray().length > 1" (click)="removeItem(i)">
+                              *ngIf="getFormArray().length > 0" (click)="removeItem(i)">
                               <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                           </div>

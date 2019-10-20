@@ -46,5 +46,12 @@ namespace XBOOK.Web.Controllers
             _iSaleInvDetailService.UpdateListSaleDetail(request);
             return Ok(request);
         }
+
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> DeletedSaleInvDetail(long id)
+        {
+           await _iSaleInvDetailService.Deleted(id);
+            return Ok();
+        }
     }
 }

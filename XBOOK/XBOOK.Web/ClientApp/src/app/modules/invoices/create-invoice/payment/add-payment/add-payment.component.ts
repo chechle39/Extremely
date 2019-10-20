@@ -64,7 +64,9 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     return payment;
   }
   getPaymentDetail(id: number) {
-    this.paymentService.getPayment(id).pipe(debounceTime(500), finalize(() => {
+    this.paymentService.getPayment(id).pipe(
+      //debounceTime(500), 
+      finalize(() => {
     })).subscribe((payment: any) => {
       this.paymentForm.patchValue({
         amount: payment.amount,

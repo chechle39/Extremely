@@ -48,7 +48,7 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     this.productService
       .getAll(request.keywords)
       .pipe(
-        debounceTime(500),
+      //  debounceTime(500),
         finalize(() => {
           finishedCallback();
         })

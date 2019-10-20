@@ -7,4 +7,5 @@ export class ClientView extends BaseModel {
   contactName: string;
   email: string;
   note: string;
+  clientId: number;
 }

@@ -4,6 +4,8 @@ export const API_URI = {
   invoice: 'api/SaleInvoice/GetAllSaleInvoice',
   invoiceById: 'api/SaleInvoice/GetSaleInvoiceById',
   client: 'api/v1/client',
+  updateClient: 'api/client/UpdateClient',
+  clientById: 'api/client/GetClientById',
   clientAll: 'api/Client/GetAllClientAsync',
   product: 'api/v1/product',
   productGetAll: 'api/Product/GetAllProductAsync',
@@ -16,6 +18,9 @@ export const API_URI = {
   invoiceDF: 'api/SaleInvoice/GetDF',
   deleteSaleInvoice: 'api/SaleInvoice/DeleteSaleInv',
   updateSaleInv: 'api/SaleInvoice/UpdateSaleInvoice',
+  deleteSaleInvoiceDetail: 'api/SaleInvDetail/DeletedSaleInvDetail',
+  deleteClient: 'api/client/DeleteClient',
+  createClient: 'api/client/SaveClient',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

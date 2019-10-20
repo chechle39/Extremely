@@ -48,8 +48,8 @@ namespace XBOOK.Service.Service
                 };
                 if(saleDetailData.ProductId > 0)
                 {
-                    var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailData);
-                    _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
+                    _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailData);
+                    _uow.SaveChanges();
                 }
                 else 
                 if(saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
@@ -100,6 +100,11 @@ namespace XBOOK.Service.Service
             await _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
         }
 
+        public async Task Deleted(long id)
+        {
+           await  _iSaleInvoiceDetailRepository.Remove(id);
+        }
+
         public async Task<IEnumerable<SaleInvDetailViewModel>> GetAllSaleInvoiceDetail()
         {
             return await _saleInvDetailUowRepository.GetAll().ProjectTo<SaleInvDetailViewModel>().ToListAsync();
@@ -126,7 +131,6 @@ namespace XBOOK.Service.Service
             }
             var saleInvoiceDetailCreate = Mapper.Map<List<SaleInvDetailViewModel>, List<SaleInvDetail>>(saleDetail);
             await _saleInvDetailUowRepository.Update(saleInvoiceDetailCreate);
-            throw new System.NotImplementedException();
         }
     }
 }
