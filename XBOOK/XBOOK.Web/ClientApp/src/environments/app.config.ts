@@ -21,6 +21,7 @@ export const API_URI = {
   deleteSaleInvoiceDetail: 'api/SaleInvDetail/DeletedSaleInvDetail',
   deleteClient: 'api/client/DeleteClient',
   createClient: 'api/client/SaveClient',
+  taxGetAll: 'api/Tax/GetAllTax',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

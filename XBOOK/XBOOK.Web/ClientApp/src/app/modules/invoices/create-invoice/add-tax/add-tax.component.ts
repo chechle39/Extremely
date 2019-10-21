@@ -29,7 +29,7 @@ export class AddTaxComponent implements OnInit {
   }
   private createTaxLine(): FormGroup {
     return this.fb.group({
-      taxRace: [null, [Validators.required, Validators.min(1), Validators.max(100), Validators.maxLength(3)]],
+      taxRate: [null, [Validators.required, Validators.min(1), Validators.max(100), Validators.maxLength(3)]],
       taxName: [null, Validators.required],
       isChecked: [null],
     });

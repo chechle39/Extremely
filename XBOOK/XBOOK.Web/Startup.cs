@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Server.IIS;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -105,9 +108,11 @@ namespace XBOOK.Web
 
                 if (env.IsDevelopment())
                 {
+                    
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                    //spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseAngularCliServer(npmScript: "start");
                 }
+                
             });
         }
     }

@@ -25,9 +25,9 @@ namespace XBOOK.Service.Service
         public readonly IClientService _iClientService;
         public readonly ISaleInvDetailService _iSaleInvDetailService;
         private readonly ISaleInvoiceDetailRepository _SaleInvoiceDetailRepository;
-
+        private readonly IProductRepository _iProductRepository;
         private readonly XBookContext _context;
-        public SaleInvoiceService(ISaleInvoiceRepository saleInvoiceRepository, XBookContext context,IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService, ISaleInvoiceDetailRepository saleInvoiceDetailRepository)
+        public SaleInvoiceService(IProductRepository iProductRepository, ISaleInvoiceRepository saleInvoiceRepository, XBookContext context,IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService, ISaleInvoiceDetailRepository saleInvoiceDetailRepository)
         {
             _context = context;
             _iClientService = iClientService;
@@ -37,6 +37,7 @@ namespace XBOOK.Service.Service
             _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
             _SaleInvoiceDetailRepository = saleInvoiceDetailRepository;
             _SaleInvoiceRepository = saleInvoiceRepository;
+            _iProductRepository = iProductRepository;
         }
 
         bool ISaleInvoiceService.CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
@@ -232,8 +233,48 @@ namespace XBOOK.Service.Service
                         _uow.SaveChanges();
                     }else
                     {
-                        _SaleInvoiceDetailRepository.CreateSaleIvDetail(saleInvoiceViewModel.SaleInvDetailView[i]);
-                        _uow.SaveChanges();
+                        if(saleInvoiceViewModel.SaleInvDetailView[i].ProductId == 0)
+                        {
+                            var product = new ProductViewModel()
+                            {
+                                description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
+                                productID = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
+                                productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName,
+                                unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price
+                            };
+                            var productUOW = _uow.GetRepository<IRepository<Product>>();
+                            var productCreate = Mapper.Map<ProductViewModel, Product>(product);
+                            _uow.BeginTransaction();
+                            productUOW.AddData(productCreate);
+                            _uow.SaveChanges();
+                            _uow.CommitTransaction();
+                        };
+                        var serchData = _iProductRepository.GetLDFProduct();
+                        var saleDetailPrd = new SaleInvDetailViewModel
+                        {
+                            Amount = saleInvoiceViewModel.SaleInvDetailView[i].Price * saleInvoiceViewModel.SaleInvDetailView[i].Qty,
+                            Qty = saleInvoiceViewModel.SaleInvDetailView[i].Qty,
+                            Price = saleInvoiceViewModel.SaleInvDetailView[i].Price,
+                            Description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
+                            Id = saleInvoiceViewModel.SaleInvDetailView[i].Id,
+                            InvoiceId = saleInvoiceViewModel.SaleInvDetailView[i].InvoiceId,
+                            ProductId = serchData.LastOrDefault().productID,
+                            ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName,
+                            Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
+                        };
+
+                        //var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailPrd);
+                        //_saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
+                        try
+                        {
+                            _SaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
+                            _uow.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                     
                     }
                 }
                // _uow.CommitTransaction();

@@ -29,6 +29,7 @@ import { ActionType } from '@core/app.enums';
 import { ProductView } from '@modules/_shared/models/product/product-view.model';
 import { debounceTime, distinctUntilChanged, switchMap, finalize, map } from 'rxjs/operators';
 import { SaleInvoiceCreateRequest } from '@modules/_shared/models/invoice/sale-invoice-create-request';
+import { TaxService } from '@modules/_shared/services/tax.service';
 
 @Component({
   selector: 'xb-create-invoice',
@@ -79,6 +80,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   oldClientId: any;
   requestData: any;
   requestRemove: any[] = [];
+  taxData: any;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -90,11 +92,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     private activeRoute: ActivatedRoute,
     private invoiceService: InvoiceService,
     private paymentService: PaymentService,
+    private taxService: TaxService,
     private fb: FormBuilder,
     private modalService: NgbModal) {
     super(injector);
     this.createForm();
-
   }
   ngOnInit() {
     // if (!this.viewMode) {
@@ -342,6 +344,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         const dueDatePicker = { year: Number(dueDateSplit[2]), month: Number(dueDateSplit[1]), day: Number(dueDateSplit[0]) };
         this.invoiceForm.controls.dueDate.patchValue(dueDatePicker);
       }
+      this.getAllTax();
       detailInvoiceFormArray.controls.forEach((control, i) => {
         const productId = control.get('productId').value;
         if (invoice[0].saleInvDetailView[i].productId === productId) {
@@ -389,7 +392,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       };
       const requestInvDt = [];
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
-        console.log(rs);
         this.invoiceService.getDF().subscribe((x: any) => {
           this.saleInvId = x.invoiceId;
           // tslint:disable-next-line:prefer-for-of
@@ -412,7 +414,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
           }
           this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
             this.notify.success('Successfully Deleted');
-            // this.router.navigate([`/invoice`]);
+             this.router.navigate([`/invoice`]);
           });
         });
       });
@@ -441,7 +443,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
           saleInvDetailView.push(rs);
         }
         if (this.invoiceForm.value.items[ii].productId !== undefined) {
-          saleInvDetailView.push(this.invoiceForm.value.items[ii]);
+          const object2 = Object.assign({}, this.invoiceForm.value.items[ii], {invoiceId: this.invoiceForm.value.invoiceId, productId: this.invoiceForm.value.items[ii].productId === ""? 0: this.invoiceForm.value.items[ii].productId});
+          saleInvDetailView.push(object2);
         }
       }
       const request1 = {
@@ -524,12 +527,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       this.invoiceService.updateSaleInv(this.requestData).pipe(
         finalize(() => {
         })).subscribe(rs => {
+          if(this.requestRemove.length <= 0){
+            this.router.navigate([`/invoice`]);
+          }
           if (this.requestRemove.length > 0){
             this.message.confirm('Do you want to delete those payment ?', 'Are you sure ?', () => {
               this.requestRemove.forEach(element => {
                 this.invoiceService.deleteInvoiceDetail(element.id).subscribe(() => {
                   this.notify.success('Successfully Deleted');
                   this.getDataForEditMode();
+                  this.requestRemove = [];
+                  this.router.navigate([`/invoice`]);
                 });
               });
             });
@@ -662,6 +670,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     });
   }
   addTaxPopup(item: any, index: number): void {
+    this.getAllTax();
     if (item.value.productName === '') {
       this.message.warning('Please select a product');
       return;
@@ -669,13 +678,14 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     const arrayControl = this.getFormArray();
     const dialog = this.modalService.open(AddTaxComponent, AppConsts.modalOptionsSmallSize);
     let oldTaxs = [];
+    this.getAllTax();
     const taxArr = arrayControl.at(index).get('taxs') as AbstractControl;
     if (taxArr.value.length > 0) {
       oldTaxs = taxArr.value.filter(e => {
         return e.isChecked !== null;
       });
     }
-    dialog.componentInstance.taxsList = oldTaxs;
+    dialog.componentInstance.taxsList = this.taxData;
     dialog.result.then(result => {
       if (result === false) {
         return;
@@ -692,6 +702,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     });
   }
 
+  getAllTax(){
+    this.taxService.getAll().pipe(finalize(()=>{
+    })).subscribe(rs => {
+      this.taxData = rs;
+    })
+  }
   private UpdateTaxLine(taxs: Array<any>, control: AbstractControl) {
     let sumTax = 0;
     taxs.forEach(element => {

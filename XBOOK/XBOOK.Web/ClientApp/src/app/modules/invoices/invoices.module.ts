@@ -26,6 +26,7 @@ import { ListPaymentComponent } from './create-invoice/payment/list-payment/list
 import { AddPaymentComponent } from './create-invoice/payment/add-payment/add-payment.component';
 import { PaymentService } from '@modules/_shared/services/payment.service';
 import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
+import { TaxService } from '@modules/_shared/services/tax.service';
 @NgModule({
   declarations: [
     InvoicesComponent,
@@ -53,7 +54,7 @@ import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
     IntlModule,
     SharedModule
   ],
-  providers: [InvoiceService, ClientService, ProductService, PaymentService, CurrencyPipe, NgbActiveModal],
+  providers: [InvoiceService, ClientService, ProductService, PaymentService, CurrencyPipe, NgbActiveModal, TaxService],
   entryComponents: [AddPaymentComponent, AddTaxComponent]
 })
 export class InvoicesModule { }
