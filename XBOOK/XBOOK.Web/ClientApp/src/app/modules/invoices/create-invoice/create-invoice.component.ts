@@ -351,7 +351,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
           const vatTax = control.get('vat').value;
           const taxFormsArray = control.get('taxs') as FormArray;
           taxFormsArray.push(this.getTax);
-          taxFormsArray.at(0).get('taxRace').setValue(vatTax);
+          taxFormsArray.at(0).get('taxRate').setValue(vatTax);
           taxFormsArray.at(0).get('taxName').setValue('VAT');
           taxFormsArray.at(0).get('isChecked').setValue(true);
         }
@@ -664,7 +664,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   }
   get getTax(): FormGroup {
     return this.fb.group({
-      taxRace: [null],
+      taxRate: [null],
       taxName: [null],
       isChecked: [null],
     });
@@ -686,6 +686,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       });
     }
     dialog.componentInstance.taxsList = this.taxData;
+    dialog.componentInstance.taxsObj = item.value.vat;
     dialog.result.then(result => {
       if (result === false) {
         return;
@@ -714,7 +715,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       if (element.isChecked) {
         const taxFormsArray = control.get('taxs') as FormArray;
         taxFormsArray.push(this.getTax);
-        sumTax += Number(element.taxRace);
+        sumTax += Number(element.taxRate);
       }
     });
     control.get('vat').patchValue(sumTax);

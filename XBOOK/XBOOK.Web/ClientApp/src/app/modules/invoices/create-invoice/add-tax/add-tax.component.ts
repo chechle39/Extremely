@@ -9,17 +9,38 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class AddTaxComponent implements OnInit {
   public taxForm: FormGroup;
   constructor(private fb: FormBuilder, public activeModal: NgbActiveModal, ) { }
-  @Input() taxsList: [];
+  @Input() taxsList: any[];
+  @Input() taxsObj: any;
+  taxListData: any;
   ngOnInit() {
+    this.getDataList();
     this.taxForm = this.createForm();
-    if (this.taxsList.length > 0) {
+    if (this.taxListData.length > 0) {
       this.taxs.controls.splice(0);
       const taxFormsArray = this.taxs;
-      this.taxsList.forEach(element => {
+      this.taxListData.forEach(element => {
         taxFormsArray.push(this.createTaxLine());
       });
-      this.taxForm.controls.taxs.patchValue(this.taxsList);
+      this.taxForm.controls.taxs.patchValue(this.taxListData);
     }
+  }
+  
+  getDataList() {
+    const data = [];
+    for (let i = 0; i < this.taxsList.length; i++) {
+      if (this.taxsList[i].taxRate === this.taxsObj){
+        const checked = {
+          id: this.taxsList[i].id,
+          taxName: this.taxsList[i].taxName,
+          taxRate: this.taxsList[i].taxRate,
+          isChecked: true,
+        }
+        data.push(checked);
+      }else {
+        data.push(this.taxsList[i]);
+      }
+    }
+    return this.taxListData = data;
   }
   private createForm() {
     return this.fb.group({
