@@ -2,5 +2,5 @@ export const environment = {
   production: false,
   hmr: true,
   apiKey: 'XB-KEY',
-  apiBaseUrl: 'http://localhost:3000/'
+  apiBaseUrl: 'http://localhost:58064/'
 };

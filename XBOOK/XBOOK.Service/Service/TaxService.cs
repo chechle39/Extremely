@@ -20,9 +20,9 @@ namespace XBOOK.Service.Service
             _uow = uow;
         }
 
-        public async Task CreateTax(TaxViewModel request)
+        public async Task CreateTax(List<TaxViewModel> request)
         {
-            var taxCreate = Mapper.Map<TaxViewModel, Tax>(request);
+            var taxCreate = Mapper.Map<List<TaxViewModel>, List<Tax>>(request);
             await _taxUowRepository.Add(taxCreate);
         }
 

@@ -22,6 +22,7 @@ export const API_URI = {
   deleteClient: 'api/client/DeleteClient',
   createClient: 'api/client/SaveClient',
   taxGetAll: 'api/Tax/GetAllTax',
+  createTax: 'api/Tax/CreateTax'
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

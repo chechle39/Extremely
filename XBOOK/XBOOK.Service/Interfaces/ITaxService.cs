@@ -7,6 +7,6 @@ namespace XBOOK.Service.Interfaces
     public interface ITaxService
     {
         Task<IEnumerable<TaxViewModel>> GetAllTax();
-        Task CreateTax(TaxViewModel request);
+        Task CreateTax(List<TaxViewModel> request);
     }
 }

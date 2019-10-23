@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace XBOOK.Web.Controllers
 {
@@ -18,11 +20,12 @@ namespace XBOOK.Web.Controllers
         public async Task<IActionResult> GetAllTax()
         {
             var taxList = await _iTaxService.GetAllTax();
-            return Ok(taxList);
+            var sort = taxList.OrderBy(x => x.TaxRate);
+            return Ok(sort);
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateTax([FromBody]TaxViewModel request)
+        public async Task<IActionResult> CreateTax([FromBody]List<TaxViewModel> request)
         {
              await _iTaxService.CreateTax(request);
             return Ok(request);

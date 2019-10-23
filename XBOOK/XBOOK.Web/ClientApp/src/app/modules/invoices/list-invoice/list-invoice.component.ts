@@ -41,6 +41,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   isSubmitted = false;
   isFirstLoad = false;
   toggle = [];
+  ischeck: boolean;
   constructor(
     injector: Injector,
     private invoiceService: InvoiceService,
@@ -197,13 +198,25 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       const searchStr = { seachString: this.keyword, from: startDate, to: endDate };
       if (searchType === SearchType.IssueDate) {
         searchStr[SearchType.IssueDate] = true;
+        this.ischeck = true;
       }
       if (searchType === SearchType.DueDate) {
-        searchStr[SearchType.DueDate] = true;
+        searchStr[SearchType.DueDate] = false;
+        this.ischeck = false;
       }
       this.searchString = this.keyword; //JSON.stringify(searchStr);
-      this.refresh();
-      alert(JSON.stringify(searchStr));
+      const requestList = {
+        keyword: searchStr.seachString,
+        startDate: searchStr.from,
+        endDate: searchStr.to,
+        isIssueDate: this.ischeck,
+      };
+      this.invoiceService.getAll(requestList).pipe(
+      ).subscribe((i: any) => {
+        this.loadingIndicator = false;
+        this.invoiceViews = i;
+      });
+     // alert(JSON.stringify(searchStr));
     }
   }
   clearFilter(formFilter: NgForm) {

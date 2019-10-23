@@ -374,11 +374,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         dueDate: [this.invoiceForm.value.dueDate.year,
         this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
         reference: this.invoiceForm.value.reference,
-        subTotal: 0,
-        discRate: 0,
+        subTotal: this.subTotalAmount,
+        discRate: this.subTotalDiscountIncl,
         discount: 0,
-        vatTax: 0,
-        amountPaid: 0,
+        vatTax: this.totalTaxAmount,
+        amountPaid: this.amountPaid,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
@@ -413,7 +413,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
             requestInvDt.push(requestInvDetail);
           }
           this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
-            this.notify.success('Successfully Deleted');
+            this.notify.success('Successfully Add');
              this.router.navigate([`/invoice`]);
           });
         });
@@ -531,17 +531,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
             this.router.navigate([`/invoice`]);
           }
           if (this.requestRemove.length > 0){
-            this.message.confirm('Do you want to delete those payment ?', 'Are you sure ?', () => {
-              this.requestRemove.forEach(element => {
-                this.invoiceService.deleteInvoiceDetail(element.id).subscribe(() => {
-                  this.notify.success('Successfully Deleted');
-                  this.getDataForEditMode();
-                  this.requestRemove = [];
-                  this.router.navigate([`/invoice`]);
-                });
+            this.requestRemove.forEach(element => {
+              this.invoiceService.deleteInvoiceDetail(element.id).subscribe(() => {
+               // this.notify.success('Successfully Deleted');
+                this.getDataForEditMode();
+                this.requestRemove = [];
+                this.router.navigate([`/invoice`]);
               });
             });
           }
+          this.notify.success('Successfully Update');
+          this.router.navigate([`/invoice`]);
         });
     } else {
 
@@ -670,37 +670,38 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     });
   }
   addTaxPopup(item: any, index: number): void {
-    this.getAllTax();
-    if (item.value.productName === '') {
-      this.message.warning('Please select a product');
-      return;
-    }
-    const arrayControl = this.getFormArray();
-    const dialog = this.modalService.open(AddTaxComponent, AppConsts.modalOptionsSmallSize);
-    let oldTaxs = [];
-    this.getAllTax();
-    const taxArr = arrayControl.at(index).get('taxs') as AbstractControl;
-    if (taxArr.value.length > 0) {
-      oldTaxs = taxArr.value.filter(e => {
-        return e.isChecked !== null;
-      });
-    }
-    dialog.componentInstance.taxsList = this.taxData;
-    dialog.componentInstance.taxsObj = item.value.vat;
-    dialog.result.then(result => {
-      if (result === false) {
+
+      if (item.value.productName === '') {
+        this.message.warning('Please select a product');
         return;
       }
-      if (result.taxs.length > 0) {
-        if (result.allLine) {
-          arrayControl.controls.forEach((control, i) => {
-            this.UpdateTaxLine(result.taxs, control);
-          });
-        } else {
-          this.UpdateTaxLine(result.taxs, arrayControl.at(index));
-        }
+      const arrayControl = this.getFormArray();
+      const dialog = this.modalService.open(AddTaxComponent, AppConsts.modalOptionsSmallSize);
+      let oldTaxs = [];
+      this.getAllTax();
+      const taxArr = arrayControl.at(index).get('taxs') as AbstractControl;
+      if (taxArr.value.length > 0) {
+        oldTaxs = taxArr.value.filter(e => {
+          return e.isChecked !== null;
+        });
       }
-    });
+      dialog.componentInstance.taxsList = this.taxData;
+      dialog.componentInstance.taxsObj = item.value.vat;
+      dialog.result.then(result => {
+        if (result === false) {
+          return;
+        }
+        if (result.taxs.length > 0) {
+          if (result.allLine) {
+            arrayControl.controls.forEach((control, i) => {
+              this.UpdateTaxLine(result.taxs, control);
+            });
+          } else {
+            this.UpdateTaxLine(result.taxs, arrayControl.at(index));
+          }
+        }
+      });
+    
   }
 
   getAllTax(){

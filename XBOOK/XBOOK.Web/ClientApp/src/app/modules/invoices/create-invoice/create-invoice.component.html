@@ -52,19 +52,19 @@
                     <div class="row">
                       <div class="col">
                         <p class="mb-0">
-                          <input kendoTextBox id="yourCompanyName" formControlName="yourCompanyName"
-                            class="border-0 full-width imput-reference-custom text-right"
+                          <input kendoTextBox id="clientName" formControlName="clientName" [(ngModel)]="clientName"
+                            class="border-0 full-width imput-reference-custom text-right" [value]="clientSelected.clientName"
                             placeholder="Your Company Name" nfNoSpaces maxlength="250"></p>
                         <p class="mb-0">
                           <input kendoTextBox class="border-0 full-width imput-reference-custom text-right"
-                            placeholder="Your Address" id="yourCompanyAddress" formControlName="yourCompanyAddress"
+                            placeholder="Your Address" id="yourCompanyAddress" formControlName="address" [value]="clientSelected.address"
                             nfNoSpaces maxlength="250">
                         </p>
                       </div>
                     </div> <!-- end col-sm-6-->
                     <div class="row">
                       <div class="col-sm-6">
-                        <input kendoTextBox id="yourTaxCode" formControlName="yourTaxCode" placeholder="Tax code"
+                        <input kendoTextBox id="yourTaxCode" formControlName="taxCode" placeholder="Tax code" [value]="clientSelected.taxCode"
                           class="border-0 full-width imput-reference-custom " nfNoSpaces maxlength="250">
                       </div>
                       <div class="col-sm-6"> <input kendoTextBox

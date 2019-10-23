@@ -38,11 +38,13 @@ namespace XBOOK.Web
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<XBookContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddCors();
             services.AddAutoMapper();
             services.AddSingleton(Mapper.Configuration);
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
@@ -65,7 +67,7 @@ namespace XBOOK.Web
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
             services.AddSignalR();
-            services.AddAuthentication(IISServerDefaults.AuthenticationScheme);
+           // services.AddAuthentication(IISServerDefaults.AuthenticationScheme);
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -75,7 +77,7 @@ namespace XBOOK.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseAuthentication();
-
+            app.UseCors();
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -108,12 +110,37 @@ namespace XBOOK.Web
 
                 if (env.IsDevelopment())
                 {
-                    
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+
+                    // spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                     spa.UseAngularCliServer(npmScript: "start");
                 }
-                
+
             });
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            //app.UseSpaStaticFiles();
+
+            //app.UseHttpsRedirection();
+            //app.UseMvc();
+
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
+
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseAngularCliServer(npmScript: "start");
+            //    }
+            //});
+
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    app.UseHsts();
+            //}
         }
     }
 }
