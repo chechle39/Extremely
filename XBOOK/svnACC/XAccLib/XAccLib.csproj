@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\svn\XBOOK\XBOOK.Common\XBOOK.Common.csproj" />
+    <ProjectReference Include="..\..\svn\XBOOK\XBOOK.Data\XBOOK.Data.csproj" />
+  </ItemGroup>
+
+</Project>

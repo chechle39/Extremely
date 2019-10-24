@@ -1,0 +1,3 @@
+@using XAccBuild
+@namespace XAccBuild.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
