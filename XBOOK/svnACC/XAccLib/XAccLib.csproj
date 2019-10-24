@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\svn\XBOOK\XBOOK.Common\XBOOK.Common.csproj" />
-    <ProjectReference Include="..\..\svn\XBOOK\XBOOK.Data\XBOOK.Data.csproj" />
+    <Reference Include="XBOOK.Common">
+      <HintPath>..\..\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\XBOOK.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="XBOOK.Data">
+      <HintPath>..\..\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
