@@ -41,10 +41,17 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> UpdateProduct(ProductViewModel request)
+        public async Task<IActionResult> UpdateProduct([FromBody]ProductViewModel request)
         {
             await  _iProductService.Update(request);
-            return Ok(request);
+            return Ok();
+        }
+
+        [HttpPost("[action]/{id}")]
+        public IActionResult DeleteProduct(int id)
+        {
+            _iProductService.DeleteProduct(id);
+            return Ok();
         }
     }
 }

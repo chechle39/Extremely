@@ -11,8 +11,8 @@ namespace XBOOK.Data.Entities
         public int patternID { get; set; }
         public string transactionType { get; set; }
         public string entryType { get; set; }
-        public string deditAccNumber { get; set; }
-        public string creditAccNumber { get; set; }
+        public string accNumber { get; set; }
+        public string crspAccNumber { get; set; }
         public string note { get; set; }
     }
 }

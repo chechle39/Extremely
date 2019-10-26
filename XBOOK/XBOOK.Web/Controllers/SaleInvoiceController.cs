@@ -54,10 +54,10 @@ namespace XBOOK.Web.Controllers
             return Ok(saleListInvoice);
         }
 
-        [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> DeleteSaleInv (long id)
+        [HttpPost("[action]")]
+        public  IActionResult DeleteSaleInv (List<requestDeleted> deleted)
         {
-            await _saleInvoiceService.DeletedSaleInv(id);
+             _saleInvoiceService.DeletedSaleInv(deleted);
             return Ok();
         }
 

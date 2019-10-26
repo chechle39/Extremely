@@ -14,5 +14,6 @@ namespace XBOOK.Service.Interfaces
         Task CreateProduct(ProductViewModel request);
         Task Update(ProductViewModel request);
         Task<ProductViewModel> GetALlPrDF();
+        bool DeleteProduct(long id);
     }
 }

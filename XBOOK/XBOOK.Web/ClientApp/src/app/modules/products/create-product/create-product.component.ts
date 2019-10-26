@@ -14,11 +14,10 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
 
   @Input() title;
   @Input() categoryId;
+  @Input() listCategory;
   saving: false;
-  categories = [
-    new ProductCategory(1, 'Hàng Hóa'),
-    new ProductCategory(2, 'Dịch Vụ')
-  ];
+  categories : any;
+  statusCategory: any;
   product: ProductView = new ProductView();
   constructor(
     injector: Injector,
@@ -28,11 +27,14 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
   }
 
   ngOnInit() {
+    this.categories = this.listCategory;
+    this.statusCategory = this.categoryId;
   }
   save(): void {
-    this.product.categoryId = this.categoryId;
-    this.product.unitPrice = Number(this.product.unitPrice.toString().replace(/,/g, ''));
-    this.productService
+    this.product.categoryId = this.statusCategory;
+    this.product.unitPrice = Number(String(this.product.unitPrice).replace(/,/g, ''));
+    if(this.product.productName != 'undefined' && this.product.productName != null){
+      this.productService
       .createProduct(this.product)
       .pipe(
         finalize(() => {
@@ -43,6 +45,10 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
         this.notify.info('Saved Successfully');
         this.close(true);
       });
+    }
+    else{
+      this.notify.error('Error');
+    }
   }
   close(result: any): void {
     this.activeModal.close(result);

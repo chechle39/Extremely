@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-// using XAccLib.Payment;
+using XAccLib.Payment;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.ViewModels;
@@ -53,24 +53,32 @@ namespace XBOOK.Service.Service
 
         public async Task RemovePayMent(long id)
         {
-             await _paymentUowRepository.Remove(id);
+            var listData = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().Where(x=>x.Id == id).ToList();
+            await _paymentUowRepository.Remove(id);
+            var paymentGL = new PaymentGL(_uow);
+            paymentGL.Delete(listData[0]);
         }
 
         public bool SavePayMent(PaymentViewModel saleInvoiceViewModel)
         {
+            _uow.BeginTransaction();
             var saleInvoice = Mapper.Map<PaymentViewModel, Payments>(saleInvoiceViewModel);
              _paymentUowRepository.AddData(saleInvoice);
             _uow.SaveChanges();
             var dataAsign = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().LastOrDefault();
-           // var paymentGL = new PaymentGL();
-          //  paymentGL.PaymentGLData(dataAsign);
+            _uow.CommitTransaction();
+            var paymentGL = new PaymentGL(_uow);
+            paymentGL.Insert(dataAsign);
             return true;
         }
 
         public async Task UpdatePayMent(PaymentViewModel request)
         {
+            var listData = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().Where(x => x.Id == request.Id).ToList();
             var payments = Mapper.Map<PaymentViewModel, Payments>(request);
             await _paymentUowRepository.Update(payments);
+            var paymentGL = new PaymentGL(_uow);
+            paymentGL.Update(listData[0]);
         }
     }
 }

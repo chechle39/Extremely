@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
@@ -16,18 +17,27 @@ namespace XBOOK.Service.Service
     {
         private readonly IRepository<Product> _productUowRepository;
         private readonly IUnitOfWork _uow;
+        private readonly IProductRepository _iProductRespository;
         private readonly XBookContext _context;
-        public ProductService(IRepository<Product> productUowRepository, IUnitOfWork uow, XBookContext context)
+        public ProductService(IRepository<Product> productUowRepository, IUnitOfWork uow, XBookContext context, IProductRepository iProductRepository)
         {
             _productUowRepository = productUowRepository;
             _uow = uow;
             _context = context;
+            _iProductRespository = iProductRepository;
         }
 
         public async Task CreateProduct(ProductViewModel request)
         {
             var clientCreate = Mapper.Map<ProductViewModel, Product>(request);
             await _productUowRepository.Add(clientCreate);
+        }
+
+        public bool DeleteProduct(long id)
+        {
+           // _iProductRespository.removeProduct(id);
+            _uow.SaveChanges();
+            return true;
         }
 
         public async Task<ProductViewModel> GetALlPrDF()

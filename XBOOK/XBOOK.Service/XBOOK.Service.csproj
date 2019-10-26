@@ -12,4 +12,10 @@
     <ProjectReference Include="..\XBOOK.Data\XBOOK.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="XAccLib">
+      <HintPath>..\..\..\svnACC\XAccLib\bin\Debug\netcoreapp2.2\XAccLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

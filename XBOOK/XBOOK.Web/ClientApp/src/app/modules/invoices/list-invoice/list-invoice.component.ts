@@ -83,8 +83,15 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       this.message.warning('Please select an item from the list?');
       return;
     }
+    const requestDl = []
     this.selected.forEach(element => {
-      this.deleteInvoice(element.invoiceId);
+     // this.deleteInvoice(element.invoiceId);
+      const id = element.invoiceId
+      requestDl.push({id});
+    });
+    this.invoiceService.deleteInvoice(requestDl).subscribe(() => {
+      this.notify.success('Successfully Deleted');
+      this.refresh();
     });
     this.selected = [];
   }
@@ -128,7 +135,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
 
   }
   private deleteInvoice(id: number): void {
-    this.invoiceService.deleteInvoice(id).subscribe(() => {
+    const request = [{id}];
+    this.invoiceService.deleteInvoice(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
     });

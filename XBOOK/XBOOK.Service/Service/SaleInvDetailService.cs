@@ -48,8 +48,10 @@ namespace XBOOK.Service.Service
                 };
                 if(saleDetailData.ProductId > 0)
                 {
+                    _uow.BeginTransaction();
                     _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailData);
                     _uow.SaveChanges();
+                    _uow.CommitTransaction();
                 }
                 else 
                 if(saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
@@ -61,8 +63,10 @@ namespace XBOOK.Service.Service
                         productName = saleDetailData.ProductName,
                         unitPrice = saleDetailData.Price
                     };
-                    var productCreate = Mapper.Map<ProductViewModel, Product>(product);
-                    productUOW.Add(productCreate);
+                    _uow.BeginTransaction();
+                    _iProductRepository.SaveProduct(product);
+                    _uow.SaveChanges();
+                    _uow.CommitTransaction();
                     var serchData = _iProductRepository.GetLDFProduct();
                     var saleDetailPrd = new SaleInvDetailViewModel
                     {
@@ -77,12 +81,12 @@ namespace XBOOK.Service.Service
                         Vat = item.Vat
                     };
 
-                    //var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailPrd);
-                    //_saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
                     try
                     {
+                        _uow.BeginTransaction();
                         _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
                         _uow.SaveChanges();
+                        _uow.CommitTransaction();
                     }
                     catch(Exception ex)
                     {

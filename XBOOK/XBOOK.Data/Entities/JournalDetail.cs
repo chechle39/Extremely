@@ -9,11 +9,10 @@ namespace XBOOK.Data.Entities
         [Key]
         public long ID { get; set; }
         public long JournalID { get; set; }
-        public string deditAccNumber { get; set; }
-        public string creditAccNumber { get; set; }
-        public string clientID { get; set; }
-        public string clientName { get; set; }
+        public string accNumber { get; set; }
+        public string crspAccNumber { get; set; }
         public string note { get; set; }
-        public decimal amount { get; set; }
+        public decimal debit { get; set; }
+        public decimal credit { get; set; }
     }
 }

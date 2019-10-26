@@ -19,8 +19,8 @@ export class InvoiceService extends BaseService {
   getInvoice(id: any): Observable<InvoiceView> {
     return this.post<InvoiceView>(`${API_URI.invoiceById}/${id}`, id);
   }
-  deleteInvoice(id: number) {
-    return this.post(`${API_URI.deleteSaleInvoice}/${id}`, id);
+  deleteInvoice(id: any) {
+    return this.post(`${API_URI.deleteSaleInvoice}`, id);
   }
   CreateSaleInv(request: any): Observable<any> {
      return this.post<any>(`${API_URI.createSaleInv}`, request);

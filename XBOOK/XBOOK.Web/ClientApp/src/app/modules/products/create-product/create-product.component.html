@@ -10,7 +10,7 @@
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="productName"
           placeholder="{{'PRODUCT.FORM.CREATE.NAME.PLACEHOLDER' | translate}}" id="productName">
         <small class="form-text text-muted danger"
-          *ngIf="!productName.valid && (productName.dirty || productName.touched)">{{'PRODUCT.FORM.CREATE.NAME.VALIDATION' | translate }}</small>
+          *ngIf="!productName.valid && (productName.dirty)">{{'PRODUCT.FORM.CREATE.NAME.VALIDATION' | translate }}</small>
       </div>
     </div>
     <div class="row">
@@ -23,9 +23,9 @@
     <div class="row">
       <div class="form-group col-12 mb-2">
         <label for="categoryId">{{'PRODUCT.FORM.CREATE.CATEGORY' | translate }}</label>
-        <select [disabled]="true" id="categoryId" name="categoryId" [(ngModel)]="categoryId" class="form-control">
-          <option *ngFor="let cat of categories" [ngValue]="cat.id">
-            {{ cat.Name }}
+        <select id="categoryId" name="categoryId" class="form-control" [(ngModel)]="statusCategory">
+          <option *ngFor="let cat of categories" [ngValue]="cat.categoryID">
+            {{ cat.categoryName }}
           </option>
         </select>
       </div>
@@ -46,7 +46,8 @@
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
       <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate }}
     </button>
-    <button type="button" (click)="save()" class="btn btn-raised btn-success" [disabled]="!f.valid"><i
-        class="ft-save"></i> {{'COMMON.BUTTON.SAVE' | translate }}</button>
+    <button type="button" (click)="save()" class="btn btn-raised btn-success">
+      <i class="ft-save"></i> {{'COMMON.BUTTON.SAVE' | translate }}
+    </button>
   </div>
 </form>

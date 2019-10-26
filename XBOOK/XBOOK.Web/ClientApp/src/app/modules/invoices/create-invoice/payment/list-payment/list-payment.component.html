@@ -51,7 +51,7 @@
 
       <ngx-datatable-column name="Date" [sortable]="false" prop="payDate">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{row.payDate}}
+          {{row.payDate | date: 'dd/MM/yyyy'}}
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="Type" [sortable]="false" prop="payType">

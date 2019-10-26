@@ -22,7 +22,15 @@ export const API_URI = {
   deleteClient: 'api/client/DeleteClient',
   createClient: 'api/client/SaveClient',
   taxGetAll: 'api/Tax/GetAllTax',
-  createTax: 'api/Tax/CreateTax'
+  createTax: 'api/Tax/CreateTax',
+  deleteProduct: 'api/Product/DeleteProduct',
+
+  // New 24/10/2019
+  createProduct: 'api/Product/CreateProduct',
+  updateProduct: 'api/Product/UpdateProduct',
+  productById: 'api/Product/GetProductById',
+  categoryById: 'api/Category/GetCategoryById',
+  categoryGetAll: 'api/Category/GetAllCategory',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

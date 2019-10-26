@@ -12,14 +12,15 @@ import { PagedListingComponentBase, PagedRequestDto } from '@core/paged-listing-
 import { finalize, debounceTime } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 class PagedProductsRequestDto extends PagedRequestDto {
-  keywords: string;
+  productKeyword: string;
 }
 @Component({
   selector: 'xb-products',
   templateUrl: './products.component.html'
 })
 export class ProductsComponent extends PagedListingComponentBase<ProductView> {
-  productViews: ProductView[] = [];
+  productViews: any;
+  categories : any;
   loadingIndicator = false;
   keywords = '';
   reorderable = true;
@@ -29,6 +30,9 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   ColumnMode = ColumnMode;
   ProductCategory = ProductCategory;
   SelectionType = SelectionType;
+  productKey = {
+    productKeyword: ''
+  };
   constructor(
     injector: Injector,
     private productService: ProductService,
@@ -37,30 +41,34 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     private translate: TranslateService) {
     super(injector);
   }
+
   protected list(
     request: PagedProductsRequestDto,
     pageNumber: number,
     finishedCallback: () => void
   ): void {
-
-    request.keywords = this.keywords;
+    request.productKeyword = this.keywords;
     this.loadingIndicator = true;
+    this.getAllProduct();
+    this.getAllCategory();
+  }
+  getAllProduct(){
     this.productService
-      .getAll(request.keywords)
-      .pipe(
-      //  debounceTime(500),
-        finalize(() => {
-          finishedCallback();
-        })
-      )
-      // .subscribe((result: PagedResultDtoOfUserDto) => {
-      //   this.users = result.items;
-      //   this.showPaging(result, pageNumber);
-      // });
-      .subscribe(i => {
-        this.loadingIndicator = false;
-        this.productViews = i;
-      });
+    .searchProduct(this.productKey)
+    .pipe(
+    )
+    .subscribe(i => {
+      this.loadingIndicator = false;
+      this.productViews = i;
+    });
+  }
+
+  getAllCategory(){
+    this.productService
+    .getAllCategory()
+    .subscribe(result => {
+      this.categories = result
+    });
   }
   edit(): void {
     if (this.selected.length === 0) {
@@ -71,7 +79,7 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
       this.message.warning('Only one item selected to edit?');
       return;
     }
-    this.showCreateOrEditProductDialog(this.selected[0].category, this.selected[0].id);
+    this.showCreateOrEditProductDialog(this.selected[0].categoryID, this.selected[0].productID);
     this.selected = [];
   }
   delete(): void {
@@ -81,35 +89,39 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     }
     this.message.confirm('Do you want to delete products ?', 'Are you sure ?', () => {
       this.selected.forEach(element => {
-        this.productService.deleteProduct(element.id).subscribe(() => {
+        this.productService.deleteProduct(element.productID).subscribe((rs) => {
           this.notify.success('Successfully Deleted');
-          this.refresh();
+          this.getAllProduct();
         });
       });
       this.selected = [];
     });
   }
+
+  
   getRowHeight(row) {
     return row.height;
   }
   createProduct(category: ProductCategory): void {
     this.showCreateOrEditProductDialog(category);
   }
-  showCreateOrEditProductDialog(category: ProductCategory, id?: number): void {
+  showCreateOrEditProductDialog(category: ProductCategory, productID?: number): void {
     let createOrEditProductDialog;
     this.translate.get('PRODUCT.LIST.PRODUCT')
       .subscribe(text => { this.productTitle = text; });
     this.translate.get('PRODUCT.LIST.SERVICE')
       .subscribe(text => { this.serviceTitle = text; });
     const title = category === ProductCategory.product ? this.productTitle : this.serviceTitle;
-    if (id === undefined || id <= 0) {
+    if (productID === undefined || productID <= 0) {
       createOrEditProductDialog = this.modalService.open(CreateProductComponent, AppConsts.modalOptionsSmallSize);
       createOrEditProductDialog.componentInstance.title = title;
       createOrEditProductDialog.componentInstance.categoryId = category;
+      createOrEditProductDialog.componentInstance.listCategory = this.categories;
     } else {
       createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
       createOrEditProductDialog.componentInstance.title = title;
-      createOrEditProductDialog.componentInstance.id = id;
+      createOrEditProductDialog.componentInstance.id = productID;
+      createOrEditProductDialog.componentInstance.listCategory = this.categories;
     }
     createOrEditProductDialog.result.then(result => {
       if (result) {
@@ -133,7 +145,8 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
       const title = event.row.categoryId === 1 ? this.productTitle : this.serviceTitle;
       const createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
       createOrEditProductDialog.componentInstance.title = title;
-      createOrEditProductDialog.componentInstance.id = event.row.id;
+      createOrEditProductDialog.componentInstance.id = event.row.productID;
+      createOrEditProductDialog.componentInstance.listCategory = this.categories;
       createOrEditProductDialog.result.then(result => {
         if (result) {
           this.refresh();

@@ -52,23 +52,23 @@
                     <div class="row">
                       <div class="col">
                         <p class="mb-0">
-                          <input kendoTextBox id="clientName" formControlName="clientName" [(ngModel)]="clientName"
-                            class="border-0 full-width imput-reference-custom text-right" [value]="clientSelected.clientName"
+                          <input kendoTextBox id="clientName" formControlName="yourCompanyName"
+                            class="border-0 full-width imput-reference-custom text-right" [value]="companyName"
                             placeholder="Your Company Name" nfNoSpaces maxlength="250"></p>
                         <p class="mb-0">
                           <input kendoTextBox class="border-0 full-width imput-reference-custom text-right"
-                            placeholder="Your Address" id="yourCompanyAddress" formControlName="address" [value]="clientSelected.address"
+                            placeholder="Your Address" id="yourCompanyAddress" formControlName="yourCompanyAddress" [value]="companyAddress"
                             nfNoSpaces maxlength="250">
                         </p>
                       </div>
                     </div> <!-- end col-sm-6-->
                     <div class="row">
                       <div class="col-sm-6">
-                        <input kendoTextBox id="yourTaxCode" formControlName="taxCode" placeholder="Tax code" [value]="clientSelected.taxCode"
+                        <input kendoTextBox id="yourTaxCode" formControlName="taxCode" placeholder="Tax code" [value]="taxCode"
                           class="border-0 full-width imput-reference-custom " nfNoSpaces maxlength="250">
                       </div>
                       <div class="col-sm-6"> <input kendoTextBox
-                          class="border-0 text-right full-width imput-reference-custom" placeholder="Your Bank Acount"
+                          class="border-0 text-right full-width imput-reference-custom" placeholder="Your Bank Acount" [value]="taxCode"
                           id="yourBankAccount" formControlName="yourBankAccount" nfNoSpaces maxlength="250"> </div>
                     </div>
                   </div>
@@ -86,7 +86,7 @@
                     <div class="client-fields">
                       <div class="row">
                         <div class="col-sm-6 col-md-6 ngb-typeahead-client">
-                          <input type="text" (focus)="focusClient$.next($event.target.value)" autocomplete="none"
+                          <input #xxx type="text" (focus)="focusClient$.next($event.target.value)" autocomplete="none"
                             [ngbTypeahead]="searchClient" [value]="clientSelected.contactName"
                             [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter"
                             id="contactName" formControlName="contactName" (selectItem)="selectedItem($event)"

@@ -14,12 +14,18 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
 
   @Input() title;
   @Input() id: number;
-  product: ProductView = new ProductView();
+  @Input() listCategory;
+  product= {
+    productName: '',
+    description: '',
+    unitPrice: 0,
+    categoryID: 0,
+    categoryName: '',
+  };
   saving = false;
-  categories = [
-    new ProductCategory(1, 'Hàng Hóa'),
-    new ProductCategory(2, 'Dịch Vụ')
-  ];
+  categorySelect: any;
+  categories: any;
+
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
@@ -27,11 +33,15 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
 
   ngOnInit() {
     this.productService.getProduct(this.id).subscribe(result => {
-      this.product = result;
+      this.product = result[0];
+      this.productService.getCategory(result[0].categoryID).subscribe(rs => {
+        this.categories = rs;
+      });
     });
+    this.categorySelect = this.listCategory;
   }
   save(): void {
-    this.product.unitPrice = Number(this.product.unitPrice.toString().replace(/,/g, ''));
+    this.product.unitPrice = Number(String(this.product.unitPrice).replace(/,/g, ''));
     this.productService
       .updateProduct(this.product)
       .pipe(

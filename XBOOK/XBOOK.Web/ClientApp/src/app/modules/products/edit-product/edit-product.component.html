@@ -23,9 +23,9 @@
     <div class="row">
       <div class="form-group col-12 mb-2">
         <label for="categoryId">{{'PRODUCT.FORM.CREATE.CATEGORY' | translate }}</label>
-        <select id="categoryId" name="categoryId" [(ngModel)]="product.categoryId" class="form-control">
-          <option *ngFor="let cat of categories" [ngValue]="cat.id">
-            {{ cat.Name }}
+        <select id="categoryId" name="categoryId" [(ngModel)]="product.categoryID" class="form-control">
+          <option *ngFor="let catS of categorySelect" [ngValue]="catS.categoryID">
+            {{ catS.categoryName }}
           </option>
         </select>
       </div>

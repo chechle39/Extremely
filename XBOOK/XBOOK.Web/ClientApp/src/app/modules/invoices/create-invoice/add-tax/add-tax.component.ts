@@ -57,7 +57,7 @@ export class AddTaxComponent implements OnInit {
   }
   applyTax() {
     const addListData = [];
-    if (this.taxForm.invalid) {
+    if (this.taxForm.value.taxs.length > this.taxListData.length) {
       this.taxForm.value.taxs.forEach(element => {
         if (element.isAdd === null) {
           addListData.push(element);

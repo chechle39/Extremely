@@ -39,6 +39,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   @ViewChild('productName', {
     static: true
   }) productNameField: ElementRef;
+  @ViewChild('xxx', {
+    static: true
+  }) xxx: ElementRef;
   invoiceNumber = '';
   title = 'New Invoice';
   saveText = 'Save';
@@ -58,7 +61,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   isMouseEnter = false;
   invoiceForm: FormGroup;
   invoiceFormValueChanges$;
-
+  companyName = 'Công Ty Cổ Phần Công Nghệ B24';
+  companyAddress = 'Quách Văn Tuấn';
+  taxCode = '1234567';
   subTotalAmount = 0;
   totalTaxAmount = 0;
   subTotalDiscountIncl = 0;
@@ -106,6 +111,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     //   this.invoiceForm.controls.address.disable();
     //   this.invoiceForm.controls.taxCode.disable();
     // }
+    this.imgURL = 'assets/img/B24Logo.png';
     this.canActionClient();
     // initialize stream on units
     const request = {
@@ -134,17 +140,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     });
   }
   // ngAfterViewInit() {
-  //   // if (!this.viewMode) {
-  //   //   this.invoiceForm.controls.clientName.disable();
-  //   //   this.invoiceForm.controls.contactName.disable();
-  //   //   this.invoiceForm.controls.email.disable();
-  //   //   this.invoiceForm.controls.address.disable();
-  //   //   this.invoiceForm.controls.taxCode.disable();
-  //   // }
+  //   if (!this.viewMode) {
+  //     this.invoiceForm.controls.clientName.disable();
+  //     this.invoiceForm.controls.contactName.disable();
+  //     this.invoiceForm.controls.email.disable();
+  //     this.invoiceForm.controls.address.disable();
+  //     this.invoiceForm.controls.taxCode.disable();
+  //   }
   //   this.addEventForInput();
   // }
   canActionClient(): boolean {
-    return (!this.viewMode && this.invoiceForm.value.clientId > 0);
+    return (!this.viewMode && this.clientSelected.clientId > 0);
   }
   private addEventForInput() {
     const inputList = [].slice.call((this.el.nativeElement as HTMLElement).getElementsByTagName('input'));
@@ -203,23 +209,23 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   removeItem(i: number) {
     const saleInvDetailView = [];
     const controls = this.getFormArray();
-      if (controls.value[i].productId === undefined) {
-        const rs = {
-          amount: controls.value[i].amount,
-          qty: controls.value[i].qty,
-          price: controls.value[i].price,
-          description : controls.value[i].description,
-          id : controls.value[i].id,
-          invoiceId : controls.value[i].invoiceId,
-          productId :controls.value[i].productName.productID,
-          productName : controls.value[i].productName.productName,
-          vat : controls.value[i].vat,
-        }
-        this.requestRemove.push(rs);
+    if (controls.value[i].productId === undefined) {
+      const rs = {
+        amount: controls.value[i].amount,
+        qty: controls.value[i].qty,
+        price: controls.value[i].price,
+        description: controls.value[i].description,
+        id: controls.value[i].id,
+        invoiceId: controls.value[i].invoiceId,
+        productId: controls.value[i].productName.productID,
+        productName: controls.value[i].productName.productName,
+        vat: controls.value[i].vat,
       }
-      if (controls.value[i].productId !== undefined) {
-        this.requestRemove.push(controls.value[i]);
-      }
+      this.requestRemove.push(rs);
+    }
+    if (controls.value[i].productId !== undefined) {
+      this.requestRemove.push(controls.value[i]);
+    }
     controls.removeAt(i);
   }
 
@@ -262,6 +268,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   selectedItem(item) {
     this.clientSelected = item.item as ClientSearchModel;
     this.isEditClient = false;
+    if (this.clientSelected.clientId > 0) {
+      this.invoiceForm.controls.clientName.disable();
+      // this.invoiceForm.controls.contactName.disable();
+      this.invoiceForm.controls.email.disable();
+      this.invoiceForm.controls.address.disable();
+      this.invoiceForm.controls.taxCode.disable();
+    } else {
+      this.invoiceForm.controls.email.reset();
+      this.invoiceForm.controls.address.reset();
+      this.invoiceForm.controls.taxCode.reset();
+    }
   }
   selectedProduct(item, index) {
     this.productSelected = item.item as ProductSearchModel;
@@ -339,7 +356,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         this.invoiceForm.controls.issueDate.patchValue(issueDatePicker);
       }
       if (invoice[0].dueDate) {
-        const dueDate = moment(invoice[0].issueDate).format(AppConsts.defaultDateFormat);
+        const dueDate = moment(invoice[0].dueDate).format(AppConsts.defaultDateFormat);
         const dueDateSplit = dueDate.split('/');
         const dueDatePicker = { year: Number(dueDateSplit[2]), month: Number(dueDateSplit[1]), day: Number(dueDateSplit[0]) };
         this.invoiceForm.controls.dueDate.patchValue(dueDatePicker);
@@ -365,31 +382,35 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   }
   save() {
     if (!this.invoiceForm.valid && this.invoiceId === 0) {
+      const a = this.oldClientId === this.invoiceForm.value.clientId;
       const request = {
         invoiceId: 0,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
+        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.issueDate.year,
         this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
         dueDate: [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
+        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.dueDate.year,
+        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
         reference: this.invoiceForm.value.reference,
         subTotal: this.subTotalAmount,
-        discRate: this.subTotalDiscountIncl,
-        discount: 0,
+        discRate: this.invoiceForm.controls.totalDiscount.value,
+        discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
         amountPaid: this.amountPaid,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        clientId: this.invoiceForm.value.contactName.clientId,
-        clientName: this.invoiceForm.value.contactName.clientName,
-        address: this.invoiceForm.value.contactName.address,
-        taxCode: this.invoiceForm.value.taxCode,
-        tag: this.invoiceForm.value.contactName.tag,
-        contactName: this.invoiceForm.value.contactName.contactName,
-        email: this.invoiceForm.value.contactName.email,
+        clientId: this.invoiceForm.value.contactName.clientId !== undefined ? this.invoiceForm.value.contactName.clientId : 0,
+        clientName: this.invoiceForm.value.clientName === '' ? this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+        address: this.invoiceForm.value.address === '' ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
+        taxCode: this.invoiceForm.value.taxCode === '' ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
+        tag: '',
+        contactName: this.invoiceForm.value.contactName.contactName !== undefined ? this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
+        email: this.invoiceForm.value.email === '' ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
       };
+      console.log(request);
       const requestInvDt = [];
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         this.invoiceService.getDF().subscribe((x: any) => {
@@ -414,17 +435,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
           }
           this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
             this.notify.success('Successfully Add');
-             this.router.navigate([`/invoice`]);
+            this.router.navigate([`/invoice`]);
           });
         });
       });
       return;
     }
     if (this.invoiceId > 0 && !this.invoiceForm.valid) {
-      // if (this.invoiceForm.value.clientName !== this.oldClienName
-      //   && this.oldClientId === this.invoiceForm.value.clientId) {
-      //  this.invoiceForm.controls.clientId.reset();
-      // }
       const checkClientId = this.invoiceForm.value.clientId;
       const saleInvDetailView = [];
       for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
@@ -433,17 +450,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
             amount: this.invoiceForm.value.items[ii].amount,
             qty: this.invoiceForm.value.items[ii].qty,
             price: this.invoiceForm.value.items[ii].price,
-            description : this.invoiceForm.value.items[ii].description,
-            id : this.invoiceForm.value.items[ii].id,
-            invoiceId : this.invoiceForm.value.invoiceId,
-            productId :this.invoiceForm.value.items[ii].productName.productID,
-            productName : this.invoiceForm.value.items[ii].productName.productName,
-            vat : this.invoiceForm.value.items[ii].vat,
+            description: this.invoiceForm.value.items[ii].description,
+            id: this.invoiceForm.value.items[ii].id,
+            invoiceId: this.invoiceForm.value.invoiceId,
+            productId: this.invoiceForm.value.items[ii].productName.productID,
+            productName: this.invoiceForm.value.items[ii].productName.productName,
+            vat: this.invoiceForm.value.items[ii].vat,
           }
           saleInvDetailView.push(rs);
         }
         if (this.invoiceForm.value.items[ii].productId !== undefined) {
-          const object2 = Object.assign({}, this.invoiceForm.value.items[ii], {invoiceId: this.invoiceForm.value.invoiceId, productId: this.invoiceForm.value.items[ii].productId === ""? 0: this.invoiceForm.value.items[ii].productId});
+          const object2 = Object.assign({}, this.invoiceForm.value.items[ii], { invoiceId: this.invoiceForm.value.invoiceId, productId: this.invoiceForm.value.items[ii].productId === "" ? 0 : this.invoiceForm.value.items[ii].productId });
           saleInvDetailView.push(object2);
         }
       }
@@ -454,31 +471,31 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         issueDate: [this.invoiceForm.value.issueDate.year,
         this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
         dueDate: [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
+        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
         reference: this.invoiceForm.value.reference,
-        subTotal: 0,
-        discRate: 0,
-        discount: 0,
-        vatTax: 0,
-        amountPaid: 0,
+        subTotal: this.subTotalAmount,
+        discRate: this.invoiceForm.controls.totalDiscount.value,
+        discount: this.subTotalDiscountIncl.toString().substring(1),
+        vatTax: this.totalTaxAmount,
+        amountPaid: this.amountDue,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        clientId: this.invoiceForm.value.contactName.clientId !== null ? this.invoiceForm.value.contactName.clientId : 0,
-        clientName: this.invoiceForm.value.contactName.clientName,
-        address: this.invoiceForm.value.contactName.address,
-        taxCode: this.invoiceForm.value.taxCode,
-        tag: this.invoiceForm.value.contactName.tag,
-        contactName: this.invoiceForm.value.contactName.contactName,
-        email: this.invoiceForm.value.contactName.email,
+        clientId: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
+        clientName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+        address: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
+        taxCode: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
+        tag: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.tag : this.invoiceForm.value.tag,
+        contactName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.contactName : this.invoiceForm.value.contactName,
+        email: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
         clientData: [{
-          clientId: this.invoiceForm.value.contactName.clientId !== null ? this.invoiceForm.value.contactName.clientId : 0,
-          clientName: this.invoiceForm.value.contactName.clientName,
-          address: this.invoiceForm.value.contactName.address,
-          taxCode: this.invoiceForm.value.contactName.taxCode,
-          tag: null,
-          contactName: this.invoiceForm.value.contactName.contactName,
-          email: this.invoiceForm.value.contactName.email,
+          clientId: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
+          clientName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+          address: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
+          taxCode: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
+          tag: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.tag : this.invoiceForm.value.tag,
+          contactName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.contactName : this.invoiceForm.value.contactName,
+          email: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
           note: this.invoiceForm.value.notes,
         }],
         saleInvDetailView: saleInvDetailView,
@@ -490,13 +507,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         issueDate: [this.invoiceForm.value.issueDate.year,
         this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
         dueDate: [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day + 1].join('-'),
+        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
         reference: this.invoiceForm.value.reference,
-        subTotal: 0,
-        discRate: 0,
-        discount: 0,
-        vatTax: 0,
-        amountPaid: 0,
+        subTotal: this.subTotalAmount,
+        discRate: this.invoiceForm.controls.totalDiscount.value,
+        discount: this.subTotalDiscountIncl.toString().substring(1),
+        vatTax: this.totalTaxAmount,
+        amountPaid: this.amountDue,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
@@ -527,13 +544,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       this.invoiceService.updateSaleInv(this.requestData).pipe(
         finalize(() => {
         })).subscribe(rs => {
-          if(this.requestRemove.length <= 0){
+          if (this.requestRemove.length <= 0) {
             this.router.navigate([`/invoice`]);
           }
-          if (this.requestRemove.length > 0){
+          if (this.requestRemove.length > 0) {
             this.requestRemove.forEach(element => {
               this.invoiceService.deleteInvoiceDetail(element.id).subscribe(() => {
-               // this.notify.success('Successfully Deleted');
+                // this.notify.success('Successfully Deleted');
                 this.getDataForEditMode();
                 this.requestRemove = [];
                 this.router.navigate([`/invoice`]);
@@ -541,13 +558,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
             });
           }
           this.notify.success('Successfully Update');
-          this.router.navigate([`/invoice`]);
+          this.router.navigate([`/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
         });
     } else {
 
     }
-    // console.log(JSON.stringify(this.invoiceForm.value));
-    // this.router.navigate([`/invoice`]);
   }
 
   private updateTotalUnitPrice(items: any) {
@@ -671,6 +686,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   }
   addTaxPopup(item: any, index: number): void {
 
+    if (!this.viewMode) {
       if (item.value.productName === '') {
         this.message.warning('Please select a product');
         return;
@@ -701,11 +717,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
           }
         }
       });
-    
+    }
+
+
   }
 
-  getAllTax(){
-    this.taxService.getAll().pipe(finalize(()=>{
+  getAllTax() {
+    this.taxService.getAll().pipe(finalize(() => {
     })).subscribe(rs => {
       this.taxData = rs;
     })
@@ -732,6 +750,16 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     this.isEditClient = true;
     this.clientSelected = new ClientSearchModel();
     this.invoiceForm.controls.clientId.reset();
+    this.invoiceForm.controls.clientName.reset();
+    this.invoiceForm.controls.contactName.reset();
+    this.invoiceForm.controls.email.reset();
+    this.invoiceForm.controls.address.reset();
+    this.invoiceForm.controls.taxCode.reset();
+
+    this.invoiceForm.controls.clientName.enable();
+    this.invoiceForm.controls.email.enable();
+    this.invoiceForm.controls.address.enable();
+    this.invoiceForm.controls.taxCode.enable();
   }
   redirectToEditInvoice() {
     this.invoiceForm.enable();

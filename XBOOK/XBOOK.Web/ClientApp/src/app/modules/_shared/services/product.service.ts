@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { ProductSearchModel } from '../models/product/product-search.model';
 import { ProductView } from '../models/product/product-view.model';
 import { Observable } from 'rxjs';
+import { ProductCategoryView } from '../models/product/product-category-view.model';
 @Injectable()
 export class ProductService extends BaseService {
 
@@ -43,18 +44,24 @@ export class ProductService extends BaseService {
       `${this.url}/?q=${term}`
     );
   }
-  getProduct(id: number): Observable<ProductView> {
-    return this.get<ProductView>(
-      `${this.url}/${id}`
+  getProduct(id: any): Observable<ProductView> {
+    return this.post<ProductView>(
+      `${API_URI.productById}`, id
     );
   }
-  createProduct(product: ProductView): Observable<ProductView> {
-    return this.post<ProductView>(`${this.url}`, product);
+  createProduct(product: any): Observable<ProductView> {
+    return this.post<ProductView>(`${API_URI.createProduct}`, product);
   }
-  updateProduct(product: ProductView) {
-    return this.put<ProductView>(`${this.url}/${product.id}`, product);
+  updateProduct(product: any) {
+    return this.put<ProductView>(`${API_URI.updateProduct}`, product);
   }
-  deleteProduct(id: number) {
-    return this.delete(`${this.url}/${id}`);
+  deleteProduct(id: any) {
+    return this.post(`${API_URI.deleteProduct}/${id}`, id);
+  }
+  getCategory(categoryId: any): Observable<ProductCategoryView> {
+    return this.post<ProductCategoryView>(`${API_URI.categoryById}`, categoryId)
+  }
+  getAllCategory(): Observable<ProductCategoryView> {
+    return this.post<ProductCategoryView>(`${API_URI.categoryGetAll}`, null);
   }
 }
