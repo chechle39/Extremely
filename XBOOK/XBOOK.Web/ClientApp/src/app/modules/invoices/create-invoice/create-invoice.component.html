@@ -181,7 +181,7 @@
                             <input formControlName="productName" #productName id="productName{{i}}" kendoTextBox
                               placeholder="Enter an Item Name" autocomplete="none"
                               class="productNameClass border-0 full-width imput-reference-custom"
-                              [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate"
+                              [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate" (focus)="focusProd$.next($event.target.value)"
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
                               [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
                             <input style="font-size: 12px" formControlName="description" #description kendoTextBox

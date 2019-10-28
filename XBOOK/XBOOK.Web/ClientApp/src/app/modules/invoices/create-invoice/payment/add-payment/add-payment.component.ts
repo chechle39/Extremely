@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { AppConsts } from '@core/app.consts';
 import { PaymentService } from '@modules/_shared/services/payment.service';
 import { finalize, debounceTime } from 'rxjs/operators';
+import { InvoiceService } from '@modules/_shared/services/invoice.service';
 @Component({
   selector: 'xb-add-payment',
   templateUrl: './add-payment.component.html',
@@ -18,6 +19,8 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
   @Input() outstandingAmount = 0;
   @Input() invoiceId: number;
   @Input() id: number;
+  @Input() amountPaid: any;
+  @Input() invoiceList: any;
   paymentMethods = [
     new PaymentMethod(1, 'Cash'),
     new PaymentMethod(2, 'Visa card'),
@@ -28,6 +31,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     public activeModal: NgbActiveModal,
     public paymentService: PaymentService,
+    private invoiceService: InvoiceService,
     public fb: FormBuilder) {
     super(injector);
     this.paymentForm = this.createPaymentFormGroup();

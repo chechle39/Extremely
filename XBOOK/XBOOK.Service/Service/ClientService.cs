@@ -58,7 +58,7 @@ namespace XBOOK.Service.Service
             if (!string.IsNullOrEmpty(request.ClientKeyword))
             {
                 var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToListAsync();
-                var query = listData.Where(x => x.ClientName.Contains(request.ClientKeyword) || x.Address.Contains(request.ClientKeyword)|| x.Email.Contains(request.ClientKeyword)).ToList();
+                var query = listData.Where(x => x.ClientName.ToLowerInvariant().Contains(request.ClientKeyword) || x.Address.ToLowerInvariant().Contains(request.ClientKeyword)|| x.Email.ToLowerInvariant().Contains(request.ClientKeyword) || x.TaxCode.ToLowerInvariant().Contains(request.ClientKeyword)).ToList();
                 return query;
             }
             else

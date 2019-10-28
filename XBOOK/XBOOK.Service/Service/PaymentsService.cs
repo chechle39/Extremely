@@ -55,8 +55,8 @@ namespace XBOOK.Service.Service
         {
             var listData = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().Where(x=>x.Id == id).ToList();
             await _paymentUowRepository.Remove(id);
-            var paymentGL = new PaymentGL(_uow);
-            paymentGL.Delete(listData[0]);
+            //var paymentGL = new PaymentGL(_uow);
+            //paymentGL.Delete(listData[0]);
         }
 
         public bool SavePayMent(PaymentViewModel saleInvoiceViewModel)
@@ -67,8 +67,8 @@ namespace XBOOK.Service.Service
             _uow.SaveChanges();
             var dataAsign = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().LastOrDefault();
             _uow.CommitTransaction();
-            var paymentGL = new PaymentGL(_uow);
-            paymentGL.Insert(dataAsign);
+            //var paymentGL = new PaymentGL(_uow);
+            //paymentGL.Insert(dataAsign);
             return true;
         }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy, Injector, Input, ViewChild } from '@angular/core';
-import { Observable, Subject, merge, interval } from 'rxjs';
+import { Observable, Subject, merge, interval, of } from 'rxjs';
 import {
   FormGroup,
   FormBuilder,
@@ -27,7 +27,7 @@ import { InvoiceView } from '@modules/_shared/models/invoice/invoice-view.model'
 import * as moment from 'moment';
 import { ActionType } from '@core/app.enums';
 import { ProductView } from '@modules/_shared/models/product/product-view.model';
-import { debounceTime, distinctUntilChanged, switchMap, finalize, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, finalize, map, tap, catchError } from 'rxjs/operators';
 import { SaleInvoiceCreateRequest } from '@modules/_shared/models/invoice/sale-invoice-create-request';
 import { TaxService } from '@modules/_shared/services/tax.service';
 
@@ -86,6 +86,10 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   requestData: any;
   requestRemove: any[] = [];
   taxData: any;
+  dataClientList: ClientSearchModel[];
+  amountPaidData: any;
+  invoiceList: InvoiceView;
+  paidAmont: any;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -104,15 +108,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     this.createForm();
   }
   ngOnInit() {
-    // if (!this.viewMode) {
-    //   this.invoiceForm.controls.clientName.disable();
-    //   this.invoiceForm.controls.contactName.disable();
-    //   this.invoiceForm.controls.email.disable();
-    //   this.invoiceForm.controls.address.disable();
-    //   this.invoiceForm.controls.taxCode.disable();
-    // }
     this.imgURL = 'assets/img/B24Logo.png';
-    this.canActionClient();
     // initialize stream on units
     const request = {
       productKeyword: ''
@@ -139,16 +135,16 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       }
     });
   }
-  // ngAfterViewInit() {
-  //   if (!this.viewMode) {
-  //     this.invoiceForm.controls.clientName.disable();
-  //     this.invoiceForm.controls.contactName.disable();
-  //     this.invoiceForm.controls.email.disable();
-  //     this.invoiceForm.controls.address.disable();
-  //     this.invoiceForm.controls.taxCode.disable();
-  //   }
-  //   this.addEventForInput();
-  // }
+  ngAfterViewInit() {
+    // if (!this.viewMode) {
+    //   this.invoiceForm.controls.clientName.disable();
+    //   this.invoiceForm.controls.contactName.disable();
+    //   this.invoiceForm.controls.email.disable();
+    //   this.invoiceForm.controls.address.disable();
+    //   this.invoiceForm.controls.taxCode.disable();
+    // }
+    this.addEventForInput();
+  }
   canActionClient(): boolean {
     return (!this.viewMode && this.clientSelected.clientId > 0);
   }
@@ -245,26 +241,48 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       taxs: this.fb.array([])
     });
   }
-
+  searching = false;
+  searchFailed = false;
   searchClient = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
     const inputFocus$ = this.focusClient$;
     return merge(debouncedText$, inputFocus$).pipe(
-      map(term => (term === '' ? this.clients
-        : this.clients.filter(v => v.contactName.toLowerCase().indexOf(term.toLowerCase()) > -1))
-      ));
+      switchMap(term =>
+        this.clientService.searchClient(this.requestClient(term)).pipe(
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          }))
+      ))
   }
-  // focusProduct(value: any) {
-  //   this.focusProd$ = this.focusProd$.next(value);
-  // }
+
+  requestClient(e: any) {
+    const clientKey = {
+      clientKeyword: e.toLocaleLowerCase()
+    };
+    return clientKey;
+  }
+
   searchProduct = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
     const inputFocus = this.focusProd$;
-    return merge(debouncedText$).pipe(
-      map(term => (term === '' ? this.products
-        : this.products.filter(v => v.productName.toLowerCase().indexOf(term.toLowerCase()) > -1))
-      ));
+    return merge(debouncedText$, inputFocus).pipe(
+      switchMap(term =>
+        this.productService.searchProduct(this.requestProduct(term)).pipe(
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          }))
+      ))
   }
+
+  requestProduct(e: any) {
+    const request = {
+      productKeyword: e.toLocaleLowerCase()
+    };
+    return request;
+  }
+
   selectedItem(item) {
     this.clientSelected = item.item as ClientSearchModel;
     this.isEditClient = false;
@@ -280,6 +298,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       this.invoiceForm.controls.taxCode.reset();
     }
   }
+
   selectedProduct(item, index) {
     this.productSelected = item.item as ProductSearchModel;
     const arrayControl = this.getFormArray();
@@ -309,8 +328,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   private getDataForEditMode() {
     if (isNaN(this.invoiceId)) { return; }
 
-    this.invoiceService.getInvoice(this.invoiceId).subscribe(data => {
+    this.getInvoiceById(this.invoiceId);
+  }
+
+  private getInvoiceById(invoiceId: any) {
+    this.invoiceService.getInvoice(invoiceId).subscribe(data => {
       const invoice = data as InvoiceView;
+      this.invoiceList = invoice;
       this.invoiceNumber = invoice[0].invoiceNumber;
       this.title = `Invoice ${this.invoiceNumber}`;
       this.clientSelected.id = invoice[0].clientId;
@@ -325,7 +349,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       for (let item = 0; item < invoice[0].saleInvDetailView.length; item++) {
         detailInvoiceFormArray.push(this.getItem());
       }
-
       this.invoiceForm.patchValue({
         invoiceId: invoice[0].invoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
@@ -375,11 +398,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       });
     });
   }
+
   cancel() {
     // Resets to blank object
     this.invoiceForm.reset();
     this.router.navigate([`/invoice`]);
   }
+
   save() {
     if (!this.invoiceForm.valid && this.invoiceId === 0) {
       const a = this.oldClientId === this.invoiceForm.value.clientId;
@@ -398,7 +423,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         discRate: this.invoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
-        amountPaid: this.amountPaid,
+        amountPaid: this.amountPaidData,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
@@ -410,7 +435,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         contactName: this.invoiceForm.value.contactName.contactName !== undefined ? this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
         email: this.invoiceForm.value.email === '' ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
       };
-      console.log(request);
       const requestInvDt = [];
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         this.invoiceService.getDF().subscribe((x: any) => {
@@ -477,7 +501,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         discRate: this.invoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
-        amountPaid: this.amountDue,
+        amountPaid: this.amountPaidData,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
@@ -513,7 +537,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         discRate: this.invoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
-        amountPaid: this.amountDue,
+        amountPaid: this.amountPaidData,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
@@ -605,6 +629,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   }
   amountPaidChange(value) {
     if (value !== '') {
+      this.amountPaidData = value;
       this.amountDue = this.totalAmount - Number(value);
     } else {
       this.amountDue = this.totalAmount;
@@ -639,9 +664,47 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     const dialog = this.modalService.open(AddPaymentComponent, AppConsts.modalOptionsSmallSize);
     dialog.componentInstance.outstandingAmount = this.amountDue;
     dialog.componentInstance.invoiceId = this.invoiceId;
+    dialog.componentInstance.amountPaid = this.amountPaidData;
     dialog.result.then(result => {
       if (result) {
         this.getPayments(this.invoiceId);
+        const request = {
+          invoiceId: this.invoiceForm.controls.invoiceId.value,
+          invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
+          invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
+
+
+          issueDate: [this.invoiceForm.controls.issueDate.value.year,
+          this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
+          this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-'),
+          dueDate: [this.invoiceForm.controls.dueDate.value.year,
+          this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
+          this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'),
+
+
+
+          reference: this.invoiceForm.controls.reference.value,
+          subTotal: this.subTotalAmount,
+          discRate: this.invoiceForm.controls.totalDiscount.value,
+          discount: this.subTotalDiscountIncl.toString().substring(1),
+          vatTax: this.totalTaxAmount,
+          amountPaid: this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value + this.paymentViews[this.paymentViews.length - 1].amount,
+          note: this.invoiceForm.controls.notes.value,
+          term: this.invoiceForm.controls.termCondition.value,
+          status: '',
+          clientId: this.invoiceForm.controls.clientId.value,
+          clientName: this.invoiceForm.controls.clientName.value,
+          address: this.invoiceForm.controls.address.value,
+          taxCode: this.invoiceForm.controls.taxCode.value,
+          tag: null,
+          contactName: this.invoiceForm.controls.contactName.value,
+          email: this.invoiceForm.controls.email.value,
+          clientData: [],
+          saleInvDetailView: [],
+        };
+        this.invoiceService.updateSaleInv(request).subscribe(rs => {
+          this.getInvoiceById(this.invoiceForm.controls.invoiceId.value);
+        })
       }
     });
   }
@@ -671,6 +734,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     dialog.componentInstance.id = payment.id || payment[0].id;
     dialog.componentInstance.outstandingAmount = this.amountDue;
     dialog.componentInstance.invoiceId = this.invoiceId;
+    dialog.componentInstance.invoiceList = this.invoiceList;
     dialog.result.then(result => {
       if (result) {
         this.getPayments(this.invoiceId);

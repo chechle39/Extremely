@@ -51,7 +51,7 @@ namespace XBOOK.Service.Service
             if (!string.IsNullOrEmpty(request.ProductKeyword))
             {
                 var listData = await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().ToListAsync();
-                var query = listData.Where(x => x.productName.Contains(request.ProductKeyword)).ToList();
+                var query = listData.Where(x => x.productName.ToLowerInvariant().Contains(request.ProductKeyword) || x.description.ToLowerInvariant().Contains(request.ProductKeyword)).ToList();
                 return query;
             }
             else

@@ -201,23 +201,25 @@ namespace XBOOK.Service.Service
                 _SaleInvoiceRepository.UpdateSaleInv(saleInvoiceViewModel);
                 _uow.SaveChanges();
                 _uow.CommitTransaction();
-                var requetsCl = new ClientCreateRequet
+                if (saleInvoiceViewModel.ClientData.Count() > 0)
                 {
-                    Address = saleInvoiceViewModel.ClientData[0].Address,
-                    ClientId = saleInvoiceViewModel.ClientData[0].ClientId,
-                    ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
-                    ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
-                    Email = saleInvoiceViewModel.ClientData[0].Email,
-                    Note = saleInvoiceViewModel.ClientData[0].Note,
-                    Tag = saleInvoiceViewModel.ClientData[0].Tag,
-                    TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
-                };
-                //var update = Mapper.Map<ClientCreateRequet, Client>(requetsCl);
-                //clientUOW.Update(update);
-                _uow.BeginTransaction();
-                _ClientRepository.UpdateCl(requetsCl);
-                _uow.SaveChanges();
-                _uow.CommitTransaction();
+                    var requetsCl = new ClientCreateRequet
+                    {
+                        Address = saleInvoiceViewModel.ClientData[0].Address,
+                        ClientId = saleInvoiceViewModel.ClientData[0].ClientId,
+                        ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
+                        ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
+                        Email = saleInvoiceViewModel.ClientData[0].Email,
+                        Note = saleInvoiceViewModel.ClientData[0].Note,
+                        Tag = saleInvoiceViewModel.ClientData[0].Tag,
+                        TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
+                    };
+                    _uow.BeginTransaction();
+                    _ClientRepository.UpdateCl(requetsCl);
+                    _uow.SaveChanges();
+                    _uow.CommitTransaction();
+                }
+                
             }
             else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientData.Count() > 0)
             {
@@ -240,7 +242,6 @@ namespace XBOOK.Service.Service
             }
             if (saleInvoiceViewModel.SaleInvDetailView.Count() > 0)
             {
-                //_uow.BeginTransaction();
                 for (int i = 0; i <  saleInvoiceViewModel.SaleInvDetailView.Count; i++)
                 {
                     if (saleInvoiceViewModel.SaleInvDetailView[i].Id > 0)
@@ -278,9 +279,6 @@ namespace XBOOK.Service.Service
                             ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName,
                             Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
                         };
-
-                        //var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(saleDetailPrd);
-                        //_saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
                         try
                         {
                             _SaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
@@ -293,10 +291,7 @@ namespace XBOOK.Service.Service
                      
                     }
                 }
-               // _uow.CommitTransaction();
-
             }
-            // _uow.SaveChanges();
         }
 
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request)
