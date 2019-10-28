@@ -5,7 +5,7 @@
         <p>All Payment For Invoice {{invoiceNumber}} </p>
       </div>
       <div class="col-md-6 float-left">
-        <a (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></a>
+        <button [disabled]="outstandingAmount === 0" (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></button>
         <div ngbDropdown class="float-right">
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Bulk Actions
           </button>

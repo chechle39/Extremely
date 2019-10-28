@@ -90,6 +90,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   amountPaidData: any;
   invoiceList: InvoiceView;
   paidAmont: any;
+  checkAddPayment: boolean;
+  checkAddPaymentDeleted: boolean;
+  allAmontById: number;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -661,59 +664,70 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     this.isMouseEnter = true;
   }
   addPayment(): void {
+
     const dialog = this.modalService.open(AddPaymentComponent, AppConsts.modalOptionsSmallSize);
     dialog.componentInstance.outstandingAmount = this.amountDue;
     dialog.componentInstance.invoiceId = this.invoiceId;
-    dialog.componentInstance.amountPaid = this.amountPaidData;
     dialog.result.then(result => {
       if (result) {
+        this.checkAddPayment = true;
         this.getPayments(this.invoiceId);
-        const request = {
-          invoiceId: this.invoiceForm.controls.invoiceId.value,
-          invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
-          invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
-
-
-          issueDate: [this.invoiceForm.controls.issueDate.value.year,
-          this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
-          this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-'),
-          dueDate: [this.invoiceForm.controls.dueDate.value.year,
-          this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
-          this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'),
-
-
-
-          reference: this.invoiceForm.controls.reference.value,
-          subTotal: this.subTotalAmount,
-          discRate: this.invoiceForm.controls.totalDiscount.value,
-          discount: this.subTotalDiscountIncl.toString().substring(1),
-          vatTax: this.totalTaxAmount,
-          amountPaid: this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value + this.paymentViews[this.paymentViews.length - 1].amount,
-          note: this.invoiceForm.controls.notes.value,
-          term: this.invoiceForm.controls.termCondition.value,
-          status: '',
-          clientId: this.invoiceForm.controls.clientId.value,
-          clientName: this.invoiceForm.controls.clientName.value,
-          address: this.invoiceForm.controls.address.value,
-          taxCode: this.invoiceForm.controls.taxCode.value,
-          tag: null,
-          contactName: this.invoiceForm.controls.contactName.value,
-          email: this.invoiceForm.controls.email.value,
-          clientData: [],
-          saleInvDetailView: [],
-        };
-        this.invoiceService.updateSaleInv(request).subscribe(rs => {
-          this.getInvoiceById(this.invoiceForm.controls.invoiceId.value);
-        })
       }
     });
   }
+  private updateSaleInvAmontPaid() {
+    const request = {
+      invoiceId: this.invoiceForm.controls.invoiceId.value,
+      invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
+      invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
+      issueDate: [this.invoiceForm.controls.issueDate.value.year,
+      this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
+      this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-'),
+      dueDate: [this.invoiceForm.controls.dueDate.value.year,
+      this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
+      this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'),
+      reference: this.invoiceForm.controls.reference.value,
+      subTotal: this.subTotalAmount,
+      discRate: this.invoiceForm.controls.totalDiscount.value,
+      discount: this.subTotalDiscountIncl.toString().substring(1),
+      vatTax: this.totalTaxAmount,
+      amountPaid: this.checkAddPaymentDeleted === true ?((this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) - this.allAmontById ) : (this.checkAddPayment === true) ? (this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) + this.paymentViews[this.paymentViews.length - 1].amount:0,
+      note: this.invoiceForm.controls.notes.value,
+      term: this.invoiceForm.controls.termCondition.value,
+      status: '',
+      clientId: this.invoiceForm.controls.clientId.value,
+      clientName: this.invoiceForm.controls.clientName.value,
+      address: this.invoiceForm.controls.address.value,
+      taxCode: this.invoiceForm.controls.taxCode.value,
+      tag: null,
+      contactName: this.invoiceForm.controls.contactName.value,
+      email: this.invoiceForm.controls.email.value,
+      clientData: [],
+      saleInvDetailView: [],
+    };
+    this.invoiceService.updateSaleInv(request).subscribe(rs => {
+      this.getInvoiceById(this.invoiceForm.controls.invoiceId.value);
+    });
+  }
+
   getPayments(invoiceId: number) {
     this.paymentService.getPaymentIvByid(invoiceId).pipe(
       //debounceTime(500), 
       finalize(() => {
       })).subscribe((i: any) => {
         this.paymentViews = i;
+        if (this.checkAddPayment === true) {
+          this.updateSaleInvAmontPaid();
+          this.checkAddPayment = false;
+        }
+        this.allAmontById = 0;
+        this.paymentViews.forEach(element => {
+          this.allAmontById += element.amount;
+        });
+        if (this.checkAddPaymentDeleted === true) {
+          this.updateSaleInvAmontPaid();
+          this.checkAddPaymentDeleted = false;
+        }
       });
   }
   deletePayment(payments: any) {
@@ -723,6 +737,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         this.paymentService.deletePayment(element.id).subscribe(() => {
           this.notify.success('Successfully Deleted');
           this.getPayments(this.invoiceId);
+          this.checkAddPaymentDeleted = true;
+          this.updateSaleInvAmontPaid();
         });
       });
     });
