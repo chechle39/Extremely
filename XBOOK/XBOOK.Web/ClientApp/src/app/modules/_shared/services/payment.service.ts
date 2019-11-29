@@ -7,12 +7,6 @@ import { PaymentView } from '../models/invoice/payment-view.model';
 @Injectable()
 export class PaymentService extends BaseService {
 
-  url = API_URI.payment;
-  getAll(invoiceId: number): Observable<PaymentView[]> {
-    return this.get<PaymentView[]>(
-      `${this.url}?invoiceId=${invoiceId}`
-    );
-  }
   getPaymentIvByid(id: any): Observable<PaymentView> {
     return this.post<PaymentView>(`${API_URI.paymentIvById}/${id}`, id);
   }

@@ -14,9 +14,11 @@
     public class ClientSerchRequest
     {
         public string ClientKeyword { get; set; }
+        public bool isGrid { get; set; }
     }
     public class ProductSerchRequest
     {
         public string ProductKeyword { get; set; }
+        public bool IsGrid { get; set; }
     }
 }

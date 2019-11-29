@@ -15,7 +15,9 @@ class PagedClientsRequestDto extends PagedRequestDto {
 }
 @Component({
   selector: 'xb-clients',
-  templateUrl: './clients.component.html'
+  templateUrl: './clients.component.html',
+  styleUrls: ['./clients.component.scss']
+
 })
 export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   clientViews: any;
@@ -25,9 +27,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   selected = [];
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
-  clientKey = {
-    clientKeyword: ''
-  };
+  clientKeyword = '';
   constructor(
     injector: Injector,
     private clientService: ClientService,
@@ -43,10 +43,14 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
 
     request.clientKeyword = this.keyword;
     this.loadingIndicator = true;
+    const clientKey = {
+      clientKeyword: this.clientKeyword.toLocaleLowerCase(),
+      isGrid: true
+    };
     this.clientService
-      .searchClient(this.clientKey)
+      .getClientData(clientKey)
       .pipe(
-       // debounceTime(500),
+        // debounceTime(500),
         finalize(() => {
           finishedCallback();
         })
@@ -66,7 +70,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
       this.message.warning('Only one item selected to edit?');
       return;
     }
-    this.showCreateOrEditClientDialog(this.selected[0].clientId);
+    this.showCreateOrEditClientDialog(this.selected[0].clientID);
     this.selected = [];
   }
   delete(): void {
@@ -74,12 +78,15 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
       this.message.warning('Please select an item from the list?');
       return;
     }
+    const deleteList = [];
     this.message.confirm('Do you want to delete clients ?', 'Are you sure ?', () => {
       this.selected.forEach(element => {
-        this.clientService.deleteClient(element.clientId).subscribe(() => {
-          this.notify.success('Successfully Deleted');
-          this.refresh();
-        });
+        const id = element.clientID;
+        deleteList.push({id});
+      });
+      this.clientService.deleteClient(deleteList).subscribe(() => {
+        this.notify.success('Successfully Deleted');
+        this.refresh();
       });
       this.selected = [];
     });
@@ -111,10 +118,10 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   }
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click' && event.value !== '') {
+    if (event.type === 'click' && event.cellIndex > 0 ) {
       event.cellElement.blur();
       const createOrEditClientDialog = this.modalService.open(EditClientComponent, AppConsts.modalOptionsCustomSize);
-      createOrEditClientDialog.componentInstance.id = event.row.clientId;
+      createOrEditClientDialog.componentInstance.id = event.row.clientID;
       createOrEditClientDialog.result.then(result => {
         if (result) {
           this.refresh();
@@ -123,13 +130,13 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     }
   }
   public getOutstanding(): number {
-    return _.sumBy(this.clientViews, item => {
-      return 12.5 * 1000000;
+    return _.sumBy(this.clientViews, (item: any) => {
+      return item.outstanding ;
     });
   }
   public getOverduce(): number {
-    return _.sumBy(this.clientViews, item => {
-      return 125.4 * 1000000;
+    return _.sumBy(this.clientViews, (item: any) => {
+      return item.overdue;
     });
   }
 }

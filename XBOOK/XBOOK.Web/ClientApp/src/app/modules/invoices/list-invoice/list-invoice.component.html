@@ -1,4 +1,4 @@
-<div class="card">
+<div  class="card">
   <div class="card-content">
     <div class="card-body">
       <div class="row form-line">
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" style="padding-top: 6px;">
           <p class="label-blue">All Invoices <span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span>
           </p>
         </div>
@@ -50,7 +50,7 @@
         </div>
         <div class="col-md-6 float-right">
           <div class="position-relative has-icon-left input-group">
-            <input type="text" [(ngModel)]="keyword" name="keyword" autocomplete="off" class="form-control round pl-4"
+            <input type="text" [(ngModel)]="keyword" name="keyword" (keyup)="refresh()" autocomplete="off" class="form-control round pl-4"
               placeholder="Search">
             <div class="form-control-position" style="right: auto;z-index: 1000;">
               <i class="ft-search" (click)="refresh()"></i>
@@ -136,9 +136,9 @@
         <div class="col-md-12">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="invoiceViews"
             [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]" [columnMode]="'force'"
-            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="5"
+            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
             [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)" (activate)="onActivate($event)"
-            (select)='onSelect($event)' [selectAllRowsOnPage]="false">
+            (select)='onSelect($event)' [selectAllRowsOnPage]="false" >
 
             <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
               [resizeable]="false">
@@ -154,7 +154,7 @@
               <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                 let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
                 <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" class="custom-control-input" id="{{row.invoiceId}}" [checked]="isSelected"
+                  <input #cb type="checkbox" class="custom-control-input" id="{{row.invoiceId}}" [checked]="isSelected"
                     (change)="onCheckboxChangeFn($event)" />
                   <label class="custom-control-label col-form-label" for="{{row.invoiceId}}"></label>
                 </div>
@@ -198,7 +198,7 @@
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
-                  {{row.amountPaid | currency:'VND':''}}
+                  {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}}
                 </div>
                 <div class="col-right">
                   <span style="color: #215961;font-weight: bold">{{row.status}}</span>
@@ -226,20 +226,21 @@
             <ngx-datatable-footer>
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-                <div class="row" style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px">
+                <div class="row" style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px; margin-top:-20px;">
                   <div class="row text-right">
-                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-center">
+                      <b>Total: {{rowCount}} items </b>
+                    </div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3 text-center">
                       <b>Grant Total</b>
                     </div>
-                    <div class="col-md-3" style="padding-right:50px">
+                    <div class="col-md-3" style="padding-right:35px">
                       <b>{{getGrantTotal()| currency:'VND':''}}</b>
                     </div>
                   </div>
                   <div class="row">
                     <div class="page-count col-md-6 pl-4">
-                      <span>Total: {{rowCount}} items </span>
                     </div>
                     <div class="col-md-6 text-right">
                       <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"

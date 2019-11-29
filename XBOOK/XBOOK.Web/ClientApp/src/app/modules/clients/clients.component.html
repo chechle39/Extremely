@@ -36,11 +36,11 @@
         </div>
 
       </div>
-      <div class="row my-3">
-        <div class=" col-md-4">
+      <div class="row my-3 margin-top-0">
+        <div class="col-md-4 margintop-13">
           <p class="label-blue">Khách Hàng</p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 posion">
           <div ngbDropdown>
             <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Chức năng chung
             </button>
@@ -54,7 +54,7 @@
           <div class="navbar-form navbar-left mt-1">
             <form class="form">
               <div class="position-relative has-icon-left">
-                <input type="text" [(ngModel)]="keyword" name="keyword" autocomplete="off" (keyup)="refresh()"
+                <input type="text" [(ngModel)]="clientKeyword" name="keyword" autocomplete="off" (keyup)="refresh()"
                   class="form-control round" placeholder="Search">
                 <div class="form-control-position">
                   <i class="ft-search" (click)="refresh()"></i>
@@ -68,7 +68,7 @@
         <div class="col-md-12">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="clientViews"
             [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
-            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="5"
+            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
             [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
             (select)='onSelect($event)' [selectAllRowsOnPage]="false">
 
@@ -86,9 +86,9 @@
               <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                 let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
                 <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" class="custom-control-input" id="{{row.clientId}}" [checked]="isSelected"
+                  <input type="checkbox" class="custom-control-input" id="{{row.clientID}}" [checked]="isSelected"
                     (change)="onCheckboxChangeFn($event)" />
-                  <label class="custom-control-label col-form-label" for="{{row.clientId}}"></label>
+                  <label class="custom-control-label col-form-label" for="{{row.clientID}}"></label>
                 </div>
 
               </ng-template>
@@ -109,8 +109,8 @@
               [headerClass]="'col-right'">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div class="col-right">
-                  <div>{{24500000 | currency:'VND':''}}</div>
-                  <div class="col-more-info " style="color: #ed7d31">{{12000000 | currency:'VND':''}}</div>
+                  <div>{{row.outstanding | currency:'VND':''}}</div>
+                  <div class="col-more-info " style="color: #ed7d31">{{row.overdue | currency:'VND':''}}</div>
                 </div>
               </ng-template>
             </ngx-datatable-column>

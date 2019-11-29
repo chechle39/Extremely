@@ -31,6 +31,11 @@ const routes: Routes = [
         loadChildren: () => import('../modules/invoices/invoices.module')
           .then(m => m.InvoicesModule)
       },
+      {
+        path: 'generalentry',
+        loadChildren: () => import('../modules/genled/genled.module')
+          .then(m => m.GenledModule)
+      },
       // {
       //   path: '**',
       //   // component: NotFoundComponent,

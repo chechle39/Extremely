@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy, Injector, Input, ViewChild } from '@angular/core';
-import { Observable, Subject, merge, interval, of } from 'rxjs';
+import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy, Injector, Input, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import { Observable, Subject, merge, of, Subscription, Observer } from 'rxjs';
 import {
   FormGroup,
   FormBuilder,
@@ -26,22 +26,21 @@ import { AddTaxComponent } from './add-tax/add-tax.component';
 import { InvoiceView } from '@modules/_shared/models/invoice/invoice-view.model';
 import * as moment from 'moment';
 import { ActionType } from '@core/app.enums';
-import { ProductView } from '@modules/_shared/models/product/product-view.model';
-import { debounceTime, distinctUntilChanged, switchMap, finalize, map, tap, catchError } from 'rxjs/operators';
-import { SaleInvoiceCreateRequest } from '@modules/_shared/models/invoice/sale-invoice-create-request';
+import { debounceTime, distinctUntilChanged, switchMap, finalize, map, tap, catchError, take, takeUntil } from 'rxjs/operators';
 import { TaxService } from '@modules/_shared/services/tax.service';
-
 @Component({
   selector: 'xb-create-invoice',
   templateUrl: './create-invoice.component.html'
 })
-export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
-  @ViewChild('productName', {
-    static: true
-  }) productNameField: ElementRef;
+
+export class CreateInvoiceComponent extends AppComponentBase implements OnInit, AfterViewInit {
+  @ViewChildren('productName') productNameField: QueryList<any>;
+  @ViewChild('amountPaidVC', { static: true }) amountPaidVC: any;
   @ViewChild('xxx', {
     static: true
   }) xxx: ElementRef;
+  productInputFocusSub: Subscription = new Subscription();
+  listInvoice: any;
   invoiceNumber = '';
   title = 'New Invoice';
   saveText = 'Save';
@@ -49,7 +48,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   clientSelected = new ClientSearchModel();
   productSelected = new ProductSearchModel();
   itemModels: ItemModel[];
-  products: ProductSearchModel[] = [];
+  products: any;
   paymentViews: PaymentView[] = [];
   imgURL: any;
   enableInput = false;
@@ -61,9 +60,10 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   isMouseEnter = false;
   invoiceForm: FormGroup;
   invoiceFormValueChanges$;
-  companyName = 'Công Ty Cổ Phần Công Nghệ B24';
-  companyAddress = 'Quách Văn Tuấn';
-  taxCode = '1234567';
+  companyName: string;
+  companyAddress: string;
+  taxCode: string;
+  yourCompanyId: number;
   subTotalAmount = 0;
   totalTaxAmount = 0;
   subTotalDiscountIncl = 0;
@@ -92,7 +92,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   paidAmont: any;
   checkAddPayment: boolean;
   checkAddPaymentDeleted: boolean;
-  allAmontById: number;
+  allAmontById: number = 0;
+  amount: any;
+  deletePaymentAmont: any;
+  checkEditPayment: boolean;
+  img: string | ArrayBuffer;
+  isCheckFc: boolean;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -110,11 +115,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     super(injector);
     this.createForm();
   }
+
   ngOnInit() {
-    this.imgURL = 'assets/img/B24Logo.png';
-    // initialize stream on units
+    this.getProfiles();
     const request = {
-      productKeyword: ''
+      productKeyword: '',
+      isGrid: false
     };
     this.productService.searchProduct(request).subscribe(response => {
       this.products = response;
@@ -122,31 +128,58 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     this.clientService.searchClient(this.clientKey).subscribe(response => {
       this.clients = response;
     });
-    this.invoiceFormValueChanges$ = this.invoiceForm.controls.items.valueChanges;
-    // subscribe to the stream so listen to changes on units
-    this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
-    this.activeRoute.params.subscribe(params => {
-      if (!isNaN(params.id)) {
-        this.invoiceId = params.id;
-        this.editMode = params.key === ActionType.Edit;
-        this.viewMode = params.key === ActionType.View;
-        this.getDataForEditMode();
-        this.getPayments(this.invoiceId);
-        if (this.viewMode) {
-          this.invoiceForm.disable();
-        }
+
+    this.invoiceService.getLastInvoice().subscribe(response => {
+      this.listInvoice = response;
+      this.createForm();
+      if (this.invoiceForm !== undefined) {
+        this.invoiceFormValueChanges$ = this.invoiceForm.controls.items.valueChanges;
+        // subscribe to the stream so listen to changes on units
+        this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
+        this.methodEdit_View();
       }
     });
+    this.methodEdit_View();
   }
+
+  getProfiles() {
+    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
+      this.companyName = rp.companyName;
+      this.taxCode = rp.taxCode;
+      this.companyAddress = rp.address;
+      this.yourCompanyId = rp.Id;
+      const request = rp.bizPhone + rp.taxCode
+      this.createImgPath(request);
+    });
+  }
+
+  private methodEdit_View() {
+    if (this.activeRoute !== undefined) {
+      this.activeRoute.params.subscribe(params => {
+        if (!isNaN(params.id)) {
+          this.invoiceId = params.id;
+          this.editMode = params.key === ActionType.Edit;
+          this.viewMode = params.key === ActionType.View;
+          this.getDataForEditMode();
+          this.getPayments(this.invoiceId);
+          if (this.viewMode) {
+            this.invoiceForm.disable();
+            this.invoiceForm.controls.items.disable();
+          }
+        }
+      });
+    }
+  }
+
   ngAfterViewInit() {
-    // if (!this.viewMode) {
-    //   this.invoiceForm.controls.clientName.disable();
-    //   this.invoiceForm.controls.contactName.disable();
-    //   this.invoiceForm.controls.email.disable();
-    //   this.invoiceForm.controls.address.disable();
-    //   this.invoiceForm.controls.taxCode.disable();
-    // }
+    this.isCheckFc = true;
     this.addEventForInput();
+    this.productInputFocusSub = this.productNameField.changes.subscribe(resp => {
+      if (this.productNameField.length > 1 && this.isCheckFc !== false) {
+        this.productNameField.last.nativeElement.focus();
+        this.isCheckFc = false;
+      }
+    });
   }
   canActionClient(): boolean {
     return (!this.viewMode && this.clientSelected.clientId > 0);
@@ -164,21 +197,25 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   }
 
   createForm() {
+    const today = new Date().toLocaleDateString('en-GB');
+    const issueDateSplit = today.split('/');
+    const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
     this.invoiceForm = this.fb.group({
-      invoiceNumber: ['', [Validators.required]],
-      invoiceSerial: [''],
+      invoiceNumber: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
+      invoiceSerial: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceSerial, [Validators.required]],
       contactName: ['', [Validators.required]],
       clientName: [''],
       clientId: [0],
       address: [''],
       taxCode: [''],
       email: [''],
-      yourCompanyName: ['', [Validators.required]],
-      yourCompanyAddress: ['', [Validators.required]],
-      yourTaxCode: ['', [Validators.required]],
+      yourCompanyName: [this.companyName, [Validators.required]],
+      yourCompanyAddress: [this.companyAddress, [Validators.required]],
+      yourCompanyId: [this.yourCompanyId, [Validators.required]],
+      yourTaxCode: [this.taxCode, [Validators.required]],
       yourBankAccount: ['', [Validators.required]],
-      issueDate: [''],
-      dueDate: [''],
+      issueDate: issueDatePicker,
+      dueDate: issueDatePicker,
       reference: [''],
       totalDiscount: [''],
       amountPaid: [''],
@@ -200,10 +237,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     return formArr;
   }
   addNewItem() {
+    this.isCheckFc = true;
     const formArray = this.getFormArray();
     formArray.push(this.getItem());
-    // const inputList = [].slice.call((this.el.nativeElement as HTMLElement).getElementsByClassName('productNameClass'));
-    // inputList[formArray.length - 2].nativeElement.addEventListener('focus', (e) => { });
   }
   removeItem(i: number) {
     const saleInvDetailView = [];
@@ -247,6 +283,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   searching = false;
   searchFailed = false;
   searchClient = (text$: Observable<string>) => {
+    this.isCheckFc = false;
     const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
     const inputFocus$ = this.focusClient$;
     return merge(debouncedText$, inputFocus$).pipe(
@@ -257,13 +294,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
             return of([]);
           }))
       ))
-  }
-
-  requestClient(e: any) {
-    const clientKey = {
-      clientKeyword: e.toLocaleLowerCase()
-    };
-    return clientKey;
   }
 
   searchProduct = (text$: Observable<string>) => {
@@ -278,10 +308,18 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
           }))
       ))
   }
+  requestClient(e: any) {
+    const clientKey = {
+      clientKeyword: e.toLocaleLowerCase(),
+      isGrid: false
+    };
+    return clientKey;
+  }
 
   requestProduct(e: any) {
     const request = {
-      productKeyword: e.toLocaleLowerCase()
+      productKeyword: e.toLocaleLowerCase(),
+      isGrid: false
     };
     return request;
   }
@@ -291,7 +329,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     this.isEditClient = false;
     if (this.clientSelected.clientId > 0) {
       this.invoiceForm.controls.clientName.disable();
-      // this.invoiceForm.controls.contactName.disable();
       this.invoiceForm.controls.email.disable();
       this.invoiceForm.controls.address.disable();
       this.invoiceForm.controls.taxCode.disable();
@@ -305,6 +342,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
   selectedProduct(item, index) {
     this.productSelected = item.item as ProductSearchModel;
     const arrayControl = this.getFormArray();
+    arrayControl.at(index).get('description').setValue(this.productSelected.description);
     arrayControl.at(index).get('productName').setValue(this.productSelected.productName);
     arrayControl.at(index).get('productId').setValue(this.productSelected.id);
     const price = this.productSelected.unitPrice;
@@ -404,11 +442,18 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
 
   cancel() {
     // Resets to blank object
+    if (this.editMode) {
+      this.router.navigate([`/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+    }
     this.invoiceForm.reset();
     this.router.navigate([`/invoice`]);
   }
 
   save() {
+    if (this.invoiceForm.controls.invoiceSerial.invalid === true || this.invoiceForm.controls.invoiceNumber.invalid === true) {
+      this.message.warning('Form invalid');
+      return;
+    }
     if (!this.invoiceForm.valid && this.invoiceId === 0) {
       const a = this.oldClientId === this.invoiceForm.value.clientId;
       const request = {
@@ -436,7 +481,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         taxCode: this.invoiceForm.value.taxCode === '' ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
         tag: '',
         contactName: this.invoiceForm.value.contactName.contactName !== undefined ? this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
-        email: this.invoiceForm.value.email === '' ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
+        email: this.invoiceForm.value.email === '' ? '' : this.invoiceForm.value.email,
       };
       const requestInvDt = [];
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
@@ -504,7 +549,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         discRate: this.invoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
-        amountPaid: this.amountPaidData,
+        amountPaid: this.amountPaidVC.inputValue,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
@@ -540,7 +585,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
         discRate: this.invoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
-        amountPaid: this.amountPaidData,
+        // amountPaid: this.amountPaidData === undefined ? this.amountPaidVC.inputValue: this.amountPaidData,
+        amountPaid: this.amountPaidVC.inputValue,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
@@ -654,11 +700,33 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
 
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
-    // tslint:disable-next-line:variable-name
     reader.onload = (_event) => {
-      this.imgURL = reader.result;
+      this.img = reader.result
     };
+    // tslint:disable-next-line:variable-name
+
+    this.invoiceService.uploadFile(files).subscribe((rp: any) => {
+      this.getProfiles();
+
+    })
+
   }
+
+  public createImgPath = (serverPath: string) => {
+    if (this.img === undefined) {
+     const requestIMG = {
+        imgName: serverPath +'.png'
+     }
+       this.invoiceService.getFile(requestIMG).subscribe(rp=>{
+        const a = "data:image/png;base64,"+ rp;
+        this.imgURL = a;
+      })
+    } else {
+     
+      this.imgURL = this.img;
+    }
+  }
+
   show(): void {
     console.log('show');
     this.isMouseEnter = true;
@@ -670,6 +738,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     dialog.componentInstance.invoiceId = this.invoiceId;
     dialog.result.then(result => {
       if (result) {
+        this.amount = result.amount;
         this.checkAddPayment = true;
         this.getPayments(this.invoiceId);
       }
@@ -691,7 +760,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
       discRate: this.invoiceForm.controls.totalDiscount.value,
       discount: this.subTotalDiscountIncl.toString().substring(1),
       vatTax: this.totalTaxAmount,
-      amountPaid: this.checkAddPaymentDeleted === true ?((this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) - this.allAmontById ) : (this.checkAddPayment === true) ? (this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) + this.paymentViews[this.paymentViews.length - 1].amount:0,
+      amountPaid: this.checkAddPaymentDeleted === true ? ((this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) - this.deletePaymentAmont) : (this.checkAddPayment === true) ? (this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) + this.paymentViews[this.paymentViews.length - 1].amount : this.allAmontById,
       note: this.invoiceForm.controls.notes.value,
       term: this.invoiceForm.controls.termCondition.value,
       status: '',
@@ -707,38 +776,41 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     };
     this.invoiceService.updateSaleInv(request).subscribe(rs => {
       this.getInvoiceById(this.invoiceForm.controls.invoiceId.value);
+      // this.allAmontById = 0;
     });
   }
 
   getPayments(invoiceId: number) {
+    this.allAmontById = 0;
     this.paymentService.getPaymentIvByid(invoiceId).pipe(
       //debounceTime(500), 
       finalize(() => {
       })).subscribe((i: any) => {
         this.paymentViews = i;
-        if (this.checkAddPayment === true) {
-          this.updateSaleInvAmontPaid();
-          this.checkAddPayment = false;
-        }
-        this.allAmontById = 0;
-        this.paymentViews.forEach(element => {
-          this.allAmontById += element.amount;
-        });
-        if (this.checkAddPaymentDeleted === true) {
+
+
+        if (this.checkAddPaymentDeleted === true || this.checkAddPayment === true || this.checkEditPayment === true) {
+          this.paymentViews.forEach(element => {
+            this.allAmontById += element.amount;
+          });
           this.updateSaleInvAmontPaid();
           this.checkAddPaymentDeleted = false;
+          this.checkAddPayment = false;
+          this.checkEditPayment = false;
         }
       });
   }
   deletePayment(payments: any) {
     if (payments.length === 0) { return; }
+    this.getPayments(this.invoiceId);
+    this.deletePaymentAmont = 0;
     this.message.confirm('Do you want to delete those payment ?', 'Are you sure ?', () => {
       payments.forEach(element => {
+        this.deletePaymentAmont += element.amount;
         this.paymentService.deletePayment(element.id).subscribe(() => {
           this.notify.success('Successfully Deleted');
-          this.getPayments(this.invoiceId);
+          this.getPayments(element.id);
           this.checkAddPaymentDeleted = true;
-          this.updateSaleInvAmontPaid();
         });
       });
     });
@@ -754,6 +826,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     dialog.result.then(result => {
       if (result) {
         this.getPayments(this.invoiceId);
+        this.checkEditPayment = true;
       }
     });
   }

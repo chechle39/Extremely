@@ -24,8 +24,7 @@ namespace XBOOK.Data.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
 
-
-        public long ID { get; set; }
+ public long ID { get; set; }
         public long invoiceID { get; set; }
         public System.DateTime payDate { get; set; }
         public int payTypeID { get; set; }

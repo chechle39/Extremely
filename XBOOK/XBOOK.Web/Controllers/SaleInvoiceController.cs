@@ -49,7 +49,7 @@ namespace XBOOK.Web.Controllers
 
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetSaleInvoiceById(long id)
-        {
+      {
             var saleListInvoice = await _saleInvoiceService.GetSaleInvoiceById(id);
             return Ok(saleListInvoice);
         }
@@ -68,5 +68,11 @@ namespace XBOOK.Web.Controllers
             return Ok(saleListInvoice);
         }
 
+        [HttpPost("[action]")]
+        public IActionResult GetLastIndexInvoiceAsync()
+        {
+            var saleListInvoice = _saleInvoiceService.GetLastInvoice();
+            return Ok(saleListInvoice);
+        }
     }
 }

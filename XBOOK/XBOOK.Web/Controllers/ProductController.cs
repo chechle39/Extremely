@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
@@ -47,11 +48,11 @@ namespace XBOOK.Web.Controllers
             return Ok();
         }
 
-        [HttpPost("[action]/{id}")]
-        public IActionResult DeleteProduct(int id)
+        [HttpPost("[action]")]
+        public IActionResult DeleteProduct([FromBody]List<requestDeleted> request)
         {
-            _iProductService.DeleteProduct(id);
-            return Ok();
+            var sttDelProduct = _iProductService.DeleteProduct(request);
+            return Ok(sttDelProduct);
         }
     }
 }

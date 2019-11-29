@@ -394,6 +394,8 @@ span.k-numeric-wrap>input {
   padding-right: 4.5rem;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+  width: 85%;
+  margin-left: 8%;
 }
 
 .invoice-area {
@@ -419,7 +421,7 @@ span.k-numeric-wrap>input {
   .card-invoice {
     padding-left: 0;
     padding-right: 0;
-    margin-left: 0;
+    margin-left: 15%;
     margin-right: 0;
   }
 
@@ -458,7 +460,50 @@ span.k-numeric-wrap>input {
     left: -215px !important;
   }
 }
+.ngb-typeahead-client .dropdown-menu.show {
+  overflow: scroll;
+  height: 380px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.ngb-typeahead-product .dropdown-menu.show {
+  overflow: scroll;
+  height: 380px;
+  overflow-x: auto;
+  overflow-y: auto;
+  width: 400px;
+}
 
 :host ::ng-deep .ngx-datatable .datatable-body .datatable-scroll {
   display: inherit;
+}
+
+
+.margintop-13 {
+  padding-top: 13px;
+  // display: flex;
+  // align-items: center;
+}
+
+.posion{
+  position: relative;
+  .mr-1 {
+    margin-top: 6px;
+    position: absolute;
+   // background: yellow;
+    margin-top: 5px;
+ //   position: absolute;
+ //   background: yellow;
+    //Display: flex;
+    /* Flex-wrap: wrap; */
+    /* Justify-content: space-between; */
+   // Align-items: center;
+  }
+}
+.margin-top-0{
+  margin-top: 0px !important;
+}
+.card {
+  margin-top: -21px;
 }

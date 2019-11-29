@@ -61,7 +61,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    InvoiceNumber = saleInvoiceViewModel.InvoiceNumber == "" ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber,
+                    InvoiceNumber = saleInvoie != null ? (  saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -77,8 +77,10 @@ namespace XBOOK.Service.Service
                 var saleInvoiceCreate = Mapper.Map<SaleInvoiceModelRequest, SaleInvoice>(saleInvoiceModelRequest);
                 try
                 {
+                    _uow.BeginTransaction();
                     _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
                     _uow.SaveChanges();
+                    _uow.CommitTransaction();
                 }catch (Exception ex)
                 {
 
@@ -112,7 +114,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    InvoiceNumber = saleInvoiceViewModel.InvoiceNumber == "" ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber,
+                    InvoiceNumber = saleInvoie != null ? (saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -182,7 +184,8 @@ namespace XBOOK.Service.Service
             {
                 var saleInvoiceGL = new SaleInvoiceGL(_uow);
                 saleInvoiceGL.InvoiceGL(objData);
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
 
             }
@@ -296,10 +299,18 @@ namespace XBOOK.Service.Service
 
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request)
         {
-            var saleInvoie = await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToListAsync();
-            saleInvoie = SerchData(request.Keyword, request.StartDate, request.EndDate, saleInvoie, request.isIssueDate);
+            var saleInvoie = new List<SaleInvoiceViewModel>();
+            if (string.IsNullOrEmpty(request.EndDate) && string.IsNullOrEmpty(request.StartDate) && string.IsNullOrEmpty(request.Keyword))
+            {
+                saleInvoie = await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().Take(200).ToListAsync();
+            }
+            else
+            {
+                saleInvoie = await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToListAsync();
+            }
             List<SaleInvoiceViewModel> listData = GetAllSaleInv(saleInvoie);
-            return listData;
+            saleInvoie = SerchData(request.Keyword, request.StartDate, request.EndDate, listData, request.isIssueDate);
+            return saleInvoie;
         }
 
         private static List<SaleInvoiceViewModel> SerchData(string keyword, string startDate, string endDate, List<SaleInvoiceViewModel> saleInvoie,bool? searchConditions)
@@ -308,7 +319,17 @@ namespace XBOOK.Service.Service
             {
                 if (!string.IsNullOrEmpty(keyword))
                 {
-                    saleInvoie = saleInvoie.Where(x => x.InvoiceNumber.Contains(keyword) || x.Note.Contains(keyword)).ToList();
+                    var lisSerch = new List<SaleInvoiceViewModel>();
+                    var fill = saleInvoie.Where(x => x.InvoiceNumber.ToLowerInvariant().Contains(keyword) || x.Note.ToLowerInvariant().Contains(keyword)).ToList();
+                    foreach (var item in saleInvoie)
+                    {
+                        var serchItem = item.ClientData.Where(x => x.ClientName.ToLowerInvariant().Contains(keyword) || x.ContactName.ToLowerInvariant().Contains(keyword) || x.Email.ToLowerInvariant().Contains(keyword));
+                        if (serchItem.Count() > 0 || fill.Count() > 0)
+                        {
+                            lisSerch.Add(item);
+                        }
+                    }
+                    saleInvoie = lisSerch;
                 }
 
                 if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
@@ -329,7 +350,9 @@ namespace XBOOK.Service.Service
                     DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
                     saleInvoie = saleInvoie.Where(x => x.IssueDate <= end).ToList();
                 }
+
             }else
+            if (searchConditions == false)
             {
                 if (!string.IsNullOrEmpty(keyword))
                 {
@@ -354,10 +377,12 @@ namespace XBOOK.Service.Service
                     DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
                     saleInvoie = saleInvoie.Where(x => x.DueDate <= end).ToList();
                 }
+            } else
+            {
+                return saleInvoie;
             }
             
-
-            return saleInvoie;
+            return saleInvoie.ToList();
         }
 
         private IEnumerable<PaymentViewModel> GetByIDPay(long id)
@@ -481,6 +506,23 @@ namespace XBOOK.Service.Service
         {
             var data =  _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
             return data;
+        }
+
+        public SaleInvoiceViewModel GetLastInvoice()
+        {
+            var data = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToList();
+            var lastInvoice = new SaleInvoiceViewModel();
+            if (data != null && data.Count > 0)
+            {
+                lastInvoice = data.Last();
+                lastInvoice.InvoiceNumber = InputString(lastInvoice.InvoiceNumber);
+                return lastInvoice;
+            }
+            else
+            {
+                return lastInvoice;
+            }
+            
         }
     }
 }

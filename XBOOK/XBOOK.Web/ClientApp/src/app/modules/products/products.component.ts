@@ -53,8 +53,12 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     this.getAllCategory();
   }
   getAllProduct(){
+    const request  = {
+      productKeyword: this.keywords.toLocaleLowerCase(),
+      isGrid: true
+    };
     this.productService
-    .searchProduct(this.productKey)
+    .searchProduct(request)
     .pipe(
     )
     .subscribe(i => {
@@ -87,18 +91,24 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
       this.message.warning('Please select an item from the list?');
       return;
     }
+    const requestDl = []
     this.message.confirm('Do you want to delete products ?', 'Are you sure ?', () => {
       this.selected.forEach(element => {
-        this.productService.deleteProduct(element.productID).subscribe((rs) => {
+        const id = element.productID;
+        requestDl.push({id});
+      });
+      this.productService.deleteProduct(requestDl).subscribe((rs: any) => {
+        if (rs === false){
+          this.message.error('This product can not delete');
+        }
+        else{
           this.notify.success('Successfully Deleted');
           this.getAllProduct();
-        });
+        }
       });
       this.selected = [];
     });
   }
-
-  
   getRowHeight(row) {
     return row.height;
   }
@@ -136,22 +146,24 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   }
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click' && event.value !== '') {
-      event.cellElement.blur();
-      this.translate.get('PRODUCT.LIST.PRODUCT')
-        .subscribe(text => { this.productTitle = text; });
-      this.translate.get('PRODUCT.LIST.SERVICE')
-        .subscribe(text => { this.serviceTitle = text; });
-      const title = event.row.categoryId === 1 ? this.productTitle : this.serviceTitle;
-      const createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
-      createOrEditProductDialog.componentInstance.title = title;
-      createOrEditProductDialog.componentInstance.id = event.row.productID;
-      createOrEditProductDialog.componentInstance.listCategory = this.categories;
-      createOrEditProductDialog.result.then(result => {
-        if (result) {
-          this.refresh();
-        }
-      });
+    if (event.type === 'click') {
+      if (event.cellIndex > 0) {
+        event.cellElement.blur();
+        this.translate.get('PRODUCT.LIST.PRODUCT')
+          .subscribe(text => { this.productTitle = text; });
+        this.translate.get('PRODUCT.LIST.SERVICE')
+          .subscribe(text => { this.serviceTitle = text; });
+        const title = event.row.categoryId === 1 ? this.productTitle : this.serviceTitle;
+        const createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
+        createOrEditProductDialog.componentInstance.title = title;
+        createOrEditProductDialog.componentInstance.id = event.row.productID;
+        createOrEditProductDialog.componentInstance.listCategory = this.categories;
+        createOrEditProductDialog.result.then(result => {
+          if (result) {
+            this.refresh();
+          }
+        });
+      }
     }
   }
 }

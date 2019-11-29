@@ -6,6 +6,24 @@ namespace XBOOK.Data.Entities
 
     public partial class GeneralLedger
     {
+        public GeneralLedger()
+        {
+
+        }
+        public GeneralLedger(string accNumber, string clientID, string clientName, decimal credit, string crspAccNumber, DateTime dateIssue, decimal debit, string note, string transactionType, string transactionNo)
+        {
+            this.accNumber = accNumber;
+            this.clientID = clientID;
+            this.clientName = clientName;
+            this.credit = credit;
+            this.crspAccNumber = crspAccNumber;
+            this.dateIssue = dateIssue;
+            this.debit = debit;
+            this.note = note;
+            this.transactionType = transactionType;
+            this.transactionNo = transactionNo;
+        }
+
         [Key]
         public long ledgerID { get; set; }
         public string transactionType { get; set; }

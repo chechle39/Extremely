@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShellComponent } from './shell.component';
-import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ShellRoutingModule } from './shell-routing.module';
 import { DashboardModule } from '../modules/dashboard/dashboard.module';
@@ -13,7 +12,6 @@ import { NotificationSidebarComponent } from './layout/notification-sidebar/noti
 import { SharedModule } from '@shared/shared.module';
 @NgModule({
   imports: [
-
     CommonModule,
     ShellRoutingModule,
     NgbModule,

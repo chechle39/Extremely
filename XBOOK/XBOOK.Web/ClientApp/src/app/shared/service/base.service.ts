@@ -26,6 +26,28 @@ export abstract class BaseService {
     return this.http.post<T>(this.processUrl(url), data);
   }
 
+  postcsv<T>(url: string, data: T): Observable<T> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'text'
+    }
+    return this.http.post<T>(this.processUrl(url), data,requestOptions);
+  }
+
+  getFilex<T>(url: string, data: T): Observable<T> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'img/png'
+    }
+    return this.http.post<T>(this.processUrl(url), data,requestOptions);
+  }
+  postUploadImg<T>(url: string, files: T): Observable<T> {
+    let fileToUpload = <File>files[0];
+    const formData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    return  this.http.post<T>(this.processUrl(url), formData, {reportProgress: true});
+  }
+
   put<T>(url: string, data: T): Observable<T> {
     return this.http.put<T>(this.processUrl(url), data);
   }
@@ -33,4 +55,5 @@ export abstract class BaseService {
   delete(url: string) {
     return this.http.delete(this.processUrl(url));
   }
+  
 }

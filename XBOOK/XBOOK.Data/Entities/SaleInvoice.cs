@@ -41,7 +41,6 @@ namespace XBOOK.Data.Entities
         public string invoiceNumber { get; set; }
         public Nullable<System.DateTime> issueDate { get; set; }
         public Nullable<System.DateTime> dueDate { get; set; }
-
         public Nullable<int> clientID { get; set; }
         public string reference { get; set; }
         public Nullable<decimal> subTotal { get; set; }
@@ -52,8 +51,8 @@ namespace XBOOK.Data.Entities
         public string note { get; set; }
         public string term { get; set; }
         public string status { get; set; }
-        [ForeignKey("clientID")]
-        public virtual Client Clients { get; set; }
+
+        public virtual Client Client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payments> Payments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

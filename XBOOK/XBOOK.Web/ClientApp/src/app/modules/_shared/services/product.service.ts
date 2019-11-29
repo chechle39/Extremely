@@ -9,7 +9,6 @@ import { ProductCategoryView } from '../models/product/product-category-view.mod
 @Injectable()
 export class ProductService extends BaseService {
 
-  url = API_URI.product;
   // searchProduct(term: string) {
   //   const products = this.get<ProductSearchModel[]>(`${this.url}/?q=${term}`)
   //     .pipe(
@@ -39,11 +38,7 @@ export class ProductService extends BaseService {
 
     return products;
   }
-  getAll(term: string): Observable<ProductView[]> {
-    return this.get<ProductView[]>(
-      `${this.url}/?q=${term}`
-    );
-  }
+
   getProduct(id: any): Observable<ProductView> {
     return this.post<ProductView>(
       `${API_URI.productById}`, id
@@ -56,7 +51,7 @@ export class ProductService extends BaseService {
     return this.put<ProductView>(`${API_URI.updateProduct}`, product);
   }
   deleteProduct(id: any) {
-    return this.post(`${API_URI.deleteProduct}/${id}`, id);
+    return this.post(`${API_URI.deleteProduct}`, id);
   }
   getCategory(categoryId: any): Observable<ProductCategoryView> {
     return this.post<ProductCategoryView>(`${API_URI.categoryById}`, categoryId)

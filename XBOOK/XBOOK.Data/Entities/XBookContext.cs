@@ -4,7 +4,6 @@ using XBOOK.Data.EntityConfigurations;
 namespace XBOOK.Data.Entities
 {
     public class XBookContext : DbContext
-#pragma warning restore S101 // Types should be named in PascalCase
     {
         public XBookContext(DbContextOptions<XBookContext> options) : base(options) { }
 
@@ -21,7 +20,8 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new SaleInvDetailConfiguration())
                 .ApplyConfiguration(new SaleInvoiceConfiguration())
                 .ApplyConfiguration(new EntryPatternConfiguration())
-                .ApplyConfiguration(new TaxConfiguration());
+                .ApplyConfiguration(new TaxConfiguration())
+                .ApplyConfiguration(new CompanyProfileConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace XBOOK.Data.Model
 {
@@ -35,7 +36,25 @@ namespace XBOOK.Data.Model
         public string EndDate { get; set; }
 
         public bool isIssueDate { get; set; }
-
     }
 
+    public class requestDeleted
+    {
+        public long id { get; set; }
+    }
+
+    public class genledSearch
+    {
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public bool Isaccount { get; set; }
+        public bool IsAccountReciprocal { get; set; }
+        public string[] AccNumber { get; set; }
+        public string Money { get; set; }
+    }
+
+    public class Acc
+    {
+        public string AccNumber { get; set; }
+    }
 }

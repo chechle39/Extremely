@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,10 +34,19 @@ namespace XBOOK.Service.Service
             await _productUowRepository.Add(clientCreate);
         }
 
-        public bool DeleteProduct(long id)
+        public bool DeleteProduct(List<requestDeleted> id)
         {
-           // _iProductRespository.removeProduct(id);
-            _uow.SaveChanges();
+            for(int i = 0; i < id.Count(); i++)
+            {
+                _iProductRespository.removeProduct(id[i].id);
+            }
+            try
+            {
+                _uow.SaveChanges();
+            }catch(Exception e)
+            {
+                return false;
+            }
             return true;
         }
 
@@ -48,16 +58,8 @@ namespace XBOOK.Service.Service
 
         public async Task<IEnumerable<ProductViewModel>> GetAllProduct(ProductSerchRequest request)
         {
-            if (!string.IsNullOrEmpty(request.ProductKeyword))
-            {
-                var listData = await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().ToListAsync();
-                var query = listData.Where(x => x.productName.ToLowerInvariant().Contains(request.ProductKeyword) || x.description.ToLowerInvariant().Contains(request.ProductKeyword)).ToList();
-                return query;
-            }
-            else
-            {
-                return await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().ToListAsync();
-            }
+            var listData = await _iProductRespository.GetAllProductAsync(request);
+            return listData;
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetProductById(int id)

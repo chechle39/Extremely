@@ -13,7 +13,7 @@ namespace XBOOK.Service.Interfaces
         Task<IEnumerable<ClientViewModel>> GetAllClient(ClientSerchRequest request);
         Task<IEnumerable<ClientViewModel>> SerchClient(string keyword);
         Task<bool> UpdateClient(ClientCreateRequet request);
-        bool DeletedClient(long id);
+        bool DeletedClient(List<requestDeleted> request);
 
     }
 }

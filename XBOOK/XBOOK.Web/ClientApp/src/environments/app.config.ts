@@ -3,13 +3,10 @@ export const API_URI = {
   createSaleInvDetail: 'api/SaleInvDetail/CreateListSaleDetail',
   invoice: 'api/SaleInvoice/GetAllSaleInvoice',
   invoiceById: 'api/SaleInvoice/GetSaleInvoiceById',
-  client: 'api/v1/client',
   updateClient: 'api/client/UpdateClient',
   clientById: 'api/client/GetClientById',
   clientAll: 'api/Client/GetAllClientAsync',
-  product: 'api/v1/product',
   productGetAll: 'api/Product/GetAllProductAsync',
-  payment: 'api/Payments/v1/CreatePayments',
   paymentCreate: 'api/Payments/CreatePayments',
   paymentIvById: 'api/Payments/GetPaymentByInv',
   paymentById: 'api/Payments/GetPaymentById',
@@ -24,15 +21,21 @@ export const API_URI = {
   taxGetAll: 'api/Tax/GetAllTax',
   createTax: 'api/Tax/CreateTax',
   deleteProduct: 'api/Product/DeleteProduct',
-
-  // New 24/10/2019
+  getGen: 'api/GeneralLedger/GetAllGen',
+  exportCSV: 'api/GeneralLedger/GetCSV',
+  getAccountChart: 'api/AccountChart/GetAllAccount',
   createProduct: 'api/Product/CreateProduct',
   updateProduct: 'api/Product/UpdateProduct',
   productById: 'api/Product/GetProductById',
   categoryById: 'api/Category/GetCategoryById',
   categoryGetAll: 'api/Category/GetAllCategory',
+  lastInvoice: 'api/SaleInvoice/GetLastIndexInvoiceAsync',
+  uploadProfile: 'api/UploadProfile/Upload',
+  getProfile: 'api/UploadProfile/GetAllProFile',
+  getFile: 'api/UploadProfile/GetIMG',
+  getClientDap: 'api/Client/GetAllClientDapper',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,
-  pageSize: 10
+  pageSize: 20
 };

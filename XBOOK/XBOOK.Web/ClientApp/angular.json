@@ -41,7 +41,10 @@
               "node_modules/@swimlane/ngx-datatable/release/assets/icons.css",
               "src/assets/css/demo.css",
               "src/assets/sass/app.scss",
-              "src/theme/styles/styles.scss"
+              "src/theme/styles/styles.scss",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeng/resources/themes/nova-light/theme.css",
+              "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": [
               "src/assets/vendor/pace/pace.min.js"

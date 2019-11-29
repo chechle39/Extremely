@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Data.Interfaces
@@ -12,5 +14,7 @@ namespace XBOOK.Data.Interfaces
         IEnumerable<Product> GetLDFProduct();
         bool removeProduct(long id);
         bool SaveProduct(ProductViewModel rs);
+        Task<IEnumerable<ProductViewModel>> GetAllProductAsync(ProductSerchRequest request);
+
     }
 }

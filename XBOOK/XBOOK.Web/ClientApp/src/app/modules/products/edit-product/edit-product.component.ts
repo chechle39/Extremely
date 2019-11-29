@@ -34,9 +34,15 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
   ngOnInit() {
     this.productService.getProduct(this.id).subscribe(result => {
       this.product = result[0];
-      this.productService.getCategory(result[0].categoryID).subscribe(rs => {
-        this.categories = rs;
-      });
+      if(result[0].categoryID === null){
+        this.product.categoryID = 2;
+      }
+      else{
+        this.productService.getCategory(result[0].categoryID).subscribe(rs => {
+          this.categories = rs;
+        });
+      }
+
     });
     this.categorySelect = this.listCategory;
   }

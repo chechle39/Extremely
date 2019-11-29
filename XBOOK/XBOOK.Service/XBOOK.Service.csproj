@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Reference Include="XAccLib">
-      <HintPath>..\..\..\svnACC\XAccLib\bin\Debug\netcoreapp2.2\XAccLib.dll</HintPath>
+      <HintPath>..\..\FILES\XAccLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 

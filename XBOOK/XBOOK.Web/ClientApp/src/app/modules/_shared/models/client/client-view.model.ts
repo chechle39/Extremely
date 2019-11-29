@@ -9,3 +9,11 @@ export class ClientView extends BaseModel {
   note: string;
   clientId: number;
 }
+export class ClientViewModel {
+  clientID: number;
+  clientName: string;
+  address: string;
+  note: string;
+  outstanding: number;
+  overdue: number;
+}

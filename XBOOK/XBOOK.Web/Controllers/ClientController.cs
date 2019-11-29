@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
 
@@ -11,9 +13,11 @@ namespace XBOOK.Web.Controllers
     public class ClientController : ControllerBase
     {
         IClientService _iClientService;
-        public ClientController(IClientService iClientService)
+        IClientServiceDapper _iClientServiceDapper;
+        public ClientController(IClientService iClientService, IClientServiceDapper iClientServiceDapper)
         {
             _iClientService = iClientService;
+            _iClientServiceDapper = iClientServiceDapper;
         }
 
         [HttpPost("[action]")]
@@ -22,6 +26,14 @@ namespace XBOOK.Web.Controllers
             var clientList = await _iClientService.GetAllClient(request);
             return Ok(clientList);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetAllClientDapper([FromBody]ClientSerchRequest request)
+        {
+            var clientList = await _iClientServiceDapper.GetClientAsync(request);
+            return Ok(clientList);
+        }
+
 
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetClientById(int id)
@@ -43,10 +55,10 @@ namespace XBOOK.Web.Controllers
             return Ok();
         }
 
-        [HttpPost("[action]/{id}")]
-        public  IActionResult DeleteClient(long id)
+        [HttpPost("[action]")]
+        public  IActionResult DeleteClient(List<requestDeleted> request)
         {
-             _iClientService.DeletedClient(id);
+             _iClientService.DeletedClient(request);
             return Ok();
         }
     }

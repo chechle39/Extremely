@@ -5,6 +5,11 @@ namespace XBOOK.Data.Entities
 
     public partial class AccountChart
     {
+        public AccountChart(string accountNumber)
+        {
+            this.accountNumber = accountNumber;
+        }
+
         [Key]
         public string accountNumber { get; set; }
         public string accountName { get; set; }

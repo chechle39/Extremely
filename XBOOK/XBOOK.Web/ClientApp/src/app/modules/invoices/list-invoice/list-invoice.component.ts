@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, Input, ViewChild, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { DatatableSorting } from '@shared/model/datatable-sorting.model';
 import { Router } from '@angular/router';
 import { InvoiceView } from '@modules/_shared/models/invoice/invoice-view.model';
@@ -12,6 +12,8 @@ import { AppConsts } from '@core/app.consts';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddPaymentComponent } from '../create-invoice/payment/add-payment/add-payment.component';
 import { SearchType, ActionType } from '@core/app.enums';
+import { Subscription } from 'rxjs';
+import { eventNames } from 'cluster';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -23,6 +25,9 @@ class PagedInvoicesRequestDto extends PagedRequestDto {
 })
 export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView> {
   @ViewChild('searchPanel', { static: true }) searchPanel: any;
+  @ViewChildren('cb') checkBoxField: QueryList<any>;
+  checkboxInvoice: Subscription = new Subscription();
+
   invoiceViews: InvoiceView[];
   searchKeywordClass: string;
   private defaultSortOrder = 'ASC';
@@ -42,6 +47,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   isFirstLoad = false;
   toggle = [];
   ischeck: boolean;
+  listInvoice: any;
   constructor(
     injector: Injector,
     private invoiceService: InvoiceService,
@@ -58,19 +64,20 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.loadingIndicator = true;
     request.keyword = this.searchString;
     const requestList = {
-      keyword: '',
+      keyword: this.keyword.toLocaleLowerCase(),
       startDate: '',
       endDate: '',
       isIssueDate: true
     };
     this.invoiceService.getAll(requestList).pipe(
-     // debounceTime(500),
+      // debounceTime(500),
       finalize(() => {
         finishedCallback();
       })
     ).subscribe((i: any) => {
       this.loadingIndicator = false;
       this.invoiceViews = i;
+      this.listInvoice = this.invoiceViews;
     });
   }
   public getGrantTotal(): number {
@@ -85,9 +92,9 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     }
     const requestDl = []
     this.selected.forEach(element => {
-     // this.deleteInvoice(element.invoiceId);
+      // this.deleteInvoice(element.invoiceId);
       const id = element.invoiceId
-      requestDl.push({id});
+      requestDl.push({ id });
     });
     this.invoiceService.deleteInvoice(requestDl).subscribe(() => {
       this.notify.success('Successfully Deleted');
@@ -120,6 +127,10 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     const duration = moment.duration(moment(duceDate).diff(moment(issueDate)));
     const numberDuceDate = duration.asDays();
     return `Duce in ${numberDuceDate} days`;
+  }
+  plusRow(subTotal: any,vat: any,discount: any){
+    const plus = (subTotal+vat) - discount;
+    return plus;
   }
   redirectToCreateNewInvoice() {
     this.router.navigate([`/invoice/new`]);
@@ -224,7 +235,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         this.loadingIndicator = false;
         this.invoiceViews = i;
       });
-     // alert(JSON.stringify(searchStr));
+      // alert(JSON.stringify(searchStr));
     }
   }
   clearFilter(formFilter: NgForm) {
@@ -234,21 +245,22 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   }
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click' && event.value !== '') {
-      event.cellElement.blur();
-      this.router.navigate([`/invoice/${event.row.invoiceId}/${ActionType.View}`]);
+    if (event.type === 'click') {
+      if (event.cellIndex > 0){
+        this.router.navigate([`/invoice/${event.row.invoiceId}/${ActionType.View}`]);
+      }
     }
   }
-  sortClient() {
-    this.invoiceViews.sort((l, r): number => {
-      if (l.clientName < r.clientName) { return -1; }
-      if (l.clientName > r.clientName) { return -1; }
-      return 0;
-    });
-    this.invoiceViews = [...this.invoiceViews];
-  }
+    sortClient() {
+      this.invoiceViews.sort((l, r): number => {
+        if (l.clientName < r.clientName) { return -1; }
+        if (l.clientName > r.clientName) { return -1; }
+        return 0;
+      });
+      this.invoiceViews = [...this.invoiceViews];
+    }
 
-  onSort(e: any) {
+    onSort(e: any) {
 
+    }
   }
-}

@@ -36,4 +36,21 @@ export class InvoiceService extends BaseService {
   deleteInvoiceDetail(id: number) {
     return this.post(`${API_URI.deleteSaleInvoiceDetail}/${id}`, id);
   }
+
+  getLastInvoice(): Observable<any> {
+    return this.post<InvoiceView>(`${API_URI.lastInvoice}`, null);
+  }
+
+    
+  uploadFile(files: any): Observable<any> {
+    return this.postUploadImg<any>(`${API_URI.uploadProfile}`, files)
+  }
+
+  getInfoProfile(): Observable<any> {
+    return this.post<any>(`${API_URI.getProfile}`, null);
+  }
+
+  getFile(fileName: any): Observable<any> {
+    return this.getFilex<any>(`${API_URI.getFile}`, fileName)
+  }
 }

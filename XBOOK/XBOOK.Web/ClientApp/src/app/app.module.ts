@@ -12,12 +12,14 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {AccordionModule} from 'primeng/accordion';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
+    AccordionModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

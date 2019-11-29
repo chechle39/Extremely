@@ -36,6 +36,13 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<TaxViewModel, Tax>().ConstructUsing(x => new Tax(x.ID,x.TaxName,x.TaxRate));
             CreateMap<ProductViewModel, Product>().ConstructUsing(x => new Product(x.categoryID, x.productID, x.productName,x.unitPrice,x.description));
             CreateMap<CategoryViewModel, Category>().ConstructUsing(x => new Category(x.CategoryID, x.CategoryName));
+
+            CreateMap<GeneralLedgerViewModel, GeneralLedger>().ConstructUsing(x => new GeneralLedger(x.accNumber, x.clientID,x.clientName
+                ,x.credit,x.crspAccNumber,x.dateIssue,x.debit,x.note,x.transactionType,x.transactionNo));
+
+            CreateMap<AccountChartViewModel, AccountChart>().ConstructUsing(x => new AccountChart(x.accountNumber));
+            CreateMap<CompanyProfileViewModel, CompanyProfile>().ConstructUsing(x => new CompanyProfile(x.address,x.bizPhone,
+                x.city,x.companyName,x.country,x.currency,x.dateFormat,x.directorName,x.logoFilePath,x.mobilePhone,x.taxCode,x.zipCode));
         }
     }
 }

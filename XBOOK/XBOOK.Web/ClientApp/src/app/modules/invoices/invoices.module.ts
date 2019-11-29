@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { InvoicesComponent } from './invoices.component';
 import { InvoicesRoutingModule } from './invoices-routing.module';
@@ -7,7 +7,6 @@ import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ListInvoiceComponent } from './list-invoice/list-invoice.component';
 import { CreateInvoiceComponent } from './create-invoice/create-invoice.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
@@ -27,6 +26,7 @@ import { AddPaymentComponent } from './create-invoice/payment/add-payment/add-pa
 import { PaymentService } from '@modules/_shared/services/payment.service';
 import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
 import { TaxService } from '@modules/_shared/services/tax.service';
+import { validateDirective } from './create-invoice/payment/add-payment/validate';
 @NgModule({
   declarations: [
     InvoicesComponent,
@@ -35,6 +35,7 @@ import { TaxService } from '@modules/_shared/services/tax.service';
     SplitPipe,
     AddPaymentComponent,
     ListPaymentComponent,
+    validateDirective,
     AddTaxComponent],
   imports: [
     CommonModule,

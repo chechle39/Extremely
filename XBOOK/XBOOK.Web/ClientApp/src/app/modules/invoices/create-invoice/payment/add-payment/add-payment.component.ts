@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector, Input } from '@angular/core';
 import { AppComponentBase } from '@core/app-base.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { PaymentMethod } from '@modules/_shared/models/invoice/payment-method.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentView } from '@modules/_shared/models/invoice/payment-view.model';
@@ -16,7 +16,7 @@ import { InvoiceService } from '@modules/_shared/services/invoice.service';
 export class AddPaymentComponent extends AppComponentBase implements OnInit {
   public paymentForm: FormGroup;
   @Input() title = 'Add a payment';
-  @Input() outstandingAmount = 0;
+  @Input() outstandingAmount: any;
   @Input() invoiceId: number;
   @Input() id: number;
   @Input() amountPaid: any;
@@ -41,13 +41,17 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     if (this.id !== undefined || this.id > 0) {
       this.getPaymentDetail(this.id);
     }
+    this.paymentForm = this.createPaymentFormGroup();
   }
   createPaymentFormGroup() {
+    const today = new Date().toLocaleDateString('en-GB');
+    const issueDateSplit = today.split('/');
+    const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
     return this.fb.group({
       id: [0],
-      amount: ['', [Validators.required]],
+      amount: this.outstandingAmount === undefined ? ['', [Validators.required]] : [this.outstandingAmount.toString(), [Validators.required]],
       paymentMethods: [null, [Validators.required]],
-      payDate: ['', [Validators.required]],
+      payDate: issueDatePicker,
       bankAccount: [''],
       note: ['']
     });
@@ -60,7 +64,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     payment.amount = Number(submittedForm.controls.amount.value.toString().replace(/,/g, ''));
     payment.bankAccount = submittedForm.controls.bankAccount.value;
     const paymentDate = submittedForm.controls.payDate.value;
-    payment.payDate = [paymentDate.year, paymentDate.month - 1, paymentDate.day].join('-');
+    payment.payDate = [paymentDate.year, paymentDate.month, paymentDate.day].join('-');
     const paymentMethodId = submittedForm.controls.paymentMethods.value;
     payment.payTypeId = paymentMethodId;
     payment.payType = this.paymentMethods.find(x => x.payTypeId === paymentMethodId).payType;
@@ -104,7 +108,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
         )
         .subscribe(() => {
           this.notify.info('Updated Successfully');
-          this.close(true);
+          this.close(this.paymentForm.value);
         });
     } else {
       this.paymentService
@@ -116,7 +120,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
       )
       .subscribe(() => {
         this.notify.info('Saved Successfully');
-        this.close(true);
+        this.close(this.paymentForm.value);
       });
     }
   }
@@ -124,4 +128,3 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     this.activeModal.close(result);
   }
 }
-

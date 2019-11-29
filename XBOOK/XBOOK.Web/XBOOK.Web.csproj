@@ -34,7 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XBOOK.Dapper\XBOOK.Dapper.csproj" />
     <ProjectReference Include="..\XBOOK.Service\XBOOK.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\assets\img\profile\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

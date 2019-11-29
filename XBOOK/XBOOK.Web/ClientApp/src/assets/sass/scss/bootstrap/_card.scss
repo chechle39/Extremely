@@ -1,7 +1,7 @@
 //https://www.google.com/design/spec/components/cards.html#cards-content-blocks
 .card {
   border: 0;
-  margin: 18px 0;
+  margin: -10px 0;
   @include card-shadow();
   border-radius: $border-radius-base;
 
