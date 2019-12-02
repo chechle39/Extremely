@@ -207,9 +207,9 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       return false;
     } else {
       // tslint:disable-next-line:max-line-length
-      const startDate = moment([formFilter.value.startDate.year, formFilter.value.startDate.month - 1, formFilter.value.startDate.day]).format(AppConsts.defaultDateFormat);
+      const startDate = moment([formFilter.value.startDate.year, formFilter.value.startDate.month - 1, formFilter.value.startDate.day]).format(AppConsts.defaultDateFormatMM);
       // tslint:disable-next-line:max-line-length
-      const endDate = moment([formFilter.value.endDate.year, formFilter.value.endDate.month - 1, formFilter.value.endDate.day]).format(AppConsts.defaultDateFormat);
+      const endDate = moment([formFilter.value.endDate.year, formFilter.value.endDate.month - 1, formFilter.value.endDate.day]).format(AppConsts.defaultDateFormatMM);
       this.dateFilters = `${startDate} - ${endDate}`;
       this.searchPanel.close();
 

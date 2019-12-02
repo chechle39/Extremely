@@ -21,7 +21,7 @@ class PagedProductsRequestDto extends PagedRequestDto {
 export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   productViews: any;
   categories : any;
-  loadingIndicator = false;
+  loadingIndicator = true;
   keywords = '';
   reorderable = true;
   selected = [];

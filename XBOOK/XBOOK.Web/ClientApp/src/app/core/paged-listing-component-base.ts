@@ -14,7 +14,7 @@ export class PagedRequestDto {
   maxResultCount: number;
 }
 export abstract class PagedListingComponentBase<TEntityDto> extends AppComponentBase implements OnInit {
-  public pageSize = 10;
+  public pageSize = 50;
   public pageNumber = 1;
   public totalPages = 1;
   public totalItems: number;
@@ -28,7 +28,10 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
   }
 
   refresh(): void {
-    this.getDataPage(this.pageNumber);
+    setTimeout(() => {    //<<<---    using ()=> syntax
+      this.getDataPage(this.pageNumber);
+    }, 1000);
+   
   }
 
   public showPaging(result: PagedResultDto, pageNumber: number): void {

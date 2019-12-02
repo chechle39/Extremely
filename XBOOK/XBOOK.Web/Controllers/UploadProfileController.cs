@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
 
@@ -65,41 +60,7 @@ namespace XBOOK.Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error");
-            }
-
-            //DateTime now = DateTime.Now;
-            //var files = Request.Form.Files;
-            //if (files.Count == 0)
-            //{
-            //    return new BadRequestObjectResult(files);
-            //}
-            //else
-            //{
-            //    var file = files[0];
-            //    var prf = await _iCompanyProfileService.GetInFoProfile();
-            //            var filename = prf.companyName + ".png";
-            //    //var filename = ContentDispositionHeaderValue
-            //    //                    .Parse(file.ContentDisposition)
-            //    //                    .FileName
-            //    //                    .Trim('"');
-
-            //    var imageFolder = $@"\XBOOK\XBOOK.Web\ClientApp\src\assets\img";
-
-
-            //    string folder = _hostingEnvironment.WebRootPath + imageFolder;
-
-            //    if (!Directory.Exists(folder))
-            //    {
-            //        Directory.CreateDirectory(folder);
-            //    }
-            //    string filePath = Path.Combine(folder, filename);
-            //    using (FileStream fs = System.IO.File.Create(filePath))
-            //    {
-            //        file.CopyTo(fs);
-            //        fs.Flush();
-            //    }
-            //    _iCompanyProfileService.UpdateCompany(Path.Combine(imageFolder, filename).Replace(@"\", @"/"));
-            //    return new OkObjectResult(Path.Combine(imageFolder, filename).Replace(@"\", @"/"));
+            } 
         }
         [HttpPost("[action]")]
         public IActionResult GetIMG([FromBody] requestGetIMG request)

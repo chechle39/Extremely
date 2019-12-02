@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.ViewModels;
@@ -11,6 +12,8 @@ namespace XBOOK.Data.Interfaces
     {
         bool UpdateSaleInv(SaleInvoiceViewModel rs);
         bool removeInv(long id);
+        Task<SaleInvoiceViewModel> GetLastInvoice();
+        Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id);
 
     }
 }

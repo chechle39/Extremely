@@ -1,26 +1,27 @@
 <div class="card">
   <div class="card-content">
     <div class="card-body">
-      <div class="row form-line" style="height: 70px; border-bottom: 2px solid #6A0888;">
+      <div class="row form-line" style="height: 70px;">
         <div class="col-md-4">
           <div>
-             <h4 class="card-title" style="color: #546D74;font-family:Tahoma ;">Sổ Nhật Ký Chung</h4>
+            <h4 class="card-title" style="color: #546D74;font-family:Tahoma ;">Sổ Nhật Ký Chung</h4>
             <div style="width: 10px;margin-top: -13px;margin-left: -47px; cursor: pointer;" (click)='SearchGenLed()'>
-              <img src="../../../assets/search.png"  style="position: relative;margin-top: -50px;margin-left: 240px;" alt="search General Ledger"></div>
-            </div>
+              <img src="../../../assets/search.png" style="position: relative;margin-top: -50px;margin-left: 240px;"
+                alt="search General Ledger"></div>
+          </div>
           <br>
           <h5 class="btn btn-flat mr-1" style="margin-left: -11px;margin-bottom: -1rem;padding-bottom: 10px;color: #546D74;    margin-top: -65px;
           position: absolute; font-size: 15px;">
-          <div *ngIf = "case=== 1">Tháng này: {{startDay}}  {{keyspace}}  {{endDay}}</div>
-          <div *ngIf = "case=== 2">Quý này: {{startDay}}  {{keyspace}}  {{endDay}}</div>
-          <div *ngIf = "case=== 3">Năm này: {{startDay}}  {{keyspace}}  {{endDay}}</div>
-          <div *ngIf = "case=== 4">Quý trước: {{startDay}}  {{keyspace}}  {{endDay}}</div>
-          <div *ngIf = "case=== 5">Năm trước: {{startDay}}  {{keyspace}}  {{endDay}}</div>
-          <div *ngIf = "case=== 6">Từ ngày: {{startDay}}  {{keyspace}}  {{endDay}}</div>
-        </h5>  
+            <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
+            <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
+            <div *ngIf="case=== 3">Năm này: {{startDay}} {{keyspace}} {{endDay}}</div>
+            <div *ngIf="case=== 4">Quý trước: {{startDay}} {{keyspace}} {{endDay}}</div>
+            <div *ngIf="case=== 5">Năm trước: {{startDay}} {{keyspace}} {{endDay}}</div>
+            <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
+          </h5>
         </div>
         <div class="col-md-2">
-         
+
         </div>
         <div class="col-md-4">
           <div ngbDropdown>
@@ -28,63 +29,84 @@
             </button>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item"><span class="icon-import"></span> Import General Ledger</button>
-              <button (click)="exportData()" class="dropdown-item"><span class="icon-export"></span> Export General Ledger</button>
+              <button (click)="exportData()" class="dropdown-item"><span class="icon-export"></span> Export General
+                Ledger</button>
             </div>
           </div>
         </div>
         <div class="col-md-4">
         </div>
       </div>
-      
-     
-      <div class="row">
+
+
+      <div class="row">          
         <div class="col-md-12">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="genViews"
             [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
-            [headerHeight]="60" [footerHeight]="100" [reorderable]="reorderable" [limit]="20"
-            [selected]="selected" [selectionType]="SelectionType.checkbox" [rowHeight]="getRowHeight"
-            [selectAllRowsOnPage]="false">
-
-
-            <ngx-datatable-column style="font-weight:bold;" name="Số Hiệu" prop="transactionNo">
-
-              <ng-template let-row="row" ngx-datatable-cell-template style="border: dotted;">
-                  <a href="">{{row.transactionNo}}</a>
+            [headerHeight]="60" [footerHeight]="100" [reorderable]="reorderable" [limit]="50" [selected]="selected"
+            [selectionType]="SelectionType.checkbox" [rowHeight]="getRowHeight" [selectAllRowsOnPage]="false">
+            <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span style="font-weight: bold;color: gray;">Số Hiệu</span>
                 </ng-template>
-            </ngx-datatable-column>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <a href="">{{row.transactionNo}}</a>
+                </ng-template>
+              </ngx-datatable-column>   
 
-            <ngx-datatable-column name="Ngày Tháng" prop="dateIssue">
+            <ngx-datatable-column prop="dateIssue">
+                <ng-template ngx-datatable-header-template>
+                    <span style="font-weight: bold;color: gray;">Ngày Tháng</span>
+                  </ng-template>
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div>{{row.dateIssue | date: 'dd/MM/yyyy'}}</div>
               </ng-template>
             </ngx-datatable-column>
 
-
-            <ngx-datatable-column name="Diển Giải" prop="note">    
-                <ng-template let-row="row" ngx-datatable-cell-template>
-                    <div>{{row.note}}</div>
-                  </ng-template>        
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Tài Khoản" prop="accNumber">           
-            </ngx-datatable-column>    
-            <ngx-datatable-column name="TK Đối Ứng" prop="crspAccNumber">             
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Phát Sinh Nợ" prop="debit">
+            <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                    <span style="font-weight: bold;color: gray;">Diễn Giải</span>
+                  </ng-template>
               <ng-template let-row="row" ngx-datatable-cell-template>
-                  <div>{{row.debit | currency:'VND':''}}</div>
-                </ng-template>
+                <div>{{row.note}}</div>
+              </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Phát Sinh Có" prop="credit">
+            <ngx-datatable-column prop="accNumber">
+                <ng-template ngx-datatable-header-template>
+                    <span style="font-weight: bold;color: gray;">Tài Khoản</span>
+                  </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="crspAccNumber">
+                <ng-template ngx-datatable-header-template>
+                    <span style="font-weight: bold;color: gray;">TK Đối Ứng</span>
+                  </ng-template>
+            </ngx-datatable-column>
+            
+            <ngx-datatable-column  prop="debit">
+                <ng-template ngx-datatable-header-template>
+                    <span style="font-weight: bold;color: gray;">Phát Sinh Nợ</span>
+                  </ng-template>
               <ng-template let-row="row" ngx-datatable-cell-template>
-                  <div>{{row.credit | currency:'VND':''}}</div>
-                </ng-template>
+                <div>{{row.debit | currency:'VND':''}}</div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column  prop="credit">
+                <ng-template ngx-datatable-header-template>
+                    <span style="font-weight: bold;color: gray;">Phát Sinh Có</span>
+                  </ng-template>
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div>{{row.credit | currency:'VND':''}}</div>
+              </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-footer>
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-                <div class="row" style="display: inline-block;width: 100%;border-top: 3px double #ccc;padding-top: 3px;margin-left: -2px;">
+                <div class="row"
+                  style="display: inline-block;width: 100%;border-top: 3px double #ccc;padding-top: 3px;margin-left: -2px;">
                   <div class="row text-right">
                     <div class="col-md-3"></div>
                     <div class="col-md-3"></div>
@@ -95,7 +117,7 @@
                       {{getGrantTotal() | currency:'VND':''}}
                     </div>
                   </div>
-                  
+
                   <div class="row">
                     <div class="page-count col-md-6 pl-4">
                       <span>Total: {{rowCount}} items </span>

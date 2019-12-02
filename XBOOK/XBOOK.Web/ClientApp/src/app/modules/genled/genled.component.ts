@@ -15,7 +15,8 @@ class PagedClientsRequestDto extends PagedRequestDto {
 }
 @Component({
   selector: 'xb-genled',
-  templateUrl: './genled.component.html'
+  templateUrl: './genled.component.html',
+  styleUrls: ['./genled.component.scss']
 })
 export class GenledComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;

@@ -1,10 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Data.Repositories
 {
@@ -14,10 +17,22 @@ namespace XBOOK.Data.Repositories
         {
         }
 
-        public IEnumerable<Client> GetAllClient()
+        public async Task<IEnumerable<ClientViewModel>> GetAllClientAsync(ClientSerchRequest request)
         {
-            var ListClient = Entities.Include(x => x.SaleInvoices);
-            return ListClient;
+            var listData = new List<ClientViewModel>();
+            if (!string.IsNullOrEmpty(request.ClientKeyword))
+            {
+                var keyWord = "%" + request.ClientKeyword + "%";
+                var data = from c in Entities
+                           where EF.Functions.Like(c.clientName, keyWord) || EF.Functions.Like(c.address, keyWord) || EF.Functions.Like(c.email, keyWord) || EF.Functions.Like(c.taxCode, keyWord)
+                           select c;
+                listData = data.ProjectTo<ClientViewModel>().Take(20).ToList();
+            }
+            else if (string.IsNullOrEmpty(request.ClientKeyword))
+            {
+                listData = await Entities.ProjectTo<ClientViewModel>().Take(20).ToListAsync();
+            }
+            return listData;
         }
 
         public bool remiveClient(long id)

@@ -12,6 +12,5 @@ namespace XBOOK.Dapper.ViewModels
         public string Note { get; set; }
         public decimal Outstanding { get; set; }
         public decimal Overdue { get; set; }
-
     }
 }

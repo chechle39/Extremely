@@ -388,14 +388,14 @@ namespace XBOOK.Service.Service
         private IEnumerable<PaymentViewModel> GetByIDPay(long id)
         {
             var payList = _uow.GetRepository<IRepository<Payments>>();
-            var listPay = payList.GetAll().ProjectTo<PaymentViewModel>().ToList().Where(x=>x.InvoiceId == id);
+            var listPay = payList.GetAll().ProjectTo<PaymentViewModel>().Where(x=>x.InvoiceId == id).ToList();
             return listPay;
         }
 
         private IEnumerable<SaleInvDetailViewModel> GetByIDInDetail(long id)
         {
             var payList = _uow.GetRepository<IRepository<SaleInvDetail>>();
-            var listInDetail = payList.GetAll().ProjectTo<SaleInvDetailViewModel>().ToList().Where(x => x.InvoiceId == id);
+            var listInDetail = payList.GetAll().ProjectTo<SaleInvDetailViewModel>().Where(x => x.InvoiceId == id).ToList();
             return listInDetail;
         }
 
@@ -438,6 +438,56 @@ namespace XBOOK.Service.Service
             return listData;
         }
 
+        public async Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id)
+        {
+
+            //  var saleInvoie=await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().Where(x => x.InvoiceId == id).ToListAsync();
+            var saleInvoie = await _SaleInvoiceRepository.GetSaleInvoiceById(id);
+            saleInvoie = SerchData(null, null, null, saleInvoie.ToList(), null);
+            List<SaleInvoiceViewModel> listData = GetAllSaleInv(saleInvoie.ToList());
+            return listData;
+        }
+
+        public bool  DeletedSaleInv(List<requestDeleted> deleted)
+        {
+            foreach(var item in deleted)
+            {
+                var getSaleInVDt = _SaleInvoiceDetailRepository.GetAll().ProjectTo<SaleInvDetailViewModel>();
+                var getByIdSaleInVDetail = getSaleInVDt.Where(x => x.InvoiceId == item.id);
+                _SaleInvoiceDetailRepository.RemoveAll(getByIdSaleInVDetail.ToList());
+                //_uow.SaveChanges();
+                _SaleInvoiceRepository.removeInv(item.id);
+                _uow.SaveChanges();
+            }
+            
+            return true;
+        }
+
+        public SaleInvoiceViewModel GetALlDF()
+        {
+            var data =  _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
+            return data;
+        }
+
+        public SaleInvoiceViewModel GetLastInvoice()
+        {
+           // var data = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToList();
+            var data = _SaleInvoiceRepository.GetLastInvoice();
+            var lastInvoice = new SaleInvoiceViewModel();
+            if (data.Result != null && data.Result.InvoiceId > 0)
+            {
+                lastInvoice = data.Result;
+                lastInvoice.InvoiceNumber = InputString(lastInvoice.InvoiceNumber);
+                return lastInvoice;
+            }
+            else
+            {
+                return lastInvoice;
+            }
+            
+        }
+
+
         public static string InputString(string value)
         {
             int carry = 1;
@@ -476,53 +526,6 @@ namespace XBOOK.Service.Service
             }
             string resStr = res.Replace(":", "0");
             return resStr;
-        }
-
-        public async Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id)
-        {
-
-            var saleInvoie=await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().Where(x => x.InvoiceId == id).ToListAsync();
-            saleInvoie = SerchData(null, null, null, saleInvoie, null);
-            List<SaleInvoiceViewModel> listData = GetAllSaleInv(saleInvoie);
-            return listData;
-        }
-
-        public bool  DeletedSaleInv(List<requestDeleted> deleted)
-        {
-            foreach(var item in deleted)
-            {
-                var getSaleInVDt = _SaleInvoiceDetailRepository.GetAll().ProjectTo<SaleInvDetailViewModel>();
-                var getByIdSaleInVDetail = getSaleInVDt.Where(x => x.InvoiceId == item.id);
-                _SaleInvoiceDetailRepository.RemoveAll(getByIdSaleInVDetail.ToList());
-                //_uow.SaveChanges();
-                _SaleInvoiceRepository.removeInv(item.id);
-                _uow.SaveChanges();
-            }
-            
-            return true;
-        }
-
-        public SaleInvoiceViewModel GetALlDF()
-        {
-            var data =  _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
-            return data;
-        }
-
-        public SaleInvoiceViewModel GetLastInvoice()
-        {
-            var data = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToList();
-            var lastInvoice = new SaleInvoiceViewModel();
-            if (data != null && data.Count > 0)
-            {
-                lastInvoice = data.Last();
-                lastInvoice.InvoiceNumber = InputString(lastInvoice.InvoiceNumber);
-                return lastInvoice;
-            }
-            else
-            {
-                return lastInvoice;
-            }
-            
         }
     }
 }

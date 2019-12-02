@@ -2,6 +2,7 @@ import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 export class AppConsts {
   static readonly defaultDateFormat = 'DD/MM/YYYY';
+  static readonly defaultDateFormatMM = 'MM/DD/YYYY';
   static readonly userManagement = {
     defaultAdminUserName: 'admin'
   };

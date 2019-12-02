@@ -60,40 +60,41 @@ namespace XBOOK.Service.Service
 
         public async Task<IEnumerable<ClientViewModel>> GetAllClient(ClientSerchRequest request)
         {
-            if (!string.IsNullOrEmpty(request.ClientKeyword) && request.isGrid == true)
-            {
-                var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(100).ToListAsync();
-                try
-                {
-                    var query = listData.Where(x => x.ClientName.ToLowerInvariant().Contains(request.ClientKeyword) || x.Address.ToLowerInvariant().Contains(request.ClientKeyword) || x.Email.ToLowerInvariant().Contains(request.ClientKeyword) || x.TaxCode.ToLowerInvariant().Contains(request.ClientKeyword)).ToList();
-                    return query;
-                }
-                catch (Exception ex)
-                {
+            //if (!string.IsNullOrEmpty(request.ClientKeyword) && request.isGrid == true)
+            //{
+            //    var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(200).ToListAsync();
+            //    try
+            //    {
+            //        var query = listData.Where(x => x.ClientName.ToLowerInvariant().Contains(request.ClientKeyword) || x.Address.ToLowerInvariant().Contains(request.ClientKeyword) || x.Email.ToLowerInvariant().Contains(request.ClientKeyword) || x.TaxCode.ToLowerInvariant().Contains(request.ClientKeyword)).ToList();
+            //        return query;
+            //    }
+            //    catch (Exception ex)
+            //    {
 
-                }
-                return listData;
-            }
-            else 
-            if(string.IsNullOrEmpty(request.ClientKeyword) && request.isGrid == true)
-            {
-                var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(100).ToListAsync();
-                return listData;
-            }
-            else if (!string.IsNullOrEmpty(request.ClientKeyword) && request.isGrid == false)
-            {
-                var listData = await _clientUowRepository.GetAll().Where(x=>x.clientName.ToLowerInvariant().Contains(request.ClientKeyword) || x.address.ToLowerInvariant().Contains(request.ClientKeyword) || x.email.ToLowerInvariant().Contains(request.ClientKeyword) || x.taxCode.ToLowerInvariant().Contains(request.ClientKeyword)).ProjectTo<ClientViewModel>().Take(20).ToListAsync();
-                return listData;
-            }else if (string.IsNullOrEmpty(request.ClientKeyword) && request.isGrid == false)
-            {
-                var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(20).ToListAsync();
-                return listData;
-            }else
-            {
-                var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(200).ToListAsync();
-                return listData;
-            }
-
+            //    }
+            //    return listData;
+            //}
+            //else 
+            //if(string.IsNullOrEmpty(request.ClientKeyword) && request.isGrid == true)
+            //{
+            //    var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(200).ToListAsync();
+            //    return listData;
+            //}
+            //if (!string.IsNullOrEmpty(request.ClientKeyword))
+            //{
+            //    var listData = await _clientUowRepository.GetAll().Where(x=>x.clientName.ToLowerInvariant().Contains(request.ClientKeyword) || x.address.ToLowerInvariant().Contains(request.ClientKeyword) || x.email.ToLowerInvariant().Contains(request.ClientKeyword) || x.taxCode.ToLowerInvariant().Contains(request.ClientKeyword)).ProjectTo<ClientViewModel>().Take(20).ToListAsync();
+            //    return listData;
+            //}else if (string.IsNullOrEmpty(request.ClientKeyword))
+            //{
+            //    var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(20).ToListAsync();
+            //    return listData;
+            //}else
+            //{
+            //    var listData = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Take(200).ToListAsync();
+            //    return listData;
+            //}
+            var data = await _iClientRepository.GetAllClientAsync(request);
+            return data;
         }
 
         public async Task<ClientViewModel> GetClientById(int id)

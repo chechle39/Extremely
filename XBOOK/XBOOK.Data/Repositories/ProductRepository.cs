@@ -31,15 +31,26 @@ namespace XBOOK.Data.Repositories
                 else
                 if (!string.IsNullOrEmpty(request.ProductKeyword))
                 {
-                    listData = await Entities.Where(x => x.productName.ToLowerInvariant().Contains(request.ProductKeyword) || x.description.ToLowerInvariant().Contains(request.ProductKeyword)).ProjectTo<ProductViewModel>().ToListAsync();
+                    var keyWord = "%" + request.ProductKeyword + "%";
+                    var data = from c in Entities
+                               where EF.Functions.Like(c.productName, keyWord) || EF.Functions.Like(c.description, keyWord)
+                               select c;
+
+                    listData = data.ProjectTo<ProductViewModel>().ToList();
                 }
             }
             else
             {
-
+                
                 if (!string.IsNullOrEmpty(request.ProductKeyword))
                 {
-                    listData = await Entities.ProjectTo<ProductViewModel>().Where(x => x.productName.ToLowerInvariant().Contains(request.ProductKeyword) || x.description.ToLowerInvariant().Contains(request.ProductKeyword)).Take(20).ToListAsync();
+
+                    var keyWord = "%" + request.ProductKeyword + "%";
+                    var data = from c in Entities
+                               where EF.Functions.Like(c.productName, keyWord) || EF.Functions.Like(c.description, keyWord)
+                               select c;
+
+                    listData = data.ProjectTo<ProductViewModel>().Take(20).ToList();
                 }
                 else
                 {

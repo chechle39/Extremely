@@ -122,12 +122,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       productKeyword: '',
       isGrid: false
     };
-    this.productService.searchProduct(request).subscribe(response => {
-      this.products = response;
-    });
-    this.clientService.searchClient(this.clientKey).subscribe(response => {
-      this.clients = response;
-    });
+    // this.productService.searchProduct(request).subscribe(response => {
+    //   this.products = response;
+    // });
+    // this.clientService.searchClient(this.clientKey).subscribe(response => {
+    //   this.clients = response;
+    // });
 
     this.invoiceService.getLastInvoice().subscribe(response => {
       this.listInvoice = response;
@@ -202,7 +202,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
     this.invoiceForm = this.fb.group({
       invoiceNumber: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
-      invoiceSerial: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceSerial, [Validators.required]],
+      invoiceSerial: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceSerial],
       contactName: ['', [Validators.required]],
       clientName: [''],
       clientId: [0],
@@ -311,7 +311,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   requestClient(e: any) {
     const clientKey = {
       clientKeyword: e.toLocaleLowerCase(),
-      isGrid: false
     };
     return clientKey;
   }
@@ -425,7 +424,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         const dueDatePicker = { year: Number(dueDateSplit[2]), month: Number(dueDateSplit[1]), day: Number(dueDateSplit[0]) };
         this.invoiceForm.controls.dueDate.patchValue(dueDatePicker);
       }
-      this.getAllTax();
+     // this.getAllTax();
       detailInvoiceFormArray.controls.forEach((control, i) => {
         const productId = control.get('productId').value;
         if (invoice[0].saleInvDetailView[i].productId === productId) {

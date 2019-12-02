@@ -25,11 +25,6 @@ namespace XBOOK.Dapper.Service
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
-                var now = DateTime.Now;
-
-                var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
                 dynamicParameters.Add("@searchString", request.ClientKeyword);
 
                 try
@@ -42,7 +37,6 @@ namespace XBOOK.Dapper.Service
                     throw;
                 }
             }
-            throw new NotImplementedException();
         }
     }
 }

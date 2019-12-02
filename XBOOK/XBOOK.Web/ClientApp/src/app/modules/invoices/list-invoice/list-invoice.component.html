@@ -173,16 +173,16 @@
               </ng-template>
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div>
-                  {{row.clientData[0].clientName}}
+                  {{row.clientName}}
                 </div>
                 <div class="col-more-info">
-                  {{row.invoiceNumber}}
+                  {{row.invoiceNumber}} {{row.invoiceSerial}}
                 </div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="note" name="Notes" [cellClass]="'col-id'" [headerClass]="'col-id'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-more-info">{{row.clientData[0].note}}</div>
+                <div class="col-more-info">{{row.note}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="issueDate" name="Issued/ Duce Date" [cellClass]="'col-center'"
@@ -194,14 +194,15 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="amountPaid" name="Amount/ Status" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="amountPaid" name="Amount/ Amount Paid" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
-                  {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}}
+                  <!-- {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}} -->
+                  {{row.amount | currency:'VND':''}}
                 </div>
                 <div class="col-right">
-                  <span style="color: #215961;font-weight: bold">{{row.status}}</span>
+                  <span style="color: #215961;font-weight: bold">{{row.amountPaid | currency:'VND':''}}</span>
                 </div>
               </ng-template>
             </ngx-datatable-column>

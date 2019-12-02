@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
@@ -18,19 +19,20 @@ namespace XBOOK.Web.Controllers
         ISaleInvoiceService _saleInvoiceService;
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IUnitOfWork _uow;
-        private readonly XBookContext _context;
-        public SaleInvoiceController(ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, XBookContext context)
+        IInvoiceServiceDapper _invoiceServiceDapper;
+        public SaleInvoiceController(ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
         {
             _saleInvoiceService = saleInvoiceService;
             _uow = uow;
             _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
-            _context = context;
+            _invoiceServiceDapper = invoiceServiceDapper;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllSaleInvoice([FromBody]SaleInvoiceListRequest request)
         {
-            var saleListInvoice = await _saleInvoiceService.GetAllSaleInvoice(request);
+            // var saleListInvoice = await _saleInvoiceService.GetAllSaleInvoice(request);
+            var saleListInvoice = await _invoiceServiceDapper.GetInvoiceAsync(request);
             return Ok(saleListInvoice);
         }
 
@@ -49,7 +51,7 @@ namespace XBOOK.Web.Controllers
 
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetSaleInvoiceById(long id)
-      {
+        {
             var saleListInvoice = await _saleInvoiceService.GetSaleInvoiceById(id);
             return Ok(saleListInvoice);
         }

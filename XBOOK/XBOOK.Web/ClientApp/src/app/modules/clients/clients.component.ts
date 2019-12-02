@@ -21,7 +21,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
 })
 export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   clientViews: any;
-  loadingIndicator = false;
+  loadingIndicator = true;
   keyword = '';
   reorderable = true;
   selected = [];
@@ -82,7 +82,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     this.message.confirm('Do you want to delete clients ?', 'Are you sure ?', () => {
       this.selected.forEach(element => {
         const id = element.clientID;
-        deleteList.push({id});
+        deleteList.push({ id });
       });
       this.clientService.deleteClient(deleteList).subscribe(() => {
         this.notify.success('Successfully Deleted');
@@ -118,7 +118,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   }
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click' && event.cellIndex > 0 ) {
+    if (event.type === 'click' && event.cellIndex > 0) {
       event.cellElement.blur();
       const createOrEditClientDialog = this.modalService.open(EditClientComponent, AppConsts.modalOptionsCustomSize);
       createOrEditClientDialog.componentInstance.id = event.row.clientID;
@@ -131,7 +131,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   }
   public getOutstanding(): number {
     return _.sumBy(this.clientViews, (item: any) => {
-      return item.outstanding ;
+      return item.outstanding;
     });
   }
   public getOverduce(): number {
