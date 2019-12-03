@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using XAccLib.SaleInvoice;
+//using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -182,8 +182,8 @@ namespace XBOOK.Service.Service
             };
             try
             {
-                var saleInvoiceGL = new SaleInvoiceGL(_uow);
-                saleInvoiceGL.InvoiceGL(objData);
+                //var saleInvoiceGL = new SaleInvoiceGL(_uow);
+              //  saleInvoiceGL.InvoiceGL(objData);
             }
             catch(Exception ex)
             {
@@ -402,7 +402,7 @@ namespace XBOOK.Service.Service
         private IEnumerable<ClientViewModel> GetClientByID(int? id)
         {
             var payList = _uow.GetRepository<IRepository<Client>>();
-            var listInDetail = payList.GetAll().ProjectTo<ClientViewModel>().ToList().Where(x => x.ClientId == id);
+            var listInDetail = payList.GetAll().ProjectTo<ClientViewModel>().Where(x => x.ClientId == id).ToList();
             return listInDetail;
         }
 

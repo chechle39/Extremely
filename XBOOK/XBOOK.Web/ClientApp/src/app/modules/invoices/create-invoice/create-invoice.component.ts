@@ -915,7 +915,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
   redirectToEditInvoice() {
     this.invoiceForm.enable();
-    this.router.navigate([`/invoice/${this.invoiceId}/${ActionType.Edit}`]);
+    //this.router.navigate([`/invoice/${this.invoiceId}/${ActionType.Edit}`]);
   }
   close(result: boolean): void {
     this.activeModal.close(result);
