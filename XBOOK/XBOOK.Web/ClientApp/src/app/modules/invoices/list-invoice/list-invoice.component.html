@@ -65,13 +65,13 @@
                 <div class="modal-header" style="padding: 0.5rem 0.5rem!important;">
                   <h5 class="modal-title">Filters</h5>
                 </div>
-                <form #searchForm="ngForm" autocomplete="off" (submit)="applySearchFilter(searchForm)" novalidate
+                <form autocomplete="off" [formGroup]="searchForm"  (submit)="applySearchFilter(searchForm)" novalidate
                   style="background: #fff;" class="form form-horizontal px-2 pb-2 pt-3 width-300">
                   <div class="form-body">
                     <div class="row">
                       <div class="col-md-6">
                         <div class=" input-group">
-                          <input ngModel required class="form-control" placeholder="Start" name="startDate"
+                          <input  required class="form-control" placeholder="Start" name="startDate" formControlName="startDate"
                             ngbDatepicker #pkStartDate="ngbDatepicker" id="startDate">
                           <div class="input-group-append">
                             <div class="input-group-text" (click)="pkStartDate.toggle()">
@@ -82,7 +82,7 @@
                       </div>
                       <div class="col-md-6">
                         <div class="input-group">
-                          <input class="form-control" required ngModel placeholder="End" name="endDate" ngbDatepicker
+                          <input class="form-control" required  placeholder="End" name="endDate" ngbDatepicker formControlName="endDate"
                             #pkEndDate="ngbDatepicker" id="endDate">
                           <div class="input-group-append">
                             <div class="input-group-text" (click)="pkEndDate.toggle()">
@@ -96,7 +96,7 @@
                       <div class="col-md-6">
                         <div class="input-group">
                           <div class="custom-control custom-radio d-inline-block">
-                            <input type="radio" id="issueDate" value="IssueDate" name="searchType" required ngModel
+                            <input type="radio" id="issueDate" value="IssueDate" name="issueDate"  formControlName="issueDate"
                               class="custom-control-input">
                             <label class="custom-control-label custom-label" for="issueDate"> Issued Date</label>
                           </div>
@@ -105,9 +105,9 @@
                       <div class="col-md-6">
                         <div class="input-group">
                           <div class="custom-control custom-radio d-inline-block">
-                            <input type="radio" id="dueDate" value="DueDate" name="searchType" required ngModel
+                            <input type="radio" id="DueDate" value="DueDate" name="issueDate"  formControlName="issueDate"
                               class="custom-control-input">
-                            <label class="custom-control-label custom-label" for="dueDate"> Due Date</label>
+                            <label class="custom-control-label custom-label" for="DueDate"> Due Date</label>
                           </div>
                         </div>
                       </div>
@@ -202,7 +202,7 @@
                   {{row.amount | currency:'VND':''}}
                 </div>
                 <div class="col-right">
-                  <span style="color: #215961;font-weight: bold">{{row.amountPaid | currency:'VND':''}}</span>
+                  <span style="color: #ed7d31">{{row.amountPaid | currency:'VND':''}}</span>
                 </div>
               </ng-template>
             </ngx-datatable-column>

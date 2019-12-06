@@ -27,6 +27,7 @@ import { PaymentService } from '@modules/_shared/services/payment.service';
 import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
 import { TaxService } from '@modules/_shared/services/tax.service';
 import { validateDirective } from './create-invoice/payment/add-payment/validate';
+import {FileUploadModule} from 'primeng/fileupload';
 @NgModule({
   declarations: [
     InvoicesComponent,
@@ -53,7 +54,8 @@ import { validateDirective } from './create-invoice/payment/add-payment/validate
     DigitOnlyModule,
     NgxCleaveDirectiveModule,
     IntlModule,
-    SharedModule
+    SharedModule,
+    FileUploadModule
   ],
   providers: [InvoiceService, ClientService, ProductService, PaymentService, CurrencyPipe, NgbActiveModal, TaxService],
   entryComponents: [AddPaymentComponent, AddTaxComponent]

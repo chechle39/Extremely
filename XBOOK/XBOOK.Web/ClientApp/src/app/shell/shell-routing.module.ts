@@ -36,6 +36,11 @@ const routes: Routes = [
         loadChildren: () => import('../modules/genled/genled.module')
           .then(m => m.GenledModule)
       },
+      {
+        path: 'genledgroup',
+        loadChildren: () => import('../modules/genledgroup/genledgroup.module')
+          .then(m => m.GenledGroupModule)
+      },
       // {
       //   path: '**',
       //   // component: NotFoundComponent,

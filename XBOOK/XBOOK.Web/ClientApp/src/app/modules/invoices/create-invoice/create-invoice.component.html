@@ -2,10 +2,10 @@
   <div class="card-content">
     <div class="card-body card-invoice">
       <div class="row mx-2">
-        <div class="col-sm-6">
+        <div class="col-sm-5">
           <h1 class="page-title">{{title}}</h1>
         </div>
-        <div class="col-sm-6 text-right">
+        <div class="col-sm-7 text-right">
           <div *ngIf="viewMode" class="d-inline-block mx-2">
             <div ngbDropdown>
               <button class="btn btn-flat mr-1 label-blue" id="bulkActions" ngbDropdownToggle>More Actions</button>
@@ -22,7 +22,7 @@
             <button (click)="cancel()" class="btn btn-raised mr-1 btn-secondary">Cancel</button>
           </div>
           <div *ngIf="!viewMode" class="d-inline-block mx-2">
-            <button  class="btn btn-raised mr-1 btn-success" (click)="save()">{{saveText}}</button>
+            <button class="btn btn-raised mr-1 btn-success" (click)="save()">{{saveText}}</button>
           </div>
           <div *ngIf="viewMode" class="d-inline-block mx-2">
             <a class="btn btn-raised mr-1 btn-success" (click)="redirectToEditInvoice()">Edit</a>
@@ -52,28 +52,30 @@
                     <div class="row">
                       <div class="col">
                         <p class="mb-0">
-                          <input style="opacity: unset" kendoTextBox id="yourCompanyName" formControlName="yourCompanyName"
+                          <input style="opacity: unset" kendoTextBox id="yourCompanyName"
+                            formControlName="yourCompanyName"
                             class="border-0 full-width imput-reference-custom text-right" [value]="companyName"
                             placeholder="Your Company Name" nfNoSpaces maxlength="250"></p>
                         <p class="mb-0">
-                          <input style="opacity: unset" kendoTextBox class="border-0 full-width imput-reference-custom text-right"
-                            placeholder="Your Address" id="yourCompanyAddress" formControlName="yourCompanyAddress"
-                            [value]="companyAddress" nfNoSpaces maxlength="250">
+                          <input style="opacity: unset" kendoTextBox
+                            class="border-0 full-width imput-reference-custom text-right" placeholder="Your Address"
+                            id="yourCompanyAddress" formControlName="yourCompanyAddress" [value]="companyAddress"
+                            nfNoSpaces maxlength="250">
                         </p>
                       </div>
                     </div> <!-- end col-sm-6-->
                     <div class="row">
                       <div class="col-sm-6"></div>
                       <div class="col-sm-6">
-                        <input style="opacity: unset" kendoTextBox id="yourTaxCode" formControlName="yourTaxCode" placeholder="Tax code"
-                          [value]="taxCode" class="border-0 text-right full-width imput-reference-custom " nfNoSpaces
-                          maxlength="250">
+                        <input style="opacity: unset" kendoTextBox id="yourTaxCode" formControlName="yourTaxCode"
+                          placeholder="Tax code" [value]="taxCode"
+                          class="border-0 text-right full-width imput-reference-custom " nfNoSpaces maxlength="250">
                       </div>
                     </div>
                   </div>
                 </div> <!-- end row -->
                 <div class="row my-3">
-                  <div class="col-sm-6 col-md-5">
+                  <div class="col-sm-6 col-md-6">
                     <p class="mb-1 p-color">Billed To &nbsp;&nbsp;<a (click)="editClient()" *ngIf="canActionClient()"
                         class="icon-action">
                         <span class="icon-edit1"></span>
@@ -85,15 +87,15 @@
                     <div class="client-fields">
                       <div class="row">
                         <div class="col-sm-6 col-md-6 ngb-typeahead-client" style="max-width: 100%;flex: 0 0 100%;">
-                          <input style="opacity: unset" #xxx type="text" (focus)="focusClient$.next($event.target.value)" autocomplete="none"
+                          <input style="opacity: unset" #xxx type="text"
+                            (focus)="focusClient$.next($event.target.value)" autocomplete="none"
                             [ngbTypeahead]="searchClient" [value]="clientSelected.contactName"
                             [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter"
                             id="contactName" formControlName="contactName" (selectItem)="selectedItem($event)"
                             class="border-0 full-width imput-reference-custom" placeholder="Client Contact Name"
                             nfNoSpaces maxlength="250" #instance="ngbTypeahead" />
 
-                          <ng-template #customItemTemplate
-                            let-r="result" let-t="term">
+                          <ng-template #customItemTemplate let-r="result" let-t="term">
                             <div class="row mt-2 client-item">
                               <div class="col-sm-2 ">
                                 <ngx-avatar name="{{r.clientName | Split:2}}"></ngx-avatar>
@@ -119,11 +121,12 @@
                         </div>
                         <div class="col-12">
                           <div class="row">
-                            <div class="col-sm-6 col-md-6"> <input kendoTextBox id="taxCode" formControlName="taxCode" style="opacity: unset"
-                                class="border-0 full-width imput-reference-custom" [value]="clientSelected.taxCode"
-                                [readOnly]="!isEditClient" placeholder="Tax Code" nfNoSpaces maxlength="250"></div>
-                            <div class="col-sm-6 col-md-6"> <input kendoTextBox id="email" formControlName="email" style="opacity: unset"
-                                class="border-0 full-width imput-reference-custom t-color-blue"
+                            <div class="col-sm-6 col-md-5"> <input kendoTextBox id="taxCode" formControlName="taxCode"
+                                style="opacity: unset" class="border-0 full-width imput-reference-custom"
+                                [value]="clientSelected.taxCode" [readOnly]="!isEditClient" placeholder="Tax Code"
+                                nfNoSpaces maxlength="250"></div>
+                            <div class="col-sm-6 col-md-7"> <input kendoTextBox id="email" formControlName="email"
+                                style="opacity: unset" class="border-0 full-width imput-reference-custom t-color-blue"
                                 [value]="clientSelected.email" [readOnly]="!isEditClient" placeholder="Email" nfNoSpaces
                                 maxlength="250"></div>
                           </div>
@@ -131,22 +134,24 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-6 col-md-3">
+                  <div class="col-sm-6 col-md-2">
                     <div>
                       <p class="p-color mb-0">Date of Issue</p>
                       <div class="input-group" style="width: 184px;">
-                        <input #datetiime kendoTextBox (click)="d1.toggle()" (focus)="d2.toggle()" style="opacity: unset"
-                          class="col-sm-6 border-0 full-width imput-reference-custom" placeholder="dd/mm/yyyy" name="dp"
-                          formControlName="issueDate" ngbDatepicker #d1="ngbDatepicker" ngbDatepicker #d2="ngbDatepicker" style="margin-right:-15px">
+                        <input #datetiime kendoTextBox (click)="d1.toggle()" (focus)="d2.toggle()"
+                          style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
+                          placeholder="dd/mm/yyyy" name="dp" formControlName="issueDate" ngbDatepicker
+                          #d1="ngbDatepicker" ngbDatepicker #d2="ngbDatepicker" style="margin-right:-15px">
                         <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d2.toggle()"></span>
                       </div>
                     </div>
                     <div>
                       <p class="p-color mb-0">Due Date</p>
                       <div class="input-group" style="width: 184px;">
-                        <input kendoTextBox (click)="d1.toggle()" (focus)="d3.toggle()" formControlName="dueDate" style="opacity: unset"
-                          class="col-sm-6 border-0 full-width imput-reference-custom" placeholder="dd/mm/yyyy" name="dp"
-                          ngbDatepicker #d1="ngbDatepicker" #d3="ngbDatepicker" style="margin-right:-15px">
+                        <input kendoTextBox (click)="d1.toggle()" (focus)="d3.toggle()" formControlName="dueDate"
+                          style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
+                          placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker" #d3="ngbDatepicker"
+                          style="margin-right:-15px">
                         <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d3.toggle()"></span>
                       </div>
                     </div>
@@ -155,17 +160,20 @@
                     <div>
                       <p class="mb-1 p-color">Invoice No#/ Seri</p>
                       <div class="row" style="margin-left: 0px">
-                        <input  style="opacity: unset" kendoTextBox placeholder="Invoice Number" class="form-control" type="text"  formControlName="invoiceNumber"  [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false}"
-                        class="col-6 width-100 imput-reference-custom" required/>
-                      <input style="opacity: unset" kendoTextBox placeholder="Seri" formControlName="invoiceSerial"  [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false}"
-                        class="width-100 imput-reference-custom" />
+                        <input style="opacity: unset" kendoTextBox placeholder="Invoice Number" class="form-control"
+                          type="text" formControlName="invoiceNumber"
+                          [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false}"
+                          class="col-6 width-100 imput-reference-custom" required />
+                        <input style="opacity: unset" kendoTextBox placeholder="Seri" formControlName="invoiceSerial"
+                          [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false}"
+                          class="width-100 imput-reference-custom" />
                       </div>
-                      
+
                     </div>
                     <div class="mt-1">
                       <p class="mb-1 p-color">Reference</p>
-                      <input kendoTextBox placeholder="Enter value e.g PO #" formControlName="reference" style="opacity: unset"
-                        class="border-0 full-width imput-reference-custom" />
+                      <input kendoTextBox placeholder="Enter value e.g PO #" formControlName="reference"
+                        style="opacity: unset" class="border-0 full-width imput-reference-custom" />
                     </div>
                   </div>
                 </div> <!-- end row -->
@@ -188,7 +196,7 @@
                             <input formControlName="productName" #productName id="productName{{i}}" kendoTextBox
                               placeholder="Enter an Item Name" autocomplete="none"
                               class="productNameClass border-0 full-width imput-reference-custom"
-                              [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate" 
+                              [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate"
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
                               [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
                             <input style="font-size: 13px" formControlName="description" #description kendoTextBox
@@ -255,68 +263,83 @@
 
                 </div>
                 <div class="row mt-4">
-                  <div class="col-md-6 col-sm-6 invoice-footer">
-                    <div class="row mb-1">
-                      <div class="col-6 text-right">
-                        Sub Total
-                      </div>
-                      <div class="col-6 text-right">
-                        {{subTotalAmount | currency:'VND':''}}
-                      </div>
-                    </div>
-                    <div class="row border-bottom">
-                      <div class="col-6 text-right t-color-blue">
-                        Add a Discount(%)
-                      </div>
-                      <div class="col-6" style="float: left">
-                        <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly [min]=1
-                          [max]=100 [maxlength]=2 (ngModelChange)="totalDiscountChange()"
-                          tabindex="{{getFormArray().length * 4 + 2}}" formControlName="totalDiscount"
-                          placeholder="Discount" kendoTextBox
-                          class="border-0 width-50-per text-center input-amount mput-reference-custom" />
-                        <label class="border-0 width-50-per text-right form-label t-color-red">
-                          {{subTotalDiscountIncl | currency:'VND':''}}</label>
-                      </div>
-                    </div>
-                    <div class="row border-bottom pb-1 my-1">
-                      <div class="col-6 text-right t-color-blue">
-                        All Tax(%)
-                      </div>
-                      <div class="col-6 text-right" style="float: left">
-                        <label style="color: blue" class="border-0 width-50-per text-rigth form-label">
-                          {{totalTaxAmount | currency:'VND':''}}</label>
-                      </div>
-                    </div>
 
-                    <div class="row ">
-                      <div class="col-6 text-right">
-                        Total
-                      </div>
-                      <div class="col-6 text-right">
-                        {{totalAmount | currency:'VND':''}}
+                  <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                      <a  style="color:blue;font-size: 12px; font-style: normal">Attach files <input #file style="width: 82px;height: 20px;" type="file" class="input-upload"></a>
+                      <div>
+                          <ul>
+                              <li style="list-style-type: none;">invoice121231231 <span>X</span></li>
+                          </ul>
                       </div>
                     </div>
+                  </div>
 
-                    <div class="row border-bottom my-2">
-                      <div class="col-6 text-right">
-                        Amount Paid
-                      </div>
-                      <div class="col-6 text-right">
-                        <kendo-numerictextbox #amountPaidVC [format]="'n'" tabindex="{{getFormArray().length * 4 + 3}}"
-                          [spinners]="false" (valueChange)="amountPaidChange($event)" formControlName="amountPaid"
-                          class="border-0 text-right width-50-per input-amount mput-reference-custom amountPaid">
-                        </kendo-numerictextbox>
-                      </div>
+                  <div class="col-md-6 col-sm-6 ">
+                    <div >
+                        <div class="row mb-1">
+                            <div class="col-6 text-right">
+                              Sub Total
+                            </div>
+                            <div class="col-6 text-right">
+                              {{subTotalAmount | currency:'VND':''}}
+                            </div>
+                          </div>
+                          <div class="row border-bottom">
+                            <div class="col-6 text-right t-color-blue">
+                              Add a Discount(%)
+                            </div>
+                            <div class="col-6" style="float: left">
+                              <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly [min]=1
+                                [max]=100 [maxlength]=2 (ngModelChange)="totalDiscountChange()"
+                                tabindex="{{getFormArray().length * 4 + 2}}" formControlName="totalDiscount"
+                                placeholder="Discount" kendoTextBox
+                                class="border-0 width-50-per text-center input-amount mput-reference-custom" />
+                              <label class="border-0 width-50-per text-right form-label t-color-red">
+                                {{subTotalDiscountIncl | currency:'VND':''}}</label>
+                            </div>
+                          </div>
+                          <div class="row border-bottom pb-1 my-1">
+                            <div class="col-6 text-right t-color-blue">
+                              All Tax(%)
+                            </div>
+                            <div class="col-6 text-right" style="float: left">
+                              <label style="color: blue" class="border-0 width-50-per text-rigth form-label">
+                                {{totalTaxAmount | currency:'VND':''}}</label>
+                            </div>
+                          </div>
+      
+                          <div class="row ">
+                            <div class="col-6 text-right">
+                              Total
+                            </div>
+                            <div class="col-6 text-right">
+                              {{totalAmount | currency:'VND':''}}
+                            </div>
+                          </div>
+      
+                          <div class="row border-bottom my-2">
+                            <div class="col-6 text-right">
+                              Amount Paid
+                            </div>
+                            <div class="col-6 text-right">
+                              <kendo-numerictextbox #amountPaidVC [format]="'n'" tabindex="{{getFormArray().length * 4 + 3}}"
+                                [spinners]="false" (valueChange)="amountPaidChange($event)" formControlName="amountPaid"
+                                class="margin-left-13 border-0 text-right width-100-per input-amount mput-reference-custom amountPaid">
+                              </kendo-numerictextbox>
+                            </div>
+                          </div>
+      
+                          <div class="row">
+                            <div class="col-6 text-right">
+                              Amount Due
+                            </div>
+                            <div class="col-6 text-right">
+                              {{amountDue | currency:'VND':''}}
+                            </div>
+                          </div>
                     </div>
-
-                    <div class="row">
-                      <div class="col-6 text-right">
-                        Amount Due
-                      </div>
-                      <div class="col-6 text-right">
-                        {{amountDue | currency:'VND':''}}
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
                 <div class="row mt-4">
@@ -336,7 +359,6 @@
               </div> <!-- end col-sm-12 -->
             </div> <!-- end row -->
           </div>
-
         </form>
       </div>
       <xb-list-payment *ngIf="viewMode" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"

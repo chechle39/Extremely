@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using DevExpress.AspNetCore;
+using DevExpress.AspNetCore.Reporting;
+using DevExpress.XtraReports.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -41,8 +44,23 @@ namespace XBOOK.Web
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDevExpressControls();
+            services.AddScoped<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            services
+                .AddMvc()
+                .AddDefaultReportingControllers()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.ConfigureReportingServices(configurator => {
+                configurator.ConfigureReportDesigner(designerConfigurator => {
+                    designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
+                });
+                configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
+                    viewerConfigurator.UseCachedReportSourceBuilder();
+                });
+            });
+            //------------------
             services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<XBookContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -69,6 +87,8 @@ namespace XBOOK.Web
             services.AddTransient<ICompanyProfileService, CompanyProfileService>();
             services.AddTransient<IClientServiceDapper, ClientServiceDapper>();
             services.AddTransient<IInvoiceServiceDapper, InvoiceServiceDapper>();
+            services.AddTransient<IGeneralLedgerGroupService, GeneralLedgerGroupService>();
+            services.AddTransient<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>
             {
@@ -84,6 +104,18 @@ namespace XBOOK.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
+
+            app.UseDevExpressControls();
+            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
+
+
+
+
+
+
+
+            //--------------------
             app.UseAuthentication();
             app.UseCors();
             app.UseDefaultFiles();
@@ -97,13 +129,14 @@ namespace XBOOK.Web
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
                 FileProvider = new PhysicalFileProvider(
-            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
                 RequestPath = "/img"
             });
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book API V1");
             });
+
             app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
 

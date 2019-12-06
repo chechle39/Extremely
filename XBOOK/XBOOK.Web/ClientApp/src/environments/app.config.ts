@@ -34,6 +34,8 @@ export const API_URI = {
   getProfile: 'api/UploadProfile/GetAllProFile',
   getFile: 'api/UploadProfile/GetIMG',
   getClientDap: 'api/Client/GetAllClientDapper',
+  getGengroup: 'api/GeneralLedgerGroup/GetAllGen',
+  exportCSVgroup: 'api/GeneralLedgerGroup/GetCSV',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

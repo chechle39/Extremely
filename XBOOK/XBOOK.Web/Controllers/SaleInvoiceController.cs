@@ -1,7 +1,11 @@
 ﻿using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Base;
@@ -45,7 +49,7 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public ActionResult CreateSaleInvoice(SaleInvoiceModelRequest request)
         {
-            var CreateData =  _saleInvoiceService.CreateSaleInvoice(request);
+            var CreateData = _saleInvoiceService.CreateSaleInvoice(request);
             return Ok(CreateData);
         }
 
@@ -75,6 +79,44 @@ namespace XBOOK.Web.Controllers
         {
             var saleListInvoice = _saleInvoiceService.GetLastInvoice();
             return Ok(saleListInvoice);
+        }
+
+        [HttpPost("[action]"), DisableRequestSizeLimit]
+        public IActionResult Upload()
+        {
+            DateTime now = DateTime.Now;
+            var files = Request.Form.Files;
+            if (files.Count == 0)
+            {
+                return new BadRequestObjectResult(files);
+            }
+            else
+            {
+                foreach(var item in Request.Form.Files)
+                {
+                   // var x = item;
+                    var file = item;
+                    var filename = ContentDispositionHeaderValue
+                                        .Parse(file.ContentDisposition)
+                                        .FileName
+                                        .Trim('"');
+
+                    var imageFolder = $@"D:\uploaded\saleInvoice\{now.ToString("yyyyMMdd")}";
+
+
+                    if (!Directory.Exists(imageFolder))
+                    {
+                        Directory.CreateDirectory(imageFolder);
+                    }
+                    string filePath = Path.Combine(imageFolder, filename);
+                    using (FileStream fs = System.IO.File.Create(filePath))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                return Ok();
+            }
         }
     }
 }

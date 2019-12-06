@@ -7,7 +7,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '@core/paged-listing-
 import { debounceTime, finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConsts } from '@core/app.consts';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddPaymentComponent } from '../create-invoice/payment/add-payment/add-payment.component';
@@ -27,11 +27,12 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   @ViewChild('searchPanel', { static: true }) searchPanel: any;
   @ViewChildren('cb') checkBoxField: QueryList<any>;
   checkboxInvoice: Subscription = new Subscription();
-
+  searchForm: FormGroup;
   invoiceViews: InvoiceView[];
   searchKeywordClass: string;
   private defaultSortOrder = 'ASC';
   private defaultSortBy = 'INVOICE_NUMBER';
+  isCheckBackTo: boolean = false;
   searchString = '';
   grantTotal: number;
   keyword = '';
@@ -48,12 +49,35 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   toggle = [];
   ischeck: boolean;
   listInvoice: any;
+  isSue: boolean = false;
+  isDue: boolean = false;
+  startDate: string;
+  endDate: string;
   constructor(
     injector: Injector,
     private invoiceService: InvoiceService,
     private router: Router,
+    private fb: FormBuilder,
     private modalService: NgbModal) {
     super(injector);
+    this.searchForm = this.createForm();
+  }
+
+  createForm() {
+    var date = new Date();
+    const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
+    const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
+    const firstDateMonth = firstDate.split('/');
+    const firstDateMonthCurent = { year: Number(firstDateMonth[2]), month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
+    const endDateMonth = endDate.split('/');
+    const endDateMonthCurent = { year: Number(endDateMonth[2]), month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
+    return this.fb.group({
+      startDate: firstDateMonthCurent,
+      endDate: endDateMonthCurent,
+      issueDate: ['IssueDate'],
+      // dueDate: this.isDue,
+    })
+
   }
 
   protected list(
@@ -69,17 +93,43 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       endDate: '',
       isIssueDate: true
     };
-    this.invoiceService.getAll(requestList).pipe(
-      // debounceTime(500),
-      finalize(() => {
-        finishedCallback();
-      })
-    ).subscribe((i: any) => {
-      this.loadingIndicator = false;
-      this.invoiceViews = i;
-      this.listInvoice = this.invoiceViews;
-    });
+    // this.invoiceService.getAll(requestList).pipe(
+    //   // debounceTime(500),
+    //   finalize(() => {
+    //     finishedCallback();
+    //   })
+    // ).subscribe((i: any) => {
+    //   this.loadingIndicator = false;
+    //   this.invoiceViews = i;
+    //   this.listInvoice = this.invoiceViews;
+    // });
+    this.getInvoice(requestList);
   }
+
+  getInvoice(request) {
+    if (this.dateFilters !== '') {
+      const rs = {
+        keyword: this.keyword.toLocaleLowerCase(),
+        startDate: this.startDate,
+        endDate: this.endDate,
+        isIssueDate: this.ischeck
+      }
+      this.invoiceService.getAll(rs).pipe(
+        ).subscribe((i: any) => {
+          this.loadingIndicator = false;
+          this.invoiceViews = i;
+          this.listInvoice = this.invoiceViews;
+        })
+    }else {
+      this.invoiceService.getAll(request).pipe(
+        ).subscribe((i: any) => {
+          this.loadingIndicator = false;
+          this.invoiceViews = i;
+          this.listInvoice = this.invoiceViews;
+        })
+    }
+  }
+
   public getGrantTotal(): number {
     return _.sumBy(this.invoiceViews, item => {
       return item.amountPaid;
@@ -128,8 +178,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     const numberDuceDate = duration.asDays();
     return `Duce in ${numberDuceDate} days`;
   }
-  plusRow(subTotal: any,vat: any,discount: any){
-    const plus = (subTotal+vat) - discount;
+  plusRow(subTotal: any, vat: any, discount: any) {
+    const plus = (subTotal + vat) - discount;
     return plus;
   }
   redirectToCreateNewInvoice() {
@@ -139,14 +189,17 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.router.navigate([`/invoice/${id}/${ActionType.Edit}`]);
   }
   delete(id: number): void {
+    this.isCheckBackTo = true;
     if (id === 0) { return; }
     this.message.confirm('Do you want to delete this invoice ?', 'Are you sure ?', () => {
       this.deleteInvoice(id);
+      this.isCheckBackTo = false;
     });
 
   }
   private deleteInvoice(id: number): void {
-    const request = [{id}];
+    const request = [{ id }];
+   
     this.invoiceService.deleteInvoice(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
@@ -200,21 +253,21 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   //     return this.isValidDate;
   //   }
   //  }
-  applySearchFilter(formFilter: NgForm) {
+  applySearchFilter(formFilter: FormGroup) {
     this.isSubmitted = true;
     //const isValidDate = this.validateDates(form.value, this.model.EndDate);
     if (!formFilter.valid) {
       return false;
     } else {
       // tslint:disable-next-line:max-line-length
-      const startDate = moment([formFilter.value.startDate.year, formFilter.value.startDate.month - 1, formFilter.value.startDate.day]).format(AppConsts.defaultDateFormatMM);
+      this.startDate = moment([formFilter.value.startDate.year, formFilter.value.startDate.month - 1, formFilter.value.startDate.day]).format(AppConsts.defaultDateFormatMM);
       // tslint:disable-next-line:max-line-length
-      const endDate = moment([formFilter.value.endDate.year, formFilter.value.endDate.month - 1, formFilter.value.endDate.day]).format(AppConsts.defaultDateFormatMM);
-      this.dateFilters = `${startDate} - ${endDate}`;
+      this.endDate = moment([formFilter.value.endDate.year, formFilter.value.endDate.month - 1, formFilter.value.endDate.day]).format(AppConsts.defaultDateFormatMM);
+      this.dateFilters = `${this.startDate} - ${this.endDate}`;
       this.searchPanel.close();
 
-      const searchType = formFilter.value.searchType;
-      const searchStr = { seachString: this.keyword, from: startDate, to: endDate };
+      const searchType = formFilter.value.issueDate;
+      const searchStr = { seachString: this.keyword, from: this.startDate, to: this.endDate };
       if (searchType === SearchType.IssueDate) {
         searchStr[SearchType.IssueDate] = true;
         this.ischeck = true;
@@ -230,37 +283,35 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         endDate: searchStr.to,
         isIssueDate: this.ischeck,
       };
-      this.invoiceService.getAll(requestList).pipe(
-      ).subscribe((i: any) => {
-        this.loadingIndicator = false;
-        this.invoiceViews = i;
-      });
+      this.getInvoice(requestList);
       // alert(JSON.stringify(searchStr));
     }
   }
-  clearFilter(formFilter: NgForm) {
+  clearFilter(formFilter: FormGroup) {
     this.isSubmitted = false;
     this.dateFilters = this.keyword = '';
-    formFilter.resetForm();
+    //  formFilter.resetForm();
+    this.dateFilters = '';
+    //this.Adsearch();
   }
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
     if (event.type === 'click') {
-      if (event.cellIndex > 0){
+      if (event.cellIndex > 0 && this.isCheckBackTo === false) {
         this.router.navigate([`/invoice/${event.row.invoiceId}/${ActionType.View}`]);
       }
     }
   }
-    sortClient() {
-      this.invoiceViews.sort((l, r): number => {
-        if (l.clientName < r.clientName) { return -1; }
-        if (l.clientName > r.clientName) { return -1; }
-        return 0;
-      });
-      this.invoiceViews = [...this.invoiceViews];
-    }
-
-    onSort(e: any) {
-
-    }
+  sortClient() {
+    this.invoiceViews.sort((l, r): number => {
+      if (l.clientName < r.clientName) { return -1; }
+      if (l.clientName > r.clientName) { return -1; }
+      return 0;
+    });
+    this.invoiceViews = [...this.invoiceViews];
   }
+
+  onSort(e: any) {
+
+  }
+}

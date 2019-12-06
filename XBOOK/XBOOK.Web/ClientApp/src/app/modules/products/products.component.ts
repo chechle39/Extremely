@@ -16,7 +16,8 @@ class PagedProductsRequestDto extends PagedRequestDto {
 }
 @Component({
   selector: 'xb-products',
-  templateUrl: './products.component.html'
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   productViews: any;

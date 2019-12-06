@@ -73,6 +73,11 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
       return item.credit;
     });
   }
+  public getGrantTotalDebit(): number {
+    return _.sumBy(this.genViews, (item: any) => {
+      return item.debit;
+    });
+  }
 
   SearchGenLed(): void {
 

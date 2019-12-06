@@ -53,7 +53,10 @@
     "screenfull": "^4.2.1",
     "sweetalert2": "^8.17.1",
     "tslib": "^1.10.0",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "devextreme": "19.2-next",
+    "@devexpress/analytics-core": "19.2-next",
+    "devexpress-reporting-angular": "19.2-next"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.802.0",

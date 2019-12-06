@@ -13,6 +13,14 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Reports\Report.repx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Report.repx" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <Content Include="ClientApp\.vscode\launch.json" />
     <Content Include="ClientApp\.vscode\settings.json" />
@@ -35,12 +43,22 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XBOOK.Dapper\XBOOK.Dapper.csproj" />
+    <ProjectReference Include="..\XBOOK.Report\XBOOK.Report.csproj" />
     <ProjectReference Include="..\XBOOK.Service\XBOOK.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ClientApp\src\assets\img\profile\" />
-    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\uploaded\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Reports\Report.cs">
+      <DependentUpon>Report.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Report.Designer.cs">
+      <DependentUpon>Report.repx</DependentUpon>
+    </Compile>
   </ItemGroup>
   
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

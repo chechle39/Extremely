@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
@@ -31,42 +32,43 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]"), DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
-            try
+            DateTime now = DateTime.Now;
+            var files = Request.Form.Files;
+            if (files.Count == 0)
             {
-                var file = Request.Form.Files[0];
-                var folderName = Path.Combine("wwwroot", "img");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-                if (file.Length > 0)
-                {
-                    var prf = await _iCompanyProfileService.GetInFoProfile();
-                    var fileName = prf.bizPhone + prf.taxCode + ".png";
-                    var fullPath = Path.Combine(pathToSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName);
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-                    _iCompanyProfileService.UpdateCompany(fileName.Replace(" ", "_"));
-                    var a = Path.Combine(folderName, fileName).Replace(@"\", @"/");
-                    return Ok(new { fileName });
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                return new BadRequestObjectResult(files);
             }
-            catch (Exception ex)
+            else
             {
-                return StatusCode(500, "Internal server error");
-            } 
+                var file = files[0];
+                var prf = await _iCompanyProfileService.GetInFoProfile();
+                var fileName = prf.bizPhone + prf.taxCode + ".png";
+
+                var imageFolder = $@"\uploaded\images";
+
+                string folder = _hostingEnvironment.WebRootPath + imageFolder;
+
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string filePath = Path.Combine(folder, fileName);
+                using (FileStream fs = System.IO.File.Create(filePath))
+                {
+                    file.CopyTo(fs);
+                    fs.Flush();
+                }
+               _iCompanyProfileService.UpdateCompany(Path.Combine(imageFolder, fileName).Replace(@"\", @"/"));
+
+                return Ok(new { fileName });
+            }
         }
         [HttpPost("[action]")]
         public IActionResult GetIMG([FromBody] requestGetIMG request)
         {
-            var file = Path.Combine(Directory.GetCurrentDirectory(),
-                                    "wwwroot", "img", request.ImgName);
+            var imageFolder = $@"\uploaded\images";
+            string folder = _hostingEnvironment.WebRootPath + imageFolder;
+            var file = Path.Combine(folder, request.ImgName);
             byte[] imageArray = System.IO.File.ReadAllBytes(file);
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
             return Ok(base64ImageRepresentation);

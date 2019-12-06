@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-//using XAccLib.SaleInvoice;
+using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -182,8 +182,8 @@ namespace XBOOK.Service.Service
             };
             try
             {
-                //var saleInvoiceGL = new SaleInvoiceGL(_uow);
-              //  saleInvoiceGL.InvoiceGL(objData);
+               var saleInvoiceGL = new SaleInvoiceGL(_uow);
+               saleInvoiceGL.InvoiceGL(objData);
             }
             catch(Exception ex)
             {
@@ -213,7 +213,7 @@ namespace XBOOK.Service.Service
                         ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
                         ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
                         Email = saleInvoiceViewModel.ClientData[0].Email,
-                        Note = saleInvoiceViewModel.ClientData[0].Note,
+                       // Note = saleInvoiceViewModel.ClientData[0].Note,
                         Tag = saleInvoiceViewModel.ClientData[0].Tag,
                         TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
                     };

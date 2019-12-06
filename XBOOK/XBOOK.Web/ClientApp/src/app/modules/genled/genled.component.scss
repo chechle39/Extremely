@@ -2,3 +2,15 @@
     margin-top: -13px;
     border-top:1px solid;
 }
+:host ::ng-deep .datatable-header-cell-template-wrap{
+    margin-top: 13px;
+    margin-left: -10px;
+}
+:host ::ng-deep .coldata {
+    font-weight: bold;color: gray;
+    font-size: 13px;
+}
+
+:host ::ng-deep .datatable-row-wrapper{
+    margin-left: -10px;
+}

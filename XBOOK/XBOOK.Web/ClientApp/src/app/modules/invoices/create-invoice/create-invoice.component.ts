@@ -453,6 +453,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.message.warning('Form invalid');
       return;
     }
+    this.viewMode = true;
     if (!this.invoiceForm.valid && this.invoiceId === 0) {
       const a = this.oldClientId === this.invoiceForm.value.clientId;
       const request = {
@@ -632,9 +633,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           this.notify.success('Successfully Update');
           this.router.navigate([`/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
         });
-    } else {
-
-    }
+    } 
+    this.invoiceForm.disable();
   }
 
   private updateTotalUnitPrice(items: any) {
@@ -915,6 +915,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
   redirectToEditInvoice() {
     this.invoiceForm.enable();
+    this.viewMode = false;
     //this.router.navigate([`/invoice/${this.invoiceId}/${ActionType.Edit}`]);
   }
   close(result: boolean): void {

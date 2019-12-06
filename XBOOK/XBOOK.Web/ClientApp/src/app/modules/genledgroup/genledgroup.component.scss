@@ -1,0 +1,594 @@
+:host ::ng-deep .datatable-scroll {
+    margin-top: -13px;
+    border-top:1px solid;
+    border-top-width: 100%;    
+  
+}
+:host ::ng-deep .col-md-12 {
+    margin-bottom: 20px;
+    
+   
+    line-height: 3rem;
+}
+:host ::ng-deep .coldata {
+    font-weight: bold;color: gray;
+    font-size: 13px;
+}
+:host ::ng-deep .datatable-header-inner {
+    margin-top: 15px;
+}
+:host ::ng-deep .datatable-body-cell.sort-active{
+    margin-left: -7px;
+}
+
+
+:host ::ng-deep.headercrspAccNumber{
+    font-weight: bold;color: gray;
+    font-size: 13px;
+    text-align:center;
+    margin-left:58px
+}
+:host ::ng-deep.datacrspAccNumber{
+    text-align:center;
+     width: 40%;
+    margin-left: 75px;
+}
+:host ::ng-deep.headerdebit{
+    font-weight: bold;color: gray;
+    font-size: 13px;
+    text-align:right;   
+    margin-left: 55px;
+}
+:host ::ng-deep.datadebit{
+    text-align: right;
+    text-align-last: auto;
+    width: 75%;
+}
+:host ::ng-deep.headercredit{
+    font-weight: bold;color: gray;
+    font-size: 13px;   
+    text-align: right;
+    margin-left: 65px
+}
+:host ::ng-deep.datacredit{
+    text-align: right;
+    text-align-last: auto;
+    width: 80%;
+    margin-left: 36px;
+}
+@media only screen and (min-width: 1930px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 13px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:center;
+        margin-left:58px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:right;   
+        margin-left: 55px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: -16px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 13px;   
+        text-align: right;
+        margin-left: 112px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 36px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -97px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 53px;
+    }
+
+}
+@media only screen and (max-width: 1920px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 13px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:center;
+        margin-left:58px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:right;   
+        margin-left: 55px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: -16px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 13px;   
+        text-align: right;
+        margin-left: 112px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 36px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -97px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 53px;
+    }
+
+}
+@media only screen and (max-width: 1820px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 13px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:center;
+        margin-left:50px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:right;   
+        margin-left: 55px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: 0px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 13px;   
+        text-align: right;
+        margin-left: 96px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 35px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -76px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 34px;
+    }
+
+}
+@media only screen and (max-width: 1720px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 13px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:center;
+        margin-left:50px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;color: gray;
+        font-size: 13px;
+        text-align:right;   
+        margin-left: 55px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: 8px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 13px;   
+        text-align: right;
+        margin-left: 78px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 38px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -61px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 30px;
+    }
+
+}
+@media only screen and (max-width: 1600px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 10px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 10px;
+        text-align:center;
+        margin-left:50px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;
+        color: gray;
+        font-size: 10px;
+        text-align: right;
+        margin-left: 50px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: 0px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 10px;   
+        text-align: right;
+        margin-left: 85px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 30px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -68px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 28px;
+    }
+   
+}
+@media only screen and (max-width: 1500px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 10px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 10px;
+        text-align:center;
+        margin-left:50px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;
+        color: gray;
+        font-size: 10px;
+        text-align: right;
+        margin-left: 50px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: 0px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 10px;   
+        text-align: right;
+        margin-left: 85px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 30px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -63px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 28px;
+    }
+   
+}
+@media only screen and (max-width: 1440px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 10px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 10px;
+        text-align:center;
+        margin-left:50px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;
+        color: gray;
+        font-size: 10px;
+        text-align: right;
+        margin-left: 32px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: 0px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 10px;   
+        text-align: right;
+        margin-left: 70px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 35px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -63px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 34px;
+    }
+   
+}
+@media only screen and (max-width: 1366px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 10px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 10px;
+        text-align:center;
+        margin-left:50px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;
+        color: gray;
+        font-size: 10px;
+        text-align: right;
+        margin-left: 32px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: 10px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 10px;   
+        text-align: right;
+        margin-left: 57px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 33px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -48px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 20px;
+    }
+   
+}
+@media only screen and (max-width: 1280px){
+    :host ::ng-deep .coldata {
+        font-weight: bold;color: gray;
+        font-size: 10px;
+    }
+    :host ::ng-deep .datatable-header-inner {
+        margin-top: 15px;
+    }
+    :host ::ng-deep .datatable-body-cell.sort-active{
+        margin-left: -7px;
+    }
+    
+    
+    :host ::ng-deep.headercrspAccNumber{
+        font-weight: bold;color: gray;
+        font-size: 10px;
+        text-align:center;
+        margin-left:50px
+    }
+    :host ::ng-deep.datacrspAccNumber{
+        text-align:center;
+         width: 40%;
+        margin-left: 75px;
+    }
+    :host ::ng-deep.headerdebit{
+        font-weight: bold;
+        color: gray;
+        font-size: 10px;
+        text-align: right;
+        margin-left: 25px;
+    }
+    :host ::ng-deep.datadebit{
+        text-align: right;
+        text-align-last: auto;
+        width: 75%;
+        margin-left: 14px;
+    }
+    :host ::ng-deep.headercredit{
+        font-weight: bold;color: gray;
+        font-size: 10px;   
+        text-align: right;
+        margin-left: 44px
+    }
+    :host ::ng-deep.datacredit{
+        text-align: right;
+        text-align-last: auto;
+        width: 80%;
+        margin-left: 30px;
+    }
+    :host ::ng-deep.col-md-2.sum{
+        text-align: right;
+    }
+    :host ::ng-deep.col-md-2.sumdebit{
+        margin-left: -40px;
+    }
+    :host ::ng-deep.col-md-2.sumcredit{
+        margin-left: 12px;
+    }
+    
+}
