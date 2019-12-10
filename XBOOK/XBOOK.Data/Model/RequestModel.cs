@@ -8,4 +8,13 @@ namespace XBOOK.Data.Model
     {
         public string ImgName { get; set; }
     }
+    public class requestGetFile
+    {
+        public string Invoice { get; set; }
+        public string Seri { get; set; }
+    }
+    public class ResponseFileName
+    {
+        public string FileName { get; set; }
+    }
 }

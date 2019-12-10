@@ -30,7 +30,8 @@ import { debounceTime, distinctUntilChanged, switchMap, finalize, map, tap, catc
 import { TaxService } from '@modules/_shared/services/tax.service';
 @Component({
   selector: 'xb-create-invoice',
-  templateUrl: './create-invoice.component.html'
+  templateUrl: './create-invoice.component.html',
+  styleUrls: ['./create-invoice.component.scss']
 })
 
 export class CreateInvoiceComponent extends AppComponentBase implements OnInit, AfterViewInit {
@@ -98,6 +99,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   checkEditPayment: boolean;
   img: string | ArrayBuffer;
   isCheckFc: boolean;
+  fileUpload: any[] = [];
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -137,9 +139,30 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         // subscribe to the stream so listen to changes on units
         this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
         this.methodEdit_View();
+        if (this.viewMode) {
+          const request = {
+            invoice: this.invoiceForm.value.invoiceNumber - 1,
+            seri: this.invoiceForm.value.invoiceSerial
+          }
+          this.invoiceService.getInfofile(request).subscribe(rp => {
+            if (rp.length > 0){
+              for (let i = 0; i < rp.length; i++) {
+                const file = [
+                  File = {
+                    name: rp[i].fileName,
+                    size: 0,
+                  } as any
+                ]
+                this.fileUpload.push(file[0]);
+              }
+            }
+            
+          })
+        }
       }
     });
     this.methodEdit_View();
+
   }
 
   getProfiles() {
@@ -424,7 +447,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         const dueDatePicker = { year: Number(dueDateSplit[2]), month: Number(dueDateSplit[1]), day: Number(dueDateSplit[0]) };
         this.invoiceForm.controls.dueDate.patchValue(dueDatePicker);
       }
-     // this.getAllTax();
+      // this.getAllTax();
       detailInvoiceFormArray.controls.forEach((control, i) => {
         const productId = control.get('productId').value;
         if (invoice[0].saleInvDetailView[i].productId === productId) {
@@ -449,6 +472,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   save() {
+
+
     if (this.invoiceForm.controls.invoiceSerial.invalid === true || this.invoiceForm.controls.invoiceNumber.invalid === true) {
       this.message.warning('Form invalid');
       return;
@@ -484,6 +509,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         email: this.invoiceForm.value.email === '' ? '' : this.invoiceForm.value.email,
       };
       const requestInvDt = [];
+      this.uploadFileMultiple(request);
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         this.invoiceService.getDF().subscribe((x: any) => {
           this.saleInvId = x.invoiceId;
@@ -505,12 +531,14 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
             };
             requestInvDt.push(requestInvDetail);
           }
+
           this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
             this.notify.success('Successfully Add');
             this.router.navigate([`/invoice`]);
           });
         });
       });
+
       return;
     }
     if (this.invoiceId > 0 && !this.invoiceForm.valid) {
@@ -614,6 +642,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       } else if (request1.clientId !== undefined) {
         this.requestData = request1;
       }
+      this.uploadFileMultiple(this.requestData);
       this.invoiceService.updateSaleInv(this.requestData).pipe(
         finalize(() => {
         })).subscribe(rs => {
@@ -633,7 +662,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           this.notify.success('Successfully Update');
           this.router.navigate([`/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
         });
-    } 
+    }
+
     this.invoiceForm.disable();
   }
 
@@ -711,17 +741,49 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   }
 
+  removeFile(item, index) {
+    this.fileUpload.splice(index, 1);
+    const rs = {
+      fileName: item.name
+    }
+    this.invoiceService.removeFile(rs).subscribe(rp=>{});
+  }
+
+  showPreviewUploadFile(files) {
+    this.fileUpload.push(files[0]);
+    console.log(files);
+  }
+
+  uploadFileMultiple(data) {
+    const fileRequest =[];
+    for(let i = 0; i< this.fileUpload.length; i++){
+      if (this.fileUpload[i].size > 0){
+        fileRequest.push(this.fileUpload[i]);
+      }
+    }
+    const request = {
+      data: data === null? this.invoiceForm.value: data,
+      fileUpload: fileRequest
+    }
+    if (fileRequest.length > 0){
+      this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
+
+      })
+    }
+
+  }
+
   public createImgPath = (serverPath: string) => {
     if (this.img === undefined) {
-     const requestIMG = {
-        imgName: serverPath +'.png'
-     }
-       this.invoiceService.getFile(requestIMG).subscribe(rp=>{
-        const a = "data:image/png;base64,"+ rp;
+      const requestIMG = {
+        imgName: serverPath + '.png'
+      }
+      this.invoiceService.getFile(requestIMG).subscribe(rp => {
+        const a = "data:image/png;base64," + rp;
         this.imgURL = a;
       })
     } else {
-     
+
       this.imgURL = this.img;
     }
   }

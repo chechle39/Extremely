@@ -41,10 +41,20 @@ export abstract class BaseService {
     }
     return this.http.post<T>(this.processUrl(url), data,requestOptions);
   }
-  postUploadImg<T>(url: string, files: T): Observable<T> {
+  postUploadFile<T>(url: string, files: T): Observable<T> {
     let fileToUpload = <File>files[0];
     const formData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
+    return  this.http.post<T>(this.processUrl(url), formData, {reportProgress: true});
+  }
+
+  postUploadMuntiple<T>(url: string, files: any): Observable<T> {
+    const formData = new FormData();
+    for (let i = 0;i< files.fileUpload.length;i++){
+      let fileToUpload = <File>files.fileUpload[i];
+      formData.append('file', fileToUpload, fileToUpload.name);
+    }
+    formData.append('data1', files.data.invoiceNumber + '_' + files.data.invoiceSerial);
     return  this.http.post<T>(this.processUrl(url), formData, {reportProgress: true});
   }
 

@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Reference Include="XAccLib">
-      <HintPath>..\..\FILES\XAccLib.dll</HintPath>
+      <HintPath>D:\svn\FILES\XAccLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 

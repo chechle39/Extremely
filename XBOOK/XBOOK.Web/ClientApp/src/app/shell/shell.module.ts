@@ -10,13 +10,15 @@ import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { NotificationSidebarComponent } from './layout/notification-sidebar/notification-sidebar.component';
 import { SharedModule } from '@shared/shared.module';
+import { PrintModule } from '@modules/print/print.module';
 @NgModule({
   imports: [
     CommonModule,
     ShellRoutingModule,
     NgbModule,
     DashboardModule,
-    SharedModule
+    SharedModule,
+    PrintModule
   ],
   exports: [ShellComponent],
   declarations: [

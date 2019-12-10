@@ -4,24 +4,9 @@ import { environment } from 'environments/environment';
 @Component({
   selector: 'xb-dashboard',
   templateUrl: './dashboard.component.html',
-  encapsulation: ViewEncapsulation.None,
-
-  styleUrls: [
-    "../../../../node_modules/jquery-ui/themes/base/all.css",
-    "../../../../node_modules/devextreme/dist/css/dx.common.css",
-    "../../../../node_modules/devextreme/dist/css/dx.light.css",
-    "../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css",
-    "../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css",
-    "../../../../node_modules/@devexpress/analytics-core/dist/css/dx-querybuilder.css",
-    "../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css",
-    "../../../../node_modules/devexpress-reporting/dist/css/dx-reportdesigner.css"
-  ]
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  reportUrl = "Report";
-  getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.reportUrl}`;
-  
-  public hostUrl = environment.apiBaseUrl
   constructor() { }
   ngOnInit() {
   }

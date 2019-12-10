@@ -20,16 +20,18 @@ namespace XBOOK.Web.Controllers
     [ApiController]
     public class SaleInvoiceController : ControllerBase
     {
+        ICompanyProfileService _iCompanyProfileService;
         ISaleInvoiceService _saleInvoiceService;
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IUnitOfWork _uow;
         IInvoiceServiceDapper _invoiceServiceDapper;
-        public SaleInvoiceController(ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
+        public SaleInvoiceController(ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
         {
             _saleInvoiceService = saleInvoiceService;
             _uow = uow;
             _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
             _invoiceServiceDapper = invoiceServiceDapper;
+            _iCompanyProfileService = iCompanyProfileService;
         }
 
         [HttpPost("[action]")]
@@ -82,9 +84,8 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]"), DisableRequestSizeLimit]
-        public IActionResult Upload()
+        public IActionResult Upload(List<IFormFile> request)
         {
-            DateTime now = DateTime.Now;
             var files = Request.Form.Files;
             if (files.Count == 0)
             {
@@ -92,6 +93,11 @@ namespace XBOOK.Web.Controllers
             }
             else
             {
+                string name = "";
+                foreach(var item1 in Request.Form)
+                {
+                    name = item1.Value.ToString();
+                }
                 foreach(var item in Request.Form.Files)
                 {
                    // var x = item;
@@ -100,15 +106,15 @@ namespace XBOOK.Web.Controllers
                                         .Parse(file.ContentDisposition)
                                         .FileName
                                         .Trim('"');
-
-                    var imageFolder = $@"D:\uploaded\saleInvoice\{now.ToString("yyyyMMdd")}";
+                    var prf = _iCompanyProfileService.GetInFoProfile();
+                    var imageFolder = $@"D:\uploaded\{prf.Result.companyName}";
 
 
                     if (!Directory.Exists(imageFolder))
                     {
                         Directory.CreateDirectory(imageFolder);
                     }
-                    string filePath = Path.Combine(imageFolder, filename);
+                    string filePath = Path.Combine(imageFolder, name + "_" + filename);
                     using (FileStream fs = System.IO.File.Create(filePath))
                     {
                         file.CopyTo(fs);
@@ -117,6 +123,41 @@ namespace XBOOK.Web.Controllers
                 }
                 return Ok();
             }
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult GetFile(requestGetFile request)
+        {
+            var prf = _iCompanyProfileService.GetInFoProfile();
+            var imageFolder = $@"D:\uploaded\{prf.Result.companyName}";
+            string[] files = Directory.GetFiles(imageFolder);
+            var listFile = new List<ResponseFileName>();
+            for (int i = 0; i < files.Length; i++)
+            {
+                var fileName = Path.GetFileName(files[i]);
+                var isCheck = fileName.Split("_");
+                if (request.Invoice + request.Seri == isCheck[0] + isCheck[1])
+                {
+                    byte[] imageArray = System.IO.File.ReadAllBytes(files[i]);
+                    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+                    listFile.Add(new ResponseFileName()
+                    {
+                        FileName = fileName
+                    });
+                }
+            }
+                
+            return Ok(listFile);
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult RemoveFile(ResponseFileName request)
+        {
+            var prf = _iCompanyProfileService.GetInFoProfile();
+            var imageFolder = $@"D:\uploaded\{prf.Result.companyName}";
+            System.IO.File.Delete(imageFolder + "\\" + request.FileName);
+            return Ok();
         }
     }
 }

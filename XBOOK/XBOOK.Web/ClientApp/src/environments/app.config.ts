@@ -36,6 +36,9 @@ export const API_URI = {
   getClientDap: 'api/Client/GetAllClientDapper',
   getGengroup: 'api/GeneralLedgerGroup/GetAllGen',
   exportCSVgroup: 'api/GeneralLedgerGroup/GetCSV',
+  uploadFileInv: 'api/SaleInvoice/Upload',
+  getFileName: 'api/SaleInvoice/GetFile',
+  removeFile: 'api/SaleInvoice/RemoveFile'
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

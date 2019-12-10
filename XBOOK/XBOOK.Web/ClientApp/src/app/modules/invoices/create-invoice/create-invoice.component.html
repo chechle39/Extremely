@@ -266,80 +266,86 @@
 
                   <div class="col-md-6 col-sm-6">
                     <div class="form-group">
-                      <a  style="color:blue;font-size: 12px; font-style: normal">Attach files <input #file style="width: 82px;height: 20px;" type="file" class="input-upload"></a>
-                      <div>
-                          <ul>
-                              <li style="list-style-type: none;">invoice121231231 <span>X</span></li>
-                          </ul>
-                      </div>
+                      <a style="color:blue;font-size: 12px; font-style: italic">Attach files 
+                        <input style="cursor: pointer;" #file type="file" class="input-upload ipfile" (change)="showPreviewUploadFile(file.files)"></a>
+                      <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png">
+
+                      <ul class="file">
+                        <li  *ngFor = "let item of fileUpload, let i = index">
+                          {{item.name}}
+                          <span style="cursor: pointer;" (click)="removeFile(item,i)">X</span>
+                        </li>
+                      </ul>
+                      <i (click)="uploadFileMultiple(null)" *ngIf= "viewMode" style="cursor: pointer;" class="fas fa-file-upload"></i>
                     </div>
                   </div>
 
                   <div class="col-md-6 col-sm-6 ">
-                    <div >
-                        <div class="row mb-1">
-                            <div class="col-6 text-right">
-                              Sub Total
-                            </div>
-                            <div class="col-6 text-right">
-                              {{subTotalAmount | currency:'VND':''}}
-                            </div>
-                          </div>
-                          <div class="row border-bottom">
-                            <div class="col-6 text-right t-color-blue">
-                              Add a Discount(%)
-                            </div>
-                            <div class="col-6" style="float: left">
-                              <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly [min]=1
-                                [max]=100 [maxlength]=2 (ngModelChange)="totalDiscountChange()"
-                                tabindex="{{getFormArray().length * 4 + 2}}" formControlName="totalDiscount"
-                                placeholder="Discount" kendoTextBox
-                                class="border-0 width-50-per text-center input-amount mput-reference-custom" />
-                              <label class="border-0 width-50-per text-right form-label t-color-red">
-                                {{subTotalDiscountIncl | currency:'VND':''}}</label>
-                            </div>
-                          </div>
-                          <div class="row border-bottom pb-1 my-1">
-                            <div class="col-6 text-right t-color-blue">
-                              All Tax(%)
-                            </div>
-                            <div class="col-6 text-right" style="float: left">
-                              <label style="color: blue" class="border-0 width-50-per text-rigth form-label">
-                                {{totalTaxAmount | currency:'VND':''}}</label>
-                            </div>
-                          </div>
-      
-                          <div class="row ">
-                            <div class="col-6 text-right">
-                              Total
-                            </div>
-                            <div class="col-6 text-right">
-                              {{totalAmount | currency:'VND':''}}
-                            </div>
-                          </div>
-      
-                          <div class="row border-bottom my-2">
-                            <div class="col-6 text-right">
-                              Amount Paid
-                            </div>
-                            <div class="col-6 text-right">
-                              <kendo-numerictextbox #amountPaidVC [format]="'n'" tabindex="{{getFormArray().length * 4 + 3}}"
-                                [spinners]="false" (valueChange)="amountPaidChange($event)" formControlName="amountPaid"
-                                class="margin-left-13 border-0 text-right width-100-per input-amount mput-reference-custom amountPaid">
-                              </kendo-numerictextbox>
-                            </div>
-                          </div>
-      
-                          <div class="row">
-                            <div class="col-6 text-right">
-                              Amount Due
-                            </div>
-                            <div class="col-6 text-right">
-                              {{amountDue | currency:'VND':''}}
-                            </div>
-                          </div>
+                    <div>
+                      <div class="row mb-1">
+                        <div class="col-6 text-right">
+                          Sub Total
+                        </div>
+                        <div class="col-6 text-right">
+                          {{subTotalAmount | currency:'VND':''}}
+                        </div>
+                      </div>
+                      <div class="row border-bottom">
+                        <div class="col-6 text-right t-color-blue">
+                          Add a Discount(%)
+                        </div>
+                        <div class="col-6" style="float: left">
+                          <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly [min]=1
+                            [max]=100 [maxlength]=2 (ngModelChange)="totalDiscountChange()"
+                            tabindex="{{getFormArray().length * 4 + 2}}" formControlName="totalDiscount"
+                            placeholder="Discount" kendoTextBox
+                            class="border-0 width-50-per text-center input-amount mput-reference-custom" />
+                          <label class="border-0 width-50-per text-right form-label t-color-red">
+                            {{subTotalDiscountIncl | currency:'VND':''}}</label>
+                        </div>
+                      </div>
+                      <div class="row border-bottom pb-1 my-1">
+                        <div class="col-6 text-right t-color-blue">
+                          All Tax(%)
+                        </div>
+                        <div class="col-6 text-right" style="float: left">
+                          <label style="color: blue" class="border-0 width-50-per text-rigth form-label">
+                            {{totalTaxAmount | currency:'VND':''}}</label>
+                        </div>
+                      </div>
+
+                      <div class="row ">
+                        <div class="col-6 text-right">
+                          Total
+                        </div>
+                        <div class="col-6 text-right">
+                          {{totalAmount | currency:'VND':''}}
+                        </div>
+                      </div>
+
+                      <div class="row border-bottom my-2">
+                        <div class="col-6 text-right">
+                          Amount Paid
+                        </div>
+                        <div class="col-6 text-right">
+                          <kendo-numerictextbox #amountPaidVC [format]="'n'"
+                            tabindex="{{getFormArray().length * 4 + 3}}" [spinners]="false"
+                            (valueChange)="amountPaidChange($event)" formControlName="amountPaid"
+                            class="margin-left-13 border-0 text-right width-100-per input-amount mput-reference-custom amountPaid">
+                          </kendo-numerictextbox>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-6 text-right">
+                          Amount Due
+                        </div>
+                        <div class="col-6 text-right">
+                          {{amountDue | currency:'VND':''}}
+                        </div>
+                      </div>
                     </div>
-                    
+
                   </div>
                 </div>
                 <div class="row mt-4">

@@ -43,7 +43,7 @@ export class InvoiceService extends BaseService {
 
     
   uploadFile(files: any): Observable<any> {
-    return this.postUploadImg<any>(`${API_URI.uploadProfile}`, files)
+    return this.postUploadFile<any>(`${API_URI.uploadProfile}`, files)
   }
 
   getInfoProfile(): Observable<any> {
@@ -52,5 +52,17 @@ export class InvoiceService extends BaseService {
 
   getFile(fileName: any): Observable<any> {
     return this.getFilex<any>(`${API_URI.getFile}`, fileName)
+  }
+
+  uploadFileInvMt(files: any): Observable<any> {
+    return this.postUploadMuntiple<any>(`${API_URI.uploadFileInv}`, files)
+  }
+
+  getInfofile(request): Observable<any> {
+    return this.post<any>(`${API_URI.getFileName}`, request);
+  }
+
+  removeFile(request): Observable<any> {
+    return this.post<any>(`${API_URI.removeFile}`, request);
   }
 }

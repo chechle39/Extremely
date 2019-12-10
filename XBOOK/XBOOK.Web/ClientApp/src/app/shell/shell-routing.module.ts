@@ -4,6 +4,7 @@ import { ShellComponent } from './shell.component';
 import { DashboardComponent } from '../modules/dashboard/dashboard.component';
 import { extract } from '../core/services/i18n.service';
 import { AuthenticationGuard } from '@core/auth/authentication.guard';
+import { PrintComponent } from '@modules/print/print.component';
 const routes: Routes = [
   {
     path: '',
@@ -16,6 +17,7 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       { path: 'dashboard', component: DashboardComponent, data: { title: extract('Dashboard') } },
+      { path: 'print', component: PrintComponent, data: { title: extract('print') } },
       {
         path: 'client',
         loadChildren: () => import('../modules/clients/clients.module')
@@ -40,11 +42,7 @@ const routes: Routes = [
         path: 'genledgroup',
         loadChildren: () => import('../modules/genledgroup/genledgroup.module')
           .then(m => m.GenledGroupModule)
-      },
-      // {
-      //   path: '**',
-      //   // component: NotFoundComponent,
-      // },
+      }
     ]
   }
 ];
