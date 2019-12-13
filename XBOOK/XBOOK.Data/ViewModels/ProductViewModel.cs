@@ -11,5 +11,6 @@ namespace XBOOK.Data.ViewModels
         public string description { get; set; }
         public decimal? unitPrice { get; set; }
         public int? categoryID { get; set; }
+        public string Unit { get; set; }
     }
 }

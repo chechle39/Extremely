@@ -38,7 +38,8 @@ export const API_URI = {
   exportCSVgroup: 'api/GeneralLedgerGroup/GetCSV',
   uploadFileInv: 'api/SaleInvoice/Upload',
   getFileName: 'api/SaleInvoice/GetFile',
-  removeFile: 'api/SaleInvoice/RemoveFile'
+  removeFile: 'api/SaleInvoice/RemoveFile',
+  deleteTax: 'api/Tax/DeleteTax'
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

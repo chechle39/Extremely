@@ -37,6 +37,7 @@ namespace XBOOK.Data.Entities
         public string directorName { get; set; }
         public string logoFilePath { get; set; }
         public string taxCode { get; set; }
-
+        public string bankAccount { get; set; }
+        public string code { get; set; }
     }
 }

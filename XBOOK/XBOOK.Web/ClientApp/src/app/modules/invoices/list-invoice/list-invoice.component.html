@@ -176,7 +176,7 @@
                   {{row.clientName}}
                 </div>
                 <div class="col-more-info">
-                  {{row.invoiceNumber}} {{row.invoiceSerial}}
+                  {{row.invoiceSerial}}{{row.invoiceNumber}}
                 </div>
               </ng-template>
             </ngx-datatable-column>
@@ -217,7 +217,7 @@
                     </a>
                   </div>
                   <div class="actions">
-                    <a class="icon-action" (click)="delete(row.invoiceId)">
+                    <a class="icon-action" (click)="delete(row.invoiceId,row.invoiceNumber, row.invoiceSerial)">
                       <span class="icon-delete"></span>
                     </a>
                   </div>

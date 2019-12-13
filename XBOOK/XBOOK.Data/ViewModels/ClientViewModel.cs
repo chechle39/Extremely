@@ -10,6 +10,8 @@
         public string ContactName { get; set; }
         public string Email { get; set; }
         public string Note { get; set; }
+        public string bankAccount { get; set; }
+
         public virtual SaleInvoiceViewModel saleInvoiceView { get; set; }
     }
 }

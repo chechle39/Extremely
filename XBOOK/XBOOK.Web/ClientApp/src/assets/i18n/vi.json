@@ -15,7 +15,7 @@
   "PRODUCT.LIST.SERVICE": "Dịch vụ",
   "PRODUCT.LIST.PRODUCT.ADDNEW.DESC": "Hàng hóa để bán cho khách hàng, <br> có thể tính giá vốn",
   "PRODUCT.LIST.SERVICE.ADDNEW.DESC": "Dịch vụ cho khách hàng, <br>có thể tính theo giờ hoặc ngày công",
-  "PRODUCT.LIST.GRID.HEADER.ITEMNAME": "Tên hàng hóa",
+  "PRODUCT.LIST.GRID.HEADER.ITEMNAME": "Tên hàng hóa (Đơn vị tính)",
   "PRODUCT.LIST.GRID.HEADER.DESCRIPTION": "Mô tả",
   "PRODUCT.LIST.GRID.HEADER.UNITPRICE": "Đơn giá",
   "PRODUCT.FORM.CREATE.NAME": "Tên",
@@ -26,5 +26,9 @@
   "PRODUCT.FORM.CREATE.CATEGORY": "Loại",
   "PRODUCT.FORM.CREATE.UNITPRICE": "Đơn giá",
   "PRODUCT.FORM.CREATE.UNITPRICE.VALIDATION": "Vui lòng nhập đơn giá",
-  "PRODUCT.FORM.CREATE.UNITPRICE.PLACEHOLDER": "Nhập đơn giá"
+  "PRODUCT.FORM.CREATE.UNITPRICE.PLACEHOLDER": "Nhập đơn giá",
+
+  
+  "Invoice.Heder": "Hóa đơn",
+  "Invoice.GRID.HEADER.": "Khách hàng/ Số hóa đơn"
 }

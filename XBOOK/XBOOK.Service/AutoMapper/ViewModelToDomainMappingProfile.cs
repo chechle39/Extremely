@@ -11,10 +11,10 @@ namespace XBOOK.Service.AutoMapper
         {
 
             CreateMap<ClientViewModel, Client>()
-           .ConstructUsing(c => new Client(c.ClientId, c.Address, c.ClientName, c.ContactName, c.Email,c.Note,c.Tag,c.TaxCode));
+           .ConstructUsing(c => new Client(c.ClientId, c.Address, c.ClientName, c.ContactName, c.Email,c.Note,c.Tag,c.TaxCode, c.bankAccount));
 
             CreateMap<ClientCreateRequet, Client>()
-           .ConstructUsing(c => new Client(c.ClientId, c.Address, c.ClientName, c.ContactName, c.Email, c.Note, c.Tag, c.TaxCode));
+           .ConstructUsing(c => new Client(c.ClientId, c.Address, c.ClientName, c.ContactName, c.Email, c.Note, c.Tag, c.TaxCode, c.bankAccount));
 
             CreateMap<SaleInvoiceViewModel, SaleInvoice>()
             .ConstructUsing(x => new SaleInvoice(x.InvoiceId,x.InvoiceNumber,x.InvoiceSerial,x.IssueDate,
@@ -34,7 +34,7 @@ namespace XBOOK.Service.AutoMapper
                 ,x.ProductName,x.Qty,x.Vat,x.Id,x.Amount));
 
             CreateMap<TaxViewModel, Tax>().ConstructUsing(x => new Tax(x.ID,x.TaxName,x.TaxRate));
-            CreateMap<ProductViewModel, Product>().ConstructUsing(x => new Product(x.categoryID, x.productID, x.productName,x.unitPrice,x.description));
+            CreateMap<ProductViewModel, Product>().ConstructUsing(x => new Product(x.categoryID, x.productID, x.productName,x.unitPrice,x.description,x.Unit));
             CreateMap<CategoryViewModel, Category>().ConstructUsing(x => new Category(x.CategoryID, x.CategoryName));
 
             CreateMap<GeneralLedgerViewModel, GeneralLedger>().ConstructUsing(x => new GeneralLedger(x.accNumber, x.clientID,x.clientName

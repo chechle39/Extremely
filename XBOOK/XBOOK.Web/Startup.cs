@@ -84,6 +84,7 @@ namespace XBOOK.Web
             services.AddTransient<ISaleInvoiceRepository, SaleInvoiceRepository>();
             services.AddTransient<ISaleInvoiceDetailRepository, SaleInvoiceDetailRepository>();
             services.AddTransient<ICompanyProfileReponsitory, CompanyProfileReponsitory>();
+            services.AddTransient<ITaxRepository, TaxRepository>();
             services.AddTransient<ICompanyProfileService, CompanyProfileService>();
             services.AddTransient<IClientServiceDapper, ClientServiceDapper>();
             services.AddTransient<IInvoiceServiceDapper, InvoiceServiceDapper>();

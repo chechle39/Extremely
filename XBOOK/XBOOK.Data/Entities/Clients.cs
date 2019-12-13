@@ -9,22 +9,21 @@ namespace XBOOK.Data.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Client()
         {
-           // this.SaleInvoices = new HashSet<SaleInvoice>();
         }
 
-        public Client(int _clientID, string _clientName, string _address, string _taxCode, string _Tag, string _contactName, string _email, string _note)
+        public Client(int clientId, string address, string clientName, string contactName, string email, string note, string tag, string taxCode, string bankAccount)
         {
-            clientID = _clientID;
-            clientName = _clientName;
-            address = _address;
-            taxCode = _taxCode;
-            Tag = _Tag;
-            contactName = _contactName;
-            email = _email;
-            note = _note;
-         //   SaleInvoices = new List<SaleInvoice>();
+            clientID = clientId;
+            this.address = address;
+            this.clientName = clientName;
+            this.contactName = contactName;
+            this.email = email;
+            this.note = note;
+            Tag = tag;
+            this.taxCode = taxCode;
+            this.bankAccount = bankAccount;
         }
-    
+
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int clientID { get; set; }
@@ -35,7 +34,8 @@ namespace XBOOK.Data.Entities
         public string contactName { get; set; }
         public string email { get; set; }
         public string note { get; set; }
-    
+        public string bankAccount { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SaleInvoice> SaleInvoices { get; set; }
     }

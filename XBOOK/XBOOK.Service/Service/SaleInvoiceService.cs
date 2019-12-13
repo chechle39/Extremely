@@ -45,8 +45,6 @@ namespace XBOOK.Service.Service
         bool ISaleInvoiceService.CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel)
         {
             var saleInvoie = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
-            //var countZero = saleInvoie.InvoiceNumber.Count(x => x == matchChar);
-            //string DZr = "D" + (countZero + 1);
             var clientUOW = _uow.GetRepository<IRepository<Client>>();
             if (saleInvoiceViewModel.ClientId != 0)
             {
@@ -259,8 +257,9 @@ namespace XBOOK.Service.Service
                             {
                                 description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
                                 productID = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
-                                productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName,
-                                unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price
+                                productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
+                                unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price,
+                                Unit = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[1].Split(")")[0]
                             };
                             var productUOW = _uow.GetRepository<IRepository<Product>>();
                             var productCreate = Mapper.Map<ProductViewModel, Product>(product);
@@ -526,6 +525,11 @@ namespace XBOOK.Service.Service
             }
             string resStr = res.Replace(":", "0");
             return resStr;
+        }
+
+        public void SaveFile()
+        {
+            throw new NotImplementedException();
         }
     }
 }

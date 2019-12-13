@@ -41,6 +41,7 @@ namespace XBOOK.Service.Service
                 note = request.Note,
                 Tag = request.Tag,
                 taxCode = request.TaxCode,
+                bankAccount = request.bankAccount
             };
             _clientUowRepository.AddData(client);
             _uow.SaveChanges();

@@ -4,6 +4,7 @@ using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 using System.Linq;
 using System.Collections.Generic;
+using XBOOK.Data.Model;
 
 namespace XBOOK.Web.Controllers
 {
@@ -28,6 +29,13 @@ namespace XBOOK.Web.Controllers
         public async Task<IActionResult> CreateTax([FromBody]List<TaxViewModel> request)
         {
              await _iTaxService.CreateTax(request);
+            return Ok(request);
+        }
+
+        [HttpPost("[action]")]
+        public  IActionResult DeleteTax([FromBody]List<requestDeleted> request)
+        {
+             _iTaxService.DeleteTax(request);
             return Ok(request);
         }
     }

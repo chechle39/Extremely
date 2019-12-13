@@ -102,8 +102,9 @@
             </ngx-datatable-column>
 
             <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.ITEMNAME' | translate}}" prop="productName">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                {{row.productName}}
+              <ng-template  let-row="row" ngx-datatable-cell-template>
+                <span *ngIf ="row.unit !== null">{{row.productName}} ({{row.unit}})</span>
+                <span *ngIf ="row.unit === null">{{row.productName}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate}}" prop="description">

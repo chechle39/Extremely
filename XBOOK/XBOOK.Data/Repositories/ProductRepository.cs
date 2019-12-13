@@ -49,12 +49,42 @@ namespace XBOOK.Data.Repositories
                     var data = from c in Entities
                                where EF.Functions.Like(c.productName, keyWord) || EF.Functions.Like(c.description, keyWord)
                                select c;
-
-                    listData = data.ProjectTo<ProductViewModel>().Take(20).ToList();
+                    var prod = new List<Product>();
+                    foreach (var item in data)
+                    {
+                        var obj = new Product()
+                        {
+                            productName = item.Unit != null ? item.productName + "(" + item.Unit + ")" : item.productName,
+                            unitPrice = item.unitPrice,
+                            Unit = item.Unit,
+                            categoryID = item.categoryID,
+                            description = item.description,
+                            productID = item.productID,
+                            SaleInvDetails = item.SaleInvDetails,
+                        };
+                        prod.Add(obj);
+                    }
+                    listData = prod.AsQueryable().ProjectTo<ProductViewModel>().Take(20).ToList();
+                  //  listData = data.ProjectTo<ProductViewModel>().Take(20).ToList();
                 }
                 else
                 {
-                    listData = await Entities.ProjectTo<ProductViewModel>().Take(20).ToListAsync();
+                    var data  = await Entities.ProjectTo<ProductViewModel>().Take(20).ToListAsync();
+                    var prod = new List<Product>();
+                    foreach (var item in data)
+                    {
+                        var obj = new Product()
+                        {
+                            productName = item.Unit != null ? item.productName + "(" + item.Unit + ")" : item.productName,
+                            unitPrice = item.unitPrice,
+                            Unit = item.Unit,
+                            categoryID = item.categoryID,
+                            description = item.description,
+                            productID = item.productID,
+                        };
+                        prod.Add(obj);
+                    }
+                    listData = prod.AsQueryable().ProjectTo<ProductViewModel>().Take(20).ToList();
                 }
             }
             return listData;

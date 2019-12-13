@@ -57,6 +57,14 @@
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
+        <label for="bankAccount">Tài khoản ngân hàng</label>
+        <input   [(ngModel)]="client.bankAccount" #bankAccount="ngModel" required class="form-control"
+        [ngModelOptions]="{updateOn: 'blur'}"  type="text" name="bankAccount" placeholder="Tài khoản ngân hàng"
+        id="bankAccount">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
         <label for="note">Ghi chú</label>
         <textarea id="note" [(ngModel)]="client.note" rows="2" class="form-control " name="note"
           placeholder="Ghi chú"></textarea>

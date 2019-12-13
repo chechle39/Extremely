@@ -8,6 +8,7 @@ export class ClientView extends BaseModel {
   email: string;
   note: string;
   clientId: number;
+  bankAccount: string;
 }
 export class ClientViewModel {
   clientID: number;
@@ -16,4 +17,5 @@ export class ClientViewModel {
   note: string;
   outstanding: number;
   overdue: number;
+  bankAccount: string;
 }

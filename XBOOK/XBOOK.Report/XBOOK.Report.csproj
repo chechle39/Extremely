@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Reports\Report1.repx" />
+    <None Remove="Reports\XtraReport.repx" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Report1.repx" />
+    <EmbeddedResource Include="Reports\XtraReport.repx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Reports\Report1.cs">
-      <DependentUpon>Report1.repx</DependentUpon>
+    <Compile Update="Reports\XtraReport.cs">
+      <DependentUpon>XtraReport.repx</DependentUpon>
     </Compile>
-    <Compile Update="Reports\Report1.Designer.cs">
-      <DependentUpon>Report1.repx</DependentUpon>
+    <Compile Update="Reports\XtraReport.Designer.cs">
+      <DependentUpon>XtraReport.repx</DependentUpon>
     </Compile>
   </ItemGroup>
 

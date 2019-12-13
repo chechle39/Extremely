@@ -188,23 +188,41 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   redirectToEditInvoice(id) {
     this.router.navigate([`/invoice/${id}/${ActionType.Edit}`]);
   }
-  delete(id: number): void {
+
+  delete(id: number, invoiceNumber: string,invoiceSerial: string): void {
     this.isCheckBackTo = true;
     if (id === 0) { return; }
     this.message.confirm('Do you want to delete this invoice ?', 'Are you sure ?', () => {
       this.deleteInvoice(id);
+      const request = {
+        invoice: invoiceNumber,
+        seri: invoiceSerial
+      }
+      this.getInFoFile(request)
       this.isCheckBackTo = false;
     });
 
   }
   private deleteInvoice(id: number): void {
     const request = [{ id }];
-   
+    
     this.invoiceService.deleteInvoice(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
     });
   }
+
+  getInFoFile(request){
+    this.invoiceService.getInfofile(request).subscribe(rp => {
+      for (let index = 0; index < rp.length; index++) {
+        const rs = {
+          fileName: rp[index].fileName
+        }
+        this.invoiceService.removeFile(rs).subscribe(rp=>{});
+      }
+    })
+  }
+
   addPayment() {
     if (this.selected.length === 0) {
       this.message.warning('Please select a item from the list?');

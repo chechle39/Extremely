@@ -19,6 +19,7 @@
             </div>
           </div>
           <div class="d-inline-block mx-2">
+            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
             <button (click)="cancel()" class="btn btn-raised mr-1 btn-secondary">Cancel</button>
           </div>
           <div *ngIf="!viewMode" class="d-inline-block mx-2">
@@ -46,7 +47,7 @@
                       </div>
                     </div>
                     <!-- <p class="text-danger" *ngIf="message">{{message}}</p> -->
-                    <input #file type="file" class="input-upload" (change)="showPreview(file.files)">
+                    <input #file1 type="file" class="input-upload" (change)="showPreview(file1.files)">
                   </div> <!-- end upload col-sm-6 -->
                   <div class="col-sm-6">
                     <div class="row">
@@ -272,8 +273,13 @@
 
                       <ul class="file">
                         <li  *ngFor = "let item of fileUpload, let i = index">
-                          {{item.name}}
-                          <span style="cursor: pointer;" (click)="removeFile(item,i)">X</span>
+                          <div class="row">
+                            <div class="col-6">
+                              {{item.name}}
+                            </div>
+                            <span style="cursor: pointer;" (click)="removeFile(item,i)">X</span>
+                          </div>
+                          
                         </li>
                       </ul>
                       <i (click)="uploadFileMultiple(null)" *ngIf= "viewMode" style="cursor: pointer;" class="fas fa-file-upload"></i>
@@ -352,12 +358,12 @@
                   <div class="col-sm-12">
                     <p class="my-1">Notes</p>
                     <fieldset class="form-group position-relative">
-                      <textarea rows="2" id="notes" formControlName="notes" class="border-0 full-width"
+                      <textarea rows="2" id="notes" formControlName="notes" class="k-textbox border-0 full-width"
                         placeholder="Enter your notes" maxlength="250" style="background: white;"></textarea>
                     </fieldset>
                     <p class="my-1">Term & Condition</p>
                     <fieldset class="form-group position-relative">
-                      <textarea rows="2" id="termCondition" formControlName="termCondition" class="border-0 full-width"
+                      <textarea rows="2" id="termCondition" formControlName="termCondition" class="k-textbox border-0 full-width"
                         placeholder="Enter term and condition" maxlength="250" style="background: white;"></textarea>
                     </fieldset>
                   </div>

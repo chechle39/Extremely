@@ -11,4 +11,7 @@ export class TaxService extends BaseService {
     addTax(request: any): Observable<any> {
         return this.post<any>(`${API_URI.createTax}`,request);
     }
+    deleteTax(request: any): Observable<any> {
+        return this.post<any>(`${API_URI.deleteTax}`,request);
+    }
 }

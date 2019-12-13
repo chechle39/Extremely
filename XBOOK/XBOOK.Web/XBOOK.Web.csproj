@@ -14,11 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Reports\Report.repx" />
+    <None Remove="Reports\XtraReport.repx" />
+    <None Remove="Reports\XtraReport1.repx" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Report.repx" />
+    <EmbeddedResource Include="Reports\XtraReport.repx" />
+    <EmbeddedResource Include="Reports\XtraReport1.repx" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -53,11 +55,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Reports\Report.cs">
-      <DependentUpon>Report.repx</DependentUpon>
+    <Compile Update="Reports\XtraReport.cs">
+      <DependentUpon>XtraReport.repx</DependentUpon>
     </Compile>
-    <Compile Update="Reports\Report.Designer.cs">
-      <DependentUpon>Report.repx</DependentUpon>
+    <Compile Update="Reports\XtraReport.Designer.cs">
+      <DependentUpon>XtraReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\XtraReport1.cs">
+      <DependentUpon>XtraReport1.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\XtraReport1.Designer.cs">
+      <DependentUpon>XtraReport1.repx</DependentUpon>
     </Compile>
   </ItemGroup>
   

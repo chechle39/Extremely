@@ -11,13 +11,14 @@ namespace XBOOK.Data.Entities
             this.SaleInvDetails = new HashSet<SaleInvDetail>();
         }
 
-        public Product(int? categoryID, int productID, string productName, decimal? unitPrice, string description)
+        public Product(int? categoryID, int productID, string productName, decimal? unitPrice, string description, string unit)
         {
             this.categoryID = categoryID;
             this.productID = productID;
             this.productName = productName;
             this.unitPrice = unitPrice;
             this.description = description;
+            Unit = unit;
         }
 
         public int productID { get; set; }
@@ -25,7 +26,8 @@ namespace XBOOK.Data.Entities
         public string description { get; set; }
         public Nullable<decimal> unitPrice { get; set; }
         public Nullable<int> categoryID { get; set; }
-    
+        public string Unit { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SaleInvDetail> SaleInvDetails { get; set; }
     }

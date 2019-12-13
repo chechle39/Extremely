@@ -100,6 +100,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   img: string | ArrayBuffer;
   isCheckFc: boolean;
   fileUpload: any[] = [];
+  requestSaveJson: { data: { address: any; amountPaid: any; }[]; };
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -139,29 +140,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         // subscribe to the stream so listen to changes on units
         this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
         this.methodEdit_View();
-        if (this.viewMode) {
-          const request = {
-            invoice: this.invoiceForm.value.invoiceNumber - 1,
-            seri: this.invoiceForm.value.invoiceSerial
-          }
-          this.invoiceService.getInfofile(request).subscribe(rp => {
-            if (rp.length > 0){
-              for (let i = 0; i < rp.length; i++) {
-                const file = [
-                  File = {
-                    name: rp[i].fileName,
-                    size: 0,
-                  } as any
-                ]
-                this.fileUpload.push(file[0]);
-              }
-            }
-            
-          })
-        }
       }
     });
-    this.methodEdit_View();
+   // this.methodEdit_View();
 
   }
 
@@ -406,6 +387,28 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.clientSelected.address = invoice[0].clientData[0].address;
       this.clientSelected.taxCode = invoice[0].clientData[0].taxCode;
       this.clientSelected.email = invoice[0].clientData[0].email;
+
+      if (this.viewMode) {
+        const request = {
+          invoice: this.invoiceNumber,
+          seri: invoice[0].invoiceSerial
+        }
+        this.invoiceService.getInfofile(request).subscribe(rp => {
+          if (rp.length > 0){
+            for (let i = 0; i < rp.length; i++) {
+              const file = [
+                File = {
+                  name: rp[i].fileName,
+                  size: 0,
+                } as any
+              ]
+              this.fileUpload.push(file[0]);
+            }
+          }
+          
+        })
+      }
+
       this.getFormArray().controls.splice(0);
       const detailInvoiceFormArray = this.getFormArray();
       // tslint:disable-next-line:prefer-for-of
@@ -761,13 +764,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         fileRequest.push(this.fileUpload[i]);
       }
     }
+    const requestData = {
+      invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
+      invoiceSerial: this.invoiceForm.controls.invoiceSerial.value
+    }
     const request = {
-      data: data === null? this.invoiceForm.value: data,
+      data: data === null? requestData: data,
       fileUpload: fileRequest
     }
     if (fileRequest.length > 0){
       this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
-
+        this.notify.success('Successfully upload');
       })
     }
 
@@ -982,5 +989,36 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
   close(result: boolean): void {
     this.activeModal.close(result);
+  }
+
+  Print(){
+    this.invoiceForm;
+    if (this.invoiceForm.value.items.length > 0){
+      this.requestSaveJson = {
+        data: [
+          {
+            address: this.invoiceForm.value.address,
+            amountPaid: this.invoiceForm.value.amountPaid,
+          }
+        ]
+        
+      }
+    }else {
+      this.requestSaveJson = {
+        data: [
+          {
+            address: this.invoiceForm.value.address,
+            amountPaid: this.invoiceForm.value.amountPaid,
+  
+          }
+        ]
+        
+      }
+    }
+    
+
+    for(let i = 0;i<this.invoiceForm.value.items.length;i++){
+     this.requestSaveJson.data.push(this.invoiceForm.value.items[i])
+    }
   }
 }

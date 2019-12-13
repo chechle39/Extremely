@@ -18,7 +18,7 @@ import { environment } from 'environments/environment';
 })
 export class PrintComponent implements OnInit {
 
-  reportUrl = "Report";
+  reportUrl = "XtraReport1";
   getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.reportUrl}`;
   
   public hostUrl = environment.apiBaseUrl
