@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { environment } from 'environments/environment';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'xb-print',
@@ -18,11 +19,18 @@ import { environment } from 'environments/environment';
 })
 export class PrintComponent implements OnInit {
 
-  reportUrl = "XtraReport1";
-  getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.reportUrl}`;
-  
+  reportUrl: string;
+  getDesignerModelAction: string;
+  invokeAction: string = '/DXXRDV';
+
   public hostUrl = environment.apiBaseUrl
-  constructor() { }
+  constructor( private activeRoute: ActivatedRoute,) { }
   ngOnInit() {
+    
+    this.activeRoute.params.subscribe(params => {
+      this.reportUrl = params.key;
+      this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.reportUrl}`
+    })
+    
   }
 }

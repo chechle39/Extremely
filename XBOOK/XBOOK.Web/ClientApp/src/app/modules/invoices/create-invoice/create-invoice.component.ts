@@ -28,6 +28,7 @@ import * as moment from 'moment';
 import { ActionType } from '@core/app.enums';
 import { debounceTime, distinctUntilChanged, switchMap, finalize, map, tap, catchError, take, takeUntil } from 'rxjs/operators';
 import { TaxService } from '@modules/_shared/services/tax.service';
+import { DataService } from '@modules/_shared/services/data.service';
 @Component({
   selector: 'xb-create-invoice',
   templateUrl: './create-invoice.component.html',
@@ -64,6 +65,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   companyName: string;
   companyAddress: string;
   taxCode: string;
+  bankAccount: string;
   yourCompanyId: number;
   subTotalAmount = 0;
   totalTaxAmount = 0;
@@ -100,7 +102,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   img: string | ArrayBuffer;
   isCheckFc: boolean;
   fileUpload: any[] = [];
-  requestSaveJson: { data: { address: any; amountPaid: any; }[]; };
+  requestSaveJson: any = [];
+  nameFile: string;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -142,7 +145,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         this.methodEdit_View();
       }
     });
-   // this.methodEdit_View();
+    // this.methodEdit_View();
 
   }
 
@@ -152,7 +155,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.taxCode = rp.taxCode;
       this.companyAddress = rp.address;
       this.yourCompanyId = rp.Id;
-      const request = rp.bizPhone + rp.taxCode
+      this.bankAccount = rp.bankAccount;
+      const request = "logo"
       this.createImgPath(request);
     });
   }
@@ -162,7 +166,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.activeRoute.params.subscribe(params => {
         if (!isNaN(params.id)) {
           this.invoiceId = params.id;
-          this.editMode = params.key === ActionType.Edit;
+        //  this.editMode = params.key === ActionType.Edit;
+          this.editMode = true;
           this.viewMode = params.key === ActionType.View;
           this.getDataForEditMode();
           this.getPayments(this.invoiceId);
@@ -217,7 +222,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       yourCompanyAddress: [this.companyAddress, [Validators.required]],
       yourCompanyId: [this.yourCompanyId, [Validators.required]],
       yourTaxCode: [this.taxCode, [Validators.required]],
-      yourBankAccount: ['', [Validators.required]],
+      yourBankAccount: [this.bankAccount, [Validators.required]],
       issueDate: issueDatePicker,
       dueDate: issueDatePicker,
       reference: [''],
@@ -375,6 +380,23 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.getInvoiceById(this.invoiceId);
   }
 
+  private getInForProfile(request){
+    this.invoiceService.getInfofile(request).subscribe(rp => {
+      if (rp.length > 0) {
+        for (let i = 0; i < rp.length; i++) {
+          const file = [
+            File = {
+              name: rp[i].fileName,
+              size: 0,
+            } as any
+          ]
+          this.fileUpload.push(file[0]);
+        }
+      }
+
+    })
+  }
+
   private getInvoiceById(invoiceId: any) {
     this.invoiceService.getInvoice(invoiceId).subscribe(data => {
       const invoice = data as InvoiceView;
@@ -393,20 +415,21 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           invoice: this.invoiceNumber,
           seri: invoice[0].invoiceSerial
         }
-        this.invoiceService.getInfofile(request).subscribe(rp => {
-          if (rp.length > 0){
-            for (let i = 0; i < rp.length; i++) {
-              const file = [
-                File = {
-                  name: rp[i].fileName,
-                  size: 0,
-                } as any
-              ]
-              this.fileUpload.push(file[0]);
-            }
-          }
-          
-        })
+        this.getInForProfile(request)
+        // this.invoiceService.getInfofile(request).subscribe(rp => {
+        //   if (rp.length > 0) {
+        //     for (let i = 0; i < rp.length; i++) {
+        //       const file = [
+        //         File = {
+        //           name: rp[i].fileName,
+        //           size: 0,
+        //         } as any
+        //       ]
+        //       this.fileUpload.push(file[0]);
+        //     }
+        //   }
+
+        // })
       }
 
       this.getFormArray().controls.splice(0);
@@ -469,9 +492,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     // Resets to blank object
     if (this.editMode) {
       this.router.navigate([`/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+      this.viewMode = true;
+    }else {
+      this.invoiceForm.reset();
+      this.router.navigate([`/invoice`]);
     }
-    this.invoiceForm.reset();
-    this.router.navigate([`/invoice`]);
+   
   }
 
   save() {
@@ -749,18 +775,19 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     const rs = {
       fileName: item.name
     }
-    this.invoiceService.removeFile(rs).subscribe(rp=>{});
+    this.invoiceService.removeFile(rs).subscribe(rp => { });
   }
 
   showPreviewUploadFile(files) {
+    this.nameFile = this.invoiceForm.controls.invoiceNumber.value + '_' + this.invoiceForm.controls.invoiceSerial.value;
     this.fileUpload.push(files[0]);
     console.log(files);
   }
 
   uploadFileMultiple(data) {
-    const fileRequest =[];
-    for(let i = 0; i< this.fileUpload.length; i++){
-      if (this.fileUpload[i].size > 0){
+    const fileRequest = [];
+    for (let i = 0; i < this.fileUpload.length; i++) {
+      if (this.fileUpload[i].size > 0) {
         fileRequest.push(this.fileUpload[i]);
       }
     }
@@ -769,12 +796,18 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       invoiceSerial: this.invoiceForm.controls.invoiceSerial.value
     }
     const request = {
-      data: data === null? requestData: data,
+      data: data === null ? requestData : data,
       fileUpload: fileRequest
     }
-    if (fileRequest.length > 0){
+    if (fileRequest.length > 0) {
       this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
         this.notify.success('Successfully upload');
+        // const rs = {
+        //   invoice: this.invoiceForm.controls.invoiceNumber.value,
+        //   seri: this.invoiceForm.controls.invoiceSerial.value
+        // }
+        // this.fileUpload = [];
+        // this.getInForProfile(rs);
       })
     }
 
@@ -787,7 +820,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       }
       this.invoiceService.getFile(requestIMG).subscribe(rp => {
         const a = "data:image/png;base64," + rp;
-        this.imgURL = a;
+        if (a !== "data:image/png;base64,") {
+          this.imgURL = a;
+        }else {
+          this.imgURL = this.img;
+        }
+        
       })
     } else {
 
@@ -991,34 +1029,76 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.activeModal.close(result);
   }
 
-  Print(){
+  dowloadFile(fileName){
+    const request = {
+      filename: fileName
+    }
+    this.invoiceService.downLoadFile(request).subscribe(rp=>{})
+  }
+
+  Print() {
     this.invoiceForm;
-    if (this.invoiceForm.value.items.length > 0){
-      this.requestSaveJson = {
-        data: [
-          {
-            address: this.invoiceForm.value.address,
-            amountPaid: this.invoiceForm.value.amountPaid,
-          }
-        ]
-        
+    if (this.invoiceForm.controls.items.value.length > 0) {
+      for (let i = 0; i < this.invoiceForm.controls.items.value.length; i++) {
+        const data = {
+          address: i === 0 ? this.invoiceForm.controls.address.value : null,
+          amountPaid: i===0? this.invoiceForm.controls.amountPaid.value: null,
+          clientId: i === 0 ? this.invoiceForm.controls.clientId.value: null,
+          clientName: i === 0? this.invoiceForm.controls.clientName.value: null,
+          contactName: i === 0 ? this.invoiceForm.controls.contactName.value : null,
+          dueDate: i === 0? [this.invoiceForm.controls.dueDate.value.year,
+            this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
+              this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'): null,
+          email: i === 0 ? this.invoiceForm.controls.email.value : null,
+          invoiceId: i === 0 ? this.invoiceForm.controls.invoiceId.value : null,
+          invoiceNumber: i === 0 ? this.invoiceForm.controls.invoiceNumber.value: null,
+          invoiceSerial: i === 0 ? this.invoiceForm.controls.invoiceSerial.value : null,
+          issueDate: i === 0 ? [this.invoiceForm.controls.issueDate.value.year,
+            this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
+              this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') : null,
+          //-----
+          amount: this.invoiceForm.controls.items.value[i].amount,
+          description: this.invoiceForm.controls.items.value[i].description,
+          id: this.invoiceForm.controls.items.value[i].id,
+          price: this.invoiceForm.controls.items.value[i].price,
+          productId: this.invoiceForm.controls.items.value[i].productId,
+          productName: this.invoiceForm.controls.items.value[i].productName,
+          qty: this.invoiceForm.controls.items.value[i].qty,
+          vat: this.invoiceForm.controls.items.value[i].vat,
+          vatAmount: this.invoiceForm.controls.items.value[i].vatAmount,
+
+          //======
+          notes: i === 0 ? this.invoiceForm.controls.notes.value : null,
+          reference: i ===0 ? this.invoiceForm.controls.reference.value : null,
+          taxCode: i === 0 ?this.invoiceForm.controls.taxCode.value : null,
+          termCondition: i===0? this.invoiceForm.controls.termCondition.value : null,
+          totalDiscount: i===0? this.invoiceForm.controls.totalDiscount.value: null,
+          yourBankAccount: i === 0? this.invoiceForm.controls.yourBankAccount.value: null,
+          yourCompanyAddress: i === 0? this.invoiceForm.controls.yourCompanyAddress.value: null,
+          yourCompanyName: i===0? this.invoiceForm.controls.yourCompanyName.value : null,
+          yourTaxCode: i===0? this.invoiceForm.controls.yourTaxCode.value: null,
+        }
+        this.requestSaveJson.push(data);
       }
+      const reportName = 'InvoiceReport';
+      this.invoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp=>{
+        this.router.navigate([`/print/${reportName}`])
+      });
+    } 
+  }
+
+  hhh(xxx){
+    if (this.nameFile !==undefined){
+      if(xxx.split('_').length > 0){
+        const name = this.nameFile + '_' + xxx;
+        return this.nameFile + '_' + name.split('_')[2];
+      }else {
+        return this.nameFile + '_' + xxx;
+      }
+      
     }else {
-      this.requestSaveJson = {
-        data: [
-          {
-            address: this.invoiceForm.value.address,
-            amountPaid: this.invoiceForm.value.amountPaid,
-  
-          }
-        ]
-        
-      }
+      return xxx;
     }
     
-
-    for(let i = 0;i<this.invoiceForm.value.items.length;i++){
-     this.requestSaveJson.data.push(this.invoiceForm.value.items[i])
-    }
   }
 }

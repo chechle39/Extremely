@@ -42,9 +42,9 @@ namespace XBOOK.Web.Controllers
             {
                 var file = files[0];
                 var prf = await _iCompanyProfileService.GetInFoProfile();
-                var fileName = prf.bizPhone + prf.taxCode + ".png";
+                var fileName = "logo" + ".png";
 
-                var imageFolder = $@"D:\uploaded\{prf.companyName}\images";
+                var imageFolder = $@"D:\uploaded\{prf.code}\images";
 
                 string folder =  imageFolder;
 
@@ -67,12 +67,20 @@ namespace XBOOK.Web.Controllers
         public async Task<IActionResult> GetIMG([FromBody] requestGetIMG request)
         {
             var prf = await _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"D:\uploaded\{prf.companyName}\images";
+            var imageFolder = $@"D:\uploaded\{prf.code}\images";
             string folder = imageFolder;
-            var file = Path.Combine(folder, request.ImgName);
-            byte[] imageArray = System.IO.File.ReadAllBytes(file);
-            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-            return Ok(base64ImageRepresentation);
+            if (!Directory.Exists(folder))
+            {
+                return Ok();
+            }else
+            {
+                var file = Path.Combine(folder, request.ImgName);
+
+                byte[] imageArray = System.IO.File.ReadAllBytes(file);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                return Ok(base64ImageRepresentation);
+            }
+          
         }
     }
 }

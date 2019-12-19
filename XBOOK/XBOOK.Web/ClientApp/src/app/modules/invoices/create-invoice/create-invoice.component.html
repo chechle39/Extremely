@@ -19,8 +19,8 @@
             </div>
           </div>
           <div class="d-inline-block mx-2">
-            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
-            <button (click)="cancel()" class="btn btn-raised mr-1 btn-secondary">Cancel</button>
+            <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
+            <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-1 btn-secondary">Cancel</button>
           </div>
           <div *ngIf="!viewMode" class="d-inline-block mx-2">
             <button class="btn btn-raised mr-1 btn-success" (click)="save()">{{saveText}}</button>
@@ -66,8 +66,11 @@
                       </div>
                     </div> <!-- end col-sm-6-->
                     <div class="row">
-                      <div class="col-sm-6"></div>
-                      <div class="col-sm-6">
+                      <div class="col-sm-8"> 
+                        <input kendoTextBox class="border-0 text-right full-width imput-reference-custom" placeholder="Your Bank Acount"
+                          id="yourBankAccount" formControlName="yourBankAccount" nfNoSpaces maxlength="250" [value]="bankAccount"> 
+                      </div>
+                      <div class="col-sm-4">
                         <input style="opacity: unset" kendoTextBox id="yourTaxCode" formControlName="yourTaxCode"
                           placeholder="Tax code" [value]="taxCode"
                           class="border-0 text-right full-width imput-reference-custom " nfNoSpaces maxlength="250">
@@ -146,7 +149,7 @@
                         <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d2.toggle()"></span>
                       </div>
                     </div>
-                    <div>
+                    <div class="mrt-16">
                       <p class="p-color mb-0">Due Date</p>
                       <div class="input-group" style="width: 184px;">
                         <input kendoTextBox (click)="d1.toggle()" (focus)="d3.toggle()" formControlName="dueDate"
@@ -156,10 +159,18 @@
                         <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d3.toggle()"></span>
                       </div>
                     </div>
+                    <div style="margin-top: -2px" class="col-12">
+                      <div class="row">
+                        <div class="text-right p-color">
+                          Amount Due
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                   <div class="col-sm-6 col-md-4">
                     <div>
-                      <p class="mb-1 p-color">Invoice No#/ Seri</p>
+                      <p class="mb-0 p-color">Invoice No#/ Seri</p>
                       <div class="row" style="margin-left: 0px">
                         <input style="opacity: unset" kendoTextBox placeholder="Invoice Number" class="form-control"
                           type="text" formControlName="invoiceNumber"
@@ -171,18 +182,25 @@
                       </div>
 
                     </div>
-                    <div class="mt-1">
-                      <p class="mb-1 p-color">Reference</p>
+                    <div class="mt-0">
+                      <p class="mb-0 p-color">Reference</p>
                       <input kendoTextBox placeholder="Enter value e.g PO #" formControlName="reference"
                         style="opacity: unset" class="border-0 full-width imput-reference-custom" />
                     </div>
+                    
+                    <div class="mt-2">
+                      <div>
+                        {{amountDue | currency:'VND':''}}
+                      </div>
+                    </div>
+
                   </div>
                 </div> <!-- end row -->
                 <div class="row">
                   <!-- table of items -->
                   <div class="items-table">
                     <div class="row header">
-                      <div class="col-6 pl-0">Description</div>
+                      <div class="col-6 pl-0">Description (Unit)</div>
                       <div class="col-2 text-center">Qty</div>
                       <div class="col-2 text-center">Price</div>
                       <div class="col-2 text-right amount-pc pr-0">Amount</div>
@@ -267,22 +285,32 @@
 
                   <div class="col-md-6 col-sm-6">
                     <div class="form-group">
-                      <a style="color:blue;font-size: 12px; font-style: italic">Attach files 
-                        <input style="cursor: pointer;" #file type="file" class="input-upload ipfile" (change)="showPreviewUploadFile(file.files)"></a>
-                      <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png">
-
+                      <div class="row mrl-1">
+                        <div>
+                          <a style="color:blue;font-size: 12px; font-style: italic">Attach files
+                            <input style="cursor: pointer;" #file type="file" class="input-upload ipfile"
+                              (change)="showPreviewUploadFile(file.files)"></a>
+                          <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png">
+                        </div>
+                       
+                        <i (click)="uploadFileMultiple(null)" *ngIf="viewMode" style="cursor: pointer;" class="gg-software-upload mlt-13"></i>
+                      </div>
+                     
                       <ul class="file">
-                        <li  *ngFor = "let item of fileUpload, let i = index">
+                        <li *ngFor="let item of fileUpload, let i = index">
                           <div class="row">
                             <div class="col-6">
-                              {{item.name}}
+                              <p  *ngIf="!viewMode && nameFile !== undefined" class="font-size">{{nameFile}}_{{item.name}}</p>
+                              <p  (click)="dowloadFile(item.name)" *ngIf="viewMode" class="font-size filedowload"> {{hhh(item.name)}}</p>
                             </div>
                             <span style="cursor: pointer;" (click)="removeFile(item,i)">X</span>
                           </div>
-                          
+
                         </li>
                       </ul>
-                      <i (click)="uploadFileMultiple(null)" *ngIf= "viewMode" style="cursor: pointer;" class="fas fa-file-upload"></i>
+                      
+                      <!-- <i (click)="uploadFileMultiple(null)" *ngIf="viewMode" style="cursor: pointer;"
+                        class="fas fa-file-upload"></i> -->
                     </div>
                   </div>
 
@@ -329,7 +357,7 @@
                         </div>
                       </div>
 
-                      <div class="row border-bottom my-2">
+                      <div class="row my-2">
                         <div class="col-6 text-right">
                           Amount Paid
                         </div>
@@ -342,29 +370,30 @@
                         </div>
                       </div>
 
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-6 text-right">
                           Amount Due
                         </div>
                         <div class="col-6 text-right">
                           {{amountDue | currency:'VND':''}}
                         </div>
-                      </div>
+                      </div> -->
                     </div>
 
                   </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-0">
                   <div class="col-sm-12">
                     <p class="my-1">Notes</p>
                     <fieldset class="form-group position-relative">
-                      <textarea rows="2" id="notes" formControlName="notes" class="k-textbox border-0 full-width"
+                      <textarea rows="2" id="notes" formControlName="notes" class="k-textbox border-0 full-width font-size"
                         placeholder="Enter your notes" maxlength="250" style="background: white;"></textarea>
                     </fieldset>
                     <p class="my-1">Term & Condition</p>
                     <fieldset class="form-group position-relative">
-                      <textarea rows="2" id="termCondition" formControlName="termCondition" class="k-textbox border-0 full-width"
-                        placeholder="Enter term and condition" maxlength="250" style="background: white;"></textarea>
+                      <textarea rows="2" id="termCondition" formControlName="termCondition"
+                        class="k-textbox border-0 full-width font-size" placeholder="Enter term and condition" maxlength="250"
+                        style="background: white;"></textarea>
                     </fieldset>
                   </div>
                 </div>

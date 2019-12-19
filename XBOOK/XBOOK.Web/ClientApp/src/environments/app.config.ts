@@ -39,7 +39,9 @@ export const API_URI = {
   uploadFileInv: 'api/SaleInvoice/Upload',
   getFileName: 'api/SaleInvoice/GetFile',
   removeFile: 'api/SaleInvoice/RemoveFile',
-  deleteTax: 'api/Tax/DeleteTax'
+  deleteTax: 'api/Tax/DeleteTax',
+  saleInVoiceSaveDataPrint: 'api/SaleInvoice/SaveFileJson',
+  downLoadFile: 'api/SaleInvoice/Download'
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

@@ -1,14 +1,14 @@
 import { BaseService } from '@shared/service/base.service';
 import { API_URI } from 'environments/app.config';
-import { InvoiceList } from '../models/invoice/invoice-list.model';
 import { Observable } from 'rxjs';
 import { InvoiceView } from '../models/invoice/invoice-view.model';
 import { Injectable } from '@angular/core';
-import { SaleInvoiceCreateRequest } from '../models/invoice/sale-invoice-create-request';
+import { saveAs } from 'file-saver';
 
 @Injectable()
 export class InvoiceService extends BaseService {
   url = API_URI.invoice;
+  fileName: any;
   getAll(request: any): Observable<InvoiceView> {
     return this.post<InvoiceView>(`${this.url}`, request);
   }
@@ -64,5 +64,29 @@ export class InvoiceService extends BaseService {
 
   removeFile(request): Observable<any> {
     return this.post<any>(`${API_URI.removeFile}`, request);
+  }
+
+  SaleInvoiceSaveDataPrint(requeData: any) {
+    return this.post(`${API_URI.saleInVoiceSaveDataPrint}`, requeData);
+  }
+
+  downLoadFile(fileName): Observable<any> {
+     this.fileName = fileName;
+    const data = this.getFileBlob<any>(`${API_URI.downLoadFile}`, fileName).subscribe(rp=>{
+      let blob = new Blob([rp], { type: "text/csv" });
+      let url = window.URL.createObjectURL(blob);
+      saveAs(blob,this.fileName.filename);
+    })
+    return ;
+  }
+
+  downLoad(data: any, type: string) {
+    let blob = new Blob([data], { type: type });
+    let url = window.URL.createObjectURL(blob);
+    saveAs(blob);
+    // let pwa = window.open(url);
+    // if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+    //     alert( 'Please disable your Pop-up blocker and try again.');
+    // }
   }
 }

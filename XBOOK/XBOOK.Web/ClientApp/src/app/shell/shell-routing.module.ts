@@ -17,7 +17,7 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       { path: 'dashboard', component: DashboardComponent, data: { title: extract('Dashboard') } },
-      { path: 'print', component: PrintComponent, data: { title: extract('print') } },
+      { path: 'print/:key', component: PrintComponent, data: { title: extract('print') } },
       {
         path: 'client',
         loadChildren: () => import('../modules/clients/clients.module')

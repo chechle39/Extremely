@@ -10,6 +10,7 @@ import { EditClientComponent } from './edit-client/edit-client.component';
 import { PagedListingComponentBase, PagedRequestDto } from '@core/paged-listing-component-base';
 import { finalize, debounceTime } from 'rxjs/operators';
 import * as _ from 'lodash';
+import { DataService } from '@modules/_shared/services/data.service';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
@@ -28,7 +29,9 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
   clientKeyword = '';
+  messageTest:string;
   constructor(
+    private data: DataService,
     injector: Injector,
     private clientService: ClientService,
     private modalService: NgbModal,
@@ -129,14 +132,28 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
       });
     }
   }
+
   public getOutstanding(): number {
     return _.sumBy(this.clientViews, (item: any) => {
       return item.outstanding;
     });
   }
+
   public getOverduce(): number {
     return _.sumBy(this.clientViews, (item: any) => {
       return item.overdue;
     });
+  }
+
+  ShowInv(){
+    if (this.selected.length === 0){
+      return;
+    }
+    let clientName = '';
+    for (let i=0;i<this.selected.length;i++){
+      clientName +=  ";" + this.selected[i].clientName;
+    }
+    this.data.sendMessage(clientName);
+    this.router.navigate([`/invoice`]);
   }
 }

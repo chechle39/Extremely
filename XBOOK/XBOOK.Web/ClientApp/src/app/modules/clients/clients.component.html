@@ -45,7 +45,7 @@
             <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Chức năng chung
             </button>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
-              <button class="dropdown-item"><span class="icon-edit"></span> Show invoices</button>
+              <button (click)="ShowInv()" class="dropdown-item"><span class="icon-edit"></span> Show invoices</button>
               <button (click)="delete()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
             </div>
           </div>

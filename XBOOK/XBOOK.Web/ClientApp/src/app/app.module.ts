@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AccordionModule} from 'primeng/accordion';
+import { DataService } from '@modules/_shared/services/data.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import {AccordionModule} from 'primeng/accordion';
     AppRoutingModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

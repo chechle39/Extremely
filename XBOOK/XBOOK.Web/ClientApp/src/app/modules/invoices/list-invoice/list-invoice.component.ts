@@ -14,6 +14,7 @@ import { AddPaymentComponent } from '../create-invoice/payment/add-payment/add-p
 import { SearchType, ActionType } from '@core/app.enums';
 import { Subscription } from 'rxjs';
 import { eventNames } from 'cluster';
+import { DataService } from '@modules/_shared/services/data.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -27,6 +28,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   @ViewChild('searchPanel', { static: true }) searchPanel: any;
   @ViewChildren('cb') checkBoxField: QueryList<any>;
   checkboxInvoice: Subscription = new Subscription();
+  client: string;
   searchForm: FormGroup;
   invoiceViews: InvoiceView[];
   searchKeywordClass: string;
@@ -54,6 +56,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   startDate: string;
   endDate: string;
   constructor(
+    private data: DataService,
     injector: Injector,
     private invoiceService: InvoiceService,
     private router: Router,
@@ -93,17 +96,50 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       endDate: '',
       isIssueDate: true
     };
-    // this.invoiceService.getAll(requestList).pipe(
-    //   // debounceTime(500),
-    //   finalize(() => {
-    //     finishedCallback();
-    //   })
-    // ).subscribe((i: any) => {
-    //   this.loadingIndicator = false;
-    //   this.invoiceViews = i;
-    //   this.listInvoice = this.invoiceViews;
-    // });
-    this.getInvoice(requestList);
+    // if (this.client !== undefined){
+    //   this.getInvoice(requestList);
+    // }
+
+    this.invoiceOfClient(requestList);
+  }
+
+  invoiceOfClient(request) {
+    this.data.getMessage().subscribe(rp => {
+
+      if (rp !== undefined) {
+        this.client = rp.text
+        if (this.dateFilters !== '') {
+          const rs = {
+            keyword: this.keyword.toLocaleLowerCase() + this.client,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            isIssueDate: this.ischeck
+          }
+          this.invoiceService.getAll(rs).pipe(
+          ).subscribe((i: any) => {
+            this.loadingIndicator = false;
+            this.invoiceViews = i;
+            this.listInvoice = this.invoiceViews;
+          })
+        } else {
+          const requestList = {
+            keyword: this.keyword.toLocaleLowerCase() + this.client,
+            startDate: '',
+            endDate: '',
+            isIssueDate: true
+          };
+          this.invoiceService.getAll(requestList).pipe(
+          ).subscribe((i: any) => {
+            this.loadingIndicator = false;
+            this.invoiceViews = i;
+            this.listInvoice = this.invoiceViews;
+          })
+        }
+      } else {
+        this.getInvoice(request);
+      }
+
+    });
   }
 
   getInvoice(request) {
@@ -115,18 +151,18 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         isIssueDate: this.ischeck
       }
       this.invoiceService.getAll(rs).pipe(
-        ).subscribe((i: any) => {
-          this.loadingIndicator = false;
-          this.invoiceViews = i;
-          this.listInvoice = this.invoiceViews;
-        })
-    }else {
+      ).subscribe((i: any) => {
+        this.loadingIndicator = false;
+        this.invoiceViews = i;
+        this.listInvoice = this.invoiceViews;
+      })
+    } else {
       this.invoiceService.getAll(request).pipe(
-        ).subscribe((i: any) => {
-          this.loadingIndicator = false;
-          this.invoiceViews = i;
-          this.listInvoice = this.invoiceViews;
-        })
+      ).subscribe((i: any) => {
+        this.loadingIndicator = false;
+        this.invoiceViews = i;
+        this.listInvoice = this.invoiceViews;
+      })
     }
   }
 
@@ -189,7 +225,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.router.navigate([`/invoice/${id}/${ActionType.Edit}`]);
   }
 
-  delete(id: number, invoiceNumber: string,invoiceSerial: string): void {
+  delete(id: number, invoiceNumber: string, invoiceSerial: string): void {
     this.isCheckBackTo = true;
     if (id === 0) { return; }
     this.message.confirm('Do you want to delete this invoice ?', 'Are you sure ?', () => {
@@ -205,20 +241,20 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   }
   private deleteInvoice(id: number): void {
     const request = [{ id }];
-    
+
     this.invoiceService.deleteInvoice(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
     });
   }
 
-  getInFoFile(request){
+  getInFoFile(request) {
     this.invoiceService.getInfofile(request).subscribe(rp => {
       for (let index = 0; index < rp.length; index++) {
         const rs = {
           fileName: rp[index].fileName
         }
-        this.invoiceService.removeFile(rs).subscribe(rp=>{});
+        this.invoiceService.removeFile(rs).subscribe(rp => { });
       }
     })
   }

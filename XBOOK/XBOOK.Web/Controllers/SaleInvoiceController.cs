@@ -1,10 +1,9 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
@@ -107,7 +106,7 @@ namespace XBOOK.Web.Controllers
                                         .FileName
                                         .Trim('"');
                     var prf = _iCompanyProfileService.GetInFoProfile();
-                    var imageFolder = $@"D:\uploaded\{prf.Result.companyName}";
+                    var imageFolder = $@"D:\uploaded\{prf.Result.code}";
 
 
                     if (!Directory.Exists(imageFolder))
@@ -129,7 +128,11 @@ namespace XBOOK.Web.Controllers
         public IActionResult GetFile(requestGetFile request)
         {
             var prf = _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"D:\uploaded\{prf.Result.companyName}";
+            var imageFolder = $@"D:\uploaded\{prf.Result.code}";
+            if (!Directory.Exists(imageFolder))
+            {
+                return Ok();
+            }
             string[] files = Directory.GetFiles(imageFolder);
             var listFile = new List<ResponseFileName>();
             for (int i = 0; i < files.Length; i++)
@@ -155,9 +158,80 @@ namespace XBOOK.Web.Controllers
         public IActionResult RemoveFile(ResponseFileName request)
         {
             var prf = _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"D:\uploaded\{prf.Result.companyName}";
+            var imageFolder = $@"D:\uploaded\{prf.Result.code}";
             System.IO.File.Delete(imageFolder + "\\" + request.FileName);
             return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult SaveFileJson(List<SaleInvoicePrintModel> request)
+        {
+            string json = JsonConvert.SerializeObject(request);
+            var folderName = Path.Combine("Reports", "Data");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var fileName = "InvoiceReport.json";
+         
+            var fullPath = Path.Combine(pathToSave, fileName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+            System.IO.File.WriteAllText(fullPath, json);
+
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult Download(ResponseFileName request)
+        {
+            if (request.FileName == null)
+                return Content("filename not present");
+
+            try
+            {
+                var prf = _iCompanyProfileService.GetInFoProfile();
+                var imageFolder = $@"D:\uploaded\{prf.Result.code}";
+                if (!Directory.Exists(imageFolder))
+                {
+                    Directory.CreateDirectory(imageFolder);
+                }
+                var path = Path.Combine(imageFolder, request.FileName);
+                var fileExists = System.IO.File.Exists(path);
+                var fs = System.IO.File.OpenRead(path);
+                return File(fs, GetContentType(path), request.FileName);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Ok();
+           
+            
+        }
+
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformats officedocument.spreadsheetml.sheet"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
         }
     }
 }

@@ -66,4 +66,11 @@ export abstract class BaseService {
     return this.http.delete(this.processUrl(url));
   }
   
+  getFileBlob<T>(url: string, data: T): Observable<T> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'blob'
+    }
+    return this.http.post<T>(this.processUrl(url), data,requestOptions);
+  }
 }

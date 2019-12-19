@@ -14,7 +14,7 @@ namespace XBOOK.Report.Services
         const string FileExtension = ".repx";
         public ReportStorageWebExtension(IHostingEnvironment env)
         {
-            ReportDirectory = Path.Combine(env.ContentRootPath, "Reports");
+            ReportDirectory = Path.Combine(env.ContentRootPath, "Reports" , "Template");
             if (!Directory.Exists(ReportDirectory))
             {
                 Directory.CreateDirectory(ReportDirectory);

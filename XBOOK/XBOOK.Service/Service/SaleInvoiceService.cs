@@ -526,10 +526,5 @@ namespace XBOOK.Service.Service
             string resStr = res.Replace(":", "0");
             return resStr;
         }
-
-        public void SaveFile()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

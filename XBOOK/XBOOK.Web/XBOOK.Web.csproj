@@ -14,13 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Reports\XtraReport.repx" />
-    <None Remove="Reports\XtraReport1.repx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Reports\XtraReport.repx" />
-    <EmbeddedResource Include="Reports\XtraReport1.repx" />
+    <EmbeddedResource Include="Reports\InvoiceReport.repx" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -51,21 +45,17 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\assets\img\profile\" />
+    <Folder Include="Reports\Data\" />
+    <Folder Include="Reports\Template\" />
     <Folder Include="wwwroot\uploaded\images\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Reports\XtraReport.cs">
-      <DependentUpon>XtraReport.repx</DependentUpon>
+    <Compile Update="Reports\InvoiceReport.cs">
+      <DependentUpon>InvoiceReport.repx</DependentUpon>
     </Compile>
-    <Compile Update="Reports\XtraReport.Designer.cs">
-      <DependentUpon>XtraReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\XtraReport1.cs">
-      <DependentUpon>XtraReport1.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\XtraReport1.Designer.cs">
-      <DependentUpon>XtraReport1.repx</DependentUpon>
+    <Compile Update="Reports\InvoiceReport.Designer.cs">
+      <DependentUpon>InvoiceReport.repx</DependentUpon>
     </Compile>
   </ItemGroup>
   

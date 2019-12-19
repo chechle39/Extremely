@@ -13,7 +13,7 @@ namespace XBOOK.Service.Interfaces
         Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id);
         bool DeletedSaleInv(List<requestDeleted> request);
         SaleInvoiceViewModel GetALlDF();
+
         SaleInvoiceViewModel GetLastInvoice();
-        void SaveFile();
     }
 }

@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XBOOK.Common", "XBOOK.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XBOOK.Dapper", "XBOOK.Dapper\XBOOK.Dapper.csproj", "{7DF3C8F5-FF4C-416E-951E-0BE78828185F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBOOK.Report", "XBOOK.Report\XBOOK.Report.csproj", "{52752071-945C-4E38-A677-2489347A41E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XBOOK.Report", "XBOOK.Report\XBOOK.Report.csproj", "{52752071-945C-4E38-A677-2489347A41E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

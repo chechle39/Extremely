@@ -10,6 +10,7 @@ namespace XBOOK.Report.PredefinedReports
     {
         public static Dictionary<string, Func<XtraReport>> Reports = new Dictionary<string, Func<XtraReport>>()
         {
+           // ["TestReport1"] = () => new TestReport1()
         };
     }
 }
