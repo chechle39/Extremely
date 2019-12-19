@@ -1087,17 +1087,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     } 
   }
 
-  hhh(xxx){
+  getName(nameFile){
     if (this.nameFile !==undefined){
-      if(xxx.split('_').length > 0){
-        const name = this.nameFile + '_' + xxx;
-        return this.nameFile + '_' + name.split('_')[2];
+      if(nameFile.split('_').length > 1){
+        const name = this.nameFile + '_' + nameFile;
+        return this.nameFile + '_' + name.split('_')[4];
       }else {
-        return this.nameFile + '_' + xxx;
+        return this.nameFile + '_' + nameFile;
       }
       
     }else {
-      return xxx;
+      return nameFile;
     }
     
   }

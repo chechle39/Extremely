@@ -300,8 +300,8 @@
                         <li *ngFor="let item of fileUpload, let i = index">
                           <div class="row">
                             <div class="col-6">
-                              <p  *ngIf="!viewMode && nameFile !== undefined" class="font-size">{{nameFile}}_{{item.name}}</p>
-                              <p  (click)="dowloadFile(item.name)" *ngIf="viewMode" class="font-size filedowload"> {{hhh(item.name)}}</p>
+                              <p  *ngIf="!viewMode" class="font-size">{{getName(item.name)}}</p>
+                              <p  (click)="dowloadFile(item.name)" *ngIf="viewMode" class="font-size filedowload"> {{getName(item.name)}}</p>
                             </div>
                             <span style="cursor: pointer;" (click)="removeFile(item,i)">X</span>
                           </div>
