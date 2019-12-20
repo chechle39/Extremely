@@ -27,6 +27,9 @@
 .mlt-13 {
    margin-left: 13px;
 }
+.ml-20 {
+    margin-left: -20px;
+ }
 .mrl-1 {
     margin-left: -1px;
  }
@@ -39,7 +42,9 @@
     color: blue;
     cursor: pointer;
 }
-
+ .pdt-7 {
+    padding-top: 7px;
+ }
 .gg-software-upload {
     box-sizing: border-box;
     position: relative;
@@ -80,3 +85,77 @@
     left: 5px;
     bottom: 3px
 }
+.amountDue {
+    width: 184px;
+    margin-top: -36px;
+    margin-left: 196px;
+}
+
+// @media (min-width: 992px) {
+//     .amountDue {
+//         margin-top: -36px;
+//         margin-left: 196px;
+//     }
+// }
+  
+// @media (max-width: 991px) {
+//     .amountDue {
+//         margin-top: -36px;
+//         margin-left: 196px;
+//     }
+// }
+
+  
+// @media (max-width: 543px) {
+//     .amountDue {
+//         margin-top: -36px;
+//         margin-left: 196px;
+//     }
+//  }
+  
+  
+  
+// @media only screen and  (min-width: 991px) {
+//     .amountDue {
+//         margin-top: -7px;
+//     margin-left: 0px;
+//     }
+      
+// }
+@media screen and (max-width: 1579px) {
+    .amountDue {
+        margin-top: -7px;
+        margin-left: 0px;
+     }
+  }
+
+.amountPaid {
+    margin-left: 18px
+}
+
+@media screen and (max-width: 1500px) {
+    .amountPaid {
+        
+        margin-left: 1px;
+     }
+  }
+  
+// @media (max-width: 991px) {
+//     .amountDue {
+//         margin-top: -36px;
+//         margin-left: 196px;
+//     }
+
+// }
+
+// @media (max-width: 543px) {
+//     .amountDue {
+//         margin-top: -36px;
+//         margin-left: 196px;
+//     }
+// }
+
+
+// @media screen and (max-width: 1224px) {
+
+// }

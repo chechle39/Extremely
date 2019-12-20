@@ -29,8 +29,8 @@
         public string VatAmount { get; set; }
         public string YourBankAccount { get; set; }
         public string YourCompanyAddress { get; set; }
-        public string YourCompanyName { get; set; } 
+        public string YourCompanyName { get; set; }
         public string YourTaxCode { get; set; }
-
+        public string yourCompanyCode { get; set; }
     }
 }

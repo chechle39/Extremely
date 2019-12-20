@@ -28,7 +28,7 @@ import * as moment from 'moment';
 import { ActionType } from '@core/app.enums';
 import { debounceTime, distinctUntilChanged, switchMap, finalize, map, tap, catchError, take, takeUntil } from 'rxjs/operators';
 import { TaxService } from '@modules/_shared/services/tax.service';
-import { DataService } from '@modules/_shared/services/data.service';
+
 @Component({
   selector: 'xb-create-invoice',
   templateUrl: './create-invoice.component.html',
@@ -64,6 +64,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   invoiceFormValueChanges$;
   companyName: string;
   companyAddress: string;
+  companyCode: string;
   taxCode: string;
   bankAccount: string;
   yourCompanyId: number;
@@ -154,10 +155,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.companyName = rp.companyName;
       this.taxCode = rp.taxCode;
       this.companyAddress = rp.address;
-      this.yourCompanyId = rp.Id;
+      this.yourCompanyId = rp.Id;  
+      this.companyCode = rp.code;  
       this.bankAccount = rp.bankAccount;
       const request = "logo"
-      this.createImgPath(request);
+      this.createImgPath(request);     
     });
   }
 
@@ -382,6 +384,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   private getInForProfile(request){
     this.invoiceService.getInfofile(request).subscribe(rp => {
+      if (rp===null)
+        return;
+        
       if (rp.length > 0) {
         for (let i = 0; i < rp.length; i++) {
           const file = [
@@ -1077,6 +1082,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           yourCompanyAddress: i === 0? this.invoiceForm.controls.yourCompanyAddress.value: null,
           yourCompanyName: i===0? this.invoiceForm.controls.yourCompanyName.value : null,
           yourTaxCode: i===0? this.invoiceForm.controls.yourTaxCode.value: null,
+          yourCompanyCode: i===0? this.companyCode: null,
         }
         this.requestSaveJson.push(data);
       }
@@ -1087,17 +1093,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     } 
   }
 
-  hhh(xxx){
+  getName(nameFile){
     if (this.nameFile !==undefined){
-      if(xxx.split('_').length > 0){
-        const name = this.nameFile + '_' + xxx;
-        return this.nameFile + '_' + name.split('_')[2];
+      if(nameFile.split('_').length > 1){
+        const name = this.nameFile + '_' + nameFile;
+        return this.nameFile + '_' + name.split('_')[4];
       }else {
-        return this.nameFile + '_' + xxx;
+        return this.nameFile + '_' + nameFile;
       }
       
     }else {
-      return xxx;
+      return nameFile;
     }
     
   }

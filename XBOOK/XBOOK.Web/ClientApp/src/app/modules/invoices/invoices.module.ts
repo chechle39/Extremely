@@ -28,7 +28,6 @@ import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
 import { TaxService } from '@modules/_shared/services/tax.service';
 import { validateDirective } from './create-invoice/payment/add-payment/validate';
 import {FileUploadModule} from 'primeng/fileupload';
-import { ChangeNameDirective } from './create-invoice/changename';
 @NgModule({
   declarations: [
     InvoicesComponent,
@@ -37,7 +36,6 @@ import { ChangeNameDirective } from './create-invoice/changename';
     SplitPipe,
     AddPaymentComponent,
     ListPaymentComponent,
-    ChangeNameDirective,
     validateDirective,
     AddTaxComponent],
   imports: [

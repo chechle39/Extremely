@@ -18,7 +18,7 @@ import { ActivatedRoute } from '@angular/router';
   ]
 })
 export class PrintComponent implements OnInit {
-
+  ischeck: boolean;
   reportUrl: string;
   getDesignerModelAction: string;
   invokeAction: string = '/DXXRDV';
@@ -26,10 +26,13 @@ export class PrintComponent implements OnInit {
   public hostUrl = environment.apiBaseUrl
   constructor( private activeRoute: ActivatedRoute,) { }
   ngOnInit() {
-    
     this.activeRoute.params.subscribe(params => {
       this.reportUrl = params.key;
-      this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.reportUrl}`
+      if (params.key === "disign"){
+        this.ischeck = true;
+         this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/InvoiceReport`
+      }
+     // this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.reportUrl}`
     })
     
   }

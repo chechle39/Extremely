@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
@@ -44,7 +43,7 @@ namespace XBOOK.Web.Controllers
                 var prf = await _iCompanyProfileService.GetInFoProfile();
                 var fileName = "logo" + ".png";
 
-                var imageFolder = $@"D:\uploaded\{prf.code}\images";
+                var imageFolder = $@"C:\uploaded\{prf.code}\images";
 
                 string folder =  imageFolder;
 
@@ -67,7 +66,7 @@ namespace XBOOK.Web.Controllers
         public async Task<IActionResult> GetIMG([FromBody] requestGetIMG request)
         {
             var prf = await _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"D:\uploaded\{prf.code}\images";
+            var imageFolder = $@"C:\uploaded\{prf.code}\images";
             string folder = imageFolder;
             if (!Directory.Exists(folder))
             {

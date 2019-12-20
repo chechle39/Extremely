@@ -5,4 +5,5 @@ export class ProductView extends BaseModel {
   unitPrice: number;
   categoryId: number;
   categoryName: string;
+  unit: string;
 }

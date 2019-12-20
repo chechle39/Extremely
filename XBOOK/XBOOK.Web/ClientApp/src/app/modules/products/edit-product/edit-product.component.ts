@@ -21,6 +21,7 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
     unitPrice: 0,
     categoryID: 0,
     categoryName: '',
+    unit: ''
   };
   saving = false;
   categorySelect: any;

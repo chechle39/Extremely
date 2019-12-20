@@ -3,4 +3,5 @@ export class ProductSearchModel {
   public productName: string;
   public unitPrice: number;
   public description: string;
+  public unit: string;
 }

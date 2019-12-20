@@ -253,14 +253,29 @@ namespace XBOOK.Service.Service
                     {
                         if(saleInvoiceViewModel.SaleInvDetailView[i].ProductId == 0)
                         {
-                            var product = new ProductViewModel()
+                            ProductViewModel product = null; ;
+                            if(saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(").Length > 1)
                             {
-                                description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
-                                productID = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
-                                productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
-                                unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price,
-                                Unit = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[1].Split(")")[0]
-                            };
+                                product = new ProductViewModel()
+                                {
+                                    description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
+                                    productID = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
+                                    productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
+                                    unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price,
+                                    Unit = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[1].Split(")")[0]
+                                };
+                            }else
+                            {
+                                 product = new ProductViewModel()
+                                {
+                                    description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
+                                    productID = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
+                                    productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
+                                    unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price,
+                                    Unit = null,
+                                };
+                            }
+                           
                             var productUOW = _uow.GetRepository<IRepository<Product>>();
                             var productCreate = Mapper.Map<ProductViewModel, Product>(product);
                             _uow.BeginTransaction();
@@ -278,7 +293,7 @@ namespace XBOOK.Service.Service
                             Id = saleInvoiceViewModel.SaleInvDetailView[i].Id,
                             InvoiceId = saleInvoiceViewModel.SaleInvDetailView[i].InvoiceId,
                             ProductId = serchData.LastOrDefault().productID,
-                            ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName,
+                            ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
                             Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
                         };
                         try
@@ -395,7 +410,24 @@ namespace XBOOK.Service.Service
         {
             var payList = _uow.GetRepository<IRepository<SaleInvDetail>>();
             var listInDetail = payList.GetAll().ProjectTo<SaleInvDetailViewModel>().Where(x => x.InvoiceId == id).ToList();
-            return listInDetail;
+            var dataList = new List<SaleInvDetailViewModel>();
+            foreach(var item in listInDetail)
+            {
+                var data = new SaleInvDetailViewModel()
+                {
+                    Amount = item.Amount,
+                    Description = item.Description,
+                    Id = item.Id,
+                    InvoiceId = item.InvoiceId,
+                    Price = item.Price,
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName +" "+ "("+_iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit +")",
+                    Qty = item.Qty,
+                    Vat = item.Vat,
+                };
+                dataList.Add(data);
+            }
+            return dataList;
         }
 
         private IEnumerable<ClientViewModel> GetClientByID(int? id)

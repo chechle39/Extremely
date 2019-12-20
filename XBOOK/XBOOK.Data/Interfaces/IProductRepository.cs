@@ -15,6 +15,7 @@ namespace XBOOK.Data.Interfaces
         bool removeProduct(long id);
         bool SaveProduct(ProductViewModel rs);
         Task<IEnumerable<ProductViewModel>> GetAllProductAsync(ProductSerchRequest request);
+        Product GetByProductId(int id);
 
     }
 }

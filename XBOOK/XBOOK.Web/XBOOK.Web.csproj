@@ -14,7 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\InvoiceReport.repx" />
+    <None Remove="Reports\Template\InvoiceReport.repx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Template\InvoiceReport.repx" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -46,7 +50,6 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\assets\img\profile\" />
     <Folder Include="Reports\Data\" />
-    <Folder Include="Reports\Template\" />
     <Folder Include="wwwroot\uploaded\images\" />
   </ItemGroup>
 
@@ -55,6 +58,12 @@
       <DependentUpon>InvoiceReport.repx</DependentUpon>
     </Compile>
     <Compile Update="Reports\InvoiceReport.Designer.cs">
+      <DependentUpon>InvoiceReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\InvoiceReport.cs">
+      <DependentUpon>InvoiceReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\InvoiceReport.Designer.cs">
       <DependentUpon>InvoiceReport.repx</DependentUpon>
     </Compile>
   </ItemGroup>

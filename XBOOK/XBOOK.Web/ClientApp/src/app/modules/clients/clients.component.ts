@@ -147,6 +147,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
 
   ShowInv(){
     if (this.selected.length === 0){
+      this.message.warning('Please select an item from the list?');
       return;
     }
     let clientName = '';

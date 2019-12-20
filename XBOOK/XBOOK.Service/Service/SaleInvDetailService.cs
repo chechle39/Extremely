@@ -56,12 +56,21 @@ namespace XBOOK.Service.Service
                 else 
                 if(saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
                 {
+                    //var product = new ProductViewModel()
+                    //{
+                    //    description = saleDetailData.Description,
+                    //    productID = saleDetailData.ProductId,
+                    //    productName = saleDetailData.ProductName,
+                    //    unitPrice = saleDetailData.Price
+                    //};
                     var product = new ProductViewModel()
                     {
                         description = saleDetailData.Description,
                         productID = saleDetailData.ProductId,
-                        productName = saleDetailData.ProductName,
-                        unitPrice = saleDetailData.Price
+                        productName = saleDetailData.ProductName.Split("(")[0],
+                        unitPrice = saleDetailData.Price,
+                        Unit = saleDetailData.ProductName.Split("(")[1].Split(")")[0],
+                        categoryID = (saleDetailData.ProductName.Split("(")[1].Split(")")[0] != null) ? 1 : 2,
                     };
                     _uow.BeginTransaction();
                     _iProductRepository.SaveProduct(product);

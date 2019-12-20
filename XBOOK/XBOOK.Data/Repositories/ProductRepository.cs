@@ -90,6 +90,19 @@ namespace XBOOK.Data.Repositories
             return listData;
         }
 
+        public Product GetByProductId(int id)
+        {
+            try
+            {
+                var data = Entities.Where(x => x.productID == id).ToList()[0];
+                return data;
+            } catch(Exception ex)
+            {
+
+            }
+            return null;
+        }
+
         public IEnumerable<Product> GetLDFProduct()
         {
             var ListClient = Entities;
@@ -105,6 +118,7 @@ namespace XBOOK.Data.Repositories
 
         public bool SaveProduct(ProductViewModel rs)
         {
+           
             var update = AutoMapper.Mapper.Map<ProductViewModel, Product>(rs);
             var createCl = Entities.Add(update);
             return true;
