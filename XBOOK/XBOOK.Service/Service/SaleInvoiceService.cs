@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using XAccLib.SaleInvoice;
+//using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -180,8 +180,8 @@ namespace XBOOK.Service.Service
             };
             try
             {
-               var saleInvoiceGL = new SaleInvoiceGL(_uow);
-               saleInvoiceGL.InvoiceGL(objData);
+               //var saleInvoiceGL = new SaleInvoiceGL(_uow);
+              // saleInvoiceGL.InvoiceGL(objData);
             }
             catch(Exception ex)
             {
@@ -247,7 +247,37 @@ namespace XBOOK.Service.Service
                 {
                     if (saleInvoiceViewModel.SaleInvDetailView[i].Id > 0)
                     {
-                        _SaleInvoiceDetailRepository.UpdateSaleInvDetail(saleInvoiceViewModel.SaleInvDetailView[i]);
+                        SaleInvDetailViewModel rs = null;
+                        if (saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(").Length > 1)
+                        {
+                            rs = new SaleInvDetailViewModel
+                            {
+                                Amount = saleInvoiceViewModel.SaleInvDetailView[i].Amount,
+                                ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
+                                Description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
+                                Id = saleInvoiceViewModel.SaleInvDetailView[i].Id,
+                                InvoiceId = saleInvoiceViewModel.SaleInvDetailView[i].InvoiceId,
+                                Price = saleInvoiceViewModel.SaleInvDetailView[i].Price,
+                                ProductId = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
+                                Qty = saleInvoiceViewModel.SaleInvDetailView[i].Qty,
+                                Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
+                            };
+                        } else
+                        {
+                            rs = new SaleInvDetailViewModel
+                            {
+                                Amount = saleInvoiceViewModel.SaleInvDetailView[i].Amount,
+                                ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName,
+                                Description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
+                                Id = saleInvoiceViewModel.SaleInvDetailView[i].Id,
+                                InvoiceId = saleInvoiceViewModel.SaleInvDetailView[i].InvoiceId,
+                                Price = saleInvoiceViewModel.SaleInvDetailView[i].Price,
+                                ProductId = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
+                                Qty = saleInvoiceViewModel.SaleInvDetailView[i].Qty,
+                                Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
+                            };
+                        }
+                        _SaleInvoiceDetailRepository.UpdateSaleInvDetail(rs);
                         _uow.SaveChanges();
                     }else
                     {
@@ -421,7 +451,7 @@ namespace XBOOK.Service.Service
                     InvoiceId = item.InvoiceId,
                     Price = item.Price,
                     ProductId = item.ProductId,
-                    ProductName = item.ProductName +" "+ "("+_iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit +")",
+                    ProductName = (_iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit != null)? item.ProductName +" "+ "("+_iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit +")" : item.ProductName,
                     Qty = item.Qty,
                     Vat = item.Vat,
                 };

@@ -36,7 +36,7 @@
             <div class="col-sm-12">
               <div class="border px-3 py-3">
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-3">
                     <div class="text-left" *ngIf="imgURL">
                       <img [src]="imgURL" class="preview-logo" *ngIf="imgURL">
                     </div>
@@ -49,7 +49,7 @@
                     <!-- <p class="text-danger" *ngIf="message">{{message}}</p> -->
                     <input #file1 type="file" class="input-upload" (change)="showPreview(file1.files)">
                   </div> <!-- end upload col-sm-6 -->
-                  <div class="col-sm-6">
+                  <div class="col-sm-9">
                     <div class="row">
                       <div class="col">
                         <p class="mb-0">
@@ -110,8 +110,6 @@
                               </div>
                             </div>
                           </ng-template>
-
-
                         </div>
                         <div class="col-12">
                           <input style="opacity: unset" kendoTextBox id="clientName" formControlName="clientName"
@@ -138,70 +136,67 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-6 col-md-3">
-                    <div>
-                      <p class="p-color mb-0">Date of Issue</p>
-                      <div class="input-group" style="width: 184px;">
-                        <input #datetiime kendoTextBox (click)="d1.toggle()" (focus)="d2.toggle()"
-                          style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
-                          placeholder="dd/mm/yyyy" name="dp" formControlName="issueDate" ngbDatepicker
-                          #d1="ngbDatepicker" ngbDatepicker #d2="ngbDatepicker" style="margin-right:-15px">
-                        <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d2.toggle()"></span>
+                  <div class="col-sm-6 col-md-6">
+                    <div class="row">
+                      <div class="col-sm-6 date">
+                        <div>
+                          <p class="p-color mb-0">Date of Issue</p>
+                          <div class="input-group" style="width: 184px;">
+                            <input #datetiime kendoTextBox (click)="d1.toggle()" (focus)="d2.toggle()"
+                              style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
+                              placeholder="dd/mm/yyyy" name="dp" formControlName="issueDate" ngbDatepicker
+                              #d1="ngbDatepicker" ngbDatepicker #d2="ngbDatepicker" style="margin-right:-15px">
+                            <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d2.toggle()"></span>
+                          </div>
+                        </div>
+                        <div class="mrt-16">
+                          <p class="p-color mb-0">Due Date</p>
+                          <div class="input-group mb-0" style="width: 184px;">
+                            <input kendoTextBox (click)="d1.toggle()" (focus)="d3.toggle()" formControlName="dueDate"
+                              style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
+                              placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker" #d3="ngbDatepicker"
+                              style="margin-right:-15px">
+                            <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d3.toggle()"></span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="mrt-16">
-                      <p class="p-color mb-0">Due Date</p>
-                      <div class="input-group" style="width: 184px;">
-                        <input kendoTextBox (click)="d1.toggle()" (focus)="d3.toggle()" formControlName="dueDate"
-                          style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
-                          placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker" #d3="ngbDatepicker"
-                          style="margin-right:-15px">
-                        <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;" (click)="d3.toggle()"></span>
-                      </div>
-                    </div>
-                    <div style="margin-top: -8px">
-                      <p class="p-color">Amount Due</p>
-                      <div class="input-group amountDue">
-                        {{amountDue | currency:'VND':''}}
-                      </div>
-                      <!-- <div class="row">
+                      <div class="col-sm-6 ml-20 refer">
+                        <div>
+                          <p class="mb-0 p-color">Invoice No#/ Seri</p>
+                          <div class="row" style="margin-left: 0px">
+                            <input style="opacity: unset; font-size: large;height: 27px;" kendoTextBox placeholder="Invoice Number" class="form-control"
+                              type="text" formControlName="invoiceNumber"
+                              [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false}"
+                              class="col-6 width-100 imput-reference-custom" required />
+                            <input style="opacity: unset;height: 27px;" kendoTextBox placeholder="Seri" formControlName="invoiceSerial"
+                              [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false}"
+                              class="width-100 imput-reference-custom" />
+                          </div>
+    
+                        </div>
+                        <div class="mt-0">
+                          <p class="mb-0 p-color">Reference</p>
+                          <input kendoTextBox placeholder="Enter value e.g PO #" formControlName="reference"
+                            style="opacity: unset" class="border-0 full-width imput-reference-custom" />
+                        </div>
                         
-                          
-                    <div class="mt-2">
-                      <div>
-                        {{amountDue | currency:'VND':''}}
+                        <!-- <div class="mt-2">
+                          <div>
+                            {{amountDue | currency:'VND':''}}
+                          </div>
+                        </div> -->
+    
                       </div>
-                    </div>
-                      </div> -->
-                    </div>
-
-                  </div>
-                  <div class="col-sm-6 col-md-3 ml-20">
-                    <div>
-                      <p class="mb-0 p-color">Invoice No#/ Seri</p>
-                      <div class="row" style="margin-left: 0px">
-                        <input style="opacity: unset; font-size: large;height: 27px;" kendoTextBox placeholder="Invoice Number" class="form-control"
-                          type="text" formControlName="invoiceNumber"
-                          [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false}"
-                          class="col-6 width-100 imput-reference-custom" required />
-                        <input style="opacity: unset;height: 27px;" kendoTextBox placeholder="Seri" formControlName="invoiceSerial"
-                          [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false}"
-                          class="width-100 imput-reference-custom" />
+                      <div class="col-sm-12 amountDue">
+                        <div class="row">
+                          <p class="p-color col-sm-6">Amount Due</p>
+                          <div class="input-group col-sm-6 ml-20">
+                            {{amountDue | currency:'VND':''}}
+                          </div>
+                        </div>
                       </div>
-
-                    </div>
-                    <div class="mt-0">
-                      <p class="mb-0 p-color">Reference</p>
-                      <input kendoTextBox placeholder="Enter value e.g PO #" formControlName="reference"
-                        style="opacity: unset" class="border-0 full-width imput-reference-custom" />
                     </div>
                     
-                    <!-- <div class="mt-2">
-                      <div>
-                        {{amountDue | currency:'VND':''}}
-                      </div>
-                    </div> -->
-
                   </div>
                 </div> <!-- end row -->
                 <div class="row">
@@ -311,9 +306,6 @@
 
                               <h6  *ngIf="!viewMode" class="font-size">{{getName(item.name)}}</h6>
                               <h6  (click)="dowloadFile(item.name)" *ngIf="viewMode" class="font-size filedowload"> {{getName(item.name)}}</h6>
-
-                              <p  *ngIf="!viewMode" class="font-size">{{getName(item.name)}}</p>
-                              <p  (click)="dowloadFile(item.name)" *ngIf="viewMode" class="font-size filedowload"> {{getName(item.name)}}</p>
 
                             </div>
                             <span style="cursor: pointer; margin-top: -9px;" (click)="removeFile(item,i)">X</span>

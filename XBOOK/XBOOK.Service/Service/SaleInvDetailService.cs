@@ -34,18 +34,37 @@ namespace XBOOK.Service.Service
             var productUOW = _uow.GetRepository<IRepository<Product>>();
             foreach (var item in saleInvoiceViewModel)
             {
-                var saleDetailData = new SaleInvDetailViewModel
+                SaleInvDetailViewModel saleDetailData = null;
+                if (item.ProductName.Split("(").Length > 1)
                 {
-                    Amount = item.Price * item.Qty,
-                    Qty = item.Qty,
-                    Price = item.Price,
-                    Description = item.Description,
-                    Id = item.Id,
-                    InvoiceId = item.InvoiceId,
-                    ProductId = item.ProductId,
-                    ProductName = item.ProductName,
-                    Vat = item.Vat
-                };
+                    saleDetailData = new SaleInvDetailViewModel
+                    {
+                        Amount = item.Price * item.Qty,
+                        Qty = item.Qty,
+                        Price = item.Price,
+                        Description = item.Description,
+                        Id = item.Id,
+                        InvoiceId = item.InvoiceId,
+                        ProductId = item.ProductId,
+                        ProductName = item.ProductName.Split("(")[0],
+                        Vat = item.Vat
+                    };
+                }else
+                {
+                    saleDetailData = new SaleInvDetailViewModel
+                    {
+                        Amount = item.Price * item.Qty,
+                        Qty = item.Qty,
+                        Price = item.Price,
+                        Description = item.Description,
+                        Id = item.Id,
+                        InvoiceId = item.InvoiceId,
+                        ProductId = item.ProductId,
+                        ProductName = item.ProductName,
+                        Vat = item.Vat
+                    };
+                }
+             
                 if(saleDetailData.ProductId > 0)
                 {
                     _uow.BeginTransaction();
@@ -56,28 +75,7 @@ namespace XBOOK.Service.Service
                 else 
                 if(saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
                 {
-                    //var product = new ProductViewModel()
-                    //{
-                    //    description = saleDetailData.Description,
-                    //    productID = saleDetailData.ProductId,
-                    //    productName = saleDetailData.ProductName,
-                    //    unitPrice = saleDetailData.Price
-                    //};
-                    var product = new ProductViewModel()
-                    {
-                        description = saleDetailData.Description,
-                        productID = saleDetailData.ProductId,
-                        productName = saleDetailData.ProductName.Split("(")[0],
-                        unitPrice = saleDetailData.Price,
-                        Unit = saleDetailData.ProductName.Split("(")[1].Split(")")[0],
-                        categoryID = (saleDetailData.ProductName.Split("(")[1].Split(")")[0] != null) ? 1 : 2,
-                    };
-                    _uow.BeginTransaction();
-                    _iProductRepository.SaveProduct(product);
-                    _uow.SaveChanges();
-                    _uow.CommitTransaction();
-                    var serchData = _iProductRepository.GetLDFProduct();
-                    var saleDetailPrd = new SaleInvDetailViewModel
+                    saleDetailData = new SaleInvDetailViewModel
                     {
                         Amount = item.Price * item.Qty,
                         Qty = item.Qty,
@@ -85,10 +83,71 @@ namespace XBOOK.Service.Service
                         Description = item.Description,
                         Id = item.Id,
                         InvoiceId = item.InvoiceId,
-                        ProductId = serchData.LastOrDefault().productID,
+                        ProductId = item.ProductId,
                         ProductName = item.ProductName,
                         Vat = item.Vat
                     };
+                    ProductViewModel product = null;
+                    if (saleDetailData.ProductName.Split("(").Length > 1)
+                    {
+                        product = new ProductViewModel()
+                        {
+                            description = saleDetailData.Description,
+                            productID = saleDetailData.ProductId,
+                            productName = saleDetailData.ProductName.Split("(")[0],
+                            unitPrice = saleDetailData.Price,
+                            Unit = saleDetailData.ProductName.Split("(")[1].Split(")")[0],
+                            categoryID = (saleDetailData.ProductName.Split("(")[1].Split(")")[0] != null) ? 1 : 2,
+                        };
+                    }else
+                    {
+                        product = new ProductViewModel()
+                        {
+                            description = saleDetailData.Description,
+                            productID = saleDetailData.ProductId,
+                            productName = saleDetailData.ProductName,
+                            unitPrice = saleDetailData.Price,
+                            Unit = null,
+                            categoryID =  2,
+                        };
+                    }
+                  
+                    _uow.BeginTransaction();
+                    _iProductRepository.SaveProduct(product);
+                    _uow.SaveChanges();
+                    _uow.CommitTransaction();
+                    var serchData = _iProductRepository.GetLDFProduct();
+                    SaleInvDetailViewModel saleDetailPrd = null;
+                    if (item.ProductName.Split("(").Length > 1)
+                    {
+                        saleDetailPrd = new SaleInvDetailViewModel
+                        {
+                            Amount = item.Price * item.Qty,
+                            Qty = item.Qty,
+                            Price = item.Price,
+                            Description = item.Description,
+                            Id = item.Id,
+                            InvoiceId = item.InvoiceId,
+                            ProductId = serchData.LastOrDefault().productID,
+                            ProductName = item.ProductName.Split("(")[0],
+                            Vat = item.Vat
+                        };
+                    }
+                    else
+                    {
+                        saleDetailPrd = new SaleInvDetailViewModel
+                        {
+                            Amount = item.Price * item.Qty,
+                            Qty = item.Qty,
+                            Price = item.Price,
+                            Description = item.Description,
+                            Id = item.Id,
+                            InvoiceId = item.InvoiceId,
+                            ProductId = serchData.LastOrDefault().productID,
+                            ProductName = item.ProductName,
+                            Vat = item.Vat
+                        };
+                    }
 
                     try
                     {

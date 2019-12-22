@@ -29,6 +29,9 @@
 }
 .ml-20 {
     margin-left: -20px;
+    @media screen and (max-width: 575px) {
+        margin-left: 0;
+    }
  }
 .mrl-1 {
     margin-left: -1px;
@@ -86,9 +89,20 @@
     bottom: 3px
 }
 .amountDue {
-    width: 184px;
-    margin-top: -36px;
-    margin-left: 196px;
+    @media screen and (max-width: 575px) {
+        order: 2;
+    }
+}
+
+.date {
+    @media screen and (max-width: 575px) {
+        order: 1;
+    }
+}
+.refer {
+    @media screen and (max-width: 575px) {
+        order: 3;
+    }
 }
 
 // @media (min-width: 992px) {
@@ -122,23 +136,7 @@
 //     }
       
 // }
-@media screen and (max-width: 1579px) {
-    .amountDue {
-        margin-top: -7px;
-        margin-left: 0px;
-     }
-  }
 
-.amountPaid {
-    margin-left: 18px
-}
-
-@media screen and (max-width: 1500px) {
-    .amountPaid {
-        
-        margin-left: 1px;
-     }
-  }
   
 // @media (max-width: 991px) {
 //     .amountDue {
