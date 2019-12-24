@@ -28,10 +28,9 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
   }
 
   refresh(): void {
-    setTimeout(() => {    //<<<---    using ()=> syntax
+    setTimeout(() => {    // <<<---    using ()=> syntax
       this.getDataPage(this.pageNumber);
     }, 1000);
-   
   }
 
   public showPaging(result: PagedResultDto, pageNumber: number): void {

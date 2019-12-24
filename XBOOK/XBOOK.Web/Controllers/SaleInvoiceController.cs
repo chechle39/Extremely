@@ -62,9 +62,9 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public  IActionResult DeleteSaleInv (List<requestDeleted> deleted)
+        public async  Task<IActionResult> DeleteSaleInv (List<requestDeleted> deleted)
         {
-             _saleInvoiceService.DeletedSaleInv(deleted);
+             await _saleInvoiceService.DeletedSaleInv(deleted);
             return Ok();
         }
 

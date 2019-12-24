@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { AppComponentBase } from '@core/app-base.component';
-import { ColumnMode, SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
+import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '@core/app.consts';
 import { PaymentView } from '@modules/_shared/models/invoice/payment-view.model';
@@ -13,15 +13,18 @@ import { CheckboxControlValueAccessor } from '@angular/forms';
   templateUrl: './list-payment.component.html'
 })
 export class ListPaymentComponent extends AppComponentBase implements OnInit {
-
+  // tslint:disable-next-line:no-output-rename
+  @Output('addNewPayment') addPaymentOutput = new EventEmitter();
+  // tslint:disable-next-line:no-output-rename
+  @Output('deletePayment') deletePaymentOutput = new EventEmitter<any>();
+  // tslint:disable-next-line:no-output-rename
+  @Output('editPayment') editPaymentOutput = new EventEmitter<any>();
   @Input() invoiceNumber: string;
   @Input() invoiceId: number;
   @Input() outstandingAmount: number;
   @Input() data: any;
   @Input() paymentViews: PaymentView[] = [];
-  @Output('addNewPayment') addPaymentOutput = new EventEmitter();
-  @Output('deletePayment') deletePaymentOutput = new EventEmitter<any>();
-  @Output('editPayment') editPaymentOutput = new EventEmitter<any>();
+
   loadingIndicator = false;
   keyword = '';
   reorderable = true;

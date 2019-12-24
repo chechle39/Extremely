@@ -6,7 +6,7 @@ import { API_URI } from 'environments/app.config';
 @Injectable()
 export class AccountChartService extends BaseService {
     searchAcc() {
-        const gen = this.post<any[]>(`${API_URI.getAccountChart}`,null)
+        const gen = this.post<any[]>(`${API_URI.getAccountChart}`, null)
           .pipe(
           //  debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
             map(
@@ -16,7 +16,6 @@ export class AccountChartService extends BaseService {
                 );
               }
             ));
-    
         return gen;
       }
 }

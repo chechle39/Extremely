@@ -20,9 +20,6 @@ class PagedClientsRequestDto extends PagedRequestDto {
 })
 export class GenledComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;
-  protected delete(id: number): void {
-    throw new Error("Method not implemented.");
-  }
   case: any;
   genViews: any;
   startDay: any;
@@ -35,6 +32,10 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
   clientKeyword = '';
+  protected delete(id: number): void {
+    throw new Error('Method not implemented.');
+  }
+
   constructor(
     injector: Injector,
     private genLedService: GenLedService,
@@ -42,6 +43,7 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
     private router: Router) {
     super(injector);
   }
+
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
@@ -54,7 +56,8 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
       isAccountReciprocal: false,
       money: null,
       accNumber: null
-    }
+    };
+
     this.genLedService
       .searchGen(genledSearch)
       .pipe(
@@ -92,8 +95,8 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
           console.log( this.case);
           this.startDay = result.startDate;
           this.endDay = result.endDate;
-          this.keyspace = ' - '
-        })
+          this.keyspace = ' - ';
+        });
 
       }
     });
@@ -111,8 +114,8 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
       isAccountReciprocal: false,
       money: null,
       accNumber: null
-    }
-    this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV)
+    };
+    this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV);
 
   }
 }

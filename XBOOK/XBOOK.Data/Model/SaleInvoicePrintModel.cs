@@ -23,6 +23,8 @@
         public long Qty { get; set; }
         public string Reference { get; set; }
         public string TaxCode { get; set; }
+        public string subTotalAmount { get; set; }
+        public string totalAmount { get; set; }
         public string TermCondition { get; set; }
         public string TotalDiscount { get; set; }
         public long Vat { get; set; }
@@ -32,5 +34,6 @@
         public string YourCompanyName { get; set; }
         public string YourTaxCode { get; set; }
         public string yourCompanyCode { get; set; }
+        public string Unit { get; set; }
     }
 }

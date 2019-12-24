@@ -27,35 +27,40 @@ export abstract class BaseService {
   }
 
   postcsv<T>(url: string, data: T): Observable<T> {
+    // tslint:disable-next-line:ban-types
     const requestOptions: Object = {
       /* other options here */
       responseType: 'text'
-    }
-    return this.http.post<T>(this.processUrl(url), data,requestOptions);
+    };
+    return this.http.post<T>(this.processUrl(url), data, requestOptions);
   }
 
   getFilex<T>(url: string, data: T): Observable<T> {
+    // tslint:disable-next-line:ban-types
     const requestOptions: Object = {
       /* other options here */
       responseType: 'img/png'
-    }
-    return this.http.post<T>(this.processUrl(url), data,requestOptions);
+    };
+    return this.http.post<T>(this.processUrl(url), data, requestOptions);
   }
   postUploadFile<T>(url: string, files: T): Observable<T> {
-    let fileToUpload = <File>files[0];
+    // tslint:disable-next-line:no-angle-bracket-type-assertion
+    const fileToUpload = <File> files[0];
     const formData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
-    return  this.http.post<T>(this.processUrl(url), formData, {reportProgress: true});
+    return this.http.post<T>(this.processUrl(url), formData, { reportProgress: true });
   }
 
   postUploadMuntiple<T>(url: string, files: any): Observable<T> {
     const formData = new FormData();
-    for (let i = 0;i< files.fileUpload.length;i++){
-      let fileToUpload = <File>files.fileUpload[i];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < files.fileUpload.length; i++) {
+      // tslint:disable-next-line:no-angle-bracket-type-assertion
+      const fileToUpload = <File> files.fileUpload[i];
       formData.append('file', fileToUpload, fileToUpload.name);
     }
     formData.append('data1', files.data.invoiceNumber + '_' + files.data.invoiceSerial);
-    return  this.http.post<T>(this.processUrl(url), formData, {reportProgress: true});
+    return this.http.post<T>(this.processUrl(url), formData, { reportProgress: true });
   }
 
   put<T>(url: string, data: T): Observable<T> {
@@ -65,12 +70,13 @@ export abstract class BaseService {
   delete(url: string) {
     return this.http.delete(this.processUrl(url));
   }
-  
+
   getFileBlob<T>(url: string, data: T): Observable<T> {
+    // tslint:disable-next-line:ban-types
     const requestOptions: Object = {
       /* other options here */
       responseType: 'blob'
-    }
-    return this.http.post<T>(this.processUrl(url), data,requestOptions);
+    };
+    return this.http.post<T>(this.processUrl(url), data, requestOptions);
   }
 }

@@ -13,6 +13,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
+import { SplitPipe } from './pipe/split.pipe';
 @NgModule({
   declarations: [
     SidebarDirective,
@@ -22,6 +23,7 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
     SidebarToggleDirective,
     AutoFocusDirective,
     ThousandSuffixesPipe,
+    SplitPipe,
     FilterPipe],
   imports: [
     CommonModule,
@@ -41,6 +43,7 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
     SidebarLinkDirective,
     SidebarListDirective,
     SidebarAnchorToggleDirective,
+    SplitPipe,
     SidebarToggleDirective],
   providers: [
     { provide: NgbDateParserFormatter, useClass: MomentDateFormatter }

@@ -170,7 +170,7 @@
                               class="col-6 width-100 imput-reference-custom" required />
                             <input style="opacity: unset;height: 27px;" kendoTextBox placeholder="Seri" formControlName="invoiceSerial"
                               [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false}"
-                              class="width-100 imput-reference-custom" />
+                              class="width-50 imput-reference-custom" />
                           </div>
     
                         </div>
@@ -253,7 +253,7 @@
                               class="border-0 full-width text-right imput-reference-custom" tabindex="{{i* 4 +3}}" />
 
                             <input kendoTextBox style="font-size: 12px;color: blue"
-                              class="text-center border-0 full-width t-color-blue input-amount mput-reference-custom"
+                              class="text-right border-0 full-width t-color-blue input-amount mput-reference-custom"
                               [min]="1" [max]="100" formControlName="vat" [readOnly]="true" #tax placeholder="" />
                           </div>
                           <div class="col-md-2 text-right d-inline-grid pr-0">
@@ -290,12 +290,12 @@
                     <div class="form-group">
                       <div class="row mrl-1">
                         <div>
-                          <a style="color:blue;font-size: 12px; font-style: italic">Attach files
+                          <a style="font-size: 12px; font-style: italic">Attach files
                             <input style="cursor: pointer;" #file type="file" class="input-upload ipfile"
                               (change)="showPreviewUploadFile(file.files)"></a>
                           <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png">
                         </div>
-                        <a *ngIf="viewMode" style="color:blue;font-size: 12px; font-style: italic">Upload files</a>
+                        <a (click)="uploadFileMultiple(null)" *ngIf="viewMode" style="font-size: 12px; font-style: italic">Upload files</a>
                         <i (click)="uploadFileMultiple(null)" *ngIf="viewMode" style="cursor: pointer;" class="gg-software-upload mlt-13"></i>
                       </div>
                      

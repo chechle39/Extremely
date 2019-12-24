@@ -9,6 +9,8 @@ import { finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { SearchgenledComponent } from './searchgenledgroup/searchgenled.component';
 import { GenLedGroupService } from '@modules/_shared/services/genledgroup.service';
+import { AccountChartService } from '@modules/_shared/services/accountchart.service';
+import { SelectItem } from 'primeng/components/common/selectitem';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
@@ -26,8 +28,10 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
   firstDate: any;
   endDate1: string;
   sum:any;
+  tempaccount:any;
+  items: SelectItem[];
   sumtemp:any;
-  case: any;
+  case: any;  
   genViews: any;
   genViewsTemp: any;
   startDay: any;
@@ -42,6 +46,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
   clientKeyword = '';
   constructor(
     injector: Injector,
+    public accountChartService: AccountChartService,
     private genLedService: GenLedGroupService,
     private modalService: NgbModal,
     private router: Router) {
@@ -65,7 +70,9 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
       money: null,
       accNumber: null
     }  
-   
+    this.accountChartService.searchAcc().subscribe(rp => {       
+      this.tempaccount=rp;          
+    })
     this.genLedService
       .searchGen(genledSearch)
       .pipe(
@@ -82,8 +89,19 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
       this.genViewsTemp = data;        
       });   
   }
+//  acountname(): void{
+//   this.accountChartService.searchAcc().subscribe(rp => {       
+//     this.tempaccount=rp;
+//     this.items = [];
+//     for (let i = 0; i < this.tempaccount.length; i++) {
+//         this.items.push({label:this.tempaccount[i].accountName, value: this.tempaccount[i].accountNumber});
+//     }
+//     this.tempaccount = this.tempaccount ;
+   
+//   })
+//  }
+
  
-  
   SearchGenLed(): void {
 
     const dialog = this.modalService.open(SearchgenledComponent, AppConsts.modalOptionsCustomSize);
@@ -100,8 +118,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
         this.exportCSV = result;
         this.genLedService.searchGen(genledSearch).subscribe(rp => {
           this.genViews = rp;
-           this.case = result.case;
-          console.log(this.case);
+           this.case = result.case;         
           this.startDay = result.startDate;
           this.endDay = result.endDate;
           this.keyspace = ' - '

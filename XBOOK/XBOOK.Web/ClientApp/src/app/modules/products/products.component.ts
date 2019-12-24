@@ -21,7 +21,7 @@ class PagedProductsRequestDto extends PagedRequestDto {
 })
 export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   productViews: any;
-  categories : any;
+  categories: any;
   loadingIndicator = true;
   keywords = '';
   reorderable = true;
@@ -53,27 +53,27 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     this.getAllProduct();
     this.getAllCategory();
   }
-  getAllProduct(){
-    const request  = {
+  getAllProduct() {
+    const request = {
       productKeyword: this.keywords.toLocaleLowerCase(),
       isGrid: true
     };
     this.productService
-    .searchProduct(request)
-    .pipe(
-    )
-    .subscribe(i => {
-      this.loadingIndicator = false;
-      this.productViews = i;
-    });
+      .searchProduct(request)
+      .pipe(
+      )
+      .subscribe(i => {
+        this.loadingIndicator = false;
+        this.productViews = i;
+      });
   }
 
-  getAllCategory(){
+  getAllCategory() {
     this.productService
-    .getAllCategory()
-    .subscribe(result => {
-      this.categories = result
-    });
+      .getAllCategory()
+      .subscribe(result => {
+        this.categories = result;
+      });
   }
   edit(): void {
     if (this.selected.length === 0) {
@@ -92,17 +92,16 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
       this.message.warning('Please select an item from the list?');
       return;
     }
-    const requestDl = []
+    const requestDl = [];
     this.message.confirm('Do you want to delete products ?', 'Are you sure ?', () => {
       this.selected.forEach(element => {
         const id = element.productID;
-        requestDl.push({id});
+        requestDl.push({ id });
       });
       this.productService.deleteProduct(requestDl).subscribe((rs: any) => {
-        if (rs === false){
+        if (rs === false) {
           this.message.error('This product can not delete');
-        }
-        else{
+        } else {
           this.notify.success('Successfully Deleted');
           this.getAllProduct();
         }

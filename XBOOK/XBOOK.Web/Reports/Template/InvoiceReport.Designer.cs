@@ -20,6 +20,7 @@ namespace XBOOK.Web.Reports {
             this.Detail = reportInitializer.GetControl<DevExpress.XtraReports.UI.DetailBand>("Detail");
             this.GroupFooter1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.GroupFooterBand>("GroupFooter1");
             this.BottomMargin = reportInitializer.GetControl<DevExpress.XtraReports.UI.BottomMarginBand>("BottomMargin");
+            this.table1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table1");
             this.pictureBox1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPictureBox>("pictureBox1");
             this.label2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label2");
             this.line2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLine>("line2");
@@ -27,9 +28,10 @@ namespace XBOOK.Web.Reports {
             this.table13 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table13");
             this.vendorTable = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("vendorTable");
             this.customerTable = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("customerTable");
-            this.table1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table1");
             this.table3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table3");
             this.headerTable = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("headerTable");
+            this.tableRow1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow1");
+            this.textName = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("textName");
             this.tableRow22 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow22");
             this.tableRow24 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow24");
             this.tableRow23 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow23");
@@ -42,15 +44,13 @@ namespace XBOOK.Web.Reports {
             this.vendorNameRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("vendorNameRow");
             this.vendorAddressRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("vendorAddressRow");
             this.vendorCityRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("vendorCityRow");
-            this.vendorCountryRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("vendorCountryRow");
             this.vendorName = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("vendorName");
+            this.tableCell23 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell23");
             this.vendorAddress = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("vendorAddress");
+            this.tableCell28 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell28");
             this.vendorCity = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("vendorCity");
-            this.vendorCountry = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("vendorCountry");
             this.customerNameRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("customerNameRow");
             this.customerName = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("customerName");
-            this.tableRow1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow1");
-            this.textName = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("textName");
             this.tableRow4 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow4");
             this.tableRow3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow3");
             this.tableRow5 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow5");
@@ -132,7 +132,11 @@ namespace XBOOK.Web.Reports {
             this.pageInfo1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPageInfo>("pageInfo1");
 
             // Data Sources
-            this.objectDataSource2 = reportInitializer.GetDataSource<DevExpress.DataAccess.ObjectBinding.ObjectDataSource>("objectDataSource2");
+            this.jsonDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.Json.JsonDataSource>("jsonDataSource1");
+            this.objectDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.ObjectBinding.ObjectDataSource>("objectDataSource1");
+
+            // Calculated Fields
+            this.calculatedField1 = reportInitializer.GetCalculatedField("calculatedField1");
 
             // Styles
             this.baseControlStyle = reportInitializer.GetStyle("baseControlStyle");
@@ -142,6 +146,7 @@ namespace XBOOK.Web.Reports {
         private DevExpress.XtraReports.UI.DetailBand Detail;
         private DevExpress.XtraReports.UI.GroupFooterBand GroupFooter1;
         private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
+        private DevExpress.XtraReports.UI.XRTable table1;
         private DevExpress.XtraReports.UI.XRPictureBox pictureBox1;
         private DevExpress.XtraReports.UI.XRLabel label2;
         private DevExpress.XtraReports.UI.XRLine line2;
@@ -149,9 +154,10 @@ namespace XBOOK.Web.Reports {
         private DevExpress.XtraReports.UI.XRTable table13;
         private DevExpress.XtraReports.UI.XRTable vendorTable;
         private DevExpress.XtraReports.UI.XRTable customerTable;
-        private DevExpress.XtraReports.UI.XRTable table1;
         private DevExpress.XtraReports.UI.XRTable table3;
         private DevExpress.XtraReports.UI.XRTable headerTable;
+        private DevExpress.XtraReports.UI.XRTableRow tableRow1;
+        private DevExpress.XtraReports.UI.XRTableCell textName;
         private DevExpress.XtraReports.UI.XRTableRow tableRow22;
         private DevExpress.XtraReports.UI.XRTableRow tableRow24;
         private DevExpress.XtraReports.UI.XRTableRow tableRow23;
@@ -164,15 +170,13 @@ namespace XBOOK.Web.Reports {
         private DevExpress.XtraReports.UI.XRTableRow vendorNameRow;
         private DevExpress.XtraReports.UI.XRTableRow vendorAddressRow;
         private DevExpress.XtraReports.UI.XRTableRow vendorCityRow;
-        private DevExpress.XtraReports.UI.XRTableRow vendorCountryRow;
         private DevExpress.XtraReports.UI.XRTableCell vendorName;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell23;
         private DevExpress.XtraReports.UI.XRTableCell vendorAddress;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell28;
         private DevExpress.XtraReports.UI.XRTableCell vendorCity;
-        private DevExpress.XtraReports.UI.XRTableCell vendorCountry;
         private DevExpress.XtraReports.UI.XRTableRow customerNameRow;
         private DevExpress.XtraReports.UI.XRTableCell customerName;
-        private DevExpress.XtraReports.UI.XRTableRow tableRow1;
-        private DevExpress.XtraReports.UI.XRTableCell textName;
         private DevExpress.XtraReports.UI.XRTableRow tableRow4;
         private DevExpress.XtraReports.UI.XRTableRow tableRow3;
         private DevExpress.XtraReports.UI.XRTableRow tableRow5;
@@ -252,7 +256,9 @@ namespace XBOOK.Web.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell24;
         private DevExpress.XtraReports.UI.XRPageInfo pageInfo2;
         private DevExpress.XtraReports.UI.XRPageInfo pageInfo1;
-        private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource2;
+        private DevExpress.DataAccess.Json.JsonDataSource jsonDataSource1;
         private DevExpress.XtraReports.UI.XRControlStyle baseControlStyle;
+        private DevExpress.XtraReports.UI.CalculatedField calculatedField1;
+        private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
     }
 }

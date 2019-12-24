@@ -11,7 +11,7 @@ namespace XBOOK.Service.Interfaces
         void Update(SaleInvoiceViewModel saleInvoiceViewModel);
         bool CreateSaleInvoice(SaleInvoiceModelRequest saleInvoiceViewModel);
         Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id);
-        bool DeletedSaleInv(List<requestDeleted> request);
+        Task<bool> DeletedSaleInv(List<requestDeleted> request);
         SaleInvoiceViewModel GetALlDF();
 
         SaleInvoiceViewModel GetLastInvoice();

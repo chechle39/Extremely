@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Injector } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, NgForm, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TaxService } from '@modules/_shared/services/tax.service';
 import { finalize } from 'rxjs/operators';
@@ -17,12 +17,12 @@ export class AddTaxComponent extends AppComponentBase implements OnInit {
   taxData: any;
   constructor(
     injector: Injector,
-    private fb: FormBuilder, 
-    public activeModal: NgbActiveModal, 
+    private fb: FormBuilder,
+    public activeModal: NgbActiveModal,
     private taxService: TaxService,
-    ) { 
-      super(injector);
-    }
+  ) {
+    super(injector);
+  }
   @Input() taxsList: any[];
   @Input() taxsObj: any;
   taxListData: any;
@@ -78,10 +78,10 @@ export class AddTaxComponent extends AppComponentBase implements OnInit {
         }
       });
       this.addList = addListData;
-      if (this.addList.length > 0)
+      if (this.addList.length > 0) {
         this.taxService.addTax(this.addList).subscribe(rs => {
-
         });
+      }
     }
     this.close(this.taxForm.value);
   }
@@ -96,6 +96,7 @@ export class AddTaxComponent extends AppComponentBase implements OnInit {
   getDataList(taxData: any) {
     const data = [];
     const list = taxData;
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < list.length; i++) {
       if (list[i].taxRate === this.taxsObj) {
         const checked = {
@@ -104,7 +105,7 @@ export class AddTaxComponent extends AppComponentBase implements OnInit {
           taxRate: list[i].taxRate,
           isChecked: true,
           isAdd: true,
-        }
+        };
         data.push(checked);
       } else {
         const checked = {
@@ -113,28 +114,28 @@ export class AddTaxComponent extends AppComponentBase implements OnInit {
           taxRate: list[i].taxRate,
           isChecked: false,
           isAdd: false,
-        }
+        };
         data.push(checked);
       }
     }
     return this.taxListData = data;
   }
-  deleteTax(){
-    console.log(this.taxForm)
+  deleteTax() {
+    console.log(this.taxForm);
     const request = [];
     this.taxForm.value.taxs.forEach(element => {
-        if(element.isChecked === true){
-          const rq = {id: element.id};
-          request.push(rq);
-        }
+      if (element.isChecked === true) {
+        const rq = { id: element.id };
+        request.push(rq);
+      }
     });
     if (request.length === 0) {
       this.message.warning('Please select a item from the list?');
       return;
     }
-    this.taxService.deleteTax(request).subscribe(rp=>{
+    this.taxService.deleteTax(request).subscribe(rp => {
       this.getTax();
       this.notify.success('Successfully Deleted');
-    })
+    });
   }
 }

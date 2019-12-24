@@ -34,7 +34,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   searchKeywordClass: string;
   private defaultSortOrder = 'ASC';
   private defaultSortBy = 'INVOICE_NUMBER';
-  isCheckBackTo: boolean = false;
+  isCheckBackTo = false;
   searchString = '';
   grantTotal: number;
   keyword = '';
@@ -51,8 +51,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   toggle = [];
   ischeck: boolean;
   listInvoice: any;
-  isSue: boolean = false;
-  isDue: boolean = false;
+  isSue: false;
+  isDue: false;
   startDate: string;
   endDate: string;
   constructor(
@@ -67,7 +67,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   }
 
   createForm() {
-    var date = new Date();
+    const date = new Date();
     const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const firstDateMonth = firstDate.split('/');
@@ -79,8 +79,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       endDate: endDateMonthCurent,
       issueDate: ['IssueDate'],
       // dueDate: this.isDue,
-    })
-
+    });
   }
 
   protected list(
@@ -107,20 +106,20 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.data.getMessage().subscribe(rp => {
 
       if (rp !== undefined) {
-        this.client = rp.text
+        this.client = rp.text;
         if (this.dateFilters !== '') {
           const rs = {
             keyword: this.keyword.toLocaleLowerCase() + this.client,
             startDate: this.startDate,
             endDate: this.endDate,
             isIssueDate: this.ischeck
-          }
+          };
           this.invoiceService.getAll(rs).pipe(
           ).subscribe((i: any) => {
             this.loadingIndicator = false;
             this.invoiceViews = i;
             this.listInvoice = this.invoiceViews;
-          })
+          });
         } else {
           const requestList = {
             keyword: this.keyword.toLocaleLowerCase() + this.client,
@@ -133,7 +132,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
             this.loadingIndicator = false;
             this.invoiceViews = i;
             this.listInvoice = this.invoiceViews;
-          })
+          });
         }
       } else {
         this.getInvoice(request);
@@ -149,20 +148,20 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         startDate: this.startDate,
         endDate: this.endDate,
         isIssueDate: this.ischeck
-      }
+      };
       this.invoiceService.getAll(rs).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
         this.invoiceViews = i;
         this.listInvoice = this.invoiceViews;
-      })
+      });
     } else {
       this.invoiceService.getAll(request).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
         this.invoiceViews = i;
         this.listInvoice = this.invoiceViews;
-      })
+      });
     }
   }
 
@@ -176,10 +175,10 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       this.message.warning('Please select an item from the list?');
       return;
     }
-    const requestDl = []
+    const requestDl = [];
     this.selected.forEach(element => {
       // this.deleteInvoice(element.invoiceId);
-      const id = element.invoiceId
+      const id = element.invoiceId;
       requestDl.push({ id });
     });
     this.invoiceService.deleteInvoice(requestDl).subscribe(() => {
@@ -233,8 +232,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       const request = {
         invoice: invoiceNumber,
         seri: invoiceSerial
-      }
-      this.getInFoFile(request)
+      };
+      this.getInFoFile(request);
       this.isCheckBackTo = false;
     });
 
@@ -250,13 +249,14 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
 
   getInFoFile(request) {
     this.invoiceService.getInfofile(request).subscribe(rp => {
+      // tslint:disable-next-line:prefer-for-of
       for (let index = 0; index < rp.length; index++) {
         const rs = {
           fileName: rp[index].fileName
-        }
-        this.invoiceService.removeFile(rs).subscribe(rp => { });
+        };
+        this.invoiceService.removeFile(rs).subscribe(() => { });
       }
-    })
+    });
   }
 
   addPayment() {
@@ -309,7 +309,6 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   //  }
   applySearchFilter(formFilter: FormGroup) {
     this.isSubmitted = true;
-    //const isValidDate = this.validateDates(form.value, this.model.EndDate);
     if (!formFilter.valid) {
       return false;
     } else {
@@ -330,7 +329,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         searchStr[SearchType.DueDate] = false;
         this.ischeck = false;
       }
-      this.searchString = this.keyword; //JSON.stringify(searchStr);
+      this.searchString = this.keyword;
       const requestList = {
         keyword: searchStr.seachString,
         startDate: searchStr.from,
@@ -346,7 +345,6 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.dateFilters = this.keyword = '';
     //  formFilter.resetForm();
     this.dateFilters = '';
-    //this.Adsearch();
   }
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type

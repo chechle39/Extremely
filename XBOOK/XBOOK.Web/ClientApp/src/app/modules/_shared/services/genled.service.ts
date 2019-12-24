@@ -24,20 +24,15 @@ export class GenLedService extends BaseService {
   }
   exportCSV(request: any) {
     const data = this.postcsv<any[]>(`${API_URI.exportCSV}`, request).subscribe(rs => {
-      this.downLoadFile(rs, "text/csv")
-    })
+      this.downLoadFile(rs, 'text/csv');
+    });
     return data;
   }
 
   downLoadFile(data: any, type: string) {
-    let blob = new Blob([data], { type: type });
-    let url = window.URL.createObjectURL(blob);
-    saveAs(blob, "GeneralLedger.csv");
-    // let pwa = window.open(url);
-    // if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-    //     alert( 'Please disable your Pop-up blocker and try again.');
-    // }
+    // tslint:disable-next-line:object-literal-shorthand
+    const blob = new Blob([data], { type: type });
+    const url = window.URL.createObjectURL(blob);
+    saveAs(blob, 'GeneralLedger.csv');
   }
-
-
 }

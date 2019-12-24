@@ -9,12 +9,12 @@ export class DataService {
   constructor() { }
 
   changeMessage(message: string) {
-    this.messageSource.next(message)
+    this.messageSource.next(message);
   }
   sendMessage(message: string) {
     this.xxx = message;
     this.messageSource.next({ text: message });
-    this.messageSource.asObservable()
+    this.messageSource.asObservable();
   }
   getMessage(): Observable<any> {
     return this.messageSource.asObservable();

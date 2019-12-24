@@ -1,5 +1,5 @@
 import { API_URI } from 'environments/app.config';
-import { debounceTime, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BaseService } from '@shared/service/base.service';
 import { ClientSearchModel } from '../models/client/client-search.model';
@@ -23,7 +23,6 @@ export class ClientService extends BaseService {
     return this.post(`${API_URI.deleteClient}`, id);
   }
 
-  
   getClientData(request): Observable<ClientViewModel> {
     return this.post<ClientViewModel>(
       `${API_URI.getClientDap}`, request

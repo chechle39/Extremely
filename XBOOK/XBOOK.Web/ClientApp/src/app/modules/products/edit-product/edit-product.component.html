@@ -42,7 +42,7 @@
       </div>
       <div class="col-5">
         <label for="unit">{{'PRODUCT.FORM.CREATE.UNIT' | translate }}</label>
-        <input [(ngModel)]="product.unit" #unit="ngModel" required class="form-control"
+        <input [(ngModel)]="product.unit" #unit="ngModel"  class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" name="unit"
             class="form-control" type="text"
           maxlength="16" placeholder="{{'PRODUCT.FORM.CREATE.UNIT.PLACEHOLDER' | translate }}" id="unit">

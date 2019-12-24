@@ -1,0 +1,103 @@
+<form class="form" name="form" autocomplete="off" #f="ngForm" (ngSubmit)="f.form.valid && save()">
+  <div class="modal-header">
+    <h4 class="modal-title">Money Receipt</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row  mb-2">
+      <div class="col-7">
+        <input class="form-control" maxlength="16" placeholder="amount" id="amount">
+      </div>
+      <div class="col-5">
+        <input class="form-control" name="receiptNo" type="text" maxlength="16" placeholder="Receipt No#"
+          id="receiptNo">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class=" col-12 mb-2 ngb-typeahead-client">
+        <input #xxx style="opacity: unset" type="text" (focus)="focusClient$.next($event.target.value)"
+          autocomplete="none" [ngbTypeahead]="searchClient"  [value]="clientName" name = "clientName"
+          [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter" id="clientName"
+           (selectItem)="selectedItem($event)"
+          class="form-control" placeholder="Client  Name" nfNoSpaces
+          maxlength="250" #instance="ngbTypeahead" />
+
+          <ng-template #customItemTemplate let-r="result" let-t="term">
+            <div class="row mt-2 client-item">
+              <div class="col-sm-2 ">
+                <ngx-avatar name="{{r.clientName | Split:2}}"></ngx-avatar>
+              </div>
+              <div class="col-sm-10 col-md-10 pb-2 font-small-3">
+                <ngb-highlight [result]="r.clientName" [term]="t"></ngb-highlight>
+                <p class="mb-0">{{r.address}}</p>
+              </div>
+            </div>
+          </ng-template>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <input kendoTextBox style="opacity: unset" required class="form-control" [value]="clientSelected.contactName" type="text" name="contactName" placeholder="receiver name"
+          id="contactName">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <select id="paymentMethods" class="form-control">
+          <option [ngValue]="null">payment method</option>
+          <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
+            {{ method.payType }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-7">
+        <select id="paymentMethods" class="form-control">
+          <option [ngValue]="null">payment method</option>
+          <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
+            {{ method.payType }}
+          </option>
+        </select>
+      </div>
+      <div class="col-5">
+        <div class="input-group">
+          <input class="form-control datapicker" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker (focus)="d3.toggle()"
+            #d3="ngbDatepicker" id="payDate">
+          <div class="input-group-append">
+            <div class="input-group-text" (click)="d3.toggle()">
+              <i class="fa fa-calendar" style="cursor: pointer;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <input class="form-control" type="text" name="bankAccount" placeholder="Bank Account (Optional)"
+          id="bankAccount">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <input class="form-control" type="text" name="notes" placeholder="notes (Optional)" id="notes">
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-raised btn-secondary mr-1">
+      <i class="ft-printer"></i> Print
+    </button>
+    <button (click)="close(false)" type="button" class="btn btn-raised btn-secondary mr-1">
+      <i class="ft-x"></i> Cancel
+    </button>
+    <button type="button" class="btn btn-raised btn-success"><i class="ft-save"></i> Save</button>
+  </div>
+</form>

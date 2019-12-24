@@ -5,8 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-//using XAccLib.SaleInvoice;
+using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -28,7 +29,7 @@ namespace XBOOK.Service.Service
         private readonly IProductRepository _iProductRepository;
         private readonly XBookContext _context;
         private readonly IRepository<EntryPattern> _entryUowRepository;
-        public SaleInvoiceService(IProductRepository iProductRepository, ISaleInvoiceRepository saleInvoiceRepository, XBookContext context,IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService, ISaleInvoiceDetailRepository saleInvoiceDetailRepository)
+        public SaleInvoiceService(IProductRepository iProductRepository, ISaleInvoiceRepository saleInvoiceRepository, XBookContext context, IUnitOfWork uow, IClientRepository ClientRepository, IClientService iClientService, ISaleInvDetailService iSaleInvDetailService, ISaleInvoiceDetailRepository saleInvoiceDetailRepository)
         {
             _context = context;
             _iClientService = iClientService;
@@ -59,7 +60,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    InvoiceNumber = saleInvoie != null ? (  saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
+                    InvoiceNumber = saleInvoie != null ? (saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -79,11 +80,12 @@ namespace XBOOK.Service.Service
                     _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
                     _uow.SaveChanges();
                     _uow.CommitTransaction();
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
 
                 }
-                
+
             }
             else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientName != null)
             {
@@ -180,14 +182,14 @@ namespace XBOOK.Service.Service
             };
             try
             {
-               //var saleInvoiceGL = new SaleInvoiceGL(_uow);
-              // saleInvoiceGL.InvoiceGL(objData);
+                var saleInvoiceGL = new SaleInvoiceGL(_uow);
+                saleInvoiceGL.InvoiceGL(objData);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
-            
+
 
             return true;
         }
@@ -211,7 +213,7 @@ namespace XBOOK.Service.Service
                         ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
                         ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
                         Email = saleInvoiceViewModel.ClientData[0].Email,
-                       // Note = saleInvoiceViewModel.ClientData[0].Note,
+                        // Note = saleInvoiceViewModel.ClientData[0].Note,
                         Tag = saleInvoiceViewModel.ClientData[0].Tag,
                         TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
                     };
@@ -220,7 +222,7 @@ namespace XBOOK.Service.Service
                     _uow.SaveChanges();
                     _uow.CommitTransaction();
                 }
-                
+
             }
             else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientData.Count() > 0)
             {
@@ -243,7 +245,7 @@ namespace XBOOK.Service.Service
             }
             if (saleInvoiceViewModel.SaleInvDetailView.Count() > 0)
             {
-                for (int i = 0; i <  saleInvoiceViewModel.SaleInvDetailView.Count; i++)
+                for (int i = 0; i < saleInvoiceViewModel.SaleInvDetailView.Count; i++)
                 {
                     if (saleInvoiceViewModel.SaleInvDetailView[i].Id > 0)
                     {
@@ -253,7 +255,7 @@ namespace XBOOK.Service.Service
                             rs = new SaleInvDetailViewModel
                             {
                                 Amount = saleInvoiceViewModel.SaleInvDetailView[i].Amount,
-                                ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
+                                ProductName = Regex.Replace(saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0], @"\s+$", "") ,
                                 Description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
                                 Id = saleInvoiceViewModel.SaleInvDetailView[i].Id,
                                 InvoiceId = saleInvoiceViewModel.SaleInvDetailView[i].InvoiceId,
@@ -262,7 +264,8 @@ namespace XBOOK.Service.Service
                                 Qty = saleInvoiceViewModel.SaleInvDetailView[i].Qty,
                                 Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
                             };
-                        } else
+                        }
+                        else
                         {
                             rs = new SaleInvDetailViewModel
                             {
@@ -279,12 +282,13 @@ namespace XBOOK.Service.Service
                         }
                         _SaleInvoiceDetailRepository.UpdateSaleInvDetail(rs);
                         _uow.SaveChanges();
-                    }else
+                    }
+                    else
                     {
-                        if(saleInvoiceViewModel.SaleInvDetailView[i].ProductId == 0)
+                        if (saleInvoiceViewModel.SaleInvDetailView[i].ProductId == 0)
                         {
                             ProductViewModel product = null; ;
-                            if(saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(").Length > 1)
+                            if (saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(").Length > 1)
                             {
                                 product = new ProductViewModel()
                                 {
@@ -292,20 +296,23 @@ namespace XBOOK.Service.Service
                                     productID = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
                                     productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
                                     unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price,
-                                    Unit = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[1].Split(")")[0]
+                                    Unit = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[1].Split(")")[0],
+                                    categoryID = 1
                                 };
-                            }else
+                            }
+                            else
                             {
-                                 product = new ProductViewModel()
+                                product = new ProductViewModel()
                                 {
                                     description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
                                     productID = saleInvoiceViewModel.SaleInvDetailView[i].ProductId,
                                     productName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
                                     unitPrice = saleInvoiceViewModel.SaleInvDetailView[i].Price,
                                     Unit = null,
+                                    categoryID = 2
                                 };
                             }
-                           
+
                             var productUOW = _uow.GetRepository<IRepository<Product>>();
                             var productCreate = Mapper.Map<ProductViewModel, Product>(product);
                             _uow.BeginTransaction();
@@ -335,7 +342,7 @@ namespace XBOOK.Service.Service
                         {
 
                         }
-                     
+
                     }
                 }
             }
@@ -357,7 +364,7 @@ namespace XBOOK.Service.Service
             return saleInvoie;
         }
 
-        private static List<SaleInvoiceViewModel> SerchData(string keyword, string startDate, string endDate, List<SaleInvoiceViewModel> saleInvoie,bool? searchConditions)
+        private static List<SaleInvoiceViewModel> SerchData(string keyword, string startDate, string endDate, List<SaleInvoiceViewModel> saleInvoie, bool? searchConditions)
         {
             if (searchConditions == true)
             {
@@ -395,7 +402,8 @@ namespace XBOOK.Service.Service
                     saleInvoie = saleInvoie.Where(x => x.IssueDate <= end).ToList();
                 }
 
-            }else
+            }
+            else
             if (searchConditions == false)
             {
                 if (!string.IsNullOrEmpty(keyword))
@@ -421,18 +429,19 @@ namespace XBOOK.Service.Service
                     DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
                     saleInvoie = saleInvoie.Where(x => x.DueDate <= end).ToList();
                 }
-            } else
+            }
+            else
             {
                 return saleInvoie;
             }
-            
+
             return saleInvoie.ToList();
         }
 
         private IEnumerable<PaymentViewModel> GetByIDPay(long id)
         {
             var payList = _uow.GetRepository<IRepository<Payments>>();
-            var listPay = payList.GetAll().ProjectTo<PaymentViewModel>().Where(x=>x.InvoiceId == id).ToList();
+            var listPay = payList.GetAll().ProjectTo<PaymentViewModel>().Where(x => x.InvoiceId == id).ToList();
             return listPay;
         }
 
@@ -441,7 +450,7 @@ namespace XBOOK.Service.Service
             var payList = _uow.GetRepository<IRepository<SaleInvDetail>>();
             var listInDetail = payList.GetAll().ProjectTo<SaleInvDetailViewModel>().Where(x => x.InvoiceId == id).ToList();
             var dataList = new List<SaleInvDetailViewModel>();
-            foreach(var item in listInDetail)
+            foreach (var item in listInDetail)
             {
                 var data = new SaleInvDetailViewModel()
                 {
@@ -451,7 +460,7 @@ namespace XBOOK.Service.Service
                     InvoiceId = item.InvoiceId,
                     Price = item.Price,
                     ProductId = item.ProductId,
-                    ProductName = (_iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit != null)? item.ProductName +" "+ "("+_iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit +")" : item.ProductName,
+                    ProductName = (_iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit != null) ? item.ProductName + " " + "(" + _iProductRepository.GetByProductId(Int32.Parse(item.ProductId.ToString())).Unit + ")" : item.ProductName,
                     Qty = item.Qty,
                     Vat = item.Vat,
                 };
@@ -509,10 +518,13 @@ namespace XBOOK.Service.Service
             return listData;
         }
 
-        public bool  DeletedSaleInv(List<requestDeleted> deleted)
+        public async Task<bool> DeletedSaleInv(List<requestDeleted> deleted)
         {
-            foreach(var item in deleted)
+            foreach (var item in deleted)
             {
+                var saleInvViewModel = await GetSaleInvoiceById(item.id);
+                var saleInvoiceGL = new SaleInvoiceGL(_uow);
+                saleInvoiceGL.deleteGL(saleInvViewModel.ToList()[0]);
                 var getSaleInVDt = _SaleInvoiceDetailRepository.GetAll().ProjectTo<SaleInvDetailViewModel>();
                 var getByIdSaleInVDetail = getSaleInVDt.Where(x => x.InvoiceId == item.id);
                 _SaleInvoiceDetailRepository.RemoveAll(getByIdSaleInVDetail.ToList());
@@ -520,19 +532,19 @@ namespace XBOOK.Service.Service
                 _SaleInvoiceRepository.removeInv(item.id);
                 _uow.SaveChanges();
             }
-            
-            return true;
+           
+            return await Task.FromResult(true);
         }
 
         public SaleInvoiceViewModel GetALlDF()
         {
-            var data =  _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
+            var data = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().LastOrDefault();
             return data;
         }
 
         public SaleInvoiceViewModel GetLastInvoice()
         {
-           // var data = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToList();
+            // var data = _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToList();
             var data = _SaleInvoiceRepository.GetLastInvoice();
             var lastInvoice = new SaleInvoiceViewModel();
             if (data.Result != null && data.Result.InvoiceId > 0)
@@ -545,7 +557,7 @@ namespace XBOOK.Service.Service
             {
                 return lastInvoice;
             }
-            
+
         }
 
 

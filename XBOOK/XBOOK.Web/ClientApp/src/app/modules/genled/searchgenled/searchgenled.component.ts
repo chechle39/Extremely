@@ -26,7 +26,7 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
 
   item: string;
 
-  
+
   public genLedForm: FormGroup;
   isSelectedAccount: boolean = false;
   isSelectedCrspAccount: boolean = false;
@@ -53,12 +53,12 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     public activeModal: NgbActiveModal, ) {
     super(injector);
-    this.genLedForm = this.createGenLedFormGroup();   
-   
-  } 
+    this.genLedForm = this.createGenLedFormGroup();
+
+  }
 
   ngOnInit() {
-    this.accountChartService.searchAcc().subscribe(rp => {     
+    this.accountChartService.searchAcc().subscribe(rp => {
       this.cars = rp;
       this.tempcars=rp;
       this.items = [];
@@ -66,8 +66,8 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
           this.items.push({label: this.cars[i].accountNumber+'-'+this.cars[i].accountName, value: this.cars[i].accountNumber});
       }
       this.cars = this.items ;
-     
-    })
+
+    });
   }
 
   createGenLedFormGroup() {
@@ -77,11 +77,11 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
       genLedMethods:this.genLedMethods[0].GenLedId,
       currencyMethod: this.currencyMethod[0].CurrencyId,
       fromDate: issueDatePicker,
-      toDate: issueDatePicker,      
+      toDate: issueDatePicker,
       account: this.isSelectedAccount=true,
       accountReciprocal: this.isSelectedCrspAccount=true,
       acountNumberMethod: [null],
-     
+
     });
   }
 
@@ -99,7 +99,7 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         //   this.genLedForm.value.fromDate.month, this.genLedForm.value.fromDate.day].join('/') === '--' ? '' : [this.genLedForm.value.fromDate.year,
         //   this.genLedForm.value.fromDate.month, this.genLedForm.value.fromDate.day].join('/');
         const endFrom = moment([this.genLedForm.value.toDate.year, this.genLedForm.value.toDate.month - 1, this.genLedForm.value.toDate.day]).format(AppConsts.defaultDateFormat);
-  
+
         // const endFrom = [this.genLedForm.value.toDate.year,
         // this.genLedForm.value.toDate.month, this.genLedForm.value.toDate.day].join('/') === '--' ? '' : [this.genLedForm.value.toDate.year,
         // this.genLedForm.value.toDate.month, this.genLedForm.value.toDate.day].join('/');
@@ -107,14 +107,14 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         this.endDate = endFrom;
       }
       console.log(this.genLedForm.value.genLedMethods);
-     if(this.genLedForm.value.genLedMethods ===1){
-      var date = new Date();
+      if(this.genLedForm.value.genLedMethods ===1) {
+      const date = new Date();
       this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
       this.endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
       this.genLedForm.patchValue({
         fromDate: this.firstDate,
         toDate: this.endDate,
-      })
+      });
     }
       const genledSearch = {
         startDate: this.firstDate === undefined ? null : this.firstDate,
@@ -122,17 +122,17 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         isaccount: this.genLedForm.value.account,
         isAccountReciprocal: this.genLedForm.value.accountReciprocal,
         money: null,
-        accNumber: this.genLedForm.value.acountNumberMethod ,      
+        accNumber: this.genLedForm.value.acountNumberMethod ,
         case: this.genLedForm.value.genLedMethods
-      }
- 
-      this.activeModal.close(genledSearch);     
+      };
+
+      this.activeModal.close(genledSearch);
     } else {
       this.activeModal.close();
     }
   }
   onChange(e: any) {
-    var date = new Date();
+    const date = new Date();
     this.case6 = 0;
     switch (this.genLedForm.value.genLedMethods) {
       case 1: {
@@ -141,19 +141,19 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         this.genLedForm.patchValue({
           fromDate: this.firstDate,
           toDate: this.endDate,
-        })
+        });
         break;
       }
       case 2: {
-        var quarter = Math.floor((date.getMonth() / 3));
-        var firstDay = new Date(date.getFullYear(), quarter * 3, 1);
-        var lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() + 3, 0);
+        const quarter = Math.floor((date.getMonth() / 3));
+        const firstDay = new Date(date.getFullYear(), quarter * 3, 1);
+        const lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() + 3, 0);
         this.firstDate = firstDay.toLocaleDateString('en-GB');
         this.endDate = lastDay.toLocaleDateString('en-GB');
         this.genLedForm.patchValue({
           fromDate: this.firstDate,
           toDate: this.endDate,
-        })
+        });
         break;
       }
       case 3: {
@@ -162,19 +162,19 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         this.genLedForm.patchValue({
           fromDate: this.firstDate,
           toDate: this.endDate,
-        })
+        });
         break;
       }
       case 4: {
-        var quarter = Math.floor((date.getMonth()/ 3));
-        var firstDay = new Date(date.getFullYear(), quarter * 3-3,1);
-        var lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() + 3,0);        
+        const quarter = Math.floor((date.getMonth() / 3));
+        const firstDay = new Date(date.getFullYear(), quarter * 3 - 3, 1);
+        const lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() + 3, 0);
         this.firstDate = firstDay.toLocaleDateString('en-GB');
         this.endDate = lastDay.toLocaleDateString('en-GB');
         this.genLedForm.patchValue({
           fromDate: this.firstDate,
           toDate: this.endDate,
-        })
+        });
         break;
       }
       case 5: {
@@ -183,7 +183,7 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         this.genLedForm.patchValue({
           fromDate: this.firstDate,
           toDate: this.endDate,
-        })
+        });
         break;
       }
       case 6: {

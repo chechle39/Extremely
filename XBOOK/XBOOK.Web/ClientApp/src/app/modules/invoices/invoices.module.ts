@@ -33,7 +33,6 @@ import {FileUploadModule} from 'primeng/fileupload';
     InvoicesComponent,
     ListInvoiceComponent,
     CreateInvoiceComponent,
-    SplitPipe,
     AddPaymentComponent,
     ListPaymentComponent,
     validateDirective,

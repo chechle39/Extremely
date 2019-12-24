@@ -38,15 +38,6 @@ namespace XBOOK.Web.Reports
 
         }
 
-        private void pictureBox1_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
-        {
-            //  string ds ="D:\\uploaded\\Công Ty Cổ Phần Công Nghệ B24\\images\\logo.jfif";
-            string namefolder = GetCurrentColumnValue("yourCompanyCode").ToString();
-            string urlimages = "C:\\uploaded\\" + namefolder + "\\images\\logo.png";
-            pictureBox1.ImageUrl = urlimages;
-
-        }
-
-        
+       
     }
 }

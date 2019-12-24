@@ -40,7 +40,10 @@
       </div>
 
       <div *ngFor="let group of genViews">
-          <h5  style="color: #546D74;position: absolute; font-size: 16px;">Doanh thu bán hàng - {{group.accNumber}}</h5>    
+        <div *ngFor="let account of tempaccount" >
+          <div *ngIf="group.accNumber==account.accountNumber" style="color: #546D74;position: absolute; font-size: 16px;">{{account.accountName}}-{{account.accountNumber}}</div>   
+        </div>
+          
         
         <div class="row">
           <hr  width="98%" style="height: 2px;;background: #6A0888;"/>   

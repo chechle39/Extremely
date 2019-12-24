@@ -42,6 +42,11 @@ const routes: Routes = [
         path: 'genledgroup',
         loadChildren: () => import('../modules/genledgroup/genledgroup.module')
           .then(m => m.GenledGroupModule)
+      },
+      {
+        path: 'moneyreceipt',
+        loadChildren: () => import('../modules/moneyreceipt/moneyreceipt.module')
+          .then(m => m.MoneyreceiptModule)
       }
     ]
   }

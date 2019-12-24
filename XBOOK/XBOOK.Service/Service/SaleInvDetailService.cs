@@ -29,7 +29,7 @@ namespace XBOOK.Service.Service
             _iSaleInvoiceDetailRepository = iSaleInvoiceDetailRepository;
         }
 
-        public  bool CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
+        public bool CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
         {
             var productUOW = _uow.GetRepository<IRepository<Product>>();
             foreach (var item in saleInvoiceViewModel)
@@ -49,7 +49,8 @@ namespace XBOOK.Service.Service
                         ProductName = item.ProductName.Split("(")[0],
                         Vat = item.Vat
                     };
-                }else
+                }
+                else
                 {
                     saleDetailData = new SaleInvDetailViewModel
                     {
@@ -64,16 +65,16 @@ namespace XBOOK.Service.Service
                         Vat = item.Vat
                     };
                 }
-             
-                if(saleDetailData.ProductId > 0)
+
+                if (saleDetailData.ProductId > 0)
                 {
                     _uow.BeginTransaction();
                     _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailData);
                     _uow.SaveChanges();
                     _uow.CommitTransaction();
                 }
-                else 
-                if(saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
+                else
+                if (saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
                 {
                     saleDetailData = new SaleInvDetailViewModel
                     {
@@ -99,7 +100,8 @@ namespace XBOOK.Service.Service
                             Unit = saleDetailData.ProductName.Split("(")[1].Split(")")[0],
                             categoryID = (saleDetailData.ProductName.Split("(")[1].Split(")")[0] != null) ? 1 : 2,
                         };
-                    }else
+                    }
+                    else
                     {
                         product = new ProductViewModel()
                         {
@@ -108,10 +110,10 @@ namespace XBOOK.Service.Service
                             productName = saleDetailData.ProductName,
                             unitPrice = saleDetailData.Price,
                             Unit = null,
-                            categoryID =  2,
+                            categoryID = 2,
                         };
                     }
-                  
+
                     _uow.BeginTransaction();
                     _iProductRepository.SaveProduct(product);
                     _uow.SaveChanges();
@@ -156,7 +158,7 @@ namespace XBOOK.Service.Service
                         _uow.SaveChanges();
                         _uow.CommitTransaction();
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
 
                     }
@@ -174,7 +176,7 @@ namespace XBOOK.Service.Service
 
         public async Task Deleted(long id)
         {
-           await  _iSaleInvoiceDetailRepository.Remove(id);
+            await _iSaleInvoiceDetailRepository.Remove(id);
         }
 
         public async Task<IEnumerable<SaleInvDetailViewModel>> GetAllSaleInvoiceDetail()
@@ -197,7 +199,7 @@ namespace XBOOK.Service.Service
                     InvoiceId = item.InvoiceId,
                     ProductId = item.ProductId,
                     ProductName = item.ProductName,
-                    Vat = item.Vat
+                    Vat = item.Vat,
                 };
                 saleDetail.Add(saleDetailData);
             }

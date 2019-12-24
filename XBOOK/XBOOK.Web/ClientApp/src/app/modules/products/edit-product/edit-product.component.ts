@@ -15,7 +15,7 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
   @Input() title;
   @Input() id: number;
   @Input() listCategory;
-  product= {
+  product = {
     productName: '',
     description: '',
     unitPrice: 0,
@@ -35,10 +35,9 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
   ngOnInit() {
     this.productService.getProduct(this.id).subscribe(result => {
       this.product = result[0];
-      if(result[0].categoryID === null){
+      if (result[0].categoryID === null) {
         this.product.categoryID = 2;
-      }
-      else{
+      } else {
         this.productService.getCategory(result[0].categoryID).subscribe(rs => {
           this.categories = rs;
         });

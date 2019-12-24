@@ -17,6 +17,7 @@ const credentialsKey = 'credentials';
 })
 export class CredentialsService {
 
+  // tslint:disable-next-line:variable-name
   private _credentials: Credentials | null = null;
 
   constructor() {

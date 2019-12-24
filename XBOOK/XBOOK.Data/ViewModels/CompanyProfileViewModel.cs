@@ -21,5 +21,6 @@ namespace XBOOK.Data.ViewModels
         public string taxCode { get; set; }
         public string bankAccount { get; set; }
         public string code { get; set; }
+       
     }
 }

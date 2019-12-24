@@ -23,7 +23,7 @@ export class InvoiceService extends BaseService {
     return this.post(`${API_URI.deleteSaleInvoice}`, id);
   }
   CreateSaleInv(request: any): Observable<any> {
-     return this.post<any>(`${API_URI.createSaleInv}`, request);
+    return this.post<any>(`${API_URI.createSaleInv}`, request);
   }
   CreateSaleInvDetail(request: any): Observable<any> {
     return this.post<any>(`${API_URI.createSaleInvDetail}`, request);
@@ -41,9 +41,9 @@ export class InvoiceService extends BaseService {
     return this.post<InvoiceView>(`${API_URI.lastInvoice}`, null);
   }
 
-    
+
   uploadFile(files: any): Observable<any> {
-    return this.postUploadFile<any>(`${API_URI.uploadProfile}`, files)
+    return this.postUploadFile<any>(`${API_URI.uploadProfile}`, files);
   }
 
   getInfoProfile(): Observable<any> {
@@ -51,11 +51,11 @@ export class InvoiceService extends BaseService {
   }
 
   getFile(fileName: any): Observable<any> {
-    return this.getFilex<any>(`${API_URI.getFile}`, fileName)
+    return this.getFilex<any>(`${API_URI.getFile}`, fileName);
   }
 
   uploadFileInvMt(files: any): Observable<any> {
-    return this.postUploadMuntiple<any>(`${API_URI.uploadFileInv}`, files)
+    return this.postUploadMuntiple<any>(`${API_URI.uploadFileInv}`, files);
   }
 
   getInfofile(request): Observable<any> {
@@ -71,22 +71,19 @@ export class InvoiceService extends BaseService {
   }
 
   downLoadFile(fileName): Observable<any> {
-     this.fileName = fileName;
-    const data = this.getFileBlob<any>(`${API_URI.downLoadFile}`, fileName).subscribe(rp=>{
-      let blob = new Blob([rp], { type: "text/csv" });
-      let url = window.URL.createObjectURL(blob);
-      saveAs(blob,this.fileName.filename);
-    })
-    return ;
+    this.fileName = fileName;
+    const data = this.getFileBlob<any>(`${API_URI.downLoadFile}`, fileName).subscribe(rp => {
+      const blob = new Blob([rp], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      saveAs(blob, this.fileName.filename);
+    });
+    return;
   }
 
   downLoad(data: any, type: string) {
-    let blob = new Blob([data], { type: type });
-    let url = window.URL.createObjectURL(blob);
+    // tslint:disable-next-line:object-literal-shorthand
+    const blob = new Blob([data], { type: type });
+    const url = window.URL.createObjectURL(blob);
     saveAs(blob);
-    // let pwa = window.open(url);
-    // if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-    //     alert( 'Please disable your Pop-up blocker and try again.');
-    // }
   }
 }

@@ -153,46 +153,46 @@ namespace XBOOK.Web
                 }
             });
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-            //    app.UseHsts();
-            //}
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
             else
             {
-                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
 
-                if (env.IsDevelopment())
-                {
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Error");
+            //    app.UseHsts();
+            //}
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller}/{action=Index}/{id?}");
+            //});
+            //app.UseSpa(spa =>
+            //{
+            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            //    // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                    // spa.UseAngularCliServer(npmScript: "start");
-                }
+            //    spa.Options.SourcePath = "ClientApp";
 
-            });
+            //    if (env.IsDevelopment())
+            //    {
+
+            //        spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+            //        // spa.UseAngularCliServer(npmScript: "start");
+            //    }
+
+            //});
         }
     }
 }

@@ -7,33 +7,33 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './print.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: [
-    "../../../../node_modules/jquery-ui/themes/base/all.css",
-    "../../../../node_modules/devextreme/dist/css/dx.common.css",
-    "../../../../node_modules/devextreme/dist/css/dx.light.css",
-    "../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css",
-    "../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css",
-    "../../../../node_modules/@devexpress/analytics-core/dist/css/dx-querybuilder.css",
-    "../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css",
-    "../../../../node_modules/devexpress-reporting/dist/css/dx-reportdesigner.css"
+    '../../../../node_modules/jquery-ui/themes/base/all.css',
+    '../../../../node_modules/devextreme/dist/css/dx.common.css',
+    '../../../../node_modules/devextreme/dist/css/dx.light.css',
+    '../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css',
+    '../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css',
+    '../../../../node_modules/@devexpress/analytics-core/dist/css/dx-querybuilder.css',
+    '../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css',
+    '../../../../node_modules/devexpress-reporting/dist/css/dx-reportdesigner.css'
   ]
 })
 export class PrintComponent implements OnInit {
   ischeck: boolean;
   reportUrl: string;
   getDesignerModelAction: string;
-  invokeAction: string = '/DXXRDV';
+  invokeAction = '/DXXRDV';
 
-  public hostUrl = environment.apiBaseUrl
-  constructor( private activeRoute: ActivatedRoute,) { }
+  public hostUrl = environment.apiBaseUrl;
+  constructor( private activeRoute: ActivatedRoute, ) { }
   ngOnInit() {
     this.activeRoute.params.subscribe(params => {
       this.reportUrl = params.key;
-      if (params.key === "disign"){
+      if (params.key === 'disign') {
         this.ischeck = true;
-         this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/InvoiceReport`
+        this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/InvoiceReport`;
       }
      // this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.reportUrl}`
-    })
-    
+    });
+
   }
 }

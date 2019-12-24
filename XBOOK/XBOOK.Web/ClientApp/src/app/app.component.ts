@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-//import defaultLanguage from '../assets/i18n/en.json';
+// import defaultLanguage from '../assets/i18n/en.json';
 @Component({
   selector: 'xb-root',
   templateUrl: './app.component.html',
@@ -13,7 +13,7 @@ export class AppComponent {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('en');
 
-    //const browserLang = translate.getBrowserLang();
+    // const browserLang = translate.getBrowserLang();
     // translate.use(browserLang.match(/en|vi/) ? browserLang : 'en');
   }
 }

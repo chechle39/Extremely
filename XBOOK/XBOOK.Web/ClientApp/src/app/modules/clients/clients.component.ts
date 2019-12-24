@@ -29,7 +29,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
   clientKeyword = '';
-  messageTest:string;
+  messageTest: string;
   constructor(
     private data: DataService,
     injector: Injector,
@@ -145,14 +145,15 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     });
   }
 
-  ShowInv(){
-    if (this.selected.length === 0){
+  ShowInv() {
+    if (this.selected.length === 0) {
       this.message.warning('Please select an item from the list?');
       return;
     }
     let clientName = '';
-    for (let i=0;i<this.selected.length;i++){
-      clientName +=  ";" + this.selected[i].clientName;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.selected.length; i++) {
+      clientName += ';' + this.selected[i].clientName;
     }
     this.data.sendMessage(clientName);
     this.router.navigate([`/invoice`]);

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using XBOOK.Data.EntityConfigurations;
 
 namespace XBOOK.Data.Entities
@@ -23,6 +24,22 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new TaxConfiguration())
                 .ApplyConfiguration(new CompanyProfileConfiguration());
 
+            //#region Identity Config
+
+            //modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("AppUserClaims").HasKey(x => x.Id);
+
+            //modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("AppRoleClaims")
+            //    .HasKey(x => x.Id);
+
+            //modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("AppUserLogins").HasKey(x => x.UserId);
+
+            //modelBuilder.Entity<IdentityUserRole<int>>().ToTable("AppUserRoles")
+            //    .HasKey(x => new { x.RoleId, x.UserId });
+
+            //modelBuilder.Entity<IdentityUserToken<int>>().ToTable("AppUserTokens")
+            //   .HasKey(x => new { x.UserId });
+
+            //#endregion Identity Config
             base.OnModelCreating(modelBuilder);
         }
     }

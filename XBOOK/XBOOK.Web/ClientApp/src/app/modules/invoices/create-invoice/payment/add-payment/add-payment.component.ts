@@ -1,13 +1,11 @@
 import { Component, OnInit, Injector, Input } from '@angular/core';
 import { AppComponentBase } from '@core/app-base.component';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaymentMethod } from '@modules/_shared/models/invoice/payment-method.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentView } from '@modules/_shared/models/invoice/payment-view.model';
-import * as moment from 'moment';
-import { AppConsts } from '@core/app.consts';
 import { PaymentService } from '@modules/_shared/services/payment.service';
-import { finalize, debounceTime } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { InvoiceService } from '@modules/_shared/services/invoice.service';
 @Component({
   selector: 'xb-add-payment',
@@ -49,7 +47,8 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
     return this.fb.group({
       id: [0],
-      amount: this.outstandingAmount === undefined ? ['', [Validators.required]] : [this.outstandingAmount.toString(), [Validators.required]],
+      amount: this.outstandingAmount === undefined
+        ? ['', [Validators.required]] : [this.outstandingAmount.toString(), [Validators.required]],
       paymentMethods: [null, [Validators.required]],
       payDate: issueDatePicker,
       bankAccount: [''],
@@ -73,24 +72,23 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
   }
   getPaymentDetail(id: number) {
     this.paymentService.getPayment(id).pipe(
-      //debounceTime(500), 
       finalize(() => {
-    })).subscribe((payment: any) => {
-      this.paymentForm.patchValue({
-        amount: payment.amount,
-        bankAccount: payment.bankAccount,
-        note: payment.note,
-        paymentMethod: payment.payTypeID
-      });
+      })).subscribe((payment: any) => {
+        this.paymentForm.patchValue({
+          amount: payment.amount,
+          bankAccount: payment.bankAccount,
+          note: payment.note,
+          paymentMethod: payment.payTypeID
+        });
 
-      this.paymentForm.controls.paymentMethods.patchValue(payment.payTypeID);
-      if (payment.payDate !== '') {
-        const payDateSplit = payment.payDate.split('-');
-        const dayx = payDateSplit[2].substring(0, 2);
-        const payDate = { 'year': Number(payDateSplit[0]), 'month': Number(payDateSplit[1]), 'day': Number(dayx) };
-        this.paymentForm.controls.payDate.patchValue(payDate);
-      }
-    });
+        this.paymentForm.controls.paymentMethods.patchValue(payment.payTypeID);
+        if (payment.payDate !== '') {
+          const payDateSplit = payment.payDate.split('-');
+          const dayx = payDateSplit[2].substring(0, 2);
+          const payDate = { year: Number(payDateSplit[0]), month: Number(payDateSplit[1]), day: Number(dayx) };
+          this.paymentForm.controls.payDate.patchValue(payDate);
+        }
+      });
   }
   savePayment(submittedForm: FormGroup): void {
     if (!this.paymentForm.valid) {
@@ -112,16 +110,16 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
         });
     } else {
       this.paymentService
-      .createPayment(payment)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        })
-      )
-      .subscribe(() => {
-        this.notify.info('Saved Successfully');
-        this.close(this.paymentForm.value);
-      });
+        .createPayment(payment)
+        .pipe(
+          finalize(() => {
+            this.saving = false;
+          })
+        )
+        .subscribe(() => {
+          this.notify.info('Saved Successfully');
+          this.close(this.paymentForm.value);
+        });
     }
   }
   close(result: boolean): void {

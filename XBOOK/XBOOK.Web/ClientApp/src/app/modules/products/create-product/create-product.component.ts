@@ -4,7 +4,6 @@ import { ProductView } from '@modules/_shared/models/product/product-view.model'
 import { AppComponentBase } from '@core/app-base.component';
 import { ProductService } from '@modules/_shared/services/product.service';
 import { finalize } from 'rxjs/operators';
-import { ProductCategory } from '@modules/_shared/models/product/product-category.model';
 
 @Component({
   selector: 'xb-create-product',
@@ -16,7 +15,7 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
   @Input() categoryId;
   @Input() listCategory;
   saving: false;
-  categories : any;
+  categories: any;
   statusCategory: any;
   product: ProductView = new ProductView();
   constructor(
@@ -33,20 +32,19 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
   save(): void {
     this.product.categoryId = this.statusCategory;
     this.product.unitPrice = Number(String(this.product.unitPrice).replace(/,/g, ''));
-    if(this.product.productName != 'undefined' && this.product.productName != null){
+    if (this.product.productName !== 'undefined' && this.product.productName != null) {
       this.productService
-      .createProduct(this.product)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        })
-      )
-      .subscribe(() => {
-        this.notify.info('Saved Successfully');
-        this.close(true);
-      });
-    }
-    else{
+        .createProduct(this.product)
+        .pipe(
+          finalize(() => {
+            this.saving = false;
+          })
+        )
+        .subscribe(() => {
+          this.notify.info('Saved Successfully');
+          this.close(true);
+        });
+    } else {
       this.notify.error('Error');
     }
   }

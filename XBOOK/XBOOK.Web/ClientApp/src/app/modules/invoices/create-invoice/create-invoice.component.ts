@@ -1,4 +1,13 @@
-import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy, Injector, Input, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ElementRef,
+  Injector,
+  ViewChild,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { Observable, Subject, merge, of, Subscription, Observer } from 'rxjs';
 import {
   FormGroup,
@@ -43,6 +52,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }) xxx: ElementRef;
   productInputFocusSub: Subscription = new Subscription();
   listInvoice: any;
+  keywords = '';
+  loadingIndicator = true;
+  productViews: any;
   invoiceNumber = '';
   title = 'New Invoice';
   saveText = 'Save';
@@ -84,6 +96,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   clientKey = {
     clientKeyword: ''
   };
+  Unit: any;
+  unit: any;
+  productNameUnit: any;
   saleInvId: any;
   oldClienName: any;
   oldClientId: any;
@@ -96,7 +111,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   paidAmont: any;
   checkAddPayment: boolean;
   checkAddPaymentDeleted: boolean;
-  allAmontById: number = 0;
+  allAmontById = 0;
   amount: any;
   deletePaymentAmont: any;
   checkEditPayment: boolean;
@@ -104,7 +119,10 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   isCheckFc: boolean;
   fileUpload: any[] = [];
   requestSaveJson: any = [];
+  Unitproduct: any = [];
   nameFile: string;
+  searching = false;
+  searchFailed = false;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -129,12 +147,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       productKeyword: '',
       isGrid: false
     };
-    // this.productService.searchProduct(request).subscribe(response => {
-    //   this.products = response;
-    // });
-    // this.clientService.searchClient(this.clientKey).subscribe(response => {
-    //   this.clients = response;
-    // });
 
     this.invoiceService.getLastInvoice().subscribe(response => {
       this.listInvoice = response;
@@ -155,11 +167,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.companyName = rp.companyName;
       this.taxCode = rp.taxCode;
       this.companyAddress = rp.address;
-      this.yourCompanyId = rp.Id;  
-      this.companyCode = rp.code;  
+      this.yourCompanyId = rp.Id;
+      this.companyCode = rp.code;
       this.bankAccount = rp.bankAccount;
-      const request = "logo"
-      this.createImgPath(request);     
+      const request = 'logo';
+      this.createImgPath(request);
     });
   }
 
@@ -168,7 +180,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.activeRoute.params.subscribe(params => {
         if (!isNaN(params.id)) {
           this.invoiceId = params.id;
-        //  this.editMode = params.key === ActionType.Edit;
+          //  this.editMode = params.key === ActionType.Edit;
           this.editMode = true;
           this.viewMode = params.key === ActionType.View;
           this.getDataForEditMode();
@@ -266,7 +278,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         productId: controls.value[i].productName.productID,
         productName: controls.value[i].productName.productName,
         vat: controls.value[i].vat,
-      }
+      };
       this.requestRemove.push(rs);
     }
     if (controls.value[i].productId !== undefined) {
@@ -291,8 +303,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       taxs: this.fb.array([])
     });
   }
-  searching = false;
-  searchFailed = false;
   searchClient = (text$: Observable<string>) => {
     this.isCheckFc = false;
     const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
@@ -304,7 +314,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
             this.searchFailed = true;
             return of([]);
           }))
-      ))
+      ));
   }
 
   searchProduct = (text$: Observable<string>) => {
@@ -317,7 +327,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
             this.searchFailed = true;
             return of([]);
           }))
-      ))
+      ));
   }
   requestClient(e: any) {
     const clientKey = {
@@ -382,24 +392,22 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.getInvoiceById(this.invoiceId);
   }
 
-  private getInForProfile(request){
+  private getInForProfile(request) {
     this.invoiceService.getInfofile(request).subscribe(rp => {
-      if (rp===null)
-        return;
-        
       if (rp.length > 0) {
+
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < rp.length; i++) {
           const file = [
             File = {
               name: rp[i].fileName,
               size: 0,
             } as any
-          ]
+          ];
           this.fileUpload.push(file[0]);
         }
       }
-
-    })
+    });
   }
 
   private getInvoiceById(invoiceId: any) {
@@ -419,8 +427,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         const request = {
           invoice: this.invoiceNumber,
           seri: invoice[0].invoiceSerial
-        }
-        this.getInForProfile(request)
+        };
+        this.getInForProfile(request);
         // this.invoiceService.getInfofile(request).subscribe(rp => {
         //   if (rp.length > 0) {
         //     for (let i = 0; i < rp.length; i++) {
@@ -498,11 +506,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     if (this.editMode) {
       this.router.navigate([`/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
       this.viewMode = true;
-    }else {
+    } else {
       this.invoiceForm.reset();
       this.router.navigate([`/invoice`]);
     }
-   
+
   }
 
   save() {
@@ -520,10 +528,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
-        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.issueDate.year,
+        this.invoiceForm.value.issueDate.month,
+        this.invoiceForm.value.issueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.issueDate.year,
         this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
         dueDate: [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.dueDate.year,
+        this.invoiceForm.value.dueDate.month,
+        this.invoiceForm.value.dueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.dueDate.year,
         this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
         reference: this.invoiceForm.value.reference,
         subTotal: this.subTotalAmount,
@@ -535,11 +545,14 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         term: this.invoiceForm.value.termCondition,
         status: '',
         clientId: this.invoiceForm.value.contactName.clientId !== undefined ? this.invoiceForm.value.contactName.clientId : 0,
-        clientName: this.invoiceForm.value.clientName === '' ? this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+        clientName: this.invoiceForm.value.clientName === '' ?
+          this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
         address: this.invoiceForm.value.address === '' ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
         taxCode: this.invoiceForm.value.taxCode === '' ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
         tag: '',
-        contactName: this.invoiceForm.value.contactName.contactName !== undefined ? this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
+        contactName:
+          this.invoiceForm.value.contactName.contactName !== undefined ?
+            this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
         email: this.invoiceForm.value.email === '' ? '' : this.invoiceForm.value.email,
       };
       const requestInvDt = [];
@@ -578,6 +591,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     if (this.invoiceId > 0 && !this.invoiceForm.valid) {
       const checkClientId = this.invoiceForm.value.clientId;
       const saleInvDetailView = [];
+      // tslint:disable-next-line:prefer-for-of
       for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
         if (this.invoiceForm.value.items[ii].productId === undefined) {
           const rs = {
@@ -590,11 +604,15 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
             productId: this.invoiceForm.value.items[ii].productName.productID,
             productName: this.invoiceForm.value.items[ii].productName.productName,
             vat: this.invoiceForm.value.items[ii].vat,
-          }
+          };
           saleInvDetailView.push(rs);
         }
         if (this.invoiceForm.value.items[ii].productId !== undefined) {
-          const object2 = Object.assign({}, this.invoiceForm.value.items[ii], { invoiceId: this.invoiceForm.value.invoiceId, productId: this.invoiceForm.value.items[ii].productId === "" ? 0 : this.invoiceForm.value.items[ii].productId });
+          const object2 = Object.assign({}, this.invoiceForm.value.items[ii],
+            {
+              invoiceId: this.invoiceForm.value.invoiceId, productId: this.invoiceForm.value.items[ii].productId === ''
+                ? 0 : this.invoiceForm.value.items[ii].productId
+            });
           saleInvDetailView.push(object2);
         }
       }
@@ -615,23 +633,35 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        clientId: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
-        clientName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+        clientId:
+          this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
+        clientName: this.invoiceForm.value.contactName !== null ?
+          this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
         address: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
         taxCode: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
         tag: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.tag : this.invoiceForm.value.tag,
-        contactName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.contactName : this.invoiceForm.value.contactName,
+        contactName: this.invoiceForm.value.contactName !== null ?
+          this.invoiceForm.value.contactName.contactName : this.invoiceForm.value.contactName,
         email: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
         clientData: [{
-          clientId: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
-          clientName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
-          address: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
-          taxCode: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
-          tag: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.tag : this.invoiceForm.value.tag,
-          contactName: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.contactName : this.invoiceForm.value.contactName,
+          clientId: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
+          clientName: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+          address: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
+          taxCode: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
+          tag: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.tag : this.invoiceForm.value.tag,
+          contactName: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.contactName :
+            this.invoiceForm.value.contactName,
           email: this.invoiceForm.value.contactName !== null ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
           note: this.invoiceForm.value.notes,
         }],
+        // tslint:disable-next-line:object-literal-shorthand
         saleInvDetailView: saleInvDetailView,
       };
       const request = {
@@ -669,6 +699,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           email: this.invoiceForm.value.email,
           note: this.invoiceForm.value.notes,
         }],
+        // tslint:disable-next-line:object-literal-shorthand
         saleInvDetailView: saleInvDetailView,
       };
       if (request1.clientId === undefined) {
@@ -763,23 +794,22 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
+    // tslint:disable-next-line:variable-name
     reader.onload = (_event) => {
-      this.img = reader.result
+      this.img = reader.result;
     };
     // tslint:disable-next-line:variable-name
 
     this.invoiceService.uploadFile(files).subscribe((rp: any) => {
       this.getProfiles();
-
-    })
-
+    });
   }
 
   removeFile(item, index) {
     this.fileUpload.splice(index, 1);
     const rs = {
-      fileName: item.name
-    }
+      fileName: item.name,
+    };
     this.invoiceService.removeFile(rs).subscribe(rp => { });
   }
 
@@ -791,6 +821,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   uploadFileMultiple(data) {
     const fileRequest = [];
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.fileUpload.length; i++) {
       if (this.fileUpload[i].size > 0) {
         fileRequest.push(this.fileUpload[i]);
@@ -799,21 +830,15 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     const requestData = {
       invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
       invoiceSerial: this.invoiceForm.controls.invoiceSerial.value
-    }
+    };
     const request = {
       data: data === null ? requestData : data,
       fileUpload: fileRequest
-    }
+    };
     if (fileRequest.length > 0) {
       this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
         this.notify.success('Successfully upload');
-        // const rs = {
-        //   invoice: this.invoiceForm.controls.invoiceNumber.value,
-        //   seri: this.invoiceForm.controls.invoiceSerial.value
-        // }
-        // this.fileUpload = [];
-        // this.getInForProfile(rs);
-      })
+      });
     }
 
   }
@@ -822,18 +847,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     if (this.img === undefined) {
       const requestIMG = {
         imgName: serverPath + '.png'
-      }
+      };
       this.invoiceService.getFile(requestIMG).subscribe(rp => {
-        const a = "data:image/png;base64," + rp;
-        if (a !== "data:image/png;base64,") {
+        const a = 'data:image/png;base64,' + rp;
+        if (a !== 'data:image/png;base64,') {
           this.imgURL = a;
-        }else {
+        } else {
           this.imgURL = this.img;
         }
-        
-      })
-    } else {
 
+      });
+    } else {
       this.imgURL = this.img;
     }
   }
@@ -861,17 +885,25 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
       invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
       issueDate: [this.invoiceForm.controls.issueDate.value.year,
-      this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
-      this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-'),
+      this.invoiceForm.controls.issueDate.value.month,
+      this.invoiceForm.controls.issueDate.value.day].join('-') === '--'
+        ? '' : [this.invoiceForm.controls.issueDate.value.year,
+        this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-'),
       dueDate: [this.invoiceForm.controls.dueDate.value.year,
-      this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
-      this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'),
+      this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--'
+        ? '' : [this.invoiceForm.controls.dueDate.value.year,
+        this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'),
       reference: this.invoiceForm.controls.reference.value,
       subTotal: this.subTotalAmount,
       discRate: this.invoiceForm.controls.totalDiscount.value,
       discount: this.subTotalDiscountIncl.toString().substring(1),
       vatTax: this.totalTaxAmount,
-      amountPaid: this.checkAddPaymentDeleted === true ? ((this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) - this.deletePaymentAmont) : (this.checkAddPayment === true) ? (this.invoiceForm.controls.amountPaid.value === null ? 0 : this.invoiceForm.controls.amountPaid.value) + this.paymentViews[this.paymentViews.length - 1].amount : this.allAmontById,
+      amountPaid: this.checkAddPaymentDeleted === true
+        ? ((this.invoiceForm.controls.amountPaid.value === null
+          ? 0 : this.invoiceForm.controls.amountPaid.value) - this.deletePaymentAmont)
+        : (this.checkAddPayment === true) ? (this.invoiceForm.controls.amountPaid.value === null
+          ? 0 : this.invoiceForm.controls.amountPaid.value) + this.paymentViews[this.paymentViews.length - 1].amount
+          : this.allAmontById,
       note: this.invoiceForm.controls.notes.value,
       term: this.invoiceForm.controls.termCondition.value,
       status: '',
@@ -894,7 +926,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   getPayments(invoiceId: number) {
     this.allAmontById = 0;
     this.paymentService.getPaymentIvByid(invoiceId).pipe(
-      //debounceTime(500), 
       finalize(() => {
       })).subscribe((i: any) => {
         this.paymentViews = i;
@@ -990,7 +1021,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.taxService.getAll().pipe(finalize(() => {
     })).subscribe(rs => {
       this.taxData = rs;
-    })
+    });
   }
   private UpdateTaxLine(taxs: Array<any>, control: AbstractControl) {
     let sumTax = 0;
@@ -1028,40 +1059,41 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   redirectToEditInvoice() {
     this.invoiceForm.enable();
     this.viewMode = false;
-    //this.router.navigate([`/invoice/${this.invoiceId}/${ActionType.Edit}`]);
   }
   close(result: boolean): void {
     this.activeModal.close(result);
   }
 
-  dowloadFile(fileName){
+  dowloadFile(fileName) {
     const request = {
       filename: fileName
-    }
-    this.invoiceService.downLoadFile(request).subscribe(rp=>{})
+    };
+    this.invoiceService.downLoadFile(request).subscribe(rp => { } );
   }
 
+
   Print() {
-    this.invoiceForm;
+    this.calculateTotalAmount();
     if (this.invoiceForm.controls.items.value.length > 0) {
       for (let i = 0; i < this.invoiceForm.controls.items.value.length; i++) {
         const data = {
           address: i === 0 ? this.invoiceForm.controls.address.value : null,
-          amountPaid: i===0? this.invoiceForm.controls.amountPaid.value: null,
-          clientId: i === 0 ? this.invoiceForm.controls.clientId.value: null,
-          clientName: i === 0? this.invoiceForm.controls.clientName.value: null,
+          amountPaid: i === 0 ? this.invoiceForm.controls.amountPaid.value : null,
+          clientId: i === 0 ? this.invoiceForm.controls.clientId.value : null,
+          clientName: i === 0 ? this.invoiceForm.controls.clientName.value : null,
           contactName: i === 0 ? this.invoiceForm.controls.contactName.value : null,
-          dueDate: i === 0? [this.invoiceForm.controls.dueDate.value.year,
-            this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
-              this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'): null,
+          dueDate: i === 0 ? [this.invoiceForm.controls.dueDate.value.year,
+          this.invoiceForm.controls.dueDate.value.month,
+          this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
+          this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') : null,
           email: i === 0 ? this.invoiceForm.controls.email.value : null,
           invoiceId: i === 0 ? this.invoiceForm.controls.invoiceId.value : null,
-          invoiceNumber: i === 0 ? this.invoiceForm.controls.invoiceNumber.value: null,
+          invoiceNumber: i === 0 ? this.invoiceForm.controls.invoiceNumber.value : null,
           invoiceSerial: i === 0 ? this.invoiceForm.controls.invoiceSerial.value : null,
           issueDate: i === 0 ? [this.invoiceForm.controls.issueDate.value.year,
-            this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
-              this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') : null,
-          //-----
+          this.invoiceForm.controls.issueDate.value.month,
+          this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
+          this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') : null,
           amount: this.invoiceForm.controls.items.value[i].amount,
           description: this.invoiceForm.controls.items.value[i].description,
           id: this.invoiceForm.controls.items.value[i].id,
@@ -1072,39 +1104,43 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           vat: this.invoiceForm.controls.items.value[i].vat,
           vatAmount: this.invoiceForm.controls.items.value[i].vatAmount,
 
-          //======
+          unit: this.invoiceForm.controls.items.value[i].productName.split('(').length > 1
+            ? this.invoiceForm.controls.items.value[i].productName.split('(')[1].split(')')[0] : null,
+
+          subTotalAmount: this.currencyPipe.transform(this.subTotalAmount, '', ''),
+          totalAmount: this.currencyPipe.transform(this.totalAmount, '', ''),
           notes: i === 0 ? this.invoiceForm.controls.notes.value : null,
-          reference: i ===0 ? this.invoiceForm.controls.reference.value : null,
-          taxCode: i === 0 ?this.invoiceForm.controls.taxCode.value : null,
-          termCondition: i===0? this.invoiceForm.controls.termCondition.value : null,
-          totalDiscount: i===0? this.invoiceForm.controls.totalDiscount.value: null,
-          yourBankAccount: i === 0? this.invoiceForm.controls.yourBankAccount.value: null,
-          yourCompanyAddress: i === 0? this.invoiceForm.controls.yourCompanyAddress.value: null,
-          yourCompanyName: i===0? this.invoiceForm.controls.yourCompanyName.value : null,
-          yourTaxCode: i===0? this.invoiceForm.controls.yourTaxCode.value: null,
-          yourCompanyCode: i===0? this.companyCode: null,
-        }
+          reference: i === 0 ? this.invoiceForm.controls.reference.value : null,
+          taxCode: i === 0 ? this.invoiceForm.controls.taxCode.value : null,
+          termCondition: i === 0 ? this.invoiceForm.controls.termCondition.value : null,
+          totalDiscount: i === 0 ? this.invoiceForm.controls.totalDiscount.value : null,
+          yourBankAccount: i === 0 ? this.invoiceForm.controls.yourBankAccount.value : null,
+          yourCompanyAddress: i === 0 ? this.invoiceForm.controls.yourCompanyAddress.value : null,
+          yourCompanyName: i === 0 ? this.invoiceForm.controls.yourCompanyName.value : null,
+          yourTaxCode: i === 0 ? this.invoiceForm.controls.yourTaxCode.value : null,
+          yourCompanyCode: i === 0 ? this.companyCode : null,
+        };
         this.requestSaveJson.push(data);
+
       }
       const reportName = 'InvoiceReport';
-      this.invoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp=>{
-        this.router.navigate([`/print/${reportName}`])
+      this.invoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp => {
+        this.router.navigate([`/print/${reportName}`]);
       });
-    } 
+    }
   }
 
-  getName(nameFile){
-    if (this.nameFile !==undefined){
-      if(nameFile.split('_').length > 1){
+  getName(nameFile) {
+    if (this.nameFile !== undefined) {
+      if (nameFile.split('_').length > 1) {
         const name = this.nameFile + '_' + nameFile;
         return this.nameFile + '_' + name.split('_')[4];
-      }else {
+      } else {
         return this.nameFile + '_' + nameFile;
       }
-      
-    }else {
+
+    } else {
       return nameFile;
     }
-    
   }
 }
