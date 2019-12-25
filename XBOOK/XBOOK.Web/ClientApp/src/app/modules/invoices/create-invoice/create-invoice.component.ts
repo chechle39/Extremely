@@ -370,8 +370,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   clientFormatter(value: any) {
-    if (value.contactName) {
-      return value.contactName;
+    if (value.clientName) {
+      return value.clientName;
     }
     return value;
   }

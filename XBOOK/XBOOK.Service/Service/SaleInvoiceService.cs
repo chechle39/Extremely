@@ -14,6 +14,7 @@ using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
+using XBOOK.Common.Method;
 
 namespace XBOOK.Service.Service
 {
@@ -60,7 +61,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    InvoiceNumber = saleInvoie != null ? (saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
+                    InvoiceNumber = saleInvoie != null ? (saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? MethodCommon.InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -114,7 +115,7 @@ namespace XBOOK.Service.Service
                     DueDate = saleInvoiceViewModel.DueDate,
                     Email = saleInvoiceViewModel.Email,
                     InvoiceId = saleInvoiceViewModel.InvoiceId,
-                    InvoiceNumber = saleInvoie != null ? (saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
+                    InvoiceNumber = saleInvoie != null ? (saleInvoiceViewModel.InvoiceNumber == saleInvoie.InvoiceNumber ? MethodCommon.InputString(saleInvoie.InvoiceNumber) : saleInvoiceViewModel.InvoiceNumber) : (saleInvoiceViewModel.InvoiceNumber),
                     InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
                     IssueDate = saleInvoiceViewModel.IssueDate,
                     Note = saleInvoiceViewModel.Note,
@@ -550,7 +551,7 @@ namespace XBOOK.Service.Service
             if (data.Result != null && data.Result.InvoiceId > 0)
             {
                 lastInvoice = data.Result;
-                lastInvoice.InvoiceNumber = InputString(lastInvoice.InvoiceNumber);
+                lastInvoice.InvoiceNumber = MethodCommon.InputString(lastInvoice.InvoiceNumber);
                 return lastInvoice;
             }
             else
@@ -558,47 +559,6 @@ namespace XBOOK.Service.Service
                 return lastInvoice;
             }
 
-        }
-
-
-        public static string InputString(string value)
-        {
-            int carry = 1;
-            string res = "";
-            for (int i = value.Length - 1; i > 0; i--)
-            {
-                int chars = 0;
-                chars += ((int)value[i]);
-                chars += carry;
-                if (chars > 90)
-                {
-                    chars = 65;
-                    carry = 1;
-                }
-                else
-                {
-                    carry = 0;
-                }
-
-                if (chars > 57 && chars < 65)
-                {
-                    carry = 1;
-                }
-
-                res = Convert.ToChar(chars) + res;
-
-                if (carry != 1)
-                {
-                    res = value.Substring(0, i) + res;
-                    break;
-                }
-            }
-            if (carry == 1)
-            {
-                res = 'A' + res;
-            }
-            string resStr = res.Replace(":", "0");
-            return resStr;
         }
     }
 }

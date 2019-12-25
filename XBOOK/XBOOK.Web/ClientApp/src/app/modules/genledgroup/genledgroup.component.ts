@@ -21,17 +21,14 @@ class PagedClientsRequestDto extends PagedRequestDto {
 })
 export class GenledgroupComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;
-  protected delete(id: number): void {
-    throw new Error("Method not implemented.");
-  }
   fromDate: any;
   firstDate: any;
   endDate1: string;
-  sum:any;
-  tempaccount:any;
+  sum: any;
+  tempaccount: any;
   items: SelectItem[];
-  sumtemp:any;
-  case: any;  
+  sumtemp: any;
+  case: any;
   genViews: any;
   genViewsTemp: any;
   startDay: any;
@@ -44,6 +41,10 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
   clientKeyword = '';
+  protected delete(id: number): void {
+    throw new Error(' Method not implemented.');
+  }
+
   constructor(
     injector: Injector,
     public accountChartService: AccountChartService,
@@ -52,27 +53,27 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     private router: Router) {
     super(injector);
   }
-  
+
   protected list(
-    
     request: PagedClientsRequestDto,
     pageNumber: number,
     finishedCallback: () => void
   ): void {
-    var date = new Date();
+    const date = new Date();
     this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     this.endDate1 = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const genledSearch = {
       startDate: this.firstDate === undefined ? null : this.firstDate,
-        endDate: this.endDate1 === undefined ? null : this.endDate1,
+      endDate: this.endDate1 === undefined ? null : this.endDate1,
       isaccount: false,
       isAccountReciprocal: false,
       money: null,
       accNumber: null
-    }  
-    this.accountChartService.searchAcc().subscribe(rp => {       
-      this.tempaccount=rp;          
-    })
+    };
+
+    this.accountChartService.searchAcc().subscribe(rp => {
+      this.tempaccount = rp;
+    });
     this.genLedService
       .searchGen(genledSearch)
       .pipe(
@@ -83,25 +84,24 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
       )
       .subscribe(i => {
         this.loadingIndicator = false;
-        this.genViews = i;       
-        const data = [];   
-       
-      this.genViewsTemp = data;        
-      });   
+        this.genViews = i;
+        const data = [];
+        this.genViewsTemp = data;
+      });
   }
-//  acountname(): void{
-//   this.accountChartService.searchAcc().subscribe(rp => {       
-//     this.tempaccount=rp;
-//     this.items = [];
-//     for (let i = 0; i < this.tempaccount.length; i++) {
-//         this.items.push({label:this.tempaccount[i].accountName, value: this.tempaccount[i].accountNumber});
-//     }
-//     this.tempaccount = this.tempaccount ;
-   
-//   })
-//  }
+  //  acountname(): void{
+  //   this.accountChartService.searchAcc().subscribe(rp => {
+  //     this.tempaccount=rp;
+  //     this.items = [];
+  //     for (let i = 0; i < this.tempaccount.length; i++) {
+  //         this.items.push({label:this.tempaccount[i].accountName, value: this.tempaccount[i].accountNumber});
+  //     }
+  //     this.tempaccount = this.tempaccount ;
 
- 
+  //   })
+  //  }
+
+
   SearchGenLed(): void {
 
     const dialog = this.modalService.open(SearchgenledComponent, AppConsts.modalOptionsCustomSize);
@@ -113,16 +113,16 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
           isaccount: result.isaccount,
           isAccountReciprocal: result.accountReciprocal,
           money: result.money,
-          accNumber: result.accNumber ,      
-        }
+          accNumber: result.accNumber,
+        };
         this.exportCSV = result;
         this.genLedService.searchGen(genledSearch).subscribe(rp => {
           this.genViews = rp;
-           this.case = result.case;         
+          this.case = result.case;
           this.startDay = result.startDate;
           this.endDay = result.endDate;
-          this.keyspace = ' - '
-        })
+          this.keyspace = ' - ';
+        });
 
       }
     });
@@ -141,8 +141,8 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
       isAccountReciprocal: false,
       money: null,
       accNumber: null
-    }
-    this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV)
+    };
+    this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV);
 
   }
 }

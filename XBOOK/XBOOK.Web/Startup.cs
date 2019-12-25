@@ -84,10 +84,15 @@ namespace XBOOK.Web
             services.AddTransient<ISaleInvoiceDetailRepository, SaleInvoiceDetailRepository>();
             services.AddTransient<ICompanyProfileReponsitory, CompanyProfileReponsitory>();
             services.AddTransient<ITaxRepository, TaxRepository>();
+            services.AddTransient<IMoneyReceiptRepository, MoneyReceiptRepository>();
+            services.AddTransient<IEntryPatternRepository, EntryPatternRepository>();
             services.AddTransient<ICompanyProfileService, CompanyProfileService>();
             services.AddTransient<IClientServiceDapper, ClientServiceDapper>();
             services.AddTransient<IInvoiceServiceDapper, InvoiceServiceDapper>();
+            services.AddTransient<IMoneyReceiptDapper, MoneyReceiptServiceDapper>();
             services.AddTransient<IGeneralLedgerGroupService, GeneralLedgerGroupService>();
+            services.AddTransient<IMoneyReceiptService, MoneyReceiptService>();
+            services.AddTransient<IEntryPatternService, EntryPatternService>();
             services.AddTransient<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>

@@ -12,6 +12,10 @@ import { ClientService } from '@modules/_shared/services/client.service';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { SplitPipe } from '@shared/pipe/split.pipe';
 import { AvatarModule } from 'ngx-avatar';
+import { MoneyReceiptService } from '@modules/_shared/services/money-receipt.service';
+import { EntryBatternService } from '@modules/_shared/services/entry-pattern.service';
+import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
+import { DigitOnlyModule } from '@uiowa/digit-only';
 
 @NgModule({
   declarations: [
@@ -30,8 +34,10 @@ import { AvatarModule } from 'ngx-avatar';
     DropDownsModule,
     ReactiveFormsModule,
     InputsModule,
-    AvatarModule
+    AvatarModule,
+    NgxCleaveDirectiveModule,
+    DigitOnlyModule
   ],
-  providers: [ClientService]
+  providers: [ClientService, MoneyReceiptService, EntryBatternService]
 })
 export class MoneyreceiptModule { }

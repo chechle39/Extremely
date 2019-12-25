@@ -21,6 +21,8 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<GeneralLedger, GeneralLedgerViewModel>();
             CreateMap<AccountChart, AccountChartViewModel>();
             CreateMap<CompanyProfile, CompanyProfileViewModel>();
+            CreateMap<MoneyReceipt, MoneyReceiptViewModel>();
+            CreateMap<EntryPattern, EntryPatternViewModel>();
         }
     }
 }

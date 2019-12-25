@@ -6,6 +6,9 @@ import { AppConsts } from '@core/app.consts';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
+import { GetMoneyReceipyRequest } from '@modules/_shared/models/money-receipt/get-money-receipy-request.model';
+import { MoneyReceiptService } from '@modules/_shared/services/money-receipt.service';
+import { MoneyReceiptViewModel } from '@modules/_shared/models/money-receipt/money-receipt.model';
 class PagedMoneyReceiptRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -17,10 +20,7 @@ class PagedMoneyReceiptRequestDto extends PagedRequestDto {
 
 export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   @ViewChild('searchPanel', { static: true }) searchPanel: any;
-  moneyReceipy = [
-    { x: 'xxx', y: 'xxxx', z: 'zzzz', j: 1, k: 'kkkk' },
-    { x: 'xxx', y: 'xxxx', z: 'zzzz', j: 2, k: 'kkkk' }
-  ];
+  loadingIndicator = true;
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
   selected = [];
@@ -32,9 +32,11 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   dateFilters = '';
   keyword = '';
   searchString = '';
+  moneyReceiptList: MoneyReceiptViewModel[];
   constructor(
     injector: Injector,
     private fb: FormBuilder,
+    private moneyReceiptService: MoneyReceiptService,
     private modalService: NgbModal) {
     super(injector);
     this.searchForm = this.createForm();
@@ -44,6 +46,14 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     pageNumber: number,
     finishedCallback: () => void
   ): void {
+    request.keyword = this.searchString;
+    const objRequest = {
+      currency: '',
+      endDate: this.endDate,
+      keyword: this.keyword.toLocaleLowerCase(),
+      startDate: this.startDate,
+    } as GetMoneyReceipyRequest;
+    this.getAllMoneyReceipt(objRequest);
   }
 
   onActivate(event) {
@@ -68,6 +78,13 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
     createOrEditClientDialog.result.then(result => {
       if (result) {
+        const objRequest = {
+          currency: '',
+          endDate: this.endDate,
+          keyword: this.keyword.toLocaleLowerCase(),
+          startDate: this.startDate,
+        } as GetMoneyReceipyRequest;
+        this.getAllMoneyReceipt(objRequest);
         this.refresh();
       }
     });
@@ -109,7 +126,9 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
         keyword: searchStr.seachString,
         startDate: searchStr.from,
         endDate: searchStr.to,
-      };
+        currency: '',
+      } as GetMoneyReceipyRequest;
+      this.getAllMoneyReceipt(requestList);
       // alert(JSON.stringify(searchStr));
     }
   }
@@ -120,5 +139,47 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
 
   sortClient() {
     console.log('xxx');
+  }
+
+  getAllMoneyReceipt(request: GetMoneyReceipyRequest) {
+    this.moneyReceiptService.getAllMoneyReceipt(request).subscribe((rp: MoneyReceiptViewModel[]) => {
+      this.loadingIndicator = false;
+      this.moneyReceiptList = rp;
+    });
+  }
+
+  private deleteMoney(id: number): void {
+    const request = [{ id }];
+
+    this.moneyReceiptService.deleteMoneyReceipt(request).subscribe(() => {
+      this.notify.success('Successfully Deleted');
+      this.refresh();
+    });
+  }
+
+  deleteAll(): void {
+    if (this.selected.length === 0) {
+      this.message.warning('Please select an item from the list?');
+      return;
+    }
+    const requestDl = [];
+    this.selected.forEach(element => {
+      // this.deleteInvoice(element.invoiceId);
+      const id = element.id;
+      requestDl.push({ id });
+    });
+    this.moneyReceiptService.deleteMoneyReceipt(requestDl).subscribe(() => {
+      this.notify.success('Successfully Deleted');
+      this.refresh();
+    });
+    this.selected = [];
+  }
+
+  delete(id: number): void {
+    if (id === 0) { return; }
+    this.message.confirm('Do you want to delete this money receipt ?', 'Are you sure ?', () => {
+      this.deleteMoney(id);
+    });
+
   }
 }

@@ -18,17 +18,17 @@
             <div ngbDropdown>
               <button class="btn btn-flat mr-1 label-blue" id="bulkActions" ngbDropdownToggle>Chức năng chung</button>
               <div ngbDropdownMenu aria-labelledby="bulkActions">
-                <button class="dropdown-item"><i class="fas fa-print"></i> Print</button>
-                <button class="dropdown-item" ><i class="fa fa-trash"></i> Delete</button>
+                <button class="dropdown-item"><i class="icon-printer"></i> Print</button>
+                <button (click)="deleteAll()" class="dropdown-item" ><i class="fa fa-trash"></i> Delete</button>
               </div>
             </div>
           </div>
           <div class="col-md-6 float-right">
             <div class="position-relative has-icon-left input-group">
-              <input type="text"  name="keyword"  autocomplete="off" class="form-control round pl-4"
+              <input type="text" [(ngModel)]="keyword" (keyup)="refresh()" name="keyword"  autocomplete="off" class="form-control round pl-4"
                 placeholder="Search">
               <div class="form-control-position" style="right: auto;z-index: 1000;">
-                <i class="ft-search" ></i>
+                <i class="ft-search" (click)="refresh()"></i>
               </div>
               <input *ngIf="searchForm.valid && isSubmitted" type="text" [(ngModel)]="dateFilters" name="dateFilters"
               autocomplete="off" class="form-control round">
@@ -86,7 +86,7 @@
         <div class="row">
           <div class="col-md-12">
      
-            <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="moneyReceipy"
+            <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="moneyReceiptList"
             [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]" [columnMode]="ColumnMode.force"
             [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
             [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)" (activate)="onActivate($event)"
@@ -106,49 +106,31 @@
               <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                 let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
                 <div class="custom-control custom-checkbox m-0">
-                  <input #cb type="checkbox" class="custom-control-input" id="{{row.j}}" [checked]="isSelected"
+                  <input #cb type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
                     (change)="onCheckboxChangeFn($event)" />
-                  <label class="custom-control-label col-form-label" for="{{row.j}}"></label>
+                  <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
                 </div>
 
               </ng-template>
             </ngx-datatable-column>
-            <!-- <ngx-datatable-column  name="Client/ Receipt# " [cellClass]="'col-id'"
-              [headerClass]="'col-id'">
-              <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
-                <span class="column-header" style="cursor: pointer" >Client/</span>
-                <span class="column-header" style="cursor: pointer">Receipt#</span>
-                <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
-                  [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
-                  [class.datatable-icon-down]="sortDir === 'desc'"></span>
-
-              </ng-template>
-              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div>
-                  {{row.x}}
-                </div>
-                <div class="col-more-info">
-                  {{row.y}}
-                </div>
-              </ng-template>
-            </ngx-datatable-column> -->
-            <ngx-datatable-column name="Client/ Address" prop="clientName">
+           
+            <ngx-datatable-column name="Client/ Receipt#" prop="clientName">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <div>{{row.x}}</div>
-                <div class="col-more-info font-small-3">{{row.y}}</div>
+                <div>{{row.clientName}}</div>
+                <div class="col-more-info font-small-3">{{row.receiptNumber}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="note" name="Notes" [cellClass]="'col-id'" [headerClass]="'col-id'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-more-info">{{row.k}}</div>
+                <div class="col-more-info">{{row.note}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="issueDate" name="Date/ Bank Account" [cellClass]="'col-center'"
               [headerClass]="'col-center'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-center">{{row.k}}</div>
+                <div class="col-center">{{row.payDate | date: 'dd/MM/yyyy'}}</div>
                 <div class="col-more-info col-center">
-                  {{row.j}}
+                  {{row.bankAccount}}
                 </div>
               </ng-template>
             </ngx-datatable-column>
@@ -157,10 +139,10 @@
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
                   <!-- {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}} -->
-                  {{row.j}}
+                  {{row.amount}}
                 </div>
                 <div class="col-right">
-                  <span style="color: #ed7d31"> {{row.j}}</span>
+                  <span style="color: #ed7d31"> {{row.payType}}</span>
                 </div>
               </ng-template>
             </ngx-datatable-column>
@@ -170,12 +152,12 @@
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
                 <div class="icon-actions">
                   <div class="actions">
-                    <a class="icon-action" (click)="redirectToEditInvoice(row.invoiceId)">
-                      <span class="icon-edit"></span>
+                    <a style="margin-left: 2px;" class="icon-action" (click)="redirectToEditInvoice(row.invoiceId)">
+                      <span class="icon-printer"></span>
                     </a>
                   </div>
                   <div class="actions">
-                    <a class="icon-action" (click)="delete(row.invoiceId,row.invoiceNumber, row.invoiceSerial)">
+                    <a class="icon-action" (click)="delete(row.id)">
                       <span class="icon-delete"></span>
                     </a>
                   </div>

@@ -41,7 +41,12 @@ export const API_URI = {
   removeFile: 'api/SaleInvoice/RemoveFile',
   deleteTax: 'api/Tax/DeleteTax',
   saleInVoiceSaveDataPrint: 'api/SaleInvoice/SaveFileJson',
-  downLoadFile: 'api/SaleInvoice/Download'
+  downLoadFile: 'api/SaleInvoice/Download',
+  getLastMoneyReceipt: 'api/MoneyReceipt/GetLastMoneyReceipt',
+  createMoneyReceipt: 'api/MoneyReceipt/CreateMoneyReceipt',
+  getAllEntryURL: 'api/EntryPattern/GetAllEntry',
+  getAllMoneyReceiptURL: 'api/MoneyReceipt/GetAllMoneyReceipt',
+  deleteMoneyReceiptURL: 'api/MoneyReceipt/DeleteMoneyReceipt'
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

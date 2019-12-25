@@ -7,6 +7,15 @@ namespace XBOOK.Data.Entities
 {
     public partial class EntryPattern
     {
+        public EntryPattern(string accNumber, string entryType, string note, string transactionType, string crspAccNumber)
+        {
+            this.accNumber = accNumber;
+            this.entryType = entryType;
+            this.note = note;
+            this.transactionType = transactionType;
+            this.crspAccNumber = crspAccNumber;
+        }
+
         [Key]
         public int patternID { get; set; }
         public string transactionType { get; set; }

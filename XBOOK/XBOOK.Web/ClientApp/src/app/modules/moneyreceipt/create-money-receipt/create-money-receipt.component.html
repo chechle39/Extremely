@@ -1,25 +1,33 @@
-<form class="form" name="form" autocomplete="off" #f="ngForm" (ngSubmit)="f.form.valid && save()">
+<form class="form" name="form" novalidate autocomplete="off" (ngSubmit)="saveMoneyReceipt(moneyReceipt)"
+[formGroup]="moneyReceipt">
   <div class="modal-header">
     <h4 class="modal-title">Money Receipt</h4>
   </div>
   <div class="modal-body">
     <div class="row  mb-2">
       <div class="col-7">
-        <input class="form-control" maxlength="16" placeholder="amount" id="amount">
+        <input digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="amount" id="amount">
       </div>
       <div class="col-5">
-        <input class="form-control" name="receiptNo" type="text" maxlength="16" placeholder="Receipt No#"
-          id="receiptNo">
+        <input formControlName="receiptNumber" class="form-control" name="receiptNumber" type="text" maxlength="16" placeholder="Receipt No#"
+          id="receiptNumber">
       </div>
+      <div class="col-12">
+        <small class="form-text text-muted danger"
+        *ngIf="!moneyReceipt.get('amount').valid && (moneyReceipt.get('amount').dirty || moneyReceipt.get('amount').touched)">
+        Please
+        enter a valid amount! <small *ngIf="!moneyReceipt.get('receiptNumber').valid && (moneyReceipt.get('receiptNumber').dirty || moneyReceipt.get('receiptNumber').touched)">and Receipt No#</small> </small>        
+      </div>
+
     </div>
 
     <div class="row">
       <div class=" col-12 mb-2 ngb-typeahead-client">
-        <input #xxx style="opacity: unset" type="text" (focus)="focusClient$.next($event.target.value)"
-          autocomplete="none" [ngbTypeahead]="searchClient"  [value]="clientName" name = "clientName"
-          [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter" id="clientName"
+        <input formControlName="clientName" #xxx style="opacity: unset" type="text" (focus)="focusClient$.next($event.target.value)"
+          autocomplete="none" [ngbTypeahead]="searchClient" [inputFormatter]="clientFormatter" [value]="clientSelected.clientName" name = "clientName"
+          [resultTemplate]="customItemTemplate" kendoTextBox  id="clientName"
            (selectItem)="selectedItem($event)"
-          class="form-control" placeholder="Client  Name" nfNoSpaces
+          class="form-control" placeholder="Client Name" nfNoSpaces
           maxlength="250" #instance="ngbTypeahead" />
 
           <ng-template #customItemTemplate let-r="result" let-t="term">
@@ -33,23 +41,23 @@
               </div>
             </div>
           </ng-template>
-
+          <small class="form-text text-muted danger" *ngIf="!moneyReceipt.get('clientName').valid && (moneyReceipt.get('clientName').dirty || moneyReceipt.get('clientName').touched)">Please enter a valid client name!</small>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <input kendoTextBox style="opacity: unset" required class="form-control" [value]="clientSelected.contactName" type="text" name="contactName" placeholder="receiver name"
-          id="contactName">
+        <input formControlName="receiverName" kendoTextBox style="opacity: unset" required class="form-control" [value]="clientSelected.contactName" type="text" name="receiverName" placeholder="receiver name"
+          id="receiverName">
+          <small class="form-text text-muted danger" *ngIf="!moneyReceipt.get('receiverName').valid && (moneyReceipt.get('receiverName').dirty || moneyReceipt.get('receiverName').touched)">Please enter a valid receiver name!</small>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <select id="paymentMethods" class="form-control">
-          <option [ngValue]="null">payment method</option>
-          <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
-            {{ method.payType }}
+        <select formControlName="entryType" id="entryType" class="form-control">
+          <option *ngFor="let method of entryBatternList" [ngValue]="method.entryType">
+            {{ method.entryType }}
           </option>
         </select>
       </div>
@@ -57,8 +65,7 @@
 
     <div class="row">
       <div class="col-7">
-        <select id="paymentMethods" class="form-control">
-          <option [ngValue]="null">payment method</option>
+        <select formControlName="paymentMethods" id="paymentMethods" class="form-control">
           <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
             {{ method.payType }}
           </option>
@@ -66,7 +73,7 @@
       </div>
       <div class="col-5">
         <div class="input-group">
-          <input class="form-control datapicker" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker (focus)="d3.toggle()"
+          <input formControlName="payDate" class="form-control datapicker" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker (focus)="d3.toggle()"
             #d3="ngbDatepicker" id="payDate">
           <div class="input-group-append">
             <div class="input-group-text" (click)="d3.toggle()">
@@ -79,14 +86,14 @@
 
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <input class="form-control" type="text" name="bankAccount" placeholder="Bank Account (Optional)"
+        <input formControlName="bankAccount" class="form-control" type="text" name="bankAccount" placeholder="Bank Account (Optional)"
           id="bankAccount">
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <input class="form-control" type="text" name="notes" placeholder="notes (Optional)" id="notes">
+        <input formControlName="note" class="form-control" type="text" name="notes" placeholder="notes (Optional)" id="notes">
       </div>
     </div>
 
@@ -98,6 +105,6 @@
     <button (click)="close(false)" type="button" class="btn btn-raised btn-secondary mr-1">
       <i class="ft-x"></i> Cancel
     </button>
-    <button type="button" class="btn btn-raised btn-success"><i class="ft-save"></i> Save</button>
+    <button [disabled]="moneyReceipt.invalid" type="submit" class="btn btn-raised btn-success"><i class="ft-save"></i> Save</button>
   </div>
 </form>

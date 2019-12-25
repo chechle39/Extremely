@@ -28,8 +28,8 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
 
 
   public genLedForm: FormGroup;
-  isSelectedAccount: boolean = false;
-  isSelectedCrspAccount: boolean = false;
+  isSelectedAccount = false;
+  isSelectedCrspAccount = false;
   genLedMethods = [
     new GenLedMethod(1, 'Tháng này'),
     new GenLedMethod(2, 'Quý này'),
@@ -60,10 +60,10 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
   ngOnInit() {
     this.accountChartService.searchAcc().subscribe(rp => {
       this.cars = rp;
-      this.tempcars=rp;
+      this.tempcars = rp;
       this.items = [];
       for (let i = 0; i < this.cars.length; i++) {
-          this.items.push({label: this.cars[i].accountNumber+'-'+this.cars[i].accountName, value: this.cars[i].accountNumber});
+          this.items.push({label: this.cars[i].accountNumber + '-' + this.cars[i].accountName, value: this.cars[i].accountNumber});
       }
       this.cars = this.items ;
 
@@ -74,12 +74,12 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
     const today = new Date().toLocaleDateString('en-GB');
     const issueDatePicker = this.tranFormsDate(today);
     return this.fb.group({
-      genLedMethods:this.genLedMethods[0].GenLedId,
+      genLedMethods: this.genLedMethods[0].GenLedId,
       currencyMethod: this.currencyMethod[0].CurrencyId,
       fromDate: issueDatePicker,
       toDate: issueDatePicker,
-      account: this.isSelectedAccount=true,
-      accountReciprocal: this.isSelectedCrspAccount=true,
+      account: this.isSelectedAccount = true,
+      accountReciprocal: this.isSelectedCrspAccount = true,
       acountNumberMethod: [null],
 
     });
@@ -94,20 +94,17 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
   close(e: boolean): void {
     if (e === true) {
       if (this.genLedForm.value.genLedMethods === 6) {
-        const dateFrom = moment([this.genLedForm.value.fromDate.year, this.genLedForm.value.fromDate.month - 1, this.genLedForm.value.fromDate.day]).format(AppConsts.defaultDateFormat);
-        // const dateFrom = [this.genLedForm.value.fromDate.year,
-        //   this.genLedForm.value.fromDate.month, this.genLedForm.value.fromDate.day].join('/') === '--' ? '' : [this.genLedForm.value.fromDate.year,
-        //   this.genLedForm.value.fromDate.month, this.genLedForm.value.fromDate.day].join('/');
-        const endFrom = moment([this.genLedForm.value.toDate.year, this.genLedForm.value.toDate.month - 1, this.genLedForm.value.toDate.day]).format(AppConsts.defaultDateFormat);
+        const dateFrom = moment([this.genLedForm.value.fromDate.year, this.genLedForm.value.fromDate.month - 1,
+          this.genLedForm.value.fromDate.day]).format(AppConsts.defaultDateFormat);
 
-        // const endFrom = [this.genLedForm.value.toDate.year,
-        // this.genLedForm.value.toDate.month, this.genLedForm.value.toDate.day].join('/') === '--' ? '' : [this.genLedForm.value.toDate.year,
-        // this.genLedForm.value.toDate.month, this.genLedForm.value.toDate.day].join('/');
+        const endFrom = moment([this.genLedForm.value.toDate.year, this.genLedForm.value.toDate.month - 1,
+          this.genLedForm.value.toDate.day]).format(AppConsts.defaultDateFormat);
+
         this.firstDate = dateFrom;
         this.endDate = endFrom;
       }
       console.log(this.genLedForm.value.genLedMethods);
-      if(this.genLedForm.value.genLedMethods ===1) {
+      if (this.genLedForm.value.genLedMethods === 1) {
       const date = new Date();
       this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
       this.endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');

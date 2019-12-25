@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XBOOK.Common\XBOOK.Common.csproj" />
     <ProjectReference Include="..\XBOOK.Data\XBOOK.Data.csproj" />
   </ItemGroup>
 

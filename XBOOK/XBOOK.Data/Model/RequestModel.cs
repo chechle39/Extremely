@@ -17,4 +17,13 @@ namespace XBOOK.Data.Model
     {
         public string FileName { get; set; }
     }
+
+    public class MoneyReceiptRequest
+    {
+        public string Keyword { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public string Currency { get; set; }
+
+    }
 }

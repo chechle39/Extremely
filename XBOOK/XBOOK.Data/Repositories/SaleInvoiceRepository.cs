@@ -21,8 +21,16 @@ namespace XBOOK.Data.Repositories
 
         public async Task<SaleInvoiceViewModel> GetLastInvoice()
         {
-            var data = await Entities.ProjectTo<SaleInvoiceViewModel>().OrderByDescending(xx => xx.InvoiceId).Take(1).LastOrDefaultAsync();
-            return data;
+            if (Entities.Count() > 1)
+            {
+                var data = await Entities.ProjectTo<SaleInvoiceViewModel>().OrderByDescending(xx => xx.InvoiceId).Take(1).LastOrDefaultAsync();
+                return data;
+            }else
+            {
+                var data = await Entities.ProjectTo<SaleInvoiceViewModel>().ToListAsync();
+                return data[0];
+            }
+            
         }
 
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id)

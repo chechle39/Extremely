@@ -45,6 +45,7 @@ namespace XBOOK.Web.Reports {
             this.vendorAddressRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("vendorAddressRow");
             this.vendorCityRow = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("vendorCityRow");
             this.vendorName = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("vendorName");
+            this.tableCell1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell1");
             this.tableCell23 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell23");
             this.vendorAddress = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("vendorAddress");
             this.tableCell28 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell28");
@@ -132,7 +133,6 @@ namespace XBOOK.Web.Reports {
             this.pageInfo1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRPageInfo>("pageInfo1");
 
             // Data Sources
-            this.jsonDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.Json.JsonDataSource>("jsonDataSource1");
             this.objectDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.ObjectBinding.ObjectDataSource>("objectDataSource1");
 
             // Calculated Fields
@@ -171,6 +171,7 @@ namespace XBOOK.Web.Reports {
         private DevExpress.XtraReports.UI.XRTableRow vendorAddressRow;
         private DevExpress.XtraReports.UI.XRTableRow vendorCityRow;
         private DevExpress.XtraReports.UI.XRTableCell vendorName;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell1;
         private DevExpress.XtraReports.UI.XRTableCell tableCell23;
         private DevExpress.XtraReports.UI.XRTableCell vendorAddress;
         private DevExpress.XtraReports.UI.XRTableCell tableCell28;
@@ -256,7 +257,6 @@ namespace XBOOK.Web.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell24;
         private DevExpress.XtraReports.UI.XRPageInfo pageInfo2;
         private DevExpress.XtraReports.UI.XRPageInfo pageInfo1;
-        private DevExpress.DataAccess.Json.JsonDataSource jsonDataSource1;
         private DevExpress.XtraReports.UI.XRControlStyle baseControlStyle;
         private DevExpress.XtraReports.UI.CalculatedField calculatedField1;
         private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
