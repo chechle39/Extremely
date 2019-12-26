@@ -61,7 +61,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     payment.id = submittedForm.controls.id.value;
     payment.invoiceId = this.invoiceId;
     payment.amount = Number(submittedForm.controls.amount.value.toString().replace(/,/g, ''));
-    payment.bankAccount = submittedForm.controls.bankAccount.value;
+    payment.receiptNumber = submittedForm.controls.bankAccount.value;
     const paymentDate = submittedForm.controls.payDate.value;
     payment.payDate = [paymentDate.year, paymentDate.month, paymentDate.day].join('-');
     const paymentMethodId = submittedForm.controls.paymentMethods.value;
@@ -76,7 +76,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
       })).subscribe((payment: any) => {
         this.paymentForm.patchValue({
           amount: payment.amount,
-          bankAccount: payment.bankAccount,
+          bankAccount: payment.receiptNumber,
           note: payment.note,
           paymentMethod: payment.payTypeID
         });

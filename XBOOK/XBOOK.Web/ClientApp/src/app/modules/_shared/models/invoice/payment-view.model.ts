@@ -5,7 +5,7 @@ export class PaymentView extends BaseModel {
   payDate: string;
   payTypeId: number;
   payType: string;
-  bankAccount: string;
+  receiptNumber: string;
   amount: number;
   note: string;
 }

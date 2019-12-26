@@ -10,10 +10,10 @@ namespace XBOOK.Data.Entities
         public Payments()
         {
         }
-        public Payments(decimal amount, string bankAccount, long id, long invoiceId, string note, DateTime payDate, string payType, int payTypeID)
+        public Payments(decimal amount, string receiptNumber, long id, long invoiceId, string note, DateTime payDate, string payType, int payTypeID)
         {
             this.amount = amount;
-            this.bankAccount = bankAccount;
+            this.receiptNumber = receiptNumber;
             invoiceID = invoiceId;
             this.note = note;
             this.payDate = payDate;
@@ -24,12 +24,12 @@ namespace XBOOK.Data.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
 
- public long ID { get; set; }
+        public long ID { get; set; }
         public long invoiceID { get; set; }
         public System.DateTime payDate { get; set; }
         public int payTypeID { get; set; }
         public string payType { get; set; }
-        public string bankAccount { get; set; }
+        public string receiptNumber { get; set; }
         public decimal amount { get; set; }
         public string note { get; set; }
     

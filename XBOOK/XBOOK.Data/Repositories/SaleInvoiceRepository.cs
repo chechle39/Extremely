@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -25,12 +23,14 @@ namespace XBOOK.Data.Repositories
             {
                 var data = await Entities.ProjectTo<SaleInvoiceViewModel>().OrderByDescending(xx => xx.InvoiceId).Take(1).LastOrDefaultAsync();
                 return data;
-            }else
+            }else if (Entities.Count() == 1)
             {
                 var data = await Entities.ProjectTo<SaleInvoiceViewModel>().ToListAsync();
                 return data[0];
+            } else
+            {
+                return null;
             }
-            
         }
 
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id)

@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ElementRef, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '@core/app-base.component';
 import { PaymentMethod } from '@modules/_shared/models/invoice/payment-method.model';
@@ -19,6 +19,13 @@ import { CreateMoneyReceiptRequest } from '@modules/_shared/models/money-receipt
   styleUrls: ['./create-money-receipt.component.scss']
 })
 export class CreateMoneyReceiptComponent extends AppComponentBase implements OnInit {
+  @Input() title = 'Add a payment';
+  @Input() outstandingAmount: any;
+  @Input() invoice: any;
+  @Input() clientId: any;
+  @Input() clientName: any;
+  @Input() contactName: any;
+  @Input() bankAccount: any;
   @ViewChild('xxx', {
     static: true
   }) xxx: ElementRef;
@@ -31,10 +38,10 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   focusClient$ = new Subject<string>();
   searchFailed = false;
   clientSelected = new ClientSearchModel();
-  clientName: string;
   LastMoneyReceipt: MoneyReceiptViewModel;
   receiptNumber: string;
   entryBatternList: EntryBatternViewModel[];
+  money: number;
   public moneyReceipt: FormGroup;
 
   constructor(
@@ -49,8 +56,48 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   }
 
   ngOnInit() {
+    if (this.outstandingAmount !== undefined) {
+      this.moneyReceipt.controls.amount.patchValue(this.outstandingAmount);
+      this.moneyReceipt.controls.clienId.patchValue(this.clientId);
+      this.moneyReceipt.controls.clientName.patchValue(this.clientName);
+      this.moneyReceipt.controls.receiverName.patchValue(this.contactName);
+      this.moneyReceipt.controls.bankAccount.patchValue(this.bankAccount);
+      const data = {
+        clientName: this.clientName,
+        contactName: this.contactName,
+        clientId: this.clientId,
+        bankAccount: this.bankAccount
+      } as ClientSearchModel;
+      this.clientSelected = data;
+    }
+    this.getParam(this.invoice);
     this.getLastDataMoneyReceipt();
     this.getAllEntryData();
+  }
+
+  getParam(data) {
+    const sortData = data.sort((a, b) => this.getDate(a.dueDate) - this.getDate(b.dueDate));
+    const dataList = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0;  i < sortData.length; i++) {
+      const y = this.moneyReceipt.controls.amount.value - sortData[i].amountIv;
+      this.money = y;
+      const x = {
+        invoiceId: sortData[i].invoiceId,
+        amountIv: (sortData[i].amountIv < this.moneyReceipt.controls.amount.value) ? sortData[i].amountIv : y,
+        dueDate: sortData[i].dueDate
+      };
+      dataList.push(x);
+    }
+  }
+
+  getDate(dateParam) {
+    const date = new Date();
+    const xx = new Date(date.toLocaleDateString());
+    const pr = new Date(dateParam);
+    const diffTime = Math.ceil(pr.getTime() - xx.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return parseFloat(diffDays.toString());
   }
 
   getLastDataMoneyReceipt() {
@@ -96,6 +143,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     this.clientSelected = item.item as ClientSearchModel;
     this.moneyReceipt.controls.clientName.patchValue(this.clientSelected.clientName);
     this.moneyReceipt.controls.receiverName.patchValue(this.clientSelected.contactName);
+    this.moneyReceipt.controls.clienId.patchValue(this.clientSelected.clientId);
   }
 
   clientFormatter(value: any) {
@@ -111,7 +159,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     const payDatePicker = { year: Number(payDateSplit[2]), month: Number(payDateSplit[1]), day: Number(payDateSplit[0]) };
     return this.fb.group({
       id: [0],
-      amount: ['', [Validators.required]],
+      amount: [0, [Validators.required]],
       receiptNumber: ['', [Validators.required]],
       clientName: ['', [Validators.required]],
       receiverName: ['', [Validators.required]],
@@ -119,11 +167,13 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       paymentMethods: [this.paymentMethods[0].payTypeId, [Validators.required]],
       payDate: payDatePicker,
       bankAccount: [''],
-      note: ['']
+      note: [''],
+      clienId: ['']
     });
   }
 
   saveMoneyReceipt(submittedForm: FormGroup) {
+    this.getParam(this.invoice);
     if (!this.moneyReceipt.valid) {
       return;
     }
@@ -133,7 +183,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     const request = {
       amount: this.moneyReceipt.value.amount,
       bankAccount: this.moneyReceipt.value.bankAccount,
-      clientID: this.moneyReceipt.value.clientName.clientId,
+      clientID: this.moneyReceipt.value.clienId,
       clientName: this.moneyReceipt.value.clientName.clientName,
       entryType: this.moneyReceipt.value.entryType,
       note: this.moneyReceipt.value.note,

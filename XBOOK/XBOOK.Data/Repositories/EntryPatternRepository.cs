@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
@@ -18,7 +19,7 @@ namespace XBOOK.Data.Repositories
         }
         public Task<List<EntryPatternViewModel>> GetAllEntry()
         {
-            return Entities.ProjectTo<EntryPatternViewModel>().ToListAsync();
+            return Entities.Where(x=>x.transactionType == "MoneyReceipt").ProjectTo<EntryPatternViewModel>().ToListAsync();
         }
     }
 }

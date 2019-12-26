@@ -9,8 +9,7 @@
         <input digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="amount" id="amount">
       </div>
       <div class="col-5">
-        <input formControlName="receiptNumber" class="form-control" name="receiptNumber" type="text" maxlength="16" placeholder="Receipt No#"
-          id="receiptNumber">
+        <input formControlName="receiptNumber" class="form-control" name="receiptNumber" type="text" maxlength="16" placeholder="Receipt No#" id="receiptNumber">
       </div>
       <div class="col-12">
         <small class="form-text text-muted danger"
@@ -86,7 +85,7 @@
 
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <input formControlName="bankAccount" class="form-control" type="text" name="bankAccount" placeholder="Bank Account (Optional)"
+        <input  [value]="clientSelected.bankAccount" formControlName="bankAccount" class="form-control" type="text" name="bankAccount" placeholder="Bank Account (Optional)"
           id="bankAccount">
       </div>
     </div>

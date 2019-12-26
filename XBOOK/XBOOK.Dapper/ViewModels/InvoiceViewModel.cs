@@ -15,5 +15,8 @@ namespace XBOOK.Dapper.ViewModels
         public DateTime DueDate { get; set; }
         public decimal Amount { get; set; }
         public decimal AmountPaid { get; set; }
+        public int ClientID { get; set; }
+        public string ContactName { get; set; }
+        public string BankAccount { get; set; }
     }
 }

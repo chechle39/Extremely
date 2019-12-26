@@ -6,4 +6,5 @@ export class ClientSearchModel extends BaseModel {
   taxCode: string;
   contactName: string;
   email: string;
+  bankAccount: string;
 }

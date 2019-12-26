@@ -11,7 +11,7 @@
         
         <div class="row">
           <div class="col-md-4" style="padding-top: 6px;">
-            <p class="label-blue">All Receipt <span> Selected </span>
+            <p class="label-blue">All Receipt <span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span>
             </p>
           </div>
           <div class="col-md-2">
@@ -134,25 +134,25 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="amountPaid" name="Amount/ Pay type" [cellClass]="'col-right'"
+            <ngx-datatable-column  prop="amountPaid" name="Amount/ Pay type" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-right">
+                <div class="col-right" style="padding-right: 0;">
                   <!-- {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}} -->
-                  {{row.amount}}
+                  {{row.amount | currency:'VND':''}}
                 </div>
-                <div class="col-right">
+                <div class="col-right" style="padding-right: 0;">
                   <span style="color: #ed7d31"> {{row.payType}}</span>
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false"
               [resizeable]="false" name="" [cellClass]="'col-action'" [headerClass]="'col-action'">
 
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
                 <div class="icon-actions">
                   <div class="actions">
-                    <a style="margin-left: 2px;" class="icon-action" (click)="redirectToEditInvoice(row.invoiceId)">
+                    <a style="margin-left: 2px;" class="icon-action">
                       <span class="icon-printer"></span>
                     </a>
                   </div>
@@ -177,7 +177,7 @@
                       <b>Grant Total</b>
                     </div>
                     <div class="col-md-3" style="padding-right:35px">
-                      <b>xxxx</b>
+                      <b>{{getGrantTotal()| currency:'VND':''}}</b>
                     </div>
                   </div>
                   <div class="row">

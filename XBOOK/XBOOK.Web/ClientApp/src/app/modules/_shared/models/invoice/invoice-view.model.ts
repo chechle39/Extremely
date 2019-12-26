@@ -8,7 +8,7 @@ export class InvoiceView {
   invoiceNumber: string;
   issueDate: Date;
   dueDate: Date;
-  clientId: number;
+  clientID: number;
   clientName: string;
   address: string;
   taxCode: string;
@@ -23,6 +23,7 @@ export class InvoiceView {
   note: string;
   term: string;
   status: string;
+  bankAccount: string;
   saleInvDetailView: SaleInvoiceDetail[];
   paymentView: PaymentView[];
   clientData: ClientView[];

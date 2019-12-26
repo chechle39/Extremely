@@ -9,6 +9,7 @@ import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { GetMoneyReceipyRequest } from '@modules/_shared/models/money-receipt/get-money-receipy-request.model';
 import { MoneyReceiptService } from '@modules/_shared/services/money-receipt.service';
 import { MoneyReceiptViewModel } from '@modules/_shared/models/money-receipt/money-receipt.model';
+import * as _ from 'lodash';
 class PagedMoneyReceiptRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -181,5 +182,11 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
       this.deleteMoney(id);
     });
 
+  }
+
+  public getGrantTotal(): number {
+    return _.sumBy(this.moneyReceiptList, item => {
+      return item.amount;
+    });
   }
 }

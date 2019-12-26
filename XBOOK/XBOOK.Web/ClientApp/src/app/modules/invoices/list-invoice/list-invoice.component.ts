@@ -15,6 +15,7 @@ import { SearchType, ActionType } from '@core/app.enums';
 import { Subscription } from 'rxjs';
 import { eventNames } from 'cluster';
 import { DataService } from '@modules/_shared/services/data.service';
+import { CreateMoneyReceiptComponent } from '@modules/moneyreceipt/create-money-receipt/create-money-receipt.component';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -27,6 +28,7 @@ class PagedInvoicesRequestDto extends PagedRequestDto {
 export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView> {
   @ViewChild('searchPanel', { static: true }) searchPanel: any;
   @ViewChildren('cb') checkBoxField: QueryList<any>;
+  sum: number;
   checkboxInvoice: Subscription = new Subscription();
   client: string;
   searchForm: FormGroup;
@@ -264,14 +266,36 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       this.message.warning('Please select a item from the list?');
       return;
     }
-    if (this.selected.length > 1) {
-      this.message.warning('Only one item selected to add payment?');
+
+    if (this.selected.filter(x => x.clientID !== this.selected[0].clientID).length !== 0) {
+      this.message.warning('Please choose the same client');
       return;
     }
+    const data = [];
+    const invoiceId = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.selected.length; i++) {
+      const amountDue = this.selected[i].amount - this.selected[i].amountPaid;
+      data.push(amountDue);
+      const invoice = {
+        invoiceId: this.selected[i].invoiceId,
+        dueDate: this.selected[i].dueDate,
+        amountIv: amountDue,
+      };
+      invoiceId.push(invoice);
+    }
+    this.sum = _.sumBy(data, item => {
+      return item;
+    });
+    const dialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
 
-    const dialog = this.modalService.open(AddPaymentComponent, AppConsts.modalOptionsSmallSize);
-    dialog.componentInstance.outstandingAmount = this.selected[0].amountPaid;
-    dialog.componentInstance.invoiceId = this.selected[0].invoiceId;
+    dialog.componentInstance.outstandingAmount = this.sum;
+    dialog.componentInstance.invoice = invoiceId;
+    dialog.componentInstance.clientId = this.selected[0].clientID;
+    dialog.componentInstance.clientName = this.selected[0].clientName;
+    dialog.componentInstance.contactName = this.selected[0].contactName;
+    dialog.componentInstance.bankAccount = this.selected[0].bankAccount;
+    // dialog.componentInstance.invoiceId = this.selected[0].invoiceId;
     dialog.result.then(result => {
       if (result) {
         this.refresh();

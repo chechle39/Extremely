@@ -58,6 +58,8 @@
       </ngx-datatable-column>
       <ngx-datatable-column name="Notes" [sortable]="false" prop="note">
       </ngx-datatable-column>
+      <ngx-datatable-column name="receiptNumber" [sortable]="false" prop="receiptNumber">
+      </ngx-datatable-column>
       <ngx-datatable-column name="Amount" [sortable]="false" [headerClass]="'col-right'" prop="amount">
         <ng-template let-row="row" ngx-datatable-cell-template>
           <div class="col-right">
@@ -65,6 +67,20 @@
           </div>
         </ng-template>
       </ngx-datatable-column>
+
+      <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+              [resizeable]="false" name="" [cellClass]="'col-action'" [headerClass]="'col-action'">
+
+              <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
+                <div class="icon-actions">
+                  <div class="actions">
+                    <a class="icon-action">
+                      <span class="icon-delete"></span>
+                    </a>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
     </ngx-datatable>
   </div>
 </div>

@@ -1,6 +1,5 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,8 +36,7 @@ namespace XBOOK.Data.Repositories
         }
 
         public async Task<MoneyReceiptViewModel> GetLastMoneyReceipt()
-        {
-     
+        {    
             if (Entities.Count() > 1)
             {
                 var data = await Entities.ProjectTo<MoneyReceiptViewModel>().OrderByDescending(xx => xx.ID).Take(1).LastOrDefaultAsync();

@@ -28,6 +28,9 @@ import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
 import { TaxService } from '@modules/_shared/services/tax.service';
 import { validateDirective } from './create-invoice/payment/add-payment/validate';
 import {FileUploadModule} from 'primeng/fileupload';
+import { CreateMoneyReceiptComponent } from '@modules/moneyreceipt/create-money-receipt/create-money-receipt.component';
+import { MoneyReceiptService } from '@modules/_shared/services/money-receipt.service';
+import { EntryBatternService } from '@modules/_shared/services/entry-pattern.service';
 @NgModule({
   declarations: [
     InvoicesComponent,
@@ -56,7 +59,16 @@ import {FileUploadModule} from 'primeng/fileupload';
     SharedModule,
     FileUploadModule
   ],
-  providers: [InvoiceService, ClientService, ProductService, PaymentService, CurrencyPipe, NgbActiveModal, TaxService],
-  entryComponents: [AddPaymentComponent, AddTaxComponent]
+  providers: [
+    EntryBatternService ,
+    MoneyReceiptService,
+    InvoiceService,
+    ClientService,
+    ProductService,
+    PaymentService,
+    CurrencyPipe,
+    NgbActiveModal,
+    TaxService],
+  entryComponents: [AddPaymentComponent, AddTaxComponent, CreateMoneyReceiptComponent]
 })
 export class InvoicesModule { }

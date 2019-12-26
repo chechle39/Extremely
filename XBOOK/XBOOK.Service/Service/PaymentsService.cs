@@ -39,7 +39,7 @@ namespace XBOOK.Service.Service
             var payment = new PaymentViewModel()
             {
                 Amount = listData.amount,
-                BankAccount = listData.bankAccount,
+                ReceiptNumber = listData.receiptNumber,
                 InvoiceId = listData.invoiceID,
                 Id = listData.ID,
                 Note = listData.note,

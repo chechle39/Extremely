@@ -20,7 +20,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 @NgModule({
   declarations: [
     MoneyreceiptComponent,
-    CreateMoneyReceiptComponent,
+   // CreateMoneyReceiptComponent,
    // SplitPipe
   ],
   entryComponents: [CreateMoneyReceiptComponent],
