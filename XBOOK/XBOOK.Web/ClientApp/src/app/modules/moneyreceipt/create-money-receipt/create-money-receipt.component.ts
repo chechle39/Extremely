@@ -12,7 +12,7 @@ import { MoneyReceiptViewModel } from '@modules/_shared/models/money-receipt/mon
 import { EntryBatternService } from '@modules/_shared/services/entry-pattern.service';
 import { EntryBatternViewModel } from '@modules/_shared/models/Entry-Pattern/entry-pattern.model';
 import { CreateMoneyReceiptRequest } from '@modules/_shared/models/money-receipt/create-money-receipt-request.model';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'xb-create-money-receipt',
   templateUrl: './create-money-receipt.component.html',
@@ -70,35 +70,69 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       } as ClientSearchModel;
       this.clientSelected = data;
     }
-    this.getParam(this.invoice);
+  //  this.getParam(this.invoice);
     this.getLastDataMoneyReceipt();
     this.getAllEntryData();
   }
 
   getParam(data) {
-    const sortData = data.sort((a, b) => this.getDate(a.dueDate) - this.getDate(b.dueDate));
+    const sortData = data.sort(function(a,b){
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    });
     const dataList = [];
+    this.money = parseFloat(this.moneyReceipt.controls.amount.value.toString().split(",").join(""));
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0;  i < sortData.length; i++) {
-      const y = this.moneyReceipt.controls.amount.value - sortData[i].amountIv;
-      this.money = y;
+      let y = 0;
+      // const y = (this.moneyReceipt.controls.amount.value.toString().split(",").length > 1)? parseFloat(this.moneyReceipt.controls.amount.value.toString().split(",").join("")) - sortData[i].amountIv : this.moneyReceipt.controls.amount.value - sortData[i].amountIv;
+      if ( this.money >= sortData[i].amountIv) {
+        y = this.money - sortData[i].amountIv;
+      } else {
+        y = this.money;
+      }
+     
+    
+      // if (this.money < 0){
+      //   if(Math.abs(this.money) < sortData[i].amountIv) {
+      //     this.money = Math.abs(this.money)
+      //   } else if (Math.abs(this.money) === sortData[i].amountIv) {
+      //     this.money = 0;
+      //   }
+      // }
+      let sum = 0
+      if (dataList.length > 0) {
+         sum = _.sumBy(dataList, item => {
+          return item.amountIv;
+        });
+      }
+      let xx = 0;
+      if (i <= 0 && sortData[i].amountIv < this.money) {
+        xx = sortData[i].amountIv;
+      } else if (i <= 0 && sortData[i].amountIv > this.money) {
+        xx = this.money ;
+      } else if(i > 0 && sortData[i].amountIv < this.money - sum) {
+        xx = sortData[i].amountIv;
+      } else if(i > 0 && sortData[i].amountIv >= this.money - sum) {
+        xx = this.money - sum;
+      }
       const x = {
         invoiceId: sortData[i].invoiceId,
-        amountIv: (sortData[i].amountIv < this.moneyReceipt.controls.amount.value) ? sortData[i].amountIv : y,
+        amountIv:xx,
         dueDate: sortData[i].dueDate
       };
+      //this.money = y;
       dataList.push(x);
     }
   }
 
-  getDate(dateParam) {
-    const date = new Date();
-    const xx = new Date(date.toLocaleDateString());
-    const pr = new Date(dateParam);
-    const diffTime = Math.ceil(pr.getTime() - xx.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return parseFloat(diffDays.toString());
-  }
+  // getDate(dateParam) {
+  //   const date = new Date();
+  //   const xx = new Date(date.toLocaleDateString());
+  //   const pr = new Date(dateParam);
+  //   const diffTime = Math.ceil(pr.getTime() - xx.getTime());
+  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  //   return parseFloat(diffDays.toString());
+  // }
 
   getLastDataMoneyReceipt() {
     this.moneyReceiptService.getLastMoney().subscribe(rp => {

@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using XAccLib.SaleInvoice;
+//using XAccLib.SaleInvoice;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -183,8 +183,8 @@ namespace XBOOK.Service.Service
             };
             try
             {
-                var saleInvoiceGL = new SaleInvoiceGL(_uow);
-                saleInvoiceGL.InvoiceGL(objData);
+                //var saleInvoiceGL = new SaleInvoiceGL(_uow);
+                //saleInvoiceGL.InvoiceGL(objData);
             }
             catch (Exception ex)
             {
@@ -523,9 +523,9 @@ namespace XBOOK.Service.Service
         {
             foreach (var item in deleted)
             {
-                var saleInvViewModel = await GetSaleInvoiceById(item.id);
-                var saleInvoiceGL = new SaleInvoiceGL(_uow);
-                saleInvoiceGL.deleteGL(saleInvViewModel.ToList()[0]);
+                //var saleInvViewModel = await GetSaleInvoiceById(item.id);
+                //var saleInvoiceGL = new SaleInvoiceGL(_uow);
+               // saleInvoiceGL.deleteGL(saleInvViewModel.ToList()[0]);
                 var getSaleInVDt = _SaleInvoiceDetailRepository.GetAll().ProjectTo<SaleInvDetailViewModel>();
                 var getByIdSaleInVDetail = getSaleInVDt.Where(x => x.InvoiceId == item.id);
                 _SaleInvoiceDetailRepository.RemoveAll(getByIdSaleInVDetail.ToList());

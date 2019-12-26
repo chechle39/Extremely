@@ -27,7 +27,7 @@ namespace XBOOK.Data.Model
 
     }
 
-    public class MoneyReceiptInvoice
+    public class MoneyReceiptPayment
     {
         public List<Invoice> InvoiceId { get; set; }
         public string ReceiptNumber { get; set; }
@@ -47,5 +47,6 @@ namespace XBOOK.Data.Model
     {
         public long InvoiceId { get; set; }
         public DateTime DueDate { get; set; }
+        public decimal AmountIv { get; set; }
     }
 }

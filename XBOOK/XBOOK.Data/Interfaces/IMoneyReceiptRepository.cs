@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
