@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateMoneyReceiptComponent } from './create-money-receipt/create-money-receipt.component';
 import { AppConsts } from '@core/app.consts';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { GetMoneyReceipyRequest } from '@modules/_shared/models/money-receipt/get-money-receipy-request.model';
@@ -33,10 +34,12 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   dateFilters = '';
   keyword = '';
   searchString = '';
+  isCheckBackTo = false;
   moneyReceiptList: MoneyReceiptViewModel[];
   constructor(
     injector: Injector,
     private fb: FormBuilder,
+    private router: Router,
     private moneyReceiptService: MoneyReceiptService,
     private modalService: NgbModal) {
     super(injector);
@@ -57,13 +60,10 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     this.getAllMoneyReceipt(objRequest);
   }
 
-  onActivate(event) {
-    // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click') {
-    }
-  }
-
   onSelect({ selected }): void {
+
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
   }
 
   getRowHeight(row) {
@@ -78,16 +78,16 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     let createOrEditClientDialog;
     createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
     createOrEditClientDialog.result.then(result => {
-      if (result) {
-        const objRequest = {
-          currency: '',
-          endDate: this.endDate,
-          keyword: this.keyword.toLocaleLowerCase(),
-          startDate: this.startDate,
-        } as GetMoneyReceipyRequest;
-        this.getAllMoneyReceipt(objRequest);
-        this.refresh();
-      }
+
+      // const objRequest = {
+      //   currency: '',
+      //   endDate: this.endDate,
+      //   keyword: this.keyword.toLocaleLowerCase(),
+      //   startDate: this.startDate,
+      // } as GetMoneyReceipyRequest;
+      // this.getAllMoneyReceipt(objRequest);
+      this.refresh();
+
     });
 
   }
@@ -139,7 +139,6 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   }
 
   sortClient() {
-    console.log('xxx');
   }
 
   getAllMoneyReceipt(request: GetMoneyReceipyRequest) {
@@ -149,8 +148,12 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     });
   }
 
-  private deleteMoney(id: number): void {
-    const request = [{ id }];
+  private deleteMoney(id1: number, receiptNumber1): void {
+    const idrs = {
+      id: id1,
+      receiptNumber: receiptNumber1
+    };
+    const request = [idrs];
 
     this.moneyReceiptService.deleteMoneyReceipt(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
@@ -166,8 +169,11 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     const requestDl = [];
     this.selected.forEach(element => {
       // this.deleteInvoice(element.invoiceId);
-      const id = element.id;
-      requestDl.push({ id });
+      const id = {
+        id: element.id,
+        receiptNumber: element.receiptNumber
+      };
+      requestDl.push(id);
     });
     this.moneyReceiptService.deleteMoneyReceipt(requestDl).subscribe(() => {
       this.notify.success('Successfully Deleted');
@@ -176,10 +182,10 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     this.selected = [];
   }
 
-  delete(id: number): void {
+  delete(id: number, receiptNumber): void {
     if (id === 0) { return; }
     this.message.confirm('Do you want to delete this money receipt ?', 'Are you sure ?', () => {
-      this.deleteMoney(id);
+      this.deleteMoney(id, receiptNumber);
     });
 
   }
@@ -188,5 +194,28 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     return _.sumBy(this.moneyReceiptList, item => {
       return item.amount;
     });
+  }
+
+  onActivate(event) {
+    // If you are using (activated) event, you will get event, row, rowElement, type
+    if (event.type === 'click') {
+      if (event.cellIndex > 0 && event.cellIndex < 5) {
+        let createOrEditClientDialog;
+        createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
+        createOrEditClientDialog.componentInstance.row = event.row;
+        createOrEditClientDialog.result.then(result => {
+
+          // const objRequest = {
+          //   currency: '',
+          //   endDate: this.endDate,
+          //   keyword: this.keyword.toLocaleLowerCase(),
+          //   startDate: this.startDate,
+          // } as GetMoneyReceipyRequest;
+          // this.getAllMoneyReceipt(objRequest);
+          this.refresh();
+
+        });
+      }
+    }
   }
 }

@@ -9,6 +9,7 @@ namespace XBOOK.Service.AutoMapper
     {
         public DomainToViewModelMappingProfile()
         {
+            CreateMap<AccountBalance, AccountBalanceViewModel>();
             CreateMap<Client, ClientViewModel>();
             CreateMap<Client, ClientCreateRequet>();
             CreateMap<SaleInvoice, SaleInvoiceModelRequest>();
@@ -23,6 +24,14 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<CompanyProfile, CompanyProfileViewModel>();
             CreateMap<MoneyReceipt, MoneyReceiptViewModel>();
             CreateMap<EntryPattern, EntryPatternViewModel>();
+            CreateMap<BuyInvoice, BuyInvoiceViewModel>();
+            CreateMap<Supplier, SupplierCreateRequest>();
+            CreateMap<Supplier, SupplierViewModel>();
+            CreateMap<BuyInvoice, BuyInvoiceModelRequest>();
+            CreateMap<BuyInvDetail, BuyInvDetailViewModel>();
+            CreateMap<Payments_2, Payment2ViewModel>();
+            CreateMap<PaymentReceipt, PaymentReceiptViewModel>();
+
         }
     }
 }

@@ -4,8 +4,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfigService } from '@shared/service/config.service';
 import { LayoutService } from '@shared/service/layout.service';
+import { DataService } from '@modules/_shared/services/data.service';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
@@ -18,11 +20,13 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   activeTitle: string;
   activeTitles: string[] = [];
   expanded: boolean;
+  // tslint:disable-next-line:variable-name
   nav_collapsed_open = false;
   logoUrl = 'assets/img/logo.png';
   public config: any = {};
   layoutSub: Subscription;
   constructor(
+    private data: DataService,
     private elementRef: ElementRef,
     private renderer: Renderer2,
     private router: Router,
@@ -64,7 +68,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.config = this.configService.templateConf;
-    //this.menuItems = ROUTES;
+    // this.menuItems = ROUTES;
 
 
 
@@ -80,7 +84,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
 
     setTimeout(() => {
-      if (this.config.layout.sidebar.collapsed != undefined) {
+      if (this.config.layout.sidebar.collapsed !== undefined) {
         if (this.config.layout.sidebar.collapsed === true) {
           this.expanded = false;
           this.renderer.addClass(this.toggleIcon.nativeElement, 'ft-toggle-left');
@@ -112,4 +116,8 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.activeTitles = titles;
   }
 
+  ShowInv() {
+    this.data.sendMessage('');
+   // this.router.navigate([`/invoice`]);
+  }
 }

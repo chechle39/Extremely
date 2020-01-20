@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { InvoicesComponent } from './invoices.component';
 import { InvoicesRoutingModule } from './invoices-routing.module';
@@ -15,18 +15,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { AvatarModule } from 'ngx-avatar';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
-import { SplitPipe } from '@shared/pipe/split.pipe';
 import { InvoiceService } from '@modules/_shared/services/invoice.service';
 import { ClientService } from '@modules/_shared/services/client.service';
 import { ProductService } from '@modules/_shared/services/product.service';
 import { SharedModule } from '@shared/shared.module';
-
 import { ListPaymentComponent } from './create-invoice/payment/list-payment/list-payment.component';
 import { AddPaymentComponent } from './create-invoice/payment/add-payment/add-payment.component';
 import { PaymentService } from '@modules/_shared/services/payment.service';
 import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
 import { TaxService } from '@modules/_shared/services/tax.service';
-import { validateDirective } from './create-invoice/payment/add-payment/validate';
 import {FileUploadModule} from 'primeng/fileupload';
 import { CreateMoneyReceiptComponent } from '@modules/moneyreceipt/create-money-receipt/create-money-receipt.component';
 import { MoneyReceiptService } from '@modules/_shared/services/money-receipt.service';
@@ -38,7 +35,6 @@ import { EntryBatternService } from '@modules/_shared/services/entry-pattern.ser
     CreateInvoiceComponent,
     AddPaymentComponent,
     ListPaymentComponent,
-    validateDirective,
     AddTaxComponent],
   imports: [
     CommonModule,

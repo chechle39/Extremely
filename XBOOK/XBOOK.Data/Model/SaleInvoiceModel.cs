@@ -41,6 +41,11 @@ namespace XBOOK.Data.Model
     public class requestDeleted
     {
         public long id { get; set; }
+        public string receiptNumber { get; set; }
+    }
+    public class Deleted
+    {
+        public long id { get; set; }
     }
 
     public class genledSearch

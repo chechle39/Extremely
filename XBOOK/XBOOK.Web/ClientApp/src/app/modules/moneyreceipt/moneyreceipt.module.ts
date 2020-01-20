@@ -16,6 +16,7 @@ import { MoneyReceiptService } from '@modules/_shared/services/money-receipt.ser
 import { EntryBatternService } from '@modules/_shared/services/entry-pattern.service';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { DigitOnlyModule } from '@uiowa/digit-only';
+import { InvoiceService } from '@modules/_shared/services/invoice.service';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,6 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
     NgxCleaveDirectiveModule,
     DigitOnlyModule
   ],
-  providers: [ClientService, MoneyReceiptService, EntryBatternService]
+  providers: [ClientService, MoneyReceiptService, EntryBatternService, InvoiceService]
 })
 export class MoneyreceiptModule { }

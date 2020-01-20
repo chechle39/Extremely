@@ -7,5 +7,6 @@ namespace XBOOK.Service.Interfaces
     public interface IEntryPatternService
     {
         Task<List<EntryPatternViewModel>> GetAllEntry();
+        Task<List<EntryPatternViewModel>> GetAllEntryPayment();
     }
 }

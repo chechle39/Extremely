@@ -53,5 +53,18 @@ namespace XBOOK.Data.Repositories
             }
            
         }
+
+        public Task<MoneyReceiptViewModel> GetMoneyById(long Id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<bool> Update(MoneyReceiptViewModel request)
+        {
+            var mapRequest = AutoMapper.Mapper.Map<MoneyReceiptViewModel, MoneyReceipt>(request);
+            if (mapRequest.ID == 0) return await Task.FromResult(false); ;
+            Entities.Update(mapRequest);
+            return await Task.FromResult(true);
+        }
     }
 }

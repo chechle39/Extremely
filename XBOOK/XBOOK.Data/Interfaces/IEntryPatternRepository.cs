@@ -9,5 +9,7 @@ namespace XBOOK.Data.Interfaces
     public interface IEntryPatternRepository
     {
         Task<List<EntryPatternViewModel>> GetAllEntry();
+        Task<List<EntryPatternViewModel>> GetAllEntryPayment();
+
     }
 }

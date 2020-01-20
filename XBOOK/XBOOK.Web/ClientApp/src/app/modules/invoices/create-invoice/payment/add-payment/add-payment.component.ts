@@ -7,6 +7,7 @@ import { PaymentView } from '@modules/_shared/models/invoice/payment-view.model'
 import { PaymentService } from '@modules/_shared/services/payment.service';
 import { finalize } from 'rxjs/operators';
 import { InvoiceService } from '@modules/_shared/services/invoice.service';
+import { MoneyReceiptService } from '@modules/_shared/services/money-receipt.service';
 @Component({
   selector: 'xb-add-payment',
   templateUrl: './add-payment.component.html',
@@ -30,6 +31,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     public activeModal: NgbActiveModal,
     public paymentService: PaymentService,
     private invoiceService: InvoiceService,
+    private moneyReceiptService: MoneyReceiptService,
     public fb: FormBuilder) {
     super(injector);
     this.paymentForm = this.createPaymentFormGroup();
@@ -40,7 +42,16 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
       this.getPaymentDetail(this.id);
     }
     this.paymentForm = this.createPaymentFormGroup();
+    // this.getLastDataMoneyReceipt();
   }
+
+  getLastDataMoneyReceipt() {
+    this.moneyReceiptService.getLastMoney().subscribe(rp => {
+      // this.receiptNumber = rp.receiptNumber;
+      this.paymentForm.controls.bankAccount.patchValue(rp.receiptNumber);
+    });
+  }
+
   createPaymentFormGroup() {
     const today = new Date().toLocaleDateString('en-GB');
     const issueDateSplit = today.split('/');

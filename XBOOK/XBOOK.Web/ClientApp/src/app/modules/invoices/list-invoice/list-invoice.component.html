@@ -36,7 +36,7 @@
           <p class="label-blue">All Invoices <span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span>
           </p>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <div ngbDropdown>
             <button class="btn btn-flat mr-1 label-blue" id="bulkActions" ngbDropdownToggle>Bulk
               Actions</button>
@@ -48,7 +48,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 float-right">
+        <div class="col-md-5 float-right">
           <div class="position-relative has-icon-left input-group">
             <input type="text" [(ngModel)]="keyword" name="keyword" (keyup)="refresh()" autocomplete="off" class="form-control round pl-4"
               placeholder="Search">

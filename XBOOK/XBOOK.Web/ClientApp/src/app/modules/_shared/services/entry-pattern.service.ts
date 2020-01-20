@@ -9,4 +9,7 @@ export class EntryBatternService extends BaseService {
     getAllEntry(): Observable<EntryBatternViewModel[]> {
         return this.post<EntryBatternViewModel[]>(`${API_URI.getAllEntryURL}`, null);
     }
+    getAllEntryPayment(): Observable<EntryBatternViewModel[]> {
+        return this.post<EntryBatternViewModel[]>(`${API_URI.getAllEntryPaymentURL}`, null);
+    }
 }

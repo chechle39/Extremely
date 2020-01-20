@@ -6,14 +6,14 @@
       </div>
       <div class="col-md-6 float-left">
         <button [disabled]="outstandingAmount === 0" (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></button>
-        <div ngbDropdown class="float-right">
+        <!-- <div ngbDropdown class="float-right">
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Bulk Actions
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
             <button (click)="editPayment()" class="dropdown-item"><span class="icon-edit"></span> Edit</button>
             <button (click)="deletePayment()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
           </div>
-        </div>
+        </div> -->
       </div>
 
     </div>
@@ -74,7 +74,7 @@
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
                 <div class="icon-actions">
                   <div class="actions">
-                    <a class="icon-action">
+                    <a (click)="delete(row)"  class="icon-action">
                       <span class="icon-delete"></span>
                     </a>
                   </div>

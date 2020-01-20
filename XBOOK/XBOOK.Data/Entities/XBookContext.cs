@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using XBOOK.Data.EntityConfigurations;
 
 namespace XBOOK.Data.Entities
@@ -23,7 +22,12 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new EntryPatternConfiguration())
                 .ApplyConfiguration(new TaxConfiguration())
                 .ApplyConfiguration(new CompanyProfileConfiguration())
-                .ApplyConfiguration(new MoneyReceiptConfiguration());
+                .ApplyConfiguration(new MoneyReceiptConfiguration())
+                .ApplyConfiguration(new SupplierConfiguration())
+                .ApplyConfiguration(new PaymentReceiptConfiguration())
+                .ApplyConfiguration(new Payments_2Configuration())
+                .ApplyConfiguration(new BuyInvoiceConfiguration())
+                .ApplyConfiguration(new BuyInvDetailConfiguration());
 
             //#region Identity Config
 

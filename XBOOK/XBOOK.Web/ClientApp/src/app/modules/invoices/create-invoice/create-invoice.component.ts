@@ -26,7 +26,7 @@ import { ItemModel } from 'app/modules/_shared/models/invoice/item.model';
 import { ClientService } from 'app/modules/_shared/services/client.service';
 import { InvoiceService } from '@modules/_shared/services/invoice.service';
 import { AppComponentBase } from '@core/app-base.component';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { AddPaymentComponent } from './payment/add-payment/add-payment.component';
 import { AppConsts } from '@core/app.consts';
 import { PaymentView } from '@modules/_shared/models/invoice/payment-view.model';
@@ -35,8 +35,9 @@ import { AddTaxComponent } from './add-tax/add-tax.component';
 import { InvoiceView } from '@modules/_shared/models/invoice/invoice-view.model';
 import * as moment from 'moment';
 import { ActionType } from '@core/app.enums';
-import { debounceTime, distinctUntilChanged, switchMap, finalize, map, tap, catchError, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, finalize, catchError } from 'rxjs/operators';
 import { TaxService } from '@modules/_shared/services/tax.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'xb-create-invoice',
@@ -84,7 +85,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   totalTaxAmount = 0;
   subTotalDiscountIncl = 0;
   totalAmount = 0;
-  amountPaid = 0;
+  amountPaid: any;
   amountDue = 0;
   taxsText = '% VAT';
   invoiceId = 0;
@@ -123,6 +124,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   nameFile: string;
   searching = false;
   searchFailed = false;
+  isCheckDate: boolean;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -223,11 +225,13 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     const today = new Date().toLocaleDateString('en-GB');
     const issueDateSplit = today.split('/');
     const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
+    const issueDatePicker1 = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
+
     this.invoiceForm = this.fb.group({
       invoiceNumber: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
       invoiceSerial: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceSerial],
       contactName: ['', [Validators.required]],
-      clientName: [''],
+      clientName: ['', [Validators.required]],
       clientId: [0],
       address: [''],
       taxCode: [''],
@@ -237,8 +241,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       yourCompanyId: [this.yourCompanyId, [Validators.required]],
       yourTaxCode: [this.taxCode, [Validators.required]],
       yourBankAccount: [this.bankAccount, [Validators.required]],
-      issueDate: issueDatePicker,
-      dueDate: issueDatePicker,
+      issueDate: [issueDatePicker],
+      dueDate: issueDatePicker1,
       reference: [''],
       totalDiscount: [''],
       amountPaid: [''],
@@ -248,7 +252,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       invoiceId: [0],
     });
   }
-
+  get issueDate() {
+    return this.invoiceForm.get('issueDate');
+  }
   initItems() {
     const formArray = this.fb.array([
       // load first row at start
@@ -515,8 +521,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   save() {
 
-
-    if (this.invoiceForm.controls.invoiceSerial.invalid === true || this.invoiceForm.controls.invoiceNumber.invalid === true) {
+    if (this.invoiceForm.controls.invoiceSerial.invalid === true
+      || this.invoiceForm.controls.invoiceNumber.invalid === true
+      || this.invoiceForm.controls.issueDate.invalid === true
+      || this.invoiceForm.controls.clientName.invalid === true
+      || this.invoiceForm.controls.contactName.invalid === true
+      || this.invoiceForm.controls.dueDate.invalid === true || this.isCheckDate === true) {
       this.message.warning('Form invalid');
       return;
     }
@@ -766,9 +776,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.totalAmount = this.subTotalAmount + this.totalTaxAmount + this.subTotalDiscountIncl;
     const amountPaid = (this.invoiceForm.controls.amountPaid as FormControl);
     if (amountPaid.value !== '') {
-      this.amountPaid = amountPaid.value;
+      this.amountPaid = _.sumBy(this.paymentViews, item => {
+        return item.amount;
+      });
     }
-    this.amountDue = this.totalAmount - amountPaid.value;
+    this.amountDue = this.totalAmount - this.amountPaid;
   }
   amountPaidChange(value) {
     if (value !== '') {
@@ -777,6 +789,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     } else {
       this.amountDue = this.totalAmount;
     }
+  }
+  public getAmountPaymentTotal() {
+    this.amountPaid = _.sumBy(this.paymentViews, item => {
+      return item.amount;
+    });
   }
   totalDiscountChange() {
     this.calculateTotalAmount();
@@ -1068,7 +1085,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     const request = {
       filename: fileName
     };
-    this.invoiceService.downLoadFile(request).subscribe(rp => { } );
+    this.invoiceService.downLoadFile(request).subscribe(rp => { });
   }
 
 
@@ -1141,6 +1158,22 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
     } else {
       return nameFile;
+    }
+  }
+  onDateSelection(e) {
+    const issueDate = [this.invoiceForm.controls.issueDate.value.year,
+      this.invoiceForm.controls.issueDate.value.month,
+      this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
+        this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-');
+
+    const dueDate = [this.invoiceForm.controls.dueDate.value.year,
+        this.invoiceForm.controls.dueDate.value.month,
+        this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
+          this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-');
+    if (issueDate > dueDate) {
+      return this.isCheckDate = true;
+    } else {
+      return this.isCheckDate = false;
     }
   }
 }

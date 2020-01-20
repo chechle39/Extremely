@@ -62,6 +62,7 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
       this.cars = rp;
       this.tempcars = rp;
       this.items = [];
+      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.cars.length; i++) {
           this.items.push({label: this.cars[i].accountNumber + '-' + this.cars[i].accountName, value: this.cars[i].accountNumber});
       }

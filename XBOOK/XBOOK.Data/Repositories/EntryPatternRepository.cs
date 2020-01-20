@@ -21,5 +21,9 @@ namespace XBOOK.Data.Repositories
         {
             return Entities.Where(x=>x.transactionType == "MoneyReceipt").ProjectTo<EntryPatternViewModel>().ToListAsync();
         }
+        public Task<List<EntryPatternViewModel>> GetAllEntryPayment()
+        {
+            return Entities.Where(x => x.transactionType == "PaymentReceipt").ProjectTo<EntryPatternViewModel>().ToListAsync();
+        }
     }
 }

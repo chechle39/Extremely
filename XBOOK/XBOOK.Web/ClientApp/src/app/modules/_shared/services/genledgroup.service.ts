@@ -32,4 +32,8 @@ export class GenLedGroupService extends BaseService {
     const url = window.URL.createObjectURL(blob);
     saveAs(blob, 'GeneralLedger.csv');
   }
+  GenGroupSaveDataPrint(requeData: any) {
+    return this.post(`${API_URI.GenLedGroupSaveDataPrint}`, requeData);
+  }
+
 }

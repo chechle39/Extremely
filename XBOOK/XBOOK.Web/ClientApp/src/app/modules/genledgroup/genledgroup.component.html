@@ -28,6 +28,9 @@
           <div ngbDropdown>
             <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
             </button>
+            <div class="d-inline-block mx-2">
+              <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
+            </div>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item"><span class="icon-import"></span> Import General Ledger</button>
               <button (click)="exportData()" class="dropdown-item"><span class="icon-export"></span> Export General
@@ -40,20 +43,22 @@
       </div>
 
       <div *ngFor="let group of genViews">
-        <div *ngFor="let account of tempaccount" >
-          <div *ngIf="group.accNumber==account.accountNumber" style="color: #546D74;position: absolute; font-size: 16px;">{{account.accountName}}-{{account.accountNumber}}</div>   
+        <div *ngFor="let account of tempaccount">
+          <div *ngIf="group.accNumber==account.accountNumber"
+            style="color: #546D74;position: absolute; font-size: 16px;">
+            {{account.accountName}}-{{account.accountNumber}}</div>
         </div>
-          
-        
+
+
         <div class="row">
-          <hr  width="98%" style="height: 2px;;background: #6A0888;"/>   
+          <hr width="98%" style="height: 2px;;background: #6A0888;" />
           <div class="col-md-12">
             <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="group.genneralListData"
               [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator"
               [columnMode]="ColumnMode.force" [headerHeight]="60" [footerHeight]="100" [reorderable]="reorderable"
-            [selected]="selected" [selectionType]="SelectionType.checkbox" [rowHeight]="getRowHeight"
+              [selected]="selected" [selectionType]="SelectionType.checkbox" [rowHeight]="getRowHeight"
               [selectAllRowsOnPage]="false">
-            
+
               <ngx-datatable-column>
                 <ng-template ngx-datatable-header-template>
                   <span class="coldata" style="margin-left: -9px;">Số Hiệu</span>
@@ -65,7 +70,7 @@
 
               <ngx-datatable-column prop="dateIssue">
                 <ng-template ngx-datatable-header-template>
-                  <span class="coldata"style="margin-left:-9px">Ngày Tháng</span>
+                  <span class="coldata" style="margin-left:-9px">Ngày Tháng</span>
                 </ng-template>
                 <ng-template let-row="row" ngx-datatable-cell-template>
                   <div style="margin-left: 5px;">{{row.dateIssue | date: 'dd/MM/yyyy'}}</div>
@@ -79,15 +84,15 @@
                 <ng-template let-row="row" ngx-datatable-cell-template>
                   <div style="text-align:left;margin-left: 23px;">{{row.note}}</div>
                 </ng-template>
-              </ngx-datatable-column>             
+              </ngx-datatable-column>
 
               <ngx-datatable-column>
                 <ng-template ngx-datatable-header-template>
-                  <span class="headercrspAccNumber" >TK Đối Ứng</span>
+                  <span class="headercrspAccNumber">TK Đối Ứng</span>
                 </ng-template>
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                    <div class="datacrspAccNumber">{{row.crspAccNumber}}</div>
-                  </ng-template>
+                  <div class="datacrspAccNumber">{{row.crspAccNumber}}</div>
+                </ng-template>
               </ngx-datatable-column>
 
               <ngx-datatable-column prop="debit">
@@ -95,7 +100,16 @@
                   <span class="headerdebit">Phát Sinh Nợ</span>
                 </ng-template>
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  <div class="datadebit" >{{row.debit | currency:'VND':''}}</div>
+                  <div class="datadebit">
+                    <div>
+                      <div *ngIf="row.debit !== 0" class="col-more-info">
+                        {{row.debit | currency:'VND':''}}
+                      </div>
+                      <div *ngIf="row.debit === 0">
+                        <a>-</a>
+                      </div>
+                    </div>
+                  </div>
                 </ng-template>
               </ngx-datatable-column>
 
@@ -104,28 +118,51 @@
                   <span class="headercredit">Phát Sinh Có</span>
                 </ng-template>
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  <div class="datacredit" >{{row.credit | currency:'VND':''}}</div>
+                  <div class="datacredit">
+                    <div>
+                      <div *ngIf="row.credit !== 0" class="col-more-info">
+                        {{row.credit | currency:'VND':''}}
+                      </div>
+                      <div *ngIf="row.credit === 0">
+                        <a>-</a>
+                      </div>
+                    </div>
+                  </div>
                 </ng-template>
               </ngx-datatable-column>
-            
+
 
               <ngx-datatable-footer>
                 <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                   let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
                   <div class="row"
                     style="position:relative;display: inline-block;width: 100%;border-top: 3px double #ccc;padding-top: 105px;margin-left: -2px;">
-                    <div class="row text-right"style="position:relative;margin-top: -100px;">
+                    <div class="row text-right" style="position:relative;margin-top: -100px;">
                       <div class="col-md-3"></div>
                       <div class="col-md-3"></div>
                       <div class="col-md-2 sum">
                         Tổng
                       </div>
                       <div class="col-md-2 sumdebit">
-                        {{group.totaldebit | currency:'VND':''}}
+                        <div>
+                          <div *ngIf="group.totaldebit !== 0">
+                            {{group.totaldebit  | currency:'VND':''}}
+                          </div>
+                          <div *ngIf="group.totaldebit  === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
                       </div>
                       <div class="col-md-2 sumcredit">
-                          {{group.totalcredit  | currency:'VND':''}}
-                     </div>
+                        <div>
+                          <div *ngIf="group.totalcredit !== 0">
+                            {{group.totalcredit  | currency:'VND':''}}
+                          </div>
+                          <div *ngIf="group.totalcredit  === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <!-- <div class="row">

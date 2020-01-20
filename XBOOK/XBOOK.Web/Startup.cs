@@ -78,21 +78,41 @@ namespace XBOOK.Web
             services.AddTransient<IAcountChartService, AccountChartSerVice>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IPaymentReceiptService, PaymentReceiptService>();
+            services.AddTransient<ICompanyProfileService, CompanyProfileService>();
+            services.AddTransient<IGeneralLedgerGroupService, GeneralLedgerGroupService>();
+            services.AddTransient<IMoneyReceiptService, MoneyReceiptService>();
+            services.AddTransient<IEntryPatternService, EntryPatternService>();
+            services.AddTransient<IBuyInvoiceService, BuyInvoiceService>();
+            services.AddTransient<ISupplierService, SupplierService>();
+            services.AddTransient<IPayments2Service, Payments2Service>();
+            services.AddTransient<IBuyDetailInvoiceService, BuyDetailInvoiceService>();
+            services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
+            services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();
+            services.AddTransient<IPaymentReceiptRepository, PaymentReceiptRepository>();
             services.AddTransient<IClientRepository, ClientRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<ISaleInvoiceRepository, SaleInvoiceRepository>();
             services.AddTransient<ISaleInvoiceDetailRepository, SaleInvoiceDetailRepository>();
             services.AddTransient<ICompanyProfileReponsitory, CompanyProfileReponsitory>();
             services.AddTransient<ITaxRepository, TaxRepository>();
             services.AddTransient<IMoneyReceiptRepository, MoneyReceiptRepository>();
             services.AddTransient<IEntryPatternRepository, EntryPatternRepository>();
-            services.AddTransient<ICompanyProfileService, CompanyProfileService>();
+            services.AddTransient<IBuyInvoiceRepository, BuyInvoiceRepository>();
+            services.AddTransient<ISupplierRepository, SupplierRepository>();
+            services.AddTransient<IBuyInvDetailRepository, BuyInvDetailRepository>();
+            services.AddTransient<IPayment2Repository, Payment2Repository>();
+            services.AddTransient<IAccountDetailServiceDapper, AccountDetailServiceDapper>();
+
             services.AddTransient<IClientServiceDapper, ClientServiceDapper>();
+            services.AddTransient<IAccountBalanceServiceDapper, AccountBalanceServiceDapper>();
             services.AddTransient<IInvoiceServiceDapper, InvoiceServiceDapper>();
             services.AddTransient<IMoneyReceiptDapper, MoneyReceiptServiceDapper>();
-            services.AddTransient<IGeneralLedgerGroupService, GeneralLedgerGroupService>();
-            services.AddTransient<IMoneyReceiptService, MoneyReceiptService>();
-            services.AddTransient<IEntryPatternService, EntryPatternService>();
+            services.AddTransient<IBuyInvoiceServiceDapper, BuyInvoiceServiceDapper>();
+            services.AddTransient<ISupplierServiceDapper, SupplierServiceDapper>();
+            services.AddTransient<IPaymentReceiptServiceDapper, PaymentReceiptServiceDapper>();
+
             services.AddTransient<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>

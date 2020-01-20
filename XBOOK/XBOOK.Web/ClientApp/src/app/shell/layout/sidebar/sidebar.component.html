@@ -25,11 +25,17 @@
       <li class=" nav-item"><a routerLink="/dashboard"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">Dashboard</span></a>
       </li>
-      <li class=" nav-item"><a routerLink="/invoice"><i class="ft-droplet"></i><span data-i18n=""
+      <li (click)="ShowInv()" class=" nav-item"><a routerLink="/invoice"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">Invoices</span></a>
       </li>
       <li class=" nav-item"><a routerLink="/client"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">Clients</span></a>
+      </li>
+      <li (click)="ShowInv()" class=" nav-item"><a routerLink="/buyinvoice"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Buy Invoice</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/supplier"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Supplier</span></a>
       </li>
       <li class=" nav-item"><a routerLink="/product"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">Products</span></a>
@@ -37,10 +43,25 @@
       <li class=" nav-item"><a routerLink="/moneyreceipt"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">Money Receipt</span></a>
       </li>
+      <li class=" nav-item"><a routerLink="/paymentreceipt"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Payment Receipt</span></a>
+      </li>
       <li class=" nav-item"><a routerLink="/generalentry"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">General Journal</span></a>
       <li class=" nav-item"><a routerLink="/genledgroup"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">General Ledger</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/accountbalance"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Account Balance</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/debitage"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Debit Age</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/salesreport"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Sales Report</span></a>
+      </li>
+      <li class=" nav-item"><a routerLink="/acountdetail"><i class="ft-droplet"></i><span data-i18n=""
+            class="menu-title">Account Detail</span></a>
       </li>
       <li class=" nav-item"><a routerLink="/print/disign"><i class="ft-droplet"></i><span data-i18n=""
             class="menu-title">Report Designer</span></a>

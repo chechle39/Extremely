@@ -202,7 +202,6 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   }
 
   onSelect({ selected }): void {
-
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
@@ -276,13 +275,15 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.selected.length; i++) {
       const amountDue = this.selected[i].amount - this.selected[i].amountPaid;
-      data.push(amountDue);
-      const invoice = {
-        invoiceId: this.selected[i].invoiceId,
-        dueDate: this.selected[i].dueDate,
-        amountIv: amountDue,
-      };
-      invoiceId.push(invoice);
+      if (amountDue > 0) {
+        data.push(amountDue);
+        const invoice = {
+          invoiceId: this.selected[i].invoiceId,
+          dueDate: this.selected[i].dueDate,
+          amountIv: amountDue,
+        };
+        invoiceId.push(invoice);
+      }
     }
     this.sum = _.sumBy(data, item => {
       return item;
@@ -298,8 +299,10 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     // dialog.componentInstance.invoiceId = this.selected[0].invoiceId;
     dialog.result.then(result => {
       if (result) {
-        this.refresh();
+
       }
+      this.refresh();
+      this.selected = [];
     });
   }
   public getOutstanding(): number {

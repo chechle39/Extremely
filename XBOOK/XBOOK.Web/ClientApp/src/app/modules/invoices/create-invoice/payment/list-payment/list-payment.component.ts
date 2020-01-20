@@ -54,6 +54,11 @@ export class ListPaymentComponent extends AppComponentBase implements OnInit {
     this.deletePaymentOutput.emit(this.selected);
     this.selected = [];
   }
+  delete(row) {
+    this.selected.push(row);
+    this.deletePaymentOutput.emit(this.selected);
+    this.selected = [];
+  }
   editPayment() {
       if (this.selected.length === 0) {
         this.message.warning('Please select a item from the list?');

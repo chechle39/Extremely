@@ -24,5 +24,12 @@ namespace XBOOK.Web.Controllers
             var entryData = await _entryPatternService.GetAllEntry();
             return Ok(entryData);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetAllEntryPayment()
+        {
+            var entryData = await _entryPatternService.GetAllEntryPayment();
+            return Ok(entryData);
+        }
     }
 }

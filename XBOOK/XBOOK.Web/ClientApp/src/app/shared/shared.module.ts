@@ -22,8 +22,13 @@ import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { CreatePaymentReceiptComponent } from '@modules/paymentreceipt/payment-receipt/payment-receipt.component';
+import { validateDirective } from './validators/validate';
+import { validateDateDirective } from './validators/validateDateDirective';
 @NgModule({
   declarations: [
+    validateDateDirective,
+    validateDirective,
     SidebarDirective,
     SidebarLinkDirective,
     SidebarListDirective,
@@ -33,6 +38,7 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     ThousandSuffixesPipe,
     SplitPipe,
     CreateMoneyReceiptComponent,
+    CreatePaymentReceiptComponent,
     FilterPipe],
   imports: [
     NgbModule,
@@ -55,6 +61,8 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     }),
   ],
   exports: [
+    validateDateDirective,
+    validateDirective,
     ThousandSuffixesPipe,
     TranslateModule,
     SidebarDirective,
@@ -63,6 +71,7 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     SidebarAnchorToggleDirective,
     SplitPipe,
     CreateMoneyReceiptComponent,
+    CreatePaymentReceiptComponent,
     SidebarToggleDirective],
   providers: [
     { provide: NgbDateParserFormatter, useClass: MomentDateFormatter }

@@ -1,0 +1,113 @@
+  .ngx-datatable .datatable-footer .datatable-footer-inner {
+      display: inline-block !important;
+    }
+  :host ::ng-deep.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+      border-bottom: hidden;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+  
+  :host ::ng-deep .form-line{
+  
+    margin-bottom: -30px;
+  }
+
+  
+  
+  :host ::ng-deep .datatable-body-row {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+  }
+  
+
+  
+  :host ::ng-deep .datatable-row-group {
+    height: 25px;
+  }
+  .totalDebit{
+    margin-right: -205px;
+  }
+  .totalCredit{
+    margin-right: -92px;
+  }
+  .totalDebitClosing{
+    margin-right: -20px;
+  }
+@media only screen and (max-width: 1820px){
+  .totalDebit{
+    margin-right: -184px;
+  }
+  .totalCredit{
+    margin-right: -92px;
+  }
+  .totalDebitClosing{
+    margin-right: -25px;
+  }
+}
+@media only screen and (max-width: 1700px){
+  .totalDebit{
+    margin-right: -171px;
+  }
+  .totalCredit{
+    margin-right: -88px;
+  }
+  .totalDebitClosing{
+  margin-right: -26px;
+  }
+}
+@media only screen and (max-width: 1600px){
+  .totalDebit{
+    margin-right: -158px;
+  }
+  .totalCredit{
+    margin-right: -90px;
+  }
+  .totalDebitClosing{
+    margin-right: -30px;
+  }
+}
+@media only screen and (max-width: 1500px){
+  .totalDebit{
+    margin-right: -155px;
+  }
+  .totalCredit{
+    margin-right: -87px;
+  }
+  .totalDebitClosing{
+    margin-right: -33px;
+  }
+}
+@media only screen and (max-width: 1440px){
+  .totalDebit{
+    margin-right: -147px;
+  }
+  .totalCredit{
+    margin-right: -88px;
+  }
+  .totalDebitClosing{
+    margin-right: -35px;
+  }
+}
+@media only screen and (max-width: 1360px){
+  .totalDebit{
+    margin-right: -137px;
+  }
+  .totalCredit{
+    margin-right: -85px;
+  }
+  .totalDebitClosing{
+    margin-right: -38px;
+  }
+}
+@media only screen and (max-width: 1280px){
+  .totalDebit{
+    margin-right: -128px;
+  }
+  .totalCredit{
+    margin-right: -85px;
+  }
+  .totalDebitClosing{
+    margin-right: -40px;
+  }
+}

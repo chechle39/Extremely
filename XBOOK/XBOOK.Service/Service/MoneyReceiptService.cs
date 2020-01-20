@@ -18,13 +18,17 @@ namespace XBOOK.Service.Service
         private readonly IPaymentsService _paymentsService;
         private readonly ISaleInvoiceService _saleInvoiceService;
         private readonly IMoneyReceiptRepository _iMoneyReceiptRepository;
+        private readonly ISaleInvoiceRepository _saleInvoiceRepository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IUnitOfWork _uow;
-        public MoneyReceiptService(IUnitOfWork uow, IMoneyReceiptRepository iMoneyReceiptRepository, IPaymentsService paymentsService, ISaleInvoiceService saleInvoiceService)
+        public MoneyReceiptService(IPaymentRepository paymentRepository,ISaleInvoiceRepository saleInvoiceRepository,IUnitOfWork uow, IMoneyReceiptRepository iMoneyReceiptRepository, IPaymentsService paymentsService, ISaleInvoiceService saleInvoiceService)
         {
             _uow = uow;
             _iMoneyReceiptRepository = iMoneyReceiptRepository;
             _paymentsService = paymentsService;
             _saleInvoiceService = saleInvoiceService;
+            _saleInvoiceRepository = saleInvoiceRepository;
+            _paymentRepository = paymentRepository;
         }
 
         public async Task<bool> CreateMoneyReceipt(MoneyReceiptViewModel request)
@@ -34,62 +38,87 @@ namespace XBOOK.Service.Service
             return save;
         }
 
-        public Task<bool> CreateMoneyReceiptPayment(MoneyReceiptPayment request)
+        public async Task<bool> CreateMoneyReceiptPaymentAsync(MoneyReceiptPayment request)
         {
-            PaymentViewModel payMent = null;
-            foreach(var item in request.InvoiceId)
+            Payments payMent = null;
+            foreach (var item in request.InvoiceId)
             {
-                payMent = new PaymentViewModel
+                if (item.AmountIv > 0)
                 {
-                    InvoiceId = item.InvoiceId,
-                    Amount = item.AmountIv,
-                    Id = 0,
-                    Note = request.Note,
-                    PayDate = request.PayDate,
-                    PayType = request.PayType,
-                    PayTypeID = request.PayTypeID,
-                    ReceiptNumber = request.ReceiptNumber,
-                };
-                _paymentsService.SavePayMent(payMent);
-                var payMentById = _paymentsService.GetAllPaymentsByInv(item.InvoiceId).Result;
-                var sumPayMent = payMentById.AsEnumerable().Sum(x => x.Amount);
-                var invoiceById = _saleInvoiceService.GetSaleInvoiceById(item.InvoiceId).Result;
-                var saleInRq = new SaleInvoice()
-                {
-                    amountPaid = sumPayMent,
-                    clientID = invoiceById.ToList()[0].ClientId,
-                    discount = invoiceById.ToList()[0].Discount,
-                    discRate = invoiceById.ToList()[0].DiscRate,
-                    dueDate = invoiceById.ToList()[0].DueDate,
-                    invoiceID = invoiceById.ToList()[0].InvoiceId,
-                    invoiceNumber = invoiceById.ToList()[0].InvoiceNumber,
-                    invoiceSerial = invoiceById.ToList()[0].InvoiceSerial,
-                    issueDate = invoiceById.ToList()[0].IssueDate,
-                    note = invoiceById.ToList()[0].Note,
-                    reference = invoiceById.ToList()[0].Reference,
-                    status = invoiceById.ToList()[0].Status,
-                    subTotal = invoiceById.ToList()[0].SubTotal,
-                    term = invoiceById.ToList()[0].Term,
-                    vatTax = invoiceById.ToList()[0].VatTax,
-                };
-                _saleInvoiceService.UpdateSaleInvPay(saleInRq);
+                    payMent = new Payments
+                    {
+                        invoiceID = item.InvoiceId,
+                        amount = item.AmountIv,
+                        ID = 0,
+                        note = request.Note,
+                        payDate = request.PayDate,
+                        payType = request.PayType,
+                        payTypeID = request.PayTypeID,
+                        receiptNumber = request.ReceiptNumber,
+                    };
+                    var payUw = _uow.GetRepository<IRepository<Payments>>();
+                    payUw.AddData(payMent);
+                    _uow.SaveChanges();
+                    //  _paymentsService.SavePayMent(payMent);
+
+                    var payMentById = _paymentsService.GetAllPaymentsByInv(item.InvoiceId).Result;
+                    var sumPayMent = payMentById.AsEnumerable().Sum(x => x.Amount);
+                    //var data = _saleInvoiceService.GetSaleInvoiceById(item.InvoiceId).Result;
+                   
+                    try
+                    {
+                       // _saleInvoiceService.Update(data.ToList()[0]);
+                        _saleInvoiceRepository.UpdateSaleInvEn(item, sumPayMent);
+                    }catch (Exception ex)
+                    {
+
+                    }
+                    _uow.SaveChanges();
+
+
+                }
+                
             }
 
-            
-
-            throw new NotImplementedException();
+            var rs = new MoneyReceiptViewModel()
+            {
+                Amount = request.Amount,
+                BankAccount = request.BankAccount,
+                ClientID = request.ClientID,
+                ClientName = request.ClientName,
+                EntryType = request.EntryType,
+                ID = 0,
+                Note = request.Note,
+                PayDate = request.PayDate,
+                PayType = request.PayType,
+                PayTypeID = request.PayTypeID,
+                ReceiptNumber = request.ReceiptNumber,
+                ReceiverName = request.ReceiverName
+            };
+            return await CreateMoneyReceipt(rs);
         }
 
         public async Task<bool> DeletedMoneyReceipt(List<requestDeleted> request)
         {
             var remove = await _iMoneyReceiptRepository.Deleted(request);
+            foreach(var item in request)
+            {
+                await _paymentRepository.DeletedPaymentAsync(item.receiptNumber);
+            }
             _uow.SaveChanges();
             return remove;
         }
 
-        public async  Task<MoneyReceiptViewModel> GetLastMoneyReceipt()
+        public async Task<MoneyReceiptViewModel> GetLastMoneyReceipt()
         {
             var data = await _iMoneyReceiptRepository.GetLastMoneyReceipt();
+            return data;
+        }
+
+        public async Task<bool> Update(MoneyReceiptViewModel request)
+        {
+            var data = await _iMoneyReceiptRepository.Update(request);
+            _uow.SaveChanges();
             return data;
         }
     }

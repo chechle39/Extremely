@@ -5,7 +5,10 @@ import { GenledgroupComponent } from './genledgroup.component';
 
 
 const routes: Routes = [
-  { path: '', component: GenledgroupComponent, data: { title: extract('genledgroup') } }
+  { path: '', component: GenledgroupComponent, data: { title: extract('genledgroup') }},
+
+
+
 ];
 
 @NgModule({

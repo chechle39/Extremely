@@ -11,6 +11,9 @@ import { AccountChartService } from '@modules/_shared/services/accountchart.serv
 import {MultiSelectModule} from 'primeng/multiselect';
 import { GenledgroupComponent } from './genledgroup.component';
 import { GenLedGroupService } from '@modules/_shared/services/genledgroup.service';
+import { AccountBalanceService } from '@modules/_shared/services/accountbalance.service';
+import { InvoiceService } from '@modules/_shared/services/invoice.service';
+import { DataService } from '@modules/_shared/services/data.service';
 @NgModule({
   declarations: [GenledgroupComponent, SearchgenledComponent],
   entryComponents: [SearchgenledComponent],
@@ -22,8 +25,9 @@ import { GenLedGroupService } from '@modules/_shared/services/genledgroup.servic
     FormsModule,
     SharedModule,
     ReactiveFormsModule,
-    MultiSelectModule
+    MultiSelectModule,
   ],
-  providers: [GenLedService, AccountChartService, CurrencyPipe, DecimalPipe,GenLedGroupService],
+  providers: [GenLedService, AccountChartService, CurrencyPipe, DecimalPipe, GenLedGroupService, AccountBalanceService, InvoiceService,
+     DataService],
 })
 export class GenledGroupModule { }

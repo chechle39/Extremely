@@ -14,7 +14,7 @@
             <p class="label-blue">All Receipt <span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span>
             </p>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-3">
             <div ngbDropdown>
               <button class="btn btn-flat mr-1 label-blue" id="bulkActions" ngbDropdownToggle>Chức năng chung</button>
               <div ngbDropdownMenu aria-labelledby="bulkActions">
@@ -23,7 +23,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 float-right">
+          <div class="col-md-5 float-right">
             <div class="position-relative has-icon-left input-group">
               <input type="text" [(ngModel)]="keyword" (keyup)="refresh()" name="keyword"  autocomplete="off" class="form-control round pl-4"
                 placeholder="Search">
@@ -97,11 +97,10 @@
               <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
                 let-selectFn="selectFn">
                 <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                  <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll1" class="custom-control-input"
                     (change)="selectFn(!allRowsSelected)" />
-                  <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+                  <label class="custom-control-label col-form-label" for="chkCheckAll1"></label>
                 </div>
-
               </ng-template>
               <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                 let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
@@ -110,7 +109,6 @@
                     (change)="onCheckboxChangeFn($event)" />
                   <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
                 </div>
-
               </ng-template>
             </ngx-datatable-column>
            
@@ -146,7 +144,7 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"
               [resizeable]="false" name="" [cellClass]="'col-action'" [headerClass]="'col-action'">
 
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
@@ -157,7 +155,7 @@
                     </a>
                   </div>
                   <div class="actions">
-                    <a class="icon-action" (click)="delete(row.id)">
+                    <a class="icon-action" (click)="delete(row.id,row.receiptNumber)">
                       <span class="icon-delete"></span>
                     </a>
                   </div>

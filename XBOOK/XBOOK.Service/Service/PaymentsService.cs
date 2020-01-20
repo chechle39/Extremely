@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-//using XAccLib.Payment;
+using XAccLib.Payment;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.ViewModels;
@@ -29,7 +29,7 @@ namespace XBOOK.Service.Service
 
         public async Task<IEnumerable<PaymentViewModel>> GetAllPaymentsByInv(long id)
         {
-            var listData = await _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().Where(x=>x.InvoiceId == id).ToListAsync();
+            var listData = await _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().AsNoTracking().Where(x=>x.InvoiceId == id).ToListAsync();
             return listData;
         }
 
@@ -54,8 +54,8 @@ namespace XBOOK.Service.Service
         {
             var listData = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().Where(x=>x.Id == id).ToList();
             await _paymentUowRepository.Remove(id);
-            //var paymentGL = new PaymentGL(_uow);
-           // paymentGL.Delete(listData[0]);
+            var paymentGL = new PaymentGL(_uow);
+            paymentGL.Delete(listData[0]);
         }
 
         public bool SavePayMent(PaymentViewModel saleInvoiceViewModel)
@@ -66,8 +66,10 @@ namespace XBOOK.Service.Service
             _uow.SaveChanges();
             var dataAsign = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().LastOrDefault();
             _uow.CommitTransaction();
-           // var paymentGL = new PaymentGL(_uow);
-          //  paymentGL.Insert(dataAsign);
+           // _uow.BeginTransaction();
+            var paymentGL = new PaymentGL(_uow);
+            paymentGL.Insert(dataAsign);
+           // _uow.CommitTransaction();
             return true;
         }
 
@@ -76,8 +78,8 @@ namespace XBOOK.Service.Service
             var listData = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().Where(x => x.Id == request.Id).ToList();
             var payments = Mapper.Map<PaymentViewModel, Payments>(request);
             await _paymentUowRepository.Update(payments);
-          //  var paymentGL = new PaymentGL(_uow);
-          //  paymentGL.Update(listData[0]);
+            var paymentGL = new PaymentGL(_uow);
+            paymentGL.Update(listData[0]);
         }
     }
 }

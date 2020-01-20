@@ -14,11 +14,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Reports\Template\AccountBalanceReport.repx" />
     <None Remove="Reports\Template\InvoiceReport.repx" />
+    <None Remove="Reports\Template\SalesReportReport.repx" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Template\AccountBalanceReport.repx" />
     <EmbeddedResource Include="Reports\Template\InvoiceReport.repx" />
+    <EmbeddedResource Include="Reports\Template\SalesReportReport.repx" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -60,11 +64,23 @@
     <Compile Update="Reports\InvoiceReport.Designer.cs">
       <DependentUpon>InvoiceReport.repx</DependentUpon>
     </Compile>
+    <Compile Update="Reports\Template\AccountBalanceReport.cs">
+      <DependentUpon>AccountBalanceReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\AccountBalanceReport.Designer.cs">
+      <DependentUpon>AccountBalanceReport.repx</DependentUpon>
+    </Compile>
     <Compile Update="Reports\Template\InvoiceReport.cs">
       <DependentUpon>InvoiceReport.repx</DependentUpon>
     </Compile>
     <Compile Update="Reports\Template\InvoiceReport.Designer.cs">
       <DependentUpon>InvoiceReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\SalesReportReport.cs">
+      <DependentUpon>SalesReportReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\SalesReportReport.Designer.cs">
+      <DependentUpon>SalesReportReport.repx</DependentUpon>
     </Compile>
   </ItemGroup>
   

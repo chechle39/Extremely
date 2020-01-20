@@ -1,0 +1,79 @@
+<form class="form" name="form" novalidate autocomplete="off" (ngSubmit)="savePayment(paymentForm)"
+  [formGroup]="paymentForm">
+  <div class=" modal-header">
+    <div class="row"></div>
+    <div class="col-4">
+      <h5 class="modal-title">{{title}}</h5>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4">
+      <h5 class="modal-title float-right text-bold-600">{{outstandingAmount | currency:'VND':''}}</h5>
+      <h5 class="modal-title float-right">outstanding</h5>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <input  *ngIf = "outstandingAmount > 0" formControlName="amount" required class="form-control" type="text" name="amount" validateDirective
+          placeholder="Paid Amount" [rowItem]= "outstandingAmount" id="amount" [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
+          digitOnly maxlength=20>
+
+          <input *ngIf = "outstandingAmount === 0" formControlName="amount" required class="form-control" type="text" name="amount"
+          placeholder="Paid Amount"  id="amount" [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
+          digitOnly maxlength=20>
+        <small class="form-text text-muted danger"
+          *ngIf="!paymentForm.get('amount').valid && (paymentForm.get('amount').dirty || paymentForm.get('amount').touched)">Please
+          enter a valid amount!</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <select id="paymentMethods" class="form-control" formControlName="paymentMethods">
+          <option [ngValue]="null">Choose a payment method</option>
+          <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
+            {{ method.payType }}
+          </option>
+        </select>
+        <small class="form-text text-muted danger"
+          *ngIf="!paymentForm.get('paymentMethods').valid && (paymentForm.get('paymentMethods').dirty || paymentForm.get('paymentMethods').touched)">Please
+          enter a valid payment method!</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <div class="input-group mb-0">
+          <input formControlName="payDate" class="form-control" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker (focus) = "d3.toggle()"
+            #d3="ngbDatepicker" id="payDate">
+          <div class="input-group-append">
+            <div class="input-group-text" (click)="d3.toggle()">
+              <i class="fa fa-calendar" style="cursor: pointer;"></i>
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted danger"
+          *ngIf="!paymentForm.get('payDate').valid && (paymentForm.get('payDate').dirty || paymentForm.get('payDate').touched)">Please
+          enter a valid payment date!</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <input formControlName="bankAccount" class="form-control" type="text" name="receiptNumber"
+          placeholder="Receipt Number" id="bankAccount">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <input formControlName="note" class="form-control" type="text" name="note"
+          placeholder="Payment Notes (Optional)" id="note">
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
+      <i class="ft-x"></i> Cancel
+    </button>
+    <button type="submit" [disabled]="paymentForm.invalid" class="btn btn-raised btn-success"><i class="ft-save"></i>
+      Save</button>
+  </div>
+</form>

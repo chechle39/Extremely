@@ -97,7 +97,7 @@
                             [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter"
                             id="contactName" formControlName="contactName" (selectItem)="selectedItem($event)"
                             class="border-0 full-width imput-reference-custom" placeholder="Client Contact Name"
-                            nfNoSpaces maxlength="250" #instance="ngbTypeahead" />
+                            nfNoSpaces maxlength="250" #instance="ngbTypeahead" [ngClass]="{'border-0':invoiceForm.controls.contactName.touched === false || invoiceForm.controls.contactName.invalid === false}" />
 
                           <ng-template #customItemTemplate let-r="result" let-t="term">
                             <div class="row mt-2 client-item">
@@ -114,7 +114,7 @@
                         <div class="col-12">
                           <input style="opacity: unset" kendoTextBox id="clientName" formControlName="clientName"
                             class="border-0 full-width imput-reference-custom" [value]="clientSelected.clientName"
-                            [readOnly]="!isEditClient" placeholder="Client Name" nfNoSpaces maxlength="250">
+                            [readOnly]="!isEditClient" placeholder="Client Name" nfNoSpaces maxlength="250" [ngClass]="{'border-0':invoiceForm.controls.clientName.touched === false || invoiceForm.controls.clientName.invalid === false} ">
                         </div>
                         <div class="col-12">
                           <input style="opacity: unset" kendoTextBox id="clientAddress" formControlName="address"
@@ -142,20 +142,20 @@
                         <div>
                           <p class="p-color mb-0">Date of Issue</p>
                           <div class="input-group" style="width: 184px;">
-                            <input #datetiime kendoTextBox (click)="d1.toggle()" (focus)="d2.toggle()"
+                            <input [rowItem]="this.invoiceForm.controls" validateDateDirective #datetiime kendoTextBox (dateSelect)="onDateSelection($event)" (click)="d2.toggle()" (focus)="d2.toggle()"
                               style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
-                              placeholder="dd/mm/yyyy" name="dp" formControlName="issueDate" ngbDatepicker
-                              #d1="ngbDatepicker" ngbDatepicker #d2="ngbDatepicker" style="margin-right:-15px">
+                              placeholder="dd/mm/yyyy" name="dp" formControlName="issueDate" 
+                              ngbDatepicker #d2="ngbDatepicker" style="margin-right:-15px" [ngClass]="{'dateColor': isCheckDate === true}">
                             <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;height: 14px;" (click)="d2.toggle()"></span>
                           </div>
                         </div>
                         <div class="mrt-16">
                           <p class="p-color mb-0">Due Date</p>
                           <div class="input-group mb-0" style="width: 184px;">
-                            <input kendoTextBox (click)="d1.toggle()" (focus)="d3.toggle()" formControlName="dueDate"
+                            <input [rowItem]="this.invoiceForm.controls" validateDateDirective #datetiime kendoTextBox (dateSelect)="onDateSelection($event)" (click)="d3.toggle()" (focus)="d3.toggle()" formControlName="dueDate"
                               style="opacity: unset" class="col-sm-6 border-0 full-width imput-reference-custom"
-                              placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d1="ngbDatepicker" #d3="ngbDatepicker"
-                              style="margin-right:-15px">
+                              placeholder="dd/mm/yyyy" name="dp" ngbDatepicker #d3="ngbDatepicker" 
+                              style="margin-right:-15px" [ngClass]="{'dateColor': isCheckDate === true}">
                             <span class="k-icon k-i-calendar-date" style="margin-top: 0.5rem;height: 14px;" (click)="d3.toggle()"></span>
                           </div>
                         </div>

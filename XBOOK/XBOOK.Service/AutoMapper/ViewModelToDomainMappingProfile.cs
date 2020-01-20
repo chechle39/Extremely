@@ -9,6 +9,8 @@ namespace XBOOK.Service.AutoMapper
     {
         public ViewModelToDomainMappingProfile()
         {
+            CreateMap<AccountBalanceViewModel, AccountBalance>()
+          .ConstructUsing(c => new AccountBalance(c.accNumber, c.accName, c.creditClosing, c.creditOpening, c.credit, c.debit, c.debitClosing, c.debitOpening));
 
             CreateMap<ClientViewModel, Client>()
            .ConstructUsing(c => new Client(c.ClientId, c.Address, c.ClientName, c.ContactName, c.Email,c.Note,c.Tag,c.TaxCode, c.bankAccount));
@@ -47,6 +49,29 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<MoneyReceiptViewModel, MoneyReceipt>().ConstructUsing(x => new MoneyReceipt(x.Amount,x.BankAccount,x.ClientID,x.ClientName,x.EntryType,x.ID,x.Note,x.PayDate,x.PayType,x.PayTypeID,x.ReceiptNumber,x.ReceiverName));
 
             CreateMap<EntryPatternViewModel, EntryPattern>().ConstructUsing(x => new EntryPattern(x.AccNumber,x.EntryType,x.Note,x.TransactionType,x.CrspAccNumber));
+
+            CreateMap<BuyInvoiceViewModel, BuyInvoice>().ConstructUsing(x => new BuyInvoice(
+                x.AmountPaid,x.BuyInvDetailView,x.Discount,x.DiscRate,x.DueDate,x.InvoiceId,x.InvoiceNumber,x.InvoiceSerial,x.IssueDate,x.Note,x.PaymentView,x.Reference,x.Status,x.SubTotal,x.SupplierData,x.supplierID,x.Term,x.VatTax
+                ));
+
+            CreateMap<SupplierCreateRequest, Supplier>()
+           .ConstructUsing(c => new Supplier(c.supplierID, c.Address, c.supplierName, c.ContactName, c.Email, c.Note, c.Tag, c.TaxCode, c.bankAccount));
+
+            CreateMap<SupplierViewModel, Supplier>()
+          .ConstructUsing(c => new Supplier(c.supplierID, c.address, c.supplierName, c.contactName, c.email, c.note, c.Tag, c.taxCode, c.bankAccount));
+
+            CreateMap<BuyInvoiceModelRequest, BuyInvoice>()
+            .ConstructUsing(x => new BuyInvoice(x.InvoiceId, x.InvoiceNumber, x.InvoiceSerial, x.IssueDate,
+           x.supplierID, x.Discount, x.DiscRate, x.DueDate, x.Note, x.Term, x.Status));
+
+            CreateMap<BuyInvDetailViewModel, BuyInvDetail>().ConstructUsing(x => new BuyInvDetail(x.invoiceID, x.price, x.productID
+              , x.productName, x.qty, x.vat, x.ID, x.amount));
+
+            CreateMap<Payment2ViewModel, Payments_2>().ConstructUsing(x => new Payments_2(x.amount, x.receiptNumber, x.ID, x.invoiceID,
+               x.note, x.payDate, x.payType, x.payTypeID));
+
+            CreateMap<PaymentReceiptViewModel, PaymentReceipt>().ConstructUsing(x => new PaymentReceipt(x.Amount, x.BankAccount, x.SupplierID, x.SupplierName, x.EntryType, x.ID, x.Note, x.PayDate, x.PayType, x.PayTypeID, x.ReceiptNumber, x.ReceiverName));
+
         }
     }
 }

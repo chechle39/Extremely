@@ -23,5 +23,9 @@ namespace XBOOK.Service.Service
         {
             return await _entryPatternRepository.GetAllEntry();
         }
+        public async Task<List<EntryPatternViewModel>> GetAllEntryPayment()
+        {
+            return await _entryPatternRepository.GetAllEntryPayment();
+        }
     }
 }
