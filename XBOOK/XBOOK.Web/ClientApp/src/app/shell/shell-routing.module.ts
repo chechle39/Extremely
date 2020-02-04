@@ -96,6 +96,11 @@ const routes: Routes = [
         loadChildren: () => import('../modules/accountdetail/accountdetail.module')
           .then(m => m.AcountDetailModule)
       },
+      {
+        path: 'acountchart',
+        loadChildren: () => import('../modules/accountchart/accountchart.module')
+          .then(m => m.AccountChartModule)
+      },
     ]
   }
 ];
