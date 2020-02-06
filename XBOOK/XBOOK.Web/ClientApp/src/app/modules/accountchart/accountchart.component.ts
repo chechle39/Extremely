@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ChangeDetectorRef } from '@angular/core';
 import { ProductService } from '@modules/_shared/services/product.service';
 import { Router } from '@angular/router';
 import { ProductView } from '@modules/_shared/models/product/product-view.model';
@@ -8,6 +8,9 @@ import { AppConsts } from '@core/app.consts';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { PagedListingComponentBase, PagedRequestDto } from '@core/paged-listing-component-base';
 import { TranslateService } from '@ngx-translate/core';
+import { AccountChartService } from '@modules/_shared/services/accountchart.service';
+import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
+import { AcountChartModel } from '@modules/_shared/models/accountchart/account-chart.model';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
@@ -17,6 +20,7 @@ class PagedProductsRequestDto extends PagedRequestDto {
   styleUrls: ['./accountchart.component.scss']
 })
 export class AccountChartComponent extends PagedListingComponentBase<ProductView> {
+  data: AcountChartModel[];
   productViews: any;
   categories: any;
   loadingIndicator = true;
@@ -36,6 +40,8 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
     private productService: ProductService,
     private modalService: NgbModal,
     private router: Router,
+    private cd: ChangeDetectorRef,
+    private accountChartService: AccountChartService,
     private translate: TranslateService) {
     super(injector);
   }
@@ -47,22 +53,16 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
   ): void {
     request.productKeyword = this.keywords;
     this.loadingIndicator = true;
-    this.getAllProduct();
-    this.getAllCategory();
+    this.getAllAcc();
   }
-  getAllProduct() {
-    const request = {
-      productKeyword: this.keywords.toLocaleLowerCase(),
-      isGrid: true
-    };
-    this.productService
-      .searchProduct(request)
-      .pipe(
-      )
-      .subscribe(i => {
-        this.loadingIndicator = false;
-        this.productViews = i;
+  getAllAcc() {
+    this.accountChartService.searchAccTree().subscribe(rp => {
+      this.data = rp.map(i => {
+        i.treeStatus = 'expanded';
+        return i;
       });
+      this.loadingIndicator = false;
+    });
   }
 
   getAllCategory() {
@@ -84,6 +84,22 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
   //   this.showCreateOrEditProductDialog(this.selected[0].categoryID, this.selected[0].productID);
   //   this.selected = [];
   // }
+  onTreeAction(event: any) {
+    const index = event.rowIndex;
+    const row = event.row;
+    if (row.treeStatus === 'collapsed') {
+      row.treeStatus = 'loading';
+      row.treeStatus = 'expanded';
+      const data = this.data.filter(x => x.parentAccount === event.accountNumber);
+      this.data = [...this.data, ...data];
+      this.cd.detectChanges();
+    } else {
+      row.treeStatus = 'collapsed';
+
+      this.data = [...this.data];
+      this.cd.detectChanges();
+    }
+  }
   delete(): void {
     if (this.selected.length === 0) {
       this.message.warning('Please select an item from the list?');
@@ -100,7 +116,7 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
           this.message.error('This product can not delete');
         } else {
           this.notify.success('Successfully Deleted');
-          this.getAllProduct();
+         // this.getAllProduct();
         }
       });
       this.selected = [];
@@ -109,58 +125,47 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
   getRowHeight(row) {
     return row.height;
   }
-  // createProduct(category: ProductCategory): void {
-  //   this.showCreateOrEditProductDialog(category);
-  // }
-  // showCreateOrEditProductDialog(category: ProductCategory, productID?: number): void {
-  //   let createOrEditProductDialog;
-  //   this.translate.get('PRODUCT.LIST.PRODUCT')
-  //     .subscribe(text => { this.productTitle = text; });
-  //   this.translate.get('PRODUCT.LIST.SERVICE')
-  //     .subscribe(text => { this.serviceTitle = text; });
-  //   const title = category === ProductCategory.product ? this.productTitle : this.serviceTitle;
-  //   if (productID === undefined || productID <= 0) {
-  //     createOrEditProductDialog = this.modalService.open(CreateProductComponent, AppConsts.modalOptionsSmallSize);
-  //     createOrEditProductDialog.componentInstance.title = title;
-  //     createOrEditProductDialog.componentInstance.categoryId = category;
-  //     createOrEditProductDialog.componentInstance.listCategory = this.categories;
-  //   } else {
-  //     createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
-  //     createOrEditProductDialog.componentInstance.title = title;
-  //     createOrEditProductDialog.componentInstance.id = productID;
-  //     createOrEditProductDialog.componentInstance.listCategory = this.categories;
-  //   }
-  //   createOrEditProductDialog.result.then(result => {
-  //     if (result) {
-  //       this.refresh();
-  //     }
-  //   });
 
-  // }
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
-  // onActivate(event) {
-  //   // If you are using (activated) event, you will get event, row, rowElement, type
-  //   if (event.type === 'click') {
-  //     if (event.cellIndex > 0) {
-  //       event.cellElement.blur();
-  //       this.translate.get('PRODUCT.LIST.PRODUCT')
-  //         .subscribe(text => { this.productTitle = text; });
-  //       this.translate.get('PRODUCT.LIST.SERVICE')
-  //         .subscribe(text => { this.serviceTitle = text; });
-  //       const title = event.row.categoryId === 1 ? this.productTitle : this.serviceTitle;
-  //       const createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
-  //       createOrEditProductDialog.componentInstance.title = title;
-  //       createOrEditProductDialog.componentInstance.id = event.row.productID;
-  //       createOrEditProductDialog.componentInstance.listCategory = this.categories;
-  //       createOrEditProductDialog.result.then(result => {
-  //         if (result) {
-  //           this.refresh();
-  //         }
-  //       });
-  //     }
-  //   }
-  // }
+
+  createProduct(): void {
+    this.showCreateOrEditAccountDialog();
+  }
+  showCreateOrEditAccountDialog(): void {
+    let createOrEditAccountDialog;
+    createOrEditAccountDialog = this.modalService.open(CreateAccountChartComponent, AppConsts.modalOptionsSmallSize);
+    createOrEditAccountDialog.componentInstance.data = this.data;
+
+    createOrEditAccountDialog.result.then(result => {
+      if (result) {
+        this.refresh();
+      }
+    });
+
+  }
+  onActivate(event) {
+    // If you are using (activated) event, you will get event, row, rowElement, type
+    if (event.type === 'click') {
+      // if (event.cellIndex > 0) {
+      //   event.cellElement.blur();
+      //   this.translate.get('PRODUCT.LIST.PRODUCT')
+      //     .subscribe(text => { this.productTitle = text; });
+      //   this.translate.get('PRODUCT.LIST.SERVICE')
+      //     .subscribe(text => { this.serviceTitle = text; });
+      //   const title = event.row.categoryId === 1 ? this.productTitle : this.serviceTitle;
+      //   const createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
+      //   createOrEditProductDialog.componentInstance.title = title;
+      //   createOrEditProductDialog.componentInstance.id = event.row.productID;
+      //   createOrEditProductDialog.componentInstance.listCategory = this.categories;
+      //   createOrEditProductDialog.result.then(result => {
+      //     if (result) {
+      //       this.refresh();
+      //     }
+      //   });
+      // }
+    }
+  }
 }

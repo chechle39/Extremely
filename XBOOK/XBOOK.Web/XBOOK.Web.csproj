@@ -15,12 +15,14 @@
 
   <ItemGroup>
     <None Remove="Reports\Template\AccountBalanceReport.repx" />
+    <None Remove="Reports\Template\GeneralLedgerReport.repx" />
     <None Remove="Reports\Template\InvoiceReport.repx" />
     <None Remove="Reports\Template\SalesReportReport.repx" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\Template\AccountBalanceReport.repx" />
+    <EmbeddedResource Include="Reports\Template\GeneralLedgerReport.repx" />
     <EmbeddedResource Include="Reports\Template\InvoiceReport.repx" />
     <EmbeddedResource Include="Reports\Template\SalesReportReport.repx" />
   </ItemGroup>
@@ -69,6 +71,12 @@
     </Compile>
     <Compile Update="Reports\Template\AccountBalanceReport.Designer.cs">
       <DependentUpon>AccountBalanceReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\GeneralLedgerReport.cs">
+      <DependentUpon>GeneralLedgerReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\GeneralLedgerReport.Designer.cs">
+      <DependentUpon>GeneralLedgerReport.repx</DependentUpon>
     </Compile>
     <Compile Update="Reports\Template\InvoiceReport.cs">
       <DependentUpon>InvoiceReport.repx</DependentUpon>

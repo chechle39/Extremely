@@ -36,7 +36,6 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllSaleInvoice([FromBody]SaleInvoiceListRequest request)
         {
-            // var saleListInvoice = await _saleInvoiceService.GetAllSaleInvoice(request);
             var saleListInvoice = await _invoiceServiceDapper.GetInvoiceAsync(request);
             return Ok(saleListInvoice);
         }

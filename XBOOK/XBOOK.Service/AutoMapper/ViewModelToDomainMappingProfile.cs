@@ -72,6 +72,7 @@ namespace XBOOK.Service.AutoMapper
 
             CreateMap<PaymentReceiptViewModel, PaymentReceipt>().ConstructUsing(x => new PaymentReceipt(x.Amount, x.BankAccount, x.SupplierID, x.SupplierName, x.EntryType, x.ID, x.Note, x.PayDate, x.PayType, x.PayTypeID, x.ReceiptNumber, x.ReceiverName));
 
+            CreateMap<TreeNode, AccountChart>().ConstructUsing(x => new AccountChart(x.accountNumber,x.accountName,x.accountType,x.closingBalance,x.isParent,x.openingBalance,x.parentAccount));
         }
     }
 }

@@ -73,11 +73,21 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="productViews"
-            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
-            [headerHeight]="60" [footerHeight]="50" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
-            [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
-            (select)='onSelect($event)' [selectAllRowsOnPage]="false">
+          <ngx-datatable #myTable class="bootstrap hover no-striped flex" 
+          [rows]="productViews"
+          [sorts]="[{prop: 'id', dir: 'desc'}]" 
+          [loadingIndicator]="loadingIndicator" 
+          [columnMode]="ColumnMode.force"
+          [headerHeight]="60"
+          [footerHeight]="50"
+          [rowHeight]="getRowHeight" 
+          [reorderable]="reorderable" 
+          [limit]="20"
+          [selected]="selected" 
+          (activate)="onActivate($event)"
+           [selectionType]="SelectionType.checkbox"
+          (select)='onSelect($event)' 
+          [selectAllRowsOnPage]="false">
 
             <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
               [resizeable]="false">

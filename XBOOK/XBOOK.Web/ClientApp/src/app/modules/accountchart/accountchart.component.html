@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="row form-line">
         <div class="col-md-4">
-          <h4 class="card-title">{{ 'PRODUCT.LIST.HEADER' | translate }}</h4>
+          <h4 class="card-title">{{ 'ACCOUNT.CHART.HEADER' | translate }}</h4>
         </div>
         <div class="col-md-4">
           <div ngbDropdown>
@@ -12,36 +12,16 @@
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item"><span class="icon-import"></span>
                 {{ 'COMMON.MOREACTION.IMPORT' | translate }} </button>
-              <button class="dropdown-item"><span class="icon-export"></span>
-                {{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
+              <button class="dropdown-item" (click)="showCreateOrEditAccountDialog()"><span class="icon-export"></span>
+                {{ 'ACCOUNT.CHART.CREATE' | translate }} </button>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <span ngbDropdown class="float-right">
-            <button class="btn btn-raised mr-1 btn-success" id="dropdownBasic2"
-              ngbDropdownToggle>{{ 'COMMON.MOREACTION.ADDNEW' | translate }}</button>
-            <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBasic2">
-              <a class="dropdown-item py-1" (click)="createProduct(ProductCategory.product)">
-                <span class="icon-hanghoa"></span>
-                <span class="text-muted text-bold-600">{{ 'PRODUCT.LIST.PRODUCT' | translate }}</span>
-                <p [innerHtml]=" 'PRODUCT.LIST.PRODUCT.ADDNEW.DESC' | translate "
-                  class="ml-3 text-muted font-small-3 line-height-2">
-                </p>
-              </a>
-              <div class="dropdown-divider mx-0"></div>
-              <a class="dropdown-item py-1" (click)="createProduct(ProductCategory.service)">
-                <span class="icon-service"></span>
-                <span class="text-muted text-bold-600">{{ 'PRODUCT.LIST.SERVICE' | translate }}</span>
-                <p class="ml-3 text-muted font-small-3 line-height-2"
-                  [innerHtml]=" 'PRODUCT.LIST.SERVICE.ADDNEW.DESC' | translate ">
-                </p>
-              </a>
-            </div>
-          </span>
+          <button (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right">{{'ACCOUNT.CHART.MENPEN' | translate}}</button>
         </div>
       </div>
-      <div class="row my-3 margin-top-0">
+      <!-- <div class="row my-3 margin-top-0">
         <div class=" col-md-4 margintop-13">
           <p class="label-blue">{{ 'PRODUCT.LIST.HEADER' | translate }}</p>
         </div>
@@ -70,53 +50,80 @@
             </form>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="row">
         <div class="col-md-12">
-          <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="productViews"
-            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
-            [headerHeight]="60" [footerHeight]="50" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
-            [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
-            (select)='onSelect($event)' [selectAllRowsOnPage]="false">
+          <ngx-datatable #myTable class="bootstrap hover no-striped flex" 
+          [rows]="data"
+          [sorts]="[{prop: 'id', dir: 'desc'}]" 
+          [loadingIndicator]="loadingIndicator" 
+          [columnMode]="ColumnMode.force"
+          [headerHeight]="46" 
+          [footerHeight]="50" 
+          [rowHeight]="getRowHeight" 
+          [reorderable]="reorderable" 
+          (activate)="onActivate($event)"
+          (select)='onSelect($event)' 
+          [selectAllRowsOnPage]="false"
+          [limit]="20"
+          (treeAction)="onTreeAction($event)"
+          [treeToRelation]="'accountNumber'"
+          [treeFromRelation]="'parentId'">
 
-            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
-              [resizeable]="false">
-              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-                let-selectFn="selectFn">
-                <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
-                    (change)="selectFn(!allRowsSelected)" />
-                  <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
-                </div>
-
-              </ng-template>
-              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-                let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
-                <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" class="custom-control-input" id="{{row.productID}}" [checked]="isSelected"
-                    (change)="onCheckboxChangeFn($event)" />
-                  <label class="custom-control-label col-form-label" for="{{row.productID}}"></label>
-                </div>
-
+            <ngx-datatable-column [treeLevelIndent]="20" name="{{'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNUMBER' | translate}}" prop="accountNumber" [isTreeColumn]="true">
+              <ng-template ngx-datatable-tree-toggle let-tree="cellContext">
+                <button [disabled]="tree.treeStatus === 'disabled'" (click)="tree.onTreeAction()">
+                  <span *ngIf="tree.treeStatus === 'loading'">
+                    ...
+                  </span>
+                  <span *ngIf="tree.treeStatus === 'collapsed'">
+                    ↑
+                  </span>
+                  <span *ngIf="tree.treeStatus === 'expanded'">
+                    ↓
+                  </span>
+                  <span *ngIf="tree.treeStatus === 'disabled'">
+                    
+                  </span>
+                </button>
               </ng-template>
             </ngx-datatable-column>
-
-            <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.ITEMNAME' | translate}}" prop="productName">
-              <ng-template  let-row="row" ngx-datatable-cell-template>
-                <span *ngIf ="row.unit !== null">{{row.productName}} ({{row.unit}})</span>
-                <span *ngIf ="row.unit === null">{{row.productName}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate}}" prop="description">
+            <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNAME' | translate}}"  prop="accountName">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                {{row.description}}
+                {{row.accountName}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.UNITPRICE' | translate}}" prop="unitPrice"
+            <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.TYPE' | translate}}"  prop="parentAccount"
               [cellClass]="'col-right'" [headerClass]="'col-right'">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div class="col-right">
-                  {{row.unitPrice | currency:'VND':''}}
+                  {{row.accountType}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.NUMBERARISED' | translate}}"  prop="parentAccount"
+              [cellClass]="'col-right'" [headerClass]="'col-right'">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="col-right">
+                  1231241
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+              [resizeable]="false" name="" [cellClass]="'col-action'" [headerClass]="'col-action'">
+
+              <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
+                <div class="icon-actions">
+                  <div class="actions">
+                    <a class="icon-action">
+                      <span class="icon-edit"></span>
+                    </a>
+                  </div>
+                  <div class="actions">
+                    <a class="icon-action">
+                      <span class="icon-delete"></span>
+                    </a>
+                  </div>
                 </div>
               </ng-template>
             </ngx-datatable-column>

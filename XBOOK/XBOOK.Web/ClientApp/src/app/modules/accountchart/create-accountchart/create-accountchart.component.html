@@ -1,0 +1,58 @@
+<form class="form" name="form" autocomplete="off" #f="ngForm" (ngSubmit)="save()">
+  <div class="modal-header">
+    <h4 class="modal-title">{{'ACCOUNT.CHART.CREATE.TITLE' | translate}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <label for="productName">{{'ACCOUNT.CHART.CREATE.ACCOUNTNAME' | translate }}</label>
+        <input [(ngModel)]="product.productName" #productName="ngModel" required class="form-control"
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="productName"
+          placeholder="{{'PRODUCT.FORM.CREATE.NAME.PLACEHOLDER' | translate}}" id="productName">
+        <small class="form-text text-muted danger"
+          *ngIf="!productName.valid && (productName.dirty)">{{'ACCOUNT.CHART.CREATE.ACCOUNTNUMBER.VALI' | translate }}</small>
+      </div>
+    </div>
+ 
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <label for="categoryId">{{'ACCOUNT.CHART.CREATE.ACCOUNTPARENT' | translate }}</label>
+        <select id="accountNumber" name="accountNumber" class="form-control" [(ngModel)]="data">
+          <option >Choose a payment method</option>
+          <option *ngFor="let cat of data" [ngValue]="cat.accountNumber">
+            {{ cat.accountName }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="row  mb-2">
+      <div class="col-7">
+        <label for="unitPrice">{{'ACCOUNT.CHART.CREATE.ACCOUNTNUMBER' | translate }}</label>
+        <input [(ngModel)]="product.unitPrice" #unitPrice="ngModel" required class="form-control"
+          [ngModelOptions]="{updateOn: 'blur'}" name="unitPrice"
+          [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly class="form-control" type="text"
+          maxlength="16" placeholder="{{'PRODUCT.FORM.CREATE.UNITPRICE.PLACEHOLDER' | translate }}" id="unitPrice">
+        <small class="form-text text-muted danger"
+          *ngIf="!unitPrice.valid && (unitPrice.dirty || unitPrice.touched)">{{'PRODUCT.FORM.CREATE.UNITPRICE.VALIDATION' | translate }}</small>
+      </div>
+      <div class="col-5">
+        <label for="unitPrice"></label>
+
+        <input [(ngModel)]="product.unit" #unit="ngModel"  class="form-control"
+          [ngModelOptions]="{updateOn: 'blur'}" name="unit"
+            class="form-control" type="text"
+          maxlength="16" placeholder="{{'PRODUCT.FORM.CREATE.UNIT.PLACEHOLDER' | translate }}" id="unit">
+
+      </div>
+    
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
+      <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate }}
+    </button>
+    <button type="button" (click)="save()" class="btn btn-raised btn-success">
+      <i class="ft-save"></i> {{'COMMON.BUTTON.SAVE' | translate }}
+    </button>
+  </div>
+</form>

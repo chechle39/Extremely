@@ -21,4 +21,11 @@ using XBOOK.Service.Interfaces;
         var clientprd = await _iAccountService.GetAllAccount();
         return Ok(clientprd);
     }
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GetAllTreeAccount()
+    {
+        var tree = await _iAccountService.GetAllTreeAccountAsync();
+        var x = tree;
+        return Ok(x);
+    }
 }

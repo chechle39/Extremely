@@ -178,6 +178,7 @@ namespace XBOOK.Web
                 }
             });
 
+            // Khi deloy
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -186,6 +187,8 @@ namespace XBOOK.Web
             {
                 app.UseHsts();
             }
+
+            // kho developer
 
             //if (env.IsDevelopment())
             //{

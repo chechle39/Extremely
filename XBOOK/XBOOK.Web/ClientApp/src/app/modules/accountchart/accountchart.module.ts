@@ -9,8 +9,10 @@ import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { SharedModule } from '@shared/shared.module';
 import { AccountChartComponent } from './accountchart.component';
 import { AccountChartRoutingModule } from './accountchart-routing.module';
+import { AccountChartService } from '@modules/_shared/services/accountchart.service';
+import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
 @NgModule({
-  declarations: [AccountChartComponent],
+  declarations: [AccountChartComponent, CreateAccountChartComponent],
   imports: [
     CommonModule,
     AccountChartRoutingModule,
@@ -21,8 +23,8 @@ import { AccountChartRoutingModule } from './accountchart-routing.module';
     NgxCleaveDirectiveModule,
     SharedModule
   ],
-  providers: [ProductService],
-  entryComponents: []
+  providers: [ProductService, CreateAccountChartComponent, AccountChartService],
+  entryComponents: [CreateAccountChartComponent]
 })
 export class AccountChartModule { }
 

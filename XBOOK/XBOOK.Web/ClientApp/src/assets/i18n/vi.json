@@ -33,5 +33,18 @@
 
   
   "Invoice.Heder": "Hóa đơn",
-  "Invoice.GRID.HEADER.": "Khách hàng/ Số hóa đơn"
+  "Invoice.GRID.HEADER.": "Khách hàng/ Số hóa đơn",
+
+  "ACCOUNT.CHART.GRID.HEADER.ACCOUNTNUMBER": "Số Tài Khoản",
+  "ACCOUNT.CHART.GRID.HEADER.ACCOUNTNAME": "Tên Tài Khoản",
+  "ACCOUNT.CHART.GRID.HEADER.TYPE": "Loại",
+  "ACCOUNT.CHART.GRID.HEADER.NUMBERARISED": "Số Phát Sinh",
+  "ACCOUNT.CHART.HEADER": "Bảng Account",
+  "ACCOUNT.CHART.CREATE": "Tạo tài khoản",
+  "ACCOUNT.CHART.MENPEN": "Tạo Bút Toán",
+  "ACCOUNT.CHART.CREATE.TITLE": "Tài Khoản",
+  "ACCOUNT.CHART.CREATE.ACCOUNTNAME": "Tên tài khoản",
+  "ACCOUNT.CHART.CREATE.ACCOUNTPARENT": "Tài Khoản Mẹ",
+  "ACCOUNT.CHART.CREATE.ACCOUNTNUMBER": "Số Tài Khoản",
+  "ACCOUNT.CHART.CREATE.ACCOUNTNUMBER.VALI": "Vui lòng nhập tên tài khoản"
 }

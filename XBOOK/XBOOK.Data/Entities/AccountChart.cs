@@ -10,6 +10,16 @@ namespace XBOOK.Data.Entities
             this.accountNumber = accountNumber;
         }
 
+        public AccountChart(string accountNumber, string accountName, string accountType, decimal? closingBalance, bool isParent, decimal? openingBalance, string parentAccount) : this(accountNumber)
+        {
+            this.accountName = accountName;
+            this.accountType = accountType;
+            this.closingBalance = closingBalance;
+            this.isParent = isParent;
+            this.openingBalance = openingBalance;
+            this.parentAccount = parentAccount;
+        }
+
         [Key]
         public string accountNumber { get; set; }
         public string accountName { get; set; }

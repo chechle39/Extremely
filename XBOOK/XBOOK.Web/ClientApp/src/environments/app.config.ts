@@ -96,6 +96,7 @@ export const API_URI = {
   uploadProfileSupplier: 'api/UploadProfile/UploadSupplier',
   getFileSupplier: 'api/UploadProfile/GetIMGSupplier',
   downLoadFileBuy: 'api/BuyInvoices/Download',
+  getAccountChartTree: 'api/AccountChart/GetAllTreeAccount',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,
