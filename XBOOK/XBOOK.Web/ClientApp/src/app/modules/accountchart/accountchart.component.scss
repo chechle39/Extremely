@@ -7,3 +7,62 @@
 :host ::ng-deep .col-right {
     padding-right: 0px;
   }
+
+.btnArrow {
+    width: 12px;
+    height: 12px;
+    border: none;
+    padding: 0;
+    margin: 0 10px 0 0;
+    background: transparent;
+
+    &:focus {
+        outline: none;
+    }
+
+    .collapsed {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: transparent;
+
+        &:after{
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid #ccc;
+            border-right: 2px solid #ccc;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: rotate(45deg) translate(0, -50%);
+        }
+    }
+
+    .expanded {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: transparent;
+
+        &:after{
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-bottom: 2px solid #ccc;
+            border-right: 2px solid #ccc;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: rotate(45deg) translate(0, -50%);
+            margin: -3px 0 0;
+        }
+    }
+}
+
+:host ::ng-deep .datatable-body-row:hover .icon-actions {
+    display: flex;
+    align-items: center;
+}

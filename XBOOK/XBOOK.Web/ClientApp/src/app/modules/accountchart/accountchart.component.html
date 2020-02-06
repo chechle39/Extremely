@@ -72,15 +72,13 @@
 
             <ngx-datatable-column [treeLevelIndent]="20" name="{{'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNUMBER' | translate}}" prop="accountNumber" [isTreeColumn]="true">
               <ng-template ngx-datatable-tree-toggle let-tree="cellContext">
-                <button [disabled]="tree.treeStatus === 'disabled'" (click)="tree.onTreeAction()">
+                <button class="btnArrow" [disabled]="tree.treeStatus === 'disabled'" (click)="tree.onTreeAction()">
                   <span *ngIf="tree.treeStatus === 'loading'">
                     ...
                   </span>
-                  <span *ngIf="tree.treeStatus === 'collapsed'">
-                    ↑
+                  <span class="collapsed" *ngIf="tree.treeStatus === 'collapsed'">
                   </span>
-                  <span *ngIf="tree.treeStatus === 'expanded'">
-                    ↓
+                  <span class="expanded" *ngIf="tree.treeStatus === 'expanded'">
                   </span>
                   <span *ngIf="tree.treeStatus === 'disabled'">
                     
@@ -109,7 +107,7 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
               [resizeable]="false" name="" [cellClass]="'col-action'" [headerClass]="'col-action'">
 
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">

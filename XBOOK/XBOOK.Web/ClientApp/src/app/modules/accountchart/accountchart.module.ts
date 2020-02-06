@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ProductService } from '@modules/_shared/services/product.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { SharedModule } from '@shared/shared.module';
@@ -21,7 +21,8 @@ import { CreateAccountChartComponent } from './create-accountchart/create-accoun
     FormsModule,
     DigitOnlyModule,
     NgxCleaveDirectiveModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
   ],
   providers: [ProductService, CreateAccountChartComponent, AccountChartService],
   entryComponents: [CreateAccountChartComponent]

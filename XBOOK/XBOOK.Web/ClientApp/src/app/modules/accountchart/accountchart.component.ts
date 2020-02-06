@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AccountChartService } from '@modules/_shared/services/accountchart.service';
 import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
 import { AcountChartModel } from '@modules/_shared/models/accountchart/account-chart.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
@@ -39,10 +40,9 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
     injector: Injector,
     private productService: ProductService,
     private modalService: NgbModal,
-    private router: Router,
     private cd: ChangeDetectorRef,
     private accountChartService: AccountChartService,
-    private translate: TranslateService) {
+    ) {
     super(injector);
   }
 
@@ -72,18 +72,7 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
         this.categories = result;
       });
   }
-  // edit(): void {
-  //   if (this.selected.length === 0) {
-  //     this.message.warning('Please select a item from the list?');
-  //     return;
-  //   }
-  //   if (this.selected.length > 1) {
-  //     this.message.warning('Only one item selected to edit?');
-  //     return;
-  //   }
-  //   this.showCreateOrEditProductDialog(this.selected[0].categoryID, this.selected[0].productID);
-  //   this.selected = [];
-  // }
+
   onTreeAction(event: any) {
     const index = event.rowIndex;
     const row = event.row;

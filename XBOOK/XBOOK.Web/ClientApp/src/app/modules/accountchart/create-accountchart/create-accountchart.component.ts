@@ -4,6 +4,7 @@ import { ProductView } from '@modules/_shared/models/product/product-view.model'
 import { AppComponentBase } from '@core/app-base.component';
 import { ProductService } from '@modules/_shared/services/product.service';
 import { finalize } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'xb-create-accountchart',
@@ -14,6 +15,7 @@ export class CreateAccountChartComponent extends AppComponentBase implements OnI
   @Input() data;
   @Input() categoryId;
   @Input() listCategory;
+  public accountChartForm: FormGroup;
   saving: false;
   categories: any;
   statusCategory: any;
@@ -21,13 +23,29 @@ export class CreateAccountChartComponent extends AppComponentBase implements OnI
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
+    public fb: FormBuilder,
     public productService: ProductService) {
     super(injector);
   }
 
   ngOnInit() {
-    this.statusCategory = this.categoryId;
+    this.accountChartForm = this.createAccountChartFormGroup();
+    this.accountChartForm.controls.accountNumber.disable();
   }
+  createAccountChartFormGroup() {
+
+    return this.fb.group({
+      accountName: ['', [Validators.required]],
+      accountMethods: [null],
+      accountNumber: [''],
+      plusString: ['']
+    });
+  }
+
+  onChange(e) {
+    console.log('xxx');
+  }
+
   save(): void {
     this.product.categoryId = this.statusCategory;
     this.product.unitPrice = Number(String(this.product.unitPrice).replace(/,/g, ''));
