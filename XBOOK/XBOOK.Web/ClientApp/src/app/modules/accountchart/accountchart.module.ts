@@ -24,7 +24,7 @@ import { CreateAccountChartComponent } from './create-accountchart/create-accoun
     SharedModule,
     ReactiveFormsModule,
   ],
-  providers: [ProductService, CreateAccountChartComponent, AccountChartService],
+  providers: [AccountChartService],
   entryComponents: [CreateAccountChartComponent]
 })
 export class AccountChartModule { }

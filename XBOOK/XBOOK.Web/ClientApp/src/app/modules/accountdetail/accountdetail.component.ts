@@ -29,7 +29,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
   companyCode: string;
   taxCode: string;
   // salesViewsrequst: SalesReportListData[] = [];
-  salesViewsreport: any[] = [];
+  accdetailViewsreport: any[] = [];
   fromDate: any;
   firstDate: any;
   endDate1: string;
@@ -38,6 +38,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
   case: any;
   genViews: any;
   startDay: any;
+  ViewsReport: any;
   endDay: any;
   keyspace: any;
   loadingIndicator = false;
@@ -95,10 +96,10 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
         this.loadingIndicator = false;
         this.genViews = i;
       });
-    // this.accountDetailService.getDataReport(genledSearch).subscribe(rp => {
-    //   this.genViewsReport = rp;
-    //   this.salesViewsreport = this.genViewsReport;
-    // });
+    this.accountDetailService.getDataReport(genledSearch).subscribe(rp => {
+      this.ViewsReport = rp;
+      this.accdetailViewsreport = this.ViewsReport;
+    });
     this.getProfiles();
   }
 
@@ -123,6 +124,10 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
           this.endDay = result.endDate;
           this.keyspace = ' - ';
         });
+        this.accountDetailService.getDataReport(genledSearch).subscribe(rp => {
+          this.ViewsReport = rp;
+          this.accdetailViewsreport = this.ViewsReport;
+        });
     });
 
   }
@@ -145,31 +150,35 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
       this.companyCode = rp.code;
     });
   }
-  // Print() {
-  //   // tslint:disable-next-line:prefer-for-of
-  //   for (let j = 0; j < this.salesViewsreport.length; j++) {
-  //     const data = {
-  //       companyNameName: this.companyName,
-  //       companyAddress: this.companyAddress,
-  //       productName: this.salesViewsreport[j].productName,
-  //       customerName: this.salesViewsreport[j].customerName,
-  //       invoiceNumber: this.salesViewsreport[j].invoiceNumber,
-  //       date: this.salesViewsreport[j].date,
-  //       unitPrice: this.salesViewsreport[j].unitPrice,
-  //       amount: this.salesViewsreport[j].amount,
-  //       discount: this.salesViewsreport[j].discount,
-  //       payment: this.salesViewsreport[j].payment,
-  //       startDate: this.startDay === undefined ? this.firstDate : this.startDay,
-  //       endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
-  //     };
-  //     this.requestSaveJson.push(data);
-  //   }
-  //   const reportName = 'SalesReportReport';
-  //   console.log(this.requestSaveJson);
-  //   this.salesReportService.SalesreportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
-  //     this.router.navigate([`/print/${reportName}`]);
-  //   });
-  // }
+  Print() {
+    // tslint:disable-next-line:prefer-for-of
+    for (let j = 0; j < this.accdetailViewsreport.length; j++) {
+      const data = {
+        companyNameName: this.companyName,
+        companyAddress: this.companyAddress,
+        accountNumber: this.accdetailViewsreport[j].accountNumber,
+        accountName: this.accdetailViewsreport[j].accountName,
+        companyName: this.accdetailViewsreport[j].companyName,
+        invoiceNumber: this.accdetailViewsreport[j].invoiceNumber,
+        date: this.accdetailViewsreport[j].date,
+        transactionNo: this.accdetailViewsreport[j].transactionNo,
+        reference: this.accdetailViewsreport[j].reference,
+        crspAccNumber: this.accdetailViewsreport[j].crspAccNumber,
+        debit: this.accdetailViewsreport[j].debit,
+        credit: this.accdetailViewsreport[j].credit,
+        debitClosing: this.accdetailViewsreport[j].debitClosing,
+        creditClosing: this.accdetailViewsreport[j].creditClosing,
+        startDate: this.startDay === undefined ? this.firstDate : this.startDay,
+        endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
+      };
+      this.requestSaveJson.push(data);
+    }
+    const reportName = 'AccountDetailReport';
+    console.log(this.requestSaveJson);
+    this.accountDetailService.AccountDeatilreportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
+      this.router.navigate([`/print/${reportName}`]);
+    });
+  }
   getinvoice(id) {
 
     let clientName = '';

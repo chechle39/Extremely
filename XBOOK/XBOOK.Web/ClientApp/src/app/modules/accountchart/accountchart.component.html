@@ -4,6 +4,9 @@
       <div class="row form-line">
         <div class="col-md-4">
           <h4 class="card-title">{{ 'ACCOUNT.CHART.HEADER' | translate }}</h4>
+          <div style="width: 10px;margin-top: -13px;margin-left: -47px; cursor: pointer;" (click)='SearchGenLed()'>
+            <img src="../../../assets/search.png" style="position: relative;margin-top: -50px;margin-left: 240px;"
+              alt="search General Ledger"></div>
         </div>
         <div class="col-md-4">
           <div ngbDropdown>
@@ -18,7 +21,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <button (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right">{{'ACCOUNT.CHART.MENPEN' | translate}}</button>
+          <button  class="btn btn-raised mr-1 btn-success float-right">{{'ACCOUNT.CHART.MENPEN' | translate}}</button>
         </div>
       </div>
       <!-- <div class="row my-3 margin-top-0">
@@ -55,7 +58,6 @@
         <div class="col-md-12">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" 
           [rows]="data"
-          [sorts]="[{prop: 'id', dir: 'desc'}]" 
           [loadingIndicator]="loadingIndicator" 
           [columnMode]="ColumnMode.force"
           [headerHeight]="46" 
@@ -63,7 +65,6 @@
           [rowHeight]="getRowHeight" 
           [reorderable]="reorderable" 
           (activate)="onActivate($event)"
-          (select)='onSelect($event)' 
           [selectAllRowsOnPage]="false"
           [limit]="20"
           (treeAction)="onTreeAction($event)"
@@ -91,12 +92,9 @@
                 {{row.accountName}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.TYPE' | translate}}"  prop="parentAccount"
-              [cellClass]="'col-right'" [headerClass]="'col-right'">
+            <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.TYPE' | translate}}"  prop="accountType">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <div class="col-right">
                   {{row.accountType}}
-                </div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.NUMBERARISED' | translate}}"  prop="parentAccount"
@@ -114,12 +112,12 @@
                 <div class="icon-actions">
                   <div class="actions">
                     <a class="icon-action">
-                      <span class="icon-edit"></span>
+                      <span (click)="editAccount(row, $event)" class="icon-edit"></span>
                     </a>
                   </div>
                   <div class="actions">
                     <a class="icon-action">
-                      <span class="icon-delete"></span>
+                      <span (click)="deleteAccount(row)" class="icon-delete"></span>
                     </a>
                   </div>
                 </div>

@@ -19,20 +19,20 @@ export class AccountDetailService extends BaseService {
             ));
         return gen;
     }
-//     getDataReport(request: any) {
-//       const gen = this.post<any[]>(`${API_URI.getDataReport}`, request)
-//         .pipe(
-//         //  debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
-//           map(
-//             (data: any) => {
-//               return (
-//                 data.length !== 0 ? data as any[] : new Array<any>()
-//               );
-//             }
-//           ));
-//       return gen;
-//   }
-//     SalesreportSaveDataPrint(requeData: any) {
-//       return this.post(`${API_URI.SalesreportSaveDataPrint}`, requeData);
-//     }
+    getDataReport(request: any) {
+      const gen = this.post<any[]>(`${API_URI.getDataReportAccountDetail}`, request)
+        .pipe(
+        //  debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
+          map(
+            (data: any) => {
+              return (
+                data.length !== 0 ? data as any[] : new Array<any>()
+              );
+            }
+          ));
+      return gen;
+  }
+    AccountDeatilreportSaveDataPrint(requeData: any) {
+      return this.post(`${API_URI.accountdetailreportSaveDataPrint}`, requeData);
+    }
 }

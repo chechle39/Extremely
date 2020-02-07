@@ -7,6 +7,10 @@ namespace XBOOK.Data.ViewModels
         public string accountNumber { get; set; }
         public string accountName { get; set; }
         public bool isParent { get; set; }
+        public string accountType { get; set; }
+        public string parentAccount { get; set; }
+        public Nullable<decimal> openingBalance { get; set; }
+        public Nullable<decimal> closingBalance { get; set; }
     }
 
     public class TreeNode

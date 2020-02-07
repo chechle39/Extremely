@@ -49,88 +49,92 @@
             [headerHeight]="60" [footerHeight]="100" [reorderable]="reorderable" [limit]="50" [selected]="selected"
             [selectionType]="SelectionType.checkbox" [rowHeight]="getRowHeight" [selectAllRowsOnPage]="false">
 
-            <ngx-datatable-column>
-              <ng-template ngx-datatable-header-template>
-                <span class="coldata">Số Hiệu</span>
-              </ng-template>
+
+            <ngx-datatable-column name="Số Hiệu" prop="transactionNo">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a href="" style=" width: 150%;">{{row.transactionNo}}</a>
+                <div>{{row.transactionNo}}</div>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="dateIssue">
-              <ng-template ngx-datatable-header-template>
-                <span class="coldata">Ngày Tháng</span>
-              </ng-template>
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div>{{row.dateIssue | date: 'dd/MM/yyyy'}}</div>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column>
-              <ng-template ngx-datatable-header-template>
-                <span class="coldata">Diễn Giải</span>
-              </ng-template>
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div>{{row.note}}</div>
-              </ng-template>
-            </ngx-datatable-column>
-
-
-            <ngx-datatable-column>
-              <ng-template ngx-datatable-header-template>
-                <span class="coldata" style="width:40%">Tài Khoản</span>
-              </ng-template>
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div style="text-align:center;width: 40%;">{{row.accNumber}}</div>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column>
-              <ng-template ngx-datatable-header-template>
-                <span class="coldata">TK Đối Ứng</span>
-              </ng-template>
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div style="text-align:center;width: 40%;">{{row.crspAccNumber}}</div>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column prop="debit">
-              <ng-template ngx-datatable-header-template>
-                <span class="coldata" style="text-align:right;text-align: right;margin-left: 40px">Phát Sinh Nợ</span>
-              </ng-template>
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div style="text-align: right;margin-left: 7px;text-align-last: auto;width: 70%;">
-                  <div>
-                    <div *ngIf="row.debit !== 0" class="col-more-info">
-                      {{row.debit | currency:'VND':''}}
-                    </div>
-                    <div *ngIf="row.debit === 0">
-                      <a>-</a>
-                    </div>
-                  </div>    
+        
+            <ngx-datatable-column prop="date" name="Ngày Tháng" [cellClass]="'col-left'"
+            [headerClass]="'col-left'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="col-left" style="color: cadetblue;">
+                <div>
+                  {{row.dateIssue | date: 'dd/MM/yyyy'}}
                 </div>
-              </ng-template>
-            </ngx-datatable-column>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
 
-            <ngx-datatable-column prop="credit">
-              <ng-template ngx-datatable-header-template>
-                <span class="coldata" style="text-align:right;text-align: right;margin-left: 52px">Phát Sinh Có</span>
-              </ng-template>
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div style="text-align: right;;margin-left: 7px;text-align-last: auto;width: 75%;">
-                  <div>
-                    <div *ngIf="row.credit !== 0" class="col-more-info">
-                      {{row.credit | currency:'VND':''}}
-                    </div>
-                    <div *ngIf="row.credit === 0">
-                      <a>-</a>
-                    </div>
-                  </div>               
-                </div>
-              </ng-template>
-            </ngx-datatable-column>
+          
+          <ngx-datatable-column name="Diền giải" prop="firstMonth">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div>{{row.note}}</div>
+            </ng-template>
+          </ngx-datatable-column>      
 
+          <ngx-datatable-column prop="invoiceNumber" name="Tài Khoản" [cellClass]="'col-center'"
+          [headerClass]="'col-center'">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div class="col-center">
+              <div>
+                {{row.accNumber}}
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column prop="invoiceNumber" name="TK Đối Ứng" [cellClass]="'col-center'"
+        [headerClass]="'col-center'">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div class="col-center">
+            <div>
+              {{row.crspAccNumber}}
+            </div>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>    
+
+
+
+      <ngx-datatable-column prop="invoiceNumber" name="Phát Sinh Nợ" [cellClass]="'col-right'"
+      [headerClass]="'col-right'">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <div class="col-right">
+          <div>
+            <div>
+              <div *ngIf="row.debit !== 0" class="col-more-info">
+                {{row.debit | currency:'VND':''}}
+              </div>
+              <div *ngIf="row.debit === 0" class="col-more-info">
+                <a>-</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="invoiceNumber" name="Phát Sinh Có" [cellClass]="'col-right'"
+    [headerClass]="'col-right'">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <div class="col-right" style="padding-left: 3%;">
+        <div>
+          <div>
+            <div *ngIf="row.credit !== 0" class="col-more-info">
+              {{row.credit | currency:'VND':''}}
+            </div>
+            <div *ngIf="row.credit === 0" class="col-more-info">
+              <a>-</a>
+            </div>
+          </div>
+        </div>
+      </div>                 
+    </ng-template>
+  </ngx-datatable-column>
 
             <ngx-datatable-footer>
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
@@ -138,13 +142,13 @@
                 <div class="row"
                   style="display: inline-block;width: 100%;border-top: 3px double #ccc;padding-top: 30px;">
                   <div class="row text-right">
-                    <div class="col-md-3"></div>
+                    <div class="col-md-4"></div>
                     <div class="col-md-2"></div>
                     <div class="col-md-2 text-right">
                       Tổng
                     </div>
-                    <div class="col-md-2" style="margin-left: 113px;">
-                      <div>
+                    <div class="col-md-2">
+                      <div class="total">
                         <div *ngIf="getGrantTotal() !== 0" class="col-more-info">
                           {{getGrantTotal() | currency:'VND':''}}
                         </div>
@@ -153,7 +157,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-2" style="margin-left: -15px;">
+                    <div class="col-md-2" >
                       <div>
                         <div *ngIf="getGrantTotalDebit() !== 0" class="col-more-info">
                           {{getGrantTotalDebit() | currency:'VND':''}}

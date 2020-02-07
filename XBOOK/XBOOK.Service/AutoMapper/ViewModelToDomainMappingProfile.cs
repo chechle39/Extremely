@@ -42,7 +42,7 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<GeneralLedgerViewModel, GeneralLedger>().ConstructUsing(x => new GeneralLedger(x.accNumber, x.clientID,x.clientName
                 ,x.credit,x.crspAccNumber,x.dateIssue,x.debit,x.note,x.transactionType,x.transactionNo));
 
-            CreateMap<AccountChartViewModel, AccountChart>().ConstructUsing(x => new AccountChart(x.accountNumber));
+            CreateMap<AccountChartViewModel, AccountChart>().ConstructUsing(x => new AccountChart(x.accountNumber, x.accountName,x.accountType,x.closingBalance,x.isParent,x.openingBalance,x.parentAccount));
             CreateMap<CompanyProfileViewModel, CompanyProfile>().ConstructUsing(x => new CompanyProfile(x.address,x.bizPhone,
                 x.city,x.companyName,x.country,x.currency,x.dateFormat,x.directorName,x.logoFilePath,x.mobilePhone,x.taxCode,x.zipCode));
 

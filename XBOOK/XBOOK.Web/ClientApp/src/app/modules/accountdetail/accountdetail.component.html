@@ -29,7 +29,7 @@
             <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
             </button>
             <div class="d-inline-block mx-2">
-              <button  class="btn btn-raised mr-1 btn-secondary">Print</button>
+              <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
             </div>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item"><span class="icon-import"></span> Import General Ledger</button>
@@ -103,10 +103,10 @@
                   <div class="col-right">
                     <div>
                       <div>
-                        <div *ngIf="row.unitPrice !== 0" class="col-more-info">
+                        <div *ngIf="row.debit !== 0" class="col-more-info">
                           {{row.debit | currency:'VND':''}}
                         </div>
-                        <div *ngIf="row.unitPrice === 0">
+                        <div *ngIf="row.debit === 0">
                           <a>-</a>
                         </div>
                       </div>
@@ -115,27 +115,34 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="Phát Sinh Có" [cellClass]="'col-center'"
-                [headerClass]="'col-center'">
+              <ngx-datatable-column prop="invoiceNumber" name="Phát Sinh Có" [cellClass]="'col-right'"
+                [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                  <div class="col-center">
+                  <div class="col-right">
                     <div>
-                      {{row.credit | currency:'VND':'' }}
+                      <div>
+                        <div *ngIf="row.credit !== 0" class="col-more-info">
+                          {{row.credit | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="row.credit === 0">
+                          <a>-</a>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </div>                 
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="Cuối Kỳ Nợ" [cellClass]="'col-center'"
-                [headerClass]="'col-center'">
+              <ngx-datatable-column prop="invoiceNumber" name="Cuối Kỳ Nợ" [cellClass]="'col-right'"
+                [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                  <div class="col-center">
+                  <div class="col-right">
                     <div>
                       <div>
-                        <div *ngIf="row.discount !== 0" class="col-more-info">
+                        <div *ngIf="row.debitClosing !== 0" class="col-more-info">
                           {{row.debitClosing | currency:'VND':''}}
                         </div>
-                        <div *ngIf="row.discount === 0">
+                        <div *ngIf="row.debitClosing === 0">
                           <a>-</a>
                         </div>
                       </div>
@@ -150,10 +157,10 @@
                   <div class="col-right">
                     <div>
                       <div>
-                        <div *ngIf="row.payment !== 0" class="col-more-info">
+                        <div *ngIf="row.creditClosing !== 0" class="col-more-info">
                           {{row.creditClosing | currency:'VND':''}}
                         </div>
-                        <div *ngIf="row.payment === 0">
+                        <div *ngIf="row.creditClosing === 0">
                           <a>-</a>
                         </div>
                       </div>

@@ -91,6 +91,8 @@
   "ACCOUNT.CHART.CREATE.ACCOUNTNAME": "Acount Name",
   "ACCOUNT.CHART.CREATE.ACCOUNTPARENT": "Acount Parent",
   "ACCOUNT.CHART.CREATE.ACCOUNTNUMBER": "Acount Number",
-  "ACCOUNT.CHART.CREATE.ACCOUNTNUMBER.VALI": "Please enter account name"
+  "ACCOUNT.CHART.CREATE.ACCOUNTNUMBER.VALI": "Please enter account name",
+  "ACCOUNT.CHART.CREATE.NAME.PLACEHOLDER": "Enter acount name or service name"
+
 }
 
