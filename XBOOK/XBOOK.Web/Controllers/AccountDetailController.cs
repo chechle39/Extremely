@@ -34,15 +34,20 @@ namespace XBOOK.Web.Controllers
             var DebitAgeList = await _iAccountDetailServiceDapper.GetAccountDetailAsync(request);
             return Ok(DebitAgeList);
         }
-
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetAccountDetailReportAsync([FromBody]AccountDetailSerchRequest request)
+        {
+            var DebitAgeList = await _iAccountDetailServiceDapper.GetAccountDetailReportAsync(request);
+            return Ok(DebitAgeList);
+        }
 
         [HttpPost("[action]")]
-        public IActionResult SaveFileJson(List<SalesReportPrintViewodel> request)
+        public IActionResult SaveFileJson(List<AccountDetailPrintViewModel> request)
         {
             string json = JsonConvert.SerializeObject(request);
             var folderName = Path.Combine("Reports", "Data");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            var fileName = "SalesReport.json";
+            var fileName = "AccountDetail.json";
 
             var fullPath = Path.Combine(pathToSave, fileName);
             if (!Directory.Exists(pathToSave))

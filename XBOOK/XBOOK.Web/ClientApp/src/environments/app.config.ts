@@ -58,7 +58,14 @@ export const API_URI = {
   getDebitAge: 'api/DebitAge/GetALLDebitageServiceDapper',
   DebitAgeSaveDataPrint: 'api/DebitAge/SaveFileJson',
   SalesreportSaveDataPrint: 'api/SalesReport/SaveFileJson',
+  getDataReportAccountDetail : 'api/AccountDetail/GetAccountDetailReportAsync',
+  accountdetailreportSaveDataPrint: 'api/AccountDetail/SaveFileJson',
   getAccountDetail: 'api/AccountDetail/GetAllAccountDetailAsync',
+  getPurchaseReport: 'api/PurchaseReport/GetPurchaseReportGroupAsync',
+  getDataPurchaseReportReport: 'api/PurchaseReport/GetAllPurchaseReportAsync',
+  PurchasereportSaveDataPrint: 'api/PurchaseReport/SaveFileJson',
+  getcompanyProfile: 'api/CompanyProfile/GetAllClientAsync',
+  createProfile: 'api/CompanyProfile/SaveCompanyProfile',
   // -------------------------------
   buyinvoice: 'api/BuyInvoices/GetAllBuyInvoice',
   deleteBuyInvoice: 'api/BuyInvoices/DeleteBuyInv',
@@ -83,6 +90,7 @@ export const API_URI = {
   getSalesreport: 'api/SalesReport/GetALLDebitageServiceDapper',
   getDataReport: 'api/SalesReport/GetDatareportServiceDapper',
 
+
   getLastPaymentReceipt: 'api/PaymentReceipt/GetLastPaymentReceipt',
   createPaymentReceipt: 'api/PaymentReceipt/CreatePaymentReceipt',
   updatePaymentReceipt: 'api/PaymentReceipt/UpdatePaymentReceipt',
@@ -97,6 +105,11 @@ export const API_URI = {
   getFileSupplier: 'api/UploadProfile/GetIMGSupplier',
   downLoadFileBuy: 'api/BuyInvoices/Download',
   getAccountChartTree: 'api/AccountChart/GetAllTreeAccount',
+  updateAcountChart: 'api/AccountChart/Update',
+  createAccountChart: 'api/AccountChart/CreateAccountChart',
+  deleteAccount: 'api/AccountChart/DeleteAcount',
+
+
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

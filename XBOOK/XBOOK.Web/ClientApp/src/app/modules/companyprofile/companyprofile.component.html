@@ -1,0 +1,109 @@
+<div class="card">
+  <div class="card-content">
+    <div class="card-body">
+      <div class="row form-line">
+        <div class="col-md-4">
+          <h4 class="card-title">THÔNG TIN CÔNG TY</h4>
+        </div>
+        <div class="col-md-4">
+          <div ngbDropdown>
+            <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
+            </button>
+            <div ngbDropdownMenu aria-labelledby="bulkActions">
+              <button class="dropdown-item"><span class="icon-import"></span> Import Profile</button>
+              <button class="dropdown-item"><span class="icon-export"></span> Export Profile</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <button (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right">New Profile</button>
+        </div>
+      </div>
+      <div class="row my-3 margin-top-0">
+        <div class="col-md-4 margintop-13">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="companyprofileViews"
+            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
+            [selected]="selected" [selectionType]="SelectionType.checkbox" (select)='onSelect($event)'
+            [selectAllRowsOnPage]="false">
+
+            <ngx-datatable-column prop="issueDate" name="Company Name/ Address" [cellClass]="'col-center'"
+              [headerClass]="'col-left'" style="width: 150%;">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-more-info col-left">{{row.companyName}}</div>
+                <div class="col-more-info col-left">
+                  {{row.address}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="issueDate" name="City/ Country" [cellClass]="'col-center'"
+              [headerClass]="'col-center'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">{{row.city}}</div>
+                <div class="col-more-info col-center">
+                  {{row.country}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="issueDate" name="Director/ Bank Account" [cellClass]="'col-center'"
+              [headerClass]="'col-center'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">{{row.directorName}}</div>
+                <div class="col-more-info col-center">
+                  {{row.bankAccount}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="issueDate" name="Currency/ DateFormat" [cellClass]="'col-center'"
+              [headerClass]="'col-center'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">{{row.currency}}</div>
+                <div class="col-more-info col-center">
+                  {{row.dateFormat}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Business/ MobilePhone" prop="" [cellClass]="'col-center'"
+              [headerClass]="'col-center'">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">
+                  <div>{{row.bizPhone}}</div>
+                  <div class="col-more-info col-center">{{row.mobilePhone}}</div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Code/ Logo FilePath" prop="" [cellClass]="'col-center'"
+              [headerClass]="'col-center'">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">
+                  <div>{{row.code}}</div>
+                  <div class="col-more-info col-center">{{row.logoFilePath}}</div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Tax/ Zip Code" prop="" [cellClass]="'col-center'" [headerClass]="'col-center'">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">
+                  <div>{{row.taxCode}}</div>
+                  <div class="col-more-info col-center">{{row.zipCode}}</div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

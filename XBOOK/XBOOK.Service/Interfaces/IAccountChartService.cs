@@ -12,5 +12,9 @@ namespace XBOOK.Service.Interfaces
     {
         Task<List<AccountChartViewModel>> GetAllAccount();
         Task<List<TreeNode>> GetAllTreeAccountAsync();
+        Task<bool> CreateAccountChartAsync(AccountChartViewModel accountChartViewModel);
+        Task<bool> DeleteAccount(Acc accountNumber);
+        Task<bool> Update(AccountChartViewModel accountChartViewModel);
+
     }
 }

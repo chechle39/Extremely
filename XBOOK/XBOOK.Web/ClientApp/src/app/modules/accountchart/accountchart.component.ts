@@ -1,17 +1,13 @@
-import { Component, OnInit, Injector, ChangeDetectorRef } from '@angular/core';
-import { ProductService } from '@modules/_shared/services/product.service';
-import { Router } from '@angular/router';
+import { Component, Injector, ChangeDetectorRef } from '@angular/core';
 import { ProductView } from '@modules/_shared/models/product/product-view.model';
 import { ProductCategory } from '@core/app.enums';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '@core/app.consts';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { PagedListingComponentBase, PagedRequestDto } from '@core/paged-listing-component-base';
-import { TranslateService } from '@ngx-translate/core';
 import { AccountChartService } from '@modules/_shared/services/accountchart.service';
 import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
 import { AcountChartModel } from '@modules/_shared/models/accountchart/account-chart.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
@@ -38,7 +34,6 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
   };
   constructor(
     injector: Injector,
-    private productService: ProductService,
     private modalService: NgbModal,
     private cd: ChangeDetectorRef,
     private accountChartService: AccountChartService,
@@ -65,13 +60,6 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
     });
   }
 
-  getAllCategory() {
-    this.productService
-      .getAllCategory()
-      .subscribe(result => {
-        this.categories = result;
-      });
-  }
 
   onTreeAction(event: any) {
     const index = event.rowIndex;
@@ -89,28 +77,21 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
       this.cd.detectChanges();
     }
   }
-  delete(): void {
-    if (this.selected.length === 0) {
-      this.message.warning('Please select an item from the list?');
-      return;
-    }
-    const requestDl = [];
-    this.message.confirm('Do you want to delete products ?', 'Are you sure ?', () => {
-      this.selected.forEach(element => {
-        const id = element.productID;
-        requestDl.push({ id });
-      });
-      this.productService.deleteProduct(requestDl).subscribe((rs: any) => {
-        if (rs === false) {
-          this.message.error('This product can not delete');
-        } else {
-          this.notify.success('Successfully Deleted');
-         // this.getAllProduct();
-        }
-      });
-      this.selected = [];
+
+  deleteAccount(row) {
+    const rs = {
+      accNumber: row.accountNumber
+    };
+    this.accountChartService.deleteAccount(rs).subscribe(rp => {
+      if (rp === false) {
+        this.message.error('This account can not delete');
+      } else {
+        this.notify.success('Successfully Deleted');
+        this.refresh();
+      }
     });
   }
+
   getRowHeight(row) {
     return row.height;
   }
@@ -120,9 +101,7 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
     this.selected.push(...selected);
   }
 
-  createProduct(): void {
-    this.showCreateOrEditAccountDialog();
-  }
+
   showCreateOrEditAccountDialog(): void {
     let createOrEditAccountDialog;
     createOrEditAccountDialog = this.modalService.open(CreateAccountChartComponent, AppConsts.modalOptionsSmallSize);
@@ -135,26 +114,39 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
     });
 
   }
+  editAccount(row, event) {
+    event.target.parentElement.parentElement.blur();
+    event.target.closest('datatable-body-cell').blur();
+    let createOrEditAccountDialog;
+    createOrEditAccountDialog = this.modalService.open(CreateAccountChartComponent, AppConsts.modalOptionsSmallSize);
+    createOrEditAccountDialog.componentInstance.row = row;
+    createOrEditAccountDialog.componentInstance.data = this.data;
+
+    createOrEditAccountDialog.result.then(result => {
+      if (result) {
+        this.refresh();
+      }
+    });
+  }
+
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click') {
-      // if (event.cellIndex > 0) {
-      //   event.cellElement.blur();
-      //   this.translate.get('PRODUCT.LIST.PRODUCT')
-      //     .subscribe(text => { this.productTitle = text; });
-      //   this.translate.get('PRODUCT.LIST.SERVICE')
-      //     .subscribe(text => { this.serviceTitle = text; });
-      //   const title = event.row.categoryId === 1 ? this.productTitle : this.serviceTitle;
-      //   const createOrEditProductDialog = this.modalService.open(EditProductComponent, AppConsts.modalOptionsSmallSize);
-      //   createOrEditProductDialog.componentInstance.title = title;
-      //   createOrEditProductDialog.componentInstance.id = event.row.productID;
-      //   createOrEditProductDialog.componentInstance.listCategory = this.categories;
-      //   createOrEditProductDialog.result.then(result => {
-      //     if (result) {
-      //       this.refresh();
-      //     }
-      //   });
-      // }
+    if (event.type === 'click' && event.cellIndex !== 4 && event.cellIndex !== 0) {
+      event.cellElement.blur();
+      let createOrEditAccountDialog;
+      createOrEditAccountDialog = this.modalService.open(CreateAccountChartComponent, AppConsts.modalOptionsSmallSize);
+      createOrEditAccountDialog.componentInstance.row = event.row;
+      createOrEditAccountDialog.componentInstance.data = this.data;
+      createOrEditAccountDialog.result.then(result => {
+        if (result) {
+          this.refresh();
+        }
+      });
+      console.log('xx');
     }
+  }
+
+  SearchGenLed() {
+
   }
 }

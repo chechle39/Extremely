@@ -8,7 +8,7 @@ namespace XBOOK.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<AccountChart> builder)
         {
-            builder.Property(e => e.accountNumber).ValueGeneratedNever();
+            builder.Property(e => e.accountNumber).ValueGeneratedOnAdd();
         }
     }
 }

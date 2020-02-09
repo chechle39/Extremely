@@ -21,7 +21,7 @@ namespace XBOOK.Dapper.Service
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<SalesReportViewodel>> GetISalesDataReportServiceDapperAsync(SalesReportModelSearchRequest request)
+        public async Task<IEnumerable<SalesReportViewModel>> GetISalesDataReportServiceDapperAsync(SalesReportModelSearchRequest request)
         {
             using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
@@ -34,7 +34,7 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@fromDate", request.StartDate);
                     dynamicParameters.Add("@toDate", request.EndDate);
                     dynamicParameters.Add("@Currency", request.Client);
-                    return await sqlConnection.QueryAsync<SalesReportViewodel>(
+                    return await sqlConnection.QueryAsync<SalesReportViewModel>(
                        "Book_SalesReport", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
             }
@@ -52,9 +52,9 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@fromDate", request.StartDate);
                     dynamicParameters.Add("@toDate", request.EndDate);
                     dynamicParameters.Add("@Currency", request.Client);
-                    var res = await sqlConnection.QueryAsync<SalesReportViewodel>(
+                    var res = await sqlConnection.QueryAsync<SalesReportViewModel>(
                        "Book_SalesReport", dynamicParameters, commandType: CommandType.StoredProcedure);
-                    List<SalesReportViewodel> salesReportViewodel = res.ToList();
+                    List<SalesReportViewModel> salesReportViewodel = res.ToList();
                     var results1 = from p in salesReportViewodel
                                    group p by p.ProductName into g
                                    select new { productName = g.Key, SalesReportListData = g.ToList(), TotalAmount = g.Sum(x => x.Amount), TotalDiscount = g.Sum(x => x.Discount), TotalPayment = g.Sum(x => x.Payment) };

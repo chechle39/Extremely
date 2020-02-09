@@ -72,6 +72,11 @@ const routes: Routes = [
       },
 
       {
+        path: 'purchasereport',
+        loadChildren: () => import('../modules/purchasereport/purchase-report.module')
+          .then(m => m.PurchaseReportModule)
+      },
+      {
         path: 'moneyreceipt',
         loadChildren: () => import('../modules/moneyreceipt/moneyreceipt.module')
           .then(m => m.MoneyreceiptModule)
@@ -100,6 +105,11 @@ const routes: Routes = [
         path: 'acountchart',
         loadChildren: () => import('../modules/accountchart/accountchart.module')
           .then(m => m.AccountChartModule)
+      },
+      {
+        path: 'companyProfile',
+        loadChildren: () => import('../modules/companyprofile/companyprofile.module')
+          .then(m => m.CompanyProfileModule)
       },
     ]
   }

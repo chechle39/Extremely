@@ -8,6 +8,6 @@ namespace XBOOK.Dapper.Interfaces
     public interface ISalesReportServiceDapper
     {
         Task<IEnumerable<SalesReportGroupViewModel>> GetISalesReportServiceDapperAsync(SalesReportModelSearchRequest request);
-        Task<IEnumerable<SalesReportViewodel>> GetISalesDataReportServiceDapperAsync(SalesReportModelSearchRequest request);
+        Task<IEnumerable<SalesReportViewModel>> GetISalesDataReportServiceDapperAsync(SalesReportModelSearchRequest request);
     }
 }

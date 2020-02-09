@@ -6,6 +6,9 @@ namespace XBOOK.Data.Entities
 
     public partial class AccountChart
     {
+        public AccountChart()
+        {
+        }
         public AccountChart(string accountNumber)
         {
             this.accountNumber = accountNumber;
