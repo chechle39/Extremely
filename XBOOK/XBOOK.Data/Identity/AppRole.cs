@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace XBOOK.Data.Identity
 {
+    [Table("AppRoles")]
     public class AppRole: IdentityRole<int>
     {
         public AppRole() : base()

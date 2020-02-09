@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace XBOOK.Data.Identity
 {
+    [Table("AppUsers")]
     public class AppUser : IdentityUser<int>
     {
         public AppUser() { }

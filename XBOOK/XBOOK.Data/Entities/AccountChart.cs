@@ -2,6 +2,7 @@ namespace XBOOK.Data.Entities
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class AccountChart
     {
@@ -21,6 +22,8 @@ namespace XBOOK.Data.Entities
         }
 
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.None)]
+
         public string accountNumber { get; set; }
         public string accountName { get; set; }
         public string accountType { get; set; }
