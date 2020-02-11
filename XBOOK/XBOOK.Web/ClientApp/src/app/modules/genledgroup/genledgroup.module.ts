@@ -13,9 +13,10 @@ import { GenledgroupComponent } from './genledgroup.component';
 import { GenLedGroupService } from '@modules/_shared/services/genledgroup.service';
 import { AccountBalanceService } from '@modules/_shared/services/accountbalance.service';
 import { InvoiceService } from '@modules/_shared/services/invoice.service';
-import { DataService } from '@modules/_shared/services/data.service';
 @NgModule({
-  declarations: [GenledgroupComponent, SearchgenledComponent],
+  declarations: [GenledgroupComponent,
+    // SearchgenledComponent
+  ],
   entryComponents: [SearchgenledComponent],
   imports: [
     CommonModule,
@@ -27,7 +28,6 @@ import { DataService } from '@modules/_shared/services/data.service';
     ReactiveFormsModule,
     MultiSelectModule,
   ],
-  providers: [GenLedService, AccountChartService, CurrencyPipe, DecimalPipe, GenLedGroupService, AccountBalanceService, InvoiceService,
-     DataService],
+  providers: [GenLedService, AccountChartService, CurrencyPipe, DecimalPipe, GenLedGroupService, AccountBalanceService, InvoiceService],
 })
 export class GenledGroupModule { }

@@ -25,6 +25,9 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { CreatePaymentReceiptComponent } from '@modules/paymentreceipt/payment-receipt/payment-receipt.component';
 import { validateDirective } from './validators/validate';
 import { validateDateDirective } from './validators/validateDateDirective';
+import { SearchgenledComponent } from '@modules/genledgroup/searchgenledgroup/searchgenled.component';
+import {MultiSelectModule} from 'primeng/multiselect';
+
 @NgModule({
   declarations: [
     validateDateDirective,
@@ -39,8 +42,10 @@ import { validateDateDirective } from './validators/validateDateDirective';
     SplitPipe,
     CreateMoneyReceiptComponent,
     CreatePaymentReceiptComponent,
+    SearchgenledComponent,
     FilterPipe],
   imports: [
+    MultiSelectModule,
     NgbModule,
     NgxDatatableModule,
     FormsModule,
@@ -72,6 +77,7 @@ import { validateDateDirective } from './validators/validateDateDirective';
     SplitPipe,
     CreateMoneyReceiptComponent,
     CreatePaymentReceiptComponent,
+    SearchgenledComponent,
     SidebarToggleDirective],
   providers: [
     { provide: NgbDateParserFormatter, useClass: MomentDateFormatter }

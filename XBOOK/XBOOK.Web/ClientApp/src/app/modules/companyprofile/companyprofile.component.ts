@@ -80,7 +80,6 @@ export class CompanyProfileComponent extends PagedListingComponentBase<ClientVie
     if (id === undefined || id <= 0) {
       createOrEditClientDialog = this.modalService.open(CreateCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
     } else {
-   //   createOrEditClientDialog = this.modalService.open(EditClientComponent, AppConsts.modalOptionsCustomSize);
       createOrEditClientDialog.componentInstance.id = id;
     }
     createOrEditClientDialog.result.then(result => {
@@ -90,4 +89,10 @@ export class CompanyProfileComponent extends PagedListingComponentBase<ClientVie
     });
 
   }
+
+  getRowHeight(row) {
+    return row.height;
+  }
+
+  onSelect(e) {}
 }

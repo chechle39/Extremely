@@ -11,6 +11,7 @@ import { AccountChartComponent } from './accountchart.component';
 import { AccountChartRoutingModule } from './accountchart-routing.module';
 import { AccountChartService } from '@modules/_shared/services/accountchart.service';
 import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
+import { SearchgenledComponent } from '@modules/genledgroup/searchgenledgroup/searchgenled.component';
 @NgModule({
   declarations: [AccountChartComponent, CreateAccountChartComponent],
   imports: [
@@ -25,7 +26,7 @@ import { CreateAccountChartComponent } from './create-accountchart/create-accoun
     ReactiveFormsModule,
   ],
   providers: [AccountChartService],
-  entryComponents: [CreateAccountChartComponent]
+  entryComponents: [CreateAccountChartComponent, SearchgenledComponent]
 })
 export class AccountChartModule { }
 

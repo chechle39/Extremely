@@ -1,7 +1,8 @@
 import * as moment from 'moment';
 import { NgbDateStruct, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '@core/app.consts';
-
+import { Pipe, Injectable } from '@angular/core';
+@Injectable()
 export class MomentDateFormatter extends NgbDateParserFormatter {
 
   readonly DT_FORMAT = AppConsts.defaultDateFormat;
@@ -9,7 +10,7 @@ export class MomentDateFormatter extends NgbDateParserFormatter {
   parse(value: string): NgbDateStruct {
     if (value) {
       value = value.trim();
-      let mdt = moment(value, this.DT_FORMAT);
+      const mdt = moment(value, this.DT_FORMAT);
     }
     return null;
   }

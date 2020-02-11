@@ -15,6 +15,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountBalanceViewModel } from '@modules/_shared/models/accountbalance/accountbalance-view.model';
 import { InvoiceService } from '@modules/_shared/services/invoice.service';
+import { DataService } from '@modules/_shared/services/data.service';
 
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
@@ -60,7 +61,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     public accountBalanceService: AccountBalanceService,
     private genLedService: GenLedGroupService,
     private genLedreportService: GenLedService,
-
+    private data: DataService,
     private modalService: NgbModal,
     private router: Router) {
     super(injector);
@@ -72,59 +73,99 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     finishedCallback: () => void
   ): void {
 
+    const genledSearch = this.getParam();
+  }
+
+
+  private getParam() {
     const date = new Date();
     this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     this.endDate1 = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
-    const genledSearch = {
-      startDate: this.firstDate === undefined ? null : this.firstDate,
-      endDate: this.endDate1 === undefined ? null : this.endDate1,
-      isaccount: false,
-      isAccountReciprocal: false,
-      money: null,
-      accNumber: null
-    };
+    this.data.getMessage().subscribe(rpp => {
+      console.log(rpp);
+      if (rpp === undefined) {
+        const genledSearch = {
+          startDate: this.firstDate === undefined ? null : this.firstDate,
+          endDate: this.endDate1 === undefined ? null : this.endDate1,
+          isaccount: false,
+          isAccountReciprocal: false,
+          money: null,
+          accNumber: null
+        };
+        this.invoiceService.getInfoProfile().subscribe((r: any) => {
+          this.companyName = r.companyName;
+          this.taxCode = r.taxCode;
+          this.companyAddress = r.address;
+          this.companyCode = r.code;
+        });
+        this.accountChartService.searchAcc().subscribe(rp => {
+          this.tempaccount = rp;
+        });
+        this.genLedService
+          .searchGen(genledSearch)
+          .pipe(
+          )
+          .subscribe(i => {
+            this.loadingIndicator = false;
+            this.genViews = i;
+            const data = [];
+            this.genViewsTemp = data;
+            this.methodEdit_View();
+          });
 
+        this.genLedreportService
+          .searchGen(genledSearch)
+          .pipe(
+            // debounceTime(500),
+          )
+          .subscribe(i => {
+            this.loadingIndicator = false;
+            this.genViewsreport = i;
+          });
+       // return genledSearch;
+      } else {
+        const genledSearch = {
+          startDate: rpp.data.start,
+          endDate: rpp.data.end,
+          isaccount: true,
+          isAccountReciprocal: false,
+          money: null,
+          accNumber: [rpp.data.accNumber]
+        };
+        this.invoiceService.getInfoProfile().subscribe((r: any) => {
+          this.companyName = r.companyName;
+          this.taxCode = r.taxCode;
+          this.companyAddress = r.address;
+          this.companyCode = r.code;
+        });
+        this.accountChartService.searchAcc().subscribe(rp => {
+          this.tempaccount = rp;
+        });
+        this.genLedService
+          .searchGen(genledSearch)
+          .pipe(
 
-    this.invoiceService.getInfoProfile().subscribe((r: any) => {
-      this.companyName = r.companyName;
-      this.taxCode = r.taxCode;
-      this.companyAddress = r.address;
-      this.companyCode = r.code;
+          )
+          .subscribe(i => {
+            this.loadingIndicator = false;
+            this.genViews = i;
+            const data = [];
+            this.genViewsTemp = data;
+            this.methodEdit_View();
+          });
+
+        this.genLedreportService
+          .searchGen(genledSearch)
+          .pipe(
+          )
+          .subscribe(i => {
+            this.loadingIndicator = false;
+            this.genViewsreport = i;
+          });
+      }
     });
-    this.accountChartService.searchAcc().subscribe(rp => {
-      this.tempaccount = rp;
-    });
-    this.genLedService
-      .searchGen(genledSearch)
-      .pipe(
-        // debounceTime(500),
-        finalize(() => {
-          finishedCallback();
-        })
-      )
-      .subscribe(i => {
-        this.loadingIndicator = false;
-        this.genViews = i;
-        const data = [];
-        this.genViewsTemp = data;
-        this.methodEdit_View();
-      });
-
-    this.genLedreportService
-      .searchGen(genledSearch)
-      .pipe(
-        // debounceTime(500),
-        finalize(() => {
-          finishedCallback();
-        })
-      )
-      .subscribe(i => {
-        this.loadingIndicator = false;
-        this.genViewsreport = i;
-      });
-
+   // return genledSearch;
   }
-
 
   SearchGenLed(): void {
 

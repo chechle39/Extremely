@@ -8,6 +8,9 @@ import { PagedListingComponentBase, PagedRequestDto } from '@core/paged-listing-
 import { AccountChartService } from '@modules/_shared/services/accountchart.service';
 import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
 import { AcountChartModel } from '@modules/_shared/models/accountchart/account-chart.model';
+import { DataService } from '@modules/_shared/services/data.service';
+import { Router } from '@angular/router';
+import { SearchgenledComponent } from '@modules/genledgroup/searchgenledgroup/searchgenled.component';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
@@ -32,11 +35,14 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
   productKey = {
     productKeyword: ''
   };
+  genledSearch: { startDate: any; endDate: any; isaccount: any; isAccountReciprocal: any; money: any; accNumber: any; };
   constructor(
     injector: Injector,
     private modalService: NgbModal,
     private cd: ChangeDetectorRef,
     private accountChartService: AccountChartService,
+    private senData: DataService,
+    private router: Router
     ) {
     super(injector);
   }
@@ -53,7 +59,11 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
   getAllAcc() {
     this.accountChartService.searchAccTree().subscribe(rp => {
       this.data = rp.map(i => {
-        i.treeStatus = 'expanded';
+        if (i.isParent === true) {
+          i.treeStatus = 'expanded';
+        } else {
+          i.treeStatus = 'loading';
+        }
         return i;
       });
       this.loadingIndicator = false;
@@ -65,11 +75,13 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
     const index = event.rowIndex;
     const row = event.row;
     if (row.treeStatus === 'collapsed') {
-      row.treeStatus = 'loading';
+     // row.treeStatus = 'loading';
       row.treeStatus = 'expanded';
       const data = this.data.filter(x => x.parentAccount === event.accountNumber);
       this.data = [...this.data, ...data];
       this.cd.detectChanges();
+    } else if (row.treeStatus === 'loading') {
+
     } else {
       row.treeStatus = 'collapsed';
 
@@ -87,7 +99,7 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
         this.message.error('This account can not delete');
       } else {
         this.notify.success('Successfully Deleted');
-        this.refresh();
+        this.getAllAcc();
       }
     });
   }
@@ -131,22 +143,59 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
 
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click' && event.cellIndex !== 4 && event.cellIndex !== 0) {
+    if (event.type === 'dblclick' && event.cellIndex !== 4 && event.cellIndex !== 0) {
       event.cellElement.blur();
-      let createOrEditAccountDialog;
-      createOrEditAccountDialog = this.modalService.open(CreateAccountChartComponent, AppConsts.modalOptionsSmallSize);
-      createOrEditAccountDialog.componentInstance.row = event.row;
-      createOrEditAccountDialog.componentInstance.data = this.data;
-      createOrEditAccountDialog.result.then(result => {
-        if (result) {
-          this.refresh();
-        }
-      });
-      console.log('xx');
+      if (this.genledSearch === undefined) {
+        const rs  = {
+          start: null,
+          end: null,
+          accNumber: event.row.accountNumber
+        };
+        this.senData.sendMessage(rs);
+
+      } else {
+        const rs  = {
+          start: this.genledSearch.startDate,
+          end: this.genledSearch.endDate,
+          accNumber: event.row.accountNumber
+        };
+        this.senData.sendMessage(rs);
+
+      }
+      this.router.navigate([`/genledgroup`]);
+
     }
   }
 
   SearchGenLed() {
-
+    const dialog = this.modalService.open(SearchgenledComponent, AppConsts.modalOptionsCustomSize);
+    dialog.componentInstance.accChart = 1;
+    dialog.result.then(result => {
+      if (result) {
+        this.genledSearch = {
+          startDate: result.startDate,
+          endDate: result.endDate,
+          isaccount: result.isaccount,
+          isAccountReciprocal: result.accountReciprocal,
+          money: result.money,
+          accNumber: result.accNumber,
+        };
+        // this.exportCSV = result;
+        // this.genLedService.searchGen(genledSearch).subscribe(rp => {
+        //   this.genViews = rp;
+        //   this.case = result.case;
+        //   this.startDay = result.startDate;
+        //   this.endDay = result.endDate;
+        //   this.keyspace = ' - ';
+        // });
+        // this.genLedreportService.searchGen(genledSearch).subscribe(rp => {
+        //   this.genViewsreport = rp;
+        //   this.case = result.case;
+        //   this.startDay = result.startDate;
+        //   this.endDay = result.endDate;
+        //   this.keyspace = ' - ';
+        // });
+      }
+    });
   }
 }

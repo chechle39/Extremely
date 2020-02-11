@@ -14,6 +14,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AccordionModule} from 'primeng/accordion';
 import { DataService } from '@modules/_shared/services/data.service';
+import { LoginService } from '@core/services/login.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { DataService } from '@modules/_shared/services/data.service';
     AppRoutingModule,
     BrowserAnimationsModule,
   ],
-  providers: [DataService],
+  providers: [DataService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

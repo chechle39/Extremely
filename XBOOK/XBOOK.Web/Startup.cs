@@ -23,6 +23,11 @@ using XBOOK.Service.Interfaces;
 using XBOOK.Service.Service;
 using DevExpress.XtraReports.Security;
 using DevExpress.Security.Resources;
+using XBOOK.Data.Identity;
+using Microsoft.AspNetCore.Identity;
+using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace XBOOK.Web
 {
     public class Startup
@@ -45,6 +50,45 @@ namespace XBOOK.Web
         {
             services.AddDevExpressControls();
             services.AddScoped<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            services.AddIdentity<AppUser, AppRole>()
+               .AddEntityFrameworkStores<XBookContext>()
+               .AddDefaultTokenProviders();
+            services.AddMemoryCache();
+            // Configure Identity
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
+            services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
+
+            //services.AddCors(options => options.AddPolicy("CorsPolicy",
+            //    builder =>
+            //    {
+            //        builder.AllowAnyMethod()
+            //            .AllowAnyHeader()
+            //            .WithOrigins("http://localhost:4200")
+            //            .AllowCredentials();
+            //    }));
+
             services
                 .AddMvc()
                 .AddDefaultReportingControllers()
@@ -121,7 +165,18 @@ namespace XBOOK.Web
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
             services.AddSignalR();
-            // services.AddAuthentication(IISServerDefaults.AuthenticationScheme);
+            services.AddCors(o => o.AddPolicy("TuanLe", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -139,11 +194,13 @@ namespace XBOOK.Web
 
 
 
-
+            app.UseAuthentication();
+            app.UseSession();
+            // app.UseCors("CorsPolicy");
+           // app.UseCors();
+            app.UseCors("TuanLe");
 
             //--------------------
-            app.UseAuthentication();
-            app.UseCors();
             app.UseDefaultFiles();
             app.UseSwagger();
             app.UseStaticFiles();

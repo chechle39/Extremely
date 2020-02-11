@@ -109,6 +109,7 @@ export const API_URI = {
   createAccountChart: 'api/AccountChart/CreateAccountChart',
   deleteAccount: 'api/AccountChart/DeleteAcount',
 
+  login: 'api/Account/Login',
 
 };
 export const PAGING_CONFIG = {

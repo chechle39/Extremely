@@ -108,7 +108,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<InvoiceVi
     this.data.getMessage().subscribe(rp => {
 
       if (rp !== undefined) {
-        this.client = rp.text;
+        this.client = rp.data;
         if (this.dateFilters !== '') {
           const rs = {
             keyword: this.keyword.toLocaleLowerCase() + this.client,

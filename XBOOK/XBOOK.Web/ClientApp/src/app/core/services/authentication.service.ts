@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { Credentials, CredentialsService } from './credentials.service';
+import { LoginService } from './login.service';
+import { LoginViewModel } from '@modules/_shared/models/login/login.model';
 
 export interface LoginContext {
   username: string;
@@ -18,7 +20,8 @@ export interface LoginContext {
 })
 export class AuthenticationService {
 
-  constructor(private credentialsService: CredentialsService) { }
+  constructor(private credentialsService: CredentialsService,
+              private loginService: LoginService) { }
 
   /**
    * Authenticates the user.
@@ -27,11 +30,20 @@ export class AuthenticationService {
    */
   login(context: LoginContext): Observable<Credentials> {
     // Replace by proper authentication call
+
+    // const rq = {
+    //   email: context.username,
+    //   password: context.password
+    // } as LoginViewModel;
+    // this.loginService.login(rq).subscribe(rp => {
+    //   this.credentialsService.setCredentials();
+    // });
     const data = {
       username: context.username,
       token: '123456'
     };
     this.credentialsService.setCredentials(data, context.remember);
+
     return of(data);
   }
 

@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="row" style="position: relative;margin-top: -19px;">
+        <div *ngIf="accChart !== 1" class="row" style="position: relative;margin-top: -19px;">
             <div class="form-group col-6 mb-2">
                 <div class="custom-control custom-checkbox m-1">
                     <input formControlName="account" type="checkbox" class="custom-control-input" id="account" />

@@ -108,7 +108,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.data.getMessage().subscribe(rp => {
 
       if (rp !== undefined) {
-        this.client = rp.text;
+        this.client = rp.data;
         if (this.dateFilters !== '') {
           const rs = {
             keyword: this.keyword.toLocaleLowerCase() + this.client,
@@ -219,9 +219,11 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     return plus;
   }
   redirectToCreateNewInvoice() {
+    this.data.sendMessage('');
     this.router.navigate([`/invoice/new`]);
   }
   redirectToEditInvoice(id) {
+    this.data.sendMessage('');
     this.router.navigate([`/invoice/${id}/${ActionType.Edit}`]);
   }
 

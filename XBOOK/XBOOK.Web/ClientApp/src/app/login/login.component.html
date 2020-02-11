@@ -1,6 +1,7 @@
 <!--Login Page Starts-->
 <section id="login">
-  <div class="container-fluid">
+  <form class="container-fluid" novalidate autocomplete="off" (ngSubmit)="login(loginForm)"
+  [formGroup]="loginForm">
     <div class="row full-height-vh m-0">
       <div class="col-12 d-flex align-items-center justify-content-center">
         <div class="card">
@@ -16,8 +17,8 @@
                   <p class="card-text mb-3">
                     Welcome back, please login to your account.
                   </p>
-                  <input type="text" class="form-control mb-3" placeholder="Username" />
-                  <input type="password" class="form-control mb-3" placeholder="Password" />
+                  <input formControlName="userName" type="text" class="form-control mb-3" placeholder="Username" />
+                  <input formControlName="password" type="password" class="form-control mb-3" placeholder="Password" />
                   <div class="d-flex justify-content-between mt-2">
                     <div class="remember-me">
                       <div class="custom-control custom-checkbox custom-control-inline mb-3">
@@ -40,8 +41,8 @@
                       </button>
                     </div> -->
                     <div class="recover-pass">
-                      <button class="btn btn-primary">
-                        <a (click)="login()" class="text-decoration-none text-white">Login</a>
+                      <button type="submit" class="btn btn-primary">
+                        <a class="text-decoration-none text-white">Login</a>
                       </button>
                     </div>
                   </div>
@@ -53,6 +54,6 @@
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </section>
 <!--Login Page Ends-->

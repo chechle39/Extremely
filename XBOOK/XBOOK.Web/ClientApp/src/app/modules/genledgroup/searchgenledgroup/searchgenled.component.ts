@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, Input } from '@angular/core';
 import { GenLedMethod } from '@modules/_shared/models/invoice/genled-method.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CurrencyMethod } from '@modules/_shared/models/invoice/currency-method.model';
@@ -16,6 +16,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
   styleUrls: ['./searchgenled.component.scss']
 })
 export class SearchgenledComponent extends AppComponentBase implements OnInit {
+  @Input() accChart;
   cars: any[];
   tempcars: AcountNumberMethod[];
   selectedCars1: string[] = [];
