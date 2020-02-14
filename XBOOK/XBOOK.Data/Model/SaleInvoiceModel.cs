@@ -47,7 +47,12 @@ namespace XBOOK.Data.Model
     {
         public long id { get; set; }
     }
-
+    public class requestDeletedMaster
+    {
+        public string paramTypedelete { get; set; }
+        public string keydelete { get; set; }
+        public string nameDelete { get; set; }
+    }
     public class genledSearch
     {
         public string StartDate { get; set; }
@@ -61,5 +66,10 @@ namespace XBOOK.Data.Model
     public class Acc
     {
         public string AccNumber { get; set; }
+    }
+    public class AccRequest
+    {
+        public string AccNumber { get; set; }
+        public string ParentAccNumber { get; set; }
     }
 }

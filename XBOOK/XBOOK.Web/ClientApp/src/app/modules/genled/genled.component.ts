@@ -104,7 +104,6 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
         this.genLedService.searchGen(result).subscribe(rp => {
           this.genViews = rp;
           this.case = result.case;
-          console.log(this.case);
           this.startDay = result.startDate;
           this.endDay = result.endDate;
           this.keyspace = ' - ';

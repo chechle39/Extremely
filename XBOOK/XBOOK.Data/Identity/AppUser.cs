@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+using XBOOK.Data.Interfaces;
 
 namespace XBOOK.Data.Identity
 {
     [Table("AppUsers")]
-    public class AppUser : IdentityUser<int>
+    public class AppUser : IdentityUser<int>, IDateTracking, ISwitchable
     {
+        private Status status;
+
         public AppUser() { }
-        public AppUser(int id, string fullName, string userName,
-            string email, string phoneNumber, string avatar, Status status)
+
+        public AppUser(int id, string fullName, string userName, string email, string phoneNumber, string avatar, Status status)
         {
             Id = id;
             FullName = fullName;
@@ -19,11 +21,12 @@ namespace XBOOK.Data.Identity
             Email = email;
             PhoneNumber = phoneNumber;
             Avatar = avatar;
-            Status = status;
+            this.status = status;
         }
+
         public string FullName { get; set; }
 
-        public DateTime? BirthDay { set; get; }
+        public DateTime BirthDay { set; get; }
 
         public decimal Balance { get; set; }
 
@@ -32,10 +35,5 @@ namespace XBOOK.Data.Identity
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public Status Status { get; set; }
-    }
-    public enum Status
-    {
-        InActive = 0,
-        Active = 1
     }
 }

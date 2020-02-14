@@ -8,6 +8,7 @@ import { LoginViewModel } from '@modules/_shared/models/login/login.model';
 export interface LoginContext {
   username: string;
   password: string;
+  token: string;
   remember?: boolean;
 }
 
@@ -19,9 +20,8 @@ export interface LoginContext {
   providedIn: 'root'
 })
 export class AuthenticationService {
-
-  constructor(private credentialsService: CredentialsService,
-              private loginService: LoginService) { }
+  private currentToken: string;
+  constructor(private credentialsService: CredentialsService) { }
 
   /**
    * Authenticates the user.
@@ -31,16 +31,14 @@ export class AuthenticationService {
   login(context: LoginContext): Observable<Credentials> {
     // Replace by proper authentication call
 
-    // const rq = {
-    //   email: context.username,
-    //   password: context.password
-    // } as LoginViewModel;
-    // this.loginService.login(rq).subscribe(rp => {
-    //   this.credentialsService.setCredentials();
-    // });
+    const rq = {
+      email: context.username,
+      password: context.password
+    } as LoginViewModel;
+
     const data = {
       username: context.username,
-      token: '123456'
+      token: context.token
     };
     this.credentialsService.setCredentials(data, context.remember);
 
@@ -55,6 +53,16 @@ export class AuthenticationService {
     // Customize credentials invalidation here
     this.credentialsService.setCredentials();
     return of(true);
+  }
+
+  getAuthToken() {
+    if ( sessionStorage.length !== 0) {
+      this.currentToken = JSON.parse(sessionStorage.getItem('credentials')).token;
+      return this.currentToken;
+    } else {
+      return null;
+    }
+
   }
 
 }

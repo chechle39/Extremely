@@ -1,0 +1,18 @@
+:host ::ng-deep .datatable-row-group {
+    height: 43px;
+    max-width: 100%;
+  }
+:host ::ng-deep .datatable-row-wrapper {
+  height: 51px;
+  display: initial !important;
+}
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-row  {
+  padding-top: 3px;
+  height: 47px;
+}
+:host ::ng-deep .datatable-row-center {
+  max-width: 100%;
+}
+:host ::ng-deep .datatable-row-center.datatable-row-group{
+  height: 200px;
+}

@@ -33,7 +33,7 @@ namespace XBOOK.Service.Service
             return await _accountChartRepository.CreateAccountChartAsync(accountChartViewModel);
         }
 
-        public async Task<bool> DeleteAccount(Acc accountNumber)
+        public async Task<bool> DeleteAccount(AccRequest accountNumber)
         {
             return await _accountChartRepository.DeleteAccount(accountNumber);
         }

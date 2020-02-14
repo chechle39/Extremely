@@ -1,4 +1,6 @@
 export const API_URI = {
+  adminRole: 'api/Seed/CreateAdminRole',
+  adminUserAdminRole: 'api/Seed/AddUserToAdminRole',
   createSaleInv: 'api/SaleInvoice/CreateSaleInvoice',
   createSaleInvDetail: 'api/SaleInvDetail/CreateListSaleDetail',
   invoice: 'api/SaleInvoice/GetAllSaleInvoice',
@@ -19,6 +21,10 @@ export const API_URI = {
   deleteClient: 'api/client/DeleteClient',
   createClient: 'api/client/SaveClient',
   taxGetAll: 'api/Tax/GetAllTax',
+  MasterGetAll: 'api/MasterParam/GetAllMaster',
+  createMaster: 'api/MasterParam/CreateMasterParam',
+  MasterGetbyId: 'api/MasterParam/GetMasterById',
+  deleteMaster: 'api/MasterParam/DeleteMaster',
   createTax: 'api/Tax/CreateTax',
   deleteProduct: 'api/Product/DeleteProduct',
   getGen: 'api/GeneralLedger/GetAllGen',
@@ -66,6 +72,8 @@ export const API_URI = {
   PurchasereportSaveDataPrint: 'api/PurchaseReport/SaveFileJson',
   getcompanyProfile: 'api/CompanyProfile/GetAllClientAsync',
   createProfile: 'api/CompanyProfile/SaveCompanyProfile',
+  updateCompanyProfile: 'api/CompanyProfile/UpdateCompanyProfile',
+  companyProfileById: 'api/CompanyProfile/GetCompanyById',
   // -------------------------------
   buyinvoice: 'api/BuyInvoices/GetAllBuyInvoice',
   deleteBuyInvoice: 'api/BuyInvoices/DeleteBuyInv',
@@ -110,6 +118,10 @@ export const API_URI = {
   deleteAccount: 'api/AccountChart/DeleteAcount',
 
   login: 'api/Account/Login',
+  logout: 'api/Account/Logout',
+  checkAcount: 'api/Account/CheckUserAcount',
+  register: 'api/Account/Register',
+  getAllUser: 'api/User/GetUser',
 
 };
 export const PAGING_CONFIG = {

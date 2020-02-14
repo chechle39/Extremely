@@ -10,7 +10,7 @@ namespace XBOOK.Data.Interfaces
     public interface IAccountChartRepository
     {
         Task<bool> CreateAccountChartAsync(AccountChartViewModel accountChartViewModel);
-        Task<bool> DeleteAccount(Acc accountNumber);
+        Task<bool> DeleteAccount(AccRequest accountNumber);
         Task<bool> Update(AccountChartViewModel accountChartViewModel);
 
     }

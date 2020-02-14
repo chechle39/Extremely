@@ -92,7 +92,11 @@
   "ACCOUNT.CHART.CREATE.ACCOUNTPARENT": "Acount Parent",
   "ACCOUNT.CHART.CREATE.ACCOUNTNUMBER": "Acount Number",
   "ACCOUNT.CHART.CREATE.ACCOUNTNUMBER.VALI": "Please enter account name",
-  "ACCOUNT.CHART.CREATE.NAME.PLACEHOLDER": "Enter acount name or service name"
-
+  "ACCOUNT.CHART.CREATE.NAME.PLACEHOLDER": "Enter acount name or service name",
+  "USER.LIST.GRID.HEADER.USERNAME": "User name",
+  "USER.LIST.GRID.HEADER.EMAIL": "Email",
+  "USER.LIST.GRID.HEADER.BIRTHDAY": "BirthDay",
+  "USER.LIST.GRID.HEADER.STATUS": "Status",
+  "USER.LIST.HEADER": "User"
 }
 

@@ -8,21 +8,17 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class CompanyService extends BaseService {
 
-  // getClient(id: any): Observable<ClientView> {
-  //   return this.post<ClientView>(
-  //     `${API_URI.clientById}/${id}`, id
-  //   );
-  // }
-  createProfile(client: CompanyprofileView): Observable<CompanyprofileView> {
-    return this.post<CompanyprofileView>(`${API_URI.createProfile}`, client);
+  getProfile(id: any): Observable<CompanyprofileView> {
+    return this.post<CompanyprofileView>(
+      `${API_URI.companyProfileById}/${id}`, id
+    );
   }
-  // updateClient(client: ClientView) {
-  //   return this.put<ClientView>(`${API_URI.updateClient}`, client);
-  // }
-  // deleteClient(id: any) {
-  //   return this.post(`${API_URI.deleteClient}`, id);
-  // }
-
+  createProfile(company: CompanyprofileView): Observable<CompanyprofileView> {
+    return this.post<CompanyprofileView>(`${API_URI.createProfile}`, company);
+  }
+  updateProfile(company: CompanyprofileView) {
+    return this.put<CompanyprofileView>(`${API_URI.updateCompanyProfile}`, company);
+  }
   getInfoProfile(): Observable<any> {
     return this.post<any>(`${API_URI.getcompanyProfile}`, null);
   }

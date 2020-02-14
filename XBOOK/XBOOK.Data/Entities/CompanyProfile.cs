@@ -7,8 +7,11 @@ namespace XBOOK.Data.Entities
 {
     public class CompanyProfile
     {
-        public CompanyProfile(string address, string bizPhone, string city, string companyName, string country, string currency, string dateFormat, string directorName, string logoFilePath, string mobilePhone, string taxCode, string zipCode)
+        public CompanyProfile() {
+        }
+        public CompanyProfile(int Id, string address, string bizPhone, string city, string companyName, string country, string currency, string dateFormat, string directorName, string logoFilePath, string mobilePhone, string taxCode, string zipCode)
         {
+            Id = Id;
             this.address = address;
             this.bizPhone = bizPhone;
             this.city = city;

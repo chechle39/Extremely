@@ -5,8 +5,10 @@ import { LayoutService } from '@shared/service/layout.service';
 import { ConfigService } from '@shared/service/config.service';
 import { AuthenticationService } from '@core/services/authentication.service';
 import { Router } from '@angular/router';
+import { LoginService } from '@core/services/login.service';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
@@ -26,6 +28,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
+    private loginService: LoginService,
     private translate: TranslateService,
     private layoutService: LayoutService,
     private configService: ConfigService) {
@@ -92,7 +95,10 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   logout() {
-    this.authenticationService.logout()
-      .subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
+    this.loginService.logOut().subscribe(() => {
+      this.router.navigate(['/login'], { replaceUrl: true });
+    });
+    // this.authenticationService.logout()
+    //   .subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
   }
 }

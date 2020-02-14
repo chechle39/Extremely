@@ -104,7 +104,6 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         this.firstDate = dateFrom;
         this.endDate = endFrom;
       }
-      console.log(this.genLedForm.value.genLedMethods);
       if (this.genLedForm.value.genLedMethods === 1) {
       const date = new Date();
       this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');

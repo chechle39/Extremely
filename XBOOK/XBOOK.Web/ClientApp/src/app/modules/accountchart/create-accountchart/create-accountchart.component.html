@@ -21,7 +21,7 @@
         <select id="accountNumber" name="accountNumber" class="form-control" formControlName="accountMethods" (change)="onChange()">
           <option [ngValue]="null">Choose a account</option>
           <option *ngFor="let cat of data" [ngValue]="cat.accountNumber">
-            {{ cat.accountName }}
+            {{ cat.accountNumber }} - {{ cat.accountName }}
           </option>
         </select>
       </div>

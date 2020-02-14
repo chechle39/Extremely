@@ -3,16 +3,15 @@ import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { CompanyProfileRoutingModule } from './companyprofile-routing.module';
 import { CompanyProfileComponent } from './companyprofile.component';
 import { CreateCompanyprofileComponent } from './create-companyprofile/create-companyprofile.component';
-// import { EditClientComponent } from './edit-client/edit-client.component';
+import { EditCompanyprofileComponent } from './edit-companyprofile/edit-companyprofile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule } from '@angular/forms';
 import { CompanyService } from '@modules/_shared/services/company-profile.service';
 import { SharedModule } from '@shared/shared.module';
-import { ClientService } from '@modules/_shared/services/client.service';
-import { InvoiceService } from '@modules/_shared/services/invoice.service';
+
 @NgModule({
-  declarations: [CompanyProfileComponent, CreateCompanyprofileComponent],
+  declarations: [CompanyProfileComponent, CreateCompanyprofileComponent, EditCompanyprofileComponent],
   imports: [
     CommonModule,
     CompanyProfileRoutingModule,
@@ -21,7 +20,7 @@ import { InvoiceService } from '@modules/_shared/services/invoice.service';
     FormsModule,
     SharedModule
   ],
-  providers: [ClientService, CompanyProfileComponent, InvoiceService, CurrencyPipe, DecimalPipe, CompanyService],
-  entryComponents: [CreateCompanyprofileComponent]
+  providers: [CompanyProfileComponent, CurrencyPipe, DecimalPipe, CompanyService],
+  entryComponents: [CreateCompanyprofileComponent, EditCompanyprofileComponent]
 })
 export class CompanyProfileModule { }

@@ -179,9 +179,8 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
           this.getcreditClosingTotal();
         });
         this.case = result.case;
-        this.startDay = result.startDate,
-          this.endDay = result.endDate,
-          console.log(this.accountBalanceViewsreport);
+        this.startDay = result.startDate;
+        this.endDay = result.endDate;
       }
 
       this.keyspace = ' - ';
@@ -213,7 +212,6 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };
       this.accountBalanceViewsreport.push(data);
-      console.log(this.accountBalanceViewsreport);
     }
 
     const reportName = 'AccountBalanceReport';

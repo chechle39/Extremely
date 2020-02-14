@@ -10,21 +10,23 @@ using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
+using XBOOK.Data.Policies;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
+using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SaleInvoiceController : ControllerBase
+    public class SaleInvoiceController : BaseAPIController
     {
         ICompanyProfileService _iCompanyProfileService;
         ISaleInvoiceService _saleInvoiceService;
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IUnitOfWork _uow;
         IInvoiceServiceDapper _invoiceServiceDapper;
-        public SaleInvoiceController(ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
+        public SaleInvoiceController(IHttpContextAccessor httpContextAccessor, ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper) : base(httpContextAccessor)
         {
             _saleInvoiceService = saleInvoiceService;
             _uow = uow;
@@ -34,6 +36,7 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
+        [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
         public async Task<IActionResult> GetAllSaleInvoice([FromBody]SaleInvoiceListRequest request)
         {
             var saleListInvoice = await _invoiceServiceDapper.GetInvoiceAsync(request);

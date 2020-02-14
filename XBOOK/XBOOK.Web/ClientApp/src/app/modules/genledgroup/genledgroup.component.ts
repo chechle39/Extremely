@@ -203,7 +203,6 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
   methodEdit_View() {
     this.activeRoute.params.subscribe(params => {
       if (!isNaN(params.key)) {
-        console.log(params.key);
         const genledSearch = {
           startDate: this.firstDate === undefined ? null : this.firstDate,
           endDate: this.endDate1 === undefined ? null : this.endDate1,

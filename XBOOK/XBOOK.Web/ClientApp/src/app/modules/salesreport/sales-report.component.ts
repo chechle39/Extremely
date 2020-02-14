@@ -33,7 +33,7 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
   salesViewsreport: any[] = [];
   fromDate: any;
   firstDate: any;
-  endDate1: string;
+  endDate1: any;
   tempaccount: any;
   requestSaveJson: any[] = [];
   case: any;
@@ -145,6 +145,10 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
           this.endDay = result.endDate;
           this.keyspace = ' - ';
         });
+        this.salesReportService.getDataReport(genledSearch).subscribe(rp => {
+          this.genViewsReport = rp;
+          this.salesViewsreport = this.genViewsReport;
+        });
     });
 
   }
@@ -187,12 +191,11 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
       this.requestSaveJson.push(data);
     }
     const reportName = 'SalesReportReport';
-    console.log(this.requestSaveJson);
     this.salesReportService.SalesreportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
       this.router.navigate([`/print/${reportName}`]);
     });
   }
-  getinvoice(id) {
+  redirectToEditInvoice(id) {
 
     let clientName = '';
 
@@ -200,8 +203,6 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
     this.data.sendMessage(clientName);
     this.router.navigate([`/invoice`]);
   }
-  redirectToEditInvoice(id) {
-    this.router.navigate([`/invoice/${id}/${ActionType.Edit}`]);
-  }
+
 }
 

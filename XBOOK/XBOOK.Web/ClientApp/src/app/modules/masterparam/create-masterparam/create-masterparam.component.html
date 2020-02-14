@@ -1,0 +1,63 @@
+<form  class="form" name="form"  novalidate autocomplete="off" (ngSubmit)="applyTax()" [formGroup]="taxForm">
+  <div class=" modal-header" style="max-width: 500px;width: 500px;">
+    <div class="row">
+      <div class="col-12">
+        <h5 class="modal-title"style="max-width: 500px;width: 500px;">Add Param Type</h5>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body" style="max-width: 500px;width: 500px;">
+    <div class="row mb-1">
+      <ng-container>
+        <div class="form-group col-12 mb-2">
+          <select #paramTypeSelected (change)="onChange($event)" class="form-control">
+            <option>Choose a value Param Type</option>
+            <option *ngFor="let method of paramType" [ngValue]="method.CurrencyId">
+              {{ method.value }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+    </div>
+    <div style="border-top: 1px solid #92d050;margin-top: 5%;" class="row mb-1" formArrayName="taxs"
+      *ngFor="let tax of taxForm.get('taxs')['controls']; index as i">
+
+      <ng-container [formGroupName]="i">
+        <div  style="margin-top: 8%;" class="col-6 text-left">Key</div>
+        <div  style="margin-top: 8%;" class="col-6 text-left">Name</div>
+
+        <div class="col-6">
+          <input #paramKey formControlName="key" class="form-control" style="border:1px solid #CFCFCF;width: 230px" type="text"
+            placeholder="key" id="key" digitOnly maxlength=2>
+        </div>
+
+        <div class="col-4">
+          <input formControlName="name" class="form-control" style="border:1px solid #CFCFCF;width: 225px;margin-left: -6px;" type="text"
+            placeholder="name" id="name" maxlength=200>
+        </div>
+
+        <div class="col-2" style="margin-top: -25px;">
+          <a class="icon-action" >
+            <span class="icon-delete" (click)="delete(tax.value.paramType,tax.value.key,tax.value.name)"></span>
+          </a>
+        </div>
+
+        <div class="col-12" style="margin-top: 3%">
+          <textarea formControlName="description" class="form-control" style="border:1px solid #CFCFCF;" type="text"
+            placeholder="description" id="description" maxlength=200></textarea>
+        </div>
+      </ng-container>
+    </div>
+    <div class="row" style="border-top: 1px solid #dee2e6;">
+      <div class="add-line-box d-flex align-items-center mx-3 my-2">
+        <div (click)="addTax()" class=" text-center w-100" style="cursor: pointer">+ Add param type </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer" style="max-width: 500px;width: 500px;">   
+    <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-raised btn-success">Apply</button>
+  </div>
+</form>

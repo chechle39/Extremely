@@ -32,7 +32,7 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@supplier", request.Supplier);
                     dynamicParameters.Add("@fromDate", request.StartDate);
                     dynamicParameters.Add("@toDate", request.EndDate);
-                    dynamicParameters.Add("@productServices", request.ProductServices);
+                    dynamicParameters.Add("@productServices", request.ProductName);
                     return await sqlConnection.QueryAsync<PurchaseReportViewModel>(
                        "Book_PurchaseReport", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
@@ -50,7 +50,7 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@supplier", request.Supplier);
                     dynamicParameters.Add("@fromDate", request.StartDate);
                     dynamicParameters.Add("@toDate", request.EndDate);
-                    dynamicParameters.Add("@productServices", request.ProductServices);
+                    dynamicParameters.Add("@productServices", request.ProductName);
                     var res = await sqlConnection.QueryAsync<PurchaseReportViewModel>(
                        "Book_PurchaseReport", dynamicParameters, commandType: CommandType.StoredProcedure);
                     List<PurchaseReportViewModel> salesReportViewodel = res.ToList();

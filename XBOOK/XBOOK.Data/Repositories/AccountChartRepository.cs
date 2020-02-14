@@ -47,13 +47,38 @@ namespace XBOOK.Data.Repositories
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteAccount(Acc accountNumber)
+        public async Task<bool> DeleteAccount(AccRequest accountNumber)
         {
-            var data = Entities.Where(x => x.parentAccount == accountNumber.AccNumber).ToList();
+            var data = Entities.Where(x => x.parentAccount == accountNumber.AccNumber).AsNoTracking().ToList();
+            var dataParent = Entities.Where(x => x.accountNumber == accountNumber.ParentAccNumber).AsNoTracking().ToList();
             if (data.Count > 0) return await Task.FromResult(false);
             if (data.Count == 0)
-                Entities.Remove(Entities.Where(x => x.accountNumber == accountNumber.AccNumber).ToList()[0]);
+                Entities.Remove(Entities.Where(x => x.accountNumber == accountNumber.AccNumber).AsNoTracking().ToList()[0]);
             _uow.SaveChanges();
+            var data3 = Entities.Where(x => x.parentAccount == accountNumber.ParentAccNumber).AsNoTracking().ToList();
+            if (data3.Count == 0)
+            {
+                var update = new AccountChartViewModel()
+                {
+                    accountName = dataParent[0].accountName,
+                    accountNumber = dataParent[0].accountNumber,
+                    accountType = dataParent[0].accountType,
+                    closingBalance = dataParent[0].closingBalance,
+                    isParent = false,
+                    openingBalance = dataParent[0].openingBalance,
+                    parentAccount = dataParent[0].parentAccount,
+                };
+                try
+                {
+                    await Update(update);
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+               // _uow.SaveChanges();
+            }
             return await Task.FromResult(true);
         }
 

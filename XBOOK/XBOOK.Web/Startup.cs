@@ -1,37 +1,40 @@
 ﻿using AutoMapper;
 using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
+using DevExpress.Security.Resources;
+using DevExpress.XtraReports.Security;
 using DevExpress.XtraReports.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.IO;
+using System.Text;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.Service;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.Identity;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Repositories;
 using XBOOK.Service.Interfaces;
 using XBOOK.Service.Service;
-using DevExpress.XtraReports.Security;
-using DevExpress.Security.Resources;
-using XBOOK.Data.Identity;
-using Microsoft.AspNetCore.Identity;
-using System;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace XBOOK.Web
 {
     public class Startup
     {
+        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
+        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
         public Startup(IHostingEnvironment env)
         {
             ScriptPermissionManager.GlobalInstance = new ScriptPermissionManager(ExecutionMode.Unrestricted);
@@ -79,15 +82,14 @@ namespace XBOOK.Web
             });
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
-
-            //services.AddCors(options => options.AddPolicy("CorsPolicy",
-            //    builder =>
-            //    {
-            //        builder.AllowAnyMethod()
-            //            .AllowAnyHeader()
-            //            .WithOrigins("http://localhost:4200")
-            //            .AllowCredentials();
-            //    }));
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins("http://localhost:58064")
+                        .AllowCredentials();
+                }));
 
             services
                 .AddMvc()
@@ -101,14 +103,12 @@ namespace XBOOK.Web
                     viewerConfigurator.UseCachedReportSourceBuilder();
                 });
             });
-            //------------------
-            services.AddCors();
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<XBookContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddAutoMapper();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddSingleton(Mapper.Configuration);
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
             services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
@@ -119,6 +119,7 @@ namespace XBOOK.Web
             services.AddTransient<ISaleInvDetailService, SaleInvDetailService>();
             services.AddTransient<IGeneralLedgerService, GeneralLedgerService>();
             services.AddTransient<ITaxService, TaxService>();
+            services.AddTransient<IMasterParamService, MasterParamService>();
             services.AddTransient<IAcountChartService, AccountChartSerVice>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
@@ -131,6 +132,8 @@ namespace XBOOK.Web
             services.AddTransient<ISupplierService, SupplierService>();
             services.AddTransient<IPayments2Service, Payments2Service>();
             services.AddTransient<IBuyDetailInvoiceService, BuyDetailInvoiceService>();
+            services.AddTransient<IUserService, UserService>();
+
             services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
             services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();
             services.AddTransient<IPaymentReceiptRepository, PaymentReceiptRepository>();
@@ -141,6 +144,7 @@ namespace XBOOK.Web
             services.AddTransient<ISaleInvoiceDetailRepository, SaleInvoiceDetailRepository>();
             services.AddTransient<ICompanyProfileReponsitory, CompanyProfileReponsitory>();
             services.AddTransient<ITaxRepository, TaxRepository>();
+            services.AddTransient<IMasterParamRepository, MasterParamRepository>();
             services.AddTransient<IMoneyReceiptRepository, MoneyReceiptRepository>();
             services.AddTransient<IEntryPatternRepository, EntryPatternRepository>();
             services.AddTransient<IBuyInvoiceRepository, BuyInvoiceRepository>();
@@ -148,8 +152,10 @@ namespace XBOOK.Web
             services.AddTransient<IBuyInvDetailRepository, BuyInvDetailRepository>();
             services.AddTransient<IPayment2Repository, Payment2Repository>();
             services.AddTransient<IAccountChartRepository, AccountChartRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddTransient<IAccountDetailServiceDapper, AccountDetailServiceDapper>();
+            services.AddTransient<IPurchaseReportDapper, PurchaseReportServiceDapper>();
             services.AddTransient<IClientServiceDapper, ClientServiceDapper>();
             services.AddTransient<IAccountBalanceServiceDapper, AccountBalanceServiceDapper>();
             services.AddTransient<IInvoiceServiceDapper, InvoiceServiceDapper>();
@@ -157,7 +163,6 @@ namespace XBOOK.Web
             services.AddTransient<IBuyInvoiceServiceDapper, BuyInvoiceServiceDapper>();
             services.AddTransient<ISupplierServiceDapper, SupplierServiceDapper>();
             services.AddTransient<IPaymentReceiptServiceDapper, PaymentReceiptServiceDapper>();
-
             services.AddTransient<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>
@@ -165,22 +170,12 @@ namespace XBOOK.Web
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
             services.AddSignalR();
-            services.AddCors(o => o.AddPolicy("TuanLe", builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            });
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddHttpContextAccessor();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -190,16 +185,7 @@ namespace XBOOK.Web
             app.UseDevExpressControls();
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 
-
-
-
-
             app.UseAuthentication();
-            app.UseSession();
-            // app.UseCors("CorsPolicy");
-           // app.UseCors();
-            app.UseCors("TuanLe");
-
             //--------------------
             app.UseDefaultFiles();
             app.UseSwagger();

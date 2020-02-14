@@ -30,7 +30,7 @@ namespace XBOOK.Web.Controllers
             return Ok(x);
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> DeleteAcount(Acc accountNumber)
+        public async Task<IActionResult> DeleteAcount(AccRequest accountNumber)
         {
             var tree = await _iAccountService.DeleteAccount(accountNumber);
             return Ok(tree);

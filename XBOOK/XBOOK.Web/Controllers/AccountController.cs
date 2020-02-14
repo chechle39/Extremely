@@ -2,8 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using XBOOK.Common.Exceptions;
 using XBOOK.Data.Identity;
+using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
+using XBOOK.Service.Interfaces;
+using XBOOK.Web.Extensions;
 
 namespace XBOOK.Web.Controllers
 {
@@ -13,12 +18,18 @@ namespace XBOOK.Web.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IEmailSender _emailSender;
+        private readonly IUserService _userService;
         public AccountController(
-            UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager)
+            UserManager<AppUser> userManager, 
+            IEmailSender emailSender,
+            SignInManager<AppUser> signInManager,
+            IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailSender = emailSender;
+            _userService = userService;
         }
 
         [HttpPost("[action]")]
@@ -31,7 +42,7 @@ namespace XBOOK.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return Ok(model);
+                    return new OkObjectResult(new GenericResult(true));
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -74,9 +85,40 @@ namespace XBOOK.Web.Controllers
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
                 return Ok(model);
             }
             return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return BadRequest();
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            return Ok(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CheckUserAcount()
+        {
+            return Ok(await _userService.checkUserAcount());
         }
     }
 }

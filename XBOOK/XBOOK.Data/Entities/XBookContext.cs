@@ -55,6 +55,7 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new SaleInvoiceConfiguration())
                 .ApplyConfiguration(new EntryPatternConfiguration())
                 .ApplyConfiguration(new TaxConfiguration())
+                .ApplyConfiguration(new MasterParamConfiguration())
                 .ApplyConfiguration(new CompanyProfileConfiguration())
                 .ApplyConfiguration(new MoneyReceiptConfiguration())
                 .ApplyConfiguration(new SupplierConfiguration())

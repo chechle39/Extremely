@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using XBOOK.Data.Entities;
+using XBOOK.Data.Identity;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Service.AutoMapper
 {
-    class DomainToViewModelMappingProfile: Profile
+    public class DomainToViewModelMappingProfile: Profile
     {
         public DomainToViewModelMappingProfile()
         {
@@ -17,6 +18,7 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<Payments, PaymentViewModel>();
             CreateMap<SaleInvDetail, SaleInvDetailViewModel>();
             CreateMap<Tax, TaxViewModel>();
+            CreateMap<MasterParam, MasterParamViewModel>();
             CreateMap<Product, ProductViewModel>();
             CreateMap<Category, CategoryViewModel>();
             CreateMap<GeneralLedger, GeneralLedgerViewModel>();
@@ -32,7 +34,8 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<BuyInvDetail, BuyInvDetailViewModel>();
             CreateMap<Payments_2, Payment2ViewModel>();
             CreateMap<PaymentReceipt, PaymentReceiptViewModel>();
-
+            CreateMap<AppUser, ApplicationUserViewModel>();
+            CreateMap<AppRole, ApplicationRoleViewModel>();
         }
     }
 }

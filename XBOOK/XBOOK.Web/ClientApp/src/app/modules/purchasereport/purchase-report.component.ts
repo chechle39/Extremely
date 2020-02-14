@@ -105,7 +105,6 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
     this.purchaseReportService.getDataReport(genledSearch).subscribe(rp => {
       this.genViewsReport = rp;
       this.purchaseViewsreport = this.genViewsReport;
-      console.log(this.genViews);
     });
     this.getProfiles();
   }

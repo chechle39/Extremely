@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
+using XBOOK.Data.Policies;
 using XBOOK.Service.Interfaces;
+using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientController : BaseAPIController
     {
         IClientService _iClientService;
         IClientServiceDapper _iClientServiceDapper;
-        public ClientController(IClientService iClientService, IClientServiceDapper iClientServiceDapper)
+        public ClientController(IClientService iClientService, IClientServiceDapper iClientServiceDapper, IHttpContextAccessor httpContextAccessor): base(httpContextAccessor)
         {
             _iClientService = iClientService;
             _iClientServiceDapper = iClientServiceDapper;
@@ -28,6 +32,7 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
+        [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
         public async Task<IActionResult> GetAllClientDapper([FromBody]ClientSerchRequest request)
         {
             var clientList = await _iClientServiceDapper.GetClientAsync(request);

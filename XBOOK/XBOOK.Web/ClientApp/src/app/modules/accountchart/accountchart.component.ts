@@ -19,22 +19,12 @@ class PagedProductsRequestDto extends PagedRequestDto {
   templateUrl: './accountchart.component.html',
   styleUrls: ['./accountchart.component.scss']
 })
-export class AccountChartComponent extends PagedListingComponentBase<ProductView> {
+export class AccountChartComponent extends PagedListingComponentBase<any> {
   data: AcountChartModel[];
-  productViews: any;
-  categories: any;
   loadingIndicator = true;
   keywords = '';
   reorderable = true;
-  selected = [];
-  productTitle = '';
-  serviceTitle = '';
   ColumnMode = ColumnMode;
-  ProductCategory = ProductCategory;
-  SelectionType = SelectionType;
-  productKey = {
-    productKeyword: ''
-  };
   genledSearch: { startDate: any; endDate: any; isaccount: any; isAccountReciprocal: any; money: any; accNumber: any; };
   constructor(
     injector: Injector,
@@ -92,15 +82,18 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
 
   deleteAccount(row) {
     const rs = {
-      accNumber: row.accountNumber
+      accNumber: row.accountNumber,
+      parentAccNumber: this.data.filter(x => x.accountNumber === row.parentAccount)[0].accountNumber
     };
-    this.accountChartService.deleteAccount(rs).subscribe(rp => {
-      if (rp === false) {
-        this.message.error('This account can not delete');
-      } else {
-        this.notify.success('Successfully Deleted');
-        this.getAllAcc();
-      }
+    this.message.confirm('Do you want to delete acount chart ?', 'Are you sure ?', () => {
+      this.accountChartService.deleteAccount(rs).subscribe(rp => {
+        if (rp === false) {
+          this.message.error('This account can not delete');
+        } else {
+          this.notify.success('Successfully Deleted');
+          this.getAllAcc();
+        }
+      });
     });
   }
 
@@ -109,8 +102,6 @@ export class AccountChartComponent extends PagedListingComponentBase<ProductView
   }
 
   onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
   }
 
 

@@ -5,12 +5,11 @@ import { DashboardComponent } from '../modules/dashboard/dashboard.component';
 import { extract } from '../core/services/i18n.service';
 import { AuthenticationGuard } from '@core/auth/authentication.guard';
 import { PrintComponent } from '@modules/print/print.component';
-import { GenledgroupComponent } from '@modules/genledgroup/genledgroup.component';
 const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
-    canActivate: [AuthenticationGuard],
+  //  canActivate: [AuthenticationGuard],
     children: [
       {
         path: '',
@@ -107,9 +106,19 @@ const routes: Routes = [
           .then(m => m.AccountChartModule)
       },
       {
+        path: 'masterParam',
+        loadChildren: () => import('../modules/masterparam/masterparam.module')
+          .then(m => m.MasterParamModule)
+      },
+      {
         path: 'companyProfile',
         loadChildren: () => import('../modules/companyprofile/companyprofile.module')
           .then(m => m.CompanyProfileModule)
+      },
+      {
+        path: 'user',
+        loadChildren: () => import('../modules/user/user.module')
+          .then(m => m.UserModule)
       },
     ]
   }
