@@ -97,6 +97,11 @@
   "USER.LIST.GRID.HEADER.EMAIL": "Email",
   "USER.LIST.GRID.HEADER.BIRTHDAY": "BirthDay",
   "USER.LIST.GRID.HEADER.STATUS": "Status",
-  "USER.LIST.HEADER": "User"
+  "USER.LIST.HEADER": "User",
+  "USER.CREATE.PASS": "Password",
+  "USER.CREATE.ADDRESS": "Address",
+  "USER.CREATE.CF": "Confirm password",
+  "USER.CREATE.PHONE": "Phone number",
+  "USER.CREATE.GENDER": "Gender"
 }
 

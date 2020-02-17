@@ -23,6 +23,20 @@
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
+        <label for="email">{{'USER.CREATE.GENDER' }}</label>
+
+        <div class="ui-g" style="width:250px;margin-bottom:10px">
+          <div class="ui-g-4"><p-radioButton name="group1" value="Nam" label="Nam" formControlName="gender"  inputId="opt1"></p-radioButton></div>
+          <div class="ui-g-4"><p-radioButton name="group1" value="Nữ" label="Nữ" formControlName="gender" inputId="opt2"></p-radioButton></div>
+          <div class="ui-g-4"><p-radioButton name="group1" value="Khác" label="Khác" formControlName="gender"  inputId="opt3"></p-radioButton></div>
+      </div>
+
+        <small class="form-text text-muted danger"
+          *ngIf="!userForm.get('gender').valid && (userForm.get('gender').dirty || userForm.get('gender').touched)">Please select gender</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
         <label for="birthDay">BirthDay</label>
         <div class="input-group mb-0">
           <input formControlName="birthDay" class="form-control" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker
@@ -38,26 +52,69 @@
           birthDay</small>
       </div>
     </div>
-
     <div class="row">
-      <div class="form-group col-12 mb-2" *ngFor="let skill of skills.controls; let i=index">
-        <div class="custom-control custom-checkbox m-1" >
-          <input [formControl]="skill" type="checkbox" class="custom-control-input" />
-          <label style="padding-top: 3px; margin-left: -7px;" class="custom-control-label col-form-label" for="account">{{user.skills[i].name}}</label>
-      </div>
-      <!-- <div class="custom-control custom-checkbox m-1">
-        <input formControlName="roles" type="checkbox" class="custom-control-input" id="account" />
-        <label style="padding-top: 3px; margin-left: -7px;" class="custom-control-label col-form-label" for="account">Tàix khoản</label>
-      </div> -->
+      <div class="form-group col-12 mb-2">
+        <label for="password">{{'USER.CREATE.PASS' }}</label>
+        <input type="password" required class="form-control" formControlName="password" placeholder="password">
+        <small class="form-text text-muted danger"
+          *ngIf="!userForm.get('password').valid && (userForm.get('password').dirty || userForm.get('password').touched)">Please
+          enter password</small>
       </div>
     </div>
-   
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <label for="passwordCF">{{'USER.CREATE.CF' }}</label>
+        <input type="passwordCF" required class="form-control" formControlName="passwordCF"
+          placeholder="Confirm password">
+        <small class="form-text text-muted danger"
+          *ngIf="!userForm.get('passwordCF').valid && (userForm.get('passwordCF').dirty || userForm.get('passwordCF').touched)">Please
+          enter Confirm password</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <label for="phoneNumber">{{'USER.CREATE.PHONE' }}</label>
+        <input type="phoneNumber" required class="form-control" formControlName="phoneNumber"
+          placeholder="Phone number">
+        <small class="form-text text-muted danger"
+          *ngIf="!userForm.get('phoneNumber').valid && (userForm.get('phoneNumber').dirty || userForm.get('phoneNumber').touched)">Please
+          enter phone number</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <label for="address">{{'USER.CREATE.ADDRESS' }}</label>
+        <input type="address" required class="form-control" formControlName="address" placeholder="address">
+        <small class="form-text text-muted danger"
+          *ngIf="!userForm.get('address').valid && (userForm.get('address').dirty || userForm.get('address').touched)">Please
+          enter address</small>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <p-multiSelect [options]="cars" formControlName="role" [panelStyle]="{minWidth:'12em'}">
+
+          <ng-template let-value pTemplate="selectedItems">
+            <div *ngFor="let val of value" class="ui-multiselected-item-token ui-corner-all">
+              <span>{{val}}</span>
+            </div>
+            <span *ngIf="!value || value.length === 0" class="ui-multiselected-empty-token ui-corner-all">Choose roles</span>
+          </ng-template>
+          <ng-template let-car pTemplate="item">
+            <div style="width: 80%;text-align:left;display: inline-block;justify-content: right;margin:0 auto;">
+              {{car.label}}</div>
+          </ng-template>
+        </p-multiSelect>
+      </div>
+    </div>
+
   </div>
   <div class="modal-footer">
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
       <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate }}
     </button>
-    <button type="submit"  class="btn btn-raised btn-success">
+    <button type="submit" class="btn btn-raised btn-success">
       <i class="ft-save"></i> {{'COMMON.BUTTON.SAVE' | translate }}
     </button>
   </div>

@@ -52,5 +52,10 @@
   "USER.LIST.GRID.HEADER.EMAIL": "Email",
   "USER.LIST.GRID.HEADER.BIRTHDAY": "Ngày sinh",
   "USER.LIST.GRID.HEADER.STATUS": "Trạng thái",
-  "USER.LIST.HEADER": "Người dùng"
+  "USER.LIST.HEADER": "Người dùng",
+  "USER.CREATE.ADDRESS": "Địa chỉ",
+  "USER.CREATE.PASS": "Mật khẩu",
+  "USER.CREATE.CF": "Xác nhận mật khẩu",
+  "USER.CREATE.PHONE": "Số điện thoại",
+  "USER.CREATE.GENDER": "Giới tính"
 }

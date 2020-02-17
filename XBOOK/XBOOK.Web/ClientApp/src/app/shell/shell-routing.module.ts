@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
-  //  canActivate: [AuthenticationGuard],
+     canActivate: [AuthenticationGuard],
     children: [
       {
         path: '',

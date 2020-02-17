@@ -19,14 +19,14 @@ namespace XBOOK.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SaleInvoiceController : BaseAPIController
+    public class SaleInvoiceController : ControllerBase
     {
         ICompanyProfileService _iCompanyProfileService;
         ISaleInvoiceService _saleInvoiceService;
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IUnitOfWork _uow;
         IInvoiceServiceDapper _invoiceServiceDapper;
-        public SaleInvoiceController(IHttpContextAccessor httpContextAccessor, ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper) : base(httpContextAccessor)
+        public SaleInvoiceController(IHttpContextAccessor httpContextAccessor, ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
         {
             _saleInvoiceService = saleInvoiceService;
             _uow = uow;
@@ -36,7 +36,7 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
+      //  [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
         public async Task<IActionResult> GetAllSaleInvoice([FromBody]SaleInvoiceListRequest request)
         {
             var saleListInvoice = await _invoiceServiceDapper.GetInvoiceAsync(request);

@@ -23,6 +23,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
 export class CompanyProfileComponent extends PagedListingComponentBase<ClientView> {
   companyprofileViews: any;
   companyprofileViews1: any[] = [];
+  companyCity: any[] = [];
   loadingIndicator = true;
   keyword = '';
   reorderable = true;
@@ -31,6 +32,7 @@ export class CompanyProfileComponent extends PagedListingComponentBase<ClientVie
   SelectionType = SelectionType;
   clientKeyword = '';
   name: any;
+  id: any;
   messageTest: string;
   constructor(
     injector: Injector,
@@ -63,30 +65,29 @@ export class CompanyProfileComponent extends PagedListingComponentBase<ClientVie
         this.loadingIndicator = false;
         this.companyprofileViews = i;
         this.name = this.companyprofileViews.companyName;
+        // if ( this.companyprofileViews.length === 0) {
+        //   console.log(this.companyprofileViews.length);
+        //   this.id = this.companyprofileViews[0].id;
+        // }
         const data = [{
           companyName: this.companyprofileViews.companyName,
         }];
         this.companyprofileViews1.push(data);
+        if ( this.companyprofileViews.length === 0) {
+          const createClientDialog = this.modalService.open(CreateCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
+        } else {
+          const createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
+          createOrEditClientDialog.componentInstance.id = this.companyprofileViews[0].id;
+          createOrEditClientDialog.result.then(result => {
+            if (result) {
+              this.refresh();
+            }
+          });
+        }
+
       });
   }
-  createClient(): void {
-    this.showCreateOrEditClientDialog();
-  }
-  showCreateOrEditClientDialog(id?: number): void {
-    let createOrEditClientDialog;
-    if (id === undefined || id <= 0) {
-      createOrEditClientDialog = this.modalService.open(CreateCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
-    } else {
-      createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
-      createOrEditClientDialog.componentInstance.id = id;
-    }
-    createOrEditClientDialog.result.then(result => {
-      if (result) {
-        this.refresh();
-      }
-    });
 
-  }
   getRowHeight(row) {
     return row.height;
   }
@@ -94,31 +95,7 @@ export class CompanyProfileComponent extends PagedListingComponentBase<ClientVie
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
-  edit(): void {
-    if (this.selected.length === 0) {
-      this.message.warning('Please select a item from the list?');
-      return;
-    }
-    if (this.selected.length > 1) {
-      this.message.warning('Only one item selected to edit?');
-      return;
-    }
-    this.showCreateOrEditClientDialog(this.selected[0].id);
-    this.selected = [];
-  }
 
-  onActivate(event) {
-    // If you are using (activated) event, you will get event, row, rowElement, type
-    if (event.type === 'click' && event.cellIndex > 0) {
-      event.cellElement.blur();
-      const createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
-      createOrEditClientDialog.componentInstance.id = event.row.id;
-      createOrEditClientDialog.result.then(result => {
-        if (result) {
-          this.refresh();
-        }
-      });
-    }
-  }
+
 
 }

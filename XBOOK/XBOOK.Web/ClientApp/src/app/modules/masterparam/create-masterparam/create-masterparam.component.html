@@ -1,12 +1,12 @@
 <form  class="form" name="form"  novalidate autocomplete="off" (ngSubmit)="applyTax()" [formGroup]="taxForm">
-  <div class=" modal-header" style="max-width: 500px;width: 500px;">
+  <div class=" modal-header">
     <div class="row">
       <div class="col-12">
-        <h5 class="modal-title"style="max-width: 500px;width: 500px;">Add Param Type</h5>
+        <h5 class="modal-title">Add Param Type</h5>
       </div>
     </div>
   </div>
-  <div class="modal-body" style="max-width: 500px;width: 500px;">
+  <div class="modal-body" >
     <div class="row mb-1">
       <ng-container>
         <div class="form-group col-12 mb-2">
@@ -24,15 +24,15 @@
 
       <ng-container [formGroupName]="i">
         <div  style="margin-top: 8%;" class="col-6 text-left">Key</div>
-        <div  style="margin-top: 8%;" class="col-6 text-left">Name</div>
+        <div  style="margin-top: 8%;margin-left: -45px;" class="col-6 text-left">Name</div>
 
         <div class="col-6">
-          <input #paramKey formControlName="key" class="form-control" style="border:1px solid #CFCFCF;width: 230px" type="text"
+          <input #paramKey formControlName="key" class="form-control" style="width: 130px" type="text"
             placeholder="key" id="key" digitOnly maxlength=2>
         </div>
 
         <div class="col-4">
-          <input formControlName="name" class="form-control" style="border:1px solid #CFCFCF;width: 225px;margin-left: -6px;" type="text"
+          <input formControlName="name" class="form-control" style="width: 200px;margin-left: -45px;" type="text"
             placeholder="name" id="name" maxlength=200>
         </div>
 
@@ -43,7 +43,7 @@
         </div>
 
         <div class="col-12" style="margin-top: 3%">
-          <textarea formControlName="description" class="form-control" style="border:1px solid #CFCFCF;" type="text"
+          <textarea formControlName="description" class="form-control"  type="text"
             placeholder="description" id="description" maxlength=200></textarea>
         </div>
       </ng-container>
@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-  <div class="modal-footer" style="max-width: 500px;width: 500px;">   
+  <div class="modal-footer">   
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
       Cancel
     </button>

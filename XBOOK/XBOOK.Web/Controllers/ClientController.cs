@@ -14,11 +14,11 @@ namespace XBOOK.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : BaseAPIController
+    public class ClientController : ControllerBase
     {
         IClientService _iClientService;
         IClientServiceDapper _iClientServiceDapper;
-        public ClientController(IClientService iClientService, IClientServiceDapper iClientServiceDapper, IHttpContextAccessor httpContextAccessor): base(httpContextAccessor)
+        public ClientController(IClientService iClientService, IClientServiceDapper iClientServiceDapper)
         {
             _iClientService = iClientService;
             _iClientServiceDapper = iClientServiceDapper;
@@ -32,7 +32,7 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
+       // [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
         public async Task<IActionResult> GetAllClientDapper([FromBody]ClientSerchRequest request)
         {
             var clientList = await _iClientServiceDapper.GetClientAsync(request);

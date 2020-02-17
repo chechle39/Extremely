@@ -1,9 +1,9 @@
 <!--Login Page Starts-->
 <section id="login">
-  <form class="container-fluid" novalidate autocomplete="off" (ngSubmit)="login(loginForm)" [formGroup]="loginForm">
+  <div class="container-fluid">
     <div class="row full-height-vh m-0">
       <div class="col-12 d-flex align-items-center justify-content-center">
-        <div *ngIf="isCheckForm === true" class="card">
+        <div class="card">
           <div class="card-content">
             <div class="card-body login-img">
               <div class="row m-0">
@@ -16,8 +16,8 @@
                   <p class="card-text mb-3">
                     Welcome back, please login to your account.
                   </p>
-                  <input formControlName="userName" type="text" class="form-control mb-3" placeholder="Username" />
-                  <input formControlName="password" type="password" class="form-control mb-3" placeholder="Password" />
+                  <input type="text" class="form-control mb-3" placeholder="Username" />
+                  <input type="password" class="form-control mb-3" placeholder="Password" />
                   <div class="d-flex justify-content-between mt-2">
                     <div class="remember-me">
                       <div class="custom-control custom-checkbox custom-control-inline mb-3">
@@ -40,8 +40,8 @@
                       </button>
                     </div> -->
                     <div class="recover-pass">
-                      <button type="submit" class="btn btn-primary">
-                        <a class="text-decoration-none text-white">Login</a>
+                      <button class="btn btn-primary">
+                        <a (click)="login()" class="text-decoration-none text-white">Login</a>
                       </button>
                     </div>
                   </div>
@@ -51,97 +51,8 @@
             </div>
           </div>
         </div>
-
-
-        <div *ngIf="isCheckForm === false" class="card">
-          <div class="card-content">
-            <div class="card-body login-img">
-              <div class="row m-0">
-                <div class="col-lg-6 d-lg-block d-none py-2 px-3 text-center align-middle">
-                  <img src="../../assets/img/gallery/login.png" alt="" class="img-fluid mt-5" width="400"
-                    height="230" />
-                </div>
-                <div class="col-lg-6 col-md-12 bg-white px-4 pt-3">
-                  <h4 class="card-title mb-2">Register</h4>
-                  <p class="card-text mb-3">
-                    Welcome back, please Register to your account.
-                  </p>
-                  <div class="form-group  mb-2">
-                    <label for="fullname">Full name</label>
-                    <input formControlName="fullName" type="text" class="form-control" placeholder="Full name" />
-                    <small class="form-text text-muted danger"
-                      *ngIf="!loginForm.get('fullName').valid && (loginForm.get('fullName').dirty || loginForm.get('fullName').touched)">Please
-                      full name</small>
-                  </div>
-                  <div class="form-group  mb-2">
-                    <label for="birthDay">BirthDay</label>
-                    <div class="input-group mb-0">
-                      <input formControlName="birthDay" class="form-control" placeholder="dd/mm/yyyy" name="dp" ngbDatepicker (focus) = "d3.toggle()"
-                        #d3="ngbDatepicker" id="birthDay">
-                      <div class="input-group-append">
-                        <div class="input-group-text" (click)="d3.toggle()">
-                          <i class="fa fa-calendar" style="cursor: pointer;"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <small class="form-text text-muted danger"
-                      *ngIf="!loginForm.get('birthDay').valid && (loginForm.get('birthDay').dirty || loginForm.get('birthDay').touched)">Please
-                      birthDay</small>
-                  </div>
-                  <div class="form-group  mb-2">
-                    <label for="email">Email liên hệ</label>
-                    <input formControlName="email" type="text" class="form-control" placeholder="email is user name" />
-                    <small
-                      *ngIf="!loginForm.get('email').valid && (loginForm.get('email').dirty || loginForm.get('email').touched)"
-                      class="form-text text-muted danger">Please enter email</small>
-                  </div>
-                  <div class="form-group  mb-2">
-                    <label for="password">Password</label>
-                    <input formControlName="password" type="password" class="form-control" placeholder="Password" />
-                    <small
-                      *ngIf="!loginForm.get('password').valid && (loginForm.get('password').dirty || loginForm.get('password').touched)"
-                      class="form-text text-muted danger">Please enter password</small>
-                  </div>
-                  <div class="form-group  mb-2">
-                    <label for="confirm">Confirm Password</label>
-                    <input formControlName="confirmPassword" type="password" class="form-control"
-                      placeholder="Confirm password" />
-                    <small
-                      *ngIf="!loginForm.get('confirmPassword').valid && (loginForm.get('confirmPassword').dirty || loginForm.get('confirmPassword').touched)"
-                      class="form-text text-muted danger">Please enter password không khớp</small>
-                  </div>
-                  <div class="form-group  mb-2">
-                    <label for="address">Address</label>
-                    <input formControlName="address" type="text" class="form-control" placeholder="Address" />
-                    <small
-                      *ngIf="!loginForm.get('address').valid && (loginForm.get('address').dirty || loginForm.get('address').touched)"
-                      class="form-text text-muted danger">Please enter address</small>
-                  </div>
-
-                  <div class="form-group  mb-2">
-                    <label for="phone">Phone number</label>
-                    <input formControlName="phoneNumber" type="text" class="form-control" placeholder="Phone Number" />
-                    <small
-                      *ngIf="!loginForm.get('phoneNumber').valid && (loginForm.get('phoneNumber').dirty || loginForm.get('phoneNumber').touched)"
-                      class="form-text text-muted danger">Please enter Phone number</small>
-                  </div>
-
-                  <div class="fg-actions justify-content-between text-center">
-                    <div class="recover-pass">
-                      <button  type="submit" class="btn btn-primary">
-                        <a  class="text-decoration-none text-white">Register</a>
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
-  </form>
+  </div>
 </section>
 <!--Login Page Ends-->

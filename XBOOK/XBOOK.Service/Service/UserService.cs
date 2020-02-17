@@ -26,7 +26,7 @@ namespace XBOOK.Service.Service
         {
             var user = new AppUser()
             {
-                UserName = userVm.UserName,
+                UserName = userVm.Email,
                 Avatar = userVm.Avatar,
                 Email = userVm.Email,
                 FullName = userVm.FullName,

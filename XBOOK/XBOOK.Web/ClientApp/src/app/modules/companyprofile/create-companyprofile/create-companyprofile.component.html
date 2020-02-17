@@ -113,18 +113,7 @@
           *ngIf="!directorName.valid && (directorName.dirty || directorName.touched)">Please
           enter director name</small>
       </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-12 mb-2">
-        <label for="logoFilePath">Thư mục hình</label>
-        <input [(ngModel)]="companyprofileView.logoFilePath" #logoFilePath="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="logoFilePath" placeholder="Thư mục hình"
-          id="logoFilePath">
-        <small class="form-text text-muted danger"
-          *ngIf="!logoFilePath.valid && (logoFilePath.dirty || logoFilePath.touched)">Please
-          enter logo filePath</small>
-      </div>
-    </div>
+    </div>  
     <div class="row">
       <div class="form-group col-12 mb-2">
         <label for="bankAccount">Tài khoản ngân hàng</label>
@@ -136,17 +125,7 @@
           enter bank account</small>
       </div>
     </div>
-    <div class="row">
-      <div class="form-group col-12 mb-2">
-        <label for="code">Mã số công ty</label>
-        <input [(ngModel)]="companyprofileView.code" #code="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="code" placeholder="Mã số công ty"
-          id="code">
-        <small class="form-text text-muted danger"
-          *ngIf="!code.valid && (code.dirty || code.touched)">Please
-          enter code</small>
-      </div>
-    </div>
+  
 
     <div class="row">
       <div class="form-group col-12 mb-2">
@@ -155,7 +134,7 @@
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="taxCode" placeholder="Mã số thuế"
           id="taxCode">
         <small class="form-text text-muted danger"
-          *ngIf="!code.valid && (taxCode.dirty || taxCode.touched)">Please
+          *ngIf="!taxCode.valid && (taxCode.dirty || taxCode.touched)">Please
           enter tax code</small>
       </div>
     </div>

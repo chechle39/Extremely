@@ -11,6 +11,10 @@ import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { UserService } from '@modules/_shared/services/user.service';
+import { RoleService } from '@modules/_shared/services/role.service';
+import { MultiSelectModule } from 'primeng/multiselect';
+import {RadioButtonModule} from 'primeng/radiobutton';
+
 @NgModule({
   declarations: [UserComponent, CreateUserComponent],
   imports: [
@@ -22,9 +26,11 @@ import { UserService } from '@modules/_shared/services/user.service';
     DigitOnlyModule,
     NgxCleaveDirectiveModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MultiSelectModule,
+    RadioButtonModule
   ],
-  providers: [ProductService, UserService],
+  providers: [ProductService, UserService, RoleService],
   entryComponents: [CreateUserComponent]
 })
 export class UserModule { }

@@ -1,4 +1,5 @@
 export const API_URI = {
+  adminUser: 'api/User/SaveEntity',
   adminRole: 'api/Seed/CreateAdminRole',
   adminUserAdminRole: 'api/Seed/AddUserToAdminRole',
   createSaleInv: 'api/SaleInvoice/CreateSaleInvoice',
@@ -116,12 +117,14 @@ export const API_URI = {
   updateAcountChart: 'api/AccountChart/Update',
   createAccountChart: 'api/AccountChart/CreateAccountChart',
   deleteAccount: 'api/AccountChart/DeleteAcount',
-
+  getListRole: 'api/Role/GetAllRole',
   login: 'api/Account/Login',
   logout: 'api/Account/Logout',
   checkAcount: 'api/Account/CheckUserAcount',
   register: 'api/Account/Register',
   getAllUser: 'api/User/GetUser',
+
+
 
 };
 export const PAGING_CONFIG = {

@@ -12,6 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '@modules/_shared/services/user.service';
 import { UserViewModel } from '@modules/_shared/models/user/userview.model';
 import { CreateUserComponent } from './create-user/create-user.component';
+import { RoleModel } from '@modules/_shared/models/role/role.model';
+import { RoleService } from '@modules/_shared/services/role.service';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
@@ -22,6 +24,7 @@ class PagedProductsRequestDto extends PagedRequestDto {
 })
 export class UserComponent extends PagedListingComponentBase<ProductView> {
   userViews: UserViewModel[];
+  listRole: RoleModel[];
   categories: any;
   loadingIndicator = true;
   keywords = '';
@@ -44,6 +47,7 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
     private translate: TranslateService) {
     super(injector);
   }
+
 
   protected list(
     request: PagedProductsRequestDto,

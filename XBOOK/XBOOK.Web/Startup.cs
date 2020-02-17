@@ -133,6 +133,7 @@ namespace XBOOK.Web
             services.AddTransient<IPayments2Service, Payments2Service>();
             services.AddTransient<IBuyDetailInvoiceService, BuyDetailInvoiceService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
 
             services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
             services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();

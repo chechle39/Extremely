@@ -7,6 +7,9 @@ export class UserService extends BaseService {
     getAllUser(): Observable<any> {
         return this.post<any>(`${API_URI.getAllUser}`, null);
     }
+    createUser(rq): Observable<any> {
+        return this.post<any>(`${API_URI.adminUser}`, rq);
+    }
     createAdminRole(): Observable<any> {
         return this.post<any>(`${API_URI.adminRole}`, null);
     }
