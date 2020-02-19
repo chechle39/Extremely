@@ -35,6 +35,12 @@ namespace XBOOK.Data.Repositories
             return listData;
         }
 
+        public async Task<IEnumerable<ClientViewModel>> GetAllClientData()
+        {
+           var data = await Entities.ProjectTo<ClientViewModel>().AsNoTracking().ToListAsync();
+            return data;
+        }
+
         public bool remiveClient(long id)
         {
             var ListClient = Entities.Where(x=>x.clientID == id).ToList();

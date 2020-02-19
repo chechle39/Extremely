@@ -13,5 +13,6 @@ namespace XBOOK.Data.Interfaces
         bool UpdateCl(ClientCreateRequet rs);
         bool remiveClient(long id);
         Task<IEnumerable<ClientViewModel>> GetAllClientAsync(ClientSerchRequest request);
+        Task<IEnumerable<ClientViewModel>> GetAllClientData();
     }
 }

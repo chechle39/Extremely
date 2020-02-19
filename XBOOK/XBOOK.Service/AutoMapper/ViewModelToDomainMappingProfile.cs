@@ -77,6 +77,9 @@ namespace XBOOK.Service.AutoMapper
            CreateMap<ApplicationUserViewModel, AppUser>()
                         .ConstructUsing(c => new AppUser(c.Id, c.FullName, c.UserName,
                         c.Email, c.PhoneNumber, c.Avatar, c.Status));
+
+            CreateMap<JournalEntryViewModel, JournalEntry>().ConstructUsing(x => new JournalEntry(x.DateCreate, x.Description, x.EntryName, x.ID,
+              x.ObjectID, x.ObjectName, x.ObjectType));
         }
     }
 }

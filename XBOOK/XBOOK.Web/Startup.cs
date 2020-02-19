@@ -134,6 +134,7 @@ namespace XBOOK.Web
             services.AddTransient<IBuyDetailInvoiceService, BuyDetailInvoiceService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IJournalEntryService, JournalEntryService>();
 
             services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
             services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();
@@ -154,6 +155,8 @@ namespace XBOOK.Web
             services.AddTransient<IPayment2Repository, Payment2Repository>();
             services.AddTransient<IAccountChartRepository, AccountChartRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IJournalEntryRepository, JournalEntryRepository>();
+
 
             services.AddTransient<IAccountDetailServiceDapper, AccountDetailServiceDapper>();
             services.AddTransient<IPurchaseReportDapper, PurchaseReportServiceDapper>();
