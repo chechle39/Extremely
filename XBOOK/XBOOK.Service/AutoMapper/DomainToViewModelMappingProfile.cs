@@ -36,6 +36,7 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<PaymentReceipt, PaymentReceiptViewModel>();
             CreateMap<AppUser, ApplicationUserViewModel>();
             CreateMap<AppRole, ApplicationRoleViewModel>();
+            CreateMap<JournalEntry, JournalEntryViewModel>();
         }
     }
 }

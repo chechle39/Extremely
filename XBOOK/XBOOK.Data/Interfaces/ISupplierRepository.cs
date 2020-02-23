@@ -13,5 +13,6 @@ namespace XBOOK.Data.Interfaces
         Task<bool> UpdateSupplier(SupplierCreateRequest request);
         Task<IEnumerable<SupplierViewModel>> GetAllSupplierAsync(ClientSerchRequest request);
         bool removeSupplier(long id);
+        Task<IEnumerable<SupplierViewModel>> GetAllSupplier();
     }
 }

@@ -27,6 +27,12 @@ namespace XBOOK.Data.Repositories
             return supplierCreate;
         }
 
+        public async Task<IEnumerable<SupplierViewModel>> GetAllSupplier()
+        {
+            var listData = await Entities.ProjectTo<SupplierViewModel>().ToListAsync();
+            return listData;
+        }
+
         public async Task<IEnumerable<SupplierViewModel>> GetAllSupplierAsync(ClientSerchRequest request)
         {
             var listData = new List<SupplierViewModel>();

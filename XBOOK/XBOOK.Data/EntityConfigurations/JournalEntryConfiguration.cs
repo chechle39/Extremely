@@ -8,7 +8,7 @@ namespace XBOOK.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<JournalEntry> builder)
         {
-            builder.Property(e => e.JournalID).ValueGeneratedNever();
+            builder.Property(e => e.ID).ValueGeneratedNever();
         }
     }
 }
