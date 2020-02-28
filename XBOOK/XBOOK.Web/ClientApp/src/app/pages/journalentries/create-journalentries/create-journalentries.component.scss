@@ -1,0 +1,155 @@
+.img-attach {
+    margin-left: 10px;
+    margin-top: -11px;
+}
+.file {
+    margin-left: -41px;
+    li {
+        list-style-type: none;
+        font-size: 14px;
+        color: #656565;
+
+        span {
+            padding-left: 70px;
+            font-weight: bold;
+        }
+    }
+}
+.ipfile {
+    width: 23px;
+    height: 23px;
+    margin-left: 93px;
+    margin-top: -4px;
+}
+.mrt-16 {
+    margin-top: -16px;
+}
+.mlt-13 {
+    margin-left: 13px;
+}
+.ml-20 {
+    margin-left: -20px;
+    @media screen and (max-width: 575px) {
+        margin-left: 0;
+    }
+}
+.mrl-1 {
+    margin-left: -1px;
+}
+.font-size {
+    font-size: 12px;
+}
+
+.filedowload {
+    color: blue;
+    cursor: pointer;
+}
+.pdt-7 {
+    padding-top: 7px;
+}
+.gg-software-upload {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(var(--ggs, 1));
+    width: 16px;
+    height: 6px;
+    border: 2px solid;
+    border-top: 0;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    margin-top: 8px;
+}
+
+.gg-software-upload::after {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid;
+    border-top: 2px solid;
+    transform: rotate(45deg);
+    left: 2px;
+    bottom: 4px;
+}
+
+.gg-software-upload::before {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    border-radius: 3px;
+    width: 2px;
+    height: 10px;
+    background: currentColor;
+    left: 5px;
+    bottom: 3px;
+}
+.amountDue {
+    @media screen and (max-width: 575px) {
+        order: 2;
+    }
+}
+
+.date {
+    @media screen and (max-width: 575px) {
+        order: 1;
+    }
+}
+.refer {
+    @media screen and (max-width: 575px) {
+        order: 3;
+    }
+}
+.dateColor {
+    border-color: rgba(243, 23, 0, 0.5);
+    color: #f31700;
+}
+
+.entryclass {
+    line-height: 0;
+}
+
+.create-journalentries__title{
+    font-weight: 300;
+    color: #343a40;
+    font-size: 2rem;
+}
+
+:host ::ng-deep.ui-autocomplete {
+    margin-top: -10px;
+    white-space: nowrap;
+    position: relative;
+    width: 100%;
+    height: 2.1em;
+    top: -2px;
+    .ui-autocomplete-panel {
+        min-width: 166%;
+    }
+}
+:host ::ng-deep.ui-button.ui-button-icon-only {
+    width: 1.5em;
+    height: 35.5px;
+    position: absolute;
+    right: 0;
+    height: 100%;
+}
+
+:host ::ng-deep .ui-inputtext{
+    width: 100%;
+    border: none;
+    height: 100%;
+}
+
+:host ::ng-deep .ui-button{
+    background: #868e96;
+    border-color: #868e96;
+    height: 100%;
+    &:active, &:hover{
+        background: #868e96!important;
+        border-color: #868e96!important;
+    }
+}
+// .ui-autocomplete 

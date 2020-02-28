@@ -1,0 +1,243 @@
+<nb-card>
+  <nb-card-header class="pb-1">
+    <div class="row">
+      <div class="col-6">
+        <div class="d-flex">
+          <span class="card__title pr-3 pt-1">{{ 'Debit.Age.HEADER' | translate }}</span>
+          <div (click)='SearchGenLed()'>
+            <img src="../../../assets/search.png" class="button__search"
+              alt="search General Ledger"></div>
+        </div>
+        <br>
+        <div class="btn btn-flat mr-1 p-0 mb-0" style="color: #546D74;">
+          <div *ngIf="case==null">Hôm nay: {{today}}</div>
+          <div *ngIf="case=== 1">Hôm nay: {{startDay}} </div>
+          <div *ngIf="case=== 2">Cuối tháng trước: {{endDate}} </div>
+          <div *ngIf="case=== 3">Cuối quý trước: {{endDate}} </div>
+          <div *ngIf="case=== 4">Cuối năm trước: {{endDate}} </div>
+          <div *ngIf="case=== 5">Từ ngày: {{endDate}}</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div ngbDropdown>
+          <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
+          </button>
+          <div class="d-inline-block mx-2">
+            <button  (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>                       
+        </div>
+          <div ngbDropdownMenu aria-labelledby="bulkActions">
+            <button class="dropdown-item"><span class="icon-import"></span> Import General Ledger</button>
+            <button  class="dropdown-item"><span class="icon-export"></span> Export General
+              Ledger</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </nb-card-header>
+    <nb-card-body class="pt-0">
+      
+      <!-- data -->
+      <div class="row">
+        <hr class="mt-0" width="98%" style="height: 2px;;background: #6A0888;"/>
+        <div class="col-md-12">
+   
+          <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="debitageViews"
+          [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]" [columnMode]="ColumnMode.force"
+          [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight"  [limit]="20"
+          [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)" 
+          (select)='onSelect($event)' [selectAllRowsOnPage]="false" >
+
+          <!-- <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+              let-selectFn="selectFn">
+              <div class="custom-control custom-checkbox m-0">
+                <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                  (change)="selectFn(!allRowsSelected)" />
+                <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+              </div>
+
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+              let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+              <div class="custom-control custom-checkbox m-0">
+                <input #cb type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
+              (change)="onCheckboxChangeFn($event)" />
+              <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
+            </div>
+
+            </ng-template>
+            </ngx-datatable-column> -->
+            <ngx-datatable-column name="{{ 'Debit.Age.LIST.CompanyName' | translate }}" prop="firstMonth">
+              <ng-template  let-row="row" ngx-datatable-cell-template>
+                <div (click)="getaccNumber(row.companyName)" >{{row.companyName}}</div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column prop="issueDate" name="0 - 31 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+              [headerClass]="'col-right'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-right">
+                  <div>
+                    <div *ngIf="row.firstMonth !== 0" class="col-more-info">
+                      {{row.firstMonth  | currency:'VND':''}}
+                    </div>
+                    <div *ngIf="row.firstMonth  === 0">
+                      <a>-</a>
+                    </div>
+                  </div> 
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="issueDate" name="31 - 60 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+              [headerClass]="'col-right'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-right">
+                  <div>
+                    <div *ngIf="row.secondMonth !== 0" class="col-more-info">
+                      {{row.secondMonth  | currency:'VND':''}}
+                    </div>
+                    <div *ngIf="row.secondMonth  === 0">
+                      <a>-</a>
+                    </div>
+                  </div> 
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="issueDate" name="61-90 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+              [headerClass]="'col-right'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-right">
+                  <div>
+                    <div *ngIf="row.thirdMonth !== 0" class="col-more-info">
+                      {{row.thirdMonth  | currency:'VND':''}}
+                    </div>
+                    <div *ngIf="row.thirdMonth  === 0">
+                      <a>-</a>
+                    </div>
+                  </div> 
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="amountPaid" name="90+ {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+              [headerClass]="'col-right'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-right" style="padding-right: 0;">
+                  <!-- {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}} -->
+                  <div>
+                    <div *ngIf="row.fourthMonth !== 0" class="col-more-info">
+                      {{row.fourthMonth  | currency:'VND':''}}
+                    </div>
+                    <div *ngIf="row.fourthMonth  === 0">
+                      <a>-</a>
+                    </div>
+                  </div> 
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+           <ngx-datatable-column prop="issueDate" name="{{ 'Debit.Age.LIST.Total' | translate }}" [cellClass]="'col-right'"
+              [headerClass]="'col-right'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-right">
+                  <div>
+                    <div *ngIf="row.sumtotal !== 0" class="col-more-info">
+                      {{row.sumtotal  | currency:'VND':''}}
+                    </div>
+                    <div *ngIf="row.sumtotal  === 0">
+                      <a>-</a>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-footer>
+              <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+                <div class="row"
+                style="display: block;width: 101%;border-top: 3px double #ccc;padding-top: 10px;">
+                  <div class="row text-right">
+                    <div class="col-2" style="text-align: left;">
+                      <div class="card__title"
+                      style="color: #546D74;font-family:Tahoma ;margin-left: 30px;inset-block: inherit;">
+                      {{ 'Debit.Age.LIST.Total' | translate }}
+                      </div>
+                    </div>
+                    <div class="col-2" style="color: #546D74;padding-right: 0%;">
+                      <div>
+                        <div *ngIf="getfirstMonth() !== 0" class="col-more-info">
+                          {{getfirstMonth()  | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="getfirstMonth()  === 0">
+                          <a>-</a>
+                        </div>
+                      </div> 
+                    </div>
+                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 0.5%;">
+                      <div>
+                        <div *ngIf="getsecondMonth() !== 0" class="col-more-info">
+                          {{getsecondMonth()  | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="getsecondMonth()  === 0">
+                          <a>-</a>
+                        </div>
+                      </div> 
+                    </div>
+                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 0.5%;">
+                      <div>
+                        <div *ngIf="getthirdMonth() !== 0" class="col-more-info">
+                          {{getthirdMonth()  | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="getthirdMonth()  === 0">
+                          <a>-</a>
+                        </div>
+                      </div> 
+                    </div>
+                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 1%;">
+                      <div>
+                        <div *ngIf="getfourthMonth() !== 0" class="col-more-info">
+                          {{getfourthMonth()  | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="getfourthMonth()  === 0">
+                          <a>-</a>
+                        </div>
+                      </div> 
+                    </div>
+                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 2.0%;">
+                      <div>
+                        <div *ngIf="getsumtotal() !== 0" class="col-more-info">
+                          {{getsumtotal()  | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="getsumtotal()  === 0">
+                          <a>-</a>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="col-md-3" style="padding-right:35px">
+                    <b>{{getGrantTotal()| currency:'VND':''}}</b>
+                  </div> -->
+                  </div>
+                  <div class="row">
+                    <div class="page-count col-md-6 pl-4">
+                    </div>
+                    <div class="col-md-6 text-right">
+                      <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                        [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                        [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage" [size]="pageSize"
+                        [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                      </datatable-pager>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+      </div>
+      <!-- data -->
+      </nb-card-body>
+    </nb-card>
+

@@ -1,0 +1,58 @@
+<div></div>
+<form class="form" name="form" novalidate autocomplete="off" [formGroup]="genLedForm">
+    <div class=" modal-header">
+        <div class="row"></div>
+        <div class="col-12">
+            <h5 style="margin-left: -15px;" class="modal-title">Tìm Kiếm</h5>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12">
+                <h5 class="modal-title">Thời điểm</h5>
+            </div>
+            <div class="form-group col-12 mb-2">
+                <select (change)="onChange($event)" id="genLedMethods" class="form-control" formControlName="genLedMethods"style="position: relative;margin-bottom: 20px;">
+                    <option *ngFor="let method of genLedMethods" [ngValue]="method.GenLedId">
+                        {{ method.publicGenLedType }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row" *ngIf = "case6 === 5" style="margin-top: -20px;position: relative;">
+            <div class="col-12">
+                <h5 class="modal-title">Tùy chọn thời điểm</h5>
+            </div>
+            <div class="form-group col-6 mb-2">
+                <div class=" input-group">
+                    <input formControlName="fromDate" required class="form-control" name="dp" placeholder="dd/mm/yyyy"
+                     ngbDatepicker id="fromDate"  #d3="ngbDatepicker" (focus) = "d3.toggle()">
+                    <div class="input-group-append">
+                        <div class="input-group-text" (click)="d3.toggle()">
+                            <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>       
+        <div class="row" style="margin-top: -8px;">
+            <div class="col-12">
+                <h5 class="modal-title">Loại tiền</h5>
+            </div>
+            <div class="form-group col-12 mb-2">
+                <select id="currencyMethod" class="form-control" formControlName="currencyMethod">
+                    <option [ngValue]="null">Choose a currency method</option>
+                    <option *ngFor="let method of currencyMethod" [ngValue]="method.CurrencyId">
+                        {{ method.CurrencyType }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1"> Cancel</button>
+        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">Áp dụng</button>
+    </div>
+</form>

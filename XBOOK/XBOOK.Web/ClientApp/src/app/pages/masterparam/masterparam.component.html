@@ -1,0 +1,90 @@
+<!-- <div class="card">
+  <div class="card-content">
+    <div class="card-body">
+      <div class="row form-line">
+        <div class="col-md-4">
+         <h4 class="card-title">THÔNG TIN CÔNG TY</h4> -->
+        <!-- </div>
+        <div class="col-md-4">
+          <div ngbDropdown>
+            <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
+            </button>
+            <div ngbDropdownMenu aria-labelledby="bulkActions">
+              <button class="dropdown-item"><span class="icon-import"></span> Import Profile</button>
+              <button class="dropdown-item"><span class="icon-export"></span> Export Profile</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <button (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right">New Master Param</button>
+        </div>
+      </div>
+      <div class="row my-3 margin-top-0">
+        <div class="col-md-4 margintop-13">
+        </div>
+      </div> -->
+      <!-- <div class="row">
+        <div class="col-md-12">
+          <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="companyprofileViews"
+            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
+            [selected]="selected" [selectionType]="SelectionType.checkbox" (select)='onSelect($event)'
+            [selectAllRowsOnPage]="false">
+
+            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+              let-selectFn="selectFn">
+              <div>
+                <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                  (change)="selectFn(!allRowsSelected)" />
+                <label  for="chkCheckAll"></label>
+              </div>
+
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+              let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+              <div>
+                <input type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
+                  (change)="onCheckboxChangeFn($event)" />
+                <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
+              </div>
+
+            </ng-template>
+      
+        </ngx-datatable-column>
+            <ngx-datatable-column prop="issueDate" name="Company Name/ Address" [cellClass]="'col-center'"
+              [headerClass]="'col-left'" style="width: 150%;">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-more-info col-left">{{row.companyName}}</div>
+                <div class="col-more-info col-left">
+                  {{row.address}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="issueDate" name="City/ Country" [cellClass]="'col-center'"
+              [headerClass]="'col-center'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">{{row.city}}</div>
+                <div class="col-more-info col-center">
+                  {{row.country}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="issueDate" name="Director/ Bank Account" [cellClass]="'col-center'"
+              [headerClass]="'col-center'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-more-info col-center">{{row.directorName}}</div>
+                <div class="col-more-info col-center">
+                  {{row.bankAccount}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div> -->
+    <!-- </div>
+  </div>
+</div> -->

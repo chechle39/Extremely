@@ -1,0 +1,60 @@
+:host ::ng-deep .datatable-scroll {
+    margin-top: -13px;
+    border-top:1px solid;
+    border-top-width: 1000%; 
+    border-top: none;
+}
+:host ::ng-deep .datatable-header-cell-template-wrap{
+    margin-top: 13px;
+}
+:host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
+  white-space: unset !important;
+}
+.total{
+    margin-right: -45px;
+  }
+@media only screen and (max-width: 1820px){
+    .total{
+        margin-right: -45px;
+      }
+  }
+  @media only screen and (max-width: 1700px){
+    .total{
+        margin-right: -40px;
+      }
+  }
+  @media only screen and (max-width: 1600px){
+    .total{
+        margin-right: -40px;
+      }
+  }
+  @media only screen and (max-width: 1500px){
+    .total{
+        margin-right: -40px;
+      }
+  }
+  @media only screen and (max-width: 1440px){
+    .total{
+        margin-right: -35px;
+      }
+  }
+  @media only screen and (max-width: 1360px){
+    .total{
+        margin-right: -32px;
+      }
+  }
+  @media only screen and (max-width: 1280px){
+    .total{
+        margin-right: -30px;
+      }
+  }
+  @media only screen and (max-width: 992px){
+    .total{
+        margin-right: -25px;
+      }
+  }
+  @media only screen and (max-width: 767px){
+    .total{
+        margin-right: -15px;
+      }
+  }

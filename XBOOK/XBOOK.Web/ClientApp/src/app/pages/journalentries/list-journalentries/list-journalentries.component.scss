@@ -1,0 +1,22 @@
+.ngx-datatable .datatable-footer .datatable-footer-inner {
+  display: inline-block !important;
+}
+
+.card {
+  margin-top: -15px;
+  margin-right: 20px;
+}
+
+
+:host ::ng-deep .datatable-body-row {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+}
+
+:host ::ng-deep .datatable-body-cell {
+  margin-right: -3px;
+}
+
+:host ::ng-deep .datatable-row-group {
+  height: 45px;
+}

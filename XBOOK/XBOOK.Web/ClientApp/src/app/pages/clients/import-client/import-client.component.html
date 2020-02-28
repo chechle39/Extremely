@@ -1,0 +1,134 @@
+<form class="form" name="form" autocomplete="off" #f="ngForm" (ngSubmit)="save(importForm)" [formGroup]="importForm">
+  <div class="modal-header">
+    <h5 class="modal-title">Import Khách Hàng Từ File Excel</h5>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -5px;" for="clientName">Thông tin khác hàng</div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group">
+          <div class="form-group" style="margin-left: -15px;" for="clientName">Chọn cột tương ứng</div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -5px;" for="clientName">Tên:</div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -15px;">
+          <select style="margin-top: -10px;" id="clientName" formControlName="clientName" class="form-control">
+            <option [ngValue]="null">Choose a value</option>
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
+              {{ method.value }}: {{i+1}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -5px;" for="clientName">Địa chỉ:</div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -15px;">
+          <select style="margin-top: -10px;" id="clientName" formControlName="clientName" class="form-control">
+            <option [ngValue]="null">Choose a value</option>
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
+              {{ method.value }}: {{i+1}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -5px;" for="clientName">Mã số thuế: </div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -15px;">
+          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+            <option [ngValue]="null">Choose a value</option>
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
+              {{ method.value }}: {{i+1}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -8px;" for="clientName">Người liên hệ:</div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -15px;">
+          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+            <option [ngValue]="null">Choose a value</option>
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
+              {{ method.value }}: {{i+1}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -5px;" for="clientName">Email liên hệ: </div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -15px;">
+          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+            <option [ngValue]="null">Choose a value</option>
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
+              {{ method.value }}: {{i+1}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -5px;" for="clientName">Tài khoản ngân hàng:</div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group"style="margin-left: -15px;">
+          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+            <option [ngValue]="null">Choose a value</option>
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
+              {{ method.value }}: {{i+1}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -5px;" for="clientName">Ghi chú: </div>
+      </div>
+      <div class="form-group col-6 mb-2">
+        <div class="form-group" style="margin-left: -15px;">
+          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+            <option [ngValue]="null">Choose a value</option>
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
+              {{ method.value }}: {{i+1}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <div style="margin-left: -5px;margin-top: -10px;font-size: 13px;" for="clientName">* Chọn file có định dạng .csv (Có thể Export file .csv từ danh sách khách hàng)</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
+      <i class="ft-x"></i> Cancel
+    </button>
+    <button type="submit" class="btn btn-raised btn-success" [disabled]="!f.valid"><i class="ft-save"></i>
+      Import</button>
+  </div>
+</form>

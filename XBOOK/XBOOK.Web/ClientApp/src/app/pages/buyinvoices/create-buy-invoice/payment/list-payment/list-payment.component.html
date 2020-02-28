@@ -1,0 +1,86 @@
+<div class="row px-4">
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-6">
+        <p>All Payment For Invoice {{invoiceNumber}} </p>
+      </div>
+      <div class="col-md-6 float-left">
+        <button [disabled]="outstandingAmount === 0" (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></button>
+        <!-- <div ngbDropdown class="float-right">
+          <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Bulk Actions
+          </button>
+          <div ngbDropdownMenu aria-labelledby="bulkActions">
+            <button (click)="editPayment()" class="dropdown-item"><span class="icon-edit"></span> Edit</button>
+            <button (click)="deletePayment()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
+          </div>
+        </div> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="row px-4">
+  <div class="col-md-12">
+    <ngx-datatable #xxx #myTable class="bootstrap hover no-striped flex" [rows]="paymentViews"
+      [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+      [headerHeight]="60" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="5" [selected]="selected"
+      [selectionType]="SelectionType.checkbox" (select)='onSelect($event)' (activate)="onActivate($event)" 
+      [selectAllRowsOnPage]="false">
+
+      <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+        [resizeable]="false">
+        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+          let-selectFn="selectFn">
+          <div class="custom-control custom-checkbox m-0">
+            <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+              (change)="selectFn(!allRowsSelected)" />
+            <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+          </div>
+
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+          let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+          <div class="custom-control custom-checkbox m-0">
+            <input type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
+              (change)="onCheckboxChangeFn($event)" />
+            <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
+          </div>
+
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Date" [sortable]="false" prop="payDate">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{row.payDate | date: 'dd/MM/yyyy'}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Type" [sortable]="false" prop="payType">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Notes" [sortable]="false" prop="note">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="receiptNumber" [sortable]="false" prop="receiptNumber">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Amount" [sortable]="false" [headerClass]="'col-right'" prop="amount">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div class="col-right">
+            {{row.amount | currency:'VND':''}}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+              [resizeable]="false" name="" [cellClass]="'col-action'" [headerClass]="'col-action'">
+
+              <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
+                <div class="icon-actions">
+                  <div class="actions">
+                    <a (click)="delete(row)"  class="icon-action">
+                      <span class="icon-delete"></span>
+                    </a>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>

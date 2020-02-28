@@ -1,0 +1,54 @@
+// Login Page
+@import '../../@theme/styles/themes';
+
+@include nb-install-component() {
+  ::ng-deep router-outlet + * {
+    display: block;
+    animation: fade 1s;
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+  }
+}
+#login {
+  background-image: url('../../../assets/img/gallery/light-bg.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+
+  .login-img {
+    padding: 0;
+    background: #f0f0f0;
+  }
+
+  .login-btn {
+    .btn.btn-outline-primary {
+      &:hover {
+        a {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .recover-pass {
+    button.btn.btn-primary {
+      color: #fff !important;
+    }
+  }
+
+  .forgot-password-option,
+  .remember-me {
+
+    a.text-decoration-none,
+    .custom-control-label {
+      font-size: 14px;
+    }
+  }
+}

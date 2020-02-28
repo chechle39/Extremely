@@ -1,0 +1,229 @@
+/*
+bootstrap table theme
+*/
+
+.ngx-datatable.bootstrap {
+  box-shadow: none;
+  font-size: 1rem;
+
+  .datatable-header {
+    // height: unset !important;
+
+    .datatable-header-cell {
+      vertical-align: bottom;
+      padding: 0.75rem;
+      border-bottom: 1px solid #d1d4d7;    
+      .datatable-header-cell-label {
+        line-height: 24px;
+      }
+    }
+  }
+
+  .datatable-body {
+    .datatable-body-row {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      vertical-align: top;
+      border-top: 1px solid #d1d4d7;
+
+      &.datatable-row-even {
+        background-color: #fff; // #e7f3fc;
+      }
+
+      &.active {
+        background-color: #e7f3fc;
+        // color: #fff;
+      }
+
+      .datatable-body-cell {
+        text-align: left;
+        vertical-align: top;
+      }
+    }
+  }
+
+  .sort-active .datatable-header-cell-template-wrap {
+    font-weight: bold;
+  }
+
+  .datatable-footer {
+    // background: #424242;
+    color: #000;
+    margin-top: -1px;
+
+    .page-count {
+      line-height: 50px;
+      height: 50px;
+      padding: 0 1.2rem;
+    }
+
+    .datatable-pager {
+      margin: 0 10px;
+      vertical-align: top;
+
+      ul {
+        li {
+          margin: 10px 0px;
+
+          &:not(.disabled) {
+
+            &.active,
+            &:hover {
+              a {
+                background-color: #0d83dd;
+                font-weight: normal;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+
+      a {
+        height: 22px;
+        min-width: 24px;
+        line-height: 22px;
+        padding: 0;
+        border-radius: 3px;
+        margin: 0 3px;
+        text-align: center;
+        vertical-align: top;
+        text-decoration: none;
+        vertical-align: bottom;
+        color: #0d83dd;
+        border: 1px solid #dee2e6;
+      }
+
+      .datatable-icon-left,
+      .datatable-icon-skip,
+      .datatable-icon-right,
+      .datatable-icon-prev {
+        font-size: 18px;
+        line-height: 27px;
+        padding: 0 3px;
+      }
+    }
+  }
+}
+
+[dir="rtl"] {
+
+  .ngx-datatable .datatable-header .datatable-header-cell {
+    text-align: right;
+  }
+
+  .ngx-datatable .datatable-body .datatable-body-row .datatable-body-cell {
+    text-align: right;
+  }
+
+  .ngx-datatable .empty-row {
+    text-align: right;
+  }
+
+  .ngx-datatable .loading-row {
+    text-align: right;
+  }
+
+  .ngx-datatable .datatable-footer .datatable-pager {
+    text-align: left;
+  }
+
+  .ngx-datatable.scroll-horz .datatable-body {
+    padding-right: 20px;
+  }
+}
+
+.col-more-info {
+  color: #808080;
+  line-height: normal;
+  margin-bottom: 3px;
+
+  &>span {
+    display: inline-block;
+    padding: 0 7px;
+    border-left: 1px solid #808080;
+
+    &:first-child {
+      border-left: none;
+      padding-left: 0;
+    }
+  }
+}
+
+.col-right {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.col-center {
+  text-align: center;
+}
+
+
+ngx-datatable.bootstrap .datatable-body .progress-linear {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 5px;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+}
+
+.ngx-datatable.bootstrap .datatable-body .progress-linear .container {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 5px;
+  -webkit-transform: translate(0, 0) scale(1, 1);
+  transform: translate(0, 0) scale(1, 1);
+  background-color: #aad1f9;
+  max-width: 100%;
+}
+
+.ngx-datatable.bootstrap .datatable-body .progress-linear .container .bar {
+  transition: all .2s linear;
+  -webkit-animation: query 0.8s infinite cubic-bezier(0.39, 0.575, 0.565, 1);
+  animation: query 0.8s infinite cubic-bezier(0.39, 0.575, 0.565, 1);
+  transition: -webkit-transform .2s linear;
+  transition: transform .2s linear;
+  background-color: #106cc8;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5px;
+}
+
+/**
+ * Progress bar animations
+ */
+@keyframes query {
+  0% {
+    opacity: 1;
+    transform: translateX(35%) scale(0.3, 1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0, 1);
+  }
+}
+
+.ngx-datatable .datatable-header {
+  border-bottom: 1px solid #ccc;
+}
+
+.datatable-body-row .icon-actions {
+  display: none;
+}
+
+.datatable-body-row:hover,
+.datatable-body-row:hover .icon-actions {
+  background-color: #e7f3fc !important;
+  display: inline-block;
+}

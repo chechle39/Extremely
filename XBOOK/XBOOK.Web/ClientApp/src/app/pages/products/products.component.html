@@ -1,0 +1,147 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <div class="col-5 col-lg-4">
+        <span class="card__title pt-1">{{ 'PRODUCT.LIST.HEADER' | translate }}</span>
+      </div>
+      <div class="col-3 col-lg-4">
+        <div ngbDropdown>
+          <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="bulkActions">
+            <button class="dropdown-item"><span class="icon-import"></span>
+              {{ 'COMMON.MOREACTION.IMPORT' | translate }} </button>
+            <button class="dropdown-item"><span class="icon-export"></span>
+              {{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 col-lg-4">
+        <span ngbDropdown class="float-right">
+          <button class="btn btn-raised mr-1 btn-success" id="dropdownBasic2"
+            ngbDropdownToggle>{{ 'COMMON.MOREACTION.ADDNEW' | translate }}</button>
+          <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBasic2">
+            <a class="dropdown-item py-1" (click)="createProduct(ProductCategory.product)">
+              <span class="icon-hanghoa"></span>
+              <span class="text-muted text-bold-600">{{ 'PRODUCT.LIST.PRODUCT' | translate }}</span>
+              <p [innerHtml]=" 'PRODUCT.LIST.PRODUCT.ADDNEW.DESC' | translate "
+                class="ml-3 text-muted font-small-3 line-height-2">
+              </p>
+            </a>
+            <div class="dropdown-divider mx-0"></div>
+            <a class="dropdown-item py-1" (click)="createProduct(ProductCategory.service)">
+              <span class="icon-service"></span>
+              <span class="text-muted text-bold-600">{{ 'PRODUCT.LIST.SERVICE' | translate }}</span>
+              <p class="ml-3 text-muted font-small-3 line-height-2"
+                [innerHtml]=" 'PRODUCT.LIST.SERVICE.ADDNEW.DESC' | translate ">
+              </p>
+            </a>
+          </div>
+        </span>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    
+    <div class="row margin-top-0">
+      <div class="col-lg-4 col-md-4 col-6 pt-1">
+        <div class="label-blue">{{ 'PRODUCT.LIST.HEADER' | translate }}</div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-6 text-right text-md-left">
+        <div ngbDropdown>
+          <button class="btn btn-flat mr-1 card__button-bulk-action" id="bulkActions"
+            ngbDropdownToggle>{{ 'COMMON.ACTION' | translate }}</button>
+          <div ngbDropdownMenu aria-labelledby="bulkActions">
+            <button (click)="edit()" class="dropdown-item"><span class="icon-edit"></span>
+              {{ 'COMMON.ACTION.EDIT' | translate }}</button>
+            <button (click)="delete()" class="dropdown-item"><span class="icon-delete"></span>
+              {{ 'COMMON.ACTION.DELETE' | translate }}</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 col-md-4 col-12 float-right">
+        <div class="navbar-left">
+          <form class="form">
+            <div class="position-relative has-icon-left">
+              <input type="text" [(ngModel)]="keywords" name="keywords" autocomplete="off" (keyup)="refresh()"
+                class="form-control round" placeholder="{{'COMMON.ACTION.SEARCH' | translate}}">
+              <div class="form-control-position">
+                <i class="ft-search" (click)="refresh()"></i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="productViews"
+          [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+          [headerHeight]="60" [footerHeight]="50" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
+          [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
+          (select)='onSelect($event)' [selectAllRowsOnPage]="false">
+
+          <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+              let-selectFn="selectFn">
+              <div class="custom-control custom-checkbox m-0">
+                <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                  (change)="selectFn(!allRowsSelected)" />
+                <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+              </div>
+
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+              let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+              <div class="custom-control custom-checkbox m-0">
+                <input type="checkbox" class="custom-control-input" id="{{row.productID}}" [checked]="isSelected"
+                  (change)="onCheckboxChangeFn($event)" />
+                <label class="custom-control-label col-form-label" for="{{row.productID}}"></label>
+              </div>
+
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.ITEMNAME' | translate}}" prop="productName">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <span *ngIf="row.unit !== null">{{row.productName}} ({{row.unit}})</span>
+              <span *ngIf="row.unit === null">{{row.productName}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate}}" prop="description">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+             <span>{{row.description}}</span> 
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.UNITPRICE' | translate}}" prop="unitPrice"
+            [cellClass]="'col-right'" [headerClass]="'col-right'">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="col-right">
+                {{row.unitPrice | currency:'VND':''}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+              let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+              <div class="page-count pl-2">
+                <span [translate]="'COMMON.GRID.TOTALROW'" [translateParams]="{rowCount: rowCount}"> </span>
+              </div>
+              <!-- |
+              'Page Size':
+              <select [ngModel]="page.size" (ngModelChange)="onPageSizeChange($event)" class="page-size-combo">
+                <option *ngFor="let size of sizeList" [value]="size"> {{size}}</option>
+              </select> -->
+              <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage" [size]="pageSize"
+                [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+              </datatable-pager>
+            </ng-template>
+          </ngx-datatable-footer>
+        </ngx-datatable>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
