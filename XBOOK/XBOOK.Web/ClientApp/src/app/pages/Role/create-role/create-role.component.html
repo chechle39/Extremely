@@ -1,0 +1,41 @@
+<form class="form" name="form" novalidate autocomplete="off" (ngSubmit)="saveRole(roleForm)" [formGroup]="roleForm">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <label for="name">{{'ROLE.CREATE.ROLENAME.LABEL'| translate}}</label>
+        <input required class="form-control" formControlName="name" placeholder="{{'ROLE.CREATE.ROLENAME.LABEL' | translate }}">
+        <small class="form-text text-muted danger"
+          *ngIf="!roleForm.get('name').valid && (roleForm.get('name').dirty || roleForm.get('name').touched)">Please
+          enter fullname</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12 mb-2">
+        <label for="description">{{'PRODUCT.LIST.GRID.HEADER.DESCRIPTION'| translate }}</label>
+        <textarea required class="form-control" formControlName="description" placeholder="{{'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate }}"></textarea>
+        <small class="form-text text-muted danger"
+          *ngIf="!roleForm.get('description').valid && (roleForm.get('description').dirty || roleForm.get('description').touched)">Please
+          enter email</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group row col-12 mb-2 m-0">
+        <div  *ngFor="let skill of skills.controls; let i=index">
+            <nb-checkbox [formControl]="skill"><label for="name">{{claims.skills[i].name}}</label></nb-checkbox>
+        </div>
+
+    </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
+      <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate }}
+    </button>
+    <button [disabled]="roleForm.invalid" type="submit" class="btn btn-raised btn-success">
+      <i class="ft-save"></i> {{'COMMON.BUTTON.SAVE' | translate }}
+    </button>
+  </div>
+</form>

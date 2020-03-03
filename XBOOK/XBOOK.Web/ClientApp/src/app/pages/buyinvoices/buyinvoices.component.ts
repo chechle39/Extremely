@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 @Component({
-  selector: 'ngx-buyinvoices',
+  selector: 'xb-buyinvoices',
   templateUrl: './buyInvoices.component.html',
 })
 

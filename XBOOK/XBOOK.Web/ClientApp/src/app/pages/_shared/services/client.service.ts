@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ClientSearchModel } from '../models/client/client-search.model';
 import { ClientView, ClientViewModel } from '../models/client/client-view.model';
 import { Observable } from 'rxjs';
+import { saveAs } from 'file-saver';
 import { BaseService } from '../../../shared/service/base.service';
 import { API_URI } from '../../../../environments/app.config';
 @Injectable()
@@ -10,7 +11,7 @@ export class ClientService extends BaseService {
 
   getClient(id: any): Observable<ClientView> {
     return this.post<ClientView>(
-      `${API_URI.clientById}/${id}`, id
+      `${API_URI.clientById}/${id}`, id,
     );
   }
   GetFieldName(files: any): Observable<any> {
@@ -31,10 +32,17 @@ export class ClientService extends BaseService {
 
   getClientData(request): Observable<ClientViewModel> {
     return this.post<ClientViewModel>(
-      `${API_URI.getClientDap}`, request
+      `${API_URI.getClientDap}`, request,
     );
   }
 
+
+  ExportClient(request: any) {
+    const data = this.postcsv<any[]>(`${API_URI.ExportClient}`, request).subscribe(rs => {
+      this.downLoadFile(rs, 'text/csv');
+    });
+    return data;
+  }
   searchClient(term: any) {
     const clients = this.post<ClientSearchModel[]>(`${API_URI.clientAll}`, term)
       .pipe(
@@ -44,11 +52,16 @@ export class ClientService extends BaseService {
             return (
               data.length !== 0 ? data as ClientSearchModel[] : new Array<ClientSearchModel>()
             );
-          }
+          },
         ));
 
     return clients;
   }
 
-
+  downLoadFile(data: any, type: string) {
+    // tslint:disable-next-line:object-literal-shorthand
+    const blob = new Blob([data], { type: type });
+    const url = window.URL.createObjectURL(blob);
+    saveAs(blob, 'Client.csv');
+  }
 }

@@ -13,9 +13,10 @@ class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-masterparam',
   templateUrl: './masterparam.component.html',
-  styleUrls: ['./masterparam.component.scss']
+  styleUrls: ['./masterparam.component.scss'],
 
 })
 export class MasterParamComponent extends PagedListingComponentBase<ClientView> {
@@ -40,14 +41,14 @@ export class MasterParamComponent extends PagedListingComponentBase<ClientView> 
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
 
     request.clientKeyword = this.keyword;
     this.loadingIndicator = true;
     const clientKey = {
       clientKeyword: this.clientKeyword.toLocaleLowerCase(),
-      isGrid: true
+      isGrid: true,
     };
     this.companyProfileService
       .getInfoProfile()
@@ -55,7 +56,7 @@ export class MasterParamComponent extends PagedListingComponentBase<ClientView> 
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -76,7 +77,7 @@ export class MasterParamComponent extends PagedListingComponentBase<ClientView> 
     if (id === undefined || id <= 0) {
       createOrEditClientDialog = this.modalService.open(CreateMasterParamComponent, AppConsts.modalOptionsCustomSize);
     } else {
-   //   createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
+   //  createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
       createOrEditClientDialog.componentInstance.id = id;
     }
     createOrEditClientDialog.result.then(result => {

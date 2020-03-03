@@ -32,7 +32,12 @@ namespace XBOOK.Service.Service
             await _masterparamUowRepository.Add(masterparamCreate);
         }
 
-   
+        public async Task UpdateMaster(List<MasterParamViewModel> request)
+        {
+            var masterparamCreate = Mapper.Map<List<MasterParamViewModel>, List<MasterParam>>(request);
+            await _masterparamUowRepository.Update(masterparamCreate);
+
+        }
 
         public async Task<IEnumerable<MasterParamViewModel>> GetAllMaster()
         {
@@ -54,5 +59,7 @@ namespace XBOOK.Service.Service
             _uow.SaveChanges();
             return deleteTax;
         }
+
+       
     }
 }

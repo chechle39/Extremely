@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
@@ -63,6 +65,24 @@ namespace XBOOK.Web.Controllers
         {
             var saveData = await _paymentReceiptService.CreatePaymentReceiptPaymentAsync(request);
             return Ok(saveData);
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult SaveFileJson(List<PaymentReceiptPaymentPrint> request)
+        {
+            string json = JsonConvert.SerializeObject(request);
+            var folderName = Path.Combine("Reports", "Data");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var fileName = "PaymentReceipt.json";
+
+            var fullPath = Path.Combine(pathToSave, fileName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+            System.IO.File.WriteAllText(fullPath, json);
+
+            return Ok();
         }
     }
 }

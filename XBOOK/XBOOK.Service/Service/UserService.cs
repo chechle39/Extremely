@@ -1,4 +1,5 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -31,7 +33,11 @@ namespace XBOOK.Service.Service
                 Email = userVm.Email,
                 FullName = userVm.FullName,
                 DateCreated = DateTime.Now,
-                PhoneNumber = userVm.PhoneNumber
+                PhoneNumber = userVm.PhoneNumber,
+                BirthDay = userVm.BirthDay,
+                Gender = userVm.Gender,
+                Status = userVm.Status,
+                Address = userVm.Address
             };
 
             var result = await _userManager.CreateAsync(user, userVm.Password);
@@ -51,17 +57,28 @@ namespace XBOOK.Service.Service
            return  await _userRepository.checkUserAcount();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(List<Deleted> rq)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            await _userManager.DeleteAsync(user);
+            foreach (var item in rq)
+            {
+                var user = await _userManager.FindByIdAsync(item.id.ToString());
+                await _userManager.DeleteAsync(user);
+            }
+           
         }
 
-        public async Task<List<ApplicationUserViewModel>> GetAllAsync()
+        public async Task<List<ApplicationUserViewModel>> GetAllAsync(UserRequest rq)
         {
-
-           var data = await _userManager.Users.ProjectTo<ApplicationUserViewModel>().ToListAsync();
-           return  data;
+            if(rq.KeyWord == "")
+            {
+                var data = await _userManager.Users.ProjectTo<ApplicationUserViewModel>().ToListAsync();
+                return data;
+            } else
+            {
+                var data = await _userManager.Users.ProjectTo<ApplicationUserViewModel>().Where(x=>x.FullName.Contains(rq.KeyWord) || x.UserName.Contains(rq.KeyWord) || x.Address.Contains(rq.KeyWord)).ToListAsync();
+                return data;
+            }
+       
             
         }
 
@@ -80,9 +97,22 @@ namespace XBOOK.Service.Service
                 user.FullName = userVm.FullName;
                 user.Status = userVm.Status;
                 user.Email = userVm.Email;
+                user.UserName = userVm.Email;
                 user.PhoneNumber = userVm.PhoneNumber;
+                user.Gender = userVm.Gender;
+                user.BirthDay = userVm.BirthDay;
+                user.Address = userVm.Address;
                 await _userManager.UpdateAsync(user);
             }
+        }
+
+        public async Task<ApplicationUserViewModel> GetById(int id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            var roles = await _userManager.GetRolesAsync(user);
+            var userVm = Mapper.Map<AppUser, ApplicationUserViewModel>(user);
+            userVm.Roles = roles.ToList();
+            return userVm;
         }
     }
 }

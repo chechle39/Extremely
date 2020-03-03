@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export abstract class BaseService {
   protected baseUrl: string;
@@ -30,7 +30,7 @@ export abstract class BaseService {
     // tslint:disable-next-line:ban-types
     const requestOptions: Object = {
       /* other options here */
-      responseType: 'text'
+      responseType: 'text',
     };
     return this.http.post<T>(this.processUrl(url), data, requestOptions);
   }
@@ -39,7 +39,7 @@ export abstract class BaseService {
     // tslint:disable-next-line:ban-types
     const requestOptions: Object = {
       /* other options here */
-      responseType: 'img/png'
+      responseType: 'img/png',
     };
     return this.http.post<T>(this.processUrl(url), data, requestOptions);
   }
@@ -75,7 +75,7 @@ export abstract class BaseService {
     // tslint:disable-next-line:ban-types
     const requestOptions: Object = {
       /* other options here */
-      responseType: 'blob'
+      responseType: 'blob',
     };
     return this.http.post<T>(this.processUrl(url), data, requestOptions);
   }

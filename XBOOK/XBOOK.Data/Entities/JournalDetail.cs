@@ -6,6 +6,18 @@ namespace XBOOK.Data.Entities
 
     public partial class JournalDetail
     {
+        public JournalDetail() { }
+        public JournalDetail(long journalID, string note, string accNumber, decimal credit, string crspAccNumber, decimal debit, long id)
+        {
+            JournalID = journalID;
+            this.note = note;
+            this.accNumber = accNumber;
+            this.credit = credit;
+            this.crspAccNumber = crspAccNumber;
+            this.debit = debit;
+            ID = id;
+        }
+
         [Key]
         public long ID { get; set; }
         public long JournalID { get; set; }

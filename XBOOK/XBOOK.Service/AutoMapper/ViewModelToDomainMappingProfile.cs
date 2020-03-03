@@ -76,10 +76,10 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<PaymentReceiptViewModel, PaymentReceipt>().ConstructUsing(x => new PaymentReceipt(x.Amount, x.BankAccount, x.SupplierID, x.SupplierName, x.EntryType, x.ID, x.Note, x.PayDate, x.PayType, x.PayTypeID, x.ReceiptNumber, x.ReceiverName));
            CreateMap<ApplicationUserViewModel, AppUser>()
                         .ConstructUsing(c => new AppUser(c.Id, c.FullName, c.UserName,
-                        c.Email, c.PhoneNumber, c.Avatar, c.Status));
+                        c.Email, c.PhoneNumber, c.Avatar, c.Status, c.Gender, c.BirthDay, c.Address));
+            CreateMap<JournalEntryViewModel, JournalEntry>().ConstructUsing(x => new JournalEntry(x.DateCreate,x.Description,x.EntryName,x.ID,x.ObjectID,x.ObjectName,x.ObjectType));
+            CreateMap<JournalEntryDetailModelCreate, JournalDetail>().ConstructUsing(x => new JournalDetail(x.JournalID, x.note, x.accNumber, x.credit, x.crspAccNumber, x.debit, x.Id));
 
-            CreateMap<JournalEntryViewModel, JournalEntry>().ConstructUsing(x => new JournalEntry(x.DateCreate, x.Description, x.EntryName, x.ID,
-              x.ObjectID, x.ObjectName, x.ObjectType));
         }
     }
 }

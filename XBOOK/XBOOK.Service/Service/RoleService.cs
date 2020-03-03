@@ -1,10 +1,13 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using XBOOK.Data.Identity;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -34,9 +37,34 @@ namespace XBOOK.Service.Service
             return result.Succeeded;
         }
 
-        public async Task<List<ApplicationRoleViewModel>> GetAllAsync()
+        public async Task DeleteAsync(List<Deleted> rq)
         {
-            return await _roleManager.Roles.ProjectTo<ApplicationRoleViewModel>().ToListAsync();
+            foreach (var item in rq)
+            {
+                var user = await _roleManager.FindByIdAsync(item.id.ToString());
+                await _roleManager.DeleteAsync(user);
+            }
+        }
+
+        public async Task<List<ApplicationRoleViewModel>> GetAllAsync(UserRequest rq)
+        {
+            if(rq.KeyWord == "")
+            {
+                return await _roleManager.Roles.ProjectTo<ApplicationRoleViewModel>().ToListAsync();
+            }else
+            {
+                return await _roleManager.Roles.ProjectTo<ApplicationRoleViewModel>().Where(x=>x.Name.Contains(rq.KeyWord)).ToListAsync();
+            }
+            
+        }
+
+        public async Task<ApplicationRoleViewModel> GetById(long id)
+        {
+            var role = await _roleManager.FindByIdAsync(id.ToString());
+            var roleClaims = await _roleManager.GetClaimsAsync(role);
+            var roleVM = Mapper.Map<AppRole, ApplicationRoleViewModel>(role);
+            roleVM.RoleClaims = roleClaims.ToList();
+            return roleVM;
         }
 
         public async Task UpdateAsync(ApplicationRoleViewModel roleVm)

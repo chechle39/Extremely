@@ -10,10 +10,8 @@ using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
-using XBOOK.Data.Policies;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {

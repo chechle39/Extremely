@@ -12,6 +12,6 @@ export class JournalEntriesComponent implements OnInit {
   ngOnInit() {
   }
   redirectToCreateNewInvoice() {
-    this.router.navigate([`/journalentries/new`]);
+    this.router.navigate([`/pages/journalentries/new`]);
   }
 }

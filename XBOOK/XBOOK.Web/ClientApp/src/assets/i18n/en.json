@@ -1,5 +1,6 @@
 {
   "COMMON.BUTTON.CANCEL": "Cancel",
+  "COMMON.BUTTON.APPLY": "Apply",
   "COMMON.BUTTON.SAVE": "Save",
   "COMMON.BULK": "Bulk Actions",
   "COMMON.MOREACTION": "More Actions",
@@ -158,6 +159,19 @@
   "Debit.Age.LIST.CompanyName": "Company Name",
   "Debit.Age.LIST.Total": "Total",
   "Debit.Age.LIST.Day": "Day",
-  "USER.CREATE.FULLNAME.LABEL": "FullName"
+  "USER.CREATE.FULLNAME.LABEL": "FullName",
+  "ROLE.CREATE.ROLENAME.LABEL": "Role name",
+  "SEARCH.TITLE":"Search",
+  "SEARCH.AmountofTime":"Amount of Time",
+  "SEARCH.AccountNumber":"Account Number",
+  "SEARCH.AccountNumbercrsp":"crspAccount Number",
+  "SEARCH.Currency":"Currency",
+  "SEARCH.ProductService":"Product/Service",
+  "SEARCH.Customer":"Product/Service",
+  "SEARCH.Supplier":"Supplier",
+
+  "ROLE.LIST.HEADER.LABEL": "Role",
+  "ROLE.LIST.GRID.HEADER.ROLENAME": "Role name",
+  "ROLE.LIST.GRID.HEADER.ROLEID": "Role ID"
 }
 

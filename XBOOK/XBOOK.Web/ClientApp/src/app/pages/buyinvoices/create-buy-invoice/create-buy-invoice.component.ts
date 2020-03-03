@@ -41,7 +41,7 @@ import { AppConsts } from '../../../coreapp/app.consts';
 import { AddPayment2Component } from './payment/add-payment/add-payment.component';
 
 @Component({
-  selector: 'ngx-create-buy-invoice',
+  selector: 'xb-create-buy-invoice',
   templateUrl: './create-buy-invoice.component.html',
   styleUrls: ['./create-buy-invoice.component.scss'],
 })
@@ -73,8 +73,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   dateOfIssue: any;
   dueDate: any;
   isMouseEnter = false;
-  invoiceForm: FormGroup;
-  invoiceFormValueChanges$;
+  buyInvoiceForm: FormGroup;
+  buyInvoiceFormValueChanges$;
   companyName: string;
   companyAddress: string;
   companyCode: string;
@@ -147,18 +147,13 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   ngOnInit() {
     this.isRead = false;
     this.getProfiles();
-    const request = {
-      productKeyword: '',
-      isGrid: false,
-    };
-
     this.buyInvoiceService.getLastBuyInvoice().subscribe(response => {
       this.listInvoice = response;
       this.createForm();
-      if (this.invoiceForm !== undefined) {
-        this.invoiceFormValueChanges$ = this.invoiceForm.controls.items.valueChanges;
+      if (this.buyInvoiceForm !== undefined) {
+        this.buyInvoiceFormValueChanges$ = this.buyInvoiceForm.controls.items.valueChanges;
         // subscribe to the stream so listen to changes on units
-        this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
+        this.buyInvoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
         this.methodEdit_View();
       }
     });
@@ -190,8 +185,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           this.getDataForEditMode();
           this.getPayments(this.invoiceId);
           if (this.viewMode) {
-            this.invoiceForm.disable();
-            this.invoiceForm.controls.items.disable();
+            this.buyInvoiceForm.disable();
+            this.buyInvoiceForm.controls.items.disable();
           }
         }
       });
@@ -231,13 +226,13 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       month: Number(issueDateSplit[1]),
       day: Number(issueDateSplit[0]),
     };
-    this.invoiceForm = this.fb.group({
+    this.buyInvoiceForm = this.fb.group({
       invoiceNumber: this.listInvoice === undefined
-      ? ['', [Validators.required]]
-      : [this.listInvoice.invoiceNumber, [Validators.required]],
+        ? ['', [Validators.required]]
+        : [this.listInvoice.invoiceNumber, [Validators.required]],
       invoiceSerial: this.listInvoice === undefined
-      ? ['', [Validators.required]]
-      : [this.listInvoice.invoiceSerial],
+        ? ['', [Validators.required]]
+        : [this.listInvoice.invoiceSerial],
       contactName: ['', [Validators.required]],
       supplierName: ['', [Validators.required]],
       supplierID: [0],
@@ -268,7 +263,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     return formArray;
   }
   getFormArray() {
-    const formArr = this.invoiceForm.controls.items as FormArray;
+    const formArr = this.buyInvoiceForm.controls.items as FormArray;
     return formArr;
   }
   addNewItem() {
@@ -360,14 +355,15 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     this.supplierSelected = item.item as SupplierSearchModel;
     this.isEditClient = false;
     if (this.supplierSelected.supplierID > 0) {
-      this.invoiceForm.controls.supplierName.disable();
-      this.invoiceForm.controls.email.disable();
-      this.invoiceForm.controls.address.disable();
-      this.invoiceForm.controls.taxCode.disable();
+      this.buyInvoiceForm.controls.supplierName.disable();
+      this.buyInvoiceForm.controls.contactName.disable();
+      this.buyInvoiceForm.controls.email.disable();
+      this.buyInvoiceForm.controls.address.disable();
+      this.buyInvoiceForm.controls.taxCode.disable();
     } else {
-      this.invoiceForm.controls.email.reset();
-      this.invoiceForm.controls.address.reset();
-      this.invoiceForm.controls.taxCode.reset();
+      this.buyInvoiceForm.controls.email.reset();
+      this.buyInvoiceForm.controls.address.reset();
+      this.buyInvoiceForm.controls.taxCode.reset();
     }
   }
 
@@ -444,12 +440,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       }
 
       this.getFormArray().controls.splice(0);
-      const detailInvoiceFormArray = this.getFormArray();
+      const detailbuyInvoiceFormArray = this.getFormArray();
       // tslint:disable-next-line:prefer-for-of
       for (let item = 0; item < invoice[0].buyInvDetailView.length; item++) {
-        detailInvoiceFormArray.push(this.getItem());
+        detailbuyInvoiceFormArray.push(this.getItem());
       }
-      this.invoiceForm.patchValue({
+      this.buyInvoiceForm.patchValue({
         invoiceId: invoice[0].invoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
         invoiceNumber: invoice[0].invoiceNumber,
@@ -480,7 +476,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           month: Number(issueDateSplit[1]),
           day: Number(issueDateSplit[0]),
         };
-        this.invoiceForm.controls.issueDate.patchValue(issueDatePicker);
+        this.buyInvoiceForm.controls.issueDate.patchValue(issueDatePicker);
       }
       if (invoice[0].dueDate) {
         const dueDate = moment(invoice[0].dueDate).format(AppConsts.defaultDateFormat);
@@ -490,10 +486,10 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           month: Number(dueDateSplit[1]),
           day: Number(dueDateSplit[0]),
         };
-        this.invoiceForm.controls.dueDate.patchValue(dueDatePicker);
+        this.buyInvoiceForm.controls.dueDate.patchValue(dueDatePicker);
       }
       // this.getAllTax();
-      detailInvoiceFormArray.controls.forEach((control, i) => {
+      detailbuyInvoiceFormArray.controls.forEach((control, i) => {
         const productID = control.get('productID').value;
         if (invoice[0].buyInvDetailView[i].productID === productID) {
           const vatTax = control.get('vat').value;
@@ -505,30 +501,30 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         }
       });
     });
-      this.invoiceForm.controls.supplierName.disable();
-      this.invoiceForm.controls.email.disable();
-      this.invoiceForm.controls.address.disable();
-      this.invoiceForm.controls.taxCode.disable();
-      this.invoiceForm.controls.contactName.disable();
-      this.isRead = true;
+    this.buyInvoiceForm.controls.supplierName.disable();
+    this.buyInvoiceForm.controls.contactName.disable();
+    this.buyInvoiceForm.controls.email.disable();
+    this.buyInvoiceForm.controls.address.disable();
+    this.buyInvoiceForm.controls.taxCode.disable();
+    this.isRead = true;
   }
 
   cancel() {
     if (this.invoiceId > 0) {
       this.getBuyInvoiceById(this.invoiceId);
     }
-    this.invoiceForm.controls.contactName.disable();
-    this.invoiceForm.controls.supplierName.disable();
-    this.invoiceForm.controls.email.disable();
-    this.invoiceForm.controls.address.disable();
-    this.invoiceForm.controls.taxCode.disable();
+    this.buyInvoiceForm.controls.contactName.disable();
+    this.buyInvoiceForm.controls.supplierName.disable();
+    this.buyInvoiceForm.controls.email.disable();
+    this.buyInvoiceForm.controls.address.disable();
+    this.buyInvoiceForm.controls.taxCode.disable();
     // Resets to blank object
     if (this.editMode) {
-      this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+      this.router.navigate([`/pages/buyinvoice/${this.buyInvoiceForm.value.invoiceId}/${ActionType.View}`]);
       this.viewMode = true;
       this.isRead = true;
     } else {
-      this.invoiceForm.reset();
+      this.buyInvoiceForm.reset();
       this.router.navigate([`/pages/buyinvoice`]);
     }
 
@@ -537,56 +533,56 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   save() {
 
 
-    if (this.invoiceForm.controls.invoiceSerial.invalid === true
-      || this.invoiceForm.controls.invoiceNumber.invalid === true
-      || this.invoiceForm.controls.issueDate.invalid === true
-      || this.invoiceForm.controls.supplierName.invalid === true
-      || this.invoiceForm.controls.contactName.invalid === true
-      || this.invoiceForm.controls.dueDate.invalid === true || this.isCheckDate === true) {
+    if (this.buyInvoiceForm.controls.invoiceSerial.invalid === true
+      || this.buyInvoiceForm.controls.invoiceNumber.invalid === true
+      || this.buyInvoiceForm.controls.issueDate.invalid === true
+      || this.buyInvoiceForm.controls.supplierName.invalid === true
+      || this.buyInvoiceForm.controls.contactName.invalid === true
+      || this.buyInvoiceForm.controls.dueDate.invalid === true || this.isCheckDate === true) {
       this.message.warning('Form invalid');
       return;
     }
     this.viewMode = true;
-    if (!this.invoiceForm.valid && this.invoiceId === 0) {
-      const a = this.oldsupplierID === this.invoiceForm.value.supplierID;
+    if (!this.buyInvoiceForm.valid && this.invoiceId === 0) {
+      const a = this.oldsupplierID === this.buyInvoiceForm.value.supplierID;
       const request = {
         invoiceId: 0,
-        invoiceSerial: this.invoiceForm.value.invoiceSerial,
-        invoiceNumber: this.invoiceForm.value.invoiceNumber,
-        issueDate: [this.invoiceForm.value.issueDate.year,
-        this.invoiceForm.value.issueDate.month,
-        this.invoiceForm.value.issueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.issueDate.year,
-        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
-        dueDate: [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month,
-        this.invoiceForm.value.dueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
-        reference: this.invoiceForm.value.reference,
+        invoiceSerial: this.buyInvoiceForm.value.invoiceSerial,
+        invoiceNumber: this.buyInvoiceForm.value.invoiceNumber,
+        issueDate: [this.buyInvoiceForm.value.issueDate.year,
+        this.buyInvoiceForm.value.issueDate.month,
+        this.buyInvoiceForm.value.issueDate.day].join('-') === '--' ? '' : [this.buyInvoiceForm.value.issueDate.year,
+        this.buyInvoiceForm.value.issueDate.month, this.buyInvoiceForm.value.issueDate.day].join('-'),
+        dueDate: [this.buyInvoiceForm.value.dueDate.year,
+        this.buyInvoiceForm.value.dueDate.month,
+        this.buyInvoiceForm.value.dueDate.day].join('-') === '--' ? '' : [this.buyInvoiceForm.value.dueDate.year,
+        this.buyInvoiceForm.value.dueDate.month, this.buyInvoiceForm.value.dueDate.day].join('-'),
+        reference: this.buyInvoiceForm.value.reference,
         subTotal: this.subTotalAmount,
-        discRate: this.invoiceForm.controls.totalDiscount.value,
+        discRate: this.buyInvoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
         amountPaid: this.amountPaidData,
-        note: this.invoiceForm.value.notes,
-        term: this.invoiceForm.value.termCondition,
+        note: this.buyInvoiceForm.value.notes,
+        term: this.buyInvoiceForm.value.termCondition,
         status: '',
-        supplierID: this.invoiceForm.value.contactName.supplierID !== undefined
-        ? this.invoiceForm.value.contactName.supplierID : 0,
-        supplierName: this.invoiceForm.value.supplierName === undefined ?
-          this.invoiceForm.value.contactName.supplierName : this.invoiceForm.value.supplierName,
-        address: this.invoiceForm.value.address === undefined
-        ? this.invoiceForm.value.contactName.address
-        : this.invoiceForm.value.address,
-        taxCode: this.invoiceForm.value.taxCode === undefined
-        ? this.invoiceForm.value.contactName.taxCode
-        : this.invoiceForm.value.taxCode,
+        supplierID: this.buyInvoiceForm.value.contactName.supplierID !== undefined
+          ? this.buyInvoiceForm.value.contactName.supplierID : 0,
+        supplierName: this.buyInvoiceForm.value.supplierName === undefined ?
+          this.buyInvoiceForm.value.contactName.supplierName : this.buyInvoiceForm.value.supplierName,
+        address: this.buyInvoiceForm.value.address === undefined
+          ? this.buyInvoiceForm.value.contactName.address
+          : this.buyInvoiceForm.value.address,
+        taxCode: this.buyInvoiceForm.value.taxCode === undefined
+          ? this.buyInvoiceForm.value.contactName.taxCode
+          : this.buyInvoiceForm.value.taxCode,
         tag: '',
         contactName:
-          this.invoiceForm.value.contactName.contactName !== undefined ?
-            this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
-        email: this.invoiceForm.value.email === undefined
-        ? this.invoiceForm.value.contactName.email
-        : this.invoiceForm.value.email,
+          this.buyInvoiceForm.value.contactName.contactName !== undefined ?
+            this.buyInvoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
+        email: this.buyInvoiceForm.value.email === undefined
+          ? this.buyInvoiceForm.value.contactName.email
+          : this.buyInvoiceForm.value.email,
       };
       const requestInvDt = [];
       this.uploadFileMultiple(request);
@@ -594,20 +590,20 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         this.buyInvoiceService.getDF().subscribe((x: any) => {
           this.saleInvId = x.invoiceId;
           // tslint:disable-next-line:prefer-for-of
-          for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-            const productID = this.invoiceForm.value.items[i].productName.productID;
-            const productName = this.invoiceForm.value.items[i].productName.productName;
+          for (let i = 0; i < this.buyInvoiceForm.value.items.length; i++) {
+            const productID = this.buyInvoiceForm.value.items[i].productName.productID;
+            const productName = this.buyInvoiceForm.value.items[i].productName.productName;
             const requestInvDetail = {
               id: 0,
               invoiceId: this.saleInvId,
-              productID: productID > 0 ? this.invoiceForm.value.items[i].productName.productID : 0,
-              productName: productName !== undefined ? this.invoiceForm.value.items[i].productName.productName
-                : this.invoiceForm.value.items[i].productName,
-              description: this.invoiceForm.value.items[i].description,
-              qty: this.invoiceForm.value.items[i].qty,
-              price: this.invoiceForm.value.items[i].price,
-              amount: this.invoiceForm.value.items[i].amount,
-              vat: this.invoiceForm.value.items[i].vat,
+              productID: productID > 0 ? this.buyInvoiceForm.value.items[i].productName.productID : 0,
+              productName: productName !== undefined ? this.buyInvoiceForm.value.items[i].productName.productName
+                : this.buyInvoiceForm.value.items[i].productName,
+              description: this.buyInvoiceForm.value.items[i].description,
+              qty: this.buyInvoiceForm.value.items[i].qty,
+              price: this.buyInvoiceForm.value.items[i].price,
+              amount: this.buyInvoiceForm.value.items[i].amount,
+              vat: this.buyInvoiceForm.value.items[i].vat,
             };
             requestInvDt.push(requestInvDetail);
           }
@@ -625,126 +621,127 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
 
       return;
     }
-    if (this.invoiceId > 0 && !this.invoiceForm.valid) {
-      const checksupplierID = this.invoiceForm.value.supplierID;
+    if (this.invoiceId > 0 && !this.buyInvoiceForm.valid) {
+      const checksupplierID = this.buyInvoiceForm.value.supplierID;
       const buyInvDetailView = [];
       // tslint:disable-next-line:prefer-for-of
-      for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
-        if (this.invoiceForm.value.items[ii].productID === undefined) {
+      for (let ii = 0; ii < this.buyInvoiceForm.value.items.length; ii++) {
+        if (this.buyInvoiceForm.value.items[ii].productID === undefined) {
           const rs = {
-            amount: this.invoiceForm.value.items[ii].amount,
-            qty: this.invoiceForm.value.items[ii].qty,
-            price: this.invoiceForm.value.items[ii].price,
-            description: this.invoiceForm.value.items[ii].description,
-            id: this.invoiceForm.value.items[ii].id,
-            invoiceId: this.invoiceForm.value.invoiceId,
-            productID: this.invoiceForm.value.items[ii].productName.productID,
-            productName: this.invoiceForm.value.items[ii].productName.productName,
-            vat: this.invoiceForm.value.items[ii].vat,
+            amount: this.buyInvoiceForm.value.items[ii].amount,
+            qty: this.buyInvoiceForm.value.items[ii].qty,
+            price: this.buyInvoiceForm.value.items[ii].price,
+            description: this.buyInvoiceForm.value.items[ii].description,
+            id: this.buyInvoiceForm.value.items[ii].id,
+            invoiceId: this.buyInvoiceForm.value.invoiceId,
+            productID: this.buyInvoiceForm.value.items[ii].productName.productID,
+            productName: this.buyInvoiceForm.value.items[ii].productName.productName,
+            vat: this.buyInvoiceForm.value.items[ii].vat,
           };
           buyInvDetailView.push(rs);
         }
-        if (this.invoiceForm.value.items[ii].productID !== undefined) {
-          const object2 = Object.assign({}, this.invoiceForm.value.items[ii],
+        if (this.buyInvoiceForm.value.items[ii].productID !== undefined) {
+          const object2 = Object.assign({}, this.buyInvoiceForm.value.items[ii],
             {
-              invoiceId: this.invoiceForm.value.invoiceId, productID: this.invoiceForm.value.items[ii].productID === ''
-                ? 0 : this.invoiceForm.value.items[ii].productID,
+              invoiceId: this.buyInvoiceForm.value.invoiceId,
+              productID: this.buyInvoiceForm.value.items[ii].productID === ''
+                ? 0 : this.buyInvoiceForm.value.items[ii].productID,
             });
           buyInvDetailView.push(object2);
         }
       }
       const request1 = {
-        invoiceId: this.invoiceForm.value.invoiceId,
-        invoiceSerial: this.invoiceForm.value.invoiceSerial,
-        invoiceNumber: this.invoiceForm.value.invoiceNumber,
-        issueDate: [this.invoiceForm.value.issueDate.year,
-        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
-        dueDate: [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
-        reference: this.invoiceForm.value.reference,
+        invoiceId: this.buyInvoiceForm.value.invoiceId,
+        invoiceSerial: this.buyInvoiceForm.value.invoiceSerial,
+        invoiceNumber: this.buyInvoiceForm.value.invoiceNumber,
+        issueDate: [this.buyInvoiceForm.value.issueDate.year,
+        this.buyInvoiceForm.value.issueDate.month, this.buyInvoiceForm.value.issueDate.day].join('-'),
+        dueDate: [this.buyInvoiceForm.value.dueDate.year,
+        this.buyInvoiceForm.value.dueDate.month, this.buyInvoiceForm.value.dueDate.day].join('-'),
+        reference: this.buyInvoiceForm.value.reference,
         subTotal: this.subTotalAmount,
-        discRate: this.invoiceForm.controls.totalDiscount.value,
+        discRate: this.buyInvoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
         amountPaid: this.amountPaidVC.nativeElement.innerText,
-        note: this.invoiceForm.value.notes,
-        term: this.invoiceForm.value.termCondition,
+        note: this.buyInvoiceForm.value.notes,
+        term: this.buyInvoiceForm.value.termCondition,
         status: '',
         supplierID:
-          this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.supplierID : this.invoiceForm.value.supplierID,
-        supplierName: this.invoiceForm.value.contactName !== null ?
-          this.invoiceForm.value.contactName.supplierName : this.invoiceForm.value.supplierName,
-        address: this.invoiceForm.value.contactName !== null
-        ? this.invoiceForm.value.contactName.address
-        : this.invoiceForm.value.address,
-        taxCode: this.invoiceForm.value.contactName !== null
-        ? this.invoiceForm.value.contactName.taxCode
-        : this.invoiceForm.value.taxCode,
-        tag: this.invoiceForm.value.contactName !== null
-        ? this.invoiceForm.value.contactName.tag : this.invoiceForm.value.tag,
-        contactName: this.invoiceForm.value.contactName !== null
-        ?
-          this.invoiceForm.value.contactName.contactName
-          : this.invoiceForm.value.contactName,
-        email: this.invoiceForm.value.contactName !== null
-        ? this.invoiceForm.value.contactName.email
-        : this.invoiceForm.value.email,
+          this.buyInvoiceForm.value.contactName !== null ?
+            this.buyInvoiceForm.value.contactName.supplierID : this.buyInvoiceForm.value.supplierID,
+        supplierName: this.buyInvoiceForm.value.contactName !== null ?
+          this.buyInvoiceForm.value.contactName.supplierName : this.buyInvoiceForm.value.supplierName,
+        address: this.buyInvoiceForm.value.contactName !== null
+          ? this.buyInvoiceForm.value.contactName.address
+          : this.buyInvoiceForm.value.address,
+        taxCode: this.buyInvoiceForm.value.contactName !== null
+          ? this.buyInvoiceForm.value.contactName.taxCode
+          : this.buyInvoiceForm.value.taxCode,
+        tag: this.buyInvoiceForm.value.contactName !== null
+          ? this.buyInvoiceForm.value.contactName.tag : this.buyInvoiceForm.value.tag,
+        contactName: this.buyInvoiceForm.value.contactName !== null
+          ?
+          this.buyInvoiceForm.value.contactName.contactName
+          : this.buyInvoiceForm.value.contactName,
+        email: this.buyInvoiceForm.value.contactName !== null
+          ? this.buyInvoiceForm.value.contactName.email
+          : this.buyInvoiceForm.value.email,
         supplierData: [{
-          supplierID: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.supplierID : this.invoiceForm.value.supplierID,
-          supplierName: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.supplierName : this.invoiceForm.value.supplierName,
-          address: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
-          taxCode: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
-          tag: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.tag : this.invoiceForm.value.tag,
-          contactName: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.contactName :
-            this.invoiceForm.value.contactName,
-          email: this.invoiceForm.value.contactName !== null
-          ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
-          note: this.invoiceForm.value.notes,
+          supplierID: this.buyInvoiceForm.value.contactName !== null ?
+            this.buyInvoiceForm.value.contactName.supplierID : this.buyInvoiceForm.value.supplierID,
+          supplierName: this.buyInvoiceForm.value.contactName !== null ?
+            this.buyInvoiceForm.value.contactName.supplierName : this.buyInvoiceForm.value.supplierName,
+          address: this.buyInvoiceForm.value.contactName !== null ?
+            this.buyInvoiceForm.value.contactName.address : this.buyInvoiceForm.value.address,
+          taxCode: this.buyInvoiceForm.value.contactName !== null ?
+            this.buyInvoiceForm.value.contactName.taxCode : this.buyInvoiceForm.value.taxCode,
+          tag: this.buyInvoiceForm.value.contactName !== null ?
+            this.buyInvoiceForm.value.contactName.tag : this.buyInvoiceForm.value.tag,
+          contactName: this.buyInvoiceForm.value.contactName !== null ?
+            this.buyInvoiceForm.value.contactName.contactName :
+            this.buyInvoiceForm.value.contactName,
+          email: this.buyInvoiceForm.value.contactName !== null
+            ? this.buyInvoiceForm.value.contactName.email : this.buyInvoiceForm.value.email,
+          note: this.buyInvoiceForm.value.notes,
         }],
         // tslint:disable-next-line:object-literal-shorthand
         buyInvDetailView: buyInvDetailView,
       };
       const request = {
-        invoiceId: this.invoiceForm.value.invoiceId,
-        invoiceSerial: this.invoiceForm.value.invoiceSerial,
-        invoiceNumber: this.invoiceForm.value.invoiceNumber,
-        issueDate: [this.invoiceForm.value.issueDate.year,
-        this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
-        dueDate: [this.invoiceForm.value.dueDate.year,
-        this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
-        reference: this.invoiceForm.value.reference,
+        invoiceId: this.buyInvoiceForm.value.invoiceId,
+        invoiceSerial: this.buyInvoiceForm.value.invoiceSerial,
+        invoiceNumber: this.buyInvoiceForm.value.invoiceNumber,
+        issueDate: [this.buyInvoiceForm.value.issueDate.year,
+        this.buyInvoiceForm.value.issueDate.month, this.buyInvoiceForm.value.issueDate.day].join('-'),
+        dueDate: [this.buyInvoiceForm.value.dueDate.year,
+        this.buyInvoiceForm.value.dueDate.month, this.buyInvoiceForm.value.dueDate.day].join('-'),
+        reference: this.buyInvoiceForm.value.reference,
         subTotal: this.subTotalAmount,
-        discRate: this.invoiceForm.controls.totalDiscount.value,
+        discRate: this.buyInvoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
         // amountPaid: this.amountPaidData === undefined ? this.amountPaidVC.inputValue: this.amountPaidData,
         amountPaid: this.amountPaidVC.nativeElement.innerText,
-        note: this.invoiceForm.value.notes,
-        term: this.invoiceForm.value.termCondition,
+        note: this.buyInvoiceForm.value.notes,
+        term: this.buyInvoiceForm.value.termCondition,
         status: '',
-        supplierID: checksupplierID !== null ? this.invoiceForm.value.supplierID : 0,
-        supplierName: this.invoiceForm.value.supplierName,
-        address: this.invoiceForm.value.address,
-        taxCode: this.invoiceForm.value.taxCode,
+        supplierID: checksupplierID !== null ? this.buyInvoiceForm.value.supplierID : 0,
+        supplierName: this.buyInvoiceForm.value.supplierName,
+        address: this.buyInvoiceForm.value.address,
+        taxCode: this.buyInvoiceForm.value.taxCode,
         tag: null,
-        contactName: this.invoiceForm.value.contactName,
-        email: this.invoiceForm.value.email,
+        contactName: this.buyInvoiceForm.value.contactName,
+        email: this.buyInvoiceForm.value.email,
         supplierData: [{
-          supplierID: checksupplierID !== null ? this.invoiceForm.value.supplierID : 0,
-          supplierName: this.invoiceForm.value.supplierName,
-          address: this.invoiceForm.value.address,
-          taxCode: this.invoiceForm.value.taxCode,
+          supplierID: checksupplierID !== null ? this.buyInvoiceForm.value.supplierID : 0,
+          supplierName: this.buyInvoiceForm.value.supplierName,
+          address: this.buyInvoiceForm.value.address,
+          taxCode: this.buyInvoiceForm.value.taxCode,
           tag: null,
-          contactName: this.invoiceForm.value.contactName,
-          email: this.invoiceForm.value.email,
-          note: this.invoiceForm.value.notes,
+          contactName: this.buyInvoiceForm.value.contactName,
+          email: this.buyInvoiceForm.value.email,
+          note: this.buyInvoiceForm.value.notes,
         }],
         // tslint:disable-next-line:object-literal-shorthand
         buyInvDetailView: buyInvDetailView,
@@ -772,11 +769,11 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
             });
           }
           this.notify.success('Successfully Update');
-          this.router.navigate([`/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+          this.router.navigate([`/buyinvoice/${this.buyInvoiceForm.value.invoiceId}/${ActionType.View}`]);
         });
     }
 
-    this.invoiceForm.disable();
+    this.buyInvoiceForm.disable();
   }
 
   private updateTotalUnitPrice(items: any) {
@@ -804,14 +801,14 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     }
   }
   calculateTotalAmount() {
-    const discount = (this.invoiceForm.controls.totalDiscount as FormControl);
+    const discount = (this.buyInvoiceForm.controls.totalDiscount as FormControl);
     if (discount.value !== '') {
       this.subTotalDiscountIncl = -(this.subTotalAmount * Number(discount.value) / 100);
     } else {
       this.subTotalDiscountIncl = 0;
     }
     this.totalAmount = this.subTotalAmount + this.totalTaxAmount + this.subTotalDiscountIncl;
-    const amountPaid = (this.invoiceForm.controls.amountPaid as FormControl);
+    const amountPaid = (this.buyInvoiceForm.controls.amountPaid as FormControl);
     if (amountPaid.value !== '') {
       this.amountPaid = _.sumBy(this.paymentViews, item => {
         return item.amount;
@@ -868,7 +865,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   }
 
   showPreviewUploadFile(files) {
-    this.nameFile = this.invoiceForm.controls.invoiceNumber.value + '_' + this.invoiceForm.controls.invoiceSerial.value;
+    this.nameFile = this.buyInvoiceForm.controls.invoiceNumber.value + '_'
+      + this.buyInvoiceForm.controls.invoiceSerial.value;
     this.fileUpload.push(files[0]);
   }
 
@@ -881,8 +879,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       }
     }
     const requestData = {
-      invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
-      invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
+      invoiceNumber: this.buyInvoiceForm.controls.invoiceNumber.value,
+      invoiceSerial: this.buyInvoiceForm.controls.invoiceSerial.value,
     };
     const request = {
       data: data === null ? requestData : data,
@@ -933,44 +931,45 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   }
   private updateSaleInvAmontPaid() {
     const request = {
-      invoiceId: this.invoiceForm.controls.invoiceId.value,
-      invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
-      invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
-      issueDate: [this.invoiceForm.controls.issueDate.value.year,
-      this.invoiceForm.controls.issueDate.value.month,
-      this.invoiceForm.controls.issueDate.value.day].join('-') === '--'
-        ? '' : [this.invoiceForm.controls.issueDate.value.year,
-        this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-'),
-      dueDate: [this.invoiceForm.controls.dueDate.value.year,
-      this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') === '--'
-        ? '' : [this.invoiceForm.controls.dueDate.value.year,
-        this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-'),
-      reference: this.invoiceForm.controls.reference.value,
+      invoiceId: this.buyInvoiceForm.controls.invoiceId.value,
+      invoiceSerial: this.buyInvoiceForm.controls.invoiceSerial.value,
+      invoiceNumber: this.buyInvoiceForm.controls.invoiceNumber.value,
+      issueDate: [this.buyInvoiceForm.controls.issueDate.value.year,
+      this.buyInvoiceForm.controls.issueDate.value.month,
+      this.buyInvoiceForm.controls.issueDate.value.day].join('-') === '--'
+        ? '' : [this.buyInvoiceForm.controls.issueDate.value.year,
+        this.buyInvoiceForm.controls.issueDate.value.month, this.buyInvoiceForm.controls.issueDate.value.day].join('-'),
+      dueDate: [this.buyInvoiceForm.controls.dueDate.value.year,
+      this.buyInvoiceForm.controls.dueDate.value.month,
+      this.buyInvoiceForm.controls.dueDate.value.day].join('-') === '--'
+        ? '' : [this.buyInvoiceForm.controls.dueDate.value.year,
+        this.buyInvoiceForm.controls.dueDate.value.month, this.buyInvoiceForm.controls.dueDate.value.day].join('-'),
+      reference: this.buyInvoiceForm.controls.reference.value,
       subTotal: this.subTotalAmount,
-      discRate: this.invoiceForm.controls.totalDiscount.value,
+      discRate: this.buyInvoiceForm.controls.totalDiscount.value,
       discount: this.subTotalDiscountIncl.toString().substring(1),
       vatTax: this.totalTaxAmount,
       amountPaid: this.checkAddPaymentDeleted === true
-        ? ((this.invoiceForm.controls.amountPaid.value === null
-          ? 0 : this.invoiceForm.controls.amountPaid.value) - this.deletePaymentAmont)
-        : (this.checkAddPayment === true) ? (this.invoiceForm.controls.amountPaid.value === null
-          ? 0 : this.invoiceForm.controls.amountPaid.value) + this.paymentViews[this.paymentViews.length - 1].amount
+        ? ((this.buyInvoiceForm.controls.amountPaid.value === null
+          ? 0 : this.buyInvoiceForm.controls.amountPaid.value) - this.deletePaymentAmont)
+        : (this.checkAddPayment === true) ? (this.buyInvoiceForm.controls.amountPaid.value === null
+          ? 0 : this.buyInvoiceForm.controls.amountPaid.value) + this.paymentViews[this.paymentViews.length - 1].amount
           : this.allAmontById,
-      note: this.invoiceForm.controls.notes.value,
-      term: this.invoiceForm.controls.termCondition.value,
+      note: this.buyInvoiceForm.controls.notes.value,
+      term: this.buyInvoiceForm.controls.termCondition.value,
       status: '',
-      supplierID: this.invoiceForm.controls.supplierID.value,
-      supplierName: this.invoiceForm.controls.supplierName.value,
-      address: this.invoiceForm.controls.address.value,
-      taxCode: this.invoiceForm.controls.taxCode.value,
+      supplierID: this.buyInvoiceForm.controls.supplierID.value,
+      supplierName: this.buyInvoiceForm.controls.supplierName.value,
+      address: this.buyInvoiceForm.controls.address.value,
+      taxCode: this.buyInvoiceForm.controls.taxCode.value,
       tag: null,
-      contactName: this.invoiceForm.controls.contactName.value,
-      email: this.invoiceForm.controls.email.value,
+      contactName: this.buyInvoiceForm.controls.contactName.value,
+      email: this.buyInvoiceForm.controls.email.value,
       supplierData: [],
       buyInvDetailView: [],
     };
     this.buyInvoiceService.updateBuyInv(request).subscribe(rs => {
-      this.getBuyInvoiceById(this.invoiceForm.controls.invoiceId.value);
+      this.getBuyInvoiceById(this.buyInvoiceForm.controls.invoiceId.value);
       // this.allAmontById = 0;
     });
   }
@@ -1091,23 +1090,23 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   editClient() {
     this.isEditClient = true;
     // tslint:disable-next-line: no-unused-expression
-    // this.invoiceForm.controls.supplierName.disabled === false;
-    this.invoiceForm.enable();
+    // this.buyInvoiceForm.controls.supplierName.disabled === false;
+    this.buyInvoiceForm.enable();
   }
   deleteClient() {
     this.isEditClient = true;
     this.supplierSelected = new SupplierSearchModel();
-    this.invoiceForm.controls.supplierID.reset();
-    this.invoiceForm.controls.supplierName.reset();
-    this.invoiceForm.controls.contactName.reset();
-    this.invoiceForm.controls.email.reset();
-    this.invoiceForm.controls.address.reset();
-    this.invoiceForm.controls.taxCode.reset();
+    this.buyInvoiceForm.controls.supplierID.reset();
+    this.buyInvoiceForm.controls.supplierName.reset();
+    this.buyInvoiceForm.controls.contactName.reset();
+    this.buyInvoiceForm.controls.email.reset();
+    this.buyInvoiceForm.controls.address.reset();
+    this.buyInvoiceForm.controls.taxCode.reset();
 
-    this.invoiceForm.controls.supplierName.enable();
-    this.invoiceForm.controls.email.enable();
-    this.invoiceForm.controls.address.enable();
-    this.invoiceForm.controls.taxCode.enable();
+    this.buyInvoiceForm.controls.supplierName.enable();
+    this.buyInvoiceForm.controls.email.enable();
+    this.buyInvoiceForm.controls.address.enable();
+    this.buyInvoiceForm.controls.taxCode.enable();
     this.supplierSelected.id = null;
     this.supplierSelected.supplierName = null;
     this.supplierSelected.contactName = null;
@@ -1116,13 +1115,13 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     this.supplierSelected.email = null;
   }
   redirectToEditInvoice() {
-    this.invoiceForm.enable();
+    this.buyInvoiceForm.enable();
     this.viewMode = false;
-    this.invoiceForm.controls.contactName.enable();
-    this.invoiceForm.controls.supplierName.enable();
-    this.invoiceForm.controls.email.enable();
-    this.invoiceForm.controls.address.enable();
-    this.invoiceForm.controls.taxCode.enable();
+    this.buyInvoiceForm.controls.contactName.enable();
+    this.buyInvoiceForm.controls.supplierName.enable();
+    this.buyInvoiceForm.controls.email.enable();
+    this.buyInvoiceForm.controls.address.enable();
+    this.buyInvoiceForm.controls.taxCode.enable();
     this.isRead = false;
   }
   close(result: boolean): void {
@@ -1151,17 +1150,17 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   }
 
   onDateSelection(e) {
-    const issueDate = [this.invoiceForm.controls.issueDate.value.year,
-      this.invoiceForm.controls.issueDate.value.month,
-      this.invoiceForm.controls.issueDate.value.day].join('-') === '--'
-      ? '' : [this.invoiceForm.controls.issueDate.value.year,
-        this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-');
+    const issueDate = [this.buyInvoiceForm.controls.issueDate.value.year,
+    this.buyInvoiceForm.controls.issueDate.value.month,
+    this.buyInvoiceForm.controls.issueDate.value.day].join('-') === '--'
+      ? '' : [this.buyInvoiceForm.controls.issueDate.value.year,
+      this.buyInvoiceForm.controls.issueDate.value.month, this.buyInvoiceForm.controls.issueDate.value.day].join('-');
 
-    const dueDate = [this.invoiceForm.controls.dueDate.value.year,
-        this.invoiceForm.controls.dueDate.value.month,
-        this.invoiceForm.controls.dueDate.value.day].join('-') === '--'
-        ? '' : [this.invoiceForm.controls.dueDate.value.year,
-          this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-');
+    const dueDate = [this.buyInvoiceForm.controls.dueDate.value.year,
+    this.buyInvoiceForm.controls.dueDate.value.month,
+    this.buyInvoiceForm.controls.dueDate.value.day].join('-') === '--'
+      ? '' : [this.buyInvoiceForm.controls.dueDate.value.year,
+      this.buyInvoiceForm.controls.dueDate.value.month, this.buyInvoiceForm.controls.dueDate.value.day].join('-');
     if (issueDate > dueDate) {
       return this.isCheckDate = true;
     } else {

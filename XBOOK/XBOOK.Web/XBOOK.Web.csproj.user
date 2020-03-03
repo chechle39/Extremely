@@ -10,39 +10,10 @@
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <NameOfLastUsedPublishProfile>FolderProfile4</NameOfLastUsedPublishProfile>
-    <ShowAllFiles>false</ShowAllFiles>
+    <ShowAllFiles>true</ShowAllFiles>
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Update="Reports\Template\AccountBalanceReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\AccountDetailReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\DebitAgeReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\GeneralJournalReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\GeneralLedgerReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\InvoiceReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\MoneyReceiptReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\PurchaseReportReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Reports\Template\SalesReportReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-  </ItemGroup>
 </Project>

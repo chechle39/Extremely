@@ -1,6 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Common.Exceptions;
 using XBOOK.Data.Identity;
@@ -16,20 +25,26 @@ namespace XBOOK.Web.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        private RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly IUserService _userService;
+        private readonly ApplicationSetting _applicationSetting;
         public AccountController(
             UserManager<AppUser> userManager, 
             IEmailSender emailSender,
+             RoleManager<AppRole> roleManager,
             SignInManager<AppUser> signInManager,
+            IOptions<ApplicationSetting> applicationSetting,
             IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _userService = userService;
+            _roleManager = roleManager;
+            _applicationSetting = applicationSetting.Value;
         }
 
         [HttpPost("[action]")]
@@ -37,26 +52,43 @@ namespace XBOOK.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var user = await _userManager.FindByNameAsync(model.Email);
+                //var roles = await _userManager.GetRolesAsync(user);
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_applicationSetting.JWT_Secret));
+                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                //var identity = (ClaimsIdentity)User.Identity;
+                //IEnumerable<Claim> xxx = identity.Claims;
+                //var sss = HttpContext.User.Identity as ClaimsIdentity;
+                //var qqqq = identity.Claims.ToList();
+                //var claims = new List<Claim>
+                //{
+                //    new Claim(ClaimTypes.Name, model.Email),
+                //    new Claim(ClaimTypes.Role, "Manager"),
+                //};
+                if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
-                    return new OkObjectResult(new GenericResult(true));
-                }
-                if (result.RequiresTwoFactor)
-                {
-                   // return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    return BadRequest("User account locked out");
+                   var tokenDesscriptor = new SecurityTokenDescriptor
+                   {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim("UserID", user.Id.ToString())
+                        }),
+                        Expires = DateTime.UtcNow.AddMinutes(5),
+                        SigningCredentials = signinCredentials,
+                   };
+                    var tokeHandle = new JwtSecurityTokenHandler();
+                    var securityToken = tokeHandle.CreateToken(tokenDesscriptor);
+                    var token = tokeHandle.WriteToken(securityToken);
+                    return Ok(new { token });
+
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return BadRequest("User account locked out");
+                    return Ok(new GenericResult(false, "Username or password incorrect"));
                 }
+
             }
 
             // If we got this far, something failed, redisplay form
@@ -119,6 +151,65 @@ namespace XBOOK.Web.Controllers
         public async Task<IActionResult> CheckUserAcount()
         {
             return Ok(await _userService.checkUserAcount());
+        }
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string code = null)
+        {
+            if (code == null)
+            {
+                throw new ApplicationException("A code must be supplied for password reset.");
+            }
+            var model = new ResetPasswordViewModel { Code = code };
+            return Ok(model);
+        }
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                // return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                //  return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+            // AddErrors(result);
+            return Ok();
+        }
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return Ok(new GenericResult(false, " Please check your email to reset your password"));
+                }
+
+                // For more information on how to enable account confirmation and password reset please
+                // visit https://go.microsoft.com/fwlink/?LinkID=532713
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                return Ok(new GenericResult(true, " Please check your email to reset your password"));
+            }
+
+            // If we got this far, something failed, redisplay form
+            return Ok(model);
         }
     }
 }

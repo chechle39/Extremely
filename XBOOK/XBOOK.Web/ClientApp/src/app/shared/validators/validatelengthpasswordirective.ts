@@ -1,9 +1,9 @@
 import { Directive, Input, Inject } from '@angular/core';
-import { NG_VALIDATORS, Validator, AbstractControl, } from '@angular/forms';
+import { NG_VALIDATORS, Validator, AbstractControl } from '@angular/forms';
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[validateLengthPasswordDirective]',
-  providers: [{ provide: NG_VALIDATORS, useExisting: validateLengthPasswordDirective, multi: true }]
+  providers: [{ provide: NG_VALIDATORS, useExisting: validateLengthPasswordDirective, multi: true }],
 })
 
 // tslint:disable-next-line:class-name

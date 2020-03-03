@@ -7,8 +7,9 @@ import { finalize } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-import-client',
-  templateUrl: './import-client.component.html'
+  templateUrl: './import-client.component.html',
 })
 export class ImportClientComponent extends AppComponentBase implements OnInit {
   @Input() id: any[];
@@ -41,7 +42,7 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
     // tslint:disable-next-line:prefer-for-of
     for (let j = 0; j < this.FieldName.length; j++) {
       const data = {
-        value: this.FieldName[j]
+        value: this.FieldName[j],
       };
       this.SelectedFieldName.push(data);
     }
@@ -78,7 +79,7 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
       .pipe(
         finalize(() => {
           this.saving = false;
-        })
+        }),
       )
       .subscribe(() => {
         this.notify.info('Saved Successfully');
@@ -89,6 +90,7 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
     this.activeModal.close(result);
   }
   onChange(value: string): void {
+    // tslint:disable-next-line:no-console
     console.log(value);
   }
 }

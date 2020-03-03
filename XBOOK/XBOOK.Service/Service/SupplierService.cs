@@ -86,5 +86,68 @@ namespace XBOOK.Service.Service
         {
             throw new NotImplementedException();
         }
+        public bool CreateSupplierImport(List<SupplierCreateRequest> request)
+        {
+            var clientCreate = Mapper.Map<List<SupplierCreateRequest>, List<Supplier>>(request);
+            foreach (var item in request)
+            {
+                var supplier = new Supplier()
+                {
+                    supplierID = 0,
+                    address = item.Address,
+                    supplierName = item.supplierName,
+                    contactName = item.ContactName,
+                    email = item.Email,
+                    note = item.Note,
+                    Tag = item.Tag,
+                    taxCode = item.TaxCode,
+                    bankAccount = item.bankAccount
+                };
+                _supUowRepository.AddData(supplier);
+                _uow.SaveChanges();
+            }
+            return true;
+        }
+        public byte[] GetDataSupplierAsync(List<SupplierCreateRequest> request)
+        {
+            var comlumHeadrs = new string[]
+            {
+                "supplierID",
+                "supplierName",
+                "address",
+                "taxCode",
+                "Tag",
+                "contactName",
+                "email",
+                "note",
+                "bankAccount",
+            };
+            var listGen = new List<SupplierCreateRequest>();
+
+            listGen = request;
+
+            var csv = (from item in listGen
+                       select new object[]
+                       {
+                          item.supplierID,
+                          item.supplierName,
+                          item.Address,
+                          item.TaxCode,
+                          item.Tag,
+                          item.ContactName,
+                          item.Email,
+                          item.Note,
+                          item.bankAccount
+                       }).ToList();
+            var csvData = new StringBuilder();
+
+            csv.ForEach(line =>
+            {
+                csvData.AppendLine(string.Join(",", line));
+            });
+            byte[] buffer = Encoding.UTF8.GetBytes($"{string.Join(",", comlumHeadrs)}\r\n{csvData.ToString()}");
+            return buffer;
+
+        }
     }
 }

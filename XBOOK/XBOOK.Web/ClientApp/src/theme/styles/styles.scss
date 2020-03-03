@@ -211,8 +211,15 @@ input.k-textbox {
   font-size: 20px;
 }
 
-.ngb-typeahead-product .product-item {
-  border-bottom: 1px solid #96d356 !important;
+.ngb-typeahead-product{
+  button.dropdown-item{
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .product-item {
+      border-bottom: 1px solid #ddd !important;
+    }
+  }
 }
 
 .ngb-typeahead-product .product-item:last-child {

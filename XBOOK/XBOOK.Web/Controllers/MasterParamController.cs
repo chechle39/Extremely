@@ -42,6 +42,11 @@ namespace XBOOK.Web.Controllers
             _iMasterParamService.DeleteMaster(request);
             return Ok(request);
         }
-
+        [HttpPut("[action]")]
+        public async Task<IActionResult> UpdateMaster([FromBody]List<MasterParamViewModel> request)
+        {
+            await _iMasterParamService.UpdateMaster(request);
+            return Ok();
+        }
     }
 }

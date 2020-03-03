@@ -1,10 +1,10 @@
 import { Directive, Input } from '@angular/core';
-import { NG_VALIDATORS, Validator, AbstractControl, } from '@angular/forms';
+import { NG_VALIDATORS, Validator, AbstractControl } from '@angular/forms';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[validateDirective]',
-  providers: [{ provide: NG_VALIDATORS, useExisting: validateDirective, multi: true }]
+  providers: [{ provide: NG_VALIDATORS, useExisting: validateDirective, multi: true }],
 })
 
 // tslint:disable-next-line:class-name

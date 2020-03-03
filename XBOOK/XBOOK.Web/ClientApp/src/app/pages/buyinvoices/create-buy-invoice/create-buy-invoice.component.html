@@ -14,7 +14,7 @@
     </nb-card-header>
     <nb-card-body class="pt-0">
       <div (mouseenter)="isMouseEnter = true" (mouseleave)="isMouseEnter = false">
-        <form class="frm-invoice" autocomplete="off" [formGroup]="invoiceForm">
+        <form class="frm-invoice" autocomplete="off" [formGroup]="buyInvoiceForm">
           <div class="row invoice-area">
             <div class="col-sm-12 p-0">
               <div class="border px-3 py-3">
@@ -81,13 +81,12 @@
 
 
                           <input style="opacity: unset" #xxx type="text" [readOnly]="isRead"
-                            (focus)="focusClient$.next($event.target.value)" autocomplete="none"
                             [ngbTypeahead]="searchSupplier" [value]="supplierSelected.contactName"
                             [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter"
                             id="contactName" formControlName="contactName" (selectItem)="selectedItem($event)"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal pl-0 invoice__input__textbox--disable"
                             placeholder="Supplier Contact Name" nfNoSpaces maxlength="250" #instance="ngbTypeahead"
-                            [ngClass]="{'border-0':invoiceForm.controls.contactName.touched === false || invoiceForm.controls.contactName.invalid === false}" />
+                            [ngClass]="{'border-0':buyInvoiceForm.controls.contactName.touched === false || buyInvoiceForm.controls.contactName.invalid === false}" />
 
                           <ng-template #customItemTemplate let-r="result" let-t="term">
                             <div class="row mt-2 client-item">
@@ -102,11 +101,11 @@
                           </ng-template>
                         </div>
                         <div class="col-12 pl-0">
-                          <input style="opacity: unset" kendotextbox id="supplierName" formControlName="supplierName" [readOnly]="true"
+                          <input style="opacity: unset" kendotextbox id="supplierName" formControlName="supplierName" [readOnly]="isRead"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal invoice__input__textbox--disable"
                             [value]="supplierSelected.supplierName" [readOnly]="!isEditClient" placeholder="supplier Name"
                             nfNoSpaces maxlength="250"
-                            [ngClass]="{'border-0':invoiceForm.controls.supplierName.touched === false || invoiceForm.controls.supplierName.invalid === false } ">
+                            [ngClass]="{'border-0':buyInvoiceForm.controls.supplierName.touched === false || buyInvoiceForm.controls.supplierName.invalid === false } ">
                         </div>
                         <div class="col-12 pl-0">
                           <input style="opacity: unset" kendotextbox id="clientAddress" formControlName="address" [readOnly]="isRead"
@@ -137,7 +136,7 @@
                         <div>
                           <p class="invoice__input__title invoice__text--height-normal mb-0">Date of Issue</p>
                           <div class="input-group mb-0 invoice__datepicker__wrapper">
-                            <input [rowItem]="this.invoiceForm.controls" validateDateDirective #datetiime kendoTextBox [readOnly]="isRead"
+                            <input [rowItem]="this.buyInvoiceForm.controls" validateDateDirective #datetiime kendoTextBox [readOnly]="isRead"
                               (dateSelect)="onDateSelection($event)" (click)="d2.toggle()"  style="opacity: unset " [disabled]="isRead"
                               class="border-0 full-width imput-reference-custom p-0 invoice__input__textbox invoice__text--height-normal"
                               placeholder="dd/mm/yyyy" name="dp" formControlName="issueDate" ngbDatepicker
@@ -152,7 +151,7 @@
                         <div>
                           <p class="invoice__input__title invoice__text--height-normal mb-0">Due Date</p>
                           <div class="input-group mb-0 invoice__datepicker__wrapper">
-                            <input [rowItem]="this.invoiceForm.controls" validateDateDirective #datetiime kendoTextBox [readOnly]="isRead"
+                            <input [rowItem]="this.buyInvoiceForm.controls" validateDateDirective #datetiime kendoTextBox [readOnly]="isRead"
                               (dateSelect)="onDateSelection($event)" (click)="d3.toggle()" [disabled]="isRead"
                               formControlName="dueDate" style="opacity: unset"
                               class="border-0 full-width imput-reference-custom p-0 invoice__input__textbox invoice__text--height-normal"
@@ -166,18 +165,18 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-6 ml-20 refer px-0">
+                      <div class="col-6 refer px-0">
                         <div>
                           <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">Invoice No#/ Seri</p>
                           <div class="row" style="margin-left: 0px">
                             <input style="opacity: unset; font-size: 1.2rem;" kendotextbox placeholder="Invoice Number"
-                              class="form-control" type="text" formControlName="invoiceNumber"
-                              [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false || isMouseEnter == false}"
+                              class="form-control" type="text" formControlName="invoiceNumber" [readOnly]="isRead"
+                              [ngClass]="{'border-0':buyInvoiceForm.controls.invoiceNumber.touched === false || buyInvoiceForm.controls.invoiceNumber.invalid === false || isMouseEnter == false}"
                               class="col-6 width-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal"
                               required />
                             <input style="opacity: unset;" kendotextbox placeholder="Seri"
-                              formControlName="invoiceSerial"
-                              [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false || isMouseEnter == false}"
+                              formControlName="invoiceSerial" [readOnly]="isRead"
+                              [ngClass]="{'border-0':buyInvoiceForm.controls.invoiceSerial.touched === false || buyInvoiceForm.controls.invoiceSerial.invalid === false || isMouseEnter == false}"
                               class="width-50 imput-reference-custom invoice__input__textbox place-holder__color invoice__text--height-normal" />
                           </div>
 
@@ -185,7 +184,7 @@
                         <div class="mt-0">
                           <p class="mb-0 invoice__input__title invoice__text--height-normal">Reference</p>
                           <input kendotextbox placeholder="Enter value e.g PO #" formControlName="reference"
-                            style="opacity: unset"
+                            style="opacity: unset" [readOnly]="isRead"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__text--height-normal" />
                         </div>
 
@@ -199,7 +198,7 @@
                       <div class="col-sm-12 amountDue px-0">
                         <div class="row mx-0">
                           <p class="invoice__input__title invoice__text--height-normal col-6 px-0">Amount Due</p>
-                          <div class="input-group invoice__text--height-normal col-6 ml-20">
+                          <div class="input-group invoice__text--height-normal col-6">
                             {{amountDue | currency:'VND':''}}
                           </div>
                         </div>
@@ -221,7 +220,7 @@
                     <!-- ngRepeat: item in invoice.items -->
                     <div formArrayName="items">
                       <div class="row invoice-item pb-1 mx-0"
-                        *ngFor="let detail of invoiceForm.get('items')['controls']; index as i">
+                        *ngFor="let detail of buyInvoiceForm.get('items')['controls']; index as i">
                         <ng-container [formGroupName]="i">
                           <div class="col-md-6 col-5 d-inline-grid pl-0 ngb-typeahead-product">
                             <input formControlName="productName" #productName id="productName{{i}}" kendotextbox [readOnly]="isRead"

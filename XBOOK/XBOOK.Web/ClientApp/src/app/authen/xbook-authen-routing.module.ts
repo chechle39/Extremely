@@ -12,10 +12,10 @@ const routes: Routes = [
     path: 'register',
     component: RegisterComponent,
   },
-  {
-    path: 'forget',
-    component: ForgotPasswordComponent,
-  },
+  // {
+  //   path: 'forgot',
+  //   component: ForgotPasswordComponent,
+  // },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

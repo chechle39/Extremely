@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -48,6 +49,28 @@ namespace XBOOK.Service.Service
             return client;
         }
 
+         public bool CreateClientImport(List<ClientCreateRequet> request)
+        {
+            var clientCreate = Mapper.Map<List<ClientCreateRequet>, List<Client>>(request);
+            foreach (var item in request) {
+                var client = new Client()
+                {
+                    clientID = 0,
+                    address = item.Address,
+                    clientName = item.ClientName,
+                    contactName = item.ContactName,
+                    email = item.Email,
+                    note = item.Note,
+                    Tag = item.Tag,
+                    taxCode = item.TaxCode,
+                    bankAccount = item.bankAccount
+                };
+                _clientUowRepository.AddData(client);
+                _uow.SaveChanges();               
+            }
+            return true;
+        }
+
         public bool DeletedClient(List<requestDeleted> request)
         {
             foreach(var item in request)
@@ -84,5 +107,49 @@ namespace XBOOK.Service.Service
             await _clientUowRepository.Update(clientCreate);
             return true;
         }
+        public byte[] GetDataClientAsync(List<ClientCreateRequet> request)
+        {
+            var comlumHeadrs = new string[]
+            {
+                "ClientId",
+                "ClientName",
+                "Address",
+                "TaxCode",
+                "Tag",
+                "ContactName",
+                "Email",
+                "Note",
+                "bankAccount",
+            };
+            var listGen = new List<ClientCreateRequet>();
+
+            listGen = request;
+
+            var csv = (from item in listGen
+                       select new object[]
+                       {
+                          item.ClientId,
+                          item.ClientName,
+                          item.Address,
+                          item.TaxCode,
+                          item.Tag,
+                          item.ContactName,
+                          item.Email,
+                          item.Note,
+                          item.bankAccount
+                       }).ToList();
+            var csvData = new StringBuilder();
+
+            csv.ForEach(line =>
+            {
+                csvData.AppendLine(string.Join(",", line));
+            });
+            byte[] buffer = Encoding.UTF8.GetBytes($"{string.Join(",", comlumHeadrs)}\r\n{csvData.ToString()}");
+            return buffer;
+
+        }
+
     }
+
 }
+

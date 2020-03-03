@@ -1,7 +1,7 @@
 <nb-card>
   <nb-card-header class="pb-1 border-0">
     <div class="row">
-      <div class="col-6">
+      <div class="col-5 col-lg-4">
         <div class="d-flex">
           <span class="card__title pr-3 pt-1">{{ 'GENGROUP.HEADER' | translate }}</span>
           <div (click)='SearchGenLed()'>
@@ -18,17 +18,21 @@
           <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-3 col-lg-4">
         <div ngbDropdown>
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
           </button>
-          <div class="d-inline-block mx-2">
-            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
-          </div>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
             <button class="dropdown-item"><span class="icon-import"></span> Import General Ledger</button>
             <button (click)="exportData()" class="dropdown-item"><span class="icon-export"></span> Export General
               Ledger</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 col-lg-4">
+        <div ngbDropdown class="float-right">
+          <div class="d-inline-block mx-2">
+            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
           </div>
         </div>
       </div>

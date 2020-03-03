@@ -14,12 +14,13 @@ import { BuyInvoiceService } from '../../_shared/services/buy-invoice.service';
 import { ActionType, SearchType } from '../../../coreapp/app.enums';
 import { CreatePaymentReceiptComponent } from '../../paymentreceipt/payment-receipt/payment-receipt.component';
 import { AppConsts } from '../../../coreapp/app.consts';
+import { CommonService } from '../../../shared/service/common.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
 @Component({
   moduleId: module.id, // this is the key
-  selector: 'ngx-list-buyinvoice',
+  selector: 'xb-list-buyinvoice',
   templateUrl: './list-buyinvoice.component.html',
   styleUrls: ['./list-buyinvoice.component.scss'],
 })
@@ -62,6 +63,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     private buyInvoiceService: BuyInvoiceService,
     private router: Router,
     private fb: FormBuilder,
+    private commonService: CommonService,
     private modalService: NgbModal) {
     super(injector);
     this.searchForm = this.createForm();
@@ -105,10 +107,10 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
       isIssueDate: true,
     };
 
-    this.invoiceOfClient(requestList);
+    this.buyInvoiceOfClient(requestList);
   }
 
-  invoiceOfClient(request) {
+  buyInvoiceOfClient(request) {
     this.data.getMessage().subscribe(rp => {
 
       if (rp !== undefined) {
@@ -120,11 +122,13 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
             endDate: this.endDate,
             isIssueDate: this.ischeck,
           };
-          this.buyInvoiceService.getAll(rs).pipe(
+          this.buyInvoiceService.getAllBuyInvoiceList(rs).pipe(
           ).subscribe((i: any) => {
             this.loadingIndicator = false;
             this.buyinvoiceViews = i;
             this.listInvoice = this.buyinvoiceViews;
+          }, (er) => {
+            this.commonService.messeage(er.status);
           });
         } else {
           const requestList = {
@@ -133,21 +137,23 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
             endDate: '',
             isIssueDate: true,
           };
-          this.buyInvoiceService.getAll(requestList).pipe(
+          this.buyInvoiceService.getAllBuyInvoiceList(requestList).pipe(
           ).subscribe((i: any) => {
             this.loadingIndicator = false;
             this.buyinvoiceViews = i;
             this.listInvoice = this.buyinvoiceViews;
+          }, (er) => {
+            this.commonService.messeage(er.status);
           });
         }
       } else {
-        this.getInvoice(request);
+        this.getBuyInvoice(request);
       }
 
     });
   }
 
-  getInvoice(request) {
+  getBuyInvoice(request) {
     if (this.dateFilters !== '') {
       const rs = {
         keyword: this.keyword.toLocaleLowerCase(),
@@ -155,18 +161,22 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         endDate: this.endDate,
         isIssueDate: this.ischeck,
       };
-      this.buyInvoiceService.getAll(rs).pipe(
+      this.buyInvoiceService.getAllBuyInvoiceList(rs).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
         this.buyinvoiceViews = i;
         this.listInvoice = this.buyinvoiceViews;
+      }, (er) => {
+          this.commonService.messeage(er.status);
       });
     } else {
-      this.buyInvoiceService.getAll(request).pipe(
+      this.buyInvoiceService.getAllBuyInvoiceList(request).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
         this.buyinvoiceViews = i;
         this.listInvoice = this.buyinvoiceViews;
+      }, (er) => {
+        this.commonService.messeage(er.status);
       });
     }
   }
@@ -190,6 +200,8 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     this.buyInvoiceService.deleteBuyInvoice(requestDl).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
+    }, (er) => {
+      this.commonService.messeage(er.status);
     });
     this.selected = [];
   }
@@ -249,6 +261,8 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     this.buyInvoiceService.deleteBuyInvoice(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
+    },  (er) => {
+      this.commonService.messeage(er.status);
     });
   }
 
@@ -259,7 +273,9 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         const rs = {
           fileName: rp[index].fileName,
         };
-        this.invoiceService.removeFile(rs).subscribe(() => { });
+        this.invoiceService.removeFile(rs).subscribe(() => { }, (er) => {
+          this.commonService.messeage(er.status);
+        });
       }
     });
   }
@@ -354,7 +370,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         endDate: searchStr.to,
         isIssueDate: this.ischeck,
       };
-      this.getInvoice(requestList);
+      this.getBuyInvoice(requestList);
       // alert(JSON.stringify(searchStr));
     }
   }

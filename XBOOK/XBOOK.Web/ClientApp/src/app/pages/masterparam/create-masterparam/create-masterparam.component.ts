@@ -209,6 +209,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 // }
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-create-masterparam',
   templateUrl: './create-masterparam.component.html',
   styleUrls: ['./create-masterparam.component.scss'],
@@ -225,6 +226,7 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
   SelectedData: any[];
   paramType: any[];
   companyprofileView: CompanyprofileView = new CompanyprofileView();
+  submitted: boolean;
   constructor(
     injector: Injector,
     private fb: FormBuilder,
@@ -325,6 +327,17 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
     //   this.message.warning('Please select a item Master Param');
     //   return false;
     // }
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.taxForm.invalid) {
+        return;
+    }
+
+    // display form values on success
+ //   alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.taxForm.value, null, 4));
+   // tslint:disable-next-line:one-line
+   else {
     const addListData = [];
     if (this.taxForm.value.taxs.length > this.taxListData.length) {
       this.taxForm.value.taxs.forEach(element => {
@@ -340,7 +353,7 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
           this.onload();
           return;
         }, (er) => {
-          this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
+        //  this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
         });
 
       }
@@ -356,10 +369,11 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
           this.onload();
           return;
         }, (er) => {
-          this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
+         // this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
         });
       }
     }
+   }
 
   }
   close(result: any): void {
@@ -426,4 +440,7 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
       }
     });
   }
+  get f() { return this.taxForm.controls; }
+
+
 }

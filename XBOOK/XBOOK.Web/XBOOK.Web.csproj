@@ -14,17 +14,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Reports\Template\AccountBalanceReport.repx" />
-    <None Remove="Reports\Template\GeneralLedgerReport.repx" />
-    <None Remove="Reports\Template\InvoiceReport.repx" />
-    <None Remove="Reports\Template\SalesReportReport.repx" />
+    <Compile Remove="wwwroot\uploaded\**" />
+    <Content Remove="wwwroot\uploaded\**" />
+    <EmbeddedResource Remove="wwwroot\uploaded\**" />
+    <None Remove="wwwroot\uploaded\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Template\AccountBalanceReport.repx" />
-    <EmbeddedResource Include="Reports\Template\GeneralLedgerReport.repx" />
-    <EmbeddedResource Include="Reports\Template\InvoiceReport.repx" />
-    <EmbeddedResource Include="Reports\Template\SalesReportReport.repx" />
+    <None Remove="Reports\Template\PaymentReceiptReport.repx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Template\PaymentReceiptReport.repx" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -56,40 +57,14 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\assets\img\profile\" />
-    <Folder Include="Reports\Data\" />
-    <Folder Include="wwwroot\uploaded\images\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Reports\InvoiceReport.cs">
-      <DependentUpon>InvoiceReport.repx</DependentUpon>
+    <Compile Update="Reports\Template\PaymentReceiptReport.cs">
+      <DependentUpon>PaymentReceiptReport.repx</DependentUpon>
     </Compile>
-    <Compile Update="Reports\InvoiceReport.Designer.cs">
-      <DependentUpon>InvoiceReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\AccountBalanceReport.cs">
-      <DependentUpon>AccountBalanceReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\AccountBalanceReport.Designer.cs">
-      <DependentUpon>AccountBalanceReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\GeneralLedgerReport.cs">
-      <DependentUpon>GeneralLedgerReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\GeneralLedgerReport.Designer.cs">
-      <DependentUpon>GeneralLedgerReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\InvoiceReport.cs">
-      <DependentUpon>InvoiceReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\InvoiceReport.Designer.cs">
-      <DependentUpon>InvoiceReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\SalesReportReport.cs">
-      <DependentUpon>SalesReportReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\SalesReportReport.Designer.cs">
-      <DependentUpon>SalesReportReport.repx</DependentUpon>
+    <Compile Update="Reports\Template\PaymentReceiptReport.Designer.cs">
+      <DependentUpon>PaymentReceiptReport.repx</DependentUpon>
     </Compile>
   </ItemGroup>
   

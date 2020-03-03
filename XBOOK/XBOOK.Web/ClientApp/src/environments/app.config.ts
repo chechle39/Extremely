@@ -1,7 +1,9 @@
 export const API_URI = {
   deleteUser: 'api/User/Delete',
+  deleteRole: 'api/Role/Delete',
   updateUserData: 'api/User/Update',
   adminUser: 'api/User/SaveEntity',
+  saveRole: 'api/Role/CreateRole',
   adminRole: 'api/Seed/CreateAdminRole',
   adminUserAdminRole: 'api/Seed/AddUserToAdminRole',
   createSaleInv: 'api/SaleInvoice/CreateSaleInvoice',
@@ -11,6 +13,7 @@ export const API_URI = {
   updateClient: 'api/client/UpdateClient',
   clientById: 'api/client/GetClientById',
   clientAll: 'api/Client/GetAllClientAsync',
+  ExportClient: 'api/Client/ExportClient',
   productGetAll: 'api/Product/GetAllProductAsync',
   paymentCreate: 'api/Payments/CreatePayments',
   paymentIvById: 'api/Payments/GetPaymentByInv',
@@ -25,6 +28,7 @@ export const API_URI = {
   createClient: 'api/client/SaveClient',
   createImportClient: 'api/client/CreateImportClient',
   GetFieldName: 'api/client/ImportExcel',
+
   taxGetAll: 'api/Tax/GetAllTax',
   MasterGetAll: 'api/MasterParam/GetAllMaster',
   createMaster: 'api/MasterParam/CreateMasterParam',
@@ -102,6 +106,9 @@ export const API_URI = {
   updateSupplier: 'api/Supplier/UpdateSupplier',
   deleteSupplier: 'api/Supplier/DeleteClient',
   getSupplierDap: 'api/Supplier/GetAllSupplierDapper',
+  ExportSupplier: 'api/Supplier/ExportSupplier',
+  GetFieldNameSupplier: 'api/Supplier/ImportExcel',
+  createImportSupplier: 'api/Supplier/CreateImportSupplier',
   getSalesreport: 'api/SalesReport/GetALLDebitageServiceDapper',
   getDataReport: 'api/SalesReport/GetDatareportServiceDapper',
 
@@ -130,6 +137,7 @@ export const API_URI = {
   register: 'api/Account/Register',
   getAllUser: 'api/User/GetUser',
   getUserById: 'api/User/GetById',
+  getRoleById: 'api/Role/GetById',
 
   JournalGetAll: 'api/JournalEntry/GetAllJournalEntry',
   dataMap: 'api/JournalEntry/GetDataMap',
@@ -142,5 +150,5 @@ export const API_URI = {
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,
-  pageSize: 20
+  pageSize: 20,
 };

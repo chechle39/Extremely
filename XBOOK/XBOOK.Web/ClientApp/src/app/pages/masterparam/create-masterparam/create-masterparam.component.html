@@ -89,16 +89,21 @@
         <div style="margin-top: 3%;" class="col-6 text-left">Key</div>
         <div style="margin-top: 3%;margin-left: -45px;" class="col-6 text-left">Name</div>
 
-        <div class="col-6">
-          <input #paramKey formControlName="key" class="form-control" style="width: 130px" type="text" placeholder="key"
-            id="key" digitOnly maxlength=200>
+        <div class="col-6">       
+          <input validateInputDirective [rowItem]="taxForm" *ngIf="taxForm.value.taxs[i].isAdd==null" type="key"  formControlName="key" class="form-control" style="width: 130px" type="text"
+          placeholder="key" id="key" digitOnly maxlength=200 [ngClass]="{ 'is-invalid': key}">   
+          <input  *ngIf="taxForm.value.taxs[i].isAdd!=null" type="key"  formControlName="key" class="form-control" style="width: 130px" type="text"
+          placeholder="key" id="key" digitOnly maxlength=200>   
+            <!-- <input  #paramKey *ngIf="taxForm.value.taxs[i].isAdd==null" formControlName="key" class="form-control" style="width: 130px" type="text" placeholder="key"
+            id="key" digitOnly maxlength=200 [ngClass]="{ 'is-invalid': submitted}">
+            <input #paramKey *ngIf="taxForm.value.taxs[i].isAdd!=null" formControlName="key" class="form-control" style="width: 130px" type="text" placeholder="key"
+            id="key" digitOnly maxlength=200>                         -->
         </div>
 
         <div class="col-4">
           <input #paramname formControlName="name" class="form-control" style="width: 200px;margin-left: -43px;"
             type="text" placeholder="name" id="name" maxlength=200>
         </div>
-
         <div class="col-2" style="margin-top: -25px;">
           <a class="icon-action">
             <span class="icon-delete" (click)="delete(tax.value.paramType,tax.value.key,tax.value.name)"></span>

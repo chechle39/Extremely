@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XBOOK.Data.Entities;
@@ -14,7 +16,7 @@ namespace XBOOK.Web.Controllers
     {
         IProductService _iProductService;
         private readonly XBookContext _context;
-        public ProductController(IProductService iProductService, XBookContext context)
+        public ProductController(IProductService iProductService, XBookContext context, IHttpContextAccessor httpContextAccessor)
         {
             _iProductService = iProductService;
             _context = context;

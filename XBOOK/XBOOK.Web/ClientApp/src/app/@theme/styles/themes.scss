@@ -5,6 +5,8 @@
 
 $nb-themes: nb-register-theme((
   layout-padding-top: 2.25rem,
+  
+  scrollbar-width	: 0.5rem,
 
   menu-item-icon-margin: 0 0.5rem 0 0,
 
@@ -32,7 +34,8 @@ $nb-themes: nb-register-theme((
   text-heading-5-font-weight: 400,
   text-heading-6-font-weight: 400,
 
-  
+  menu-text-font-size: 0.9rem,
+  menu-text-font-weight: 500,
 ), default, default);
 
 $nb-themes: nb-register-theme((

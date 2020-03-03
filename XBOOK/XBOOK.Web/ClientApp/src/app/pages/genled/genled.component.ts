@@ -15,9 +15,10 @@ class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-genled',
   templateUrl: './genled.component.html',
-  styleUrls: ['./genled.component.scss']
+  styleUrls: ['./genled.component.scss'],
 })
 export class GenledComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;
@@ -55,7 +56,7 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
     this.getProfiles();
     const date = new Date();
@@ -67,7 +68,7 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
       isaccount: false,
       isAccountReciprocal: false,
       money: null,
-      accNumber: null
+      accNumber: null,
     };
 
     this.genLedService
@@ -76,7 +77,7 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -124,7 +125,7 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
       isaccount: false,
       isAccountReciprocal: false,
       money: null,
-      accNumber: null
+      accNumber: null,
     };
     this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV);
 
@@ -158,7 +159,6 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };
       this.genViewsreport.push(data);
-      console.log(this.genViewsreport);
     }
     const reportName = 'GeneralJournalReport';
     this.genLedService.GenSaveDataPrint(this.genViewsreport).subscribe(rp => {

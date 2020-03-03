@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { NbAlertModule, NbCardModule, NbIconModule, NbPopoverModule, NbSearchModule, NbButtonModule, NbActionsModule, NbSelectModule, NbContextMenuModule, NbSidebarModule } from '@nebular/theme';
+import { NbAlertModule, NbCardModule, NbIconModule, NbPopoverModule,
+  NbSearchModule, NbButtonModule, NbActionsModule, NbSelectModule,
+   NbContextMenuModule, NbSidebarModule } from '@nebular/theme';
 import { ClientRoutingModule } from './clients-routing.module';
 import { ClientsComponent } from './clients.component';
 import { CreateClientComponent } from './create-client/create-client.component';
@@ -27,9 +29,9 @@ import { SharedModule } from '../../shared/shared.module';
     NgbModule,
     NgxDatatableModule,
     FormsModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [ClientService, CurrencyPipe, DecimalPipe],
-  entryComponents: [EditClientComponent, CreateClientComponent, ImportClientComponent]
+  entryComponents: [EditClientComponent, CreateClientComponent, ImportClientComponent],
 })
 export class ClientsModule { }

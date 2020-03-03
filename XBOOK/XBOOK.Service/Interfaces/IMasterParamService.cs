@@ -9,6 +9,7 @@ namespace XBOOK.Service.Interfaces
     {
         Task<IEnumerable<MasterParamViewModel>> GetAllMaster();
         Task CreateMasterParam(List<MasterParamViewModel> request);
+        Task UpdateMaster(List<MasterParamViewModel> request);
         Task<IEnumerable<MasterParamViewModel>> GetMasterById(string id);
         bool DeleteMaster(List<requestDeletedMaster> request);
     }

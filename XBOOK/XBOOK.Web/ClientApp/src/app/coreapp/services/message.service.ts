@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 import { Injectable } from '@angular/core';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessageService {
   success(message: string, content: string = '') {
@@ -15,6 +15,13 @@ export class MessageService {
   }
   error(message: string, content: string = '') {
     Swal.fire(message, content, 'error');
+  }
+  errorHandel(message: string, content: string = '', callBack: () => void) {
+    Swal.fire(message, content, 'error').then(isConfirm => {
+      if (isConfirm.value) {
+        callBack();
+      }
+    }).catch();
   }
   confirm(message: string, content: string, callBack: () => void) {
     Swal.fire({

@@ -16,6 +16,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     isCheckForm: boolean;
     isAccountNotExit: boolean;
     loading = false;
+    isCheck: boolean = true;
     constructor(
         injector: Injector,
         public fb: FormBuilder,
@@ -40,7 +41,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
         });
     }
 
-    private login(submittedForm: FormGroup) {
+    public login(submittedForm: FormGroup) {
         const rq = {
             email: submittedForm.value.userName,
             password: submittedForm.value.password,
@@ -54,7 +55,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
             } as LoginContext;
             if (rp.success === false) {
                 this.message.error(rp.message, 'Wrong login, please login again');
-
+                this.isCheck = rp.success;
             } else {
                 this.loading = true;
                 const login$ = this.authenticationService.login(request);

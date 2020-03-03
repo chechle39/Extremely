@@ -81,12 +81,28 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'General Ledger',
         link: '/pages/genledgroup',
       },
+      {
+        title: 'Account Detail',
+        link: '/pages/acountdetail',
+      },
+      {
+        title: 'Account Balance',
+        link: '/pages/accountbalance',
+      },
     ],
   },
   {
     title: 'System & Extra Functions',
     icon: 'person-outline',
     children: [
+      {
+        title: 'User',
+        link: '/pages/user',
+      },
+      {
+        title: 'Role',
+        link: '/pages/role',
+      },
       {
         title: 'Company profile',
         link: '/pages/companyProfile',
@@ -96,7 +112,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/masterParam',
       },
       {
-        title: 'Print',
+        title: 'Report Designer',
         link: '/pages/print/disign',
       },
     ],
@@ -105,6 +121,5 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Purchase Report',
     icon: 'file-text',
     link: '/pages/purchasereport',
-    home: true,
   },
 ];

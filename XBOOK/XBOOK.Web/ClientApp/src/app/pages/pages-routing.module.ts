@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { PrintComponent } from './print/print.component';
 import { extract } from '../coreapp/services/i18n.service';
+import { AuthenticationGuard } from '../coreapp/auth/authentication.guard';
 
 const routes: Routes = [
   {
   path: '',
   component: PagesComponent,
+  canActivate: [AuthenticationGuard],
   children: [
     { path: 'print/:key', component: PrintComponent, data: { title: extract('print') } },
     {
@@ -94,6 +96,31 @@ const routes: Routes = [
       path: 'debitage',
       loadChildren: () => import('./debitage/debit-age.module')
         .then(m => m.DebitAgeModule),
+    },
+    {
+      path: 'debitage',
+      loadChildren: () => import('./debitage/debit-age.module')
+        .then(m => m.DebitAgeModule),
+    },
+    {
+      path: 'acountdetail',
+      loadChildren: () => import('./accountdetail/accountdetail.module')
+        .then(m => m.AcountDetailModule),
+    },
+    {
+      path: 'user',
+      loadChildren: () => import('./user/user.module')
+        .then(m => m.UserModule),
+    },
+    {
+      path: 'role',
+      loadChildren: () => import('./role/role.module')
+        .then(m => m.RoleModule),
+    },
+    {
+      path: 'accountbalance',
+      loadChildren: () => import('./accountbalance/accountbalance.module')
+        .then(m => m.AccountbalanceModule),
     },
   ],
 }];

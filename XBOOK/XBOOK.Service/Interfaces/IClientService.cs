@@ -9,11 +9,13 @@ namespace XBOOK.Service.Interfaces
     public interface IClientService
     {
         Client CreateClient(ClientCreateRequet request);
+        bool CreateClientImport(List<ClientCreateRequet> request);
         Task<ClientViewModel> GetClientById(int id);
         Task<IEnumerable<ClientViewModel>> GetAllClient(ClientSerchRequest request);
         Task<IEnumerable<ClientViewModel>> SerchClient(string keyword);
         Task<bool> UpdateClient(ClientCreateRequet request);
         bool DeletedClient(List<requestDeleted> request);
+        byte[] GetDataClientAsync(List<ClientCreateRequet> request);
 
     }
 }

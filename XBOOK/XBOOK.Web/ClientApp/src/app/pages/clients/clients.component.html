@@ -9,11 +9,12 @@
           <button class="btn btn-flat mr-1 pt-0" id="bulkActions" ngbDropdownToggle>More Actions
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button class="dropdown-item"><span class="icon-import"></span> Import Clients
-              <input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)"
-            ></button>
-            <button class="dropdown-item"><span class="icon-export"></span> Export Client</button>
+            <button class="dropdown-item position-relative"><span class="icon-import"></span> Import Clients
+              <input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)">              
+            </button>
+               <button class="dropdown-item" (click)="ExportClient()"><span class="icon-export"></span> Export Client</button>
           </div>
+       
         </div>
       </div>
       <div class="col-4 col-lg-4">

@@ -3,7 +3,6 @@ using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
 using DevExpress.Security.Resources;
 using DevExpress.XtraReports.Security;
-using DevExpress.XtraReports.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +24,9 @@ using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.Repositories;
+using XBOOK.Report.Services;
 using XBOOK.Service.Interfaces;
 using XBOOK.Service.Service;
 
@@ -51,8 +52,9 @@ namespace XBOOK.Web
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ApplicationSetting>(Configuration.GetSection("ApplicationSetting"));
             services.AddDevExpressControls();
-            services.AddScoped<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddIdentity<AppUser, AppRole>()
                .AddEntityFrameworkStores<XBookContext>()
                .AddDefaultTokenProviders();
@@ -80,6 +82,7 @@ namespace XBOOK.Web
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSetting:JWT_Secret"].ToString());
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddCors(options => options.AddPolicy("CorsPolicy",
@@ -135,6 +138,7 @@ namespace XBOOK.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IJournalEntryService, JournalEntryService>();
+            services.AddTransient<IJournalDetailService, JournalDetailService>();
 
             services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
             services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();
@@ -156,7 +160,7 @@ namespace XBOOK.Web
             services.AddTransient<IAccountChartRepository, AccountChartRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IJournalEntryRepository, JournalEntryRepository>();
-
+            services.AddTransient<IJournalDetailRepository, JournalDetailRepository>();
 
             services.AddTransient<IAccountDetailServiceDapper, AccountDetailServiceDapper>();
             services.AddTransient<IPurchaseReportDapper, PurchaseReportServiceDapper>();
@@ -167,7 +171,7 @@ namespace XBOOK.Web
             services.AddTransient<IBuyInvoiceServiceDapper, BuyInvoiceServiceDapper>();
             services.AddTransient<ISupplierServiceDapper, SupplierServiceDapper>();
             services.AddTransient<IPaymentReceiptServiceDapper, PaymentReceiptServiceDapper>();
-            services.AddTransient<ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddSwaggerGen(c =>
             {
@@ -226,7 +230,7 @@ namespace XBOOK.Web
                 }
             });
 
-            // Khi deloy
+           // Khi deloy
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -236,7 +240,7 @@ namespace XBOOK.Web
                 app.UseHsts();
             }
 
-            // kho developer
+            //  kho developer
 
             //if (env.IsDevelopment())
             //{

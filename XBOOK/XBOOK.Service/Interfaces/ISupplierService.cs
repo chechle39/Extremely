@@ -13,5 +13,7 @@ namespace XBOOK.Service.Interfaces
         Task<IEnumerable<SupplierViewModel>> SerchClient(string keyword);
         Task<bool> UpdateSupplier(SupplierCreateRequest request);
         Task<bool> DeletedSupplier(List<requestDeleted> request);
+        byte[] GetDataSupplierAsync(List<SupplierCreateRequest> request);
+        bool CreateSupplierImport(List<SupplierCreateRequest> request);
     }
 }

@@ -12,8 +12,7 @@ const routes: Routes = [
     loadChildren: () => import('../app/authen/xbook-authen.module')
       .then(m => m.XBookAuthenModule),
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: '**', redirectTo: 'pages', pathMatch: 'full' },
 ];
 
 const config: ExtraOptions = {

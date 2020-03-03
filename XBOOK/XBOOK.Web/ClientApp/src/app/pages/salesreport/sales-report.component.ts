@@ -201,7 +201,7 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
 
     clientName = id;
     this.data.sendMessage(clientName);
-    this.router.navigate([`/invoice`]);
+    this.router.navigate([`/pages/invoice`]);
   }
 
 }

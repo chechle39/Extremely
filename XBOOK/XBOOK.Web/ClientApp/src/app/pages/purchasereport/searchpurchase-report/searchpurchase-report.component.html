@@ -3,13 +3,13 @@
     <div class=" modal-header">
         <div class="row"></div>
         <div class="col-12">
-            <h5 style="margin-left: -15px;" class="modal-title">Tìm Kiếm</h5>
+            <h5 style="margin-left: -15px;" class="modal-title">{{'SEARCH.TITLE' | translate }}</h5>
         </div>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-12">
-                <h5 class="modal-title">KHOẢNG THỜI GIAN</h5>
+                <h5 class="modal-title">{{'SEARCH.AmountofTime' | translate }}</h5>
             </div>
             <div class="form-group col-12 mb-2">
                 <select (change)="onChange($event)" id="genLedMethods" class="form-control" formControlName="genLedMethods"style="position: relative;margin-bottom: 20px;">
@@ -21,7 +21,7 @@
         </div>
         <div class="row" *ngIf = "case6 === 6" style="margin-top: -20px;position: relative;">
             <div class="col-12">
-                <h5 class="modal-title">TÙY CHỌN THỜI GIAN</h5>
+                <h5 class="modal-title">{{'SEARCH.AmountofTime' | translate }}</h5>
             </div>
             <div class="form-group col-6 mb-2">
                 <div class=" input-group">
@@ -50,7 +50,7 @@
         <div class="row" style="position: relative;margin-top: -19px;">
             <div class="form-group col-6 mb-2">
                 <div class="custom-control custom-checkbox m-1">                  
-                    <label style="padding-top: 3px; margin-left: -7px;width: 200px;" class="custom-control-label col-form-label" for="account">HÀNG HÓA/DỊCH VỤ</label>
+                    <label style="padding-top: 3px; margin-left: -7px;width: 200px;" class="custom-control-label col-form-label" for="account">{{'SEARCH.ProductService' | translate }}</label>
                 </div>
             </div>                        
             <div class="form-group col-12 mb-2" style="margin-top: -23px;">
@@ -78,7 +78,7 @@
         <div class="row" style="position: relative;margin-top: -15px;">
             <div class="form-group col-6 mb-2">
                 <div  class="custom-control custom-checkbox m-1">                  
-                    <label style="padding-top: 3px; margin-left: -7px;width: 200px;" class="custom-control-label col-form-label" for="account">NHÀ CUNG CẤP</label>
+                    <label style="padding-top: 3px; margin-left: -7px;width: 200px;" class="custom-control-label col-form-label" for="account">{{'SEARCH.Supplier' | translate }}</label>
                 </div>
             </div>                        
             <div class="form-group col-12 mb-2" style="margin-top: -20px;">
@@ -115,7 +115,7 @@
 
 
     <div class="modal-footer">
-        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1"> Cancel</button>
-        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">Áp dụng</button>
+        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">{{'COMMON.BUTTON.CANCEL' | translate }}</button>
+        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">{{'COMMON.BUTTON.APPLY' | translate }}</button>
     </div>
 </form>

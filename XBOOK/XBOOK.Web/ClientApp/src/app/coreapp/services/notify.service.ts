@@ -3,7 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotifyService {
   options = { timeOut: 1000, progressBar: true, closeButton: true };

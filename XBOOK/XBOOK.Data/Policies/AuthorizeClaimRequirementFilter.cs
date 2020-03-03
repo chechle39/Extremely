@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using XBOOK.Common.Exceptions;
 using XBOOK.Data.Identity;
 
 namespace XBOOK.Data.Policies
@@ -24,7 +25,7 @@ namespace XBOOK.Data.Policies
             var hasClaim = context.HttpContext.User.Claims.Any(c => c.Value == _claim.Value);
             if (!hasClaim)
             {
-                context.Result = new ForbidResult();
+                context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
             }
         }
     }

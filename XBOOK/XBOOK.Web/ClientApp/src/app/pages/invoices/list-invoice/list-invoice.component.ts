@@ -17,7 +17,7 @@ class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
 @Component({
-  selector: 'ngx-list-invoice',
+  selector: 'xb-list-invoice',
   styleUrls: ['./list-invoice.component.scss'],
   templateUrl: './list-invoice.component.html',
 })
@@ -223,7 +223,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     return plus;
   }
   redirectToCreateNewInvoice() {
-    this.data.sendMessage('');
+   // this.data.sendMessage('');
     this.router.navigate([`pages/invoice/new`]);
   }
   redirectToEditInvoice(id) {

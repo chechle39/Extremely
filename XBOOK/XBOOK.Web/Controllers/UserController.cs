@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using XBOOK.Data.Identity;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -15,15 +18,25 @@ namespace XBOOK.Web.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly UserManager<AppUser> _userManager;
+        public UserController(IUserService userService, UserManager<AppUser> userManager)
         {
             _userService = userService;
+            _userManager = userManager;
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> GetUser()
+        public async Task<IActionResult> GetUserProFile()
         {
-            return Ok(await _userService.GetAllAsync());
+            string UserID = User.Claims.First(x => x.Type == "UserID").Value;
+            var user = await _userManager.FindByIdAsync(UserID);
+            return Ok(user);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetUser(UserRequest rq)
+        {
+            return Ok(await _userService.GetAllAsync(rq));
         }
 
         [HttpPost("[action]")]
@@ -43,6 +56,28 @@ namespace XBOOK.Web.Controllers
         {
             await _userService.UpdateAsync(userVm);
             return Ok(userVm);
+        }
+
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var model = await _userService.GetById(id);
+            return new OkObjectResult(model);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Delete(List<Deleted> id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+            else
+            {
+                await _userService.DeleteAsync(id);
+
+                return Ok(true);
+            }
         }
     }
 }

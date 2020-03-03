@@ -21,7 +21,7 @@ export class RegisterComponent extends AppComponentBase {
     super(injector);
     this.loginForm = this.createForm();
   }
-  private register(submittedForm: FormGroup) {
+  public register(submittedForm: FormGroup) {
     const birthDay = submittedForm.controls.birthDay.value;
     const request = {
       email: submittedForm.value.email,

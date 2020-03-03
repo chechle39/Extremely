@@ -12,19 +12,22 @@ import { DataService } from '../_shared/services/data.service';
 import { EditSupplierComponent } from './edit-supplier/edit-supplier.component';
 import { CreateSupplierComponent } from './create-supplier/create-supplier.component';
 import { SupplierService } from '../_shared/services/supplier.service';
+import { ImportSupplierComponent } from './import-supplier/import-supplier.component';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-supplier',
   templateUrl: './supplier.component.html',
-  styleUrls: ['./supplier.component.scss']
+  styleUrls: ['./supplier.component.scss'],
 
 })
 export class SupplierComponent extends PagedListingComponentBase<ClientView> {
   clientViews: any;
   loadingIndicator = true;
   keyword = '';
+  Datareport: any[] = [];
   reorderable = true;
   selected = [];
   ColumnMode = ColumnMode;
@@ -42,14 +45,14 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
 
     request.clientKeyword = this.keyword;
     this.loadingIndicator = true;
     const clientKey = {
       clientKeyword: this.clientKeyword.toLocaleLowerCase(),
-      isGrid: true
+      isGrid: true,
     };
     this.supplierService
       .getSupplierData(clientKey)
@@ -57,14 +60,31 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
         this.clientViews = i;
       });
   }
-
+  ExportSupplier() {
+    this.supplierService.ExportSupplier(this.clientViews);
+  }
+  public showPreview(files): void {
+    if (files.length === 0) {
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    // tslint:disable-next-line:variable-name
+    // tslint:disable-next-line:variable-name
+    this.supplierService.GetFieldNameSupplier(files).subscribe((rp: any) => {
+      this.Datareport = rp;
+      const createOrEditClientDialog = this.modalService.open(ImportSupplierComponent
+        , AppConsts.modalOptionsCustomSize);
+      createOrEditClientDialog.componentInstance.id = this.Datareport;
+    });
+  }
   edit(): void {
     if (this.selected.length === 0) {
       this.message.warning('Please select a item from the list?');
@@ -157,6 +177,6 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
       supplierName += ';' + this.selected[i].supplierName;
     }
     this.data.sendMessage(supplierName);
-    this.router.navigate([`/buyinvoice`]);
+    this.router.navigate([`/pages/buyinvoice`]);
   }
 }

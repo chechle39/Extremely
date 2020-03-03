@@ -24,25 +24,24 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { CreatePaymentReceiptComponent } from '../pages/paymentreceipt/payment-receipt/payment-receipt.component';
 import { validateDirective } from './validators/validate';
-import { validateInputDirective } from './validators/validateInputDirective';
 import { validateDateDirective } from './validators/validateDateDirective';
 import { SearchgenledComponent } from '../pages/genledgroup/searchgenledgroup/searchgenled.component';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { validatePasswordDirective } from './validators/validatePasswordDirective';
 import { validateLengthPasswordDirective } from './validators/validatelengthpasswordirective';
-
+import { validateInputDirective } from './validators/validateInputDirective';
 @NgModule({
   declarations: [
     validateDateDirective,
     validatePasswordDirective,
     validateLengthPasswordDirective,
     validateDirective,
+    validateInputDirective,
     SidebarDirective,
     SidebarLinkDirective,
     SidebarListDirective,
     SidebarAnchorToggleDirective,
     SidebarToggleDirective,
-    validateInputDirective,
     AutoFocusDirective,
     ThousandSuffixesPipe,
     SplitPipe,
@@ -76,6 +75,7 @@ import { validateLengthPasswordDirective } from './validators/validatelengthpass
     validatePasswordDirective,
     validateLengthPasswordDirective,
     validateDirective,
+    validateInputDirective,
     ThousandSuffixesPipe,
     TranslateModule,
     SidebarDirective,
@@ -87,7 +87,6 @@ import { validateLengthPasswordDirective } from './validators/validatelengthpass
     CreatePaymentReceiptComponent,
     SearchgenledComponent,
     SidebarToggleDirective,
-    validateInputDirective
   ],
   providers: [
     { provide: NgbDateParserFormatter, useClass: MomentDateFormatter },

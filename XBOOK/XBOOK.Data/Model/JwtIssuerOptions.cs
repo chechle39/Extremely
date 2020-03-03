@@ -31,19 +31,17 @@ namespace XBOOK.Data.Model
         /// <summary>
         /// 4.1.5.  "nbf" (Not Before) Claim - The "nbf" (not before) claim identifies the time before which the JWT MUST NOT be accepted for processing.
         /// </summary>
-        public DateTime NotBefore => DateTime.UtcNow;
+        public DateTime NotBefore { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// 4.1.6.  "iat" (Issued At) Claim - The "iat" (issued at) claim identifies the time at which the JWT was issued.
         /// </summary>
-        public DateTime IssuedAt => DateTime.UtcNow;
+        public DateTime IssuedAt { get; set; } = DateTime.UtcNow;
 
         /// <summary>
-        /// Set the timespan the token will be valid for (default is 120 min)
+        /// Set the timespan the token will be valid for (default is 5 min/300 seconds)
         /// </summary>
-        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(120);
-
-
+        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(5);
 
         /// <summary>
         /// "jti" (JWT ID) Claim (default ID is a GUID)

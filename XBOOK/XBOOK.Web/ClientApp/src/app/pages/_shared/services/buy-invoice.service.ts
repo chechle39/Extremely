@@ -53,7 +53,7 @@ export class BuyInvoiceService extends BaseService {
     getLastBuyInvoice(): Observable<any> {
         return this.post<BuyInvoiceView>(`${API_URI.lastBuyInvoice}`, null);
     }
-    getAll(request: any): Observable<BuyInvoiceView> {
+    getAllBuyInvoiceList(request: any): Observable<BuyInvoiceView> {
         return this.post<BuyInvoiceView>(`${API_URI.buyinvoice}`, request);
     }
     deleteBuyInvoice(id: any) {

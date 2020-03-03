@@ -16,9 +16,10 @@ class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-clients',
   templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss']
+  styleUrls: ['./clients.component.scss'],
 
 })
 export class ClientsComponent extends PagedListingComponentBase<ClientView> {
@@ -47,14 +48,14 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
 
     request.clientKeyword = this.keyword;
     this.loadingIndicator = true;
     const clientKey = {
       clientKeyword: this.clientKeyword.toLocaleLowerCase(),
-      isGrid: true
+      isGrid: true,
     };
     this.clientService
       .getClientData(clientKey)
@@ -62,7 +63,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -100,19 +101,14 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
       this.selected = [];
     });
   }
-  // showPreviewUploadFile(files) {
-  //   this.fileUpload.push(files[0]);
-  //   this.clientService.GetFieldName().subscribe(i => {
-  //     this.Datareport = i;
-  //     const createOrEditClientDialog = this.modalService.open(ImportClientComponent, AppConsts.modalOptionsCustomSize);
-  //     createOrEditClientDialog.componentInstance.id = this.Datareport;
-  //     // tslint:disable-next-line:prefer-for-of
-  //   });
-  // }
+  ExportClient() {
+    this.clientService.ExportClient(this.clientViews);
+  }
   public showPreview(files): void {
     if (files.length === 0) {
       return;
     }
+    // tslint:disable-next-line:no-console
     console.log(files);
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
@@ -190,6 +186,6 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
       clientName += ';' + this.selected[i].clientName;
     }
     this.data.sendMessage(clientName);
-    this.router.navigate([`/invoice`]);
+    this.router.navigate([`/pages/invoice`]);
   }
 }

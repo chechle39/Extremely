@@ -10,10 +10,13 @@ namespace XBOOK.Data.Identity
     public class AppUser : IdentityUser<int>, IDateTracking, ISwitchable
     {
         private Status status;
+        private Status status1;
+        private Status status2;
+        private Status status3;
 
         public AppUser() { }
 
-        public AppUser(int id, string fullName, string userName, string email, string phoneNumber, string avatar, Status status)
+        public AppUser(int id, string fullName, string userName, string email, string phoneNumber, string avatar, Status status3, string gender, DateTime birthDay, string address)
         {
             Id = id;
             FullName = fullName;
@@ -21,7 +24,10 @@ namespace XBOOK.Data.Identity
             Email = email;
             PhoneNumber = phoneNumber;
             Avatar = avatar;
-            this.status = status;
+            this.status3 = status3;
+            Gender = gender;
+            BirthDay = birthDay;
+            Address = address;
         }
 
         public string FullName { get; set; }
@@ -31,9 +37,10 @@ namespace XBOOK.Data.Identity
         public decimal Balance { get; set; }
 
         public string Avatar { get; set; }
-
+        public string Address { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public Status Status { get; set; }
+        public string Gender { get; set; }
     }
 }

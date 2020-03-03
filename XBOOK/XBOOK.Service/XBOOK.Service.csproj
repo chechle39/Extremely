@@ -13,10 +13,4 @@
     <ProjectReference Include="..\XBOOK.Data\XBOOK.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="XAccLib">
-      <HintPath>D:\svn\FILES\XAccLib.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

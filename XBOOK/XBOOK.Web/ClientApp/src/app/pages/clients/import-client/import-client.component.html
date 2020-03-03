@@ -30,11 +30,11 @@
     </div>
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <div class="form-group" style="margin-left: -5px;" for="clientName">Địa chỉ:</div>
+        <div class="form-group" style="margin-left: -5px;" for="address">Địa chỉ:</div>
       </div>
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
-          <select style="margin-top: -10px;" id="clientName" formControlName="clientName" class="form-control">
+          <select style="margin-top: -10px;" id="address" formControlName="address" class="form-control">
             <option [ngValue]="null">Choose a value</option>
             <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
               {{ method.value }}: {{i+1}}
@@ -45,11 +45,11 @@
     </div>
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <div class="form-group" style="margin-left: -5px;" for="clientName">Mã số thuế: </div>
+        <div class="form-group" style="margin-left: -5px;" for="taxCode">Mã số thuế: </div>
       </div>
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
-          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+          <select id="taxCode" style="margin-top: -10px;" formControlName="taxCode" class="form-control">
             <option [ngValue]="null">Choose a value</option>
             <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
               {{ method.value }}: {{i+1}}
@@ -60,11 +60,11 @@
     </div>
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <div class="form-group" style="margin-left: -8px;" for="clientName">Người liên hệ:</div>
+        <div class="form-group" style="margin-left: -8px;" for="contactName">Người liên hệ:</div>
       </div>
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
-          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+          <select id="contactName" style="margin-top: -10px;" formControlName="contactName" class="form-control">
             <option [ngValue]="null">Choose a value</option>
             <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
               {{ method.value }}: {{i+1}}
@@ -75,11 +75,11 @@
     </div>
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <div class="form-group" style="margin-left: -5px;" for="clientName">Email liên hệ: </div>
+        <div class="form-group" style="margin-left: -5px;" for="bankAccount">Email liên hệ: </div>
       </div>
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
-          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+          <select id="bankAccount" style="margin-top: -10px;" formControlName="bankAccount" class="form-control">
             <option [ngValue]="null">Choose a value</option>
             <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
               {{ method.value }}: {{i+1}}
@@ -105,11 +105,11 @@
     </div>
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <div class="form-group" style="margin-left: -5px;" for="clientName">Ghi chú: </div>
+        <div class="form-group" style="margin-left: -5px;" for="note">Ghi chú: </div>
       </div>
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
-          <select id="clientName" style="margin-top: -10px;" formControlName="clientName" class="form-control">
+          <select id="note" style="margin-top: -10px;" formControlName="note" class="form-control">
             <option [ngValue]="null">Choose a value</option>
             <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
               {{ method.value }}: {{i+1}}

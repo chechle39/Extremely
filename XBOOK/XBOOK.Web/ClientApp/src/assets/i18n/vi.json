@@ -113,5 +113,20 @@
   "Debit.Age.LIST.CompanyName": "Tên công ty",
   "Debit.Age.LIST.Total": "Tổng Cộng",
   "Debit.Age.LIST.date": "Ngày",
-  "USER.CREATE.FULLNAME.LABEL": "Họ và tên"
+  "USER.CREATE.FULLNAME.LABEL": "Họ và tên",
+  "ROLE.CREATE.ROLENAME.LABEL": "Tên role",
+
+  "SEARCH.TITLE":"Tìm kiếm",
+  "SEARCH.AmountofTime":"Khoảng Thời Gian",
+  "SEARCH.AccountNumber":"Tài Khoản",
+  "SEARCH.AccountNumbercrsp":"TK Đối Ứng",
+  "SEARCH.Currency":"Loại Tiền",
+  "SEARCH.Time":"Thời Điểm",
+  "SEARCH.ProductService":"HÀNG HÓA/DỊCH VỤ",
+  "SEARCH.Customer":"Khách Hàng",
+  "SEARCH.Supplier":"Nhà Cung Cấp",
+
+  "ROLE.LIST.HEADER.LABEL": "Quyền người dùng",
+  "ROLE.LIST.GRID.HEADER.ROLENAME": "Tên quyền",
+  "ROLE.LIST.GRID.HEADER.ROLEID": "Mã quyền"
 }

@@ -138,11 +138,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   ngOnInit() {
     this.isRead = false;
     this.getProfiles();
-    const request = {
-      productKeyword: '',
-      isGrid: false,
-    };
-
     this.invoiceService.getLastInvoice().subscribe(response => {
       this.listInvoice = response;
       this.createForm();
@@ -1135,69 +1130,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.invoiceService.downLoadFile(request).subscribe(rp => { });
   }
 
-
-  // Print() {
-  //   this.calculateTotalAmount();
-  //   if (this.invoiceForm.controls.items.value.length > 0) {
-  //     for (let i = 0; i < this.invoiceForm.controls.items.value.length; i++) {
-  //       const data = {
-  //         address: i === 0 ? this.invoiceForm.controls.address.value : null,
-  //         amountPaid: i === 0 ? this.invoiceForm.controls.amountPaid.value : null,
-  //         clientId: i === 0 ? this.invoiceForm.controls.clientId.value : null,
-  //         clientName: i === 0 ? this.invoiceForm.controls.clientName.value : null,
-  //         contactName: i === 0 ? this.invoiceForm.controls.contactName.value : null,
-  //         dueDate: i === 0 ? [this.invoiceForm.controls.dueDate.value.year,
-  //         this.invoiceForm.controls.dueDate.value.month,
-  //         this.invoiceForm.controls.dueDate.value.day].join('-') === '--'
-  //           ? '' : [this.invoiceForm.controls.dueDate.value.year,
-  //           this.invoiceForm.controls.dueDate.value.month,
-  //           this.invoiceForm.controls.dueDate.value.day].join('-') : null,
-  //         email: i === 0 ? this.invoiceForm.controls.email.value : null,
-  //         invoiceId: i === 0 ? this.invoiceForm.controls.invoiceId.value : null,
-  //         invoiceNumber: i === 0 ? this.invoiceForm.controls.invoiceNumber.value : null,
-  //         invoiceSerial: i === 0 ? this.invoiceForm.controls.invoiceSerial.value : null,
-  //         issueDate: i === 0 ? [this.invoiceForm.controls.issueDate.value.year,
-  //         this.invoiceForm.controls.issueDate.value.month,
-  //         this.invoiceForm.controls.issueDate.value.day].join('-') === '--'
-  //           ? '' : [this.invoiceForm.controls.issueDate.value.year,
-  //           this.invoiceForm.controls.issueDate.value.month,
-  //           this.invoiceForm.controls.issueDate.value.day].join('-') : null,
-  //         amount: this.invoiceForm.controls.items.value[i].amount,
-  //         description: this.invoiceForm.controls.items.value[i].description,
-  //         id: this.invoiceForm.controls.items.value[i].id,
-  //         price: this.invoiceForm.controls.items.value[i].price,
-  //         productId: this.invoiceForm.controls.items.value[i].productId,
-  //         productName: this.invoiceForm.controls.items.value[i].productName,
-  //         qty: this.invoiceForm.controls.items.value[i].qty,
-  //         vat: this.invoiceForm.controls.items.value[i].vat,
-  //         vatAmount: this.invoiceForm.controls.items.value[i].vatAmount,
-
-  //         unit: this.invoiceForm.controls.items.value[i].productName.split('(').length > 1
-  //           ? this.invoiceForm.controls.items.value[i].productName.split('(')[1].split(')')[0] : null,
-
-  //         subTotalAmount: this.currencyPipe.transform(this.subTotalAmount, '', ''),
-  //         totalAmount: this.currencyPipe.transform(this.totalAmount, '', ''),
-  //         notes: i === 0 ? this.invoiceForm.controls.notes.value : null,
-  //         reference: i === 0 ? this.invoiceForm.controls.reference.value : null,
-  //         taxCode: i === 0 ? this.invoiceForm.controls.taxCode.value : null,
-  //         termCondition: i === 0 ? this.invoiceForm.controls.termCondition.value : null,
-  //         totalDiscount: i === 0 ? this.invoiceForm.controls.totalDiscount.value : null,
-  //         yourBankAccount: i === 0 ? this.invoiceForm.controls.yourBankAccount.value : null,
-  //         yourCompanyAddress: i === 0 ? this.invoiceForm.controls.yourCompanyAddress.value : null,
-  //         yourCompanyName: i === 0 ? this.invoiceForm.controls.yourCompanyName.value : null,
-  //         yourTaxCode: i === 0 ? this.invoiceForm.controls.yourTaxCode.value : null,
-  //         yourCompanyCode: i === 0 ? this.companyCode : null,
-  //       };
-  //       this.requestSaveJson.push(data);
-
-  //     }
-  //     const reportName = 'InvoiceReport';
-  //     this.invoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp => {
-  //       this.router.navigate([`/pages/print/${reportName}`]);
-  //     });
-  //   }
-  // }
-
   Print() {
     this.calculateTotalAmount();
     if (this.invoiceForm.controls.items.value.length > 0) {
@@ -1210,7 +1142,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           contactName: i === 0 ? this.invoiceForm.controls.contactName.value : null,
           dueDate: i === 0 ? [this.invoiceForm.controls.dueDate.value.year,
           this.invoiceForm.controls.dueDate.value.month,
-          this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
+          this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ?
+          '' : [this.invoiceForm.controls.dueDate.value.year,
           this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') : null,
           email: i === 0 ? this.invoiceForm.controls.email.value : null,
           invoiceId: i === 0 ? this.invoiceForm.controls.invoiceId.value : null,
@@ -1218,8 +1151,10 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           invoiceSerial: i === 0 ? this.invoiceForm.controls.invoiceSerial.value : null,
           issueDate: i === 0 ? [this.invoiceForm.controls.issueDate.value.year,
           this.invoiceForm.controls.issueDate.value.month,
-          this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
-          this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-') : null,
+          this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ?
+          '' : [this.invoiceForm.controls.issueDate.value.year,
+          this.invoiceForm.controls.issueDate.value.month,
+          this.invoiceForm.controls.issueDate.value.day].join('-') : null,
           amount: this.invoiceForm.controls.items.value[i].amount,
           description: this.invoiceForm.controls.items.value[i].description,
           id: this.invoiceForm.controls.items.value[i].id,

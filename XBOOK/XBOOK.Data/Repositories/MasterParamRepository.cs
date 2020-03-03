@@ -15,10 +15,14 @@ namespace XBOOK.Data.Repositories
         }
         public bool DeleteMaster(List<requestDeletedMaster> request)
         {
-            var listTax = Entities.Where(x => ((x.paramType == request[0].paramTypedelete && x.key == request[0].keydelete && x.name == request[0].nameDelete))).ToList();
-            Entities.Remove(listTax[0]);
+            if (request[0].keydelete != null) {
+                var listTax = Entities.Where(x => ((x.paramType == request[0].paramTypedelete && x.key == request[0].keydelete && x.name == request[0].nameDelete))).ToList();
+                if (listTax.Count > 0) { Entities.Remove(listTax[0]); }                
+
+            }
 
             return true;
+
         }
 
     }
