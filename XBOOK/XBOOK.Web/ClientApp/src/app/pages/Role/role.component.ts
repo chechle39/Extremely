@@ -36,7 +36,6 @@ export class RoleComponent extends PagedListingComponentBase<ProductView> implem
   constructor(
     injector: Injector,
     private modalService: NgbModal,
-    private userService: UserService,
     private roleService: RoleService) {
     super(injector);
   }
@@ -82,7 +81,7 @@ export class RoleComponent extends PagedListingComponentBase<ProductView> implem
       return;
     }
     const requestDl = [];
-    this.message.confirm('Do you want to delete users ?', 'Are you sure ?', () => {
+    this.message.confirm('Do you want to delete role ?', 'Are you sure ?', () => {
       this.selected.forEach(element => {
         const id = element.id;
         requestDl.push({ id });
@@ -132,8 +131,8 @@ export class RoleComponent extends PagedListingComponentBase<ProductView> implem
     let createOrEditProductDialog;
     createOrEditProductDialog = this.modalService.open(CreateRoleComponent, AppConsts.modalOptionsSmallSize);
     createOrEditProductDialog.componentInstance.edit = true;
-    createOrEditProductDialog.componentInstance.id = event !== undefined ? event.row.id : event;
-    const title = 'Edit user';
+    createOrEditProductDialog.componentInstance.id = event.row !== undefined ? event.row.id : event;
+    const title = 'Edit role';
     createOrEditProductDialog.componentInstance.title = title;
     createOrEditProductDialog.result.then(result => {
       if (result) {

@@ -32,7 +32,7 @@ namespace XBOOK.Web.Controllers
             return Ok(roleVm);
         }
 
-        [HttpPut]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Update([FromBody]ApplicationRoleViewModel roleVm)
         {
             await _roleService.UpdateAsync(roleVm);

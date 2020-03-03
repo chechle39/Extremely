@@ -39,21 +39,21 @@
                             <div class="border px-3 py-3">
                                 <div class="row my-3 justify-content-between">
                                     <div class="col-sm-6 col-md-6">
-                                        <p class="mb-1 p-color">Date of Entry / Object Name</p>
+                                        <p class="mb-1 p-color">Entry Name / Description</p>
                                         <div class="client-fields">
                                             <div class="row">
 
-                                                <div class="col-12">
+                                                <div class="col-12 ">
                                                     <input style="opacity: unset" kendoTextBox id="entryName"
                                                         formControlName="entryName"
-                                                        class="border-0 full-width imput-reference-custom"
+                                                        class="border-0 full-width imput-reference-custom pl-0"
                                                         placeholder="Name of entry" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.entryName.touched === false || invoiceForm.controls.entryName.invalid === false} ">
                                                 </div>
-                                                <div class="col-12">
+                                                <div class="col-12 ">
                                                     <input style="opacity: unset" kendoTextBox id="description"
                                                         formControlName="description"
-                                                        class="border-0 full-width imput-reference-custom"
+                                                        class="border-0 full-width imput-reference-custom pl-0"
                                                         placeholder="Entry Description" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.description.touched === false || invoiceForm.controls.description.invalid === false} ">
                                                 </div>
@@ -66,17 +66,16 @@
                                         <div class="client-fields">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <div style="width: 184px;">
-                                                        <input #datetiime kendoTextBox
-                                                            (dateSelect)="onDateSelection($event)" (click)="d2.toggle()"
-                                                            (focus)="d2.toggle()" style="opacity: unset"
-                                                            class="col-sm-6 border-0 full-width imput-reference-custom"
-                                                            placeholder="dd/mm/yyyy" name="dp"
-                                                            formControlName="dateCreate" ngbDatepicker
-                                                            #d2="ngbDatepicker" style="margin-right:-15px"
-                                                            [ngClass]="{'dateColor': isCheckDate === true}">
-                                                        <span class="k-icon k-i-calendar-date" style="height: 14px;"
-                                                            (click)="d2.toggle()"></span>
+                                                    <div class="input-group mb-0 invoice__datepicker__wrapper">
+                                                        <input   #datetiime kendoTextBox [readOnly]="isRead"
+                                                         (click)="d2.toggle()"  style="opacity: unset " [disabled]="isRead"
+                                                        class="border-0 full-width imput-reference-custom p-0 invoice__input__textbox invoice__text--height-normal"
+                                                        placeholder="dd/mm/yyyy" name="dp" formControlName="dateCreate" ngbDatepicker
+                                                        #d2="ngbDatepicker" >
+                                                      <!-- <span class="k-icon k-i-calendar-date position-absolute"
+                                                        [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
+                                                        style="margin-top: 0.5rem;height: 14px; right: 0;" (click)="d2.toggle()"></span> -->
+                                                        <button [disabled]="isRead"  [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'" style="margin-top: 0.5rem;height: 14px; right: 0; border: 0;" class="k-icon k-i-calendar-date position-absolute" (click)="d2.toggle()" type="button"></button>
                                                     </div>
                                                 </div>
 
@@ -89,7 +88,7 @@
                                                         [resultTemplate]="customItemTemplate" kendoTextBox
                                                         [inputFormatter]="clientFormatter" id="objectName"
                                                         formControlName="objectName" (selectItem)="selectedItem($event)"
-                                                        class="border-0 full-width imput-reference-custom"
+                                                        class="border-0 full-width imput-reference-custom pl-0"
                                                         placeholder="Object Name" nfNoSpaces maxlength="250"
                                                         #instance="ngbTypeahead"
                                                         [ngClass]="{'border-0':invoiceForm.controls.objectName.touched === false || invoiceForm.controls.objectName.invalid === false}" />
@@ -140,7 +139,7 @@
                                                     <div class="col-3 text-center">
                                                       
 
-                                                        <p-autoComplete formControlName="accNumber" 
+                                                        <!-- <p-autoComplete formControlName="accNumber" 
                                                             [suggestions]="filteredBrands" field="accountNumber"  [disabled]="isRead"
                                                             class="border-0 pt-2 full-width  form-control"
                                                             (completeMethod)="filterBrands($event)" [size]="12"
@@ -152,13 +151,24 @@
                                                                         {{brand.accountName}}</span>
                                                                 </div>
                                                             </ng-template>
-                                                        </p-autoComplete>
+                                                        </p-autoComplete> -->
+                                                        <select  class="border-0 pt-2 full-width  form-control" formControlName="accNumber" [disabled]="isRead">
+                                                            <option [ngValue]="null">Choose a acount chart</option>
+                                                            <option *ngFor="let method of dataAccount" [ngValue]="method.accountNumber">
+                                                                {{method.accountNumber}} - {{method.accountName}}
+                                                            </option>
+                                                        </select>
                                                     </div>
                                                     <div class="col-3 text-center">
 
-                                            
+                                                        <select  class="border-0 pt-2 full-width  form-control" formControlName="crspAccNumber" [disabled]="isRead">
+                                                            <option [ngValue]="null">Choose a acount chart</option>
+                                                            <option *ngFor="let method of dataAccount" [ngValue]="method.accountNumber">
+                                                                {{method.accountNumber}} - {{method.accountName}}
+                                                            </option>
+                                                        </select>
 
-                                                        <p-autoComplete formControlName="crspAccNumber" [disabled]="isRead"
+                                                        <!-- <p-autoComplete formControlName="crspAccNumber" [disabled]="isRead"
                                                             [suggestions]="filteredBrands"
                                                             class="border-0 pt-2 full-width  form-control"
                                                             (completeMethod)="filterBrands($event)" [size]="12"
@@ -170,7 +180,7 @@
                                                                     <span>{{brand.accountNumber}} - {{brand.accountName}}</span>
                                                                 </div>
                                                             </ng-template>
-                                                        </p-autoComplete>
+                                                        </p-autoComplete> -->
 
                                                     </div>
                                                     <div class="col-2 text-left">
@@ -218,8 +228,8 @@
                                     <div class="col-md-6">
                                         <div class="row">
                                             <div class="col-4">Total</div>
-                                            <div class="col-4 text-center"> {{subTotalAmount | currency:'VND':''}}</div>
-                                            <div class="col-4 text-right">{{tong() | currency:'VND':''}}</div>
+                                            <div class="col-4 text-center"> {{totalCredit() | currency:'VND':''}}</div>
+                                            <div class="col-4 text-right">{{totalDebit() | currency:'VND':''}}</div>
                                         </div>
                                     </div>
                                 </div>

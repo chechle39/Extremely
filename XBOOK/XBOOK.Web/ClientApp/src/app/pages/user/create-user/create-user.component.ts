@@ -2,8 +2,6 @@ import { Component, OnInit, Input, Injector } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProductView } from '../../_shared/models/product/product-view.model';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { ProductService } from '../../_shared/services/product.service';
-import { finalize } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { RoleService } from '../../_shared/services/role.service';
 import { RoleModel } from '../../_shared/models/role/role.model';
@@ -48,8 +46,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
     public roleService: RoleService,
     public activeModal: NgbActiveModal,
     public fb: FormBuilder,
-    public userService: UserService,
-    public productService: ProductService) {
+    public userService: UserService) {
     super(injector);
   }
   // get skills(): FormArray {

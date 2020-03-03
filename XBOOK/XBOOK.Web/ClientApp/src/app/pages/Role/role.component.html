@@ -89,18 +89,19 @@
               <span>{{row.id}}</span>
             </ng-template>
           </ngx-datatable-column>
-            <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'"
+          <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'"
+          name="{{'PRODUCT.FORM.CREATE.DESCRIPTION' | translate}}" prop="description">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <span>{{row.description}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+            <ngx-datatable-column [cellClass]="'col-right'" [headerClass]="'col-right'"
               name="{{'ROLE.LIST.GRID.HEADER.ROLENAME' | translate}}" prop="name">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <span>{{row.name}}</span>
+                <div class="col-more-info col-right">{{row.name}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'"
-              name="{{'PRODUCT.FORM.CREATE.DESCRIPTION' | translate}}" prop="description">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <span>{{row.description}}</span>
-              </ng-template>
-            </ngx-datatable-column>
+          
             
             <ngx-datatable-footer>
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"

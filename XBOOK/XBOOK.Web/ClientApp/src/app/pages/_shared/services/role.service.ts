@@ -5,6 +5,9 @@ import { API_URI } from '../../../../environments/app.config';
 import { map } from 'rxjs/operators';
 
 export class RoleService extends BaseService {
+  updateRole(rq): Observable<any> {
+    return this.post<any>(`${API_URI.updateRoleData}`, rq);
+  }
   createRole(rq): Observable<any> {
     return this.post<any>(`${API_URI.saveRole}`, rq);
   }

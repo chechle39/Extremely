@@ -76,7 +76,6 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     injector: Injector,
     private el: ElementRef,
     private journalEntryService: JournalEntryService,
-    private currencyPipe: CurrencyPipe,
     private router: Router,
     private accountChartService: AccountChartService,
     private activeRoute: ActivatedRoute,
@@ -87,7 +86,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   }
 
   ngOnInit() {
-    this.isRead = false;
+    this.isRead = true;
     this.getAccoutChart();
     this.createForm();
     if (this.invoiceForm !== undefined) {
@@ -109,15 +108,12 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
   filterBrands(event) {
     this.filteredBrands = [];
-    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.dataAccount.length; i++) {
         const brand =  {
           accountNumber: this.dataAccount[i].accountNumber,
           accountName: this.dataAccount[i].accountName
         };
         this.filteredBrands.push(brand);
-        // if (brand.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-        // }
     }
 }
   private methodEdit_View() {
@@ -125,7 +121,6 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       this.activeRoute.params.subscribe(params => {
         if (!isNaN(params.id)) {
           this.invoiceId = params.id;
-          //  this.editMode = params.key === ActionType.Edit;
           this.editMode = true;
           this.viewMode = params.key === ActionType.View;
           this.getDataForEditMode();
@@ -219,14 +214,10 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   private getItem() {
 
     const numberPatern = '^[0-9.,]+$';
-    const a = [{
-      accountNumber: 'ddd',
-      accountName: '21123123123'
-    }];
     return this.fb.group({
       id: 0,
       crspAccNumber: [null, [Validators.required]],
-      accNumber: [a, [Validators.required]],
+      accNumber: [null, [Validators.required]],
       note: [''],
       credit: [0, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(16)]],
       debit: [0, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(16)]],
@@ -285,6 +276,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
 
   private getInvoiceById(invoiceId: any) {
+    
     this.journalEntryService.getJournalById(invoiceId).subscribe(data => {
       const invoice = data as CreateRequest;
       this.invoiceList = invoice;
@@ -298,8 +290,8 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         detailInvoiceFormArray.push(this.getItem());
         detailInvoiceFormArray.at(item).get('note').setValue(invoice.detail[item].note);
         detailInvoiceFormArray.at(item).get('id').setValue(invoice.detail[item].id);
-        detailInvoiceFormArray.at(item).get('crspAccNumber').setValue(this.filterAccNumber(invoice.detail[item].crspAccNumber));
-        detailInvoiceFormArray.at(item).get('accNumber').setValue(this.filterAccNumber(invoice.detail[item].accNumber));
+        detailInvoiceFormArray.at(item).get('crspAccNumber').setValue(invoice.detail[item].crspAccNumber);
+        detailInvoiceFormArray.at(item).get('accNumber').setValue(invoice.detail[item].accNumber);
         detailInvoiceFormArray.at(item).get('credit').setValue(invoice.detail[item].credit);
         detailInvoiceFormArray.at(item).get('debit').setValue(invoice.detail[item].debit);
       }
@@ -318,16 +310,17 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
         this.invoiceForm.controls.dateCreate.patchValue(issueDatePicker);
       }
+      this.isRead = true;
     });
   }
-  filterAccNumber(item) {
-    const data = this.dataAccount.filter(x => x.accountNumber === item);
-    const obj = {
-      accountNumber: data[0].accountNumber,
-      accountName: data[0].accountName
-    };
-    return obj;
-  }
+  // filterAccNumber(item) {
+  //   const data = this.dataAccount.filter(x => x.accountNumber === item);
+  //   const obj = {
+  //     accountNumber: data[0].accountNumber,
+  //     accountName: data[0].accountName
+  //   };
+  //   return obj;
+  // }
   cancel() {
     // Resets to blank object
     if (this.editMode) {
@@ -351,19 +344,19 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       this.message.warning('Form invalid');
       return;
     }
-    const data = [];
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-      const object = {
-        id: this.invoiceForm.value.items[i].id,
-        crspAccNumber: this.invoiceForm.value.items[i].crspAccNumber.accountNumber,
-        accNumber: this.invoiceForm.value.items[i].accNumber.accountNumber,
-        credit: this.invoiceForm.value.items[i].credit,
-        note: this.invoiceForm.value.items[i].note,
-        debit: this.invoiceForm.value.items[i].debit,
-      };
-      data.push(object);
-    }
+    // const data = [];
+    // // tslint:disable-next-line:prefer-for-of
+    // for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
+    //   const object = {
+    //     id: this.invoiceForm.value.items[i].id,
+    //     crspAccNumber: this.invoiceForm.value.items[i].crspAccNumber.accountNumber,
+    //     accNumber: this.invoiceForm.value.items[i].accNumber.accountNumber,
+    //     credit: this.invoiceForm.value.items[i].credit,
+    //     note: this.invoiceForm.value.items[i].note,
+    //     debit: this.invoiceForm.value.items[i].debit,
+    //   };
+    //   data.push(object);
+    // }
     this.viewMode = true;
     this.isRead = true;
     if (this.invoiceId === 0) {
@@ -377,7 +370,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         objectName: this.invoiceForm.value.objectName.objectName === undefined ? this.invoiceForm.value.objectName
         : this.invoiceForm.value.objectName.objectName,
         objectType: this.invoiceForm.value.objectName.objectType === undefined ? 'Employee' : this.invoiceForm.value.objectName.objectType,
-        detail: data
+        detail: this.invoiceForm.value.items
       } as CreateRequest;
       this.journalEntryService.createJournal(request).subscribe(rp => {
         this.notify.success('Successfully Add');
@@ -396,7 +389,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         objectID: this.invoiceForm.value.objectID,
         objectName: this.invoiceForm.value.objectName,
         objectType: this.invoiceForm.value.objectType,
-        detail: data
+        detail: this.invoiceForm.value.items
       } as CreateRequest;
       this.journalEntryService.updateJournal(request).subscribe(rp => {
         if (this.requestRemove.length > 0) {
@@ -420,21 +413,34 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
   private updateTotalUnitPrice(items: any) {
 
-    this.subTotalAmount = 0;
-    // tslint:disable-next-line:forin
-    for (const i in items) {
-      const arrayControl = this.getFormArray();
-      const price = items[i].credit === 0
-      || items[i].credit === '0'
-      || items[i].credit === null ? 0 : items[i].credit.toString().replace(/,/g, '');
-      const amount = (1 * price);
-      const amountFormatted = this.currencyPipe.transform(amount, 'VND', '', '');
-      arrayControl.at(+i).get('credit').setValue(amountFormatted, { onlySelf: true, emitEvent: false });
-      this.subTotalAmount += amount;
-    }
+    // this.subTotalAmount = 0;
+    // // tslint:disable-next-line:forin
+    // for (const i in items) {
+    //   const arrayControl = this.getFormArray();
+    //   const price = items[i].credit === 0
+    //   || items[i].credit === '0'
+    //   || items[i].credit === null ? 0 : items[i].credit.toString().replace(/,/g, '');
+    //   const amount = (1 * price);
+    //   const amountFormatted = this.currencyPipe.transform(amount, 'VND', '', '');
+    //   arrayControl.at(+i).get('credit').setValue(amountFormatted, { onlySelf: true, emitEvent: false });
+    //   this.subTotalAmount += amount;
+    // }
   }
 
-  tong() {
+  totalCredit(){
+    let Credit = 0;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.invoiceForm.value.items.length; i ++) {
+      const credit = this.invoiceForm.value.items[i].credit === 0 ||
+      this.invoiceForm.value.items[i].credit === '0' ||
+      this.invoiceForm.value.items[i].credit === null ? 0 :
+      this.invoiceForm.value.items[i].credit.toString().replace(/,/g, '');
+      const amountDebit = (1 * credit);
+      Credit += amountDebit;
+    }
+    return Credit;
+  }
+  totalDebit() {
     this.debitTotal = 0;
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.invoiceForm.value.items.length; i ++) {

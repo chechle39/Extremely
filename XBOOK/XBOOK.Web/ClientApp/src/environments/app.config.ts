@@ -2,6 +2,7 @@ export const API_URI = {
   deleteUser: 'api/User/Delete',
   deleteRole: 'api/Role/Delete',
   updateUserData: 'api/User/Update',
+  updateRoleData: 'api/Role/Update',
   adminUser: 'api/User/SaveEntity',
   saveRole: 'api/Role/CreateRole',
   adminRole: 'api/Seed/CreateAdminRole',

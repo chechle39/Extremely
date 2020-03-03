@@ -1,19 +1,13 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { ProductService } from '../_shared/services/product.service';
-import { Router } from '@angular/router';
+import { Component, Injector } from '@angular/core';
 import { ProductView } from '../_shared/models/product/product-view.model';
-import { ProductCategory } from '../../coreapp/app.enums';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '../../coreapp/app.consts';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
-import { finalize, debounceTime } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../_shared/services/user.service';
 import { UserViewModel } from '../_shared/models/user/userview.model';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { RoleModel } from '../_shared/models/role/role.model';
-import { RoleService } from '../_shared/services/role.service';
 class PagedProductsRequestDto extends PagedRequestDto {
   keyWord: string;
 }
@@ -130,7 +124,7 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
     let createOrEditProductDialog;
     createOrEditProductDialog = this.modalService.open(CreateUserComponent, AppConsts.modalOptionsSmallSize);
     createOrEditProductDialog.componentInstance.edit = true;
-    createOrEditProductDialog.componentInstance.id = event !== undefined ? event.row.id : event;
+    createOrEditProductDialog.componentInstance.id = event.row !== undefined ? event.row.id : event;
     const title = 'Edit user';
     createOrEditProductDialog.componentInstance.title = title;
     createOrEditProductDialog.result.then(result => {
