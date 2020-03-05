@@ -40,6 +40,7 @@ namespace XBOOK.Data.Entities
         public DbSet<BuyInvDetail> BuyInvDetail { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
+       // public DbSet<Functions> Functions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -64,8 +65,6 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new BuyInvoiceConfiguration())
                 .ApplyConfiguration(new BuyInvDetailConfiguration());
 
-            //#region Identity Config
-
             modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("AppUserClaims").HasKey(x => x.Id);
 
             modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("AppRoleClaims")
@@ -74,13 +73,11 @@ namespace XBOOK.Data.Entities
             modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("AppUserLogins").HasKey(x => x.UserId);
 
             modelBuilder.Entity<IdentityUserRole<int>>().ToTable("AppUserRoles")
-                .HasKey(x => new { x.RoleId, x.UserId });
+                .HasKey(x => new { x.UserId, x.RoleId });
 
             modelBuilder.Entity<IdentityUserToken<int>>().ToTable("AppUserTokens")
                .HasKey(x => new { x.UserId });
-
-            //#endregion Identity Config
-            //base.OnModelCreating(modelBuilder);
+            
         }
 
         public override int SaveChanges()

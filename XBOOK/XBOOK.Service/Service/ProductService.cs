@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -71,6 +72,60 @@ namespace XBOOK.Service.Service
         {
             var product = Mapper.Map<ProductViewModel, Product>(request);
             await _productUowRepository.Update(product);
+        }
+        public bool CreateProductImport(List<ProductViewModel> request)
+        {
+            var productCreate = Mapper.Map<List<ProductViewModel>, List<Product>>(request);
+            foreach (var item in request)
+            {
+                var product = new Product()
+                {
+                    productID = 0,
+                    productName = item.productName,
+                    description = item.description,
+                    unitPrice = item.unitPrice,
+                    categoryID = item.categoryID,
+                    Unit = item.Unit,
+                };
+                _productUowRepository.AddData(product);
+                _uow.SaveChanges();
+            }
+            return true;
+        }
+        public byte[] GetDataProductAsync(List<ProductViewModel> request)
+        {
+            var comlumHeadrs = new string[]
+            {
+                "productID",
+                "productName",
+                "description",
+                "unitPrice",
+                "categoryID",
+                "Unit",
+            };
+            var listGen = new List<ProductViewModel>();
+
+            listGen = request;
+
+            var csv = (from item in listGen
+                       select new object[]
+                       {
+                          item.productID,
+                          item.productName,
+                          item.description,
+                          item.unitPrice,
+                          item.categoryID,
+                          item.Unit,
+                       }).ToList();
+            var csvData = new StringBuilder();
+
+            csv.ForEach(line =>
+            {
+                csvData.AppendLine(string.Join(",", line));
+            });
+            byte[] buffer = Encoding.UTF8.GetBytes($"{string.Join(",", comlumHeadrs)}\r\n{csvData.ToString()}");
+            return buffer;
+
         }
     }
 }

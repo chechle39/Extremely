@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using XBOOK.Data.Interfaces;
 
@@ -9,9 +8,6 @@ namespace XBOOK.Data.Identity
     [Table("AppUsers")]
     public class AppUser : IdentityUser<int>, IDateTracking, ISwitchable
     {
-        private Status status;
-        private Status status1;
-        private Status status2;
         private Status status3;
 
         public AppUser() { }

@@ -15,5 +15,7 @@ namespace XBOOK.Service.Interfaces
         Task Update(ProductViewModel request);
         Task<ProductViewModel> GetALlPrDF();
         bool DeleteProduct(List<requestDeleted> id);
+        byte[] GetDataProductAsync(List<ProductViewModel> request);
+        bool CreateProductImport(List<ProductViewModel> request);
     }
 }

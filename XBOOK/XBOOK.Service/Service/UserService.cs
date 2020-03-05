@@ -17,11 +17,15 @@ namespace XBOOK.Service.Service
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
-        public UserService(IUserRepository userRepository, UserManager<AppUser> userManager)
+        private readonly IUserRolesRepository _userRolesRepository;
+        public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IUserRolesRepository userRolesRepository)
         {
             _userRepository = userRepository;
             _userManager = userManager;
+            _roleManager = roleManager;
+            _userRolesRepository = userRolesRepository;
         }
 
         public async Task<bool> AddAsync(ApplicationUserViewModel userVm)
@@ -85,13 +89,16 @@ namespace XBOOK.Service.Service
         public async Task UpdateAsync(ApplicationUserViewModel userVm)
         {
             var user = await _userManager.FindByIdAsync(userVm.Id.ToString());
+            //Remove current roles in db
             var currentRoles = await _userManager.GetRolesAsync(user);
+
             var result = await _userManager.AddToRolesAsync(user,
-            userVm.Roles.Except(currentRoles).ToArray());
+                userVm.Roles.Except(currentRoles).ToArray());
             if (result.Succeeded)
             {
                 string[] needRemoveRoles = currentRoles.Except(userVm.Roles).ToArray();
                 await _userManager.RemoveFromRolesAsync(user, needRemoveRoles);
+
 
                 //Update user detail
                 user.FullName = userVm.FullName;

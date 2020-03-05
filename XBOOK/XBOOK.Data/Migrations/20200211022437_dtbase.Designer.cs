@@ -21,803 +21,478 @@ namespace XBOOK.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+            modelBuilder.Entity("CITS.Data.AppRole", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken();
 
-                    b.Property<string>("ClaimValue");
+                b.Property<string>("Description")
+                    .HasMaxLength(250);
 
-                    b.Property<int>("RoleId");
+                b.Property<string>("Name")
+                    .HasMaxLength(256);
 
-                    b.HasKey("Id");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256);
 
-                    b.HasIndex("RoleId");
+                b.HasKey("Id");
 
-                    b.ToTable("AppRoleClaims");
-                });
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasName("RoleNameIndex")
+                    .HasFilter("[NormalizedName] IS NOT NULL");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                b.ToTable("AspNetRoles");
+            });
 
-                    b.Property<string>("ClaimType");
+            modelBuilder.Entity("CITS.Data.AppUser", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimValue");
+                b.Property<int>("AccessFailedCount");
 
-                    b.Property<int>("UserId");
+                b.Property<string>("Avatar");
 
-                    b.HasKey("Id");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken();
 
-                    b.HasIndex("UserId");
+                b.Property<DateTime>("DateCreated");
 
-                    b.ToTable("AppUserClaims");
-                });
+                b.Property<DateTime>("DateModified");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
-                {
-                    b.Property<string>("LoginProvider");
+                b.Property<string>("Email")
+                    .HasMaxLength(256);
 
-                    b.Property<string>("ProviderKey");
+                b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("ProviderDisplayName");
+                b.Property<string>("FullName");
 
-                    b.Property<int>("UserId");
+                b.Property<bool>("LockoutEnabled");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.HasAlternateKey("UserId");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256);
 
-                    b.ToTable("AppUserLogins");
-                });
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
-                {
-                    b.Property<int>("UserId");
+                b.Property<string>("PasswordHash");
 
-                    b.Property<int>("RoleId");
+                b.Property<string>("PhoneNumber");
 
-                    b.HasKey("UserId", "RoleId");
+                b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.HasAlternateKey("RoleId", "UserId");
+                b.Property<string>("SecurityStamp");
 
-                    b.ToTable("AppUserRoles");
-                });
+                b.Property<bool>("Status");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
-                {
-                    b.Property<int>("UserId");
+                b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<string>("LoginProvider");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256);
 
-                    b.Property<string>("Name");
+                b.HasKey("Id");
 
-                    b.Property<string>("Value");
+                b.HasIndex("NormalizedEmail")
+                    .HasName("EmailIndex");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasName("UserNameIndex")
+                    .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasAlternateKey("UserId");
+                b.ToTable("AspNetUsers");
+            });
 
-                    b.ToTable("AppUserTokens");
-                });
+            modelBuilder.Entity("CITS.Data.AppendixProperty", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("XBOOK.Data.Entities.AccountChart", b =>
-                {
-                    b.Property<string>("accountNumber")
-                        .ValueGeneratedOnAdd();
+                b.Property<long>("AppendixTypeVersionId");
 
-                    b.Property<string>("accountName");
+                b.Property<string>("ControlType")
+                    .IsRequired();
 
-                    b.Property<string>("accountType");
+                b.Property<string>("Description");
 
-                    b.Property<decimal?>("closingBalance");
+                b.Property<bool>("IsRequired");
 
-                    b.Property<bool>("isParent");
+                b.Property<string>("Label");
 
-                    b.Property<decimal?>("openingBalance");
+                b.Property<string>("Name");
 
-                    b.Property<string>("parentAccount");
+                b.Property<string>("Options");
 
-                    b.HasKey("accountNumber");
+                b.Property<string>("ValueType")
+                    .IsRequired();
 
-                    b.ToTable("AccountChart");
-                });
+                b.HasKey("Id");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.BuyInvDetail", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                b.HasIndex("AppendixTypeVersionId");
 
-                    b.Property<decimal?>("amount");
+                b.ToTable("AppendixProperties");
+            });
 
-                    b.Property<string>("description");
+            modelBuilder.Entity("CITS.Data.AppendixPropertyValue", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("invoiceID");
+                b.Property<long>("AppendixTypeVersionId");
 
-                    b.Property<decimal?>("price");
+                b.Property<long>("ApplicantApplicationId");
 
-                    b.Property<int>("productID");
+                b.Property<long>("ApplicationDependantId");
 
-                    b.Property<string>("productName");
+                b.Property<string>("Value");
 
-                    b.Property<decimal?>("qty");
+                b.HasKey("Id");
 
-                    b.Property<decimal?>("vat");
+                b.HasIndex("AppendixTypeVersionId");
 
-                    b.HasKey("ID");
+                b.HasIndex("ApplicantApplicationId");
 
-                    b.HasIndex("invoiceID");
+                b.HasIndex("ApplicationDependantId");
 
-                    b.HasIndex("productID");
+                b.ToTable("AppendixPropertyValues");
+            });
 
-                    b.ToTable("BuyInvDetail");
-                });
+            modelBuilder.Entity("CITS.Data.AppendixType", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("XBOOK.Data.Entities.BuyInvoice", b =>
-                {
-                    b.Property<long>("invoiceID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                b.Property<string>("Description");
 
-                    b.Property<decimal?>("amountPaid");
+                b.Property<string>("Image");
 
-                    b.Property<decimal?>("discRate");
+                b.Property<string>("Name");
 
-                    b.Property<decimal?>("discount");
+                b.HasKey("Id");
 
-                    b.Property<DateTime?>("dueDate");
+                b.ToTable("AppendixTypes");
+            });
 
-                    b.Property<string>("invoiceNumber");
+            modelBuilder.Entity("CITS.Data.AppendixTypeVersion", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("invoiceSerial");
+                b.Property<long>("AppendixTypeId");
 
-                    b.Property<DateTime?>("issueDate");
+                b.Property<string>("Description");
 
-                    b.Property<string>("note");
+                b.Property<string>("Template");
 
-                    b.Property<string>("reference");
+                b.Property<string>("Version");
 
-                    b.Property<string>("status");
+                b.HasKey("Id");
 
-                    b.Property<decimal?>("subTotal");
+                b.HasIndex("AppendixTypeId");
 
-                    b.Property<int?>("supplierID");
+                b.ToTable("AppendixTypeVersions");
+            });
 
-                    b.Property<string>("term");
+            modelBuilder.Entity("CITS.Data.ApplicantApplication", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal?>("vatTax");
+                b.Property<string>("ApplicantId");
 
-                    b.HasKey("invoiceID");
+                b.Property<long>("ApplicationVersionId");
 
-                    b.HasIndex("supplierID");
+                b.HasKey("Id");
 
-                    b.ToTable("BuyInvoice");
-                });
+                b.HasIndex("ApplicationVersionId");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.Category", b =>
-                {
-                    b.Property<int>("CategoryID");
+                b.ToTable("ApplicantApplications");
+            });
 
-                    b.Property<string>("CategoryName");
+            modelBuilder.Entity("CITS.Data.Application.Application", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("CategoryID");
+                b.Property<string>("Description");
 
-                    b.ToTable("Category");
-                });
+                b.Property<string>("Name");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.Client", b =>
-                {
-                    b.Property<int>("clientID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                b.HasKey("Id");
 
-                    b.Property<string>("Tag");
+                b.ToTable("Applications");
+            });
 
-                    b.Property<string>("address");
+            modelBuilder.Entity("CITS.Data.Application.ApplicationDependant", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("bankAccount");
+                b.Property<long>("ApplicationVersionId");
 
-                    b.Property<string>("clientName");
+                b.Property<string>("Name");
 
-                    b.Property<string>("contactName");
+                b.Property<string>("Type")
+                    .IsRequired();
 
-                    b.Property<string>("email");
+                b.HasKey("Id");
 
-                    b.Property<string>("note");
+                b.HasIndex("ApplicationVersionId");
 
-                    b.Property<string>("taxCode");
+                b.ToTable("ApplicationDependants");
+            });
 
-                    b.HasKey("clientID");
+            modelBuilder.Entity("CITS.Data.Application.ApplicationDependantAppendix", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.ToTable("Client");
-                });
+                b.Property<long>("AppendixTypeVersionId");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.CompanyProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                b.Property<long>("ApplicationDependantId");
 
-                    b.Property<string>("address");
+                b.HasKey("Id");
 
-                    b.Property<string>("bankAccount");
+                b.HasIndex("AppendixTypeVersionId");
 
-                    b.Property<string>("bizPhone");
+                b.HasIndex("ApplicationDependantId");
 
-                    b.Property<string>("city");
+                b.ToTable("ApplicationDependantAppendices");
+            });
 
-                    b.Property<string>("code");
+            modelBuilder.Entity("CITS.Data.Application.ApplicationVersion", b =>
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("companyName");
+                b.Property<long>("ApplicationId");
 
-                    b.Property<string>("country");
+                b.Property<string>("Version");
 
-                    b.Property<string>("currency");
+                b.HasKey("Id");
 
-                    b.Property<string>("dateFormat");
+                b.HasIndex("ApplicationId");
 
-                    b.Property<string>("directorName");
-
-                    b.Property<string>("logoFilePath");
-
-                    b.Property<string>("mobilePhone");
-
-                    b.Property<string>("taxCode");
-
-                    b.Property<string>("zipCode");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CompanyProfile");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.EntryPattern", b =>
-                {
-                    b.Property<int>("patternID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("accNumber");
-
-                    b.Property<string>("crspAccNumber");
-
-                    b.Property<string>("entryType");
-
-                    b.Property<string>("note");
-
-                    b.Property<string>("transactionType");
-
-                    b.HasKey("patternID");
-
-                    b.ToTable("EntryPattern");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.GeneralLedger", b =>
-                {
-                    b.Property<long>("ledgerID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("accNumber");
-
-                    b.Property<string>("clientID");
-
-                    b.Property<string>("clientName");
-
-                    b.Property<decimal>("credit");
-
-                    b.Property<string>("crspAccNumber");
-
-                    b.Property<DateTime>("dateIssue");
-
-                    b.Property<decimal>("debit");
-
-                    b.Property<string>("note");
-
-                    b.Property<string>("reference");
-
-                    b.Property<string>("transactionNo");
-
-                    b.Property<string>("transactionType");
-
-                    b.HasKey("ledgerID");
-
-                    b.ToTable("GeneralLedger");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.JournalDetail", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("JournalID");
-
-                    b.Property<string>("accNumber");
-
-                    b.Property<decimal>("credit");
-
-                    b.Property<string>("crspAccNumber");
-
-                    b.Property<decimal>("debit");
-
-                    b.Property<string>("note");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("JournalDetail");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.JournalEntry", b =>
-                {
-                    b.Property<long>("JournalID");
-
-                    b.Property<string>("accountNumber");
-
-                    b.Property<decimal>("creditAmount");
-
-                    b.Property<decimal>("debitAmount");
-
-                    b.HasKey("JournalID");
-
-                    b.ToTable("JournalEntry");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.MoneyReceipt", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("amount");
-
-                    b.Property<string>("bankAccount");
-
-                    b.Property<long?>("clientID");
-
-                    b.Property<string>("clientName");
-
-                    b.Property<string>("entryType");
-
-                    b.Property<string>("note");
-
-                    b.Property<DateTime>("payDate");
-
-                    b.Property<string>("payType");
-
-                    b.Property<int>("payTypeID");
-
-                    b.Property<string>("receiptNumber");
-
-                    b.Property<string>("receiverName");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("MoneyReceipt");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.PaymentReceipt", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("amount");
-
-                    b.Property<string>("bankAccount");
-
-                    b.Property<string>("entryType");
-
-                    b.Property<string>("note");
-
-                    b.Property<DateTime>("payDate");
-
-                    b.Property<string>("payType");
-
-                    b.Property<int>("payTypeID");
-
-                    b.Property<string>("receiptNumber");
-
-                    b.Property<string>("receiverName");
-
-                    b.Property<long?>("supplierID");
-
-                    b.Property<string>("supplierName");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("PaymentReceipt");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.Payments", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("amount");
-
-                    b.Property<long>("invoiceID");
-
-                    b.Property<string>("note");
-
-                    b.Property<DateTime>("payDate");
-
-                    b.Property<string>("payType");
-
-                    b.Property<int>("payTypeID");
-
-                    b.Property<string>("receiptNumber");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("invoiceID");
-
-                    b.ToTable("Payments");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.Payments_2", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("amount");
-
-                    b.Property<long>("invoiceID");
-
-                    b.Property<string>("note");
-
-                    b.Property<DateTime>("payDate");
-
-                    b.Property<string>("payType");
-
-                    b.Property<int>("payTypeID");
-
-                    b.Property<string>("receiptNumber");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("invoiceID");
-
-                    b.ToTable("Payments_2");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.Product", b =>
-                {
-                    b.Property<int>("productID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Unit");
-
-                    b.Property<int?>("categoryID");
-
-                    b.Property<string>("description");
-
-                    b.Property<string>("productName");
-
-                    b.Property<decimal?>("unitPrice");
-
-                    b.HasKey("productID");
-
-                    b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.SaleInvDetail", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal?>("amount");
-
-                    b.Property<string>("description");
-
-                    b.Property<long>("invoiceID");
-
-                    b.Property<decimal?>("price");
-
-                    b.Property<int>("productID");
-
-                    b.Property<string>("productName");
-
-                    b.Property<decimal?>("qty");
-
-                    b.Property<decimal?>("vat");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("invoiceID");
-
-                    b.HasIndex("productID");
-
-                    b.ToTable("SaleInvDetail");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.SaleInvoice", b =>
-                {
-                    b.Property<long>("invoiceID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal?>("amountPaid");
-
-                    b.Property<int?>("clientID");
-
-                    b.Property<decimal?>("discRate");
-
-                    b.Property<decimal?>("discount");
-
-                    b.Property<DateTime?>("dueDate");
-
-                    b.Property<string>("invoiceNumber");
-
-                    b.Property<string>("invoiceSerial");
-
-                    b.Property<DateTime?>("issueDate");
-
-                    b.Property<string>("note");
-
-                    b.Property<string>("reference");
-
-                    b.Property<string>("status");
-
-                    b.Property<decimal?>("subTotal");
-
-                    b.Property<string>("term");
-
-                    b.Property<decimal?>("vatTax");
-
-                    b.HasKey("invoiceID");
-
-                    b.HasIndex("clientID");
-
-                    b.ToTable("SaleInvoice");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.Supplier", b =>
-                {
-                    b.Property<int>("supplierID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Tag");
-
-                    b.Property<string>("address");
-
-                    b.Property<string>("bankAccount");
-
-                    b.Property<string>("contactName");
-
-                    b.Property<string>("email");
-
-                    b.Property<string>("note");
-
-                    b.Property<string>("supplierName");
-
-                    b.Property<string>("taxCode");
-
-                    b.HasKey("supplierID");
-
-                    b.ToTable("Supplier");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Entities.Tax", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("taxName");
-
-                    b.Property<decimal?>("taxRate");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Tax");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Identity.AppRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AppRoles");
-                });
-
-            modelBuilder.Entity("XBOOK.Data.Identity.AppUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("Avatar");
-
-                    b.Property<decimal>("Balance");
-
-                    b.Property<DateTime?>("BirthDay");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<DateTime>("DateModified");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FullName");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("Status");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AppUsers");
-                });
+                b.ToTable("ApplicationVersions");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
-                {
-                    b.HasOne("XBOOK.Data.Identity.AppRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<string>("ClaimType");
+
+                b.Property<string>("ClaimValue");
+
+                b.Property<int>("RoleId");
+
+                b.HasKey("Id");
+
+                b.HasIndex("RoleId");
+
+                b.ToTable("AspNetRoleClaims");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
-                {
-                    b.HasOne("XBOOK.Data.Identity.AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<string>("ClaimType");
+
+                b.Property<string>("ClaimValue");
+
+                b.Property<int>("UserId");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("AspNetUserClaims");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
-                {
-                    b.HasOne("XBOOK.Data.Identity.AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+            {
+                b.Property<string>("LoginProvider");
+
+                b.Property<string>("ProviderKey");
+
+                b.Property<string>("ProviderDisplayName");
+
+                b.Property<int>("UserId");
+
+                b.HasKey("LoginProvider", "ProviderKey");
+
+                b.HasAlternateKey("UserId");
+
+                b.ToTable("AspNetUserLogins");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
-                {
-                    b.HasOne("XBOOK.Data.Identity.AppRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+            {
+                b.Property<int>("UserId");
 
-                    b.HasOne("XBOOK.Data.Identity.AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+                b.Property<int>("RoleId");
+
+                b.HasKey("UserId", "RoleId");
+
+                b.HasAlternateKey("RoleId", "UserId");
+
+                b.ToTable("AspNetUserRoles");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
-                {
-                    b.HasOne("XBOOK.Data.Identity.AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+            {
+                b.Property<int>("UserId");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.BuyInvDetail", b =>
-                {
-                    b.HasOne("XBOOK.Data.Entities.BuyInvoice", "BuyInvoice")
-                        .WithMany("BuyInvDetails")
-                        .HasForeignKey("invoiceID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                b.Property<string>("LoginProvider");
 
-                    b.HasOne("XBOOK.Data.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("productID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+                b.Property<string>("Name");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.BuyInvoice", b =>
-                {
-                    b.HasOne("XBOOK.Data.Entities.Supplier", "Supplier")
-                        .WithMany("BuyInvoices")
-                        .HasForeignKey("supplierID");
-                });
+                b.Property<string>("Value");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.Payments", b =>
-                {
-                    b.HasOne("XBOOK.Data.Entities.SaleInvoice", "SaleInvoice")
-                        .WithMany("Payments")
-                        .HasForeignKey("invoiceID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.Payments_2", b =>
-                {
-                    b.HasOne("XBOOK.Data.Entities.BuyInvoice", "BuyInvoice")
-                        .WithMany("Payments_2")
-                        .HasForeignKey("invoiceID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+                b.HasAlternateKey("UserId");
 
-            modelBuilder.Entity("XBOOK.Data.Entities.SaleInvDetail", b =>
-                {
-                    b.HasOne("XBOOK.Data.Entities.SaleInvoice", "SaleInvoice")
-                        .WithMany("SaleInvDetails")
-                        .HasForeignKey("invoiceID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                b.ToTable("AspNetUserTokens");
+            });
 
-                    b.HasOne("XBOOK.Data.Entities.Product", "Product")
-                        .WithMany("SaleInvDetails")
-                        .HasForeignKey("productID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+            modelBuilder.Entity("CITS.Data.AppendixProperty", b =>
+            {
+                b.HasOne("CITS.Data.AppendixTypeVersion", "AppendixTypeVersion")
+                    .WithMany("Properties")
+                    .HasForeignKey("AppendixTypeVersionId")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
 
-            modelBuilder.Entity("XBOOK.Data.Entities.SaleInvoice", b =>
-                {
-                    b.HasOne("XBOOK.Data.Entities.Client", "Client")
-                        .WithMany("SaleInvoices")
-                        .HasForeignKey("clientID");
-                });
+            modelBuilder.Entity("CITS.Data.AppendixPropertyValue", b =>
+            {
+                b.HasOne("CITS.Data.AppendixTypeVersion", "AppendixTypeVersion")
+                    .WithMany()
+                    .HasForeignKey("AppendixTypeVersionId")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasOne("CITS.Data.ApplicantApplication", "ApplicantApplication")
+                    .WithMany()
+                    .HasForeignKey("ApplicantApplicationId")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasOne("CITS.Data.Application.ApplicationDependant", "ApplicationDependant")
+                    .WithMany()
+                    .HasForeignKey("ApplicationDependantId")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity("CITS.Data.AppendixTypeVersion", b =>
+            {
+                b.HasOne("CITS.Data.AppendixType", "AppendixType")
+                    .WithMany("Versions")
+                    .HasForeignKey("AppendixTypeId")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity("CITS.Data.ApplicantApplication", b =>
+            {
+                b.HasOne("CITS.Data.Application.ApplicationVersion", "ApplicationVersion")
+                    .WithMany()
+                    .HasForeignKey("ApplicationVersionId")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity("CITS.Data.Application.ApplicationDependant", b =>
+            {
+                b.HasOne("CITS.Data.Application.ApplicationVersion", "ApplicationVersion")
+                    .WithMany("ApplicationDepenants")
+                    .HasForeignKey("ApplicationVersionId")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity("CITS.Data.Application.ApplicationDependantAppendix", b =>
+            {
+                b.HasOne("CITS.Data.AppendixTypeVersion", "AppendixTypeVersion")
+                    .WithMany()
+                    .HasForeignKey("AppendixTypeVersionId")
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasOne("CITS.Data.Application.ApplicationDependant", "ApplicationDependant")
+                    .WithMany("Appendixes")
+                    .HasForeignKey("ApplicationDependantId")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity("CITS.Data.Application.ApplicationVersion", b =>
+            {
+                b.HasOne("CITS.Data.Application.Application", "Application")
+                    .WithMany("ApplicationVersions")
+                    .HasForeignKey("ApplicationId")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            {
+                b.HasOne("CITS.Data.AppRole")
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            {
+                b.HasOne("CITS.Data.AppUser")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            {
+                b.HasOne("CITS.Data.AppUser")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            {
+                b.HasOne("CITS.Data.AppRole")
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne("CITS.Data.AppUser")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            {
+                b.HasOne("CITS.Data.AppUser")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 #pragma warning restore 612, 618
         }
     }
