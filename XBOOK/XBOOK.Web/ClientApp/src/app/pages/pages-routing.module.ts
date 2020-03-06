@@ -122,6 +122,11 @@ const routes: Routes = [
       loadChildren: () => import('./accountbalance/accountbalance.module')
         .then(m => m.AccountbalanceModule),
     },
+    {
+      path: 'dashboard',
+      loadChildren: () => import('./dashboard/dashboard.module')
+        .then(m => m.DashboardModule),
+    },
   ],
 }];
 

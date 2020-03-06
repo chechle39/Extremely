@@ -9,6 +9,7 @@
   "COMMON.ACTION.EDIT": "Chỉnh sửa",
   "COMMON.ACTION.DELETE": "xóa",
   "COMMON.ACTION.SEARCH": "Tìm kiếm",
+  "COMMON.ACTION.PRINT": "In",
   "COMMON.GRID.TOTALROW": "Tổng cộng: {{rowCount}} ",
   "PRODUCT.LIST.HEADER": "Sản phẩm và dịch vụ",
   "PRODUCT.LIST.PRODUCT": "Sản phẩm",

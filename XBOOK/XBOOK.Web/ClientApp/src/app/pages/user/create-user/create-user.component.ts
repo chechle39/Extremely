@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Injector } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProductView } from '../../_shared/models/product/product-view.model';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from '../../_shared/services/role.service';
 import { RoleModel } from '../../_shared/models/role/role.model';
 import { SelectItem } from 'primeng/components/common/selectitem';
@@ -10,6 +10,7 @@ import { UserService } from '../../_shared/services/user.service';
 import { UserViewModel } from '../../_shared/models/user/userview.model';
 import { AppConsts } from '../../../coreapp/app.consts';
 import * as moment from 'moment';
+import { CommonService } from '../../../shared/service/common.service';
 
 @Component({
   selector: 'xb-create-user',
@@ -17,12 +18,6 @@ import * as moment from 'moment';
   styleUrls: ['./create-user.component.scss'],
 })
 export class CreateUserComponent extends AppComponentBase implements OnInit {
-  // user = {
-  //   skills: [
-  //     { name: 'Admin', selected: true, id: 12 },
-  //     { name: 'Member', selected: false, id: 2 },
-  //   ]
-  // };
   @Input() title;
   @Input() edit: boolean;
   @Input() id;
@@ -46,12 +41,11 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
     public roleService: RoleService,
     public activeModal: NgbActiveModal,
     public fb: FormBuilder,
+    private commonService: CommonService,
     public userService: UserService) {
     super(injector);
   }
-  // get skills(): FormArray {
-  //   return this.userForm.get('skills') as FormArray;
-  // }
+
   ngOnInit() {
     this.userForm = this.createUserChartFormGroup();
     if (this.edit === true) {
@@ -71,10 +65,11 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
           phoneNumber: rp.phoneNumber,
           status: rp.status,
           gender: rp.gender,
-          // skills: this.buildSkills(),
           role: [''],
         });
         this.selectedCities = rp.roles;
+      }, (er) => {
+        this.commonService.messeage(er.status);
       });
     }
     this.getRole();
@@ -100,11 +95,15 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
       this.userService.createUser(request).subscribe(rp => {
         this.notify.success('saved successfully');
         this.close(true);
+      }, (er) => {
+        this.commonService.messeage(er.status);
       });
     } else {
       this.userService.updateUser(request).subscribe(rp => {
         this.notify.success('update successfully');
         this.close(true);
+      }, (er) => {
+        this.commonService.messeage(er.status);
       });
     }
 
@@ -119,11 +118,12 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
       this.cars = rp;
       this.tempcars = rp;
       this.items = [];
-      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.cars.length; i++) {
         this.items.push({ label: this.cars[i].name, value: this.cars[i].name });
       }
       this.cars = this.items;
+    }, (er) => {
+      this.commonService.messeage(er.status);
     });
   }
   close(result: any): void {
@@ -144,21 +144,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
       phoneNumber: [''],
       status: [''],
       gender: [''],
-      // skills: this.buildSkills(),
       role: [''],
     });
   }
-
-  // buildSkills() {
-  //   const arr = this.user.skills.map(s => {
-  //     return this.fb.control(s.selected);
-  //     // return this.fb.group({
-  //     //   selected: [s.selected],
-  //     //   id: [s.id]
-  //     // }
-  //   });
-  //   return this.fb.array(arr);
-  // }
-
-
 }

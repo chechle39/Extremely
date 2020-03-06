@@ -13,9 +13,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PaymentReceiptController : ControllerBase
+    public class PaymentReceiptController : BaseAPIController
     {
         private readonly IPaymentReceiptService _paymentReceiptService;
         private readonly IPaymentReceiptServiceDapper _paymentReceiptServiceDapper;

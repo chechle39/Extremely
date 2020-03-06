@@ -51,7 +51,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
             const request = {
                 username: submittedForm.value.userName,
                 password: submittedForm.value.password,
-                token: rp.token,
+                token: rp.auth_token,
             } as LoginContext;
             if (rp.success === false) {
                 this.message.error(rp.message, 'Wrong login, please login again');

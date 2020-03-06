@@ -14,7 +14,8 @@ import { InvoiceService } from '../_shared/services/invoice.service';
 import { ProductService } from '../_shared/services/product.service';
 import { SearchPurchaseReportComponent } from './searchpurchase-report/searchpurchase-report.component';
 import { SupplierService } from '../_shared/services/supplier.service';
-import { NbCardModule, NbButtonModule, NbPopoverModule, NbIconModule, NbAlertModule, NbSearchModule } from '@nebular/theme';
+import { NbCardModule, NbButtonModule, NbPopoverModule,
+  NbIconModule, NbAlertModule, NbSearchModule } from '@nebular/theme';
 @NgModule({
   declarations: [PurchaseReportComponent, SearchPurchaseReportComponent],
   entryComponents: [SearchPurchaseReportComponent],

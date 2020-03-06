@@ -83,7 +83,9 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
       const createOrEditClientDialog = this.modalService.open(ImportSupplierComponent
         , AppConsts.modalOptionsCustomSize);
       createOrEditClientDialog.componentInstance.id = this.Datareport;
-    });
+    },  (er) => {
+      this.message.warning('Vui lòng chọn file có định dạng .csv');
+  });
   }
   edit(): void {
     if (this.selected.length === 0) {

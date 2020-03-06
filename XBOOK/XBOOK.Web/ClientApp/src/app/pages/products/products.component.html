@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card class="layout__container--medium">
   <nb-card-header>
     <div class="row">
       <div class="col-5 col-lg-4">
@@ -9,10 +9,14 @@
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button class="dropdown-item"><span class="icon-import"></span>
-              {{ 'COMMON.MOREACTION.IMPORT' | translate }} </button>
-            <button class="dropdown-item"><span class="icon-export"></span>
-              {{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
+            <div ngbDropdownMenu aria-labelledby="bulkActions">
+              <button class="dropdown-item position-relative"><span class="icon-import"></span>{{ 'COMMON.MOREACTION.IMPORT' | translate }} 
+                <input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)"> </button>
+              <button class="dropdown-item" (click)="ExportProduct()"><span class="icon-export"></span>{{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
+            </div>
+            <!-- <button class="dropdown-item"><span class="icon-import"></span>
+              {{ 'COMMON.MOREACTION.IMPORT' | translate }}<input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)"></button> </button>
+            <button class="dropdown-item" (click)="ExportProduct()"><span class="icon-export"></span>{{ 'COMMON.MOREACTION.EXPORT' | translate }} </button> -->
           </div>
         </div>
       </div>

@@ -1,0 +1,15 @@
+<nb-card>
+  <nb-card-header style="padding: 0.5rem 1rem;">
+    <nb-select class="float-right" [selected]="'1'" [size]="'tiny'">
+      <nb-option value='1' (click)="showByMonth()">Xem theo tháng</nb-option>
+      <nb-option value="2" (click)="showByQuater()">Xem theo quý</nb-option>
+      <nb-option value="3" (click)="showByYear()">Xem theo năm</nb-option>
+    </nb-select>
+    <div style="font-size: 0.9rem; line-height: 1.5rem;color: #edf1f7;">
+      DOANH SỐ BÁN HÀNG
+    </div>
+  </nb-card-header>
+  <nb-card-body class="d-flex align-items-center">
+    <chart class="w-100" type="line" [data]="data" [options]="options"></chart>
+  </nb-card-body>
+</nb-card>

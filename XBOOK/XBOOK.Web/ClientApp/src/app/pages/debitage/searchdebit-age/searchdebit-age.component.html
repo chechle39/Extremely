@@ -9,7 +9,7 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-12">
-                <h5 class="modal-title">{{'SEARCH.Time' | translate }}</h5>
+                <span class="modal-title">{{'SEARCH.Time' | translate }}</span>
             </div>
             <div class="form-group col-12 mb-2">
                 <select (change)="onChange($event)" id="genLedMethods" class="form-control" formControlName="genLedMethods"style="position: relative;margin-bottom: 20px;">
@@ -21,7 +21,7 @@
         </div>
         <div class="row" *ngIf = "case6 === 5" style="margin-top: -20px;position: relative;">
             <div class="col-12">
-                <h5 class="modal-title">{{'SEARCH.AmountofTime' | translate }}</h5>
+                <span class="modal-title">{{'SEARCH.AmountofTime' | translate }}</span>
             </div>
             <div class="form-group col-6 mb-2">
                 <div class=" input-group">
@@ -37,7 +37,7 @@
         </div>       
         <div class="row" style="margin-top: -8px;">
             <div class="col-12">
-                <h5 class="modal-title">{{'SEARCH.Currency' | translate }}</h5>
+                <span class="modal-title">{{'SEARCH.Currency' | translate }}</span>
             </div>
             <div class="form-group col-12 mb-2">
                 <select id="currencyMethod" class="form-control" formControlName="currencyMethod">

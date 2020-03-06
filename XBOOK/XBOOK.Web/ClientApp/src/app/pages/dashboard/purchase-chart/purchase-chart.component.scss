@@ -1,0 +1,43 @@
+.purchase-chart__information{
+    font-size: 0.6rem;
+    line-height: 0.9rem;
+    @media screen and (max-width: 1024px){
+        font-size: 0.8rem;
+        line-height: 1rem;
+    }
+}
+
+.purchase-chart__header{
+    position: absolute;
+    top: 0;
+    height: 20%;
+    left: 0;
+    right: 0;
+    padding-top: 10px;
+}
+
+.purchase-chart__chart{
+    position: absolute;
+    top: 23%;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.purchase-chart__button-create{
+    background: #d1e2bd;
+    font-size: 0.8rem;
+    transition: 0.2s ease-in;
+    white-space: nowrap;
+}
+
+:host ::ng-deep nb-card{
+    &:hover{
+        .purchase-chart__button-create{
+            background: #4caf50;
+            color: #FFF;
+        }
+        
+    }
+}

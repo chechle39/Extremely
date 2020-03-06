@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace XBOOK.Web.Controllers
         private readonly IBuyInvoiceService _buyInvoiceService;
         ICompanyProfileService _iCompanyProfileService;
 
-        public BuyInvoicesController(IBuyInvoiceServiceDapper buyInvoiceServiceDapper, IBuyInvoiceService buyInvoiceService, ICompanyProfileService iCompanyProfileService, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public BuyInvoicesController(IBuyInvoiceServiceDapper buyInvoiceServiceDapper, IBuyInvoiceService buyInvoiceService, ICompanyProfileService iCompanyProfileService)
         {
             _buyInvoiceServiceDapper = buyInvoiceServiceDapper;
             _buyInvoiceService = buyInvoiceService;
@@ -35,14 +36,12 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
         public async Task<IActionResult> GetAllBuyInvoice([FromBody]SaleInvoiceListRequest request)
         {
             var buyListInvoice = await _buyInvoiceServiceDapper.GetBuyInvoice(request);
             return Ok(buyListInvoice);
         }
         [HttpPost("[action]")]
-        [AuthorizationClaimCustom(Authority.ROLE_EDIT)]
         public async Task<IActionResult> DeleteBuyInv(List<Deleted> deleted)
         {
             await _buyInvoiceService.DeleteBuyInvoice(deleted);
@@ -64,7 +63,6 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPut("[action]")]
-        [AuthorizationClaimCustom(Authority.ROLE_EDIT)]
         public async Task<ActionResult> UpdateBuyInvoice(BuyInvoiceViewModel request)
         {
             await _buyInvoiceService.Update(request);
@@ -152,7 +150,6 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        [AuthorizationClaimCustom(Authority.ROLE_EDIT)]
         public IActionResult RemoveFile(ResponseFileName request)
         {
             var prf = _iCompanyProfileService.GetInFoProfile();

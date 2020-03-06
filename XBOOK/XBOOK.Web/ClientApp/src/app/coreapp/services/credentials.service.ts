@@ -13,11 +13,10 @@ const credentialsKey = 'credentials';
  * The Credentials interface should be replaced with proper implementation.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CredentialsService {
 
-  // tslint:disable-next-line:variable-name
   private _credentials: Credentials | null = null;
 
   constructor() {

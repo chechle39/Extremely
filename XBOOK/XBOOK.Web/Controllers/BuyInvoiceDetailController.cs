@@ -11,12 +11,10 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BuyInvoiceDetailController : ControllerBase
+    public class BuyInvoiceDetailController : BaseAPIController
     {
         private readonly IBuyDetailInvoiceService _buyDetailInvoiceService;
-        public BuyInvoiceDetailController(IBuyDetailInvoiceService buyDetailInvoiceService)
+        public BuyInvoiceDetailController(IBuyDetailInvoiceService buyDetailInvoiceService,IHttpContextAccessor httpContextAccessor)
         {
             _buyDetailInvoiceService = buyDetailInvoiceService;
         }

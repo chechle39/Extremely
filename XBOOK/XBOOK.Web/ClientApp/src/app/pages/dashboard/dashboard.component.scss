@@ -1,0 +1,40 @@
+:host ::ng-deep {
+    .dashboard__row{
+        justify-content: space-evenly;
+        >*{
+            width: 40%;
+            padding: 0 15px;
+            @media screen and (max-width: 1024px){
+                width: 100%
+            }
+
+            .dashboard__card{
+                nb-card-header{
+                    background-color: #92d050;
+                }
+                nb-card{
+                    height: 35vh;
+                    margin-bottom: 3vh;
+                    @media screen and (max-width: 1024px){
+                        margin-bottom: 5vh;
+                        height: 35vh;
+                        min-height: 229px;
+                    }
+                }
+            
+                nb-select.appearance-outline.size-tiny .select-button{
+                    padding-right: 30px;
+                }
+            }
+        }
+    
+        
+        @media screen and (max-width: 1024px){
+            &:last-child{
+                >*:last-child nb-card{
+                    margin-bottom: 1vh;
+                }
+            }
+        }
+    }
+}

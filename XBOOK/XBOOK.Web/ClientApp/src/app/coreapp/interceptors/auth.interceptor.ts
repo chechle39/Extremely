@@ -15,11 +15,11 @@ export class AuthInterceptor implements HttpInterceptor {
     // Get the auth header (fake value is shown here)
     let requestConfig = {
       setHeaders: {},
-      withCredentials: false
+      withCredentials: false,
     };
     const authHeader =  this.authenticationService.getAuthToken();
     const authReq = req.clone({
-      headers: req.headers.set('Authorization', 'Bearer ' + authHeader)
+      headers: req.headers.set('Authorization', 'Bearer ' + authHeader),
     });
     // if (this.authService.isAnonymousRoute(req.url)) {
     //   req = req.clone(requestConfig);
@@ -30,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if (authToken !== '') {
       requestConfig = {
         setHeaders: { Authorization: 'Bearer ' + authToken },
-        withCredentials: true
+        withCredentials: true,
       };
     }
     req = req.clone(requestConfig);

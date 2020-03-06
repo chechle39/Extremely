@@ -106,10 +106,8 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   }
   public showPreview(files): void {
     if (files.length === 0) {
-      return;
+    return;
     }
-    // tslint:disable-next-line:no-console
-    console.log(files);
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
     // tslint:disable-next-line:variable-name
@@ -121,6 +119,8 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
       this.Datareport = rp;
       const createOrEditClientDialog = this.modalService.open(ImportClientComponent, AppConsts.modalOptionsCustomSize);
       createOrEditClientDialog.componentInstance.id = this.Datareport;
+    }, (er) => {
+        this.message.warning('Vui lòng chọn file có định dạng .csv');
     });
   }
 

@@ -8,9 +8,7 @@ using XBOOK.Data.Model;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MasterParamController : ControllerBase
+    public class MasterParamController : BaseAPIController
     {
         IMasterParamService _iMasterParamService;
         public MasterParamController(IMasterParamService iMasterParamService)

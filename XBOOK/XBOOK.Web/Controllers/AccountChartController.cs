@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountChartController : ControllerBase
+    public class AccountChartController : BaseAPIController
     {
         IAcountChartService _iAccountService;
         public AccountChartController(IAcountChartService iAccountService)

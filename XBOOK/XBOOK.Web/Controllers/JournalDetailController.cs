@@ -9,9 +9,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class JournalDetailController : ControllerBase
+    public class JournalDetailController : BaseAPIController
     {
         private readonly IJournalDetailService _journalDetailService;
         public JournalDetailController(IJournalDetailService journalDetailService)

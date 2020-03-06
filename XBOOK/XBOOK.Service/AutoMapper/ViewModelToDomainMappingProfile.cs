@@ -79,6 +79,8 @@ namespace XBOOK.Service.AutoMapper
                         c.Email, c.PhoneNumber, c.Avatar, c.Status, c.Gender, c.BirthDay, c.Address));
             CreateMap<JournalEntryViewModel, JournalEntry>().ConstructUsing(x => new JournalEntry(x.DateCreate,x.Description,x.EntryName,x.ID,x.ObjectID,x.ObjectName,x.ObjectType));
             CreateMap<JournalEntryDetailModelCreate, JournalDetail>().ConstructUsing(x => new JournalDetail(x.JournalID, x.note, x.accNumber, x.credit, x.crspAccNumber, x.debit, x.Id));
+            CreateMap<FunctionViewModel, Functions>().ConstructUsing(x => new Functions(x.IconCss, x.Id, x.Name, x.ParentId, x.SortOrder, x.Status, x.URL));
+            CreateMap<PermissionViewModel, Permission>().ConstructUsing(x => new Permission(x.Id, x.Read, x.RoleId, x.Update, x.Create, x.Delete, x.FunctionId));
 
         }
     }

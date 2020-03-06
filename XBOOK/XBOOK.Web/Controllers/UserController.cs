@@ -8,14 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Model;
+using XBOOK.Data.Policies;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
+using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseAPIController
     {
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;

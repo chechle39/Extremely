@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EntryPatternController : ControllerBase
+    public class EntryPatternController : BaseAPIController
     {
         private readonly IEntryPatternService _entryPatternService;
         public EntryPatternController(IEntryPatternService entryPatternService)

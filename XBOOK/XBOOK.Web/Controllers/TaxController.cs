@@ -8,9 +8,7 @@ using XBOOK.Data.Model;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TaxController : ControllerBase
+    public class TaxController : BaseAPIController
     {
         ITaxService _iTaxService;
         public TaxController(ITaxService iTaxService)

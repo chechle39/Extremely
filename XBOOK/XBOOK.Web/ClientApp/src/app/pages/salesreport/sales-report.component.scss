@@ -30,64 +30,14 @@ padding-bottom: 0.35rem !important;
 height: 25px;
 }
 .totalDiscount{
-margin-right: 48px;
-    }
-    .totalAmount{
-      margin-right: 5px;
-    }
-@media only screen and (max-width: 1800px){
-.totalDiscount{
-margin-right: 30px;
-    }
-    .totalAmount{
-      margin-right: -5px;
-    }
-}
-@media only screen and (max-width: 1700px){
-.totalDiscount{
-margin-right: 40px;
-    }
-    .totalAmount{
-      margin-right: -1px;
-    }
-}
-@media only screen and (max-width: 1600px){
-.totalDiscount{
-margin-right: 35px;
-    }
-    .totalAmount{
-      margin-right: -8px;
-    }
-}
-@media only screen and (max-width: 1500px){
-.totalDiscount{
-margin-right: 16px;
-    }
-    .totalAmount{
-      margin-right: -13px;
-    }
-}
-@media only screen and (max-width: 1440px){
-    .totalDiscount{
-      margin-right: 13px;
-          }
-    .totalAmount{
-      margin-right: -15px;
-    }
-}
-@media only screen and (max-width: 1360px){
-.totalDiscount{
-margin-right: -20px;
-    }
-    .totalAmount{
-      margin-right: -10px;
-    }
-}
-@media only screen and (max-width: 1280px){
-.totalDiscount{
-margin-right: 17px;
+  position: absolute; 
+  right: 10.8%;
 }
 .totalAmount{
-  margin-right: -13px;
+  position: absolute; 
+  right: 23.7%;
 }
+.totalPayment{
+  position: absolute;
+  right: 8px;
 }

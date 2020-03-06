@@ -14,5 +14,6 @@ namespace XBOOK.Service.Interfaces
         Task UpdateAsync(ApplicationRoleViewModel roleVm);
         Task DeleteAsync(List<Deleted> rq);
         Task<ApplicationRoleViewModel> GetById(long id);
+        Task<bool> CheckPermission(string functionId, string action, string[] roles);
     }
 }

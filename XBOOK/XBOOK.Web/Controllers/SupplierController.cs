@@ -13,9 +13,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SupplierController : ControllerBase
+    public class SupplierController : BaseAPIController
     {
         private readonly ISupplierService _supplierService;
         ISupplierServiceDapper _supplierServiceDapper;
@@ -94,7 +92,7 @@ namespace XBOOK.Web.Controllers
             {
                 return new BadRequestObjectResult(files);
             }
-            else
+            else if (filename.EndsWith(".csv"))
             {
                 string name = "";
                 foreach (var item1 in Request.Form)
@@ -118,15 +116,24 @@ namespace XBOOK.Web.Controllers
                     }
                 }
             }
-            using (StreamReader r = new StreamReader(fullPath))
+            if (filename.EndsWith(".csv"))
             {
-                var json = r.ReadToEnd();
-                //    var items = JsonConvert.DeserializeObject<List<String[]>>(json);
-                var data = (from row in json.Split('\r')
-                            select row.Split(',')).ToList();
-                //   string jsonString = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(data);
-                return Ok(data);
+                using (StreamReader r = new StreamReader(fullPath))
+                {
+                    var json = r.ReadToEnd();
+                    //    var items = JsonConvert.DeserializeObject<List<String[]>>(json);
+                    var data = (from row in json.Split('\r')
+                                select row.Split(',')).ToList();
+                    //   string jsonString = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(data);
+                    return Ok(data);
+                }
             }
+            else
+            {
+                return new BadRequestObjectResult(files);
+            }
+
+            return Ok();
 
         }
     }

@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,16 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
-using XBOOK.Data.Policies;
-using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientController : BaseAPIController
     {
         IClientService _iClientService;
         IClientServiceDapper _iClientServiceDapper;
@@ -90,8 +83,8 @@ namespace XBOOK.Web.Controllers
             {
                 return new BadRequestObjectResult(files);
             }
-            else
-            {
+            else if (filename.EndsWith(".csv"))
+                {
                 string name = "";
                 foreach (var item1 in Request.Form)
                 {
@@ -113,17 +106,25 @@ namespace XBOOK.Web.Controllers
                         fs.Flush();
                     }                                 
                 }
-            }                  
-            using (StreamReader r = new StreamReader(fullPath))
+            }
+            if (filename.EndsWith(".csv"))
             {
-                var json = r.ReadToEnd();
-                //    var items = JsonConvert.DeserializeObject<List<String[]>>(json);
-                var data = (from row in json.Split('\r')
-                            select row.Split(',')).ToList();
-                //   string jsonString = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(data);
-                return Ok(data);
+                using (StreamReader r = new StreamReader(fullPath))
+                {
+                    var json = r.ReadToEnd();
+                    //    var items = JsonConvert.DeserializeObject<List<String[]>>(json);
+                    var data = (from row in json.Split('\r')
+                                select row.Split(',')).ToList();
+                    //   string jsonString = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(data);
+                    return Ok(data);
+                }
+            }
+            else 
+            {
+                return new BadRequestObjectResult(files);
             }
 
+            return Ok();
         }
 
         [HttpPost("[action]")]

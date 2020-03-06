@@ -4,9 +4,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryController : BaseAPIController
     {
         ICategoryService _iCategoryService;
         public CategoryController(ICategoryService iCategoryService)

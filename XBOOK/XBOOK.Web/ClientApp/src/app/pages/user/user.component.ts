@@ -8,6 +8,7 @@ import { UserService } from '../_shared/services/user.service';
 import { UserViewModel } from '../_shared/models/user/userview.model';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { RoleModel } from '../_shared/models/role/role.model';
+import { CommonService } from '../../shared/service/common.service';
 class PagedProductsRequestDto extends PagedRequestDto {
   keyWord: string;
 }
@@ -28,6 +29,7 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
   constructor(
     injector: Injector,
     private modalService: NgbModal,
+    private commonService: CommonService,
     private userService: UserService) {
     super(injector);
   }
@@ -53,6 +55,8 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
       .subscribe(i => {
         this.loadingIndicator = false;
         this.userViews = i;
+      }, (er) => {
+        this.commonService.messeage(er.status);
       });
   }
 

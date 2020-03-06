@@ -15,9 +15,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SaleInvoiceController : ControllerBase
+    public class SaleInvoiceController : BaseAPIController
     {
         ICompanyProfileService _iCompanyProfileService;
         ISaleInvoiceService _saleInvoiceService;

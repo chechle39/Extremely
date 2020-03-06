@@ -10,9 +10,7 @@ using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ReportDesignerController : ControllerBase
+    public class ReportDesignerController : BaseAPIController
     {
         [HttpPost("[action]/{reportUrl}")]
         public object GetReportDesignerModel(string reportUrl)

@@ -8,9 +8,7 @@ using XBOOK.Data.Model;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountBalanceController : ControllerBase
+    public class AccountBalanceController : BaseAPIController
     {
        
         IAccountBalanceServiceDapper _iAccountBalanceServiceDapperr;

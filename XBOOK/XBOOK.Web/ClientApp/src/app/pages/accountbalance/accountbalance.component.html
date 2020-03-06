@@ -1,278 +1,281 @@
 <nb-card>
-    <nb-card-header class="pb-1 border-0">
-        <div class="row">
-            <div class="col-5 col-lg-4">
-                <div class="d-flex">
-                    <span class="card__title pr-3 pt-1">
-                        {{ 'ACCOUNT.BALANCE.HEADER' | translate }}</span>
-                    <div (click)='SearchGenLed()'>
-                        <img src="../../../assets/search.png" class="button__search" alt="search General Ledger"></div>
-                </div>
-                <div class="btn btn-flat mr-1 p-0 mb-0" style="color: #546D74;">
-                    <div *ngIf=" case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
-                    <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
-                    <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
-                    <div *ngIf="case=== 3">Năm này: {{startDay}} {{keyspace}} {{endDay}}</div>
-                    <div *ngIf="case=== 4">Quý trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-                    <div *ngIf="case=== 5">Năm trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-                    <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
-                </div>
-            </div>
-            <div class="col-3 col-lg-4">
-                <div ngbDropdown>
-                    <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
-                    </button>
-                    <div ngbDropdownMenu aria-labelledby="bulkActions">
-                        <button class="dropdown-item"><span class="icon-import"></span> Import General
-                            Ledger</button>
-                        <button class="dropdown-item"><span class="icon-export"></span>
-                            Export General
-                            Ledger</button>
+    <div class="layout__container--medium px-3">
+        <nb-card-header class="pb-1 border-0">
+            <div class="row">
+                <div class="col-5 col-lg-5">
+                    <div class="d-flex">
+                        <span class="card__title pr-3 pt-1">
+                            {{ 'ACCOUNT.BALANCE.HEADER' | translate }}</span>
+                        <div (click)='SearchGenLed()'>
+                            <img src="../../../assets/search.png" class="button__search" alt="search General Ledger"></div>
+                    </div>
+                    <div class="btn btn-flat mr-1 p-0 mb-0 text-left text-nowrap" style="color: #546D74;">
+                        <div *ngIf=" case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
+                        <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 3">Năm này: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 4">Quý trước: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 5">Năm trước: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
                     </div>
                 </div>
-
-            </div>
-            <div class="col-4 col-lg-4">
-                <div ngbDropdown class="float-right">
-                    <div class="d-inline-block mx-2" style="position: relative;">
-                        <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
+                <div class="col-3 col-lg-3">
+                    <!-- <div ngbDropdown>
+                        <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="bulkActions">
+                            <button class="dropdown-item"><span class="icon-import"></span> Import General
+                                Ledger</button>
+                            <button class="dropdown-item"><span class="icon-export"></span>
+                                Export General
+                                Ledger</button>
+                        </div>
+                    </div> -->
+    
+                </div>
+                <div class="col-4 col-lg-4">
+                    <div ngbDropdown class="float-right">
+                        <div class="d-inline-block mx-2" style="position: relative;">
+                            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </nb-card-header>
-    <nb-card-body>
-        <div class="row">
-            <hr width="98%" style="height: 2px;;background: #6A0888;" />
-            <div class="col-12 ">
-                <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="accountBalanceViews"
-                    [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator"
-                    [columnMode]="ColumnMode.force" [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight"
-                    [reorderable]="reorderable" [limit]="20" [selected]="selected" [selectAllRowsOnPage]="false">
-
-                    <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
-                        [headerClass]="'col-id'">
-                        <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
-                            ngx-datatable-header-template>
-                            <span class="column-header"
-                                style="cursor: pointer;margin-left: -10px;font-weight: bold;color: gray;">{{ 'ACCOUNT.BALANCE.LIST.accNumber' | translate }}</span>
-                            <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
-                                [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
-                                [class.datatable-icon-down]="sortDir === 'desc'"></span>
-
-                        </ng-template>
-                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <div (click)="getaccNumber(row.accNumber)" style="margin-left: 4px;">
-                                <a>{{row.accNumber}}</a>
-                            </div>
-                            <div (click)="getaccNumber(row.accNumber)">
-                                {{row.accName}}
-                            </div>
-                        </ng-template>
-                    </ngx-datatable-column>
-
-                    <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
-                        [headerClass]="'col-id'">
-                        <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
-                            ngx-datatable-header-template>
-                            <span class="column-header"
-                                style="cursor: pointer;font-weight: bold;color: gray;">{{ 'ACCOUNT.BALANCE.LIST.debitOpening' | translate }}</span>
-                            <span class="column-header" style="cursor: pointer;font-weight: bold;color: gray;">
-                                /{{ 'ACCOUNT.BALANCE.LIST.creditOpeningdit' | translate }}</span>
-                            <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
-                                [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
-                                [class.datatable-icon-down]="sortDir === 'desc'"></span>
-
-                        </ng-template>
-                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <div class="Opening">
-                                <div>
-                                    <div *ngIf="row.debitOpening !== 0" style="color: darkslategray;">
-                                        {{row.debitOpening | currency:'VND':''}}
-                                    </div>
-                                    <div *ngIf="row.debitOpening === 0">
-                                        <a>-</a>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div *ngIf="row.creditOpening !== 0" class="col-more-info">
-                                        {{row.creditOpening | currency:'VND':''}}
-                                    </div>
-                                    <div *ngIf="row.creditOpening === 0">
-                                        <a>-</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </ngx-datatable-column>
-
-                    <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
-                        [headerClass]="'col-id'">
-                        <ng-template let-column="column" class="template-wrap1" let-sort="sortFn" let-sortDir="sortDir"
-                            ngx-datatable-header-template>
-                            <div class="headername">
+        </nb-card-header>
+        <nb-card-body class="pt-0">
+            <div class="row">
+                <hr width="98%" style="height: 2px;;background: #6A0888;" class="mt-0" />
+                <div class="col-12 ">
+                    <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="accountBalanceViews"
+                        [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator"
+                        [columnMode]="ColumnMode.force" [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight"
+                        [reorderable]="reorderable" [limit]="20" [selected]="selected" [selectAllRowsOnPage]="false">
+    
+                        <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
+                            [headerClass]="'col-id'">
+                            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
+                                ngx-datatable-header-template>
                                 <span class="column-header"
-                                    style="cursor: pointer;font-weight: bold;color: gray;">{{ 'ACCOUNT.BALANCE.LIST.debit' | translate }}</span>
-                                <span class="column-header" style="cursor: pointer;font-weight: bold;color: gray;">
-                                    /{{ 'ACCOUNT.BALANCE.LIST.credit' | translate }}</span>
+                                    style="cursor: pointer;margin-left: -10px;font-weight: 400;color:">{{ 'ACCOUNT.BALANCE.LIST.accNumber' | translate }}</span>
                                 <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
                                     [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
                                     [class.datatable-icon-down]="sortDir === 'desc'"></span>
-                            </div>
-                        </ng-template>
-                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <div class=creditdebit>
-                                <div>
-                                    <div *ngIf="row.debit !== 0" style="color: darkslategray;">
-                                        {{row.debit | currency:'VND':''}}
-                                    </div>
-                                    <div *ngIf="row.debit === 0">
-                                        <a>-</a>
-                                    </div>
+    
+                            </ng-template>
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div (click)="getaccNumber(row.accNumber)" style="margin-left: 4px;">
+                                    <a>{{row.accNumber}}</a>
                                 </div>
-                                <div>
-                                    <div *ngIf="row.credit !== 0" class="col-more-info">
-                                        {{row.credit | currency:'VND':''}}
-                                    </div>
-                                    <div *ngIf="row.credit === 0">
-                                        <a>-</a>
-                                    </div>
+                                <div (click)="getaccNumber(row.accNumber)">
+                                    {{row.accName}}
                                 </div>
-                            </div>
-                        </ng-template>
-                    </ngx-datatable-column>
-
-                    <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
-                        [headerClass]="'col-id'">
-                        <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
-                            ngx-datatable-header-template>
-                            <div class="headername">
+                            </ng-template>
+                        </ngx-datatable-column>
+    
+                        <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
+                            [headerClass]="'col-id'">
+                            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
+                                ngx-datatable-header-template>
                                 <span class="column-header"
-                                    style="cursor: pointer;font-weight: bold;color: gray;">{{ 'ACCOUNT.BALANCE.LIST.debitClosing' | translate }}</span>
-                                <span class="column-header" style="cursor: pointer;font-weight: bold;color: gray;">
-                                    /{{ 'ACCOUNT.BALANCE.LIST.creditClosing' | translate }}</span>
+                                    style="cursor: pointer;font-weight: 400;">{{ 'ACCOUNT.BALANCE.LIST.debitOpening' | translate }}</span>
+                                <span class="column-header" style="cursor: pointer;font-weight: 400;">
+                                    /{{ 'ACCOUNT.BALANCE.LIST.creditOpeningdit' | translate }}</span>
                                 <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
                                     [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
                                     [class.datatable-icon-down]="sortDir === 'desc'"></span>
-                            </div>
-                        </ng-template>
-                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template
-                            style="text-align: right;">
-                            <div class="Closing">
-                                <div>
-                                    <div *ngIf="row.debitClosing !== 0" style="color: darkslategray;">
-                                        {{row.debitClosing | currency:'VND':''}}
-                                    </div>
-                                    <div *ngIf="row.debitClosing === 0">
-                                        <a>-</a>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div *ngIf="row.creditClosing !== 0" class="col-more-info">
-                                        {{row.creditClosing | currency:'VND':''}}
-                                    </div>
-                                    <div *ngIf="row.creditClosing === 0">
-                                        <a>-</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </ngx-datatable-column>
-
-                    <ngx-datatable-footer>
-                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
-                            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset"
-                            let-isVisible="isVisible">
-                            <div class="row" style="display: block;width: 100%;border-top: 3px double #ccc;">
-                                <div class="row text-right">
-                                    <div class="col-3 d-flex">
-                                        <div>
-                                            <span class="card__title">
-                                                {{ 'ACCOUNT.BALANCE.LIST.Total' | translate }}
-                                            </span>
+    
+                            </ng-template>
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="Opening pr-2">
+                                    <div>
+                                        <div *ngIf="row.debitOpening !== 0" style="color: darkslategray;">
+                                            {{row.debitOpening | currency:'VND':''}}
                                         </div>
-                                        <div style="margin-left: 10px;">
-                                            <div>{{ 'ACCOUNT.BALANCE.LIST.dbit' | translate }}</div>
-                                            <div>{{ 'ACCOUNT.BALANCE.LIST.credt' | translate }}</div>
+                                        <div *ngIf="row.debitOpening === 0">
+                                            <a>-</a>
                                         </div>
                                     </div>
-                                    <div class="col-3">
-                                        <div class="Openingfooter">
-                                            <div>
-                                                <div *ngIf="getdebitOpeningTotal() !== 0" style="color: darkslategray;">
-                                                    {{getdebitOpeningTotal() | currency:'VND':''}}
-                                                </div>
-                                                <div *ngIf="getdebitOpeningTotal() === 0">
-                                                    <a>-</a>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div *ngIf="getcreditOpeningTotal() !== 0" class="col-more-info">
-                                                    {{getcreditOpeningTotal() | currency:'VND':''}}
-                                                </div>
-                                                <div *ngIf="getcreditOpeningTotal() === 0">
-                                                    <a>-</a>
-                                                </div>
-                                            </div>
+                                    <div>
+                                        <div *ngIf="row.creditOpening !== 0" class="col-more-info">
+                                            {{row.creditOpening | currency:'VND':''}}
                                         </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="debitcreditfooter">
-                                            <div>
-                                                <div *ngIf="getdebitTotal() !== 0" style="color: darkslategray;">
-                                                    {{getdebitTotal() | currency:'VND':''}}
-                                                </div>
-                                                <div *ngIf="getdebitTotal() === 0">
-                                                    <a>-</a>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div *ngIf="getcreditTotal() !== 0" class="col-more-info">
-                                                    {{getcreditTotal() | currency:'VND':''}}
-                                                </div>
-                                                <div *ngIf="getcreditTotal() === 0">
-                                                    <a>-</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="Closingfooter">
-                                            <div>
-                                                <div *ngIf="getdebitClosingTotal() !== 0" style="color: darkslategray;">
-                                                    {{getdebitClosingTotal() | currency:'VND':''}}
-                                                </div>
-                                                <div *ngIf="getdebitClosingTotal() === 0">
-                                                    <a>-</a>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div *ngIf="getcreditClosingTotal() !== 0" class="col-more-info">
-                                                    {{getcreditClosingTotal() | currency:'VND':''}}
-                                                </div>
-                                                <div *ngIf="getcreditClosingTotal() === 0">
-                                                    <a>-</a>
-                                                </div>
-                                            </div>
+                                        <div *ngIf="row.creditOpening === 0">
+                                            <a>-</a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-6 ">
-                                        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
-                                            [pagerRightArrowIcon]="'datatable-icon-right'"
-                                            [pagerPreviousIcon]="'datatable-icon-prev'"
-                                            [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage"
-                                            [size]="pageSize" [hidden]="!((rowCount / pageSize) > 1)"
-                                            (change)="myTable.onFooterPage($event)">
-                                        </datatable-pager>
+                            </ng-template>
+                        </ngx-datatable-column>
+    
+                        <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
+                            [headerClass]="'col-id'">
+                            <ng-template let-column="column" class="template-wrap1" let-sort="sortFn" let-sortDir="sortDir"
+                                ngx-datatable-header-template>
+                                <div class="headername">
+                                    <span class="column-header"
+                                        style="cursor: pointer;font-weight: 400;">{{ 'ACCOUNT.BALANCE.LIST.debit' | translate }}</span>
+                                    <span class="column-header" style="cursor: pointer;font-weight: 400;">
+                                        /{{ 'ACCOUNT.BALANCE.LIST.credit' | translate }}</span>
+                                    <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
+                                        [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
+                                        [class.datatable-icon-down]="sortDir === 'desc'"></span>
+                                </div>
+                            </ng-template>
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="creditdebit pr-2">
+                                    <div>
+                                        <div *ngIf="row.debit !== 0" style="color: darkslategray;">
+                                            {{row.debit | currency:'VND':''}}
+                                        </div>
+                                        <div *ngIf="row.debit === 0">
+                                            <a>-</a>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div *ngIf="row.credit !== 0" class="col-more-info">
+                                            {{row.credit | currency:'VND':''}}
+                                        </div>
+                                        <div *ngIf="row.credit === 0">
+                                            <a>-</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </ng-template>
-                    </ngx-datatable-footer>
-                </ngx-datatable>
+                            </ng-template>
+                        </ngx-datatable-column>
+    
+                        <ngx-datatable-column [sortable]="false" name="Client/ Invoice Number " [cellClass]="'col-id'"
+                            [headerClass]="'col-id'">
+                            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
+                                ngx-datatable-header-template>
+                                <div class="headername">
+                                    <span class="column-header"
+                                        style="cursor: pointer;font-weight: 400;">{{ 'ACCOUNT.BALANCE.LIST.debitClosing' | translate }}</span>
+                                    <span class="column-header" style="cursor: pointer;font-weight: 400;">
+                                        /{{ 'ACCOUNT.BALANCE.LIST.creditClosing' | translate }}</span>
+                                    <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
+                                        [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
+                                        [class.datatable-icon-down]="sortDir === 'desc'"></span>
+                                </div>
+                            </ng-template>
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template
+                                style="text-align: right;">
+                                <div class="Closing pr-2">
+                                    <div>
+                                        <div *ngIf="row.debitClosing !== 0" style="color: darkslategray;">
+                                            {{row.debitClosing | currency:'VND':''}}
+                                        </div>
+                                        <div *ngIf="row.debitClosing === 0">
+                                            <a>-</a>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div *ngIf="row.creditClosing !== 0" class="col-more-info">
+                                            {{row.creditClosing | currency:'VND':''}}
+                                        </div>
+                                        <div *ngIf="row.creditClosing === 0">
+                                            <a>-</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+    
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset"
+                                let-isVisible="isVisible">
+                                <div class="row pt-4" style="display: block;width: 100%;border-top: 3px double #ccc;">
+                                    <div class="row text-right">
+                                        <div class="col-3 d-flex">
+                                            <div>
+                                                <br>
+                                                <span class="card__title">
+                                                    {{ 'ACCOUNT.BALANCE.LIST.Total' | translate }}
+                                                </span>
+                                            </div>
+                                            <div style="margin-left: 10px;">
+                                                <div>{{ 'ACCOUNT.BALANCE.LIST.dbit' | translate }}</div>
+                                                <div>{{ 'ACCOUNT.BALANCE.LIST.credt' | translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 pr-2">
+                                            <div class="Openingfooter">
+                                                <div>
+                                                    <div *ngIf="getdebitOpeningTotal() !== 0" style="color: darkslategray;">
+                                                        {{getdebitOpeningTotal() | currency:'VND':''}}
+                                                    </div>
+                                                    <div *ngIf="getdebitOpeningTotal() === 0">
+                                                        <a>-</a>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div *ngIf="getcreditOpeningTotal() !== 0" class="col-more-info">
+                                                        {{getcreditOpeningTotal() | currency:'VND':''}}
+                                                    </div>
+                                                    <div *ngIf="getcreditOpeningTotal() === 0">
+                                                        <a>-</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="debitcreditfooter">
+                                                <div>
+                                                    <div *ngIf="getdebitTotal() !== 0" style="color: darkslategray;">
+                                                        {{getdebitTotal() | currency:'VND':''}}
+                                                    </div>
+                                                    <div *ngIf="getdebitTotal() === 0">
+                                                        <a>-</a>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div *ngIf="getcreditTotal() !== 0" class="col-more-info">
+                                                        {{getcreditTotal() | currency:'VND':''}}
+                                                    </div>
+                                                    <div *ngIf="getcreditTotal() === 0">
+                                                        <a>-</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="Closingfooter pr-2">
+                                                <div>
+                                                    <div *ngIf="getdebitClosingTotal() !== 0" style="color: darkslategray;">
+                                                        {{getdebitClosingTotal() | currency:'VND':''}}
+                                                    </div>
+                                                    <div *ngIf="getdebitClosingTotal() === 0">
+                                                        <a>-</a>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div *ngIf="getcreditClosingTotal() !== 0" class="col-more-info">
+                                                        {{getcreditClosingTotal() | currency:'VND':''}}
+                                                    </div>
+                                                    <div *ngIf="getcreditClosingTotal() === 0">
+                                                        <a>-</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 ">
+                                            <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage"
+                                                [size]="pageSize" [hidden]="!((rowCount / pageSize) > 1)"
+                                                (change)="myTable.onFooterPage($event)">
+                                            </datatable-pager>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
             </div>
-        </div>
-    </nb-card-body>
+        </nb-card-body>
+    </div>
 </nb-card>

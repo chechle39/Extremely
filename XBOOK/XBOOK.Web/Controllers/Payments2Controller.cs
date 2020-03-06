@@ -5,9 +5,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class Payments2Controller : ControllerBase
+    public class Payments2Controller : BaseAPIController
     {
         IPayments2Service _paymentsService;
         public Payments2Controller(IPayments2Service paymentsService)

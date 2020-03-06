@@ -4,9 +4,7 @@
     border-top-width: 1000%; 
     border-top: none;
 }
-:host ::ng-deep .datatable-header-cell-template-wrap{
-    margin-top: 13px;
-}
+
 :host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
   white-space: unset !important;
 }

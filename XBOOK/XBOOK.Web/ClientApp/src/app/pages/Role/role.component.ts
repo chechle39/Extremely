@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '../../coreapp/app.consts';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
-import { UserService } from '../_shared/services/user.service';
 import { CreateRoleComponent } from './create-role/create-role.component';
 import { RoleModel } from '../_shared/models/role/role.model';
 import { RoleService } from '../_shared/services/role.service';

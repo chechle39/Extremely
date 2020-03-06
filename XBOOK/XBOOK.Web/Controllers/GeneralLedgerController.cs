@@ -13,9 +13,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class GeneralLedgerController : ControllerBase
+    public class GeneralLedgerController : BaseAPIController
     {
         IGeneralLedgerService _iGeneralLedgerService;
         public GeneralLedgerController(IGeneralLedgerService iGeneralLedgerService)

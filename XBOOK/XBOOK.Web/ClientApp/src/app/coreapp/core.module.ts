@@ -8,15 +8,15 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
   ],
   providers: [{
     provide: HttpClient,
-    useClass: HttpService
-  }]
+    useClass: HttpService,
+  }],
 })
-export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
+export class CoreModuleApp {
+  constructor(@Optional() @SkipSelf() parentModule: CoreModuleApp) {
     if (parentModule) {
       throw new Error(
         'Core is already loaded. Import it in the AppModule only');

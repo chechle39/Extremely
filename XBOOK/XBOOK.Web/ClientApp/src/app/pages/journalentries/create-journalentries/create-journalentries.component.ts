@@ -32,14 +32,14 @@ import { AccountChartService } from '../../_shared/services/accountchart.service
 @Component({
   selector: 'xb-create-journalentries',
   templateUrl: './create-journalentries.component.html',
-  styleUrls: ['./create-journalentries.component.scss']
+  styleUrls: ['./create-journalentries.component.scss'],
 })
 
 export class CreateJournalEntriesComponent extends AppComponentBase implements OnInit, AfterViewInit {
   @ViewChildren('productName') productNameField: QueryList<any>;
   @ViewChild('amountPaidVC', { static: true }) amountPaidVC: any;
   @ViewChild('xxx', {
-    static: true
+    static: true,
   }) xxx: ElementRef;
   @ViewChild('view',  { static: false }) view: ElementRef;
   productInputFocusSub: Subscription = new Subscription();
@@ -60,7 +60,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   focusClient$ = new Subject<string>();
   isEditClient = true;
   clientKey = {
-    clientKeyword: ''
+    clientKeyword: '',
   };
   requestRemove: any[] = [];
   invoiceList: any;
@@ -86,7 +86,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   }
 
   ngOnInit() {
-    this.isRead = true;
+    this.isRead = false;
     this.getAccoutChart();
     this.createForm();
     if (this.invoiceForm !== undefined) {
@@ -111,7 +111,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     for (let i = 0; i < this.dataAccount.length; i++) {
         const brand =  {
           accountNumber: this.dataAccount[i].accountNumber,
-          accountName: this.dataAccount[i].accountName
+          accountName: this.dataAccount[i].accountName,
         };
         this.filteredBrands.push(brand);
     }
@@ -161,7 +161,8 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
     const today = new Date().toLocaleDateString('en-GB');
     const issueDateSplit = today.split('/');
-    const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
+    const issueDatePicker = { year: Number(issueDateSplit[2]),
+      month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
 
     this.invoiceForm = this.fb.group({
       id: 0,
@@ -234,7 +235,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
           catchError(() => {
             this.searchFailed = true;
             return of([]);
-          }))
+          })),
       ));
   }
 
@@ -276,7 +277,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
 
   private getInvoiceById(invoiceId: any) {
-    
+    this.isRead = true;
     this.journalEntryService.getJournalById(invoiceId).subscribe(data => {
       const invoice = data as CreateRequest;
       this.invoiceList = invoice;
@@ -307,27 +308,29 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       if (invoice.dateCreate) {
         const issueDate = moment(invoice.dateCreate).format(AppConsts.defaultDateFormat);
         const issueDateSplit = issueDate.split('/');
-        const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
+        const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]),
+          day: Number(issueDateSplit[0]) };
         this.invoiceForm.controls.dateCreate.patchValue(issueDatePicker);
       }
       this.isRead = true;
+      this.invoiceForm.controls.items.disable();
     });
+    this.isRead = true;
+    this.invoiceForm.controls.items.disable();
   }
-  // filterAccNumber(item) {
-  //   const data = this.dataAccount.filter(x => x.accountNumber === item);
-  //   const obj = {
-  //     accountNumber: data[0].accountNumber,
-  //     accountName: data[0].accountName
-  //   };
-  //   return obj;
-  // }
+
   cancel() {
-    // Resets to blank object
+    if (this.invoiceId > 0) {
+      this.getInvoiceById(this.invoiceId);
+      this.isRead = true;
+      this.invoiceForm.controls.items.disable();
+    }
     if (this.editMode) {
       this.router.navigate([`/pages/journalentries/${this.invoiceForm.value.id}/${ActionType.View}`]);
       this.viewMode = true;
       this.isRead = true;
       this.invoiceForm.disable();
+      this.invoiceForm.controls.items.disable();
     } else {
       this.invoiceForm.reset();
       this.router.navigate([`/pages/journalentries`]);
@@ -344,19 +347,6 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       this.message.warning('Form invalid');
       return;
     }
-    // const data = [];
-    // // tslint:disable-next-line:prefer-for-of
-    // for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-    //   const object = {
-    //     id: this.invoiceForm.value.items[i].id,
-    //     crspAccNumber: this.invoiceForm.value.items[i].crspAccNumber.accountNumber,
-    //     accNumber: this.invoiceForm.value.items[i].accNumber.accountNumber,
-    //     credit: this.invoiceForm.value.items[i].credit,
-    //     note: this.invoiceForm.value.items[i].note,
-    //     debit: this.invoiceForm.value.items[i].debit,
-    //   };
-    //   data.push(object);
-    // }
     this.viewMode = true;
     this.isRead = true;
     if (this.invoiceId === 0) {
@@ -369,8 +359,9 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         objectID: this.invoiceForm.value.objectName.id === undefined ? null : this.invoiceForm.value.objectName.id,
         objectName: this.invoiceForm.value.objectName.objectName === undefined ? this.invoiceForm.value.objectName
         : this.invoiceForm.value.objectName.objectName,
-        objectType: this.invoiceForm.value.objectName.objectType === undefined ? 'Employee' : this.invoiceForm.value.objectName.objectType,
-        detail: this.invoiceForm.value.items
+        objectType: this.invoiceForm.value.objectName.objectType === undefined
+        ? 'Employee' : this.invoiceForm.value.objectName.objectType,
+        detail: this.invoiceForm.value.items,
       } as CreateRequest;
       this.journalEntryService.createJournal(request).subscribe(rp => {
         this.notify.success('Successfully Add');
@@ -389,7 +380,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         objectID: this.invoiceForm.value.objectID,
         objectName: this.invoiceForm.value.objectName,
         objectType: this.invoiceForm.value.objectType,
-        detail: this.invoiceForm.value.items
+        detail: this.invoiceForm.value.items,
       } as CreateRequest;
       this.journalEntryService.updateJournal(request).subscribe(rp => {
         if (this.requestRemove.length > 0) {
@@ -413,23 +404,10 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
   private updateTotalUnitPrice(items: any) {
 
-    // this.subTotalAmount = 0;
-    // // tslint:disable-next-line:forin
-    // for (const i in items) {
-    //   const arrayControl = this.getFormArray();
-    //   const price = items[i].credit === 0
-    //   || items[i].credit === '0'
-    //   || items[i].credit === null ? 0 : items[i].credit.toString().replace(/,/g, '');
-    //   const amount = (1 * price);
-    //   const amountFormatted = this.currencyPipe.transform(amount, 'VND', '', '');
-    //   arrayControl.at(+i).get('credit').setValue(amountFormatted, { onlySelf: true, emitEvent: false });
-    //   this.subTotalAmount += amount;
-    // }
   }
 
-  totalCredit(){
+  totalCredit() {
     let Credit = 0;
-    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.invoiceForm.value.items.length; i ++) {
       const credit = this.invoiceForm.value.items[i].credit === 0 ||
       this.invoiceForm.value.items[i].credit === '0' ||
@@ -442,7 +420,6 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   }
   totalDebit() {
     this.debitTotal = 0;
-    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.invoiceForm.value.items.length; i ++) {
       const debit1 = this.invoiceForm.value.items[i].debit === 0 ||
       this.invoiceForm.value.items[i].debit === '0' ||
@@ -458,31 +435,5 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     this.invoiceForm.enable();
     this.viewMode = false;
     this.isRead = false;
-  }
-
-
-  onDateSelection(e) {
-    const issueDate = [this.invoiceForm.controls.issueDate.value.year,
-    this.invoiceForm.controls.issueDate.value.month,
-    this.invoiceForm.controls.issueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.issueDate.value.year,
-    this.invoiceForm.controls.issueDate.value.month, this.invoiceForm.controls.issueDate.value.day].join('-');
-
-    const dueDate = [this.invoiceForm.controls.dueDate.value.year,
-    this.invoiceForm.controls.dueDate.value.month,
-    this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ? '' : [this.invoiceForm.controls.dueDate.value.year,
-    this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-');
-    if (issueDate > dueDate) {
-      return this.isCheckDate = true;
-    } else {
-      return this.isCheckDate = false;
-    }
-  }
-
-
-  onChange(e: boolean) {
-    this.isCheckdr = !e;
-  }
-  onChangeCbb(e, i) {
-
   }
 }

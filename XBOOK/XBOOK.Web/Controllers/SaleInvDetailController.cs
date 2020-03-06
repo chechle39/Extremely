@@ -7,9 +7,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SaleInvDetailController : ControllerBase
+    public class SaleInvDetailController : BaseAPIController
     {
         ISaleInvDetailService _iSaleInvDetailService;
         private readonly XBookContext _context;

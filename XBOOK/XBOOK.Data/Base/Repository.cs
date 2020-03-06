@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using XBOOK.Common.Exceptions;
 
@@ -137,6 +138,19 @@ namespace XBOOK.Data.Base
             var query = Entities.FindAsync(id);
 
             return await query;
+        }
+
+        public IQueryable<TEntity> FindAll(params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> items = _dbContext.Set<TEntity>();
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    items = items.Include(includeProperty);
+                }
+            }
+            return items;
         }
     }
 }

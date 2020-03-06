@@ -8,9 +8,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UploadProfileController : ControllerBase
+    public class UploadProfileController : BaseAPIController
     {
         ICompanyProfileService _iCompanyProfileService;
         private readonly IHostingEnvironment _hostingEnvironment;

@@ -91,6 +91,6 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
   }
   onChange(value: string): void {
     // tslint:disable-next-line:no-console
-    console.log(value);
+
   }
 }

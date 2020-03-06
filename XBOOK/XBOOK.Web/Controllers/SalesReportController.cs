@@ -15,9 +15,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SalesReportController : ControllerBase
+    public class SalesReportController : BaseAPIController
     {
 
         ISalesReportServiceDapper _iSalesReportServiceDapper;

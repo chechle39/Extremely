@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Injector } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProductView } from '../../_shared/models/product/product-view.model';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { ProductService } from '../../_shared/services/product.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RoleService } from '../../_shared/services/role.service';
 import { RoleModel } from '../../_shared/models/role/role.model';
@@ -38,8 +37,7 @@ export class CreateRoleComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     public roleService: RoleService,
     public activeModal: NgbActiveModal,
-    public fb: FormBuilder,
-    public productService: ProductService) {
+    public fb: FormBuilder) {
     super(injector);
   }
 
@@ -47,7 +45,7 @@ export class CreateRoleComponent extends AppComponentBase implements OnInit {
     const claims = [
       { id: 'XBOOk.Role.View', selected: false, name: 'View' },
       { id: 'XBOOk.Role.Edit', selected: false, name: 'Edit' },
-    ]
+    ];
     this.claims = claims;
     this.roleForm = this.createRoleFormGroup();
     if (this.edit === true) {
@@ -66,7 +64,7 @@ export class CreateRoleComponent extends AppComponentBase implements OnInit {
           id: rp.id,
           name: rp.name,
           description: rp.description,
-          roleClaims: [view,edit]
+          roleClaims: [view, edit],
         });
         this.selectedCities = rp.roles;
       });
@@ -97,7 +95,7 @@ export class CreateRoleComponent extends AppComponentBase implements OnInit {
       description: submittedForm.value.description,
       requestData: arrclaim,
     };
-   
+
     if (!this.edit) {
       this.roleService.createRole(requestCreate).subscribe(rp => {
         this.notify.success('saved successfully');

@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header class="pb-1">
+  <nb-card-header class="pb-1 border-0">
     <div class="row">
       <div class="col-5 col-lg-4">
         <div class="d-flex">
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="col-3 col-lg-4">
-        <div ngbDropdown>
+        <!-- <div ngbDropdown>
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
@@ -26,7 +26,7 @@
             <button (click)="exportData()" class="dropdown-item"><span class="icon-export"></span> Export General
               Ledger</button>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="col-4 col-lg-4">
         <div ngbDropdown class="float-right">
@@ -35,10 +35,12 @@
           </div>
         </div>
       </div>
+      <!-- <hr width="98%" style="height: 2px;;background: #6A0888;" class="mt-0" /> -->
     </div>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body class="pt-0">
     <div class="row">
+      <hr width="98%" style="height: 2px;;background: #6A0888;" class="mt-0" />
       <div class="col-md-12">
         <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="genViews"
           [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"

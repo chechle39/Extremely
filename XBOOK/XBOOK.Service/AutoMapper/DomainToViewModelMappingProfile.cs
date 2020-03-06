@@ -38,6 +38,8 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<AppRole, ApplicationRoleViewModel>();
             CreateMap<JournalEntry, JournalEntryViewModel>();
             CreateMap<JournalDetail, JournalEntryDetailModelCreate>();
+            CreateMap<Functions, FunctionViewModel>();
+            CreateMap<Permission, PermissionViewModel>();
         }
     }
 }

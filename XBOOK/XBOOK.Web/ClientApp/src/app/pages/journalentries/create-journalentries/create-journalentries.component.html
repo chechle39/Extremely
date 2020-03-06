@@ -152,7 +152,7 @@
                                                                 </div>
                                                             </ng-template>
                                                         </p-autoComplete> -->
-                                                        <select  class="border-0 pt-2 full-width  form-control" formControlName="accNumber" [disabled]="isRead">
+                                                        <select  class="invoice__input__textbox--disable border-0 pt-2 full-width  form-control" formControlName="accNumber" >
                                                             <option [ngValue]="null">Choose a acount chart</option>
                                                             <option *ngFor="let method of dataAccount" [ngValue]="method.accountNumber">
                                                                 {{method.accountNumber}} - {{method.accountName}}
@@ -161,7 +161,7 @@
                                                     </div>
                                                     <div class="col-3 text-center">
 
-                                                        <select  class="border-0 pt-2 full-width  form-control" formControlName="crspAccNumber" [disabled]="isRead">
+                                                        <select  class="invoice__input__textbox--disable border-0 pt-2 full-width  form-control" formControlName="crspAccNumber" [disabled]="viewMode">
                                                             <option [ngValue]="null">Choose a acount chart</option>
                                                             <option *ngFor="let method of dataAccount" [ngValue]="method.accountNumber">
                                                                 {{method.accountNumber}} - {{method.accountName}}

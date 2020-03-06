@@ -9,11 +9,6 @@ namespace XBOOK.Web.Controllers
     [Authorize]
     public class BaseAPIController : ControllerBase
     {
-        protected readonly IHttpContextAccessor HttpContextAccessor;
-
-        protected BaseAPIController(IHttpContextAccessor httpContextAccessor)
-        {
-            HttpContextAccessor = httpContextAccessor;
-        }
+    
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -10,9 +12,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MoneyReceiptController : ControllerBase
+    public class MoneyReceiptController : BaseAPIController
     {
         private readonly IMoneyReceiptService _iMoneyReceiptService;
         private readonly IMoneyReceiptDapper _moneyReceiptDapper;

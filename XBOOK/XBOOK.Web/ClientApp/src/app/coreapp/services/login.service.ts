@@ -7,12 +7,12 @@ import { API_URI } from '../../../environments/app.config';
 export class LoginService extends BaseService {
     login(request): Observable<LoginViewModel> {
         return this.post<LoginViewModel>(
-            `${API_URI.login}`, request
+            `${API_URI.login}`, request,
         );
     }
     logOut(): Observable<any> {
         return this.post<any>(
-            `${API_URI.logout}`, null
+            `${API_URI.logout}`, null,
         );
     }
 }

@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { MasterParamService } from '../../_shared/services/masterparam.service';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { SelectItem } from 'primeng/components/common/selectitem';
+import { Router } from '@angular/router';
 // @Component({
 //   selector: 'xb-create-masterparam',
 //   templateUrl: './create-masterparam.component.html',
@@ -233,6 +234,7 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
     public activeModal: NgbActiveModal,
     private companyProfileService: CompanyService,
     private masterParamService: MasterParamService,
+    private router: Router,
   ) {
     super(injector);
   }
@@ -270,6 +272,7 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
     });
   }
   get taxs(): FormArray {
+    const controls = this.getFormArray();
     return this.taxForm.get('taxs') as FormArray;
   }
 
@@ -328,81 +331,90 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
     //   return false;
     // }
     this.submitted = true;
-
     // stop here if form is invalid
     if (this.taxForm.invalid) {
-        return;
+      return;
     }
 
     // display form values on success
- //   alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.taxForm.value, null, 4));
-   // tslint:disable-next-line:one-line
-   else {
-    const addListData = [];
-    if (this.taxForm.value.taxs.length > this.taxListData.length) {
-      this.taxForm.value.taxs.forEach(element => {
-        if (element.isAdd === null) {
-          addListData.push(element);
-        }
-      });
-      this.addList = addListData;
-      if (this.addList.length > 0) {
-        this.masterParamService.addTax(this.addList).subscribe(rs => {
-          this.notify.success('Successfully Save');
-          // tslint:disable-next-line:no-shadowed-variable
-          this.onload();
-          return;
-        }, (er) => {
-        //  this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
+    //   alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.taxForm.value, null, 4));
+    // tslint:disable-next-line:one-line
+    else {
+      const addListData = [];
+      if (this.taxForm.value.taxs.length > this.taxListData.length) {
+        this.taxForm.value.taxs.forEach(element => {
+          if (element.isAdd === null) {
+            addListData.push(element);
+          }
         });
+        this.addList = addListData;
+        if (this.addList.length > 0) {
+          this.masterParamService.addTax(this.addList).subscribe(rs => {
+            this.notify.success('Successfully Save');
+            // tslint:disable-next-line:no-shadowed-variable
+            this.onload();
+            return;
+          }, (er) => {
+            //  this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
+          });
 
-      }
-    } else {
-      this.taxForm.value.taxs.forEach(element => {
-        addListData.push(element);
-      });
-      this.addList = addListData;
-      if (this.addList.length > 0) {
-        this.masterParamService.updateMaster(this.addList).subscribe(rs => {
-          this.notify.success('Successfully Update');
-          // tslint:disable-next-line:no-shadowed-variable
-          this.onload();
-          return;
-        }, (er) => {
-         // this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
+        }
+      } else {
+        this.taxForm.value.taxs.forEach(element => {
+          addListData.push(element);
         });
+        this.addList = addListData;
+        if (this.addList.length > 0) {
+          this.masterParamService.updateMaster(this.addList).subscribe(rs => {
+            this.notify.success('Successfully Update');
+            // tslint:disable-next-line:no-shadowed-variable
+            this.onload();
+            return;
+          }, (er) => {
+            // this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');
+          });
+        }
       }
     }
-   }
 
   }
-  close(result: any): void {
-    this.activeModal.close(result);
+  close(): void {
+    this.activeModal.close();
+    this.router.navigate([`/pages`]);
   }
-  delete(paramType: string, key: string, name: string): void {
+  getFormArray() {
+    const formArr = this.taxForm.controls.taxs as FormArray;
+    return formArr;
+  }
+  delete(isAdd: string, paramType: string, key: string, name: string, i: number): void {
     const a = this.paramTypeSelected.nativeElement.value;
     if (a !== 'Choose a value Master Param') {
-      this.masterParamService.getProfile(this.paramTypeSelected.nativeElement.value).pipe(finalize(() => {
-      })).subscribe(rs => {
-        this.Listtemp = rs;
-        if (this.Listtemp.length > 1 || key === null || key === undefined) {
-          const request = [{
-            nameDelete: name,
-            keydelete: key,
-            paramTypedelete: paramType,
-          }];
-          if (key !== null || key !== undefined) {
-            this.masterParamService.deleteMaster(request).subscribe(rp => {
-              this.onload();
-              this.notify.success('Successfully Deleted');
-            });
+      if ((key === null || key === undefined) || isAdd === null) {
+        const controls = this.getFormArray();
+        controls.removeAt(i);
+      }
+      // tslint:disable-next-line:one-line
+      else {
+        this.masterParamService.getProfile(this.paramTypeSelected.nativeElement.value).pipe(finalize(() => {
+        })).subscribe(rs => {
+          this.Listtemp = rs;
+          if (this.Listtemp.length > 1) {
+            const request = [{
+              nameDelete: name,
+              keydelete: key,
+              paramTypedelete: paramType,
+            }];
+            if (key !== null || key !== undefined) {
+              this.masterParamService.deleteMaster(request).subscribe(rp => {
+                this.onload();
+                this.notify.success('Successfully Deleted');
+              });
+            }
+          } else {
+            this.message.warning('Only one left  item Master Param');
           }
-
-        } else {
-          this.message.warning('Only one left  item Master Param');
-        }
-
-      });
+        });
+      }
     } else {
       this.message.warning('Please select a item Master Param');
     }

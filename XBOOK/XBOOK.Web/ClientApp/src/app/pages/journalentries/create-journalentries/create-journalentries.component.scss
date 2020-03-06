@@ -96,4 +96,9 @@
 .invoice__datepicker__wrapper{
     width: 105px;
 }
-// .ui-autocomplete 
+
+.invoice__input__textbox--disable{
+    &:disabled{
+        background: #FFF;
+    }
+}

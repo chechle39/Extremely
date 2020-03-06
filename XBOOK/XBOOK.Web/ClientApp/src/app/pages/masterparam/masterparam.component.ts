@@ -38,6 +38,7 @@ export class MasterParamComponent extends PagedListingComponentBase<ClientView> 
     private router: Router) {
     super(injector);
   }
+
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
@@ -71,10 +72,13 @@ export class MasterParamComponent extends PagedListingComponentBase<ClientView> 
   }
   createClient(): void {
     this.showCreateOrEditClientDialog();
+    this.router.navigateByUrl('/pages/masterParam', {skipLocationChange: true}).then(() =>
+    this.router.navigate(['/pages']));
   }
   showCreateOrEditClientDialog(id?: number): void {
     let createOrEditClientDialog;
     if (id === undefined || id <= 0) {
+      this.modalService.dismissAll();
       createOrEditClientDialog = this.modalService.open(CreateMasterParamComponent, AppConsts.modalOptionsCustomSize);
     } else {
    //  createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent, AppConsts.modalOptionsCustomSize);
@@ -85,6 +89,5 @@ export class MasterParamComponent extends PagedListingComponentBase<ClientView> 
         this.refresh();
       }
     });
-
   }
 }

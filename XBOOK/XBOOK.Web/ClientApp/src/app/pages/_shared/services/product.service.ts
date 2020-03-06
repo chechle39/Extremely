@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ProductSearchModel } from '../models/product/product-search.model';
 import { ProductView } from '../models/product/product-view.model';
 import { Observable } from 'rxjs';
+import { saveAs } from 'file-saver';
 import { ProductCategoryView } from '../models/product/product-category-view.model';
 import { BaseService } from '../../../shared/service/base.service';
 import { API_URI } from '../../../../environments/app.config';
@@ -17,7 +18,7 @@ export class ProductService extends BaseService {
             return (
               data.length !== 0 ? data as ProductSearchModel[] : new Array<ProductSearchModel>()
             );
-          }
+          },
         ));
 
     return products;
@@ -25,7 +26,7 @@ export class ProductService extends BaseService {
 
   getProduct(id: any): Observable<ProductView> {
     return this.post<ProductView>(
-      `${API_URI.productById}`, id
+      `${API_URI.productById}`, id,
     );
   }
   createProduct(product: any): Observable<ProductView> {
@@ -42,5 +43,23 @@ export class ProductService extends BaseService {
   }
   getAllCategory(): Observable<ProductCategoryView> {
     return this.post<ProductCategoryView>(`${API_URI.categoryGetAll}`, null);
+  }
+  createImportProduct(request: any): Observable<any> {
+    return this.post<any>(`${API_URI.createImportProduct}`, request);
+  }
+  ExportProduct(request: any) {
+    const data = this.postcsv<any[]>(`${API_URI.ExportProduct}`, request).subscribe(rs => {
+      this.downLoadFile(rs, 'text/csv');
+    });
+    return data;
+  }
+  downLoadFile(data: any, type: string) {
+    // tslint:disable-next-line:object-literal-shorthand
+    const blob = new Blob([data], { type: type });
+    const url = window.URL.createObjectURL(blob);
+    saveAs(blob, 'Product.csv');
+  }
+  GetFieldNameProduct(files: any): Observable<any> {
+    return this.postUploadFile<any>(`${API_URI.GetFieldName}`, files);
   }
 }

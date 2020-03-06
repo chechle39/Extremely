@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="col-3 col-lg-4">
-        <div ngbDropdown>
+        <!-- <div ngbDropdown>
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
@@ -29,7 +29,7 @@
             <button class="dropdown-item"><span class="icon-export"></span> Export General
               Ledger</button>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="col-4 col-lg-4">
         <div ngbDropdown class="float-right">
@@ -43,10 +43,15 @@
   <nb-card-body>
     <div *ngFor="let group of genViews" style="padding-top: 3%;">
       <div>
-        <div style="color: #546D74;">
-          {{group.accountNumber}}- {{group.accountName}}</div>
-        <div style="color: #546D74;position: absolute; font-size: 1.1rem;">
-          {{group.companyName}}</div>
+        <div class="row" style="padding-top: 3%;color: #546D74">         
+          <div class="col-4"style="color: #546D74;">
+            {{group.accountNumber}}- {{group.accountName}}</div>
+        </div>         
+        <div class="row" style="color: #546D74;">         
+          <div class="col-8" style="color: #546D74;position: absolute; font-size: 1.1rem;">
+            {{group.companyName}}</div>
+          <div style="text-align: right;color: #546D74;font-weight: bold;" class="col-md-6">Số Dư Đầu Kỳ:  {{122990 | currency:'VND':''}}</div>
+        </div>      
       </div>
 
 

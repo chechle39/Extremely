@@ -1,9 +1,10 @@
 <nb-card>
   <nb-card-header class="pb-1 border-0">
     <div class="row">
-      <div class="col-6">
+      <div class="col-5 col-lg-4">
         <div class="d-flex">
-          <span class="card__title pr-3 pt-1">{{ 'PURCHASE.HEADER' | translate }}</span>
+          <span class="card__title pr-3 pt-1" >{{ 'PURCHASE.HEADER' | translate }}
+          </span>
           <div (click)='SearchGenLed()'>
             <img src="../../../assets/search.png" class="button__search"
               alt="search General Ledger"></div>
@@ -19,17 +20,21 @@
           <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
         </div>
       </div>
-      <div class="col-6">
-        <div ngbDropdown>
+      <div class="col-3 col-lg-4">
+        <!-- <div ngbDropdown>
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
           </button>
-          <div class="d-inline-block mx-2">
-            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
-          </div>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
             <button class="dropdown-item"><span class="icon-import"></span> Import General Ledger</button>
             <button class="dropdown-item"><span class="icon-export"></span> Export General
               Ledger</button>
+          </div>
+        </div> -->
+      </div>
+      <div class="col-4 col-lg-4">
+        <div ngbDropdown class="float-right">
+          <div class="d-inline-block mx-2">
+            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
           </div>
         </div>
       </div>
@@ -60,17 +65,17 @@
 
             <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="group.purchaseReportListData"
               [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]"
-              [columnMode]="ColumnMode.force" [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight"
+              [columnMode]="ColumnMode.flex" [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight"
               [limit]="20" [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)"
               [selectAllRowsOnPage]="false">
 
-              <ngx-datatable-column name="{{ 'PURCHASE.LIST.Supplier' | translate }}" prop="firstMonth">
+              <ngx-datatable-column name="{{ 'PURCHASE.LIST.Supplier' | translate }}" prop="firstMonth" [flexGrow]="3">
                 <ng-template let-row="row" ngx-datatable-cell-template>
                   <div>{{row.supplier}}</div>
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.invoiceNumber' | translate }}"
+              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.invoiceNumber' | translate }}" [flexGrow]="2"
                 [cellClass]="'col-left'" [headerClass]="'col-left'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-left" style="color: cadetblue;">
@@ -81,7 +86,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.date' | translate }}"
+              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.date' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-left'" [headerClass]="'col-left'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-left">
@@ -92,7 +97,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.unitPrice' | translate }}"
+              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.unitPrice' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-right'" [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-right">
@@ -110,7 +115,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.amount' | translate }}"
+              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.amount' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-center'" [headerClass]="'col-center'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-center">
@@ -121,10 +126,10 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.discount' | translate }}"
-                [cellClass]="'col-center'" [headerClass]="'col-center'">
+              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.discount' | translate }}" [flexGrow]="1"
+                [cellClass]="'col-right'" [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                  <div class="col-center">
+                  <div class="col-right">
                     <div>
                       <div>
                         <div *ngIf="row.discount !== 0" class="col-more-info">
@@ -139,7 +144,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'col-right'"
+              <ngx-datatable-column name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'col-right'" [flexGrow]="1"
                 [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-right">
@@ -171,10 +176,7 @@
                       </div>
 
 
-                      <div class="col-2"></div>
-                      <div class="col-1"></div>
-                      <div class="col-1"></div>
-                      <div class="col-2" style="color: #546D74;font-family:Tahoma;">
+                      <div style="color: #546D74;font-family:Tahoma;">
                         <div class="totalAmount">
                           <div *ngIf="group.totalAmount  !== 0" class="col-more-info"
                             style="color: #546D74;font-family:Tahoma;">
@@ -186,7 +188,7 @@
                         </div>
                       </div>
 
-                      <div class="col-2" style="color: #546D74;font-family:Tahoma">
+                      <div style="color: #546D74;font-family:Tahoma;">
                         <div class="totalDiscount">
                           <div *ngIf="group.totalDiscount  !== 0" class="col-more-info">
                             {{group.totalDiscount  | currency:'VND':''}}
@@ -197,8 +199,8 @@
                         </div>
                       </div>
 
-                      <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 2%;">
-                        <div>
+                      <div style="color: #546D74;font-family:Tahoma;">
+                        <div class="totalPayment">
                           <div *ngIf="group.totalPayment  !== 0" class="col-more-info">
                             {{group.totalPayment  | currency:'VND':''}}
                           </div>

@@ -1,17 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using XBOOK.Dapper.Interfaces;
-using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CompanyProfileController : ControllerBase
+    public class CompanyProfileController : BaseAPIController
     {
         ICompanyProfileService _iCompanyProfileService;
         public CompanyProfileController(ICompanyProfileService iCompanyProfileService)

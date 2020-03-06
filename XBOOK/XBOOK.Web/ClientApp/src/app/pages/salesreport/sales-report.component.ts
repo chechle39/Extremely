@@ -21,7 +21,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
 @Component({
   selector: 'xb-sales',
   templateUrl: './sales-report.component.html',
-  styleUrls: ['./sales-report.component.scss']
+  styleUrls: ['./sales-report.component.scss'],
 })
 export class SalesReportComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;
@@ -67,17 +67,17 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
 
     const date = new Date();
     this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     this.endDate1 = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const genledSearch = {
-      // startDate: this.firstDate === undefined ? null : this.firstDate,
-      // endDate: this.endDate1 === undefined ? null : this.endDate1,
+      startDate: this.firstDate === undefined ? null : this.firstDate,
+      endDate: this.endDate1 === undefined ? null : this.endDate1,
       money: null,
-      productName: null
+      productName: null,
     };
 
 
@@ -93,7 +93,7 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -144,6 +144,9 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
           this.startDay = result.startDate;
           this.endDay = result.endDate;
           this.keyspace = ' - ';
+          this.salesViewsrequst = this.genViews;
+          this.gettotalAmount();
+          this.gettotalPayment();
         });
         this.salesReportService.getDataReport(genledSearch).subscribe(rp => {
           this.genViewsReport = rp;

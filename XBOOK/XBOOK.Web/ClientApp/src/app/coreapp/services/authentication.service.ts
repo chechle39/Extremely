@@ -29,11 +29,6 @@ export class AuthenticationService {
   login(context: LoginContext): Observable<Credentials> {
     // Replace by proper authentication call
 
-    const rq = {
-      email: context.username,
-      password: context.password,
-    } as LoginViewModel;
-
     const data = {
       username: context.username,
       token: context.token,

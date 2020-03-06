@@ -40,7 +40,8 @@ namespace XBOOK.Data.Entities
         public DbSet<BuyInvDetail> BuyInvDetail { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
-       // public DbSet<Functions> Functions { get; set; }
+        public DbSet<Functions> Functions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +64,8 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new PaymentReceiptConfiguration())
                 .ApplyConfiguration(new Payments_2Configuration())
                 .ApplyConfiguration(new BuyInvoiceConfiguration())
+                .ApplyConfiguration(new FunctionsConfiguration())
+                .ApplyConfiguration(new PermissionConfiguration())
                 .ApplyConfiguration(new BuyInvDetailConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("AppUserClaims").HasKey(x => x.Id);

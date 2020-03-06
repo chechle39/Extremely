@@ -9,7 +9,7 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-12">
-                <h5 class="modal-title">Khoảng thời gian</h5>
+                <span class="modal-title font-weight-300">KHOẢNG THỜI GIAN</span>
             </div>
             <div class="form-group col-12 mb-2">
                 <select (change)="onChange($event)" id="genLedMethods" class="form-control" formControlName="genLedMethods"style="position: relative;margin-bottom: 20px;">
@@ -21,7 +21,7 @@
         </div>
         <div class="row" *ngIf = "case6 === 6" style="margin-top: -20px;position: relative;">
             <div class="col-12">
-                <h5 class="modal-title">Khoảng thời gian</h5>
+                <span class="modal-title font-weight-300">TÙY CHỌN THỜI GIAN</span>
             </div>
             <div class="form-group col-6 mb-2">
                 <div class=" input-group">
@@ -84,9 +84,9 @@
                 </p-multiSelect>                 -->
             </div>
         </div>
-        <div class="row" style="margin-top: -8px;">
+        <div class="row" style="margin-top: 0px;">
             <div class="col-12">
-                <h5 class="modal-title">Loại tiền</h5>
+                <span class="modal-title  font-weight-300">LOẠI TIỀN</span>
             </div>
             <div class="form-group col-12 mb-2">
                 <select id="currencyMethod" class="form-control" formControlName="currencyMethod">

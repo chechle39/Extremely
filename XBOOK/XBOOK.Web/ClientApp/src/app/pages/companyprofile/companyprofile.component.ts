@@ -14,6 +14,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-companyprofile',
   templateUrl: './companyprofile.component.html',
   styleUrls: ['./companyprofile.component.scss'],
@@ -73,9 +74,11 @@ export class CompanyProfileComponent extends PagedListingComponentBase<any> {
         }];
         this.companyprofileViews1.push(data);
         if (this.companyprofileViews.length === 0) {
+          this.modalService.dismissAll();
           const createClientDialog = this.modalService.open(CreateCompanyprofileComponent,
             AppConsts.modalOptionsCustomSize);
         } else {
+          this.modalService.dismissAll();
           const createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent,
             AppConsts.modalOptionsCustomSize);
           createOrEditClientDialog.componentInstance.id = this.companyprofileViews[0].id;
@@ -85,7 +88,8 @@ export class CompanyProfileComponent extends PagedListingComponentBase<any> {
             }
           });
         }
-
+        this.router.navigateByUrl('/pages/masterParam', {skipLocationChange: true}).then(() =>
+        this.router.navigate(['/pages']));
       });
   }
 

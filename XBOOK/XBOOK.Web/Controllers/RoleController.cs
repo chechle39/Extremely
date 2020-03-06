@@ -10,9 +10,7 @@ using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RoleController : ControllerBase
+    public class RoleController : BaseAPIController
     {
         private readonly IRoleService _roleService;
         public RoleController(IRoleService roleService)

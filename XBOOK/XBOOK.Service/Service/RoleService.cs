@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using XBOOK.Data.Base;
+using XBOOK.Data.Entities;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
@@ -16,9 +18,14 @@ namespace XBOOK.Service.Service
     public class RoleService : IRoleService
     {
         private RoleManager<AppRole> _roleManager;
-        public RoleService(RoleManager<AppRole> roleManager)
+        private IRepository<Functions> _functionRepository;
+        private IRepository<Permission> _permissionRepository;
+        public RoleService(RoleManager<AppRole> roleManager, IRepository<Functions> functionRepository,
+         IRepository<Permission> permissionRepository)
         {
             _roleManager = roleManager;
+            _functionRepository = functionRepository;
+            _permissionRepository = permissionRepository;
         }
 
         public async Task<bool> AddAsync(ApplicationRoleViewModel roleVm)
@@ -35,6 +42,22 @@ namespace XBOOK.Service.Service
             }
 
             return result.Succeeded;
+        }
+
+        public Task<bool> CheckPermission(string functionId, string action, string[] roles)
+        {
+            var functions = _functionRepository.FindAll();
+            var permissions = _permissionRepository.FindAll();
+            var query = from f in functions
+                        join p in permissions on f.Id equals p.FunctionId
+                        join r in _roleManager.Roles on p.RoleId equals r.Id
+                        where roles.Contains(r.Name) && f.Id == functionId
+                        && ((p.Create && action == "Create")
+                        || (p.Update && action == "Update")
+                        || (p.Delete && action == "Delete")
+                        || (p.Read && action == "Read"))
+                        select p;
+            return query.AnyAsync();
         }
 
         public async Task DeleteAsync(List<Deleted> rq)

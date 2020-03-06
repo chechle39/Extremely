@@ -2,6 +2,11 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
+    title: 'Dashboard',
+    icon: 'grid',
+    link: '/pages/dashboard',
+  },
+  {
     title: 'Danh mục chung',
     icon: 'layout-outline',
     children: [

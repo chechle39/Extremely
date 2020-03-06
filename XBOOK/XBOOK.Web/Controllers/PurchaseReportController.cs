@@ -1,23 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Model;
-using XBOOK.Data.ViewModels;
-using XBOOK.Service.Interfaces;
+
 
 namespace XBOOK.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PurchaseReportController : ControllerBase
+    public class PurchaseReportController : BaseAPIController
     {
 
         IPurchaseReportDapper _iPurchaseReportDapper;

@@ -12,3 +12,21 @@
   // Remove focus outline from opened modal
   outline: 0;
 }
+.arrayparam {
+  border-top: 3px double #92d050;
+  margin: 0;
+  >.arrayparam-inner{
+    padding: 15px;
+  }
+  &:nth-child(2) {
+    /* display: none; */
+    border-top-style: solid;
+    border-top-width: 1px;
+    margin-left: -15px;
+    margin-right: -15px;
+    >.arrayparam-inner{
+      margin: 0;
+    }
+
+}
+}

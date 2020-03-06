@@ -11,13 +11,15 @@ import { EditProductComponent } from './edit-product/edit-product.component';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
 import { finalize, debounceTime } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { ImportProductComponent } from './import-product/import-product.component';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'xb-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   productViews: any;
@@ -27,12 +29,13 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   reorderable = true;
   selected = [];
   productTitle = '';
+  Datareport: any[] = [];
   serviceTitle = '';
   ColumnMode = ColumnMode;
   ProductCategory = ProductCategory;
   SelectionType = SelectionType;
   productKey = {
-    productKeyword: ''
+    productKeyword: '',
   };
   constructor(
     injector: Injector,
@@ -46,7 +49,7 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   protected list(
     request: PagedProductsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
     request.productKeyword = this.keywords;
     this.loadingIndicator = true;
@@ -56,7 +59,7 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   getAllProduct() {
     const request = {
       productKeyword: this.keywords.toLocaleLowerCase(),
-      isGrid: true
+      isGrid: true,
     };
     this.productService
       .searchProduct(request)
@@ -74,6 +77,26 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
       .subscribe(result => {
         this.categories = result;
       });
+  }
+  ExportProduct() {
+    this.productService.ExportProduct(this.productViews);
+  }
+  public showPreview(files): void {
+    if (files.length === 0) {
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    // tslint:disable-next-line:variable-name
+    // tslint:disable-next-line:variable-name
+    this.productService.GetFieldNameProduct(files).subscribe((rp: any) => {
+      this.Datareport = rp;
+      const createOrEditClientDialog = this.modalService.open(ImportProductComponent
+        , AppConsts.modalOptionsCustomSize);
+      createOrEditClientDialog.componentInstance.id = this.Datareport;
+    }, (er) => {
+      this.message.warning('Vui lòng chọn file có định dạng .csv');
+  });
   }
   edit(): void {
     if (this.selected.length === 0) {

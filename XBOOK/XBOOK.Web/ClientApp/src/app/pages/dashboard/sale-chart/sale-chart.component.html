@@ -1,0 +1,31 @@
+<nb-card>
+  <nb-card-header style="padding: 0.5rem 1rem;">
+    <nb-select class="float-right" [selected]="'2'" [size]="'tiny'">
+      <nb-option value="1" (click)="showByWeek()">Xem theo tuần</nb-option>
+      <nb-option value='2' (click)="showByMonth()">Xem theo tháng</nb-option>
+    </nb-select>
+    <div style="font-size: 0.9rem; line-height: 1.5rem;color: #edf1f7;">
+      TIỀN BÁN HÀNG SẮP THU VỀ
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="sale-chart__header">
+      <div class="row mx-0">
+        <div class="col-4"><button class="btn sale-chart__button-create">Tạo hoá đơn mới</button></div>
+        <div class="col-8">
+          <div class="row text-right sale-chart__information">
+            <div class="col-9">5 hd chờ duyệt:</div>
+            <div class="col-3">23.000</div>
+            <div class="col-9">32 hoá đơn phải thu:</div>
+            <div class="col-3">2.390.000</div>
+            <div class="col-9">4 hoá đơn quá hạn:</div>
+            <div class="col-3">260.000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sale-chart__chart">
+      <chart type="bar" [data]="data" [options]="options"></chart>
+    </div>
+  </nb-card-body>
+</nb-card>

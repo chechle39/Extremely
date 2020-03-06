@@ -9,9 +9,9 @@
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>More Actions
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button class="dropdown-item position-relative"><span class="icon-import"></span> Import Supplier 
+            <button class="dropdown-item position-relative"><span class="icon-import"></span>{{ 'COMMON.MOREACTION.IMPORT' | translate }} 
               <input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)"> </button>
-            <button class="dropdown-item" (click)="ExportSupplier()"><span class="icon-export"></span> Export Supplier</button>
+            <button class="dropdown-item" (click)="ExportSupplier()"><span class="icon-export"></span>{{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
           </div>
         </div>
       </div>

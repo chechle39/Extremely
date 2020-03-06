@@ -21,7 +21,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
 @Component({
   selector: 'xb-purchase',
   templateUrl: './purchase-report.component.html',
-  styleUrls: ['./purchase-report.component.scss']
+  styleUrls: ['./purchase-report.component.scss'],
 })
 export class PurchaseReportComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;
@@ -67,7 +67,7 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
 
     const date = new Date();
@@ -77,7 +77,7 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
       startDate: this.firstDate === undefined ? null : this.firstDate,
       endDate: this.endDate1 === undefined ? null : this.endDate1,
       money: null,
-      productName: null
+      productName: null,
     };
 
 
@@ -93,7 +93,7 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -109,17 +109,17 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
     this.getProfiles();
   }
 
-  public gettotalAmount(): number {
+ gettotalAmount(): number {
     return _.sumBy(this.purchaseViewsrequst, item => {
       return item.totalAmount;
     });
   }
-  public gettotalDiscount(): number {
+ gettotalDiscount(): number {
     return _.sumBy(this.purchaseViewsrequst, item => {
       return item.totalDiscount;
     });
   }
-  public gettotalPayment(): number {
+ gettotalPayment(): number {
     return _.sumBy(this.purchaseViewsrequst, item => {
       return item.totalPayment;
     });
@@ -138,10 +138,13 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
       this.exportCSV = result;
       this.purchaseReportService.searchGen(genledSearch).subscribe(rp => {
         this.genViews = rp;
+        this.purchaseViewsrequst = this.genViews;
         this.case = result.case;
         this.startDay = result.startDate;
         this.endDay = result.endDate;
         this.keyspace = ' - ';
+        this.gettotalAmount();
+        this.gettotalPayment();
       });
       this.purchaseReportService.getDataReport(genledSearch).subscribe(rp => {
         this.genViewsReport = rp;

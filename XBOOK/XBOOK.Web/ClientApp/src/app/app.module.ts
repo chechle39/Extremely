@@ -14,7 +14,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { ToastrModule } from 'ngx-toastr';
 import {
-  NbChatModule,
   NbDatepickerModule,
   NbDialogModule,
   NbMenuModule,
@@ -26,6 +25,7 @@ import { DataService } from './pages/_shared/services/data.service';
 import { LoginService } from './coreapp/services/login.service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { XBookAuthenModule } from './authen/xbook-authen.module';
+import { CoreModuleApp } from './coreapp/core.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -56,6 +56,7 @@ import { XBookAuthenModule } from './authen/xbook-authen.module';
     // }),
     CoreModule.forRoot(),
     ToastrModule.forRoot(),
+    CoreModuleApp,
 
   ],
   providers: [DataService, LoginService],

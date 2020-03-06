@@ -4,10 +4,10 @@
       <div class="row w-100 mx-0 px-4 d-flex justify-content-between">
         <h1 class="invoice__title float-left">{{title}}</h1>
         <div class="float-right mt-1">
-          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">Print</button>
+          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{ 'COMMON.ACTION.PRINT' | translate }}</button>
           <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">Cancel</button>
           <button *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
-          <button *ngIf="viewMode" (click)="redirectToEditInvoice()" class="btn btn-raised btn-success">Edit</button>
+          <button *ngIf="viewMode" (click)="redirectToEditInvoice()" class="btn btn-raised btn-success">{{ 'COMMON.ACTION.EDIT' | translate }}</button>
         </div>
       </div>
 
@@ -235,10 +235,10 @@
                               class="border-0 full-width imput-reference-custom font-italic description place-holder__color invoice__input__textbox invoice__input__textbox--disable" />
                             <ng-template #productTemplate let-r="result" let-t="term">
                               <div class="row m-0 product-item py-1">
-                                <div class="col-sm-9 col-md-9 p-0">
-                                  <p class="mb-0">{{r.productName}}</p>
+                                <div class="col-sm-8 col-md-8 p-0">
+                                  <p class="mb-0" style="overflow: hidden;text-overflow: ellipsis;">{{r.productName}}</p>
                                 </div>
-                                <div class="col-sm-3 col-md-3">
+                                <div class="col-sm-4 col-md-4 px-1">
                                   <p class="mb-0 text-right">{{r.unitPrice | currency:'VND':''}}</p>
                                 </div>
                               </div>
@@ -305,11 +305,15 @@
                     <div class="form-group">
                       <div class="row mrl-1">
                         <div>
-                          <a style="font-size: 1rem; font-style: italic">Attach files
-                            <input style="cursor: pointer;" #file type="file" class="input-upload ipfile"
-                              (change)="showPreviewUploadFile(file.files)"></a>
-                          <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png"
+                          <span style="font-size: 1rem; font-style: italic">Attach files</span>
+                          <a>
+                            <label for="attach-files">
+                              <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png"
                             [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'">
+                            </label>
+                            <input style="cursor: pointer;" id="attach-files" #file type="file" class="input-upload ipfile"
+                              (change)="showPreviewUploadFile(file.files)">
+                          </a>
                         </div>
                         <a (click)="uploadFileMultiple(null)" *ngIf="viewMode"
                           style="font-size: 1rem; font-style: italic">Upload files</a>
@@ -327,7 +331,7 @@
                                 {{getName(item.name)}}</h6>
 
                             </div>
-                            <span style="cursor: pointer; margin-top: -9px;" (click)="removeFile(item,i)">X</span>
+                            <span style="cursor: pointer;" (click)="removeFile(item,i)">X</span>
                           </div>
 
                         </li>
