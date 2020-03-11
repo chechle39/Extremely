@@ -39,21 +39,21 @@
                             <div class="border px-3 py-3">
                                 <div class="row my-3 justify-content-between">
                                     <div class="col-sm-6 col-md-6">
-                                        <p class="mb-1 p-color">Entry Name / Description</p>
+                                        <p class="invoice__input__title invoice__text--height-normal mb-0">Entry Name / Description</p>
                                         <div class="client-fields">
                                             <div class="row">
 
                                                 <div class="col-12 ">
                                                     <input style="opacity: unset" kendoTextBox id="entryName"
                                                         formControlName="entryName"
-                                                        class="border-0 full-width imput-reference-custom pl-0"
+                                                        class="border-0 place-holder__color full-width imput-reference-custom pl-0"
                                                         placeholder="Name of entry" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.entryName.touched === false || invoiceForm.controls.entryName.invalid === false} ">
                                                 </div>
                                                 <div class="col-12 ">
                                                     <input style="opacity: unset" kendoTextBox id="description"
                                                         formControlName="description"
-                                                        class="border-0 full-width imput-reference-custom pl-0"
+                                                        class="border-0 place-holder__color full-width imput-reference-custom pl-0"
                                                         placeholder="Entry Description" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.description.touched === false || invoiceForm.controls.description.invalid === false} ">
                                                 </div>
@@ -62,14 +62,14 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-4">
-                                        <p class="mb-1 p-color">Date of Entry / Object Name</p>
+                                        <p class="invoice__input__title invoice__text--height-normal mb-0">Date of Entry / Object Name</p>
                                         <div class="client-fields">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="input-group mb-0 invoice__datepicker__wrapper">
                                                         <input   #datetiime kendoTextBox [readOnly]="isRead"
                                                          (click)="d2.toggle()"  style="opacity: unset " [disabled]="isRead"
-                                                        class="border-0 full-width imput-reference-custom p-0 invoice__input__textbox invoice__text--height-normal"
+                                                        class="border-0 full-width imput-reference-custom p-0 place-holder__color invoice__input__textbox invoice__text--height-normal"
                                                         placeholder="dd/mm/yyyy" name="dp" formControlName="dateCreate" ngbDatepicker
                                                         #d2="ngbDatepicker" >
                                                       <!-- <span class="k-icon k-i-calendar-date position-absolute"
@@ -130,9 +130,9 @@
                                                 *ngFor="let detail of invoiceForm.get('items')['controls']; index as i">
                                                 <ng-container [formGroupName]="i">
                                                     <div class="col-2 pl-0 ngb-typeahead-product">
-                                                        <input style="opacity: unset" kendoTextBox id="note"
+                                                        <input  #productName style="opacity: unset" kendoTextBox id="note"
                                                             formControlName="note" [readOnly]="isRead"
-                                                            class="border-0 full-width imput-reference-custom"
+                                                            class="border-0 place-holder__color  full-width imput-reference-custom"
                                                             placeholder="Description" nfNoSpaces maxlength="250"
                                                             class="border-0 full-width text-left imput-reference-custom">
                                                     </div>
@@ -152,12 +152,40 @@
                                                                 </div>
                                                             </ng-template>
                                                         </p-autoComplete> -->
-                                                        <select  class="invoice__input__textbox--disable border-0 pt-2 full-width  form-control" formControlName="accNumber" >
+                                                        <!-- <select  class="invoice__input__textbox--disable border-0 pt-2 full-width  form-control" formControlName="accNumber" >
                                                             <option [ngValue]="null">Choose a acount chart</option>
                                                             <option *ngFor="let method of dataAccount" [ngValue]="method.accountNumber">
                                                                 {{method.accountNumber}} - {{method.accountName}}
                                                             </option>
-                                                        </select>
+                                                        </select> -->
+
+                                                        <div class="col-sm-3 col-md-3 ngb-typeahead-client"
+                                                    style="max-width: 100%;flex: 0 0 100%;">
+                                                    <input style="opacity: unset" #xxx type="text"
+                                                        autocomplete="none"  [ngbTypeahead]="searchData"
+                                                        [resultTemplate]="customItemTemplateacc" kendoTextBox
+                                                        [inputFormatter]="accFormatter" id="accNumber{{i}}"
+                                                        formControlName="accNumber" (selectItem)="selectedAcc($event)"
+                                                        class="border-0 place-holder__color  full-width imput-reference-custom pl-0"
+                                                        placeholder="Account Name" nfNoSpaces maxlength="250"
+                                                        #instance="ngbTypeahead"
+                                                        [ngClass]="{'border-0':detail.get('accNumber').touched === false || detail.get('accNumber').invalid === false}" />
+
+                                                    <ng-template #customItemTemplateacc let-r="result" let-t="term">
+                                                        <div class="row mt-2 client-item">
+                                                            <div class="col-sm-2 ">
+                                                                <ngx-avatar name="{{r.accountName | Split:2}}">
+                                                                </ngx-avatar>
+                                                            </div>
+                                                            <div class="col-sm-10 col-md-10 pb-2 font-small-3">
+                                                                <ngb-highlight [result]="r.accountName" [term]="t">
+                                                                </ngb-highlight>
+                                                                <p class="mb-0">{{r.accountNumber}} - {{r.accountName}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </ng-template>
+
+                                                </div>
                                                     </div>
                                                     <div class="col-3 text-center">
 

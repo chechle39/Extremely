@@ -35,7 +35,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
-  paymentMethods: MasterParamModel[];
+  payment: MasterParamModel[];
   companyName: any;
   companyAddress: any;
   companyCode: any;
@@ -60,11 +60,10 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     private masterParamService: MasterParamService,
     public fb: FormBuilder) {
     super(injector);
-
+      this.moneyReceipt = this.createMoneyReceiptFormGroup();
   }
 
   ngOnInit() {
-    this.getPayType();
     if (this.outstandingAmount !== undefined) {
       this.moneyReceipt.controls.amount.patchValue(this.outstandingAmount);
       this.moneyReceipt.controls.clienId.patchValue(this.clientId);
@@ -90,8 +89,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       this.moneyReceipt.controls.receiverName.patchValue(this.row.receiverName);
       this.moneyReceipt.controls.clientName.patchValue(this.row.clientName);
       this.moneyReceipt.controls.entryType.patchValue(this.row.entryType);
-      this.moneyReceipt.controls.paymentMethods.
-      patchValue(this.paymentMethods.filter(x => x.key === this.row.payType)[0].key);
+      this.moneyReceipt.controls.paymentMethods.patchValue(this.row.payType);
       this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
       this.moneyReceipt.controls.bankAccount.patchValue(this.row.bankAccount);
       this.moneyReceipt.controls.note.patchValue(this.row.note);
@@ -108,15 +106,11 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     if (this.row === undefined) {
       this.getLastDataMoneyReceipt();
     }
+    this.getPayType();
     this.getAllEntryData();
     this.getProfiles();
   }
-  getPayType() {
-    this.masterParamService.GetMasTerByPayType().subscribe(rp => {
-      this.paymentMethods = rp;
-      this.moneyReceipt = this.createMoneyReceiptFormGroup();
-    });
-  }
+
   getProfiles() {
     this.invoiceService.getInfoProfile().subscribe((rp: any) => {
       this.companyName = rp.companyName;
@@ -173,7 +167,17 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
     });
   }
-
+  getPayType() {
+    this.masterParamService.GetMasTerByPayType().subscribe(rp => {
+      this.payment = rp;
+      if (this.row === undefined) {
+        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
+      } else {
+        const entry = this.payment.filter(x => x.name === this.row.payType);
+        this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
+      }
+    });
+  }
   getAllEntryData() {
     this.masterParamService.GetMasTerByMoneyReceipt().subscribe((rp: MasterParamModel[]) => {
       this.entryBatternList = rp;
@@ -236,7 +240,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       clientName: [''],
       receiverName: ['', [Validators.required]],
       entryType: [null, Validators.required],
-      paymentMethods: [this.paymentMethods[0].key, [Validators.required]],
+      paymentMethods: [null, [Validators.required]],
       payDate: payDatePicker,
       bankAccount: [''],
       note: [''],
@@ -262,7 +266,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name ,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.paymentMethods.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
         payTypeID: this.moneyReceipt.value.paymentMethods,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
@@ -281,8 +285,8 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name ,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.paymentMethods.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
-        payTypeID: this.moneyReceipt.value.paymentMethods,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
+        payTypeID: 1,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreateMoneyReceiptRequest;
@@ -300,7 +304,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
           entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name ,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.paymentMethods.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
         payTypeID: this.moneyReceipt.value.paymentMethods,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
@@ -330,7 +334,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
           ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
         entryType: this.moneyReceipt.value.entryType,
         note: this.moneyReceipt.value.note,
-        payType: this.paymentMethods.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
         payTypeID: this.moneyReceipt.value.paymentMethods,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,

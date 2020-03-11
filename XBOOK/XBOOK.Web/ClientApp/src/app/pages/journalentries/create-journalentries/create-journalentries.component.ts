@@ -22,7 +22,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '../../../coreapp/app.consts';
 import * as moment from 'moment';
 import { ActionType } from '../../../coreapp/app.enums';
-import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { DataMap, CreateRequest, Datatable } from '../../_shared/models/journalentry/journalentry.model';
 import { JournalEntryService } from '../../_shared/services/journal-entry.service';
@@ -47,6 +47,9 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   title = 'New JournalEntries';
   saveText = 'Save';
   clientSelected = new DataMap();
+  accSelected = {
+
+  };
   isRead = true;
   isMouseEnter = false;
   invoiceForm: FormGroup;
@@ -57,6 +60,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   editMode = false;
   viewMode = false;
   focusClient$ = new Subject<string>();
+  focusAcc$ = new Subject<string>();
   isEditClient = true;
   clientKey = {
     clientKeyword: '',
@@ -190,6 +194,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     return formArr;
   }
   addNewItem() {
+    this.accSelected = null;
     this.isCheckFc = true;
     const formArray = this.getFormArray();
     formArray.push(this.getItem());
@@ -218,8 +223,8 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     const numberPatern = '^[0-9.,]+$';
     return this.fb.group({
       id: 0,
-      crspAccNumber: [null, [Validators.required]],
-      accNumber: [null, [Validators.required]],
+      crspAccNumber: ['', [Validators.required]],
+      accNumber: ['', [Validators.required]],
       note: [''],
       credit: [0, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(16)]],
       debit: [0, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(16)]],
@@ -239,7 +244,14 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
           })),
       ));
   }
-
+  searchData = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const inputFocus$ = this.focusAcc$;
+    return merge(debouncedText$, inputFocus$).pipe(
+      map(term => (term === '' ? this.dataAccount
+        : this.dataAccount.filter(v => v.accountName.toLowerCase().indexOf(term.toLowerCase()) > -1 || v.accountNumber.toLowerCase().indexOf(term.toLowerCase()) > -1))
+      ));
+  }
 
   requestClient(e: any) {
     const clientKey = {
@@ -256,8 +268,21 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
   }
 
-
-
+  selectedAcc(item) {
+    this.accSelected = {
+      accountNumber: item.item.accountNumber,
+      accountName:item.item.accountNumber +'-'+ item.item.accountName
+    } ;
+    console.log(this.accSelected);
+  }
+  accFormatter(value: any) {
+    if (value.accountNumber) {
+      const stringData = value.accountNumber + '-' + value.accountName;
+      console.log(stringData);
+      return stringData;
+    }
+    return value = null;
+  }
   clientFormatter(value: any) {
     if (value.objectName) {
       return value.objectName;
@@ -282,7 +307,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     this.journalEntryService.getJournalById(invoiceId).subscribe(data => {
       const invoice = data as CreateRequest;
       this.invoiceList = invoice;
-      this.title = `JournalEntry ${this.invoiceList.entryName}`;
+      this.title = 'JournalEntry';
       this.clientSelected.id = invoice.objectID;
 
       this.getFormArray().controls.splice(0);

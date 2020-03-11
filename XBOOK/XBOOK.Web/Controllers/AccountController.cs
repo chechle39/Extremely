@@ -76,8 +76,8 @@ namespace XBOOK.Web.Controllers
             }
             var finUser = await _userManager.FindByEmailAsync(model.Email);
             var roles = await _userManager.GetRolesAsync(finUser);
-            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
-            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList);
+           // var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
+            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, null);
             return new OkObjectResult(jwt);
         }
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)

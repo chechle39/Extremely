@@ -7,7 +7,7 @@
     <div class="row  mb-2">
       <div  class="col-7">
         <input *ngIf = "outstandingAmount !== undefined" [rowItem]= "outstandingAmount" validateDirective digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="amount" id="amount">
-        <input *ngIf = "outstandingAmount === undefined"   digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="amount" id="amount">
+        <input *ngIf = "outstandingAmount === undefined" [rowItem]= "outstandingAmount" validateDirective  digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="amount" id="amount">
 
       </div>
       <div class="col-5">

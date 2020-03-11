@@ -21,7 +21,9 @@ export class validateDirective implements Validator {
         return { amount: true };
       }
     }
-
+    if (control.value === '0') {
+      return { amount: true };
+    }
     return null;
   }
 }
