@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Service.Service
@@ -19,6 +20,11 @@ namespace XBOOK.Service.Service
             _functionsRepository = functionsRepository;
             _uow = uow;
             _authorizationService = authorizationService;
+        }
+
+        public async Task<List<FunctionViewModel>> GetAllFunction()
+        {
+            return await _functionsRepository.GetAllFunction();
         }
 
         public async Task<List<MenuModel>> GetMenu(ClaimsPrincipal user)

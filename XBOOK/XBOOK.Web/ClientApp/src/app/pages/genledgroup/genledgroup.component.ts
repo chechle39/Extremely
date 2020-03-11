@@ -23,7 +23,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
 @Component({
   selector: 'xb-genled',
   templateUrl: './genledgroup.component.html',
-  styleUrls: ['./genledgroup.component.scss']
+  styleUrls: ['./genledgroup.component.scss'],
 })
 export class GenledgroupComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;
@@ -70,10 +70,9 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
-
-    const genledSearch = this.getParam();
+    this.getParam();
   }
 
 
@@ -81,16 +80,18 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     const date = new Date();
     this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     this.endDate1 = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
-    this.data.getMessage().subscribe(rpp => {
-      console.log(rpp);
+
+    this.data.getMessage().subscribe((rpp: any) => {
+      // tslint:disable-next-line:no-console
       if (rpp === undefined) {
+        // tslint:disable-next-line:no-console
         const genledSearch = {
           startDate: this.firstDate === undefined ? null : this.firstDate,
           endDate: this.endDate1 === undefined ? null : this.endDate1,
           isaccount: false,
           isAccountReciprocal: false,
           money: null,
-          accNumber: null
+          accNumber: null,
         };
         this.invoiceService.getInfoProfile().subscribe((r: any) => {
           this.companyName = r.companyName;
@@ -110,7 +111,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
             this.genViews = i;
             const data = [];
             this.genViewsTemp = data;
-            this.methodEdit_View();
+          //  this.methodEdit_View();
           });
 
         this.genLedreportService
@@ -124,14 +125,19 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
           });
        // return genledSearch;
       } else {
+        // tslint:disable-next-line:no-console
         const genledSearch = {
-          startDate: rpp.data.start,
-          endDate: rpp.data.end,
+          startDate: rpp.data.startDate,
+          endDate: rpp.data.endDate,
           isaccount: true,
           isAccountReciprocal: false,
           money: null,
-          accNumber: [rpp.data.accNumber]
+          accNumber: [rpp.data.accNumber],
         };
+        this.case = rpp.data.case ;
+        this.startDay = rpp.data.startDate  === undefined ? null : rpp.data.startDate;
+        this.endDay = rpp.data.endDate === undefined ? null : rpp.data.endDate;
+        this.keyspace = ' - ';
         this.invoiceService.getInfoProfile().subscribe((r: any) => {
           this.companyName = r.companyName;
           this.taxCode = r.taxCode;
@@ -144,14 +150,14 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
         this.genLedService
           .searchGen(genledSearch)
           .pipe(
-
           )
           .subscribe(i => {
             this.loadingIndicator = false;
             this.genViews = i;
             const data = [];
-            this.genViewsTemp = data;
-            this.methodEdit_View();
+            this.genViewsTemp = data; 
+            rpp = undefined;         
+            // this.methodEdit_View();
           });
 
         this.genLedreportService
@@ -161,6 +167,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
           .subscribe(i => {
             this.loadingIndicator = false;
             this.genViewsreport = i;
+            rpp = undefined; 
           });
       }
     });
@@ -199,28 +206,6 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     });
 
   }
-
-  methodEdit_View() {
-    this.activeRoute.params.subscribe(params => {
-      if (!isNaN(params.key)) {
-        const genledSearch = {
-          startDate: this.firstDate === undefined ? null : this.firstDate,
-          endDate: this.endDate1 === undefined ? null : this.endDate1,
-          isaccount: true,
-          isAccountReciprocal: false,
-          money: null,
-          accNumber: [params.key]
-        };
-        this.genLedService.searchGen(genledSearch).subscribe(rp => {
-          this.loadingIndicator = false;
-          this.genViews = rp;
-          const data = [];
-          this.genViewsTemp = data;
-          this.keyspace = ' - ';
-        });
-      }
-    });
-  }
   getRowHeight(row) {
     return row.height;
   }
@@ -232,7 +217,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
       isaccount: false,
       isAccountReciprocal: false,
       money: null,
-      accNumber: null
+      accNumber: null,
     };
     this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV);
 
@@ -251,7 +236,8 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
           this.genViewsrequst[i] = rp;
           // tslint:disable-next-line:prefer-for-of
           for (let j = 0; j < this.genViewsreport.length; j++) {
-            if (this.genViews[i].accNumber === this.genViewsreport[j].accNumber && this.genViewsreport[j].accNumber !== undefined) {
+            if (this.genViews[i].accNumber === this.genViewsreport[j].accNumber
+              && this.genViewsreport[j].accNumber !== undefined) {
               const data = {
                 companyName: i !== undefined ? this.companyName : null,
                 companyAddress: i !== undefined ? this.companyAddress : null,

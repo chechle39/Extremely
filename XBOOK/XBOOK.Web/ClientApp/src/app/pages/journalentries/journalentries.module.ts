@@ -27,8 +27,13 @@ import { CreateJournalEntriesComponent } from './create-journalentries/create-jo
 import { JournalEntriesRoutingModule } from './journalentries-routing.module';
 import { JournalEntryService } from '../_shared/services/journal-entry.service';
 import { AccountChartService } from '../_shared/services/accountchart.service';
-import {AutoCompleteModule} from 'primeng/autocomplete';
-import { NbButtonModule, NbPopoverModule, NbCardModule, NbIconModule, NbSearchModule, NbAlertModule } from '@nebular/theme';
+import {
+  NbButtonModule,
+  NbPopoverModule,
+  NbCardModule,
+  NbIconModule,
+  NbSearchModule,
+  NbAlertModule } from '@nebular/theme';
 
 @NgModule({
   declarations: [
@@ -50,28 +55,20 @@ import { NbButtonModule, NbPopoverModule, NbCardModule, NbIconModule, NbSearchMo
     InputsModule,
     DateInputsModule,
     DropDownsModule,
-    HttpClientModule,
     AvatarModule,
     FormsModule,
     DigitOnlyModule,
     NgxCleaveDirectiveModule,
     IntlModule,
     SharedModule,
-    FileUploadModule,
-    AutoCompleteModule
   ],
   providers: [
     EntryBatternService,
     MoneyReceiptService,
-    InvoiceService,
-    ClientService,
-    ProductService,
-    PaymentService,
-    CurrencyPipe,
     NgbActiveModal,
     JournalEntryService,
     AccountChartService,
     TaxService],
-  entryComponents: [CreateMoneyReceiptComponent]
+  entryComponents: [CreateMoneyReceiptComponent],
 })
 export class JournalEntriesModule { }

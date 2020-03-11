@@ -2,7 +2,7 @@
      <nb-card style="min-height: 70vh;">
       <nb-card-header>
         <span style="font-size: 1.3rem;" class="font-weight-normal" >INVOICES</span>
-        <button  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>New Invoice</button>
+        <button [disabled] = "this.authenticationService.hasPermission('Invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>New Invoice</button>
       </nb-card-header>
       <nb-card-body>
         <div class="row">

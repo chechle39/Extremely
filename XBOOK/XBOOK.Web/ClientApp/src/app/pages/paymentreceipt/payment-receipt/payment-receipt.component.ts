@@ -6,16 +6,18 @@ import { Observable, Subject, merge, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EntryBatternService } from '../../_shared/services/entry-pattern.service';
-import { EntryBatternViewModel } from '../../_shared/models/Entry-Pattern/entry-pattern.model';
 import { InvoiceService } from '../../_shared/services/invoice.service';
 import * as _ from 'lodash';
 import { PaymentReceiptService } from '../../_shared/services/payment-receipt.service';
 import { PaymentReceiptViewModel } from '../../_shared/models/payment-receipt/payment-receipt.model';
-import { CreatePaymentReceiptRequestList,
-  CreatePaymentReceiptRequest } from '../../_shared/models/payment-receipt/create-payment-receipt-request.model';
+import {
+  CreatePaymentReceiptRequestList,
+  CreatePaymentReceiptRequest,
+} from '../../_shared/models/payment-receipt/create-payment-receipt-request.model';
 import { SupplierService } from '../../_shared/services/supplier.service';
 import { SupplierSearchModel } from '../../_shared/models/supplier/supplier-search.model';
+import { MasterParamService } from '../../_shared/services/masterparam.service';
+import { MasterParamModel } from '../../_shared/models/masterparam.model';
 @Component({
   selector: 'xb-create-payment-receipt',
   templateUrl: './payment-receipt.component.html',
@@ -48,7 +50,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   clientSelected = new SupplierSearchModel();
   LastMoneyReceipt: PaymentReceiptViewModel;
   receiptNumber: string;
-  entryBatternList: EntryBatternViewModel[];
+  entryBatternList: MasterParamModel[];
   money: number;
   inVoiceList: any = [];
   public moneyReceipt: FormGroup;
@@ -60,7 +62,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     private supplierService: SupplierService,
     private invoiceService: InvoiceService,
     private paymentReceiptService: PaymentReceiptService,
-    private entryBatternService: EntryBatternService,
+    private masterParamService: MasterParamService,
     public fb: FormBuilder) {
     super(injector);
     this.moneyReceipt = this.createMoneyReceiptFormGroup();
@@ -84,14 +86,18 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     if (this.row !== undefined) {
       const today = new Date(this.row.payDate).toLocaleDateString('en-GB');
       const payDateSplit = today.split('/');
-      const payDatePicker = { year: Number(payDateSplit[2]), month: Number(payDateSplit[1]), day: Number(payDateSplit[0]) };
+      const payDatePicker = {
+        year: Number(payDateSplit[2]),
+        month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
+      };
       this.moneyReceipt.controls.id.patchValue(this.row.id);
       this.moneyReceipt.controls.amount.patchValue(this.row.amount);
       this.moneyReceipt.controls.receiptNumber.patchValue(this.row.receiptNumber);
       this.moneyReceipt.controls.receiverName.patchValue(this.row.receiverName);
       this.moneyReceipt.controls.supplierName.patchValue(this.row.supplierName);
       this.moneyReceipt.controls.entryType.patchValue(this.row.entryType);
-      this.moneyReceipt.controls.paymentMethods.patchValue(this.paymentMethods.filter(x => x.payType === this.row.payType)[0].payTypeId);
+      this.moneyReceipt.controls.paymentMethods.patchValue(this.paymentMethods.filter(x => x.payType ===
+        this.row.payType)[0].payTypeId);
       this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
       this.moneyReceipt.controls.bankAccount.patchValue(this.row.bankAccount);
       this.moneyReceipt.controls.note.patchValue(this.row.note);
@@ -181,13 +187,13 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   }
 
   getAllEntryData() {
-    this.entryBatternService.getAllEntryPayment().subscribe((rp: EntryBatternViewModel[]) => {
+    this.masterParamService.GetMasTerByPaymentReceipt().subscribe((rp: MasterParamModel[]) => {
       this.entryBatternList = rp;
       if (this.row === undefined) {
-        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].entryType);
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
       } else {
-        const entry = this.entryBatternList.filter(x => x.entryType === this.row.entryType);
-        this.moneyReceipt.controls.entryType.patchValue(entry[0].entryType);
+        const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
+        this.moneyReceipt.controls.entryType.patchValue(entry[0].key);
       }
     });
   }
@@ -233,7 +239,10 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   createMoneyReceiptFormGroup() {
     const today = new Date().toLocaleDateString('en-GB');
     const payDateSplit = today.split('/');
-    const payDatePicker = { year: Number(payDateSplit[2]), month: Number(payDateSplit[1]), day: Number(payDateSplit[0]) };
+    const payDatePicker = {
+      year: Number(payDateSplit[2]),
+      month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
+    };
     return this.fb.group({
       id: [0],
       amount: [0, [Validators.required]],
@@ -297,8 +306,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         bankAccount: this.moneyReceipt.value.bankAccount,
         supplierID: this.moneyReceipt.value.supplierID,
         supplierName: this.moneyReceipt.value.supplierName.supplierName !== undefined
-        ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
-        entryType: this.moneyReceipt.value.entryType,
+          ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.paymentMethods.filter(x => x.payTypeId === this.moneyReceipt.value.paymentMethods)[0].payType,
@@ -315,9 +324,9 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         amount: this.moneyReceipt.value.amount,
         bankAccount: this.moneyReceipt.value.bankAccount,
         supplierID: this.moneyReceipt.value.supplierID,
-        supplierName:  this.moneyReceipt.value.supplierName.supplierName !== undefined
-        ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
-        entryType: this.moneyReceipt.value.entryType,
+        supplierName: this.moneyReceipt.value.supplierName.supplierName !== undefined
+          ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.paymentMethods.filter(x => x.payTypeId === this.moneyReceipt.value.paymentMethods)[0].payType,
@@ -336,7 +345,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         supplierID: this.moneyReceipt.value.supplierID,
         supplierName: this.moneyReceipt.value.supplierName.supplierName !== undefined
           ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
-        entryType: this.moneyReceipt.value.entryType,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.paymentMethods.filter(x => x.payTypeId === this.moneyReceipt.value.paymentMethods)[0].payType,

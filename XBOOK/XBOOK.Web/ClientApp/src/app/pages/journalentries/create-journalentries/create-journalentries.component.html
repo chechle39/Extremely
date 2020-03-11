@@ -183,7 +183,7 @@
                                                         </p-autoComplete> -->
 
                                                     </div>
-                                                    <div class="col-2 text-left">
+                                                    <div class="col-2 text-left" *ngIf = "isRead === true">
                                                         <input
                                                             [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                             digitOnly maxlength="16" formControlName="credit"
@@ -191,11 +191,29 @@
                                                             class="border-0 full-width text-right imput-reference-custom"
                                                             tabindex="{{i* 4 +3}}" />
                                                     </div>
-                                                    <div class="col-2 text-right">
+                                                    <div class="col-2 text-right" *ngIf = "isRead === true">
                                                         <input
                                                             [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                             digitOnly maxlength="16" formControlName="debit"
                                                             [readOnly]="isRead" placeholder="Enter debit" kendoTextBox
+                                                            class="border-0 full-width text-right imput-reference-custom"
+                                                            tabindex="{{i* 4 +3}}" />
+                                                    </div>
+
+                                                    <div class="col-2 text-left" *ngIf = "isRead !== true">
+                                                        <input
+                                                            [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
+                                                            digitOnly maxlength="16" formControlName="credit"
+                                                            placeholder="Enter credit" kendoTextBox [readOnly]="checkDis(detail.get('debit').value) > 0" 
+                                                            class="border-0 full-width text-right imput-reference-custom"
+                                                            tabindex="{{i* 4 +3}}" />
+                                                    </div>
+
+                                                    <div class="col-2 text-right" *ngIf = "isRead !== true">
+                                                        <input
+                                                            [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
+                                                            digitOnly maxlength="16" formControlName="debit" [readOnly]="checkDis(detail.get('credit').value) > 0"
+                                                            placeholder="Enter debit" kendoTextBox
                                                             class="border-0 full-width text-right imput-reference-custom"
                                                             tabindex="{{i* 4 +3}}" />
                                                     </div>

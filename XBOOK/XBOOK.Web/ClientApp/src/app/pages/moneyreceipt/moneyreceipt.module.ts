@@ -10,19 +10,25 @@ import { SharedModule } from '../../shared/shared.module';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { ClientService } from '../_shared/services/client.service';
 import { InputsModule } from '@progress/kendo-angular-inputs';
-import { SplitPipe } from '../../shared/pipe/split.pipe';
 import { AvatarModule } from 'ngx-avatar';
 import { MoneyReceiptService } from '../_shared/services/money-receipt.service';
 import { EntryBatternService } from '../_shared/services/entry-pattern.service';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { InvoiceService } from '../_shared/services/invoice.service';
-import { NbCardModule, NbButtonModule, NbSearchModule, NbPopoverModule, NbIconModule, NbAlertModule } from '@nebular/theme';
+import {
+  NbCardModule,
+  NbButtonModule,
+  NbSearchModule,
+  NbPopoverModule,
+  NbIconModule,
+  NbAlertModule } from '@nebular/theme';
+import { MasterParamService } from '../_shared/services/masterparam.service';
 
 @NgModule({
   declarations: [
     MoneyreceiptComponent,
-   // SplitPipe
+    // SplitPipe
   ],
   entryComponents: [CreateMoneyReceiptComponent],
   imports: [
@@ -43,8 +49,8 @@ import { NbCardModule, NbButtonModule, NbSearchModule, NbPopoverModule, NbIconMo
     InputsModule,
     AvatarModule,
     NgxCleaveDirectiveModule,
-    DigitOnlyModule
+    DigitOnlyModule,
   ],
-  providers: [ClientService, MoneyReceiptService, EntryBatternService, InvoiceService]
+  providers: [ClientService, MoneyReceiptService, EntryBatternService, InvoiceService, MasterParamService],
 })
 export class MoneyreceiptModule { }

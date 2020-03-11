@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>
+  <nb-card-header class="layout__container--medium">
     <div class="row">
       <div class="col-5 col-lg-4">
         <!-- <h4 class="card-title">{{ 'User.LIST.HEADER' | translate }}</h4> -->
@@ -14,6 +14,7 @@
               {{ 'COMMON.MOREACTION.IMPORT' | translate }} </button>
             <button class="dropdown-item"><span class="icon-export"></span>
               {{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
+             
           </div>
         </div>
       </div>
@@ -23,7 +24,7 @@
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body class="layout__container--medium">
       <div class="row my-3 margin-top-0">
         <div class="col-md-4 col-6 margintop-13">
           <div class="label-blue">{{ 'ROLE.LIST.HEADER.LABEL' | translate }}<span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span></div>
@@ -37,6 +38,8 @@
                 {{ 'COMMON.ACTION.EDIT' | translate }}</button>
               <button (click)="delete()" class="dropdown-item"><span class="icon-delete"></span>
                 {{ 'COMMON.ACTION.DELETE' | translate }}</button>
+                <button class="dropdown-item" (click)="assignpermission()"><span class="icon-export"></span>
+                  Assign permission </button>
             </div>
           </div>
         </div>

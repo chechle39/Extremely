@@ -22,5 +22,10 @@ namespace XBOOK.Web.Controllers
           //  var result = await _authorizationService.AuthorizeAsync(User, "Buy invoice", Operations.Read);
             return Ok(await _functionsService.GetMenu(User));
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetAllFunction()
+        {
+            return Ok(await _functionsService.GetAllFunction());
+        }
     }
 }

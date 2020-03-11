@@ -17,7 +17,7 @@ class PagedMoneyReceiptRequestDto extends PagedRequestDto {
 @Component({
   selector: 'xb-moneyreceipt',
   templateUrl: './moneyreceipt.component.html',
-  styleUrls: ['./moneyreceipt.component.scss']
+  styleUrls: ['./moneyreceipt.component.scss'],
 })
 
 export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
@@ -48,7 +48,7 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   protected list(
     request: PagedMoneyReceiptRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
     request.keyword = this.searchString;
     const objRequest = {
@@ -97,9 +97,11 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const firstDateMonth = firstDate.split('/');
-    const firstDateMonthCurent = { year: Number(firstDateMonth[2]), month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
+    const firstDateMonthCurent = { year: Number(firstDateMonth[2]),
+      month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
     const endDateMonth = endDate.split('/');
-    const endDateMonthCurent = { year: Number(endDateMonth[2]), month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
+    const endDateMonthCurent = { year: Number(endDateMonth[2]),
+      month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
     return this.fb.group({
       startDate: firstDateMonthCurent,
       endDate: endDateMonthCurent,
@@ -151,7 +153,7 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   private deleteMoney(id1: number, receiptNumber1): void {
     const idrs = {
       id: id1,
-      receiptNumber: receiptNumber1
+      receiptNumber: receiptNumber1,
     };
     const request = [idrs];
 
@@ -171,7 +173,7 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
       // this.deleteInvoice(element.invoiceId);
       const id = {
         id: element.id,
-        receiptNumber: element.receiptNumber
+        receiptNumber: element.receiptNumber,
       };
       requestDl.push(id);
     });
@@ -199,9 +201,11 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
     if (event.type === 'click') {
+      event.cellElement.blur();
       if (event.cellIndex > 0 && event.cellIndex < 5) {
         let createOrEditClientDialog;
-        createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
+        createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent,
+          AppConsts.modalOptionsCustomSize);
         createOrEditClientDialog.componentInstance.row = event.row;
         createOrEditClientDialog.result.then(result => {
 

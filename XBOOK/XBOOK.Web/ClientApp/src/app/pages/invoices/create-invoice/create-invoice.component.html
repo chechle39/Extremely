@@ -5,9 +5,9 @@
         <h1 class="invoice__title float-left">{{title}}</h1>
         <div class="float-right mt-1">
           <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{ 'COMMON.ACTION.PRINT' | translate }}</button>
-          <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">Cancel</button>
-          <button *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
-          <button *ngIf="viewMode" (click)="redirectToEditInvoice()" class="btn btn-raised btn-success">{{ 'COMMON.ACTION.EDIT' | translate }}</button>
+          <button  *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">Cancel</button>
+          <button [disabled] = "authenticationService.hasPermission('Invoice','create')" *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
+          <button [disabled] = "authenticationService.hasPermission('Invoice','update')" *ngIf="viewMode" (click)="redirectToEditInvoice()" class="btn btn-raised btn-success">{{ 'COMMON.ACTION.EDIT' | translate }}</button>
         </div>
       </div>
 

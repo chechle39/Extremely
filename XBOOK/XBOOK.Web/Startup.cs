@@ -223,6 +223,7 @@ namespace XBOOK.Web
             services.AddTransient<IBuyInvoiceServiceDapper, BuyInvoiceServiceDapper>();
             services.AddTransient<ISupplierServiceDapper, SupplierServiceDapper>();
             services.AddTransient<IPaymentReceiptServiceDapper, PaymentReceiptServiceDapper>();
+            services.AddTransient<IPermissionDapper, PermissionServiceDapper>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
             services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();

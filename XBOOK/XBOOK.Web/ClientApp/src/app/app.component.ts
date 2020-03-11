@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
      public translate: TranslateService,
      ) {
       translate.addLangs(['en', 'vi']);
-      translate.setDefaultLang('en');
+      translate.setDefaultLang('vi');
   }
 
   ngOnInit(): void {

@@ -25,7 +25,7 @@ namespace XBOOK.Web.Reports.Template
                 var itemss = new List<PaymentReceiptPaymentPrint>();
                 var folderName = Path.Combine("Reports", "Data");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                var fileName = "SalesReport.json";
+                var fileName = "PaymentReceipt.json";
                 var fullPath = Path.Combine(pathToSave, fileName);
                 using (StreamReader r = new StreamReader(fullPath))
                 {

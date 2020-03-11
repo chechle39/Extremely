@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseService } from '../../../shared/service/base.service';
 import { API_URI } from '../../../../environments/app.config';
+import { MasterParamModel } from '../models/masterparam.model';
 @Injectable()
 export class MasterParamService extends BaseService {
 
@@ -16,10 +17,19 @@ export class MasterParamService extends BaseService {
     }
     getProfile(id: any): Observable<any> {
         return this.post<any>(
-          `${API_URI.MasterGetbyId}/${id}`, id
+          `${API_URI.MasterGetbyId}/${id}`, id,
         );
     }
     updateMaster(request: any) {
         return this.put<any>(`${API_URI.updateMaster}`, request);
+    }
+    GetMasTerByMoneyReceipt(): Observable<MasterParamModel[]> {
+        return this.post<MasterParamModel[]>(`${API_URI.MasterByMoney}`, null);
+    }
+    GetMasTerByPaymentReceipt(): Observable<MasterParamModel[]> {
+        return this.post<MasterParamModel[]>(`${API_URI.MasterByPayment}`, null);
+    }
+    GetMasTerByPayType(): Observable<MasterParamModel[]> {
+        return this.post<MasterParamModel[]>(`${API_URI.MasterByPayType}`, null);
     }
 }

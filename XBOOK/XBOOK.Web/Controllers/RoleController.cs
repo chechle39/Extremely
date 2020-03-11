@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using XBOOK.Common.Helpers;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
@@ -13,14 +12,19 @@ namespace XBOOK.Web.Controllers
     public class RoleController : BaseAPIController
     {
         private readonly IRoleService _roleService;
-        public RoleController(IRoleService roleService)
+        private readonly IAuthorizationService _authorizationService;
+        public RoleController(IRoleService roleService, IAuthorizationService authorizationService)
         {
             _roleService = roleService;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllRole(UserRequest rq)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Role", Operations.Read);
+            if (result.Succeeded == false)
+                return new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
             return Ok(await _roleService.GetAllAsync(rq));
         }
         [HttpPost("[action]")]

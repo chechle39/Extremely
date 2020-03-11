@@ -6,7 +6,7 @@ import {
   Injector,
   ViewChild,
   QueryList,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { Observable, Subject, merge, of, Subscription, Observer } from 'rxjs';
 import {
@@ -15,7 +15,7 @@ import {
   Validators,
   FormArray,
   FormControl,
-  AbstractControl
+  AbstractControl,
 } from '@angular/forms';
 import { AccountBalanceService } from '../_shared/services/accountbalance.service';
 import { GenLedGroupService } from '../_shared/services/genledgroup.service';
@@ -31,13 +31,14 @@ import { finalize } from 'rxjs/operators';
 import { SearchaccountbalanceComponent } from './searchaccountbalance/searchgenled.component';
 import * as _ from 'lodash';
 import { SearchType, ActionType } from '../../coreapp/app.enums';
+import { DataService } from '../_shared/services/data.service';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
   selector: 'xb-accountbalance',
   templateUrl: './accountbalance.component.html',
-  styleUrls: ['./accountbalance.component.scss']
+  styleUrls: ['./accountbalance.component.scss'],
 })
 export class AccountbalanceComponent extends PagedListingComponentBase<ClientView> {
   genViews: any;
@@ -67,6 +68,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
   }
   constructor(
     injector: Injector,
+    private data: DataService,
     private accountBalanceService: AccountBalanceService,
     private genLedService: GenLedGroupService,
     private modalService: NgbModal,
@@ -119,7 +121,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
     const date = new Date();
     this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
@@ -128,8 +130,6 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
     const genledSearch = {
       //  startDate: this.firstDate === undefined ? null : this.firstDate,
       // endDate: this.endDate1 === undefined ? null : this.endDate1,
-      startDate: null,
-      endDate: null,
       money: null,
     };
     this.
@@ -138,7 +138,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -220,13 +220,17 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
     });
   }
   getaccNumber(id) {
-    const data = {
-      accNumber: id,
-      case: this.case,
-      startDate: this.startDay,
-      endDate: this.endDay
-    };
-    this.router.navigate([`/pages/genledgroup/${id}`]);
+    if( id !== null || id !==undefined){
+      const data = {
+        accNumber: id,
+        case: this.case,
+        startDate: this.startDay === undefined ? this.firstDate : this.startDay,
+        endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
+      };
+      this.data.sendMessage(data);
+      this.router.navigate([`/pages/genledgroup/${id}`]);
+    }  
+   
   }
 }
 

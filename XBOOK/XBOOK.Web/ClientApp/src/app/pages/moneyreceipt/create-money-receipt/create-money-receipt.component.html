@@ -57,8 +57,8 @@
     <div class="row">
       <div class="form-group col-12 mb-2">
         <select formControlName="entryType" id="entryType" class="form-control">
-          <option *ngFor="let method of entryBatternList" [ngValue]="method.entryType">
-            {{ method.entryType }}
+          <option *ngFor="let method of entryBatternList" [ngValue]="method.key">
+            {{ method.name }}
           </option>
         </select>
       </div>
@@ -67,8 +67,8 @@
     <div class="row">
       <div class="col-7">
         <select formControlName="paymentMethods" id="paymentMethods" class="form-control">
-          <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
-            {{ method.payType }}
+          <option *ngFor="let method of paymentMethods" [ngValue]="method.key">
+            {{ method.name }}
           </option>
         </select>
       </div>

@@ -19,59 +19,57 @@
       <div class="form-group col-12 mb-2">
         <label for="address">Địa chỉ</label>
         <input [(ngModel)]="companyprofileView.address" #address="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="address" placeholder="Địa chỉ"
-          id="address">
-        <small class="form-text text-muted danger"
-          *ngIf="!address.valid && (address.dirty || address.touched)">Please
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="address" placeholder="Địa chỉ" id="address">
+        <small class="form-text text-muted danger" *ngIf="!address.valid && (address.dirty || address.touched)">Please
           enter address</small>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="city">Tên thành phố</label>
-        <input [(ngModel)]="companyprofileView.city" #city="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="city" placeholder="Tên Thành phố"
-          id="city">
+        <label for="directorName">Quản lý</label>
+        <input [(ngModel)]="companyprofileView.directorName" #directorName="ngModel" required class="form-control"
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="directorName" placeholder="Quản lý" id="directorName">
         <small class="form-text text-muted danger"
-          *ngIf="!city.valid && (city.dirty || city.touched)">Please
-          enter city name</small>
+          *ngIf="!directorName.valid && (directorName.dirty || directorName.touched)">Please
+          enter director name</small>
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-12 mb-2">
+      <div class="form-group col-6 mb-2">
+        <label for="city">Tên thành phố</label>
+        <input [(ngModel)]="companyprofileView.city" #city="ngModel" required class="form-control"
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="city" placeholder="Tên Thành phố" id="city">
+        <small class="form-text text-muted danger" *ngIf="!city.valid && (city.dirty || city.touched)">Please
+          enter city name</small>
+      </div>
+      <div class="form-group col-6 mb-2">
         <label for="country">Tên nước</label>
         <input [(ngModel)]="companyprofileView.country" #country="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="country" placeholder="Tên nước"
-          id="country">
-        <small class="form-text text-muted danger"
-          *ngIf="!country.valid && (country.dirty || country.touched)">Please
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="country" placeholder="Tên nước" id="country">
+        <small class="form-text text-muted danger" *ngIf="!country.valid && (country.dirty || country.touched)">Please
           enter country name</small>
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-12 mb-2">
+      <div class="form-group col-6 mb-2">
         <label for="zipCode">Tên zipCode</label>
         <input [(ngModel)]="companyprofileView.zipCode" #zipCode="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="zipCode" placeholder="Tên zipCode"
-          id="zipCode">
-        <small class="form-text text-muted danger"
-          *ngIf="!zipCode.valid && (zipCode.dirty || zipCode.touched)">Please
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="zipCode" placeholder="Tên zipCode" id="zipCode">
+        <small class="form-text text-muted danger" *ngIf="!zipCode.valid && (zipCode.dirty || zipCode.touched)">Please
           enter zipCode</small>
       </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-12 mb-2">
+      <div class="form-group col-6 mb-2">
         <label for="currency">Tiền tệ</label>
         <input [(ngModel)]="companyprofileView.currency" #currency="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="currency" placeholder="Tiền tệ"
-          id="currency">
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="currency" placeholder="Tiền tệ" id="currency">
         <small class="form-text text-muted danger"
           *ngIf="!currency.valid && (currency.dirty || currency.touched)">Please
           enter currency</small>
       </div>
     </div>
+
     <div class="row">
-      <div class="form-group col-12 mb-2">
+      <div class="form-group col-6 mb-2">
         <label for="dateFormat">Định dạng ngày</label>
         <input [(ngModel)]="companyprofileView.dateFormat" #dateFormat="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="dateFormat" placeholder="Định dạng ngày"
@@ -80,9 +78,7 @@
           *ngIf="!dateFormat.valid && (dateFormat.dirty || dateFormat.touched)">Please
           enter date format</small>
       </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-12 mb-2">
+      <div class="form-group col-6 mb-2">
         <label for="bizPhone">Điện thoại công ty</label>
         <input [(ngModel)]="companyprofileView.bizPhone" #bizPhone="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="bizPhone" placeholder="Điện thoại công ty"
@@ -93,30 +89,12 @@
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-12 mb-2">
-        <label for="mobilePhone">Điện thoại</label>
-        <input [(ngModel)]="companyprofileView.mobilePhone" #mobilePhone="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="mobilePhone" placeholder="Điện thoại"
-          id="mobilePhone">
-        <small class="form-text text-muted danger"
-          *ngIf="!mobilePhone.valid && (mobilePhone.dirty || mobilePhone.touched)">Please
-          enter mobile phone</small>
-      </div>
+
     </div>
+
+
     <div class="row">
-      <div class="form-group col-12 mb-2">
-        <label for="directorName">Quản lý</label>
-        <input [(ngModel)]="companyprofileView.directorName" #directorName="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="directorName" placeholder="Quản lý"
-          id="directorName">
-        <small class="form-text text-muted danger"
-          *ngIf="!directorName.valid && (directorName.dirty || directorName.touched)">Please
-          enter director name</small>
-      </div>
-    </div>
-    
-    <div class="row">
-      <div class="form-group col-12 mb-2">
+      <div class="form-group col-6 mb-2">
         <label for="bankAccount">Tài khoản ngân hàng</label>
         <input [(ngModel)]="companyprofileView.bankAccount" #bankAccount="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="bankAccount" placeholder="Tài khoản ngân hàng"
@@ -125,20 +103,14 @@
           *ngIf="!bankAccount.valid && (bankAccount.dirty || bankAccount.touched)">Please
           enter bank account</small>
       </div>
-    </div>
-  
-    <div class="row">
-      <div class="form-group col-12 mb-2">
+      <div class="form-group col-6 mb-2">
         <label for="taxCode">mã số thuế</label>
         <input [(ngModel)]="companyprofileView.taxCode" #taxCode="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="taxCode" placeholder="Mã số thuế"
-          id="taxCode">
-        <small class="form-text text-muted danger"
-          *ngIf="!taxCode.valid && (taxCode.dirty || taxCode.touched)">Please
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="taxCode" placeholder="Mã số thuế" id="taxCode">
+        <small class="form-text text-muted danger" *ngIf="!taxCode.valid && (taxCode.dirty || taxCode.touched)">Please
           enter tax code</small>
       </div>
     </div>
-
   </div>
   <div class="modal-footer">
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">

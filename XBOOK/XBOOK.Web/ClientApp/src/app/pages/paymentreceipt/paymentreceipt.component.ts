@@ -19,7 +19,7 @@ class PagedMoneyReceiptRequestDto extends PagedRequestDto {
 @Component({
   selector: 'xb-paymentreceipt',
   templateUrl: './paymentreceipt.component.html',
-  styleUrls: ['./paymentreceipt.component.scss']
+  styleUrls: ['./paymentreceipt.component.scss'],
 })
 
 export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
@@ -50,7 +50,7 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
   protected list(
     request: PagedMoneyReceiptRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
     request.keyword = this.searchString;
     const objRequest = {
@@ -80,14 +80,6 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
     let createOrEditClientDialog;
     createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent, AppConsts.modalOptionsCustomSize);
     createOrEditClientDialog.result.then(result => {
-
-      // const objRequest = {
-      //   currency: '',
-      //   endDate: this.endDate,
-      //   keyword: this.keyword.toLocaleLowerCase(),
-      //   startDate: this.startDate,
-      // } as GetMoneyReceipyRequest;
-      // this.getAllMoneyReceipt(objRequest);
       this.refresh();
 
     });
@@ -99,9 +91,11 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
     const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const firstDateMonth = firstDate.split('/');
-    const firstDateMonthCurent = { year: Number(firstDateMonth[2]), month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
+    const firstDateMonthCurent = { year: Number(firstDateMonth[2]),
+      month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
     const endDateMonth = endDate.split('/');
-    const endDateMonthCurent = { year: Number(endDateMonth[2]), month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
+    const endDateMonthCurent = { year: Number(endDateMonth[2]),
+      month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
     return this.fb.group({
       startDate: firstDateMonthCurent,
       endDate: endDateMonthCurent,
@@ -153,7 +147,7 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
   private deleteMoney(id1: number, receiptNumber1): void {
     const idrs = {
       id: id1,
-      receiptNumber: receiptNumber1
+      receiptNumber: receiptNumber1,
     };
     const request = [idrs];
 
@@ -173,7 +167,7 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
       // this.deleteInvoice(element.invoiceId);
       const id = {
         id: element.id,
-        receiptNumber: element.receiptNumber
+        receiptNumber: element.receiptNumber,
       };
       requestDl.push(id);
     });
@@ -203,7 +197,9 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
     if (event.type === 'click') {
       if (event.cellIndex > 0 && event.cellIndex < 5) {
         let createOrEditClientDialog;
-        createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent, AppConsts.modalOptionsCustomSize);
+        event.cellElement.blur();
+        createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent,
+          AppConsts.modalOptionsCustomSize);
         createOrEditClientDialog.componentInstance.row = event.row;
         createOrEditClientDialog.result.then(result => {
 

@@ -8,6 +8,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-
 import { CreateRoleComponent } from './create-role/create-role.component';
 import { RoleModel } from '../_shared/models/role/role.model';
 import { RoleService } from '../_shared/services/role.service';
+import { AssignPermissionComponent } from './assign-permission/assign-permission.component';
 class PagedProductsRequestDto extends PagedRequestDto {
   keyWord: string;
 }
@@ -111,6 +112,18 @@ export class RoleComponent extends PagedListingComponentBase<ProductView> implem
       }
     });
 
+  }
+  assignpermission() {
+    let permission;
+    const title = 'Assign permission';
+    permission = this.modalService.open(AssignPermissionComponent, AppConsts.modalOptionsLargerSize);
+    permission.componentInstance.title = title;
+
+    permission.result.then(result => {
+      if (result) {
+        this.refresh();
+      }
+    });
   }
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);

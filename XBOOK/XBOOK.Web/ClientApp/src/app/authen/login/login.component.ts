@@ -52,6 +52,8 @@ export class LoginComponent extends AppComponentBase implements OnInit {
                 username: submittedForm.value.userName,
                 password: submittedForm.value.password,
                 token: rp.auth_token,
+                role: rp.role,
+                permission: rp.permission,
             } as LoginContext;
             if (rp.success === false) {
                 this.message.error(rp.message, 'Wrong login, please login again');

@@ -13,6 +13,7 @@ import { DataService } from '../../_shared/services/data.service';
 import { ActionType, SearchType } from '../../../coreapp/app.enums';
 import { AppConsts } from '../../../coreapp/app.consts';
 import { CreateMoneyReceiptComponent } from '../../moneyreceipt/create-money-receipt/create-money-receipt.component';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -60,6 +61,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     private invoiceService: InvoiceService,
     private router: Router,
     private fb: FormBuilder,
+    public authenticationService: AuthenticationService,
     private modalService: NgbModal) {
     super(injector);
     this.searchForm = this.createForm();

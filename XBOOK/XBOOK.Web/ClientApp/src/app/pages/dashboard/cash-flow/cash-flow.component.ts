@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'ngx-cash-flow',
+  selector: 'xb-cash-flow',
   templateUrl: './cash-flow.component.html',
   styleUrls: ['./cash-flow.component.scss'],
 })
@@ -10,51 +10,12 @@ export class CashFlowComponent implements OnInit {
   options: any;
 
   constructor() {
-    this.showByMonth();
-
-    this.options = {
-      responsive: true,
-      maintainAspectRatio: false,
-      elements: {
-        rectangle: {
-          borderWidth: 2,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-              color: 'blue',
-              drawBorder: false,
-            },
-            ticks: {
-              fontColor: 'black',
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: false,
-              drawBorder: false,
-            },
-            ticks: {
-              display: false,
-            },
-          },
-        ],
-      },
-      legend: {
-        position: 'top',
-        labels: {
-          fontColor: 'black',
-        },
-      },
-    };
   }
 
   ngOnInit() {
+    this.showByMonth();
+
+    this.options = this.getOption();
   }
 
   showByMonth() {
@@ -207,6 +168,97 @@ export class CashFlowComponent implements OnInit {
           backgroundColor: colors[index % colors.length],
         };
       }),
+    };
+  }
+
+  private getOption() {
+    let isChartInit = true;
+
+    /**
+     * Show data on top of bar chart
+     * @param chartReference ,
+     */
+    function displayDatasetCallback(chartReference) {
+      const chartInstance = chartReference.chart,
+        ctx = chartReference.chart.ctx;
+      ctx.font = '1rem Montserrat';
+      ctx.fillStyle = '#212529';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      chartReference.data.datasets.forEach(function (dataset, i) {
+        const isLegendHidden = chartReference.legend.legendItems[i].hidden;
+        if (!isLegendHidden) {
+          const meta = chartInstance.controller.getDatasetMeta(i);
+          meta.data.forEach(function (bar, index) {
+            const data = dataset.data[index];
+            ctx.fillText(data, bar._model.x, bar._model.y - 1);
+          });
+        }
+      });
+    }
+
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      elements: {
+        rectangle: {
+          borderWidth: 2,
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+              color: 'blue',
+              drawBorder: false,
+            },
+            ticks: {
+              fontColor: 'black',
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: false,
+              drawBorder: false,
+            },
+            ticks: {
+              display: false,
+            },
+          },
+        ],
+      },
+      legend: {
+        position: 'top',
+        labels: {
+          fontColor: 'black',
+        },
+      },
+      layout: {
+        padding: {
+          left: 0,
+          right: 0,
+          top: 10,
+          bottom: 0,
+        },
+      },
+      events: ['mousemove', 'click'],
+      animation: {
+        easing: 'easeOutCirc',
+        onComplete: function () {
+          if (isChartInit) {
+            const chartReference = this;
+            displayDatasetCallback(chartReference);
+            isChartInit = false;
+          }
+        },
+        onProgress: function () {
+          const chartReference = this;
+          displayDatasetCallback(chartReference);
+        },
+      },
     };
   }
 }

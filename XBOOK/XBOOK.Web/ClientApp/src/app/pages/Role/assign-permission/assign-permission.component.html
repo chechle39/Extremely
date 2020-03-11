@@ -1,0 +1,135 @@
+<form class="form" name="form" novalidate autocomplete="off">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="data"
+          [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force" [headerHeight]="60" [footerHeight]="50"
+          [rowHeight]="getRowHeight" [reorderable]="reorderable" (activate)="onActivate($event)"
+          [selectAllRowsOnPage]="false" [limit]="20" (treeAction)="onTreeAction($event)"
+          [treeToRelation]="'name'" [treeFromRelation]="'parentId'">
+
+          <ngx-datatable-column [treeLevelIndent]="20" name="{{'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNUMBER' | translate}}"
+            prop="name" [isTreeColumn]="true">
+            <ng-template ngx-datatable-tree-toggle let-tree="cellContext">
+              <button class="btnArrow" [disabled]="tree.treeStatus === 'disabled'" (click)="tree.onTreeAction()">
+                <span *ngIf="tree.treeStatus === 'loading'">
+                  ...
+                </span>
+                <span class="collapsed" *ngIf="tree.treeStatus === 'collapsed'">
+                </span>
+                <span class="expanded" *ngIf="tree.treeStatus === 'expanded'">
+                </span>
+                <span *ngIf="tree.treeStatus === 'disabled'">
+
+                </span>
+              </button>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column  [sortable]="false" [canAutoResize]="false" [draggable]="false"
+              [resizeable]="false">
+              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <!-- <div class="custom-control custom-checkbox m-0">
+                  <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                    (change)="selectFn(!allRowsSelected)" />
+                  <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+                </div> -->
+                <nb-checkbox id="chkCheckAll" (change)="selectFn(!allRowsSelected)"><label for="chkCheckAll">xxx</label></nb-checkbox>
+              </ng-template>
+              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+         
+                <nb-checkbox  [checked]="row.name === 'Invoice'"  (change)="onCheckboxChangeFn($event)"><label id="{{row.id}}">xxx</label></nb-checkbox>
+              </ng-template>
+            </ngx-datatable-column>
+            <!-- <ngx-datatable-column  [sortable]="false" [canAutoResize]="false" [draggable]="false"
+              [resizeable]="false">
+              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <div class="custom-control custom-checkbox m-0">
+                  <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                    (change)="selectFn(!allRowsSelected)" />
+                  <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+                </div>
+
+              </ng-template>
+              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+                <div class="custom-control custom-checkbox m-0">
+                  <input type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
+                    (change)="onCheckboxChangeFn($event)" />
+                  <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
+                </div>
+
+              </ng-template>
+            </ngx-datatable-column> -->
+          <!-- <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNAME' | translate}}" prop="accountName">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{row.accountName}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.TYPE' | translate}}" prop="accountType">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{row.accountType}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.NUMBERARISED' | translate}}" prop="parentAccount"
+            [cellClass]="'col-right'" [headerClass]="'col-right'">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="col-right">
+                1231241
+              </div>
+            </ng-template>
+          </ngx-datatable-column> -->
+          <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false" name="" [cellClass]="'col-action'" [headerClass]="'col-action'">
+
+            <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
+              <div class="icon-actions">
+                <div class="actions">
+                  <a class="icon-action">
+                    <span (click)="editAccount(row, $event)" class="icon-edit"></span>
+                  </a>
+                </div>
+                <div class="actions">
+                  <a class="icon-action">
+                    <span (click)="deleteAccount(row)" class="icon-delete"></span>
+                  </a>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+              let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+              <div class="page-count pl-2">
+                <span [translate]="'COMMON.GRID.TOTALROW'" [translateParams]="{rowCount: rowCount}"> </span>
+              </div>
+              <!-- |
+                'Page Size':
+                <select [ngModel]="page.size" (ngModelChange)="onPageSizeChange($event)" class="page-size-combo">
+                  <option *ngFor="let size of sizeList" [value]="size"> {{size}}</option>
+                </select> -->
+              <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage" [size]="pageSize"
+                [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+              </datatable-pager>
+            </ng-template>
+          </ngx-datatable-footer>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="close(false)"  class="btn btn-raised btn-secondary mr-1">
+      <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate }}
+    </button>
+    <button  type="submit" class="btn btn-raised btn-success">
+      <i class="ft-save"></i> {{'COMMON.BUTTON.SAVE' | translate }}
+    </button>
+  </div>
+</form>

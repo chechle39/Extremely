@@ -636,6 +636,29 @@ body{
 }
 
 /*
+    Sweet Alert
+*/
+.swal2-modal{
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 300px !important;
+  .swal2-header{
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #d1d4d7;
+    .swal2-title{
+      width: 100%;
+      font-size: 1.5rem;
+      margin-bottom: 0;
+    }
+  }
+
+  .swal2__content{
+    font-size: 1.2rem;
+    margin-top: 15px;
+  }
+}
+/*
     Layout
 */
 .layout__container--medium{
@@ -645,4 +668,5 @@ body{
   @media screen and (max-width: 992px){
     width: 100%;
 }
+
 }

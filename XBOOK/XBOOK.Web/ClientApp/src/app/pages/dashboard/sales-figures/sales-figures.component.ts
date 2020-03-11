@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'ngx-sales-figures',
+  selector: 'xb-sales-figures',
   templateUrl: './sales-figures.component.html',
-  styleUrls: ['./sales-figures.component.scss']
+  styleUrls: ['./sales-figures.component.scss',
+],
 })
 export class SalesFiguresComponent implements OnInit {
   data: any;
@@ -11,44 +12,7 @@ export class SalesFiguresComponent implements OnInit {
 
   constructor() {
     this.showByMonth();
-    this.options = {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              offsetGridLines: true,
-              display: false,
-            },
-            ticks: {
-              fontColor: '#000',
-            },
-            offset: true,
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-              color: '#858585',
-            },
-            ticks: {
-              fontColor: '#000',
-              beginAtZero: true,
-            },
-          },
-        ],
-      },
-      legend: {
-        position: 'right',
-        labels: {
-          fontColor: '#000',
-          backgroundColor: '#5177a6',
-          usePointStyle: true,
-        },
-      },
-    };
+    this.options = this.getOption();
   }
 
   ngOnInit() {
@@ -101,9 +65,9 @@ export class SalesFiguresComponent implements OnInit {
     ];
     this.data = this.chartObjectMapping(data);
 
-   }
+  }
 
-  showByYear() { 
+  showByYear() {
     const data = [
       {
         label: '2016',
@@ -129,7 +93,7 @@ export class SalesFiguresComponent implements OnInit {
     this.data = this.chartObjectMapping(data);
   }
 
-  private chartObjectMapping(dataInput: Array<any>){
+  private chartObjectMapping(dataInput: Array<any>) {
     return {
       labels: dataInput.map(item => item.label),
       datasets: [{
@@ -143,6 +107,48 @@ export class SalesFiguresComponent implements OnInit {
         pointStyle: 'rect',
       },
       ],
+    };
+  }
+
+  private getOption() {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              offsetGridLines: true,
+              display: false,
+            },
+            ticks: {
+              fontColor: '#000',
+            },
+            offset: true,
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: true,
+              color: '#858585',
+            },
+            ticks: {
+              fontColor: '#000',
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+      legend: {
+        position: 'right',
+        labels: {
+          fontColor: '#000',
+          backgroundColor: '#5177a6',
+          usePointStyle: true,
+        },
+      },
+      events: ['mousemove', 'click'],
     };
   }
 }

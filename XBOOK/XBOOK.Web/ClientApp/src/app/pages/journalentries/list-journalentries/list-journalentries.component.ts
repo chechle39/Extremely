@@ -23,7 +23,7 @@ class PagedInvoicesRequestDto extends PagedRequestDto {
   moduleId: module.id, // this is the key
   selector: 'xb-list-journalentries',
   templateUrl: './list-journalentries.component.html',
-  styleUrls: ['./list-journalentries.component.scss']
+  styleUrls: ['./list-journalentries.component.scss'],
 })
 export class ListJournalEntriesComponent extends PagedListingComponentBase<InvoiceView> {
   @ViewChild('searchPanel', { static: true }) searchPanel: any;
@@ -43,7 +43,7 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
   dateFilters = '';
   staticAlertClosed = false;
   sortElement: DatatableSorting[] = [
-    { dir: this.defaultSortOrder, prop: this.defaultSortBy }
+    { dir: this.defaultSortOrder, prop: this.defaultSortBy },
   ];
   loadingIndicator = true;
   reorderable = true;
@@ -61,10 +61,8 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     private data: DataService,
     private journalEntryService: JournalEntryService,
     injector: Injector,
-    private invoiceService: InvoiceService,
     private router: Router,
-    private fb: FormBuilder,
-    private modalService: NgbModal) {
+    private fb: FormBuilder) {
     super(injector);
     this.searchForm = this.createForm();
   }
@@ -74,9 +72,11 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const firstDateMonth = firstDate.split('/');
-    const firstDateMonthCurent = { year: Number(firstDateMonth[2]), month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
+    const firstDateMonthCurent = { year: Number(firstDateMonth[2]),
+      month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
     const endDateMonth = endDate.split('/');
-    const endDateMonthCurent = { year: Number(endDateMonth[2]), month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
+    const endDateMonthCurent = { year: Number(endDateMonth[2]),
+      month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
     return this.fb.group({
       startDate: firstDateMonthCurent,
       endDate: endDateMonthCurent,
@@ -88,7 +88,7 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
   protected list(
     request: PagedInvoicesRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
     this.loadingIndicator = true;
     request.keyword = this.searchString;

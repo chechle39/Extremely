@@ -13,3 +13,10 @@
         height: 40px!important;
     }
 }
+
+.text-overflow--ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    position: relative;
+    display: block;
+}

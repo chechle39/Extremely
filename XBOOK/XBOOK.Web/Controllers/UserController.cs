@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using XBOOK.Common.Helpers;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Model;
-using XBOOK.Data.Policies;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {
     public class UserController : BaseAPIController
     {
+        private readonly IAuthorizationService _authorizationService;
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;
-        public UserController(IUserService userService, UserManager<AppUser> userManager)
+        public UserController(IUserService userService, UserManager<AppUser> userManager, IAuthorizationService authorizationService)
         {
             _userService = userService;
             _userManager = userManager;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
@@ -36,6 +36,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetUser(UserRequest rq)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "User", Operations.Read);
+            if (result.Succeeded == false)
+                return new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
             return Ok(await _userService.GetAllAsync(rq));
         }
 

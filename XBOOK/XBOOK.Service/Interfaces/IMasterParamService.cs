@@ -12,5 +12,8 @@ namespace XBOOK.Service.Interfaces
         Task UpdateMaster(List<MasterParamViewModel> request);
         Task<IEnumerable<MasterParamViewModel>> GetMasterById(string id);
         bool DeleteMaster(List<requestDeletedMaster> request);
+        Task<IEnumerable<MasterParamViewModel>> GetMasTerByMoneyReceipt();
+        Task<IEnumerable<MasterParamViewModel>> GetMasTerByPaymentReceipt();
+        Task<IEnumerable<MasterParamViewModel>> GetMasTerByPaymentType();
     }
 }

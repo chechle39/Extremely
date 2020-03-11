@@ -11,23 +11,23 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: ListJournalEntriesComponent
+        component: ListJournalEntriesComponent,
       },
       {
         path: 'new',
-        component: CreateJournalEntriesComponent
+        component: CreateJournalEntriesComponent,
       },
       {
         path: ':id/:key',
-        component: CreateJournalEntriesComponent
-      }
-    ]
+        component: CreateJournalEntriesComponent,
+      },
+    ],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: []
+  providers: [],
 })
 export class JournalEntriesRoutingModule { }

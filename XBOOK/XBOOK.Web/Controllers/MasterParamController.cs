@@ -46,5 +46,21 @@ namespace XBOOK.Web.Controllers
             await _iMasterParamService.UpdateMaster(request);
             return Ok();
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetMasTerByPaymentReceipt()
+        {
+            return Ok(await _iMasterParamService.GetMasTerByPaymentReceipt());
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetMasTerByMoneyReceipt()
+        {
+            return Ok(await _iMasterParamService.GetMasTerByMoneyReceipt());
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetMasTerByPaymentType()
+        {
+            return Ok(await _iMasterParamService.GetMasTerByPaymentType());
+        }
     }
 }

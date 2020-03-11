@@ -20,7 +20,7 @@ namespace XBOOK.Data.ViewModels
 
         public List<Claim> RoleClaims { get; set; }
 
-        public List<RequestClaims> RequestData { get; set; }
+        //public List<RequestClaims> RequestData { get; set; }
     }
 
     public class RequestClaims

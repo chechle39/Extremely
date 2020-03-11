@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Common.Exceptions;
+using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
@@ -35,6 +36,7 @@ namespace XBOOK.Web.Controllers
         private readonly ApplicationSetting _applicationSetting;
         private readonly IJwtFactory _jwtFactory;
         private readonly JwtIssuerOptions _jwtOptions;
+        private readonly IPermissionDapper _permissionDapper;
         public AccountController(
             UserManager<AppUser> userManager,
             IEmailSender emailSender,
@@ -42,6 +44,7 @@ namespace XBOOK.Web.Controllers
             SignInManager<AppUser> signInManager,
             IOptions<ApplicationSetting> applicationSetting,
             IOptions<JwtIssuerOptions> jwtOptions,
+            IPermissionDapper permissionDapper,
             IJwtFactory jwtFactory,
             IUserService userService)
         {
@@ -53,54 +56,13 @@ namespace XBOOK.Web.Controllers
             _roleManager = roleManager;
             _applicationSetting = applicationSetting.Value;
             _jwtFactory = jwtFactory;
+            _permissionDapper = permissionDapper;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    var user = await _userManager.FindByNameAsync(model.Email);
-            //    //var roles = await _userManager.GetRolesAsync(user);
-            //    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-
-            //    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_applicationSetting.JWT_Secret));
-            //    var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            //    //var identity = (ClaimsIdentity)User.Identity;
-            //    //IEnumerable<Claim> xxx = identity.Claims;
-            //    //var sss = HttpContext.User.Identity as ClaimsIdentity;
-            //    //var qqqq = identity.Claims.ToList();
-            //    //var claims = new List<Claim>
-            //    //{
-            //    //    new Claim(ClaimTypes.Name, model.Email),
-            //    //    new Claim(ClaimTypes.Role, "Manager"),
-            //    //};
-            //    if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-            //    {
-            //       var tokenDesscriptor = new SecurityTokenDescriptor
-            //       {
-            //            Subject = new ClaimsIdentity(new Claim[]
-            //            {
-            //                new Claim("UserID", user.Id.ToString())
-            //            }),
-            //            Expires = DateTime.UtcNow.AddMinutes(5),
-            //            SigningCredentials = signinCredentials,
-            //       };
-            //        var tokeHandle = new JwtSecurityTokenHandler();
-            //        var securityToken = tokeHandle.CreateToken(tokenDesscriptor);
-            //        var token = tokeHandle.WriteToken(securityToken);
-            //        return Ok(new { token });
-
-            //    }
-            //    else
-            //    {
-            //        return Ok(new GenericResult(false, "Username or password incorrect"));
-            //    }
-
-            //}
-
-            //// If we got this far, something failed, redisplay form
-            //return BadRequest();
+           
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -114,8 +76,8 @@ namespace XBOOK.Web.Controllers
             }
             var finUser = await _userManager.FindByEmailAsync(model.Email);
             var roles = await _userManager.GetRolesAsync(finUser);
-
-            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles);
+            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
+            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList);
             return new OkObjectResult(jwt);
         }
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)

@@ -31,6 +31,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { AppConsts } from '../../../coreapp/app.consts';
 import { AddTaxComponent } from './add-tax/add-tax.component';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 @Component({
   selector: 'xb-create-invoice',
   styleUrls: ['./create-invoice.component.scss'],
@@ -128,6 +129,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     private activeRoute: ActivatedRoute,
     private invoiceService: InvoiceService,
     private paymentService: PaymentService,
+    private authenticationService: AuthenticationService,
     private taxService: TaxService,
     private fb: FormBuilder,
     private modalService: NgbModal) {

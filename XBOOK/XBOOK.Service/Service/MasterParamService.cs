@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,6 +59,19 @@ namespace XBOOK.Service.Service
             return deleteTax;
         }
 
-       
+        public async Task<IEnumerable<MasterParamViewModel>> GetMasTerByMoneyReceipt()
+        {
+            return await _iMasterParamRepository.GetMasTerByMoneyReceipt();
+        }
+
+        public async Task<IEnumerable<MasterParamViewModel>> GetMasTerByPaymentReceipt()
+        {
+            return await _iMasterParamRepository.GetMasTerByPaymentReceipt();
+        }
+
+        public async Task<IEnumerable<MasterParamViewModel>> GetMasTerByPaymentType()
+        {
+            return await _iMasterParamRepository.GetMasTerByPaymentType();
+        }
     }
 }

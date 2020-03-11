@@ -12,7 +12,13 @@ import { AccountChartRoutingModule } from './accountchart-routing.module';
 import { AccountChartService } from '../_shared/services/accountchart.service';
 import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
 import { SearchgenledComponent } from '../genledgroup/searchgenledgroup/searchgenled.component';
-import { NbPopoverModule, NbSearchModule, NbIconModule, NbAlertModule, NbCardModule, NbButtonModule } from '@nebular/theme';
+import {
+  NbPopoverModule,
+  NbSearchModule,
+  NbIconModule,
+  NbAlertModule,
+  NbCardModule,
+  NbButtonModule } from '@nebular/theme';
 @NgModule({
   declarations: [AccountChartComponent, CreateAccountChartComponent],
   imports: [

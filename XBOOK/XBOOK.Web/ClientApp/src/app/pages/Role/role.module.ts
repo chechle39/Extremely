@@ -20,9 +20,12 @@ import {
   NbSearchModule,
   NbCardModule,
   NbCheckboxModule} from '@nebular/theme';
+import { AssignPermissionComponent } from './assign-permission/assign-permission.component';
+import { AccountChartService } from '../_shared/services/accountchart.service';
+import { MenuService } from '../_shared/services/menu.service';
 
 @NgModule({
-  declarations: [RoleComponent, CreateRoleComponent],
+  declarations: [RoleComponent, CreateRoleComponent, AssignPermissionComponent],
   imports: [
     NbButtonModule,
     NbCardModule,
@@ -43,8 +46,8 @@ import {
     RadioButtonModule,
     NbCheckboxModule,
   ],
-  providers: [RoleService],
-  entryComponents: [CreateRoleComponent],
+  providers: [RoleService, AccountChartService, MenuService],
+  entryComponents: [CreateRoleComponent, AssignPermissionComponent],
 })
 export class RoleModule { }
 

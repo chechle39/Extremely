@@ -16,7 +16,6 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
-import { CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -41,7 +40,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
-  @ViewChild('view',  { static: false }) view: ElementRef;
+  @ViewChild('view', { static: false }) view: ElementRef;
   productInputFocusSub: Subscription = new Subscription();
   listInvoice: any;
   loadingIndicator = true;
@@ -80,7 +79,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     private accountChartService: AccountChartService,
     private activeRoute: ActivatedRoute,
     private fb: FormBuilder,
-    ) {
+  ) {
     super(injector);
     this.createForm();
   }
@@ -92,7 +91,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     if (this.invoiceForm !== undefined) {
       this.invoiceFormValueChanges$ = this.invoiceForm.controls.items.valueChanges;
       // subscribe to the stream so listen to changes on units
-      this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items) );
+      this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
       this.methodEdit_View();
     }
 
@@ -109,13 +108,13 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   filterBrands(event) {
     this.filteredBrands = [];
     for (let i = 0; i < this.dataAccount.length; i++) {
-        const brand =  {
-          accountNumber: this.dataAccount[i].accountNumber,
-          accountName: this.dataAccount[i].accountName,
-        };
-        this.filteredBrands.push(brand);
+      const brand = {
+        accountNumber: this.dataAccount[i].accountNumber,
+        accountName: this.dataAccount[i].accountName,
+      };
+      this.filteredBrands.push(brand);
     }
-}
+  }
   private methodEdit_View() {
     if (this.activeRoute !== undefined) {
       this.activeRoute.params.subscribe(params => {
@@ -161,8 +160,10 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
     const today = new Date().toLocaleDateString('en-GB');
     const issueDateSplit = today.split('/');
-    const issueDatePicker = { year: Number(issueDateSplit[2]),
-      month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
+    const issueDatePicker = {
+      year: Number(issueDateSplit[2]),
+      month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]),
+    };
 
     this.invoiceForm = this.fb.group({
       id: 0,
@@ -308,8 +309,10 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       if (invoice.dateCreate) {
         const issueDate = moment(invoice.dateCreate).format(AppConsts.defaultDateFormat);
         const issueDateSplit = issueDate.split('/');
-        const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]),
-          day: Number(issueDateSplit[0]) };
+        const issueDatePicker = {
+          year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]),
+          day: Number(issueDateSplit[0]),
+        };
         this.invoiceForm.controls.dateCreate.patchValue(issueDatePicker);
       }
       this.isRead = true;
@@ -358,9 +361,9 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         entryName: this.invoiceForm.value.entryName,
         objectID: this.invoiceForm.value.objectName.id === undefined ? null : this.invoiceForm.value.objectName.id,
         objectName: this.invoiceForm.value.objectName.objectName === undefined ? this.invoiceForm.value.objectName
-        : this.invoiceForm.value.objectName.objectName,
+          : this.invoiceForm.value.objectName.objectName,
         objectType: this.invoiceForm.value.objectName.objectType === undefined
-        ? 'Employee' : this.invoiceForm.value.objectName.objectType,
+          ? 'Employee' : this.invoiceForm.value.objectName.objectType,
         detail: this.invoiceForm.value.items,
       } as CreateRequest;
       this.journalEntryService.createJournal(request).subscribe(rp => {
@@ -408,11 +411,11 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
   totalCredit() {
     let Credit = 0;
-    for (let i = 0; i < this.invoiceForm.value.items.length; i ++) {
+    for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
       const credit = this.invoiceForm.value.items[i].credit === 0 ||
-      this.invoiceForm.value.items[i].credit === '0' ||
-      this.invoiceForm.value.items[i].credit === null ? 0 :
-      this.invoiceForm.value.items[i].credit.toString().replace(/,/g, '');
+        this.invoiceForm.value.items[i].credit === '0' ||
+        this.invoiceForm.value.items[i].credit === null ? 0 :
+        this.invoiceForm.value.items[i].credit.toString().replace(/,/g, '');
       const amountDebit = (1 * credit);
       Credit += amountDebit;
     }
@@ -420,11 +423,11 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   }
   totalDebit() {
     this.debitTotal = 0;
-    for (let i = 0; i < this.invoiceForm.value.items.length; i ++) {
+    for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
       const debit1 = this.invoiceForm.value.items[i].debit === 0 ||
-      this.invoiceForm.value.items[i].debit === '0' ||
-      this.invoiceForm.value.items[i].debit === null ? 0 :
-      this.invoiceForm.value.items[i].debit.toString().replace(/,/g, '');
+        this.invoiceForm.value.items[i].debit === '0' ||
+        this.invoiceForm.value.items[i].debit === null ? 0 :
+        this.invoiceForm.value.items[i].debit.toString().replace(/,/g, '');
       const amountDebit = (1 * debit1);
       this.debitTotal += amountDebit;
     }
@@ -435,5 +438,11 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     this.invoiceForm.enable();
     this.viewMode = false;
     this.isRead = false;
+  }
+
+  checkDis(e) {
+    const dis = e.toString().replace(/,/g, '');
+    const taltal = 1 * dis;
+    return taltal;
   }
 }

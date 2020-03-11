@@ -20,7 +20,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
 @Component({
   selector: 'xb-accountdetail',
   templateUrl: './accountdetail.component.html',
-  styleUrls: ['./accountdetail.component.scss']
+  styleUrls: ['./accountdetail.component.scss'],
 })
 export class AccountDetailComponent extends PagedListingComponentBase<ClientView> {
   exportCSV: any;
@@ -64,7 +64,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
 
     const date = new Date();
@@ -74,7 +74,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
       // startDate: this.firstDate === undefined ? null : this.firstDate,
       // endDate: this.endDate1 === undefined ? null : this.endDate1,
       money: null,
-      productName: null
+      productName: null,
     };
 
 
@@ -90,7 +90,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -115,7 +115,6 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
           // client: result.client,
           // product: result.product,
         };
-        console.log(result);
         this.exportCSV = result;
         this.accountDetailService.searchGen(genledSearch).subscribe(rp => {
           this.genViews = rp;
@@ -174,7 +173,6 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
       this.requestSaveJson.push(data);
     }
     const reportName = 'AccountDetailReport';
-    console.log(this.requestSaveJson);
     this.accountDetailService.AccountDeatilreportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

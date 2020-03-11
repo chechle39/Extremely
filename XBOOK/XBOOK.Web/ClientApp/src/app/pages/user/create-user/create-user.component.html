@@ -63,7 +63,7 @@
     <div class="row"  *ngIf = "edit !== true">
       <div class="form-group col-12 mb-2">
         <label for="passwordCF">{{'USER.CREATE.CF' | translate}}</label>
-        <input validatePasswordDirective [rowItem]="userForm" type="passwordCF" required class="form-control" formControlName="passwordCF"
+        <input validatePasswordDirective [rowItem]="userForm" type="password" required class="form-control" formControlName="passwordCF"
           placeholder="Confirm password">
         <small class="form-text text-muted danger"
           *ngIf="!userForm.get('passwordCF').valid && (userForm.get('passwordCF').dirty || userForm.get('passwordCF').touched)">Password confirmation does not match the password</small>

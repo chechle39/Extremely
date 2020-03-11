@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>
+  <nb-card-header class="layout__container--medium">
     <div class="row">
       <div class="col-5 col-lg-4">
         <!-- <h4 class="card-title">{{ 'User.LIST.HEADER' | translate }}</h4> -->
@@ -18,12 +18,12 @@
         </div>
       </div>
       <div class="col-4 col-lg-4">
-        <button (click)="createUser()"
+        <button (click)="createUser()" [disabled] = "this.authenticationService.hasPermission('User','create')"
           class="btn btn-raised mr-1 btn-success float-right">{{'COMMON.MOREACTION.ADDNEW' | translate}}</button>
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body class="layout__container--medium">
       <div class="row my-3 margin-top-0">
         <div class="col-md-4 col-6 margintop-13">
           <div class="label-blue">{{ 'USER.LIST.HEADER.LABEL' | translate }} <span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span></div>
@@ -57,7 +57,7 @@
       <div class="row">
         <div class="col-md-12">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="userViews"
-            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.flex"
             [headerHeight]="60" [footerHeight]="50" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
             [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
             (select)='onSelect($event)' [selectAllRowsOnPage]="false">
@@ -84,25 +84,25 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'"
+            <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'" [flexGrow]="3"
               name="{{'USER.LIST.GRID.HEADER.USERNAME' | translate}}" prop="userName">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <span>{{row.userName}}</span>
+                <span class="text-overflow--ellipsis">{{row.userName}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'"
+            <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'" [flexGrow]="3"
               name="{{'USER.LIST.GRID.HEADER.EMAIL' | translate}}" prop="email">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <span>{{row.email}}</span>
+                <span class="text-overflow--ellipsis">{{row.email}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [cellClass]="'col-center'" [headerClass]="'col-center'"
+            <ngx-datatable-column [cellClass]="'col-center'" [headerClass]="'col-center'" [flexGrow]="1"
               name="{{'USER.LIST.GRID.HEADER.BIRTHDAY' | translate}}" prop="birthDay">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div class="col-more-info col-center">{{row.birthDay | date: 'dd/MM/yyyy'}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="{{'USER.LIST.GRID.HEADER.STATUS' | translate}}" [cellClass]="'col-right'"
+            <ngx-datatable-column name="{{'USER.LIST.GRID.HEADER.STATUS' | translate}}" [cellClass]="'col-right'" [flexGrow]="1"
               [headerClass]="'col-right'" prop="status">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div class="col-right" *ngIf="row.status !== 1">InActive</div>

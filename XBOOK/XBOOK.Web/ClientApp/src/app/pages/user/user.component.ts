@@ -9,6 +9,8 @@ import { UserViewModel } from '../_shared/models/user/userview.model';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { RoleModel } from '../_shared/models/role/role.model';
 import { CommonService } from '../../shared/service/common.service';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
+import { Router } from '@angular/router';
 class PagedProductsRequestDto extends PagedRequestDto {
   keyWord: string;
 }
@@ -30,8 +32,13 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
     injector: Injector,
     private modalService: NgbModal,
     private commonService: CommonService,
+    public authenticationService: AuthenticationService,
+    private router: Router,
     private userService: UserService) {
     super(injector);
+    if (this.authenticationService.checkAccess('User') === false) {
+      this.router.navigate([`/auth/login`]);
+    }
   }
 
 

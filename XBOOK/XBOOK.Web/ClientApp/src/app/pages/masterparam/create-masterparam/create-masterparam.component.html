@@ -2,7 +2,7 @@
   <div class=" modal-header">
     <div class="row">
       <div class="col-12">
-        <h5 class="modal-title">New Master Param</h5>
+        <h5 class="modal-title">Master Param</h5>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
     </div>
     <div  class="mb-1 arrayparam" formArrayName="taxs"
       *ngFor="let tax of taxForm.get('taxs')['controls']; index as i">
-      <div class="row arrayparam-inner" style="margin-top: -5px;">
+      <div class="row arrayparam-inner font-weight-500" style="margin-top: -5px;">
         <ng-container [formGroupName]="i">
           <div class="col-6 px-0 text-left">Key</div>
           <div style="margin-left: -28px;" class="col-6 px-0 text-left">Name</div>
@@ -44,9 +44,9 @@
             </a>
           </div>
   
-          <div class="col-12 px-0" style="margin-bottom: -3px;margin-top: 13px;">
+          <div class="col-12 px-0" style="margin-bottom: -3px;margin-top: 8px;">
             <textarea #paramdescription formControlName="description" class="form-control" type="text"
-              placeholder="description" id="description" maxlength=200></textarea>
+              placeholder="description" id="description" maxlength=200 rows=1></textarea>
           </div>
         </ng-container>
       </div>

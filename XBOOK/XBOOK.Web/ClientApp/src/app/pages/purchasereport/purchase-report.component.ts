@@ -55,8 +55,6 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
 
   constructor(
     injector: Injector,
-    private data: DataService,
-    private activeRoute: ActivatedRoute,
     private invoiceService: InvoiceService,
     private purchaseReportService: PurchaseReportService,
     private modalService: NgbModal,

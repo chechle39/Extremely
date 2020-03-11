@@ -47,6 +47,7 @@ namespace XBOOK.Data.Repositories
                         {
                             link = item2.URL,
                             title = item2.Name,
+                            SortOrder = item2.SortOrder
                         };
                         children.Add(child);
                     }
@@ -56,25 +57,23 @@ namespace XBOOK.Data.Repositories
                 {
                     icon = item.IconCss,
                     title = item.Name,
-                    children = children
+                    link = item.URL,
+                    SortOrder = item.SortOrder,
+                    children = children.OrderBy(x => x.SortOrder).ToList()
                 };
                 dataMenuList.Add(menuModel);
             }
-            try
-            {
-                foreach (var item in dataMenuList.ToList())
-                {
-                    if (item.children.Count() == 0)
-                    {
-                        dataMenuList.Remove(item);
-                    }
-                }
-            } catch (Exception ex)
-            {
 
-            }
+           foreach (var item in dataMenuList.ToList())
+           {
+               if (item.children.Count() == 0 && item.link == "/")
+               {
+                   dataMenuList.Remove(item);
+               } 
+           }
+
             
-            return dataMenuList;
+            return dataMenuList.OrderBy(x=>x.SortOrder).ToList();
         }
     }
 }

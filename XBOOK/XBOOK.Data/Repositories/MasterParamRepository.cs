@@ -1,10 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Data.Repositories
 {
@@ -25,5 +28,19 @@ namespace XBOOK.Data.Repositories
 
         }
 
+        public async Task<IEnumerable<MasterParamViewModel>> GetMasTerByMoneyReceipt()
+        {
+           return await Entities.ProjectTo<MasterParamViewModel>().Where(x => x.paramType == "MoneyReceipt").ToListAsync();
+        }
+
+        public async Task<IEnumerable<MasterParamViewModel>> GetMasTerByPaymentReceipt()
+        {
+            return await Entities.ProjectTo<MasterParamViewModel>().Where(x => x.paramType == "PaymentReceipt").ToListAsync();
+        }
+
+        public async Task<IEnumerable<MasterParamViewModel>> GetMasTerByPaymentType()
+        {
+            return await Entities.ProjectTo<MasterParamViewModel>().Where(x => x.paramType == "PaymentType").ToListAsync();
+        }
     }
 }

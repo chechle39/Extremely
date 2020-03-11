@@ -36,10 +36,10 @@ namespace XBOOK.Service.Service
                 Description = roleVm.Description,
             };
             var result = await _roleManager.CreateAsync(role);
-            foreach (var item in roleVm.RequestData)
-            {
-                await _roleManager.AddClaimAsync(role, new Claim(item.Name, item.Type));
-            }
+            //foreach (var item in roleVm.RequestData)
+            //{
+            //    await _roleManager.AddClaimAsync(role, new Claim(item.Name, item.Type));
+            //}
 
             return result.Succeeded;
         }
@@ -96,25 +96,25 @@ namespace XBOOK.Service.Service
             role.Description = roleVm.Description;
             role.Name = roleVm.Name;
 
-            var claims = await _roleManager.GetClaimsAsync(role);
-            if (roleVm.RequestData.Count > 0)
-            {
-                foreach (var removingClaim in claims)
-                {
-                    await _roleManager.RemoveClaimAsync(role, new Claim(removingClaim.Type, removingClaim.Value));
-                }
-                foreach (var item in roleVm.RequestData)
-                {
-                    await _roleManager.AddClaimAsync(role, new Claim(item.Name, item.Type));
-                }
-            }
-            else
-            {
-                foreach (var item in claims)
-                {
-                    await _roleManager.RemoveClaimAsync(role, new Claim(item.Value, item.Type));
-                }
-            }
+            //var claims = await _roleManager.GetClaimsAsync(role);
+            //if (roleVm.RequestData.Count > 0)
+            //{
+            //    foreach (var removingClaim in claims)
+            //    {
+            //        await _roleManager.RemoveClaimAsync(role, new Claim(removingClaim.Type, removingClaim.Value));
+            //    }
+            //    foreach (var item in roleVm.RequestData)
+            //    {
+            //        await _roleManager.AddClaimAsync(role, new Claim(item.Name, item.Type));
+            //    }
+            //}
+            //else
+            //{
+            //    foreach (var item in claims)
+            //    {
+            //        await _roleManager.RemoveClaimAsync(role, new Claim(item.Value, item.Type));
+            //    }
+            //}
             await _roleManager.UpdateAsync(role);
         }
 

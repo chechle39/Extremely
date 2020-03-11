@@ -6,6 +6,7 @@ import { PagesComponent } from './pages.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { PrintModule } from './print/print.module';
+import { MenuService } from './_shared/services/menu.service';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { PrintModule } from './print/print.module';
   declarations: [
     PagesComponent,
   ],
+  providers: [MenuService]
 })
 export class PagesModule {
 }

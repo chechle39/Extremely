@@ -151,6 +151,11 @@ export const API_URI = {
   deleteJournalDetail: 'api/JournalDetail/DeleteJournalDetail',
   deleteJournal: 'api/JournalEntry/DeleteJournal',
   PaymentReceiptSaveDataPrint: 'api/PaymentReceipt/SaveFileJson',
+  getAllMenu: 'api/Menu/GetAllMenu',
+  getAllFunc: 'api/Menu/GetAllFunction',
+  MasterByMoney: 'api/MasterParam/GetMasTerByMoneyReceipt',
+  MasterByPayment: 'api/MasterParam/GetMasTerByPaymentReceipt',
+  MasterByPayType: 'api/MasterParam/GetMasTerByPaymentType',
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

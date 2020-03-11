@@ -10,7 +10,9 @@ using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {
-    public class SeedController : BaseAPIController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SeedController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
         private RoleManager<AppRole> _roleManager;

@@ -78,7 +78,7 @@ export class CompanyProfileComponent extends PagedListingComponentBase<any> {
           const createClientDialog = this.modalService.open(CreateCompanyprofileComponent,
             AppConsts.modalOptionsCustomSize);
         } else {
-          this.modalService.dismissAll();
+           this.modalService.dismissAll();
           const createOrEditClientDialog = this.modalService.open(EditCompanyprofileComponent,
             AppConsts.modalOptionsCustomSize);
           createOrEditClientDialog.componentInstance.id = this.companyprofileViews[0].id;

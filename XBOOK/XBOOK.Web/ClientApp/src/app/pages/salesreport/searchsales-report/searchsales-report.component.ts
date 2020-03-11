@@ -16,7 +16,7 @@ import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'xb-searchgenled',
   templateUrl: './searchsales-report.component.html',
-  styleUrls: ['./searchsales-report.component.scss']
+  styleUrls: ['./searchsales-report.component.scss'],
 })
 export class SearchsalesReportComponent extends AppComponentBase implements OnInit {
   cars: any[];
@@ -58,7 +58,7 @@ export class SearchsalesReportComponent extends AppComponentBase implements OnIn
     public clientService: ClientService,
     public fb: FormBuilder,
     injector: Injector,
-    public activeModal: NgbActiveModal, ) {
+    public activeModal: NgbActiveModal ) {
     super(injector);
     this.genLedForm = this.createGenLedFormGroup();
   }
@@ -67,7 +67,7 @@ export class SearchsalesReportComponent extends AppComponentBase implements OnIn
 
     const request = {
       productKeyword: null,
-      isGrid: false
+      isGrid: false,
     };
     const requestClient = {
       productKeyword: null,
@@ -113,7 +113,8 @@ export class SearchsalesReportComponent extends AppComponentBase implements OnIn
 
   private tranFormsDate(today: string) {
     const issueDateSplit = today.split('/');
-    const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
+    const issueDatePicker = { year: Number(issueDateSplit[2]),
+      month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
     return issueDatePicker;
   }
 
@@ -142,7 +143,7 @@ export class SearchsalesReportComponent extends AppComponentBase implements OnIn
         endDate: this.endDate === undefined ? null : this.endDate,
         client: this.genLedForm.value.acountNumberMethod1,
         product: this.genLedForm.value.acountNumberMethod,
-        case: this.genLedForm.value.genLedMethods
+        case: this.genLedForm.value.genLedMethods,
       };
 
       this.activeModal.close(genledSearch);
