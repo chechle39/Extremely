@@ -22,9 +22,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllRole(UserRequest rq)
         {
-            var result = await _authorizationService.AuthorizeAsync(User, "Role", Operations.Read);
-            if (result.Succeeded == false)
-                return new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
+            //var result = await _authorizationService.AuthorizeAsync(User, "Role", Operations.Read);
+            //if (result.Succeeded == false)
+            //    return new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
             return Ok(await _roleService.GetAllAsync(rq));
         }
         [HttpPost("[action]")]

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Injector } from '@angular/core';
+import { Component, OnInit, Input, Injector, ViewChild, ElementRef } from '@angular/core';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
 import { ClientView } from '../../_shared/models/client/client-view.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ImportClientComponent extends AppComponentBase implements OnInit {
   @Input() id: any[];
+  
   saving: false;
   public importForm: FormGroup;
   FieldName: any[] = [];
@@ -34,27 +35,32 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
     public clientService: ClientService) {
     super(injector);
   }
-
+  @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   ngOnInit() {
     this.importForm = this.createClientFormGroup();
     this.FieldName = this.id[0];
+    console.log(this.FieldName)
     this.Datareport = this.id;
     // tslint:disable-next-line:prefer-for-of
-    for (let j = 0; j < this.FieldName.length; j++) {
+    for (let j = 1; j < this.FieldName.length; j++) {
+      console.log(this.FieldName)
+      if (this.FieldName[j] !== "" ){
       const data = {
         value: this.FieldName[j],
       };
-      this.SelectedFieldName.push(data);
+      if (data !== null || data !== undefined){
+        this.SelectedFieldName.push(data);
+      }  
+    }       
     }
-
   }
   createClientFormGroup() {
     return this.fb.group({
-      clientName: [null],
-      address: [null],
-      taxCode: [null],
-      contactName: [null],
-      email: [null],
+      clientName: [null, [Validators.required]],
+      address: [null, [Validators.required]],
+      taxCode: [null, [Validators.required]],
+      contactName: [null, [Validators.required]],
+      email: [null, [Validators.required]],
       bankAccount: [null],
       note: [null],
     });
@@ -72,6 +78,14 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
         bankAccount: this.Datareport[i][this.importForm.value.bankAccount],
         note: this.Datareport[i][this.importForm.value.note],
       };
+      let invalid = false;
+      let regex =/[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+      if( client.email == "" || ! regex.test(client.email)){
+        invalid = true;
+        this.message.warning('Sai định dạng Email dòng thứ '+ [i]);
+        return;
+    }
+       
       this.ImportDatareport.push(client);
     }
     this.clientService
@@ -82,7 +96,7 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
         }),
       )
       .subscribe(() => {
-        this.notify.info('Saved Successfully');
+     //   this.notify.info('Saved Successfully');
         this.close(true);
       });
   }

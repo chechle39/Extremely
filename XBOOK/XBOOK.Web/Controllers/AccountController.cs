@@ -1,21 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Common.Exceptions;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Identity;
-using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
@@ -75,9 +68,13 @@ namespace XBOOK.Web.Controllers
                 return Ok(new GenericResult(false, "Username or password incorrect"));
             }
             var finUser = await _userManager.FindByEmailAsync(model.Email);
+            if (finUser.Status == Status.InActive )
+            {
+                return Ok(new GenericResult(false, "User is not active"));
+            }
             var roles = await _userManager.GetRolesAsync(finUser);
-           // var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
-            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, null);
+            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
+            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList);
             return new OkObjectResult(jwt);
         }
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)

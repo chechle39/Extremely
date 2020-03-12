@@ -8,7 +8,7 @@
             <img src="../../../assets/search.png" class="button__search"
               alt="search General Ledger"></div>
         </div>
-        <div class="btn btn-flat mr-1 p-0 mb-0" style="color: #546D74;">
+        <div class="btn btn-flat mr-1 p-0 mb-0 text-nowrap" style="color: #546D74;">
           <div *ngIf="case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
           <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
           <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
@@ -47,7 +47,7 @@
 
 
       <div class="row">
-        <hr width="98%" style="height: 2px;;background: #6A0888;" />
+        <hr width="98%" style="height: 2px;;background: #6A0888;" class="mb-0" />
         <div class="col-md-12">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="group.genneralListData"
             [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
@@ -152,7 +152,7 @@
                     <div class="col-md-2 sum">
                       {{ 'GEN.LIST.Total' | translate }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" style="color: rgb(16, 20, 20)">
                       <div class="total">
                         <div *ngIf="group.totaldebit !== 0">
                           {{group.totaldebit  | currency:'VND':''}}
@@ -162,7 +162,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-2" style="padding-right: 2%;">
+                    <div class="col-md-2" style="padding-right: 2%;color: rgb(16, 20, 20)">
                       <div>
                         <div *ngIf="group.totalcredit !== 0">
                           {{group.totalcredit  | currency:'VND':''}}

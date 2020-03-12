@@ -9,8 +9,7 @@
             <img src="../../../assets/search.png" class="button__search"
               alt="search General Ledger"></div>
         </div>
-        <br>
-        <div class="btn btn-flat mr-1 p-0 mb-0" style="color: #546D74;">
+        <div class="btn btn-flat mr-1 p-0 mb-0 text-nowrap" style="color: #546D74;">
           <div *ngIf="case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
           <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
           <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
@@ -41,16 +40,16 @@
     </div>
   </nb-card-header>
   <nb-card-body>
-    <div *ngFor="let group of genViews" style="padding-top: 3%;">
+    <div *ngFor="let group of genViews">
       <div>
-        <div class="row" style="padding-top: 3%;color: #546D74">         
-          <div class="col-4"style="color: #546D74;font-size: 1.1rem;">
+        <div class="row" style="color: #546D74">         
+          <div class="col-12"style="color: #546D74;font-size: 1.1rem;">
             {{group.accountNumber}}- {{group.accountName}}</div>
         </div>         
         <div class="row" style="color: #546D74;">         
-          <div class="col-8" style="color: #546D74;position: absolute; font-size: 1.1rem;">
+          <div class="col-lg-4 col-md-5 col-6" style="color: #546D74; font-size: 1.1rem;">
             {{group.companyName}}</div>
-          <div style="text-align: right;color: #546D74;font-weight: bold;" class="col-md-6">Số Dư Đầu Kỳ:  {{122990 | currency:'VND':''}}</div>
+          <div style="color: #546D74;font-weight: bold;" class="col-lg-8 col-md-7 col-6">Số Dư Đầu Kỳ:  {{122990 | currency:'VND':''}}</div>
         </div>      
       </div>
 
@@ -58,7 +57,7 @@
 
 
       <div class="row">
-        <hr width="98%" style="height: 2px;;background: #6A0888;" />
+        <hr width="98%" class="mb-0" style="height: 2px;;background: #6A0888;" />
         <div class="col-md-12">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="group.accountDetailViewModel"
             [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]" [columnMode]="ColumnMode.force"
@@ -179,40 +178,38 @@
                   <div class="row text-right">
                     <div class="col-2" style="text-align: left;">
                       <span class="card__title"
-                        style="color: #546D74;font-family:Tahoma ;margin-left: 30px;inset-block: inherit;width: 300px;">
+                        style="color: rgb(16, 20, 20);margin-left: 30px;inset-block: inherit;width: 300px;">
                         {{'ACCOUNT.DETAIL.LIST.Total' | translate}}
                       </span>
                     </div>
                     <div class="col-2"></div>
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma;">
+                    <div class="col-2">
                       <div class="totalDebit">
-                        <div *ngIf="group.totalAmount  !== 0" class="col-more-info"
-                          style="color: #546D74;font-family:Tahoma;">
+                        <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{group.totalDebit  | currency:'VND':''}}
                         </div>
                       </div>
                     </div>
 
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma;">
+                    <div class="col-2">
                       <div class="totalCredit">
-                        <div *ngIf="group.totalAmount  !== 0" class="col-more-info"
-                          style="color: #546D74;font-family:Tahoma;">
+                        <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{group.totalCredit  | currency:'VND':''}}
                         </div>
                       </div>
                     </div>
 
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma">
+                    <div class="col-2">
                       <div class="totalDebitClosing">
-                        <div *ngIf="group.totalDiscount  !== 0" class="col-more-info">
+                        <div *ngIf="group.totalDiscount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{group.totalDebitClosing  | currency:'VND':''}}
                         </div>
                       </div>
                     </div>
 
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma;">
+                    <div class="col-2">
                       <div style="padding-right: 12px;">
-                        <div *ngIf="group.totalPayment  !== 0" class="col-more-info">
+                        <div *ngIf="group.totalPayment  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{group.totalCreditClosing  | currency:'VND':''}}
                         </div>
                       </div>

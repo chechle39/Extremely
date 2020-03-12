@@ -437,20 +437,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           seri: invoice[0].invoiceSerial,
         };
         this.getInForProfile(request);
-        // this.invoiceService.getInfofile(request).subscribe(rp => {
-        //   if (rp.length > 0) {
-        //     for (let i = 0; i < rp.length; i++) {
-        //       const file = [
-        //         File = {
-        //           name: rp[i].fileName,
-        //           size: 0,
-        //         } as any
-        //       ]
-        //       this.fileUpload.push(file[0]);
-        //     }
-        //   }
-
-        // })
       }
 
       this.getFormArray().controls.splice(0);

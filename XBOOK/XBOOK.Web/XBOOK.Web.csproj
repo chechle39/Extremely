@@ -21,10 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Reports\Template\AccountDetailReport.repx" />
     <None Remove="Reports\Template\PaymentReceiptReport.repx" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Template\AccountDetailReport.repx" />
     <EmbeddedResource Include="Reports\Template\PaymentReceiptReport.repx" />
   </ItemGroup>
 
@@ -60,6 +62,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Reports\Template\AccountDetailReport.cs">
+      <DependentUpon>AccountDetailReport.repx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Template\AccountDetailReport.Designer.cs">
+      <DependentUpon>AccountDetailReport.repx</DependentUpon>
+    </Compile>
     <Compile Update="Reports\Template\PaymentReceiptReport.cs">
       <DependentUpon>PaymentReceiptReport.repx</DependentUpon>
     </Compile>

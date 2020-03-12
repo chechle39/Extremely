@@ -40,21 +40,26 @@ export class ImportSupplierComponent extends AppComponentBase implements OnInit 
     this.FieldName = this.id[0];
     this.Datareport = this.id;
     // tslint:disable-next-line:prefer-for-of
-    for (let j = 0; j < this.FieldName.length; j++) {
+    for (let j = 1; j < this.FieldName.length; j++) {
+      console.log(this.FieldName)
+      if (this.FieldName[j] !== "" ){
       const data = {
         value: this.FieldName[j],
       };
-      this.SelectedFieldName.push(data);
+      if (data !== null || data !== undefined){
+        this.SelectedFieldName.push(data);
+      }  
+    }       
     }
 
   }
   createSupplierFormGroup() {
     return this.fb.group({
-      supplierName: [null],
-      address: [null],
-      taxCode: [null],
-      contactName: [null],
-      email: [null],
+      supplierName: [null, [Validators.required]],
+      address: [null, [Validators.required]],
+      taxCode: [null, [Validators.required]],
+      contactName: [null, [Validators.required]],
+      email: [null, [Validators.required]],
       bankAccount: [null],
       note: [null],
     });
@@ -72,6 +77,13 @@ export class ImportSupplierComponent extends AppComponentBase implements OnInit 
         bankAccount: this.Datareport[i][this.importForm.value.bankAccount],
         note: this.Datareport[i][this.importForm.value.note],
       };
+      let invalid = false;
+      let regex =/[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+      if( client.email == "" || ! regex.test(client.email)){
+        invalid = true;
+        this.message.warning('Sai định dạng Email dòng thứ '+ [i]);
+        return;
+    }
       this.ImportDatareport.push(client);
     }
     this.supplierService

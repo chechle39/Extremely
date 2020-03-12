@@ -10,7 +10,7 @@
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
             <button class="dropdown-item position-relative"><span class="icon-import"></span> Import Clients
-              <input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)">              
+              <input style="cursor: pointer;" #file1 type="file" class="input-upload" #paramTypeSelected (change)="showPreview(file1.files)">              
             </button>
                <button class="dropdown-item" (click)="ExportClient()"><span class="icon-export"></span> Export Client</button>
           </div>

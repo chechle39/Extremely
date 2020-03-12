@@ -37,7 +37,11 @@ export class MessageService {
     });
   }
   errorHandel(message: string, content: string = '', callBack: () => void) {
-    Swal.fire(message, content, 'error').then(isConfirm => {
+    Swal.fire({
+      title: 'Xbook',
+      html: `<p class="swal2__content">${message}<p><p class="swal2__content">${content}</p>`,
+      showCloseButton: true,
+    }).then(isConfirm => {
       if (isConfirm.value) {
         callBack();
       }
@@ -45,9 +49,10 @@ export class MessageService {
   }
   confirm(message: string, content: string, callBack: () => void) {
     Swal.fire({
-      title: message || 'Are you sure?',
-      text: content || 'You won\'t be able to revert this!',
-      type: 'warning',
+      title: 'Xbook',
+      html: `<p class="swal2__content">${ message || 'Are you sure?'}<p>
+              <p class="swal2__content">${ content || 'You won\'t be able to revert this!' }</p>`,
+      showCloseButton: true,
       showCancelButton: true,
       confirmButtonColor: '#0CC27E',
       cancelButtonColor: '#FF586B',
@@ -61,9 +66,10 @@ export class MessageService {
   }
   confirm1(message: string, content: string, callBack: () => void) {
     Swal.fire({
-      title: message || 'Are you sure?',
-      text: content || 'You won\'t be able to revert this!',
-      type: 'warning',
+      title: 'Xbook',
+      html: `<p class="swal2__content">${ message || 'Are you sure?'}<p>
+              <p class="swal2__content">${ content || 'You won\'t be able to revert this!' }</p>`,
+      showCloseButton: true,
       showCancelButton: false,
       confirmButtonColor: '#0CC27E',
       cancelButtonColor: '#FF586B',

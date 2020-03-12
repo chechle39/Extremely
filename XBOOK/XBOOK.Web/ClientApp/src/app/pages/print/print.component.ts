@@ -34,7 +34,7 @@ export class PrintComponent implements OnInit {
   ) { }
   ngOnInit() {
     this.activeRoute.params.subscribe(params => {
-      if (params.key === 'disign') {
+      if (params.key === 'design') {
         const dialog = this.modalService.open(SelectReportComponent, AppConsts.modalOptionsCustomSize);
         dialog.result.then(result => {
           if (result) {

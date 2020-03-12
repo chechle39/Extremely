@@ -146,7 +146,7 @@
                   </div>
                   <div class="col-2">
                     <div class="total">
-                      <div *ngIf="getGrantTotal() !== 0" class="col-more-info">
+                      <div *ngIf="getGrantTotal() !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                         {{getGrantTotal() | currency:'VND':''}}
                       </div>
                       <div *ngIf="getGrantTotal() === 0">
@@ -156,7 +156,7 @@
                   </div>
                   <div class="col-2">
                     <div>
-                      <div *ngIf="getGrantTotalDebit() !== 0" class="col-more-info">
+                      <div *ngIf="getGrantTotalDebit() !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                         {{getGrantTotalDebit() | currency:'VND':''}}
                       </div>
                       <div *ngIf="getGrantTotalDebit() === 0">

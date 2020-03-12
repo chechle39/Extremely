@@ -166,13 +166,13 @@
                   <div class="row text-right">
                     <div class="col-2" style="text-align: left;">
                       <div class="card__title"
-                      style="color: #546D74;font-family:Tahoma ;margin-left: 30px;inset-block: inherit;">
+                      style="color: rgb(16, 20, 20);margin-left: 30px;inset-block: inherit;">
                       {{ 'Debit.Age.LIST.Total' | translate }}
                       </div>
                     </div>
                     <div class="col-2" style="color: #546D74;padding-right: 0%;">
                       <div>
-                        <div *ngIf="getfirstMonth() !== 0" class="col-more-info">
+                        <div *ngIf="getfirstMonth() !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{getfirstMonth()  | currency:'VND':''}}
                         </div>
                         <div *ngIf="getfirstMonth()  === 0">
@@ -180,9 +180,9 @@
                         </div>
                       </div> 
                     </div>
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 0.5%;">
+                    <div class="col-2" style="color: #546D74;padding-right: 0.5%;">
                       <div>
-                        <div *ngIf="getsecondMonth() !== 0" class="col-more-info">
+                        <div *ngIf="getsecondMonth() !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{getsecondMonth()  | currency:'VND':''}}
                         </div>
                         <div *ngIf="getsecondMonth()  === 0">
@@ -190,9 +190,9 @@
                         </div>
                       </div> 
                     </div>
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 0.5%;">
+                    <div class="col-2" style="color: #546D74;padding-right: 0.5%;">
                       <div>
-                        <div *ngIf="getthirdMonth() !== 0" class="col-more-info">
+                        <div *ngIf="getthirdMonth() !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{getthirdMonth()  | currency:'VND':''}}
                         </div>
                         <div *ngIf="getthirdMonth()  === 0">
@@ -200,9 +200,9 @@
                         </div>
                       </div> 
                     </div>
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 1%;">
+                    <div class="col-2" style="color: #546D74;padding-right: 1%;">
                       <div>
-                        <div *ngIf="getfourthMonth() !== 0" class="col-more-info">
+                        <div *ngIf="getfourthMonth() !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{getfourthMonth()  | currency:'VND':''}}
                         </div>
                         <div *ngIf="getfourthMonth()  === 0">
@@ -210,9 +210,9 @@
                         </div>
                       </div> 
                     </div>
-                    <div class="col-2" style="color: #546D74;font-family:Tahoma;padding-right: 2.0%;">
+                    <div class="col-2" style="color: #546D74;padding-right: 2.0%;">
                       <div>
-                        <div *ngIf="getsumtotal() !== 0" class="col-more-info">
+                        <div *ngIf="getsumtotal() !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                           {{getsumtotal()  | currency:'VND':''}}
                         </div>
                         <div *ngIf="getsumtotal()  === 0">

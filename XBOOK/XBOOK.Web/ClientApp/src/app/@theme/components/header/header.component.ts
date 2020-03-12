@@ -40,15 +40,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ];
   lang = [
     {
-      value: 'en',
-      name: 'English',
-    },
-    {
       value: 'vi',
       name: 'Vietnamese',
     },
+    {
+      value: 'en',
+      name: 'English',
+    },
+
   ];
-  curr = 'en';
+  curr = 'vi';
   currentTheme = 'default';
   tag = 'my-context-menu';
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
@@ -56,7 +57,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private userService: UserData,
     private layoutService: LayoutService,
     private translate: TranslateService,
     private loginService: LoginService,
@@ -74,11 +74,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
-
-    this.userService.getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
-
+    this.user = {
+      name: JSON.parse(sessionStorage.getItem('credentials')).username,
+    };
+    // this.userService.getUsers()
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((users: any) => this.user = users.nick);
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(

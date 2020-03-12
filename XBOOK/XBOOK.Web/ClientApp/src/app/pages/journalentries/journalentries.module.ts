@@ -34,9 +34,11 @@ import {
   NbIconModule,
   NbSearchModule,
   NbAlertModule } from '@nebular/theme';
+import { validateInputAccDirective } from './validate/validateinputacc';
 
 @NgModule({
   declarations: [
+    validateInputAccDirective,
     JournalEntriesComponent,
     ListJournalEntriesComponent,
     CreateJournalEntriesComponent],

@@ -127,12 +127,12 @@
   }
 
   .invoice__input__title{
-      font-size: 1.1rem;
+      @extend .invoice__font--medium;
       color: #922999;
   }
   .invoice__input__textbox{
     color: #656565;
-    font-size: 1rem;
+    @extend .invoice__font--medium-2;
     height: 2.1em;
 }
 .invoice__input__textbox--disable{
@@ -171,4 +171,12 @@
     font-size: 1.1rem;
 }
 
+.invoice__font--medium-2{
+    font-size: 1rem;
+}
+
+
+.invoice__font--medium-3{
+    font-size: 1.2rem;
+}
 }

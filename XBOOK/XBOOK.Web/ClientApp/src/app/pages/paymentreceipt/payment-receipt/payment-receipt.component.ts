@@ -35,11 +35,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
-  paymentMethods = [
-    new PaymentMethod(1, 'Cash'),
-    new PaymentMethod(2, 'Visa card'),
-    new PaymentMethod(3, 'Bank transfer'),
-  ];
+  payment: MasterParamModel[];
   requestSaveJson: any[] = [];
   companyName: any;
   companyAddress: any;
@@ -96,8 +92,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       this.moneyReceipt.controls.receiverName.patchValue(this.row.receiverName);
       this.moneyReceipt.controls.supplierName.patchValue(this.row.supplierName);
       this.moneyReceipt.controls.entryType.patchValue(this.row.entryType);
-      this.moneyReceipt.controls.paymentMethods.patchValue(this.paymentMethods.filter(x => x.payType ===
-        this.row.payType)[0].payTypeId);
+      this.moneyReceipt.controls.paymentMethods.patchValue(this.row.payType);
       this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
       this.moneyReceipt.controls.bankAccount.patchValue(this.row.bankAccount);
       this.moneyReceipt.controls.note.patchValue(this.row.note);
@@ -114,6 +109,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     if (this.row === undefined) {
       this.getLastDataMoneyReceipt();
     }
+    this.getPayType();
     this.getAllEntryData();
   }
 
@@ -185,7 +181,17 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       this.moneyReceipt.controls.receiptNumber.patchValue(rp === null ? null : rp.receiptNumber);
     });
   }
-
+  getPayType() {
+    this.masterParamService.GetMasTerByPayType().subscribe(rp => {
+      this.payment = rp;
+      if (this.row === undefined) {
+        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
+      } else {
+        const entry = this.payment.filter(x => x.name === this.row.payType);
+        this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
+      }
+    });
+  }
   getAllEntryData() {
     this.masterParamService.GetMasTerByPaymentReceipt().subscribe((rp: MasterParamModel[]) => {
       this.entryBatternList = rp;
@@ -250,7 +256,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       supplierName: [''],
       receiverName: ['', [Validators.required]],
       entryType: [null, Validators.required],
-      paymentMethods: [this.paymentMethods[0].payTypeId, [Validators.required]],
+      paymentMethods: [null, [Validators.required]],
       payDate: payDatePicker,
       bankAccount: [''],
       note: [''],
@@ -276,7 +282,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
           entryType: this.moneyReceipt.value.entryType,
           note: this.moneyReceipt.value.note,
           payDate: payDateData,
-          payType: this.paymentMethods.filter(x => x.payTypeId === this.moneyReceipt.value.paymentMethods)[0].payType,
+          payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
           payTypeID: this.moneyReceipt.value.paymentMethods,
           receiptNumber: this.moneyReceipt.value.receiptNumber,
           receiverName: this.moneyReceipt.value.receiverName,
@@ -310,8 +316,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.paymentMethods.filter(x => x.payTypeId === this.moneyReceipt.value.paymentMethods)[0].payType,
-        payTypeID: this.moneyReceipt.value.paymentMethods,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payTypeID: 1,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreatePaymentReceiptRequestList;
@@ -329,8 +335,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.paymentMethods.filter(x => x.payTypeId === this.moneyReceipt.value.paymentMethods)[0].payType,
-        payTypeID: this.moneyReceipt.value.paymentMethods,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
+        payTypeID: 1,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreatePaymentReceiptRequest;
@@ -348,8 +354,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.paymentMethods.filter(x => x.payTypeId === this.moneyReceipt.value.paymentMethods)[0].payType,
-        payTypeID: this.moneyReceipt.value.paymentMethods,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
+        payTypeID: 1,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
         id: this.moneyReceipt.value.id,

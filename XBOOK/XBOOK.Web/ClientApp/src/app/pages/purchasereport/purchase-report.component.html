@@ -170,16 +170,16 @@
                     <div class="row text-right">
                       <div class="col-2" style="text-align: left;">
                         <div class="card__title"
-                          style="color: #546D74;margin-left: 30px;inset-block: inherit;width: 300px;">
+                          style="color: rgb(16, 20, 20);margin-left: 30px;inset-block: inherit;width: 300px;">
                           {{ 'SALE.LIST.Total' | translate }}
                         </div>
                       </div>
 
 
-                      <div style="color: #546D74;font-family:Tahoma;">
+                      <div style="color: #546D74;">
                         <div class="totalAmount">
-                          <div *ngIf="group.totalAmount  !== 0" class="col-more-info"
-                            style="color: #546D74;font-family:Tahoma;">
+                          <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info"
+                          >
                             {{group.totalAmount  | currency:'VND':''}}
                           </div>
                           <div *ngIf="group.totalAmount   === 0">
@@ -188,9 +188,9 @@
                         </div>
                       </div>
 
-                      <div style="color: #546D74;font-family:Tahoma;">
+                      <div style="color: #546D74;">
                         <div class="totalDiscount">
-                          <div *ngIf="group.totalDiscount  !== 0" class="col-more-info">
+                          <div *ngIf="group.totalDiscount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                             {{group.totalDiscount  | currency:'VND':''}}
                           </div>
                           <div *ngIf="group.totalDiscount   === 0">
@@ -199,9 +199,9 @@
                         </div>
                       </div>
 
-                      <div style="color: #546D74;font-family:Tahoma;">
+                      <div style="color: #546D74;">
                         <div class="totalPayment">
-                          <div *ngIf="group.totalPayment  !== 0" class="col-more-info">
+                          <div *ngIf="group.totalPayment  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
                             {{group.totalPayment  | currency:'VND':''}}
                           </div>
                           <div *ngIf="group.totalPayment  === 0">

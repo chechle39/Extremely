@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
 import { ClientService } from '../_shared/services/client.service';
 import { Router } from '@angular/router';
 import { ClientView } from '../_shared/models/client/client-view.model';
@@ -45,6 +45,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     private router: Router) {
     super(injector);
   }
+  @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
@@ -116,9 +117,15 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     };
     // tslint:disable-next-line:variable-name
     this.clientService.GetFieldName(files).subscribe((rp: any) => {
+      this.paramTypeSelected.nativeElement.value = null;
       this.Datareport = rp;
       const createOrEditClientDialog = this.modalService.open(ImportClientComponent, AppConsts.modalOptionsCustomSize);
       createOrEditClientDialog.componentInstance.id = this.Datareport;
+      createOrEditClientDialog.result.then(result => {
+        if (result) {
+          this.refresh();
+        }
+      });
     }, (er) => {
         this.message.warning('Vui lòng chọn file có định dạng .csv');
     });

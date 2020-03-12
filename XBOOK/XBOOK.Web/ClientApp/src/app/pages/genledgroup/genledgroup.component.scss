@@ -1,5 +1,4 @@
 :host ::ng-deep .datatable-scroll {
-    margin-top: -13px;
     border-top:1px solid;
     border-top-width: 1000%;    
     border-top: none;
@@ -15,6 +14,10 @@
 }
 :host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
   white-space: unset !important;
+}
+
+:host ::ng-deep .datatable-header {
+  height: unset !important;
 }
 
 .total{

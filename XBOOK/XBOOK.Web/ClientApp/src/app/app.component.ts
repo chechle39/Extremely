@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
      private seoService: SeoService,
      public translate: TranslateService,
      ) {
-      translate.addLangs(['en', 'vi']);
+      translate.addLangs(['vi', 'en']);
       translate.setDefaultLang('vi');
   }
 

@@ -31,7 +31,7 @@
   "PRODUCT.FORM.CREATE.UNITPRICE.PLACEHOLDER": "Nhập đơn giá",
   "PRODUCT.FORM.CREATE.UNIT.PLACEHOLDER": "Nhập đơn vị tính",
   "PRODUCT.FORM.CREATE.UNIT.VALIDATION": "Vui lòng nhập đơn vị",
-
+  "INVOICE.FORM.CREATE.CLIENTNAME.PLACEHOLDER": "Tên khách hàng",
   
   "Invoice.Heder": "Hóa đơn",
   "Invoice.GRID.HEADER.": "Khách hàng/ Số hóa đơn",
@@ -123,11 +123,24 @@
   "SEARCH.AccountNumbercrsp":"TK Đối Ứng",
   "SEARCH.Currency":"Loại Tiền",
   "SEARCH.Time":"Thời Điểm",
-  "SEARCH.ProductService":"HÀNG HÓA/DỊCH VỤ",
+  "SEARCH.ProductService":"Hàng Hóa/Dịch Vụ",
   "SEARCH.Customer":"Khách Hàng",
   "SEARCH.Supplier":"Nhà Cung Cấp",
 
   "ROLE.LIST.HEADER.LABEL": "Quyền người dùng",
   "ROLE.LIST.GRID.HEADER.ROLENAME": "Tên quyền",
-  "ROLE.LIST.GRID.HEADER.ROLEID": "Mã quyền"
+  "ROLE.LIST.GRID.HEADER.ROLEID": "Mã quyền",
+
+  "PAYMENT.RECEIPT.HEADER": "Hóa đơn thanh toán",
+  "PAYMENT.RECEIPT.NEW.BUTTON": "Tạo mới hóa đơn",
+  "PAYMENT.RECEIPT.ALL.HEADER": "Tất cả hóa đơn",
+  "COMMON.SELECTED": "Chọn",
+  "PAYMENT.RECIPT.GRID.HEADER.CLIENT": "Khách hàng/ Hóa đơn",
+  "PAYMENT.RECIPT.GRID.HEADER.DATE.BANK": "Ngày/ Tài khoản ngân hàng",
+  "PAYMENT.RECIPT.GRID.HEADER.AMOUNT.PAYDATE": "Số tiền/ loại thanh toán",
+  "INVOICE.FORM.VIEW.PAYMENT.BANKACOUNT": "Tài khoản ngân hàng",
+  "INVOICE.FORM.VIEW.PAYMENT.NOTES": "Ghi chú",
+  "PAYMENT.RECIPT.GRID.HEADER.AMOUNT": "Số tiền",
+  "PAYMENT.CREATE.RECIPT": "Số hóa đơn",
+  "INVOICE.GRID.HEADER.NOTES": "Ghi chú"
 }

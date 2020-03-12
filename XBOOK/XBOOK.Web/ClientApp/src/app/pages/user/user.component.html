@@ -6,7 +6,7 @@
         <span class="card__title">{{ 'USER.LIST.HEADER.LABEL' | translate }}</span>
       </div>
       <div class="col-3 col-lg-4">
-        <div ngbDropdown>
+        <!-- <div ngbDropdown>
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
@@ -15,7 +15,7 @@
             <button class="dropdown-item"><span class="icon-export"></span>
               {{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="col-4 col-lg-4">
         <button (click)="createUser()" [disabled] = "this.authenticationService.hasPermission('User','create')"
@@ -87,7 +87,7 @@
             <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'" [flexGrow]="3"
               name="{{'USER.LIST.GRID.HEADER.USERNAME' | translate}}" prop="userName">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <span class="text-overflow--ellipsis">{{row.userName}}</span>
+                <span class="text-overflow--ellipsis">{{row.fullName}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column [cellClass]="'col-id'" [headerClass]="'col-id'" [flexGrow]="3"

@@ -118,7 +118,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Report Designer',
-        link: '/pages/print/disign',
+        link: '/pages/print/design',
       },
     ],
   },

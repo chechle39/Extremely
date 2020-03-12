@@ -21,8 +21,8 @@
         <div class="form-group" style="margin-left: -15px;">
           <select style="margin-top: -10px;" id="productName" formControlName="productName" class="form-control">
             <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
-              {{ method.value }}: {{i+1}}
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
+              {{ method.value }}
             </option>
           </select>
         </div>
@@ -36,8 +36,8 @@
         <div class="form-group" style="margin-left: -15px;">
           <select style="margin-top: -10px;" id="description" formControlName="description" class="form-control">
             <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
-              {{ method.value }}: {{i+1}}
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
+              {{ method.value }}
             </option>
           </select>
         </div>
@@ -51,8 +51,8 @@
         <div class="form-group" style="margin-left: -15px;">
           <select id="unitPrice" style="margin-top: -10px;" formControlName="unitPrice" class="form-control">
             <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
-              {{ method.value }}: {{i+1}}
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
+              {{ method.value }}
             </option>
           </select>
         </div>
@@ -66,8 +66,8 @@
         <div class="form-group" style="margin-left: -15px;">
           <select id="categoryID" style="margin-top: -10px;" formControlName="categoryID" class="form-control">
             <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
-              {{ method.value }}: {{i+1}}
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
+              {{ method.value }}
             </option>
           </select>
         </div>
@@ -81,8 +81,8 @@
         <div class="form-group" style="margin-left: -15px;">
           <select id="Unit" style="margin-top: -10px;" formControlName="Unit" class="form-control">
             <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i">
-              {{ method.value }}: {{i+1}}
+            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
+              {{ method.value }}
             </option>
           </select>
         </div>

@@ -42,22 +42,26 @@ export class ImportProductComponent extends AppComponentBase implements OnInit {
     this.FieldName = this.id[0];
     this.Datareport = this.id;
     // tslint:disable-next-line:prefer-for-of
-    for (let j = 0; j < this.FieldName.length; j++) {
+    for (let j = 1; j < this.FieldName.length; j++) {
+      console.log(this.FieldName)
+      if (this.FieldName[j] !== "" ){
       const data = {
         value: this.FieldName[j],
       };
-      this.SelectedFieldName.push(data);
+      if (data !== null || data !== undefined){
+        this.SelectedFieldName.push(data);
+      }  
+    }       
     }
 
   }
   createSupplierFormGroup() {
     return this.fb.group({
-      productID: [null],
-      productName: [null],
+      productName: [null, [Validators.required]],
       description: [null],
-      unitPrice: [null],
+      unitPrice: [null, [Validators.required]],
       categoryID: [null],
-      Unit: [null],
+      Unit: [null,[Validators.required]],
     });
   }
   save(e: FormGroup): void {

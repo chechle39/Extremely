@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
 import { ProductService } from '../_shared/services/product.service';
 import { Router } from '@angular/router';
 import { ProductView } from '../_shared/models/product/product-view.model';
@@ -45,7 +45,7 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     private translate: TranslateService) {
     super(injector);
   }
-
+  @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   protected list(
     request: PagedProductsRequestDto,
     pageNumber: number,
@@ -90,10 +90,16 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     // tslint:disable-next-line:variable-name
     // tslint:disable-next-line:variable-name
     this.productService.GetFieldNameProduct(files).subscribe((rp: any) => {
+      this.paramTypeSelected.nativeElement.value = null;
       this.Datareport = rp;
       const createOrEditClientDialog = this.modalService.open(ImportProductComponent
         , AppConsts.modalOptionsCustomSize);
       createOrEditClientDialog.componentInstance.id = this.Datareport;
+      createOrEditClientDialog.result.then(result => {
+        if (result) {
+          this.refresh();
+        }
+      });
     }, (er) => {
       this.message.warning('Vui lòng chọn file có định dạng .csv');
   });
