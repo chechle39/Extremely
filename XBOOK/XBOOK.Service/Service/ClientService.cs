@@ -42,7 +42,7 @@ namespace XBOOK.Service.Service
                 note = request.Note,
                 Tag = request.Tag,
                 taxCode = request.TaxCode,
-                bankAccount = request.bankAccount
+                bankAccount = request.BankAccount
             };
             _clientUowRepository.AddData(client);
             _uow.SaveChanges();
@@ -63,7 +63,7 @@ namespace XBOOK.Service.Service
                     note = item.Note,
                     Tag = item.Tag,
                     taxCode = item.TaxCode,
-                    bankAccount = item.bankAccount
+                    bankAccount = item.BankAccount
                 };
                 _clientUowRepository.AddData(client);
                 _uow.SaveChanges();               
@@ -128,7 +128,7 @@ namespace XBOOK.Service.Service
             var csv = (from item in listGen
                        select new object[]
                        {
-                          item.ClientId,
+                          item.ClientID,
                           item.ClientName,
                           item.Address,
                           item.TaxCode,
@@ -136,7 +136,7 @@ namespace XBOOK.Service.Service
                           item.ContactName,
                           item.Email,
                           item.Note,
-                          item.bankAccount
+                          item.BankAccount
                        }).ToList();
             var csvData = new StringBuilder();
 

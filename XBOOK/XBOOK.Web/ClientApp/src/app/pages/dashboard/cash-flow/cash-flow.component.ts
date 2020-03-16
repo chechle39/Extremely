@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { thousandSuffix } from '../../../shared/utils/util';
 
 @Component({
   selector: 'xb-cash-flow',
@@ -25,11 +26,11 @@ export class CashFlowComponent implements OnInit {
         datasets: [
           {
             label: 'Tiền Thu',
-            value: 41,
+            value: 41000000000,
           },
           {
             label: 'Tiền Chi',
-            value: 84,
+            value: 84000000000,
           },
         ],
       },
@@ -38,11 +39,11 @@ export class CashFlowComponent implements OnInit {
         datasets: [
           {
             label: 'Tiền Thu',
-            value: 65,
+            value: 65000000000,
           },
           {
             label: 'Tiền Chi',
-            value: 12,
+            value: 12000000000,
           },
         ],
       },
@@ -51,11 +52,11 @@ export class CashFlowComponent implements OnInit {
         datasets: [
           {
             label: 'Tiền Thu',
-            value: 33,
+            value: 33000000000,
           },
           {
             label: 'Tiền Chi',
-            value: 28,
+            value: 28000000000,
           },
         ],
       },
@@ -64,11 +65,11 @@ export class CashFlowComponent implements OnInit {
         datasets: [
           {
             label: 'Tiền Thu',
-            value: 75,
+            value: 75000000000,
           },
           {
             label: 'Tiền Chi',
-            value: 42,
+            value: 42000000000,
           },
         ],
       },
@@ -77,11 +78,11 @@ export class CashFlowComponent implements OnInit {
         datasets: [
           {
             label: 'Tiền Thu',
-            value: 4,
+            value: 44000000000,
           },
           {
             label: 'Tiền Chi',
-            value: 55,
+            value: 55000000000,
           },
         ],
       },
@@ -172,31 +173,6 @@ export class CashFlowComponent implements OnInit {
   }
 
   private getOption() {
-    let isChartInit = true;
-
-    /**
-     * Show data on top of bar chart
-     * @param chartReference ,
-     */
-    function displayDatasetCallback(chartReference) {
-      const chartInstance = chartReference.chart,
-        ctx = chartReference.chart.ctx;
-      ctx.font = '1rem Montserrat';
-      ctx.fillStyle = '#212529';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      chartReference.data.datasets.forEach(function (dataset, i) {
-        const isLegendHidden = chartReference.legend.legendItems[i].hidden;
-        if (!isLegendHidden) {
-          const meta = chartInstance.controller.getDatasetMeta(i);
-          meta.data.forEach(function (bar, index) {
-            const data = dataset.data[index];
-            ctx.fillText(data, bar._model.x, bar._model.y - 1);
-          });
-        }
-      });
-    }
-
     return {
       responsive: true,
       maintainAspectRatio: false,
@@ -209,9 +185,7 @@ export class CashFlowComponent implements OnInit {
         xAxes: [
           {
             gridLines: {
-              display: false,
-              color: 'blue',
-              drawBorder: false,
+              drawOnChartArea: false,
             },
             ticks: {
               fontColor: 'black',
@@ -221,11 +195,16 @@ export class CashFlowComponent implements OnInit {
         yAxes: [
           {
             gridLines: {
-              display: false,
-              drawBorder: false,
+              drawOnChartArea: false,
             },
             ticks: {
-              display: false,
+              fontColor: '#000',
+              fontSize: 8,
+              fontFamily: 'Montserrat',
+              beginAtZero: true,
+              callback: function (label, index, labels) {
+                return thousandSuffix(label);
+              },
             },
           },
         ],
@@ -234,6 +213,13 @@ export class CashFlowComponent implements OnInit {
         position: 'top',
         labels: {
           fontColor: 'black',
+        },
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItems, data) {
+            return thousandSuffix(tooltipItems.yLabel);
+          },
         },
       },
       layout: {
@@ -245,20 +231,6 @@ export class CashFlowComponent implements OnInit {
         },
       },
       events: ['mousemove', 'click'],
-      animation: {
-        easing: 'easeOutCirc',
-        onComplete: function () {
-          if (isChartInit) {
-            const chartReference = this;
-            displayDatasetCallback(chartReference);
-            isChartInit = false;
-          }
-        },
-        onProgress: function () {
-          const chartReference = this;
-          displayDatasetCallback(chartReference);
-        },
-      },
     };
   }
 }

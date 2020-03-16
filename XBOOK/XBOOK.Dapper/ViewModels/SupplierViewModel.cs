@@ -12,5 +12,10 @@ namespace XBOOK.Dapper.ViewModels
         public string Note { get; set; }
         public decimal Outstanding { get; set; }
         public decimal Overdue { get; set; }
+        public string TaxCode { get; set; }
+        public string Tag { get; set; }
+        public string ContactName { get; set; }
+        public string Email { get; set; }
+        public string BankAccount { get; set; }
     }
 }

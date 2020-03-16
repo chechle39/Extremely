@@ -40,6 +40,7 @@ import {
    NbButtonModule,
    NbActionsModule} from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
+import { MasterParamService } from '../_shared/services/masterparam.service';
 
 const components = [
   BuyInvoicesComponent,
@@ -88,6 +89,7 @@ const components = [
     Payment2Service,
     CurrencyPipe,
     NgbActiveModal,
+    MasterParamService,
     TaxService],
   entryComponents: [
     AddPayment2Component,

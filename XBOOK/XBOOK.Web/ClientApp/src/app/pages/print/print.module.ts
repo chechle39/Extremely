@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { PrintService } from '../_shared/services/print.service';
+import { PrintRoutingModule } from './print-routing.module';
 @NgModule({
   declarations: [PrintComponent, SelectReportComponent],
   entryComponents: [SelectReportComponent],
@@ -23,6 +24,7 @@ import { PrintService } from '../_shared/services/print.service';
     SharedModule,
     ReactiveFormsModule,
     MultiSelectModule,
+    PrintRoutingModule,
   ],
   providers: [PrintService]
 })

@@ -15,6 +15,10 @@ export class ClientViewModel {
   clientName: string;
   address: string;
   note: string;
+  taxCode: number;
+  tag: number;
+  contactName: string;
+  email: string;
   outstanding: number;
   overdue: number;
   bankAccount: string;

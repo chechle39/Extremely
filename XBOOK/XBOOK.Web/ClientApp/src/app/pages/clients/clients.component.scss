@@ -12,6 +12,8 @@
 :host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-row  {
   padding-top: 3px;
   height: 47px;
+  display: flex;
+  align-items: center;
   @media screen and (max-width: 767px){
     height: 57px;
   }

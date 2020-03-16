@@ -32,6 +32,8 @@ import * as _ from 'lodash';
 import { AppConsts } from '../../../coreapp/app.consts';
 import { AddTaxComponent } from './add-tax/add-tax.component';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
+import { ngbTypeheadScrollToActiveItem } from '../../../shared/utils/util';
+
 @Component({
   selector: 'xb-create-invoice',
   styleUrls: ['./create-invoice.component.scss'],
@@ -1212,4 +1214,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     }
   }
 
+  typeheadScrollHandler(e) {
+    ngbTypeheadScrollToActiveItem(e);
+  }
 }

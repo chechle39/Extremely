@@ -1,7 +1,7 @@
 <nb-card style="min-height: 70vh;">
   <nb-card-header>
-    <span style="font-size: 1.3rem;" class="font-weight-normal" >Buy INVOICES</span>
-    <button  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()' >New Invoice</button>
+    <span style="font-size: 1.3rem;" class="font-weight-normal" >{{'BUY.INVOICE.HEADER' | translate}}</span>
+    <button  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
   </nb-card-header>
   <nb-card-body>
     <div class="row">
@@ -30,26 +30,26 @@
 
     <div class="row">
       <div class="col-md-4 col-6" style="padding-top: 6px;">
-        <div class="label-blue" style="font-size: 1rem;">All Buy Invoices <span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span>
+        <div class="label-blue" style="font-size: 1rem;">{{'BUY.INVOICE.GRID.HEADER.ALL' | translate}}<span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span>
         </div>
       </div>
       <div class="col-md-3 col-6 text-md-left text-right">
         <div ngbDropdown>
           <button class="btn btn-flat mr-1 card__button-bulk-action" id="bulkActions" ngbDropdownToggle>
-              Bulk Actions
+              {{'COMMON.MOREACTION' | translate}}
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i> Duplicate</button>
-            <button class="dropdown-item" [disabled]="true"><i class="fa fa-paper-plane"></i> Mark as Send</button>
-            <button class="dropdown-item" (click)="addPayment()"><i class="fa fa-dollar"></i> Add Receipt</button>
-            <button class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i> Delete</button>
+            <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i>{{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
+            <button class="dropdown-item" [disabled]="true"><i class="fa fa-paper-plane"></i>{{'BUY.INVOICE.GRID.MARK.SEND' | translate}}</button>
+            <button class="dropdown-item" (click)="addPayment()"><i class="fa fa-dollar"></i>{{'BUY.INVOICE.GRID.ADD.RECIPT' | translate}}</button>
+            <button class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
           </div>
         </div>
       </div>
       <div class="col-md-5 float-right">
         <div class="position-relative has-icon-left input-group">
           <input type="text" [(ngModel)]="keyword" name="keyword" (keyup)="refresh()" autocomplete="off" class="form-control round pl-4"
-            placeholder="Search">
+            placeholder="{{'COMMON.ACTION.SEARCH' | translate}}">
           <div class="form-control-position" style="right: auto;z-index: 1000;">
             <i class="ft-search" (click)="refresh()"></i>
           </div>
@@ -96,7 +96,7 @@
                         <div class="custom-control custom-radio d-inline-block">
                           <input type="radio" id="issueDate" value="IssueDate" name="issueDate"  formControlName="issueDate"
                             class="custom-control-input">
-                          <label class="custom-control-label custom-label" for="issueDate"> Issued Date</label>
+                          <label class="custom-control-label custom-label" for="issueDate">{{'BUY.INVOICE.FROM.SEARCH.ISSUED' | translate}}</label>
                         </div>
                       </div>
                     </div>
@@ -105,23 +105,19 @@
                         <div class="custom-control custom-radio d-inline-block">
                           <input type="radio" id="DueDate" value="DueDate" name="issueDate"  formControlName="issueDate"
                             class="custom-control-input">
-                          <label class="custom-control-label custom-label" for="DueDate"> Due Date</label>
+                          <label class="custom-control-label custom-label" for="DueDate">{{'BUY.INVOICE.FROM.SEARCH.DUE' | translate}}</label>
                         </div>
                       </div>
                     </div>
 
                   </div>
                   <ngb-alert [dismissible]="false" *ngIf="isSubmitted && searchForm.invalid"
-                    class="alert alert-danger" role="alert" type="danger">Please select either value.
+                    class="alert alert-danger" role="alert" type="danger">{{'JUOURNAL.SEARCH.FROM' | translate}}
                   </ngb-alert>
                 </div>
                 <div class="form-actions right mt-1">
-                  <button (click)="clearFilter(searchForm)" class="btn btn-raised mr-1 btn-secondary"> <i
-                      class="ft-x"></i>
-                    Clear</button>
-                  <button type="submit" class="btn btn-raised mr-1 btn-success">
-                    <i class="ft-check-square"></i> Apply
-                  </button>
+                  <button (click)="clearFilter(searchForm)" class="btn btn-raised mr-1 btn-secondary"> <i class="ft-x"></i>{{'COMMON.BUTTON.CLEAR' | translate}}</button>
+                  <button type="submit" class="btn btn-raised mr-1 btn-success"><i class="ft-check-square"></i>{{'COMMON.BUTTON.APPLY' | translate}}</button>
                 </div>
               </form>
             </div>
@@ -160,11 +156,11 @@
 
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [sortable]="false" name="Supplier/ Invoice Number " [cellClass]="'col-id'"
+            <ngx-datatable-column [sortable]="false" name="{{'BUY.INVOICE.GRID.SUPPLIER.INVOICE' | translate}}" [cellClass]="'col-id'"
               [headerClass]="'col-id'">
               <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
-                <span class="column-header" style="cursor: pointer" (click)="sortClient()">Supplier/</span>
-                <span class="column-header" style="cursor: pointer"> Invoice Number</span>
+                <span class="column-header" style="cursor: pointer" (click)="sortClient()">{{'BUY.INVOICE.GRID.SUPPLIER' | translate}}</span>
+                <span class="column-header" style="cursor: pointer">{{'BUY.INVOICE.GRID.INVOICE' | translate}}</span>
                 <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
                   [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
                   [class.datatable-icon-down]="sortDir === 'desc'"></span>
@@ -179,12 +175,12 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="note" name="Notes" [cellClass]="'col-id'" [headerClass]="'col-id'">
+            <ngx-datatable-column prop="note" name="{{'INVOICE.GRID.HEADER.NOTES' | translate}}" [cellClass]="'col-id'" [headerClass]="'col-id'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-more-info">{{row.note}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="issueDate" name="Issued/ Duce Date" [cellClass]="'col-center'"
+            <ngx-datatable-column prop="issueDate" name="{{'BUY.INVOICE.GRID.ISSUED.DUE' | translate}}" [cellClass]="'col-center'"
               [headerClass]="'col-center'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-center">{{row.issueDate | date: 'dd/MM/yyyy'}}</div>
@@ -193,7 +189,7 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="amountPaid" name="Amount/ Amount Paid" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="amountPaid" name="{{'BUY.INVOICE.GRID.AMOUNT.AMOUNTPAID' | translate}}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -233,7 +229,7 @@
                     </div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3 text-center">
-                      <b>Grant Total</b>
+                      <b>{{'BUY.INVOICE.GRID.GRANT.TOTAL' | translate}}</b>
                     </div>
                     <div class="col-md-3" style="padding-right:35px">
                       <b>{{getGrantTotal()| currency:'VND':''}}</b>

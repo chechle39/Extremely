@@ -35,6 +35,7 @@ import { AddPaymentComponent } from './create-invoice/payment/add-payment/add-pa
 import { ListPaymentComponent } from './create-invoice/payment/list-payment/list-payment.component';
 import { CreateMoneyReceiptComponent } from '../moneyreceipt/create-money-receipt/create-money-receipt.component';
 import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
+import { MasterParamService } from '../_shared/services/masterparam.service';
 const components = [
   InvoicesComponent,
   ListInvoiceComponent,
@@ -81,6 +82,7 @@ const components = [
     ProductService,
     PaymentService,
     CurrencyPipe,
+    MasterParamService,
     NgbActiveModal,
     TaxService],
 })

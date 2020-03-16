@@ -17,7 +17,9 @@
     margin-bottom: -30px;
   }
 
-  
+  :host ::ng-deep .datatable-header {
+    height: unset !important;
+  }
   
   :host ::ng-deep .datatable-body-row {
     padding-top: 0.35rem !important;

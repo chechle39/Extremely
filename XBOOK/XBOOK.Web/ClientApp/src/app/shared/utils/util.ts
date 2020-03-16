@@ -54,7 +54,7 @@ if (typeof Element !== 'undefined' && !Element.prototype.closest) {
     Element.prototype.matches = (Element.prototype as any).msMatchesSelector || Element.prototype.webkitMatchesSelector;
   }
 
-  Element.prototype.closest = function(s: string) {
+  Element.prototype.closest = function (s: string) {
     let el = this;
     if (!document.documentElement.contains(el)) {
       return null;
@@ -75,4 +75,33 @@ export function closest(element: HTMLElement, selector): HTMLElement {
   }
 
   return element.closest(selector);
+}
+
+export function thousandSuffix(value: any) {
+  // convert to string
+  value += '';
+  return value
+    .split('')
+    .reverse()
+    .map((letter, index, Array) => {
+      if (index !== 0 && index % 3 === 0) {
+        letter += ',';
+      }
+      return letter;
+    })
+    .reverse()
+    .join('');
+}
+
+export function ngbTypeheadScrollToActiveItem(e) {
+  setTimeout(() => {
+    const activeItem = e.target.nextElementSibling.getElementsByClassName('active')[0];
+    if (activeItem) {
+      const option = {
+        behavior: 'smooth',
+        block: 'nearest',
+      };
+      activeItem.scrollIntoView(option);
+    }
+  });
 }

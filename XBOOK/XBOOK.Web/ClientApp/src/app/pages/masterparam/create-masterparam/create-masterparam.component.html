@@ -62,6 +62,6 @@
     <button type="button" (click)="close()" class="btn btn-raised btn-secondary mr-1">
       Cancel
     </button>
-    <button [disabled]="taxForm.invalid" type="submit" class="btn btn-raised btn-success">Apply</button>
+    <button [disabled]="taxForm.invalid" type="submit" class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.APPLY' | translate }}</button>
   </div>
 </form>

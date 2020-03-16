@@ -23,6 +23,16 @@
     right: 0;
     left: 0;
     overflow: hidden;
+    font-size: 1rem;
+    @media screen and (max-width: 1200px){
+        font-size: 0.8rem;
+    }
+    @media screen and (max-width: 992px){
+        font-size: 1.5rem;
+    }
+    @media screen and (max-width: 575px){
+        font-size: 1.5rem;
+    }
 }
 
 .sale-chart__button-create{
@@ -39,5 +49,8 @@
             color: #FFF;
         }
         
+    }
+    chart{
+        height: 100%;
     }
 }

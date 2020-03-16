@@ -2,15 +2,15 @@
 {
     public class ClientCreateRequet
     {
-        public int ClientId { get; set; }
+        public int ClientID { get; set; }
         public string ClientName { get; set; }
         public string Address { get; set; }
+        public string Note { get; set; }
         public string TaxCode { get; set; }
+        public string Email { get; set; }
         public string Tag { get; set; }
         public string ContactName { get; set; }
-        public string Email { get; set; }
-        public string Note { get; set; }
-        public string bankAccount { get; set; }
+        public string BankAccount { get; set; }
     }
     public class ClientSerchRequest
     {

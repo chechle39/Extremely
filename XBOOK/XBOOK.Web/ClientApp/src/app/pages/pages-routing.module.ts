@@ -1,9 +1,9 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
+import { AuthenticationGuard } from '../coreapp/auth/authentication.guard';
 import { PrintComponent } from './print/print.component';
 import { extract } from '../coreapp/services/i18n.service';
-import { AuthenticationGuard } from '../coreapp/auth/authentication.guard';
 
 const routes: Routes = [
   {
@@ -11,11 +11,16 @@ const routes: Routes = [
   component: PagesComponent,
   canActivate: [AuthenticationGuard],
   children: [
-    { path: 'print/:key', component: PrintComponent, data: { title: extract('print') } },
+    // { path: 'print/:key', component: PrintComponent, data: { title: extract('print') } },
     {
       path: 'invoice',
       loadChildren: () => import('./invoices/invoice.module')
         .then(m => m.InvoicesModule),
+    },
+    {
+      path: 'print',
+      loadChildren: () => import('./print/print.module')
+        .then(m => m.PrintModule),
     },
     {
       path: 'clients',

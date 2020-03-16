@@ -18,7 +18,7 @@ namespace XBOOK.Service.AutoMapper
            .ConstructUsing(c => new Client(c.ClientId, c.Address, c.ClientName, c.ContactName, c.Email,c.Note,c.Tag,c.TaxCode, c.bankAccount));
 
             CreateMap<ClientCreateRequet, Client>()
-           .ConstructUsing(c => new Client(c.ClientId, c.Address, c.ClientName, c.ContactName, c.Email, c.Note, c.Tag, c.TaxCode, c.bankAccount));
+           .ConstructUsing(c => new Client(c.ClientID, c.Address, c.ClientName, c.ContactName, c.Email, c.Note, c.Tag, c.TaxCode, c.BankAccount));
 
             CreateMap<SaleInvoiceViewModel, SaleInvoice>()
             .ConstructUsing(x => new SaleInvoice(x.InvoiceId,x.InvoiceNumber,x.InvoiceSerial,x.IssueDate,

@@ -3,13 +3,13 @@
     <div class=" modal-header">
         <div class="row"></div>
         <div class="col-12">
-            <h5 style="margin-left: -15px;" class="modal-title">Tìm Kiếm</h5>
+            <h5 style="margin-left: -15px;" class="modal-title">{{ 'SEARCH.TITLE' | translate }}</h5>
         </div>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-12">
-                <span class="modal-title">KHOẢNG THỜI GIAN</span>
+                <span class="modal-title">{{ 'SEARCH.AmountofTime' | translate }}</span>
             </div>
             <div class="form-group col-12 mb-2">
                 <select (change)="onChange($event)" id="genLedMethods" class="form-control" formControlName="genLedMethods"style="position: relative;margin-bottom: 20px;">
@@ -21,7 +21,7 @@
         </div>
         <div class="row" *ngIf = "case6 === 6" style="margin-top: -20px;position: relative;">
             <div class="col-12">
-                <span class="modal-title">TÙY CHỌN THỜI GIAN</span>
+                <span class="modal-title">{{ 'SEARCH.SelectofTime' | translate }}</span>
             </div>
             <div class="form-group col-6 mb-2">
                 <div class=" input-group">
@@ -49,7 +49,7 @@
 
         <div class="row mb-2" style="position: relative;margin-top: -19px;">
             <div class="form-group col-6 mb-2">                        
-                    <span style="margin-bottom: 10px;width: 200px;" class="modal-title">TÀI KHOẢN</span>               
+                    <span style="margin-bottom: 10px;width: 200px;" class="modal-title">{{ 'SEARCH.AccountNumber' | translate }}</span>               
             </div>                        
             <div class="form-group col-12 mb-2" style="margin-top: -15px;">
                 <select id="acountNumberMethod" style="margin-bottom: -3px;" class="form-control" formControlName="acountNumberMethod">
@@ -63,7 +63,7 @@
 
         <div class="row" style="position: relative;margin-top: -10px;">
                 <div class="col-12 mb-3">
-                    <span class="modal-title">KHÁCH HÀNG</span>
+                    <span class="modal-title">{{ 'SEARCH.Customer' | translate }}</span>
                 </div>                      
             <div class="form-group col-12 mb-0" style="margin-top: -24px;">
                 <p-multiSelect [options]="cars1"  formControlName="acountNumberMethod1" [panelStyle]="{minWidth:'12em'}">
@@ -99,7 +99,7 @@
 
 
     <div class="modal-footer">
-        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1"> Cancel</button>
-        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">Áp dụng</button>
+        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1"> {{ 'COMMON.BUTTON.CANCEL' | translate }}</button>
+        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.SAVE' | translate }</button>
     </div>
 </form>

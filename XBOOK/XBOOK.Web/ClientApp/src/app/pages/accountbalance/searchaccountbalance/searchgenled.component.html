@@ -3,13 +3,13 @@
     <div class=" modal-header">
         <div class="row"></div>
         <div class="col-12">
-            <h5 style="margin-left: -15px;" class="modal-title">Tìm Kiếm</h5>
+            <h5 style="margin-left: -15px;" class="modal-title">{{ 'SEARCH.TITLE' | translate }}</h5>
         </div>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-12">
-                <span class="modal-title font-weight-300">KHOẢNG THỜI GIAN</span>
+                <span class="modal-title font-weight-300">{{ 'SEARCH.AmountofTime' | translate }}</span>
             </div>
             <div class="form-group col-12 mb-2">
                 <select (change)="onChange($event)" id="genLedMethods" class="form-control" formControlName="genLedMethods"style="position: relative;margin-bottom: 20px;">
@@ -21,7 +21,7 @@
         </div>
         <div class="row" *ngIf = "case6 === 6" style="margin-top: -20px;position: relative;">
             <div class="col-12">
-                <span class="modal-title font-weight-300">TÙY CHỌN THỜI GIAN</span>
+                <span class="modal-title font-weight-300">{{ 'SEARCH.SelectofTime' | translate }}</span>
             </div>
             <div class="form-group col-6 mb-2">
                 <div class=" input-group">
@@ -86,7 +86,7 @@
         </div>
         <div class="row" style="margin-top: 0px;">
             <div class="col-12">
-                <span class="modal-title  font-weight-300">LOẠI TIỀN</span>
+                <span class="modal-title  font-weight-300">{{ 'SEARCH.Currency' | translate }}</span>
             </div>
             <div class="form-group col-12 mb-2">
                 <select id="currencyMethod" class="form-control" formControlName="currencyMethod">
@@ -101,7 +101,7 @@
 
 
     <div class="modal-footer">
-        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1"> Cancel</button>
-        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">Áp dụng</button>
+        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1"> {{ 'COMMON.BUTTON.CANCEL' | translate }}</button>
+        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.SAVE' | translate }}</button>
     </div>
 </form>

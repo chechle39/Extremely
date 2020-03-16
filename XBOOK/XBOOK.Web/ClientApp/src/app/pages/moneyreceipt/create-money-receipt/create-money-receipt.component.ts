@@ -335,7 +335,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         entryType: this.moneyReceipt.value.entryType,
         note: this.moneyReceipt.value.note,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
-        payTypeID: this.moneyReceipt.value.paymentMethods,
+        payTypeID: 1,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
         id: this.moneyReceipt.value.id,

@@ -2,33 +2,32 @@
     <nb-card-header>
         <div class="row">
             <div class="col-6">
-                <span class="card__title">Journal Entries</span>
+                <span class="card__title">{{'JUOURNAL.HEADER.ENTRY' | translate}}</span>
             </div>
             <div class="col-6"> <a (click)='redirectToCreateNewInvoice()'
-                    class="btn btn-raised mr-1 btn-success float-right">New Entries</a></div>
+                    class="btn btn-raised mr-1 btn-success float-right">{{'JUOURNAL.HEADER.BUTTON' | translate}}</a></div>
         </div>
     </nb-card-header>
     <nb-card-body>
         <div class="row">
             <div class="col-lg-4 col-md-4 col-6" style="padding-top: 6px;">
-                <div class="label-blue">All Entry <span *ngIf="selected.length > 0">> Selected
+                <div class="label-blue">{{'JUOURNAL.GRID.ALL.ENTRY' | translate}} <span *ngIf="selected.length > 0">> {{'COMMON.SELECTED' | translate}}
                         ({{selected.length}})</span>
                 </div>
             </div>
             <div class="col-lg-3 col-md-4 col-6 text-right text-md-left">
                 <div ngbDropdown>
-                    <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>Chức năng
-                        chung</button>
+                    <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}</button>
                     <div ngbDropdownMenu aria-labelledby="bulkActions">
-                        <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i> Duplicate</button>
-                        <button class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i> Delete</button>
+                        <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i> {{ 'COMMON.BUTTON.DUPLICATE' | translate }}</button>
+                        <button class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i> {{ 'COMMON.ACTION.DELETE' | translate }}</button>
                     </div>
                 </div>
             </div>
             <div class="col-lg-5 col-md-4 col-12 float-right">
                 <div class="position-relative has-icon-left input-group">
                     <input type="text" [(ngModel)]="keyword" name="keyword" (keyup)="refresh()" autocomplete="off"
-                        class="form-control round pl-4" placeholder="Search">
+                        class="form-control round pl-4" placeholder="{{'COMMON.ACTION.SEARCH' | translate}}">
                     <div class="form-control-position" style="right: auto;z-index: 1000;">
                         <i class="ft-search" (click)="refresh()"></i>
                     </div>
@@ -73,16 +72,15 @@
                                         </div>
                                     </div>
                                     <ngb-alert [dismissible]="false" *ngIf="isSubmitted && searchForm.invalid"
-                                        class="alert alert-danger" role="alert" type="danger">Please select either
-                                        value.
+                                        class="alert alert-danger" role="alert" type="danger">{{ 'JUOURNAL.SEARCH.FROM' | translate }}
                                     </ngb-alert>
                                 </div>
                                 <div class="form-actions right mt-1">
                                     <button (click)="clearFilter(searchForm)" class="btn btn-raised mr-1 btn-secondary">
                                         <i class="ft-x"></i>
-                                        Clear</button>
+                                        {{ 'COMMON.BUTTON.CLEAR' | translate }}</button>
                                     <button type="submit" class="btn btn-raised mr-1 btn-success">
-                                        <i class="ft-check-square"></i> Apply
+                                        <i class="ft-check-square"></i> {{ 'COMMON.BUTTON.APPLY' | translate }}
                                     </button>
                                 </div>
                             </form>
@@ -121,12 +119,12 @@
 
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [sortable]="false" name="Entry/ Object" [cellClass]="'col-id'"
+                    <ngx-datatable-column [sortable]="false" name="{{'INVOICE.GRID.HEADER.NOTES' | translate}}" [cellClass]="'col-id'"
                         [headerClass]="'col-id'">
                         <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
                             ngx-datatable-header-template>
-                            <span class="column-header" style="cursor: pointer" (click)="sortClient()">Entry/</span>
-                            <span class="column-header" style="cursor: pointer"> Object</span>
+                            <span class="column-header" style="cursor: pointer" (click)="sortClient()">{{ 'JUOURNAL.GRID.ENTRY' | translate }}</span>
+                            <span class="column-header" style="cursor: pointer"> {{ 'JUOURNAL.GRID.OBJECT' | translate }}</span>
                             <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
                                 [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
                                 [class.datatable-icon-down]="sortDir === 'desc'"></span>
@@ -141,13 +139,13 @@
                             </div>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column prop="note" name="Description" [cellClass]="'col-id'"
+                    <ngx-datatable-column prop="note" name="{{'PRODUCT.FORM.CREATE.DESCRIPTION' | translate}}" [cellClass]="'col-id'"
                         [headerClass]="'col-id'">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <div class="col-more-info">{{row.description}}</div>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column prop="issueDate" name="Date / Object" [cellClass]="'col-right'"
+                    <ngx-datatable-column prop="issueDate" name="{{'JUOURNAL.GRID.DATE.OBJECT' | translate}}" [cellClass]="'col-right'"
                         [headerClass]="'col-right'">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <div class="col-right">{{row.dateCreate | date: 'dd/MM/yyyy'}}</div>

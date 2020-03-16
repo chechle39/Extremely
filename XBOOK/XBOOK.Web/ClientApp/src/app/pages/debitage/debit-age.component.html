@@ -8,7 +8,6 @@
             <img src="../../../assets/search.png" class="button__search"
               alt="search General Ledger"></div>
         </div>
-        <br>
         <div class="btn btn-flat mr-1 p-0 mb-0" style="color: #546D74;">
           <div *ngIf="case==null">Hôm nay: {{today}}</div>
           <div *ngIf="case=== 1">Hôm nay: {{startDay}} </div>
@@ -42,7 +41,7 @@
       
       <!-- data -->
       <div class="row">
-        <hr class="mt-0" width="98%" style="height: 2px;;background: #6A0888;"/>
+        <hr class="my-0" width="98%" style="height: 2px;;background: #6A0888;"/>
         <div class="col-md-12">
    
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="debitageViews"

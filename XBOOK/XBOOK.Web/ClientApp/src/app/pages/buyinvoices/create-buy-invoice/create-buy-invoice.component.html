@@ -4,10 +4,10 @@
       <div class="row w-100 mx-0 px-4 d-flex justify-content-between">
         <h1 class="invoice__title float-left">{{title}}</h1>
         <div class="float-right">
-          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">Print</button>
-          <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">Cancel</button>
+          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.ACTION.PRINT' | translate}}</button>
+          <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
           <button *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
-          <button *ngIf="viewMode" class="btn btn-raised btn-success" (click)="redirectToEditInvoice()">Edit</button>
+          <button *ngIf="viewMode" class="btn btn-raised btn-success" (click)="redirectToEditInvoice()">{{'COMMON.ACTION.EDIT' |translate}}</button>
         </div>
       </div>
 
@@ -57,7 +57,7 @@
                       </div>
                       <div class="col-sm-4">
                         <input style="opacity: unset" kendotextbox id="yourTaxCode" formControlName="yourTaxCode"
-                          [readOnly]="true" placeholder="Tax code" [value]="taxCode"
+                          [readOnly]="true" placeholder="{{'INVOICE.FORM.CREATE.TAXCODEHEADER.PLACEHOLDER' | translate}}" [value]="taxCode"
                           class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__font--medium" nfNoSpaces
                           maxlength="250">
                       </div>
@@ -66,7 +66,7 @@
                 </div> <!-- end row -->
                 <div class="row my-3">
                   <div class="col-12 col-md-6">
-                    <p class="mb-0 invoice__input__title invoice__text--height-normal">Billed To &nbsp;&nbsp;<a
+                    <p class="mb-0 invoice__input__title invoice__text--height-normal">{{'BUY.INVOICE.CREATE.BILL' | translate}} &nbsp;&nbsp;<a
                         (click)="editClient()" *ngIf="canActionClient()" class="icon-action">
                         <span class="icon-edit1"></span>
                       </a>
@@ -86,7 +86,8 @@
                             [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter"
                             id="contactName" formControlName="contactName" (selectItem)="selectedItem($event)"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal pl-0 invoice__input__textbox--disable"
-                            placeholder="Supplier Contact Name" nfNoSpaces maxlength="250" #instance="ngbTypeahead"
+                            placeholder="{{'BUY.INVOICE.CREATE.SUPPLIER.CONTACT.NAME' | translate}}" nfNoSpaces maxlength="250" #instance="ngbTypeahead"
+                            (keydown)="typeheadScrollHandler($event)" placement="bottom"
                             [ngClass]="{'border-0':invoiceForm.controls.contactName.touched === false || invoiceForm.controls.contactName.invalid === false}" />
 
                           <ng-template #customItemTemplate let-r="result" let-t="term">
@@ -106,14 +107,14 @@
                             [readOnly]="true"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal invoice__input__textbox--disable"
                             [value]="supplierSelected.supplierName" [readOnly]="!isEditClient"
-                            placeholder="supplier Name" nfNoSpaces maxlength="250"
+                            placeholder="{{'BUY.INVOICE.CREATE.SUPPLIER.NAME' | translate}}" nfNoSpaces maxlength="250"
                             [ngClass]="{'border-0':invoiceForm.controls.supplierName.touched === false || invoiceForm.controls.supplierName.invalid === false } ">
                         </div>
                         <div class="col-12 pl-0">
                           <input style="opacity: unset" kendotextbox id="clientAddress" formControlName="address"
                             [readOnly]="isRead"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal invoice__input__textbox--disable"
-                            [value]="supplierSelected.address" [readOnly]="!isEditClient" placeholder="Client Address"
+                            [value]="supplierSelected.address" [readOnly]="!isEditClient" placeholder="{{'BUY.INVOICE.CREATE.SUPPLIER.ADDRES' | translate}}"
                             nfNoSpaces maxlength="250">
                         </div>
                         <div class="col-12 pl-0">
@@ -137,7 +138,7 @@
                     <div class="row mx-0">
                       <div class="col-6 date px-0">
                         <div>
-                          <p class="invoice__input__title invoice__text--height-normal mb-0">Date of Issue</p>
+                          <p class="invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.DATE.OR.ISSUE' | translate}}</p>
                           <div class="input-group mb-0 invoice__datepicker__wrapper">
                             <input [rowItem]="this.invoiceForm.controls" validateDateDirective #datetiime kendoTextBox
                               [readOnly]="isRead" (dateSelect)="onDateSelection($event)" (click)="d2.toggle()"
@@ -156,7 +157,7 @@
                           </div>
                         </div>
                         <div>
-                          <p class="invoice__input__title invoice__text--height-normal mb-0">Due Date</p>
+                          <p class="invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.FROM.SEARCH.DUE' | translate}}</p>
                           <div class="input-group mb-0 invoice__datepicker__wrapper">
                             <input [rowItem]="this.invoiceForm.controls" validateDateDirective #datetiime kendoTextBox
                               [readOnly]="isRead" (dateSelect)="onDateSelection($event)" (click)="d3.toggle()"
@@ -177,9 +178,9 @@
                       </div>
                       <div class="col-6 refer px-0">
                         <div>
-                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">Invoice No#/ Seri</p>
+                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.SERI' | translate}}</p>
                           <div class="row" style="margin-left: 0px">
-                            <input style="opacity: unset;" kendotextbox placeholder="Invoice Number"
+                            <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.CREATE.INVOICE.NUMBER' | translate}}"
                               class="form-control" type="text" formControlName="invoiceNumber"
                               [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false || isMouseEnter == false}"
                               class="col-6 width-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
@@ -192,8 +193,8 @@
 
                         </div>
                         <div class="mt-0">
-                          <p class="mb-0 invoice__input__title invoice__text--height-normal">Reference</p>
-                          <input kendotextbox placeholder="Enter value e.g PO #" formControlName="reference"
+                          <p class="mb-0 invoice__input__title invoice__text--height-normal">{{'ACCOUNT.DETAIL.LIST.reference' | translate}}</p>
+                          <input kendotextbox placeholder="{{'INVOICE.FORM.CREATE.REFERENCE' | translate}}" formControlName="reference"
                             style="opacity: unset"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__text--height-normal invoice__font--medium-2" />
                         </div>
@@ -207,7 +208,7 @@
                       </div>
                       <div class="col-sm-12 amountDue px-0">
                         <div class="row mx-0">
-                          <p class="invoice__input__title invoice__text--height-normal col-6 px-0">Amount Due</p>
+                          <p class="invoice__input__title invoice__text--height-normal col-6 px-0">{{'INVOICE.FORM.CREATE.AMOUNTDUE' | translate}}</p>
                           <div class="input-group invoice__text--height-normal col-6 px-0">
                             {{amountDue | currency:'VND':''}}
                           </div>
@@ -221,10 +222,10 @@
                   <!-- table of items -->
                   <div class="items-table invoice__items-table">
                     <div class="row header invoice__input__title mx-0">
-                      <div class="col-md-6 col-5 pl-0">Description (Unit)</div>
-                      <div class="col-md-2 col-2 text-center">Qty</div>
-                      <div class="col-md-2 col-2 text-right">Price</div>
-                      <div class="col-md-2 col-2 text-right amount-pc pr-0">Amount</div>
+                      <div class="col-md-6 col-5 pl-0">{{'BUY.INVOICE.CREATE.DESCRIPTION.UNIT' | translate}}</div>
+                      <div class="col-md-2 col-2 text-center">{{'INVOICE.FORM.CREATE.QTY' | translate}}</div>
+                      <div class="col-md-2 col-2 text-right">{{'INVOICE.FORM.CREATE.PRICE' | translate}}</div>
+                      <div class="col-md-2 col-2 text-right amount-pc pr-0">{{'INVOICE.FORM.CREATE.AMOUNT' | translate}}</div>
                       <div class="col-md-2  col-3 text-right amount-mobile pr-0">Amt</div>
                     </div>
                     <!-- ngRepeat: item in invoice.items -->
@@ -234,22 +235,23 @@
                         <ng-container [formGroupName]="i">
                           <div class="col-md-6 col-5 d-inline-grid pl-0 ngb-typeahead-product">
                             <input formControlName="productName" #productName id="productName{{i}}" kendotextbox
-                              [readOnly]="isRead" placeholder="Enter an Item Name" autocomplete="none"
+                              [readOnly]="isRead" placeholder="{{'INVOICE.FORM.CREATE.ENTERITEMNAME.PLACEHOLDER' | translate}}" autocomplete="none"
                               class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                               [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate"
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
+                              (keydown)="typeheadScrollHandler($event)"
                               [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
                             <input formControlName="description" #description kendotextbox
-                              [readOnly]="isRead" placeholder="Description" id="description{{i}}"
+                              [readOnly]="isRead" placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}"
                               tabindex="{{i * 4 + 4}}"
                               class="border-0 full-width imput-reference-custom font-italic invoice__font--medium-2 description place-holder__color invoice__input__textbox invoice__input__textbox--disable" />
                             <ng-template #productTemplate let-r="result" let-t="term">
                               <div class="row m-0 product-item py-1">
-                                <div class="col-sm-9 col-md-9 p-0">
-                                  <p class="mb-0 text-right">{{r.productName}}</p>
+                                <div class="col-sm-8 col-md-8 p-0">
+                                  <p class="mb-0 text-left">{{r.productName}}</p>
                                 </div>
-                                <div class="col-sm-3 col-md-3">
-                                  <p class="mb-0">{{r.unitPrice | currency:'VND':''}}</p>
+                                <div class="col-sm-4 col-md-4 p-0">
+                                  <p class="mb-0 text-right">{{r.unitPrice | currency:'VND':''}}</p>
                                 </div>
                               </div>
 
@@ -261,18 +263,18 @@
                               [max]="10000" placeholder="Enter qty" [spinners]="false">
                             </kendo-numerictextbox> -->
                             <input digitOnly [min]=1 [max]="10000" #quantity tabindex="{{i* 4 + 2}}"
-                              formControlName="qty" placeholder="Enter qty" kendoTextBox [readOnly]="isRead"
+                              formControlName="qty" placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.QTY' | translate}}" kendoTextBox [readOnly]="isRead"
                               class="text-center border-0 full-width invoice__font--medium-2" />
                             <a *ngIf="detail.value.taxs.length > 0" style="color:blue;"
                               (click)="addTaxPopup(detail,i)" class="lb-discount invoice__font--medium-2">{{taxsText}}</a>
                             <a *ngIf="detail.value.taxs.length === 0"
                               style="color:blue;" class="lb-discount invoice__font--medium-2"
-                              (click)="addTaxPopup(detail,i)">Add Tax</a>
+                              (click)="addTaxPopup(detail,i)">{{'INVOICE.FORM.CREATE.ADDTAX' | translate}}</a>
                           </div>
                           <div class="col-md-2 col-2 text-left d-inline-grid">
                             <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly
                               kendotextbox [readOnly]="isRead" maxlength="16" formControlName="price"
-                              placeholder="Enter price"
+                              placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.PRICE' | translate}}"
                               class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                               tabindex="{{i* 4 +3}}" />
 
@@ -281,7 +283,7 @@
                               [min]="1" [max]="100" formControlName="vat" [readOnly]="true" #tax placeholder="" />
                           </div>
                           <div class="col-md-2 col-3 text-right d-inline-grid pr-0">
-                            <input formControlName="amount" kendotextbox placeholder="Amount" [readOnly]="true"
+                            <input formControlName="amount" kendotextbox placeholder="{{'INVOICE.FORM.CREATE.AMOUNT' | translate}}" [readOnly]="true"
                               class="border-0 full-width t-color-black input-amount mput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable " />
                             <input formControlName="vatAmount" kendotextbox [readOnly]="true"
                               class="border-0 full-width t-color-red input-amount mput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2" />
@@ -299,7 +301,7 @@
                     <div *ngIf="!viewMode" class="row" style="border: none;margin-top: 20px"
                       [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'">
                       <div class="add-line-box d-flex align-items-center">
-                        <input tabindex="{{getFormArray().length * 4 + 1}}" type="button" value="+ Add a Line"
+                        <input tabindex="{{getFormArray().length * 4 + 1}}" type="button" value="{{'BUY.INVOICE.CREATE.ADD.LINE' | translate}}"
                           (click)="addNewItem()" class=" text-center w-100"
                           style="cursor: pointer;background-color:#fff;border: none" />
                       </div>
@@ -314,14 +316,14 @@
                     <div class="form-group">
                       <div class="row mrl-1">
                         <div>
-                          <a class="invoice__font--medium-2 font-italic">Attach files
+                          <a class="invoice__font--medium-2 font-italic">{{'INVOICE.FORM.CREATE.ATTACHFILRS' | translate}}
                             <input style="cursor: pointer;" #file type="file" class="input-upload ipfile"
                               (change)="showPreviewUploadFile(file.files)"></a>
                           <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png"
                             [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'">
                         </div>
                         <a (click)="uploadFileMultiple(null)" *ngIf="viewMode"
-                        class="invoice__font--medium-2 font-italic">Upload files</a>
+                        class="invoice__font--medium-2 font-italic">{{'BUY.INVOICE.CREATE.UPLOAD.FILE' | translate}}</a>
                         <i (click)="uploadFileMultiple(null)" *ngIf="viewMode" style="cursor: pointer;"
                           class="gg-software-upload mlt-13"></i>
                       </div>
@@ -351,7 +353,7 @@
                     <div class="invoice__font--medium-2">
                       <div class="row mb-1">
                         <div class="col-6 text-right">
-                          Sub Total
+                          {{'INVOICE.FORM.CREATE.SUBTOTAL' | translate}}
                         </div>
                         <div class="col-6 text-right">
                           {{subTotalAmount | currency:'VND':''}}
@@ -359,13 +361,13 @@
                       </div>
                       <div class="row border-bottom">
                         <div class="col-6 text-right t-color-blue py-1">
-                          Add a Discount(%)
+                          {{'INVOICE.FORM.CREATE.ADDDISCOUNT' | translate}}
                         </div>
                         <div class="col-6" style="float: left">
                           <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly [min]=1
                             [max]=100 [maxlength]=2 (ngModelChange)="totalDiscountChange()"
                             tabindex="{{getFormArray().length * 4 + 2}}" formControlName="totalDiscount"
-                            placeholder="Discount" kendoTextBox [readOnly]="isRead"
+                            placeholder="{{'INVOICE.FORM.CREATE.ADDDISCOUNT.PLACEHOLDER' | translate}}" kendoTextBox [readOnly]="isRead"
                             class="border-0 width-50-per text-center input-amount mput-reference-custom invoice__font--medium-2 px-0"
                             />
                           <label class="border-0 width-50-per text-right form-label t-color-red">
@@ -374,7 +376,7 @@
                       </div>
                       <div class="row border-bottom pb-1 my-1">
                         <div class="col-6 text-right t-color-blue">
-                          All Tax(%)
+                          {{'BUY.INVOICE.CREATE.ALL.TAX' | translate}}
                         </div>
                         <div class="col-6 text-right" style="float: left">
                           <label style="color: blue" class="border-0 width-50-per text-rigth form-label">
@@ -384,7 +386,7 @@
 
                       <div class="row ">
                         <div class="col-6 text-right">
-                          Total
+                          {{'INVOICE.GRID.HEADER.TOTAL' | translate}}
                         </div>
                         <div class="col-6 text-right">
                           {{totalAmount | currency:'VND':''}}
@@ -393,7 +395,7 @@
 
                       <div class="row my-2">
                         <div class="col-6 text-right">
-                          Amount Paid
+                          {{'INVOICE.FORM.CREATE.AMOUNTPAID' | translate}}
                         </div>
                         <div class="col-6 text-right" #amountPaidVC>
                           <!-- <kendo-numerictextbox  #amountPaidVC [format]="'n'"
@@ -419,17 +421,17 @@
                 </div>
                 <div class="row mt-0">
                   <div class="col-sm-12">
-                    <p class="my- invoice__font--medium-2">Notes</p>
+                    <p class="my- invoice__font--medium-2">{{'INVOICE.GRID.HEADER.NOTES' | translate}}</p>
                     <fieldset class="form-group position-relative">
                       <textarea rows="2" id="notes" formControlName="notes"
-                        class="k-textbox border-0 full-width invoice__font--medium-2 p-0" placeholder="Enter your notes" kendoTextBox
+                        class="k-textbox border-0 full-width invoice__font--small-1 p-0" placeholder="{{'INVOICE.FORM.CREATE.ENTERYOURNOTES.PLACEHOLDER' | translate}}" kendoTextBox
                         [readOnly]="isRead" maxlength="250" style="background: white;"></textarea>
                     </fieldset>
-                    <p class="my-1 invoice__font--medium-2">Term & Condition</p>
+                    <p class="my-1 invoice__font--medium-2">{{'INVOICE.FORM.CREATE.TERMCONDITION' | translate}}</p>
                     <fieldset class="form-group position-relative">
                       <textarea rows="2" id="termCondition" formControlName="termCondition" kendoTextBox
-                        [readOnly]="isRead" class="k-textbox border-0 full-width font-size p-0 invoice__font--medium-2"
-                        placeholder="Enter term and condition" maxlength="250" style="background: white;"></textarea>
+                        [readOnly]="isRead" class="k-textbox border-0 full-width font-size p-0 invoice__font--small-1"
+                        placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.TERM' | translate}}" maxlength="250" style="background: white;"></textarea>
                     </fieldset>
                   </div>
                 </div>

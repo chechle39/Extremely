@@ -1,11 +1,11 @@
 <form class="form" name="form" autocomplete="off" #f="ngForm" (ngSubmit)="f.form.valid && save()">
   <div class="modal-header">
-    <h4 class="modal-title">Hồ Sơ Công Ty</h4>
+    <h4 class="modal-title">{{ 'COMPANYPROFILE.HEADER.TITLE' | translate }}</h4>
   </div>
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="companyName">Tên</label>
+        <label for="companyName">{{ 'COMPANYPROFILE.CREATE.Name' | translate }}</label>
         <input [(ngModel)]="companyprofileView.companyName" #companyName="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="companyName" placeholder="Tên công ty"
           id="companyName">
@@ -17,7 +17,7 @@
 
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="address">Địa chỉ</label>
+        <label for="address">{{ 'COMPANYPROFILE.CREATE.Address' | translate }}</label>
         <input [(ngModel)]="companyprofileView.address" #address="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="address" placeholder="Địa chỉ" id="address">
         <small class="form-text text-muted danger" *ngIf="!address.valid && (address.dirty || address.touched)">Please
@@ -26,7 +26,7 @@
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="directorName">Quản lý</label>
+        <label for="directorName">{{ 'COMPANYPROFILE.CREATE.DirectorName' | translate }}</label>
         <input [(ngModel)]="companyprofileView.directorName" #directorName="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="directorName" placeholder="Quản lý" id="directorName">
         <small class="form-text text-muted danger"
@@ -36,14 +36,14 @@
     </div>
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <label for="city">Tên thành phố</label>
+        <label for="city">{{ 'COMPANYPROFILE.CREATE.City' | translate }}</label>
         <input [(ngModel)]="companyprofileView.city" #city="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="city" placeholder="Tên Thành phố" id="city">
         <small class="form-text text-muted danger" *ngIf="!city.valid && (city.dirty || city.touched)">Please
           enter city name</small>
       </div>
       <div class="form-group col-6 mb-2">
-        <label for="country">Tên nước</label>
+        <label for="country">{{ 'COMPANYPROFILE.CREATE.Country' | translate }}</label>
         <input [(ngModel)]="companyprofileView.country" #country="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="country" placeholder="Tên nước" id="country">
         <small class="form-text text-muted danger" *ngIf="!country.valid && (country.dirty || country.touched)">Please
@@ -52,14 +52,14 @@
     </div>
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <label for="zipCode">Tên zipCode</label>
+        <label for="zipCode">{{ 'COMPANYPROFILE.CREATE.ZipCode' | translate }}</label>
         <input [(ngModel)]="companyprofileView.zipCode" #zipCode="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="zipCode" placeholder="Tên zipCode" id="zipCode">
         <small class="form-text text-muted danger" *ngIf="!zipCode.valid && (zipCode.dirty || zipCode.touched)">Please
           enter zipCode</small>
       </div>
       <div class="form-group col-6 mb-2">
-        <label for="currency">Tiền tệ</label>
+        <label for="currency">{{ 'COMPANYPROFILE.CREATE.Currency' | translate }}</label>
         <input [(ngModel)]="companyprofileView.currency" #currency="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="currency" placeholder="Tiền tệ" id="currency">
         <small class="form-text text-muted danger"
@@ -70,7 +70,7 @@
 
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <label for="dateFormat">Định dạng ngày</label>
+        <label for="dateFormat">{{ 'COMPANYPROFILE.CREATE.DateFormat' | translate }}</label>
         <input [(ngModel)]="companyprofileView.dateFormat" #dateFormat="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="dateFormat" placeholder="Định dạng ngày"
           id="dateFormat">
@@ -79,7 +79,7 @@
           enter date format</small>
       </div>
       <div class="form-group col-6 mb-2">
-        <label for="bizPhone">Điện thoại công ty</label>
+        <label for="bizPhone">{{ 'COMPANYPROFILE.CREATE.BizPhone' | translate }}</label>
         <input [(ngModel)]="companyprofileView.bizPhone" #bizPhone="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="bizPhone" placeholder="Điện thoại công ty"
           id="bizPhone">
@@ -95,7 +95,7 @@
 
     <div class="row">
       <div class="form-group col-6 mb-2">
-        <label for="bankAccount">Tài khoản ngân hàng</label>
+        <label for="bankAccount">{{ 'COMPANYPROFILE.CREATE.BankAccount' | translate }}</label>
         <input [(ngModel)]="companyprofileView.bankAccount" #bankAccount="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="bankAccount" placeholder="Tài khoản ngân hàng"
           id="bankAccount">
@@ -104,7 +104,7 @@
           enter bank account</small>
       </div>
       <div class="form-group col-6 mb-2">
-        <label for="taxCode">mã số thuế</label>
+        <label for="taxCode">{{ 'COMPANYPROFILE.CREATE.TaxCode' | translate }}</label>
         <input [(ngModel)]="companyprofileView.taxCode" #taxCode="ngModel" required class="form-control"
           [ngModelOptions]="{updateOn: 'blur'}" type="text" name="taxCode" placeholder="Mã số thuế" id="taxCode">
         <small class="form-text text-muted danger" *ngIf="!taxCode.valid && (taxCode.dirty || taxCode.touched)">Please

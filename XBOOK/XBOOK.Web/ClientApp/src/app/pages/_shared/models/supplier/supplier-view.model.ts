@@ -18,5 +18,9 @@ export class SupplierViewModel {
     note: string;
     outstanding: number;
     overdue: number;
+    taxCode: number;
+    tag: number;
+    contactName: string;
+    email: string;
     bankAccount: string;
 }

@@ -97,7 +97,7 @@ namespace XBOOK.Service.Service
                     Note = saleInvoiceViewModel.Note,
                     Tag = saleInvoiceViewModel.Tag,
                     TaxCode = saleInvoiceViewModel.TaxCode,
-                    ClientId = saleInvoiceViewModel.ClientId
+                    ClientID = saleInvoiceViewModel.ClientId
                 };
                 _iClientService.CreateClient(ClientViewModel);
 
@@ -208,7 +208,7 @@ namespace XBOOK.Service.Service
                     var requetsCl = new ClientCreateRequet
                     {
                         Address = saleInvoiceViewModel.ClientData[0].Address,
-                        ClientId = saleInvoiceViewModel.ClientData[0].ClientId,
+                        ClientID = saleInvoiceViewModel.ClientData[0].ClientId,
                         ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
                         ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
                         Email = saleInvoiceViewModel.ClientData[0].Email,
@@ -228,7 +228,7 @@ namespace XBOOK.Service.Service
                 var requetsCl = new ClientCreateRequet
                 {
                     Address = saleInvoiceViewModel.ClientData[0].Address,
-                    ClientId = saleInvoiceViewModel.ClientData[0].ClientId,
+                    ClientID = saleInvoiceViewModel.ClientData[0].ClientId,
                     ClientName = saleInvoiceViewModel.ClientData[0].ClientName,
                     ContactName = saleInvoiceViewModel.ClientData[0].ContactName,
                     Email = saleInvoiceViewModel.ClientData[0].Email,

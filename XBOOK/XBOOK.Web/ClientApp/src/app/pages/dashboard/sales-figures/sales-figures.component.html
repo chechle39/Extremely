@@ -9,7 +9,11 @@
       DOANH SỐ BÁN HÀNG
     </div>
   </nb-card-header>
-  <nb-card-body class="d-flex align-items-center">
-    <chart class="w-100" type="line" [data]="data" [options]="options"></chart>
+  <nb-card-body>
+    <div class="sales-figures__chart-wrapper">
+      <div class="sales-figures__chart">
+        <chart class="w-100" type="line" [data]="data" [options]="options"></chart>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>

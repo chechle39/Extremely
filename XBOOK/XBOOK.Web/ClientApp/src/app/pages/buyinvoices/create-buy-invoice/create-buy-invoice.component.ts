@@ -39,6 +39,7 @@ import { TaxService } from '../../_shared/services/tax.service';
 import { ActionType } from '../../../coreapp/app.enums';
 import { AppConsts } from '../../../coreapp/app.consts';
 import { AddPayment2Component } from './payment/add-payment/add-payment.component';
+import { ngbTypeheadScrollToActiveItem } from '../../../shared/utils/util';
 
 @Component({
   selector: 'xb-create-buy-invoice',
@@ -1167,5 +1168,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     } else {
       return this.isCheckDate = false;
     }
+  }
+  typeheadScrollHandler(e) {
+    ngbTypeheadScrollToActiveItem(e);
   }
 }

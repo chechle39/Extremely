@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { thousandSuffix } from '../../../shared/utils/util';
 
 @Component({
   selector: 'xb-sales-figures',
@@ -135,7 +136,12 @@ export class SalesFiguresComponent implements OnInit {
             },
             ticks: {
               fontColor: '#000',
+              fontSize: 8,
+              fontFamily: 'Montserrat',
               beginAtZero: true,
+              callback: function (label, index, labels) {
+                return thousandSuffix(label);
+              },
             },
           },
         ],
@@ -146,6 +152,13 @@ export class SalesFiguresComponent implements OnInit {
           fontColor: '#000',
           backgroundColor: '#5177a6',
           usePointStyle: true,
+        },
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItems, data) {
+            return thousandSuffix(tooltipItems.yLabel);
+          },
         },
       },
       events: ['mousemove', 'click'],

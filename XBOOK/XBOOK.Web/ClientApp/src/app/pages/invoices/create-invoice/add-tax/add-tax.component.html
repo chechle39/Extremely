@@ -2,7 +2,7 @@
   <div class=" modal-header">
     <div class="row">
       <div class="col-12">
-        <h5 class="modal-title">Add Taxs</h5>
+        <h5 class="modal-title">{{'TAX.CREATE.TITLE' | translate}}</h5>
       </div>
     </div>
   </div>
@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-2"></div>
       <div class="col-4 text-left">Race %</div>
-      <div class="col-6 text-left">Tax Name</div>
+      <div class="col-6 text-left">{{'TAX.CREATE.TAX.NAME' | translate}}</div>
     </div>
     <div class="row mb-1" formArrayName="taxs" *ngFor="let tax of taxForm.get('taxs')['controls']; index as i">
       <ng-container [formGroupName]="i">
@@ -25,30 +25,30 @@
             maxlength=2>
         </div>
         <div class="col-6">
-          <input formControlName="taxName" class="form-control" type="text" placeholder="Tax name" id="taxName"
+          <input formControlName="taxName" class="form-control" type="text" placeholder="{{'TAX.CREATE.TAX.NAME' | translate}}" id="taxName"
             maxlength=200>
         </div>
       </ng-container>
     </div>
     <div class="row">
       <div class="add-line-box d-flex align-items-center mx-3 my-2">
-        <div (click)="addTax()" class=" text-center w-100" style="cursor: pointer">+ Add Tax </div>
+        <div (click)="addTax()" class=" text-center w-100" style="cursor: pointer">+ {{'TAX.CREATE.TITLE' | translate}} </div>
       </div>
     </div>
     <div class="row pt-2" style="border-top: 1px solid #dee2e6;">
       <div class="form-group col-12 mb-0">
         <div class="custom-control custom-checkbox m-1">
           <input formControlName="allLine" type="checkbox" class="custom-control-input" id="applyAll" />
-          <label class="custom-control-label col-form-label" for="applyAll"></label> Apply tax to all line items
+          <label class="custom-control-label col-form-label" for="applyAll"></label>{{'TAX.CREATE.APPLY.ALL' | translate}}
         </div>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-raised btn-delete" (click)="deleteTax()">Delete</button>
+    <button type="button" class="btn btn-raised btn-delete" (click)="deleteTax()">{{'COMMON.ACTION.DELETE' | translate}}</button>
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
-      Cancel
+      {{'COMMON.BUTTON.CANCEL' | translate}}
     </button>
-    <button type="submit" class="btn btn-raised btn-success">Apply</button>
+    <button type="submit" class="btn btn-raised btn-success">{{'COMMON.BUTTON.APPLY' | translate}}</button>
   </div>
 </form>

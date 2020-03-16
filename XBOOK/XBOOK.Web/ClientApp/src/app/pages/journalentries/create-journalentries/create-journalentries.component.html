@@ -5,7 +5,7 @@
                 <h1 class="invoice__title float-left">{{title}}</h1>
                 <div class="float-right mt-1">
                     <button *ngIf="!viewMode" (click)="cancel()"
-                        class="btn btn-raised mr-3 ml-2 btn-secondary">Cancel</button>
+                        class="btn btn-raised mr-3 ml-2 btn-secondary">{{ 'COMMON.BUTTON.CANCEL' | translate }}</button>
                     <button *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
                     <button *ngIf="viewMode" (click)="redirectToEditInvoice()"
                         class="btn btn-raised btn-success">{{ 'COMMON.ACTION.EDIT' | translate }}</button>
@@ -21,8 +21,7 @@
                             <div class="border px-3 py-3">
                                 <div class="row my-3 justify-content-between">
                                     <div class="col-sm-6 col-md-6">
-                                        <p class="invoice__input__title invoice__text--height-normal mb-0">Entry Name /
-                                            Description</p>
+                                        <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.ENTRYNAME.DESCRIPTION' | translate }}</p>
                                         <div class="client-fields">
                                             <div class="row">
 
@@ -30,14 +29,14 @@
                                                     <input style="opacity: unset" kendoTextBox id="entryName"
                                                         formControlName="entryName"
                                                         class="border-0 place-holder__color full-width imput-reference-custom pl-0"
-                                                        placeholder="Name of entry" nfNoSpaces maxlength="250"
+                                                        placeholder="{{'JUOURNAL.CREATE.ENTRYNAME' | translate}}" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.entryName.touched === false || invoiceForm.controls.entryName.invalid === false} ">
                                                 </div>
                                                 <div class="col-12 ">
                                                     <input style="opacity: unset" kendoTextBox id="description"
                                                         formControlName="description"
                                                         class="border-0 place-holder__color full-width imput-reference-custom pl-0"
-                                                        placeholder="Entry Description" nfNoSpaces maxlength="250"
+                                                        placeholder="{{'JUOURNAL.CREATE.DESCRIPTION' | translate}}" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.description.touched === false || invoiceForm.controls.description.invalid === false} ">
                                                 </div>
                                             </div>
@@ -45,8 +44,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-4">
-                                        <p class="invoice__input__title invoice__text--height-normal mb-0">Date of Entry
-                                            / Object Name</p>
+                                        <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.DATE.OBJECT.NAME' | translate }}</p>
                                         <div class="client-fields">
                                             <div class="row">
                                                 <div class="col-12">
@@ -79,7 +77,7 @@
                                                         [inputFormatter]="clientFormatter" id="objectName"
                                                         formControlName="objectName" (selectItem)="selectedItem($event)"
                                                         class="border-0 full-width imput-reference-custom pl-0"
-                                                        placeholder="Object Name" nfNoSpaces maxlength="250"
+                                                        placeholder="{{'JUOURNAL.CREATE.OBJECT.NAME' | translate}}" nfNoSpaces maxlength="250"
                                                         #instance="ngbTypeahead"
                                                         [ngClass]="{'border-0':invoiceForm.controls.objectName.touched === false || invoiceForm.controls.objectName.invalid === false}" />
 
@@ -108,11 +106,11 @@
                                     <!-- table of items -->
                                     <div class="items-table">
                                         <div class="row header">
-                                            <div class="col-2 pl-0">Description</div>
-                                            <div class="col-3 text-center">Account</div>
-                                            <div class="col-3 text-center">Crsp Acc</div>
-                                            <div class="col-2 text-right">Credit</div>
-                                            <div class="col-2 text-right">Debit</div>
+                                            <div class="col-2 pl-0">{{ 'PRODUCT.FORM.CREATE.DESCRIPTION' | translate }}</div>
+                                            <div class="col-3 text-center">{{ 'JUOURNAL.CREATE.ACCOUNT' | translate }}</div>
+                                            <div class="col-3 text-center">{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT' | translate }}</div>
+                                            <div class="col-2 text-right">{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}</div>
+                                            <div class="col-2 text-right">{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}</div>
                                         </div>
                                         <!-- ngRepeat: item in invoice.items -->
                                         <div formArrayName="items">
@@ -123,7 +121,7 @@
                                                         <input #productName style="opacity: unset" kendoTextBox
                                                             id="note" formControlName="note" [readOnly]="isRead"
                                                             class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
-                                                            placeholder="Description" nfNoSpaces maxlength="250"
+                                                            placeholder="{{ 'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate }}" nfNoSpaces maxlength="250"
                                                             class="border-0 full-width text-left imput-reference-custom">
                                                     </div>
                                                     <div class="col-3 text-center">
@@ -139,7 +137,7 @@
                                                                 formControlName="accNumber"
                                                                 (selectItem)="selectedAcc($event)"
                                                                 class="border-0 place-holder__color  full-width imput-reference-custom pl-0"
-                                                                placeholder="Account Name" nfNoSpaces maxlength="250"
+                                                                placeholder="{{ 'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNAME' | translate }}" nfNoSpaces maxlength="250"
                                                                 #instance="ngbTypeahead"
                                                                 [ngClass]="{'border-0':detail.get('accNumber').touched === false || detail.get('accNumber').invalid === false}" />
 
@@ -181,7 +179,7 @@
                                                                 id="crspAccNumber{{i}}" formControlName="crspAccNumber"
                                                                 (selectItem)="selectedCrspAcc($event)"
                                                                 class="border-0 place-holder__color  full-width imput-reference-custom pl-0"
-                                                                placeholder="Crsp Account Name" nfNoSpaces
+                                                                placeholder="{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT.NAME' | translate }}" nfNoSpaces
                                                                 maxlength="250" #instance="ngbTypeahead"
                                                                 [ngClass]="{'border-0':detail.get('accNumber').touched === false || detail.get('accNumber').invalid === false}" />
 
@@ -209,7 +207,7 @@
                                                         <input #inputtab 
                                                             [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                             digitOnly maxlength="16" formControlName="credit"
-                                                            placeholder="Enter credit" kendoTextBox [readOnly]="isRead"
+                                                            placeholder="{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}" kendoTextBox [readOnly]="isRead"
                                                             class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                                                             tabindex="{{i* 4 +3}}" />
                                                     </div>
@@ -217,7 +215,7 @@
                                                         <input #inputtab
                                                             [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                             digitOnly maxlength="16" formControlName="debit"
-                                                            [readOnly]="isRead" placeholder="Enter debit" kendoTextBox
+                                                            [readOnly]="isRead" placeholder="{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}" kendoTextBox
                                                             class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                                                             />
                                                     </div>
@@ -226,7 +224,7 @@
                                                         <input
                                                             [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                             digitOnly maxlength="16" formControlName="credit"
-                                                            placeholder="Enter credit" kendoTextBox
+                                                            placeholder="{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}" kendoTextBox
                                                             [readOnly]="checkDis(detail.get('debit').value) > 0"
                                                             class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                                                              />
@@ -237,7 +235,7 @@
                                                             [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                             digitOnly maxlength="16" formControlName="debit"
                                                             [readOnly]="checkDis(detail.get('credit').value) > 0"
-                                                            placeholder="Enter debit" kendoTextBox
+                                                            placeholder="{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}" kendoTextBox
                                                             class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                                                             />
                                                     </div>
@@ -269,7 +267,7 @@
                                 <div class="row mt-3 justify-content-end">
                                     <div class="col-md-6">
                                         <div class="row">
-                                            <div class="col-4">Total</div>
+                                            <div class="col-4">{{ 'JUOURNAL.CREATE.TOTAL' | translate }}</div>
                                             <div class="col-4 text-center"> {{totalCredit() | currency:'VND':''}}</div>
                                             <div class="col-4 text-right">{{totalDebit() | currency:'VND':''}}</div>
                                         </div>

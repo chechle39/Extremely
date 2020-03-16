@@ -9,7 +9,7 @@ import { PrintService } from '../../_shared/services/print.service';
 import * as moment from 'moment';
 import { AppConsts } from '../../../coreapp/app.consts';
 import { SelectItem } from 'primeng/components/common/selectitem';
-
+import  DevExpress  from "@devexpress/analytics-core";  
 @Component({
   selector: 'xb-selectreport',
   templateUrl: './selectreport.component.html',

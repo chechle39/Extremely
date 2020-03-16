@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { thousandSuffix } from '../../../shared/utils/util';
 
 @Component({
   selector: 'xb-sale-chart',
@@ -46,23 +47,23 @@ export class SaleChartComponent implements OnInit {
     const data = [
       {
         label: 'Feb',
-        value: 2300,
+        value: 2300000000,
       },
       {
         label: 'Mar',
-        value: 1200,
+        value: 1200000000,
       },
       {
         label: 'Tháng này',
-        value: 3500,
+        value: 3500000000,
       },
       {
         label: 'May',
-        value: 800,
+        value: 800000000,
       },
       {
         label: 'Jun',
-        value: 2500,
+        value: 2500000000,
       },
     ];
     this.data = this.chartObjectMapping(data);
@@ -89,14 +90,14 @@ export class SaleChartComponent implements OnInit {
     function displayDatasetCallback(chartReference) {
       const chartInstance = chartReference.chart,
         ctx = chartReference.chart.ctx;
-      ctx.font = '1rem Montserrat';
+      ctx.font = '0.6em Montserrat';
       ctx.fillStyle = '#212529';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       chartReference.data.datasets.forEach(function (dataset, i) {
         const meta = chartInstance.controller.getDatasetMeta(i);
         meta.data.forEach(function (bar, index) {
-          const data = dataset.data[index];
+          const data = thousandSuffix(dataset.data[index]);
           ctx.fillText(data, bar._model.x, bar._model.y - 1);
         });
       });
@@ -138,11 +139,18 @@ export class SaleChartComponent implements OnInit {
       legend: {
         display: false,
       },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItems, data) {
+            return thousandSuffix(tooltipItems.yLabel);
+          },
+        },
+      },
       layout: {
         padding: {
           left: 0,
           right: 0,
-          top: 10,
+          top: 20,
           bottom: 0,
         },
       },
