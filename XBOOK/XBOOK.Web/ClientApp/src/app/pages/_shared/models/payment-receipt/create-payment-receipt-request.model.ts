@@ -5,7 +5,7 @@ export class CreatePaymentReceiptRequest {
     supplierName: string;
     receiverName: string;
     payDate: string;
-    payTypeID: number;
+    payName: string;
     payType: string;
     bankAccount: string;
     amount: number;
@@ -20,7 +20,7 @@ export class CreatePaymentReceiptRequestList {
     supplierName: string;
     receiverName: string;
     payDate: string;
-    payTypeID: number;
+    payName: string;
     payType: string;
     bankAccount: string;
     amount: number;

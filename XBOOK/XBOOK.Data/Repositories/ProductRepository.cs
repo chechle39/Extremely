@@ -15,7 +15,7 @@ namespace XBOOK.Data.Repositories
 {
     public class ProductRepository : Repository<Product>, IProductRepository
     {
-        public ProductRepository(DbContext context) : base(context)
+        public ProductRepository(XBookContext context) : base(context)
         {
         }
 

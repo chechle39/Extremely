@@ -27,10 +27,15 @@
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <select id="paymentMethods" class="form-control" formControlName="paymentMethods">
+        <!-- <select id="paymentMethods" class="form-control" formControlName="paymentMethods">
           <option [ngValue]="null">{{'PAYMENT.CREATE.COMBOBOX.PAYTYPE' | translate}}</option>
           <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
             {{ method.payType }}
+          </option>
+        </select> -->
+        <select formControlName="paymentMethods" id="paymentMethods" class="form-control">
+          <option *ngFor="let method of payment" [ngValue]="method.key">
+            {{ method.name }}
           </option>
         </select>
         <small class="form-text text-muted danger"

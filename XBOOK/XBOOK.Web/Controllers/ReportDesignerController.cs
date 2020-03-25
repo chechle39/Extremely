@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using XBOOK.Data.ViewModels;
 
 
@@ -22,22 +23,20 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public IActionResult ReadNameReport ()
         {
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory());
             var itemss = new List<ReportNameViewModel>();
-            var folderName = Path.Combine("Reports", "Data");
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = "NameReport.json";
-            var fullPath = Path.Combine(pathToSave, fileName);
-            using (StreamReader r = new StreamReader(fullPath))
-            {
-                var json = r.ReadToEnd();
-                var items = JsonConvert.DeserializeObject<List<ReportNameViewModel>>(json);
-                foreach (var item in items)
+                var fullPath = Path.Combine(pathToSave, fileName);
+                using (StreamReader r = new StreamReader(fullPath))
                 {
-                    itemss.Add(item);
-                }                
+                    var json = r.ReadToEnd();
+                    var items = JsonConvert.DeserializeObject<List<ReportNameViewModel>>(json);
+                    foreach (var item in items)
+                    {
+                        itemss.Add(item);
+                    }
+                }
+                return Ok(itemss);
             }
-            return Ok(itemss);
         }
-
     }
-}

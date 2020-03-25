@@ -38,11 +38,11 @@
                         <p class="mb-0">
                           <input style="opacity: unset" kendotextbox id="yourCompanyName" 
                             formControlName="yourCompanyName" [readOnly]="true"
-                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__font--medium"
+                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__input__textbox"
                             [value]="companyName" placeholder="Your Company Name" nfNoSpaces maxlength="250"></p>
                         <p class="mb-0">
                           <input style="opacity: unset" kendotextbox  [readOnly]="true"
-                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__font--medium"
+                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__input__textbox"
                             placeholder="Your Address" id="yourCompanyAddress" formControlName="yourCompanyAddress"
                             [value]="companyAddress" nfNoSpaces maxlength="250">
                         </p>
@@ -51,14 +51,14 @@
                     <div class="row">
                       <div class="col-sm-8">
                         <input kendotextbox
-                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__font--medium"
+                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__input__textbox"
                           placeholder="Your Bank Acount" id="yourBankAccount" formControlName="yourBankAccount" [readOnly]="true"
                           nfNoSpaces maxlength="250" [value]="bankAccount">
                       </div>
                       <div class="col-sm-4">
                         <input style="opacity: unset" kendotextbox id="yourTaxCode" formControlName="yourTaxCode" [readOnly]="true"
                           placeholder="Tax code" [value]="taxCode"
-                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__font--medium" nfNoSpaces
+                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__input__textbox" nfNoSpaces
                           maxlength="250">
                       </div>
                     </div>
@@ -226,11 +226,12 @@
                         <ng-container [formGroupName]="i">
                           <div class="col-md-6 col-5 d-inline-grid pl-0 ngb-typeahead-product">
                             <input formControlName="productName" #productName id="productName{{i}}" kendotextbox [readOnly]="isRead"
-                              placeholder="{{'INVOICE.FORM.CREATE.ENTERITEMNAME.PLACEHOLDER' | translate}}" autocomplete="none"
+                              placeholder="{{'INVOICE.FORM.CREATE.ENTERITEMNAME.PLACEHOLDER' | translate}}" autocomplete="off"
                               class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                               [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate"
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
                               (keydown)="typeheadScrollHandler($event)" placement="bottom"
+                              (focus)="onFocus($event)"
                               [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
                             <input formControlName="description" #description kendotextbox [readOnly]="isRead"
                               placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}" tabindex="{{i * 4 + 4}}"
@@ -264,7 +265,7 @@
                               (click)="addTaxPopup(detail,i)">Add Tax</a>
                           </div>
                           <div class="col-md-2 col-2 text-left d-inline-grid">
-                            <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly  kendotextbox [readOnly]="isRead"
+                            <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly  kendotextbox [readOnly]="isRead" formControlName="price"
                               maxlength="16" placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.PRICE' | translate}}" placeholder="Enter price" 
                               class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                               tabindex="{{i* 4 +3}}" />
@@ -317,10 +318,10 @@
                               (change)="showPreviewUploadFile(file.files)">
                           </a>
                         </div>
-                        <a (click)="uploadFileMultiple(null)" *ngIf="viewMode"
+                        <!-- <a (click)="uploadFileMultiple(null)" *ngIf="viewMode"
                         class="invoice__font--medium-2 font-italic">{{'BUY.INVOICE.CREATE.UPLOAD.FILE' | translate}}</a>
                         <i (click)="uploadFileMultiple(null)" *ngIf="viewMode" style="cursor: pointer;"
-                          class="gg-software-upload mlt-13"></i>
+                          class="gg-software-upload mlt-13"></i> -->
                       </div>
 
                       <ul class="file">

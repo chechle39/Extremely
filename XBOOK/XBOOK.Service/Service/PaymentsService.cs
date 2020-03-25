@@ -45,7 +45,7 @@ namespace XBOOK.Service.Service
                 Note = listData.note,
                 PayDate = listData.payDate,
                 PayType = listData.payType,
-                PayTypeID = listData.payTypeID,
+                PayName = listData.payName,
             };
             return payment;
         }

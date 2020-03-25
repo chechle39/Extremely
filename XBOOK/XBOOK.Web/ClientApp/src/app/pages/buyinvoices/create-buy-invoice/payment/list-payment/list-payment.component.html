@@ -1,25 +1,17 @@
-<div class="row px-4">
+<div class="row px-1 pt-2">
   <div class="col-md-8">
     <div class="row">
       <div class="col-md-6">
         <p>{{'PAYMENT.GRID.HEADER' | translate}} {{invoiceNumber}} </p>
       </div>
       <div class="col-md-6 float-left">
-        <button [disabled]="outstandingAmount === 0" (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></button>
-        <!-- <div ngbDropdown class="float-right">
-          <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Bulk Actions
-          </button>
-          <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button (click)="editPayment()" class="dropdown-item"><span class="icon-edit"></span> Edit</button>
-            <button (click)="deletePayment()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
-          </div>
-        </div> -->
+        <button [disabled]="outstandingAmount === 0 || authenticationService.hasPermission('Buy invoice','create') || authenticationService.hasPermission('Buy invoice','update')" (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></button>
       </div>
 
     </div>
   </div>
 </div>
-<div class="row px-4">
+<div class="row px-1">
   <div class="col-md-12">
     <ngx-datatable #xxx #myTable class="bootstrap hover no-striped flex" [rows]="paymentViews"
       [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
@@ -36,7 +28,6 @@
               (change)="selectFn(!allRowsSelected)" />
             <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
           </div>
-
         </ng-template>
         <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
           let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
@@ -74,7 +65,7 @@
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
                 <div class="icon-actions">
                   <div class="actions">
-                    <a (click)="delete(row)"  class="icon-action">
+                    <a  [hidden] = "authenticationService.hasPermission('Buy invoice','delete')" (click)="delete(row)"  class="icon-action">
                       <span class="icon-delete"></span>
                     </a>
                   </div>

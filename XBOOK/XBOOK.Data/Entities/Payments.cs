@@ -1,7 +1,6 @@
 namespace XBOOK.Data.Entities
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,7 +9,7 @@ namespace XBOOK.Data.Entities
         public Payments()
         {
         }
-        public Payments(decimal amount, string receiptNumber, long id, long invoiceId, string note, DateTime payDate, string payType, int payTypeID)
+        public Payments(decimal amount, string receiptNumber, long id, long invoiceId, string note, DateTime payDate, string payType, string payName)
         {
             this.amount = amount;
             this.receiptNumber = receiptNumber;
@@ -18,7 +17,7 @@ namespace XBOOK.Data.Entities
             this.note = note;
             this.payDate = payDate;
             this.payType = payType;
-            this.payTypeID = payTypeID;
+            this.payName = payName;
         }
 
         [Key]
@@ -27,7 +26,7 @@ namespace XBOOK.Data.Entities
         public long ID { get; set; }
         public long invoiceID { get; set; }
         public System.DateTime payDate { get; set; }
-        public int payTypeID { get; set; }
+        public string payName { get; set; }
         public string payType { get; set; }
         public string receiptNumber { get; set; }
         public decimal amount { get; set; }

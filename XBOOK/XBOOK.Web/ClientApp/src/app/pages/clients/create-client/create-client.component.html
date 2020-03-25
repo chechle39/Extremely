@@ -76,7 +76,7 @@
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
       <i class="ft-x"></i> Cancel
     </button>
-    <button type="button" (click)="save()" class="btn btn-raised btn-success" [disabled]="!f.valid"><i
+    <button type="button" (click)="save()" class="btn btn-raised btn-success" [disabled]="!f.valid || authenticationService.hasPermission('Clients','Create')"><i
         class="ft-save"></i> Save</button>
   </div>
 </form>

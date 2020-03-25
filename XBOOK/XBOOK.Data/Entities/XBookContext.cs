@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
+using XBOOK.Data.EntitiesDBCommon;
 using XBOOK.Data.EntityConfigurations;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Interfaces;
@@ -15,8 +17,16 @@ namespace XBOOK.Data.Entities
 {
     public class XBookContext : IdentityDbContext<AppUser, AppRole, int>
     {
-        public XBookContext(DbContextOptions<XBookContext> options) : base(options)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        protected readonly IConfiguration _configuration;
+        private readonly IUserCommonRepository _userCommonRepository;
+        private readonly AppUserCommon code;
+        public XBookContext(DbContextOptions<XBookContext> options, IUserCommonRepository userCommonRepository, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(options)
         {
+            _userCommonRepository = userCommonRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
+            code = _userCommonRepository.FindUserCommon("xbook@gmail.com").Result;
         }
         public DbSet<AccountChart> AccountChart { get; set; }
         public DbSet<Category> Category { get; set; }
@@ -82,7 +92,16 @@ namespace XBOOK.Data.Entities
                .HasKey(x => new { x.UserId });
             
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if(_httpContextAccessor.HttpContext != null)
+            {
+                var subdomain = _httpContextAccessor.HttpContext.Request.Host.Host;
 
+            }
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
         public override int SaveChanges()
         {
             var modified = ChangeTracker.Entries().Where(e => e.State == EntityState.Modified || e.State == EntityState.Added);
@@ -100,20 +119,6 @@ namespace XBOOK.Data.Entities
                 }
             }
             return base.SaveChanges();
-        }
-    }
-
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<XBookContext>
-    {
-        public XBookContext CreateDbContext(string[] args)
-        {
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json").Build();
-            var builder = new DbContextOptionsBuilder<XBookContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            builder.UseSqlServer(connectionString);
-            return new XBookContext(builder.Options);
         }
     }
 }

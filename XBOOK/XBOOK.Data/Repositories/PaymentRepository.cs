@@ -12,7 +12,7 @@ namespace XBOOK.Data.Repositories
 {
     public class PaymentRepository : Repository<Payments>, IPaymentRepository
     {
-        public PaymentRepository(DbContext context) : base(context)
+        public PaymentRepository(XBookContext context) : base(context)
         {
         }
 

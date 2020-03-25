@@ -19,7 +19,7 @@ namespace XBOOK.Data.Repositories
     public class FunctionsRepository : Repository<Functions>, IFunctionsRepository
     {
         private readonly IAuthorizationService _authorizationService;
-        public FunctionsRepository(DbContext context, IAuthorizationService authorizationService) : base(context)
+        public FunctionsRepository(XBookContext context, IAuthorizationService authorizationService) : base(context)
         {
             _authorizationService = authorizationService;
         }

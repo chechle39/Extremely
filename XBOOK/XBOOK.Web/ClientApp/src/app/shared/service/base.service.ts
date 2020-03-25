@@ -2,15 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { getBaseURL } from '../utils/util';
 
 @Injectable({
   providedIn: 'root',
 })
 export abstract class BaseService {
   protected baseUrl: string;
-
+  protected location: Location;
   constructor(protected http: HttpClient) {
-    this.baseUrl = environment.apiBaseUrl;
+    this.location = environment.apiBaseUrl;
+    this.baseUrl =  getBaseURL(this.location);
   }
   private processUrl<T>(url: string) {
     let endpoint = this.baseUrl + url;

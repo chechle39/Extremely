@@ -77,7 +77,6 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]"), DisableRequestSizeLimit]
-        [AuthorizationClaimCustom(Authority.ROLE_EDIT)]
         public IActionResult Upload(List<IFormFile> request)
         {
             var files = Request.Form.Files;

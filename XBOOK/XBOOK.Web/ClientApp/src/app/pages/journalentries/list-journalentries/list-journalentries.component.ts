@@ -1,26 +1,33 @@
-import { Component, Injector, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  Injector,
+  ViewChild,
+  QueryList,
+  ViewChildren } from '@angular/core';
 import { DatatableSorting } from '../../../shared/model/datatable-sorting.model';
 import { Router } from '@angular/router';
 import { InvoiceView } from '../../_shared/models/invoice/invoice-view.model';
-import { InvoiceService } from '../../_shared/services/invoice.service';
-import { PagedListingComponentBase, PagedRequestDto } from '../../../coreapp/paged-listing-component-base';
+import {
+  PagedListingComponentBase,
+  PagedRequestDto } from '../../../coreapp/paged-listing-component-base';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder } from '@angular/forms';
 import { AppConsts } from '../../../coreapp/app.consts';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SearchType, ActionType } from '../../../coreapp/app.enums';
 import { Subscription } from 'rxjs';
-import { eventNames } from 'cluster';
 import { DataService } from '../../_shared/services/data.service';
-import { CreateMoneyReceiptComponent } from '../../moneyreceipt/create-money-receipt/create-money-receipt.component';
 import { JournalEntryService } from '../../_shared/services/journal-entry.service';
 import { JournalEntryViewModel } from '../../_shared/models/journalentry/journalentry.model';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
+import { CommonService } from '../../../shared/service/common.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
 @Component({
-  moduleId: module.id, // this is the key
+  moduleId: module.id,
   selector: 'xb-list-journalentries',
   templateUrl: './list-journalentries.component.html',
   styleUrls: ['./list-journalentries.component.scss'],
@@ -61,10 +68,14 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     private data: DataService,
     private journalEntryService: JournalEntryService,
     injector: Injector,
+    public authenticationService: AuthenticationService,
+    private commonService: CommonService,
     private router: Router,
     private fb: FormBuilder) {
     super(injector);
+    this.commonService.CheckAssessFunc('Journal Entries');
     this.searchForm = this.createForm();
+    this.recalculateOnResize(() => this.invoiceViews = [...this.invoiceViews]);
   }
 
   createForm() {

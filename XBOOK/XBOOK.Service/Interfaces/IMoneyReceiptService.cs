@@ -12,7 +12,9 @@ namespace XBOOK.Service.Interfaces
         Task<bool> CreateMoneyReceipt(MoneyReceiptViewModel request);
         Task<bool> DeletedMoneyReceipt(List<requestDeleted> request);
         Task<MoneyReceiptViewModel> GetLastMoneyReceipt();
+        Task<MoneyReceiptViewModel> GetMoneyById(MoneyReceiptID request);
         Task<bool> CreateMoneyReceiptPaymentAsync(MoneyReceiptPayment request);
         Task<bool> Update(MoneyReceiptViewModel request);
+        Task<MoneyReceiptByIdViewModel> GetMoneyByIdObject(long id);
     }
 }

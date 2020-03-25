@@ -19,7 +19,7 @@ namespace XBOOK.Data.Repositories
         private readonly IClientRepository _clientRepository;
         private readonly ISupplierRepository _supplierRepository;
         private readonly IJournalDetailRepository _journalDetailRepository;
-        public JournalEntryRepository(DbContext context, IUnitOfWork uow, IClientRepository clientRepository, ISupplierRepository supplierRepository, IJournalDetailRepository journalDetailRepository) : base(context)
+        public JournalEntryRepository(XBookContext context, IUnitOfWork uow, IClientRepository clientRepository, ISupplierRepository supplierRepository, IJournalDetailRepository journalDetailRepository) : base(context)
         {
             _uow = uow;
             _clientRepository = clientRepository;

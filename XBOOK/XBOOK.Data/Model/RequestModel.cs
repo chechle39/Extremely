@@ -36,7 +36,7 @@ namespace XBOOK.Data.Model
         public string ClientName { get; set; }
         public string ReceiverName { get; set; }
         public System.DateTime PayDate { get; set; }
-        public int PayTypeID { get; set; }
+        public string PayName { get; set; }
         public string PayType { get; set; }
         public string BankAccount { get; set; }
         public decimal Amount { get; set; }
@@ -59,7 +59,7 @@ namespace XBOOK.Data.Model
         public string SupplierName { get; set; }
         public string ReceiverName { get; set; }
         public System.DateTime PayDate { get; set; }
-        public int PayTypeID { get; set; }
+        public string PayName { get; set; }
         public string PayType { get; set; }
         public string BankAccount { get; set; }
         public decimal Amount { get; set; }
@@ -70,8 +70,10 @@ namespace XBOOK.Data.Model
 
     public class PaymentReceiptPaymentPrint
     {
+        public string companyCode { get; set; }
         public string yourCompanyAddress { get; set; }
         public string yourCompanyName { get; set; }
+        public string address { get; set; }
         public List<Invoice> InvoiceId { get; set; }
         public string ReceiptNumber { get; set; }
         public string EntryType { get; set; }

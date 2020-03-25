@@ -1,7 +1,5 @@
-import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NB_WINDOW } from '@nebular/theme';
-
-import { UserData } from '../../../@core/data/users';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -75,11 +73,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
     this.user = {
-      name: JSON.parse(sessionStorage.getItem('credentials')).username,
+      name: JSON.parse(sessionStorage.getItem('credentials')).fullName,
     };
-    // this.userService.getUsers()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((users: any) => this.user = users.nick);
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(

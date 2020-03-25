@@ -14,5 +14,6 @@ namespace XBOOK.Service.Interfaces
         Task<PaymentReceiptViewModel> GetLastPaymentReceipt();
         Task<bool> CreatePaymentReceiptPaymentAsync(PaymentReceiptPayment request);
         Task<bool> Update(PaymentReceiptViewModel request);
+        Task<PaymentReceiptByIdViewModel> GetPaymentReceiptById(long id);
     }
 }

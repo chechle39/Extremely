@@ -1,7 +1,5 @@
 import { Observable } from 'rxjs';
-import { InvoiceView } from '../models/invoice/invoice-view.model';
 import { Injectable } from '@angular/core';
-import { saveAs } from 'file-saver';
 import { map } from 'rxjs/operators';
 import { JournalEntryViewModel, DataMap } from '../models/journalentry/journalentry.model';
 import { API_URI } from '../../../../environments/app.config';
@@ -18,7 +16,7 @@ export class JournalEntryService extends BaseService {
             return (
               data.length !== 0 ? data as JournalEntryViewModel[] : new Array<JournalEntryViewModel>()
             );
-          }
+          },
         ));
 
     return products;
@@ -33,7 +31,7 @@ export class JournalEntryService extends BaseService {
             return (
               data.length !== 0 ? data as DataMap[] : new Array<DataMap>()
             );
-          }
+          },
         ));
 
     return clients;

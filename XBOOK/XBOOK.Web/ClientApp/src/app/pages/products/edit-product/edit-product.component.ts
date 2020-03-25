@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, Injector } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ProductView } from '../../_shared/models/product/product-view.model';
 import { ProductService } from '../../_shared/services/product.service';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { ProductCategory } from '../../_shared/models/product/product-category.model';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 
 @Component({
   selector: 'xb-edit-product',
@@ -21,7 +20,7 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
     unitPrice: 0,
     categoryID: 0,
     categoryName: '',
-    unit: ''
+    unit: '',
   };
   saving = false;
   categorySelect: any;
@@ -29,6 +28,7 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
 
   constructor(
     injector: Injector,
+    public authenticationService: AuthenticationService,
     public activeModal: NgbActiveModal,
     public productService: ProductService) { super(injector); }
 
@@ -53,7 +53,7 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
       .pipe(
         finalize(() => {
           this.saving = false;
-        })
+        }),
       )
       .subscribe(() => {
         this.notify.info('Update Successfully');

@@ -14,5 +14,6 @@ namespace XBOOK.Data.Interfaces
         Task<PaymentReceiptViewModel> GetLastPayMentReceipt();
         Task<bool> Update(PaymentReceiptViewModel request);
         Task<PaymentReceiptViewModel> GetPayMentId(long Id);
+        Task<PaymentReceiptByIdViewModel> GetPaymentReceiptById(long id);
     }
 }

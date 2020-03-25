@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Injector } from '@angular/core';
+import { Component, OnInit, Input, Injector, ElementRef, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
@@ -28,40 +28,42 @@ export class ImportProductComponent extends AppComponentBase implements OnInit {
   bankAccount: any;
   note: any;
   SelectedFieldName: any[] = [];
+  SelectedTemp: any[] = [];
+  SelectedDescription: any[] = [];
+  arrayselected:any = [];
   client: ProductView = new ProductView();
   constructor(
     injector: Injector,
     public fb: FormBuilder,
     public activeModal: NgbActiveModal,
-    private productService: ProductService ) {
+    private productService: ProductService) {
     super(injector);
   }
-
   ngOnInit() {
     this.importForm = this.createSupplierFormGroup();
     this.FieldName = this.id[0];
     this.Datareport = this.id;
     // tslint:disable-next-line:prefer-for-of
     for (let j = 1; j < this.FieldName.length; j++) {
-      console.log(this.FieldName)
-      if (this.FieldName[j] !== "" ){
-      const data = {
-        value: this.FieldName[j],
-      };
-      if (data !== null || data !== undefined){
-        this.SelectedFieldName.push(data);
-      }  
-    }       
+      if (this.FieldName[j] !== "") {
+        const data = {
+          value: this.FieldName[j],
+        };
+        if (data !== null || data !== undefined) {
+          this.SelectedFieldName.push(data);
+        }
+      }
     }
-
+      this.SelectedTemp =  this.SelectedFieldName
   }
+  
   createSupplierFormGroup() {
     return this.fb.group({
       productName: [null, [Validators.required]],
       description: [null],
       unitPrice: [null, [Validators.required]],
       categoryID: [null],
-      Unit: [null,[Validators.required]],
+      Unit: [null],
     });
   }
   save(e: FormGroup): void {
@@ -71,7 +73,7 @@ export class ImportProductComponent extends AppComponentBase implements OnInit {
       const client = {
         productName: this.Datareport[i][this.importForm.value.productName],
         description: this.Datareport[i][this.importForm.value.description],
-        unitPrice:  Number(String(this.Datareport[i][this.importForm.value.unitPrice]).replace(/,/g, '')),
+        unitPrice: Number(String(this.Datareport[i][this.importForm.value.unitPrice]).replace(/,/g, '')),
         categoryID: Number(String(this.Datareport[i][this.importForm.value.categoryID]).replace(/,/g, '')),
         Unit: this.Datareport[i][this.importForm.value.Unit],
       };
@@ -92,6 +94,21 @@ export class ImportProductComponent extends AppComponentBase implements OnInit {
   close(result: any): void {
     this.activeModal.close(result);
   }
-  onChange(value: string): void {
-  }
+  // onChange(e: any,formindex: number) { 
+      
+  //   this.arrayselected[formindex] = this.FieldName[e];
+  //   this.SelectedTemp = this.SelectedFieldName.filter(item => !Array.from(this.arrayselected).includes(item.value));
+   
+  //   // this.SelectedTemp = this.SelectedDescription;
+  //   // this.FieldName = this.SelectedTemp ;
+  // }
+  // b(e: any,formindex: number){
+  //   for(let i = 1; i < this.SelectedFieldName.length; i++){
+  //     if(Array.from(this.arrayselected).includes(this.SelectedFieldName[i].value)){
+  //       return true;
+  //     }
+
+  //   }
+  //   return false;
+  // }
 }

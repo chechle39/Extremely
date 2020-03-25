@@ -71,12 +71,12 @@
 
             </ng-template>
             </ngx-datatable-column> -->
-            <ngx-datatable-column name="{{ 'Debit.Age.LIST.CompanyName' | translate }}" prop="firstMonth">
+            <ngx-datatable-column name="{{ 'Debit.Age.LIST.CompanyName' | translate }}" prop="companyName">
               <ng-template  let-row="row" ngx-datatable-cell-template>
                 <div (click)="getaccNumber(row.companyName)" >{{row.companyName}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="issueDate" name="0 - 31 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="firstMonth" name="0 - 31 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -92,7 +92,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="issueDate" name="31 - 60 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="secondMonth" name="31 - 60 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -108,7 +108,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="issueDate" name="61-90 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="thirdMonth" name="61-90 {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -124,7 +124,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="amountPaid" name="90+ {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="fourthMonth" name="90+ {{ 'Debit.Age.LIST.Day' | translate }}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right" style="padding-right: 0;">
@@ -141,7 +141,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-           <ngx-datatable-column prop="issueDate" name="{{ 'Debit.Age.LIST.Total' | translate }}" [cellClass]="'col-right'"
+           <ngx-datatable-column prop="sumtotal" name="{{ 'Debit.Age.LIST.Total' | translate }}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">

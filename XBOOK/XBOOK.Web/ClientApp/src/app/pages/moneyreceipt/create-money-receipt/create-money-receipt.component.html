@@ -6,8 +6,8 @@
   <div class="modal-body">
     <div class="row  mb-2">
       <div  class="col-7">
-        <input *ngIf = "outstandingAmount !== undefined" [rowItem]= "outstandingAmount" validateDirective digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="{{'INVOICE.FORM.CREATE.AMOUNT' | translate}}" id="amount">
-        <input *ngIf = "outstandingAmount === undefined"  [rowItem]= "outstandingAmount" validateDirective  digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="{{'INVOICE.FORM.CREATE.AMOUNT' | translate}}" id="amount">
+        <input [hidden] = "outstandingAmount !== undefined" [rowItem]= "outstandingAmount" validateDirective digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="{{'INVOICE.FORM.CREATE.AMOUNT' | translate}}" id="amount">
+        <input [hidden] = "outstandingAmount === undefined"  [rowItem]= "outstandingAmount" validateDirective  digitOnly [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" formControlName="amount" class="form-control" maxlength="16" placeholder="{{'INVOICE.FORM.CREATE.AMOUNT' | translate}}" id="amount">
 
       </div>
       <div class="col-5">
@@ -104,6 +104,6 @@
     <button (click)="close(false)" type="button" class="btn btn-raised btn-secondary mr-1">
       <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate}}
     </button>
-    <button [disabled]="moneyReceipt.invalid" type="submit" class="btn btn-raised btn-success"><i class="ft-save"></i>{{'COMMON.BUTTON.SAVE' | translate}}</button>
+    <button [disabled]="moneyReceipt.invalid || authenticationService.hasPermission('Money Receipt','create')" type="submit" class="btn btn-raised btn-success"><i class="ft-save"></i>{{'COMMON.BUTTON.SAVE' | translate}}</button>
   </div>
 </form>

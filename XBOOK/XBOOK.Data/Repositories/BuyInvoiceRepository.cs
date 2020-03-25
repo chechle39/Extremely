@@ -22,7 +22,7 @@ namespace XBOOK.Data.Repositories
         private readonly IBuyInvDetailRepository _buyInvDetailRepository;
         private readonly IProductRepository _productRepository;
 
-        public BuyInvoiceRepository(DbContext context, IUnitOfWork uow, ISupplierRepository supplierRepository, IBuyInvDetailRepository buyInvDetailRepository, IProductRepository productRepository) : base(context)
+        public BuyInvoiceRepository(XBookContext context, IUnitOfWork uow, ISupplierRepository supplierRepository, IBuyInvDetailRepository buyInvDetailRepository, IProductRepository productRepository) : base(context)
         {
             _uow = uow;
             _supplierRepository = supplierRepository;

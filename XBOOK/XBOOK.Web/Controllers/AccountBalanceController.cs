@@ -36,7 +36,7 @@ namespace XBOOK.Web.Controllers
         public IActionResult SaveFileJson(List<AccountBalancePrintModel> request)
         {
             string json = JsonConvert.SerializeObject(request);
-            var folderName = Path.Combine("Reports", "Data");
+            var folderName = Path.Combine(request[0].companyCode,"Reports", "Data");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = "AccountBalance.json";
 

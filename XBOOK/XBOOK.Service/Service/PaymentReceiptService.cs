@@ -18,12 +18,13 @@ namespace XBOOK.Service.Service
         private readonly IPayments2Service _payments2Service;
         private readonly IPayment2Repository _paymentRepository;
         private readonly IUnitOfWork _uow;
-        public PaymentReceiptService(IPayment2Repository paymentRepository, IBuyInvoiceService buyInvoiceRepository, IUnitOfWork uow, IPaymentReceiptRepository iPaymentReceiptRepository, IPayments2Service payments2Service, IBuyInvoiceService buyInvoiceService)
+        public PaymentReceiptService(IPayment2Repository paymentRepository, IBuyInvoiceRepository buyInvoiceRepository, IUnitOfWork uow, IPaymentReceiptRepository iPaymentReceiptRepository, IPayments2Service payments2Service, IBuyInvoiceService buyInvoiceService)
         {
             _uow = uow;
             _iPaymentReceiptRepository = iPaymentReceiptRepository;
             _payments2Service = payments2Service;
             _paymentRepository = paymentRepository;
+            _buyInvoiceRepository = buyInvoiceRepository;
         }
 
         public async Task<bool> CreatePaymentReceipt(PaymentReceiptViewModel request)
@@ -48,7 +49,7 @@ namespace XBOOK.Service.Service
                         note = request.Note,
                         payDate = request.PayDate,
                         payType = request.PayType,
-                        payTypeID = request.PayTypeID,
+                        payName = request.PayName,
                         receiptNumber = request.ReceiptNumber,
                     };
                     var payUw = _uow.GetRepository<IRepository<Payments_2>>();
@@ -87,7 +88,7 @@ namespace XBOOK.Service.Service
                 Note = request.Note,
                 PayDate = request.PayDate,
                 PayType = request.PayType,
-                PayTypeID = request.PayTypeID,
+                PayName= request.PayName,
                 ReceiptNumber = request.ReceiptNumber,
                 ReceiverName = request.ReceiverName
             };
@@ -109,6 +110,11 @@ namespace XBOOK.Service.Service
         {
             var data = await _iPaymentReceiptRepository.GetLastPayMentReceipt();
             return data;
+        }
+
+        public async Task<PaymentReceiptByIdViewModel> GetPaymentReceiptById(long id)
+        {
+            return await _iPaymentReceiptRepository.GetPaymentReceiptById(id);
         }
 
         public async Task<bool> Update(PaymentReceiptViewModel request)

@@ -160,16 +160,16 @@
     
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [sortable]="false" name="{{'INVOICE.GRID.HEADER.CLIENTINVOICE' | translate}}" [cellClass]="'col-id'"
+            <ngx-datatable-column  prop="clientName"  name="{{'INVOICE.GRID.HEADER.CLIENTINVOICE' | translate}}" [cellClass]="'col-id'"
               [headerClass]="'col-id'">
-              <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+              <!-- <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
                 <span class="column-header" style="cursor: pointer" (click)="sortClient()">{{'INVOICE.GRID.HEADER.CLIENT' | translate}}</span>
                 <span class="column-header" style="cursor: pointer">{{'INVOICE.GRID.HEADER.INVOICE' | translate}}</span>
                 <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
                   [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
                   [class.datatable-icon-down]="sortDir === 'desc'"></span>
     
-              </ng-template>
+              </ng-template> -->
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div>
                   {{row.clientName}}
@@ -193,7 +193,7 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="amountPaid" name="{{'BUY.INVOICE.GRID.AMOUNT.AMOUNTPAID' | translate}}" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="amount" name="{{'BUY.INVOICE.GRID.AMOUNT.AMOUNTPAID' | translate}}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">

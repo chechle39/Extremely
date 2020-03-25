@@ -4,10 +4,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientView } from '../../_shared/models/client/client-view.model';
 import { ClientService } from '../../_shared/services/client.service';
 import { finalize } from 'rxjs/operators';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 
 @Component({
   selector: 'xb-edit-client',
-  templateUrl: './edit-client.component.html'
+  templateUrl: './edit-client.component.html',
 })
 export class EditClientComponent extends AppComponentBase implements OnInit {
 
@@ -18,6 +19,7 @@ export class EditClientComponent extends AppComponentBase implements OnInit {
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
+    public authenticationService: AuthenticationService,
     public clientService: ClientService) { super(injector); }
 
   ngOnInit() {
@@ -31,7 +33,7 @@ export class EditClientComponent extends AppComponentBase implements OnInit {
       .pipe(
         finalize(() => {
           this.saving = false;
-        })
+        }),
       )
       .subscribe(() => {
         this.notify.info('Update Successfully');

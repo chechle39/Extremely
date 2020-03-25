@@ -16,7 +16,7 @@ namespace XBOOK.Data.Repositories
         private readonly IUnitOfWork _uow;
         private readonly IProductRepository _productRepository;
         private readonly ISaleInvoiceDetailRepository _saleInvoiceDetailRepository;
-        public BuyInvDetailRepository(DbContext context, IUnitOfWork uow, IProductRepository productRepository, ISaleInvoiceDetailRepository saleInvoiceDetailRepository) : base(context)
+        public BuyInvDetailRepository(XBookContext context, IUnitOfWork uow, IProductRepository productRepository, ISaleInvoiceDetailRepository saleInvoiceDetailRepository) : base(context)
         {
             _uow = uow;
             _productRepository = productRepository;

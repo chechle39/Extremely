@@ -6,6 +6,7 @@ namespace XBOOK.Data.ViewModels
 {
     public class GeneralLedgerViewModel
     {
+        public string companyCode { get; set; }
         public string companyName { get; set; }
         public string companyAddress { get; set; }
         public long ledgerID { get; set; }
@@ -25,6 +26,7 @@ namespace XBOOK.Data.ViewModels
     }
     public class GeneralJournalViewModel
     {
+        public string companyCode { get; set; }
         public string startDate { get; set; }
         public string endDate { get; set; }
         public string companyName { get; set; }

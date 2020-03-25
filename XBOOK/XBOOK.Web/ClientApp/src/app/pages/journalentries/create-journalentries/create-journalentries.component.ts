@@ -8,7 +8,7 @@ import {
   ViewChild,
   QueryList,
 } from '@angular/core';
-import { Observable, Subject, merge, of, Subscription, fromEvent } from 'rxjs';
+import { Observable, Subject, merge, of, Subscription } from 'rxjs';
 import {
   FormGroup,
   FormBuilder,
@@ -26,6 +26,9 @@ import * as _ from 'lodash';
 import { DataMap, CreateRequest, Datatable } from '../../_shared/models/journalentry/journalentry.model';
 import { JournalEntryService } from '../../_shared/services/journal-entry.service';
 import { AccountChartService } from '../../_shared/services/accountchart.service';
+import { ngbTypeheadScrollToActiveItem } from '../../../shared/utils/util';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
+import { CommonService } from '../../../shared/service/common.service';
 
 @Component({
   selector: 'xb-create-journalentries',
@@ -36,12 +39,7 @@ import { AccountChartService } from '../../_shared/services/accountchart.service
 export class CreateJournalEntriesComponent extends AppComponentBase implements OnInit, AfterViewInit {
   @ViewChildren('productName') productNameField: QueryList<any>;
   @ViewChild('inputtab',  { static: true }) inputtab: ElementRef;
-  @ViewChild('amountPaidVC', { static: true }) amountPaidVC: any;
-  @ViewChild('xxx', {
-    static: true,
-  }) xxx: ElementRef;
-  @ViewChild('view', { static: false }) view: ElementRef;
-  productInputFocusSub: Subscription = new Subscription();
+   productInputFocusSub: Subscription = new Subscription();
   listInvoice: any;
   loadingIndicator = true;
   title = 'New JournalEntries';
@@ -53,14 +51,10 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   isRead = true;
   isMouseEnter = false;
   invoiceForm: FormGroup;
-  invoiceFormValueChanges$;
-  subTotalAmount = 0;
-  totalTaxAmount = 0;
   invoiceId = 0;
   editMode = false;
   viewMode = false;
   focusClient$ = new Subject<string>();
-  focusAcc$ = new Subject<string>();
   isEditClient = true;
   clientKey = {
     clientKeyword: '',
@@ -82,27 +76,30 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     private el: ElementRef,
     private journalEntryService: JournalEntryService,
     private router: Router,
+    public authenticationService: AuthenticationService,
+    private commonService: CommonService,
     private accountChartService: AccountChartService,
     private activeRoute: ActivatedRoute,
     private fb: FormBuilder,
   ) {
     super(injector);
+    this.commonService.CheckAssessFunc('Journal Entries');
     this.createForm();
   }
 
+  typeheadScrollHandler(e) {
+    ngbTypeheadScrollToActiveItem(e);
+  }
   ngOnInit() {
     this.isRead = false;
     this.getAccoutChart();
     this.createForm();
     if (this.invoiceForm !== undefined) {
-      this.invoiceFormValueChanges$ = this.invoiceForm.controls.items.valueChanges;
+      // this.invoiceFormValueChanges$ = this.invoiceForm.controls.items.valueChanges;
       // subscribe to the stream so listen to changes on units
-      this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
+      // this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
       this.methodEdit_View();
     }
-
-    // this.methodEdit_View();
-
   }
 
   getAccoutChart() {
@@ -391,7 +388,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       this.invoiceForm.disable();
       this.invoiceForm.controls.items.disable();
     } else {
-      this.invoiceForm.reset();
+    //  this.invoiceForm.reset();
       this.router.navigate([`/pages/journalentries`]);
     }
 

@@ -4,10 +4,11 @@ import { ProductView } from '../../_shared/models/product/product-view.model';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
 import { ProductService } from '../../_shared/services/product.service';
 import { finalize } from 'rxjs/operators';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 
 @Component({
   selector: 'xb-create-product',
-  templateUrl: './create-product.component.html'
+  templateUrl: './create-product.component.html',
 })
 export class CreateProductComponent extends AppComponentBase implements OnInit {
 
@@ -21,6 +22,7 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
+    public authenticationService: AuthenticationService,
     public productService: ProductService) {
     super(injector);
   }
@@ -38,7 +40,7 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
         .pipe(
           finalize(() => {
             this.saving = false;
-          })
+          }),
         )
         .subscribe(() => {
           this.notify.info('Saved Successfully');

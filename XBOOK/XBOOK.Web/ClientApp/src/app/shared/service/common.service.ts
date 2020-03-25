@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from '../../coreapp/services/message.service';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonService {
-    constructor(private message: MessageService, private router: Router) {
+    constructor(private message: MessageService,
+        public authenticationService: AuthenticationService,
+        private router: Router) {
 
     }
     messeage(code) {
@@ -18,5 +21,13 @@ export class CommonService {
             });
         }
         return;
+    }
+
+    CheckAssessFunc(funcName: string) {
+        if (this.authenticationService.checkAccess(funcName) === false) {
+            this.authenticationService.logout().subscribe(() => {
+              this.router.navigate(['/auth/login'], { replaceUrl: true });
+            });
+          }
     }
 }

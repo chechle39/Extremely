@@ -1,7 +1,7 @@
 <nb-card style="min-height: 70vh;">
   <nb-card-header>
     <span style="font-size: 1.3rem;" class="font-weight-normal" >{{'BUY.INVOICE.HEADER' | translate}}</span>
-    <button  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
+    <button [disabled] = "authenticationService.hasPermission('Buy invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
   </nb-card-header>
   <nb-card-body>
     <div class="row">
@@ -42,7 +42,7 @@
             <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i>{{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
             <button class="dropdown-item" [disabled]="true"><i class="fa fa-paper-plane"></i>{{'BUY.INVOICE.GRID.MARK.SEND' | translate}}</button>
             <button class="dropdown-item" (click)="addPayment()"><i class="fa fa-dollar"></i>{{'BUY.INVOICE.GRID.ADD.RECIPT' | translate}}</button>
-            <button class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
+            <button [disabled] = "authenticationService.hasPermission('Buy invoice','delete')" class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
           </div>
         </div>
       </div>
@@ -156,16 +156,16 @@
 
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [sortable]="false" name="{{'BUY.INVOICE.GRID.SUPPLIER.INVOICE' | translate}}" [cellClass]="'col-id'"
+            <ngx-datatable-column prop="supplierName"  name="{{'BUY.INVOICE.GRID.SUPPLIER.INVOICE' | translate}}" [cellClass]="'col-id'"
               [headerClass]="'col-id'">
-              <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+              <!-- <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
                 <span class="column-header" style="cursor: pointer" (click)="sortClient()">{{'BUY.INVOICE.GRID.SUPPLIER' | translate}}</span>
                 <span class="column-header" style="cursor: pointer">{{'BUY.INVOICE.GRID.INVOICE' | translate}}</span>
                 <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
                   [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
                   [class.datatable-icon-down]="sortDir === 'desc'"></span>
 
-              </ng-template>
+              </ng-template> -->
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div>
                   {{row.supplierName}}
@@ -189,7 +189,7 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="amountPaid" name="{{'BUY.INVOICE.GRID.AMOUNT.AMOUNTPAID' | translate}}" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="amount" name="{{'BUY.INVOICE.GRID.AMOUNT.AMOUNTPAID' | translate}}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -207,12 +207,12 @@
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
                 <div class="icon-actions">
                   <div class="actions">
-                    <a class="icon-action" (click)="redirectToEditInvoice(row.invoiceId)">
+                    <a [hidden] = "authenticationService.hasPermission('Buy invoice','update')" class="icon-action" (click)="redirectToEditInvoice(row.invoiceId)">
                       <span class="icon-edit"></span>
                     </a>
                   </div>
                   <div class="actions">
-                    <a class="icon-action" (click)="delete(row.invoiceId,row.invoiceNumber, row.invoiceSerial)">
+                    <a [hidden] = "authenticationService.hasPermission('Buy invoice','delete')" class="icon-action" (click)="delete(row.invoiceId,row.invoiceNumber, row.invoiceSerial)">
                       <span class="icon-delete"></span>
                     </a>
                   </div>

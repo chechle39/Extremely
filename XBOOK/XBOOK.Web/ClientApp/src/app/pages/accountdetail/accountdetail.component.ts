@@ -12,6 +12,7 @@ import { InvoiceService } from '../_shared/services/invoice.service';
 import { SearchAccountDetailComponent } from './searchaccount-detail/searchaccount-detail.component';
 import { AccountDetailService } from '../_shared/services/accountdetail.service';
 import { DataService } from '../_shared/services/data.service';
+import { CommonService } from '../../shared/service/common.service';
 
 
 class PagedClientsRequestDto extends PagedRequestDto {
@@ -55,10 +56,17 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
     private data: DataService,
     private activeRoute: ActivatedRoute,
     private invoiceService: InvoiceService,
+    private commonService: CommonService,
     private accountDetailService: AccountDetailService,
     private modalService: NgbModal,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('Account Detail');
+    this.recalculateOnResize(() => {
+      this.genViews.forEach((view, index) => {
+        this.genViews[index].accountDetailViewModel = [...view.accountDetailViewModel];
+      });
+    });
   }
 
   protected list(
@@ -155,6 +163,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
       const data = {
         companyNameName: this.companyName,
         companyAddress: this.companyAddress,
+        companyCode: this.companyCode,
         accountNumber: this.accdetailViewsreport[j].accountNumber,
         accountName: this.accdetailViewsreport[j].accountName,
         companyName: this.accdetailViewsreport[j].companyName,

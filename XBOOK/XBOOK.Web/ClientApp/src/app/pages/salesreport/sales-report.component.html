@@ -68,7 +68,7 @@
               [limit]="20" [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)"
               [selectAllRowsOnPage]="false">
 
-              <ngx-datatable-column name="{{ 'SALE.LIST.customerName' | translate }}" prop="firstMonth"  [flexGrow]="3">
+              <ngx-datatable-column name="{{ 'SALE.LIST.customerName' | translate }}" prop="customerName"  [flexGrow]="3">
                 <ng-template let-row="row" ngx-datatable-cell-template>
                   <div>{{row.customerName}}</div>
                 </ng-template>
@@ -85,7 +85,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.date' | translate }}" [flexGrow]="1"
+              <ngx-datatable-column prop="date" name="{{ 'SALE.LIST.date' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-left'" [headerClass]="'col-left'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-left">
@@ -96,7 +96,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.unitPrice' | translate }}" [flexGrow]="1"
+              <ngx-datatable-column prop="unitPrice" name="{{ 'SALE.LIST.unitPrice' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-right'" [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-right">
@@ -114,7 +114,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.amount' | translate }}" [flexGrow]="1"
+              <ngx-datatable-column prop="amount" name="{{ 'SALE.LIST.amount' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-center'" [headerClass]="'col-center'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-center">
@@ -125,7 +125,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.discount' | translate }}" [flexGrow]="1"
+              <ngx-datatable-column prop="discount" name="{{ 'SALE.LIST.discount' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-right'" [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-right">
@@ -143,7 +143,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'col-right'" [flexGrow]="1"
+              <ngx-datatable-column prop="payment" name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'col-right'" [flexGrow]="1"
                 [headerClass]="'col-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-right">

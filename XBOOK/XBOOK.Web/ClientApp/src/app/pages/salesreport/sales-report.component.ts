@@ -13,6 +13,7 @@ import { InvoiceService } from '../_shared/services/invoice.service';
 import { SearchsalesReportComponent } from './searchsales-report/searchsales-report.component';
 import { SalesReportService } from '../_shared/services/salesreport.service';
 import { DataService } from '../_shared/services/data.service';
+import { CommonService } from '../../shared/service/common.service';
 
 
 class PagedClientsRequestDto extends PagedRequestDto {
@@ -60,8 +61,15 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
     private invoiceService: InvoiceService,
     private salesReportService: SalesReportService,
     private modalService: NgbModal,
+    private commonService: CommonService,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('Sales Report');
+    this.recalculateOnResize(() => {
+      this.genViews.forEach((view, index) => {
+        this.genViews[index].salesReportListData = [...view.salesReportListData];
+      });
+    });
   }
 
   protected list(
@@ -180,6 +188,7 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
       const data = {
         companyNameName: this.companyName,
         companyAddress: this.companyAddress,
+        companyCode: this.companyCode,
         productName: this.salesViewsreport[j].productName,
         customerName: this.salesViewsreport[j].customerName,
         invoiceNumber: this.salesViewsreport[j].invoiceNumber,

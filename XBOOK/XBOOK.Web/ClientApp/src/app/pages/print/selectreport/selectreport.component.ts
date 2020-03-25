@@ -1,15 +1,11 @@
 import { Component, OnInit, Injector, Input } from '@angular/core';
-import { GenLedMethod } from '../../_shared/models/invoice/genled-method.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CurrencyMethod } from '../../_shared/models/invoice/currency-method.model';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
 import { AcountNumberMethod } from '../../_shared/models/invoice/accountnumber-method.model';
 import { PrintService } from '../../_shared/services/print.service';
-import * as moment from 'moment';
-import { AppConsts } from '../../../coreapp/app.consts';
 import { SelectItem } from 'primeng/components/common/selectitem';
-import  DevExpress  from "@devexpress/analytics-core";  
 @Component({
   selector: 'xb-selectreport',
   templateUrl: './selectreport.component.html',
@@ -17,6 +13,7 @@ import  DevExpress  from "@devexpress/analytics-core";
 })
 export class SelectReportComponent extends AppComponentBase implements OnInit {
   @Input() accChart;
+  invokeAction = '/DXXRDV';
   cars: any[];
   tempcars: AcountNumberMethod[];
   selectedCars1: string[] = [];
@@ -42,6 +39,7 @@ export class SelectReportComponent extends AppComponentBase implements OnInit {
   constructor(
     public fb: FormBuilder,
     injector: Injector,
+    private modalService: NgbModal,
     public activeModal: NgbActiveModal,
     public printService: PrintService) {
     super(injector);

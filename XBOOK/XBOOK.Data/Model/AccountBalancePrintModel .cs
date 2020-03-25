@@ -4,6 +4,7 @@ namespace XBOOK.Data.Model
 {
     public class AccountBalancePrintModel
     {
+        public string companyCode { get; set; }
         public string startDate { get; set; }
         public string endDate { get; set; }
         public string companyName { get; set; }

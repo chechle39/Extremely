@@ -14,8 +14,10 @@ namespace XBOOK.Data.Repositories
 {
     public class MoneyReceiptRepository: Repository<MoneyReceipt>, IMoneyReceiptRepository
     {
-        public MoneyReceiptRepository(DbContext context) : base(context)
+        private readonly IClientRepository _clientRepository;
+        public MoneyReceiptRepository(XBookContext context, IClientRepository clientRepository) : base(context)
         {
+            _clientRepository = clientRepository;
         }
 
         public async Task<bool> CreateMoneyReceipt(MoneyReceiptViewModel request)
@@ -54,9 +56,33 @@ namespace XBOOK.Data.Repositories
            
         }
 
-        public Task<MoneyReceiptViewModel> GetMoneyById(long Id)
+        public async Task<MoneyReceiptViewModel> GetMoneyByIdAsync(MoneyReceiptID request)
         {
-            throw new System.NotImplementedException();
+
+            var data = await Entities.ProjectTo<MoneyReceiptViewModel>().Where(x=> x.ID == request.ID).LastOrDefaultAsync();
+            return data;
+        }
+
+        public async Task<MoneyReceiptByIdViewModel> GetMoneyByIdObject(long id)
+        {
+            var data = await Entities.ProjectTo<MoneyReceiptViewModel>().Where(x => x.ID == id).AsNoTracking().ToListAsync();
+            var dataMoney = new MoneyReceiptByIdViewModel()
+            {
+                Address = await _clientRepository.GetAllClientByID(data[0].ClientID),
+                Amount = data[0].Amount,
+                ClientID = data[0].ClientID,
+                ClientName = data[0].ClientName,
+                BankAccount = data[0].BankAccount,
+                EntryType = data[0].EntryType,
+                ID = data[0].ID,
+                Note = data[0].Note,
+                PayDate = data[0].PayDate,
+                PayName = data[0].PayName,
+                PayType = data[0].PayType,
+                ReceiptNumber = data[0].ReceiptNumber,
+                ReceiverName = data[0].ReceiverName,
+            };
+            return dataMoney;
         }
 
         public async Task<bool> Update(MoneyReceiptViewModel request)

@@ -1,7 +1,6 @@
 import { Component, OnInit, Injector, ViewChild, ElementRef, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { PaymentMethod } from '../../_shared/models/invoice/payment-method.model';
 import { Observable, Subject, merge, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
@@ -18,6 +17,7 @@ import { SupplierService } from '../../_shared/services/supplier.service';
 import { SupplierSearchModel } from '../../_shared/models/supplier/supplier-search.model';
 import { MasterParamService } from '../../_shared/services/masterparam.service';
 import { MasterParamModel } from '../../_shared/models/masterparam.model';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 @Component({
   selector: 'xb-create-payment-receipt',
   templateUrl: './payment-receipt.component.html',
@@ -40,6 +40,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   companyName: any;
   companyAddress: any;
   companyCode: any;
+  address:any
   isCheckFc: boolean;
   focusClient$ = new Subject<string>();
   searchFailed = false;
@@ -55,9 +56,11 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     injector: Injector,
     private router: Router,
     public activeModal: NgbActiveModal,
+    private modalService: NgbModal,
     private supplierService: SupplierService,
     private invoiceService: InvoiceService,
     private paymentReceiptService: PaymentReceiptService,
+    public authenticationService: AuthenticationService,
     private masterParamService: MasterParamService,
     public fb: FormBuilder) {
     super(injector);
@@ -80,37 +83,44 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       this.clientSelected = data;
     }
     if (this.row !== undefined) {
-      const today = new Date(this.row.payDate).toLocaleDateString('en-GB');
-      const payDateSplit = today.split('/');
-      const payDatePicker = {
-        year: Number(payDateSplit[2]),
-        month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
-      };
-      this.moneyReceipt.controls.id.patchValue(this.row.id);
-      this.moneyReceipt.controls.amount.patchValue(this.row.amount);
-      this.moneyReceipt.controls.receiptNumber.patchValue(this.row.receiptNumber);
-      this.moneyReceipt.controls.receiverName.patchValue(this.row.receiverName);
-      this.moneyReceipt.controls.supplierName.patchValue(this.row.supplierName);
-      this.moneyReceipt.controls.entryType.patchValue(this.row.entryType);
-      this.moneyReceipt.controls.paymentMethods.patchValue(this.row.payType);
-      this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
-      this.moneyReceipt.controls.bankAccount.patchValue(this.row.bankAccount);
-      this.moneyReceipt.controls.note.patchValue(this.row.note);
-      this.moneyReceipt.controls.supplierID.patchValue(this.row.supplierID);
+      this.paymentReceiptService.getPaymentReceiptById(this.row.id).subscribe(rp => {
+        this.masterParamService.GetMasTerByPaymentReceipt().subscribe((rpx: MasterParamModel[]) => {
+          this.entryBatternList = rpx;
+          const today = new Date(rp.payDate).toLocaleDateString('en-GB');
+        const payDateSplit = today.split('/');
+        const payDatePicker = {
+          year: Number(payDateSplit[2]),
+          month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
+        };
+        this.address = rp.address
+        this.moneyReceipt.controls.id.patchValue(rp.id);
+        this.moneyReceipt.controls.amount.patchValue(rp.amount);
+        this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
+        this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
+        this.moneyReceipt.controls.supplierName.patchValue(rp.supplierName);
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.name ===
+          this.row.entryType)[0].key);
+        this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
+        this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
+        this.moneyReceipt.controls.bankAccount.patchValue(rp.bankAccount);
+        this.moneyReceipt.controls.note.patchValue(rp.note);
+        this.moneyReceipt.controls.supplierID.patchValue(rp.supplierID);
+        const data = {
+          supplierName: this.moneyReceipt.value.supplierName,
+          contactName: this.moneyReceipt.value.receiverName,
+          supplierID: this.moneyReceipt.value.supplierID,
+          bankAccount: this.moneyReceipt.value.bankAccount,
+        } as SupplierSearchModel;
+        this.clientSelected = data;
+        });
 
-      const data = {
-        supplierName: this.moneyReceipt.value.supplierName,
-        contactName: this.moneyReceipt.value.receiverName,
-        supplierID: this.moneyReceipt.value.supplierID,
-        bankAccount: this.moneyReceipt.value.bankAccount,
-      } as SupplierSearchModel;
-      this.clientSelected = data;
+      });
     }
     if (this.row === undefined) {
       this.getLastDataMoneyReceipt();
+      this.getAllEntryData();
     }
     this.getPayType();
-    this.getAllEntryData();
   }
 
   getParam(data) {
@@ -165,14 +175,6 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     }
   }
 
-  // getDate(dateParam) {
-  //   const date = new Date();
-  //   const xx = new Date(date.toLocaleDateString());
-  //   const pr = new Date(dateParam);
-  //   const diffTime = Math.ceil(pr.getTime() - xx.getTime());
-  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  //   return parseFloat(diffDays.toString());
-  // }
 
   getLastDataMoneyReceipt() {
     this.paymentReceiptService.getLastPayment().subscribe(rp => {
@@ -188,7 +190,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
       } else {
         const entry = this.payment.filter(x => x.name === this.row.payType);
-        this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
+      //  this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
       }
     });
   }
@@ -273,6 +275,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       if (this.moneyReceipt.value.id > 0) {
         const request = {
           yourCompanyAddress: rp.address,
+          companyCode: rp.code,
+          address: this.address,
           yourCompanyName: rp.companyName,
           amount: this.moneyReceipt.value.amount,
           bankAccount: this.moneyReceipt.value.bankAccount,
@@ -283,7 +287,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
           note: this.moneyReceipt.value.note,
           payDate: payDateData,
           payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
-          payTypeID: 1,
+          payName: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
           receiptNumber: this.moneyReceipt.value.receiptNumber,
           receiverName: this.moneyReceipt.value.receiverName,
           id: this.moneyReceipt.value.id,
@@ -292,7 +296,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         const reportName = 'PaymentReceiptReport';
         this.paymentReceiptService.paymentReceiptSaveDataPrint(this.requestSaveJson).subscribe(rp1 => {
           this.router.navigate([`/pages/print/${reportName}`]);
-          this.close(false);
+          this.modalService.dismissAll();
+          return ;
         });
       }
 
@@ -316,8 +321,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
-        payTypeID: 1,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payName: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreatePaymentReceiptRequestList;
@@ -335,8 +340,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
-        payTypeID: 1,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payName: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreatePaymentReceiptRequest;
@@ -354,8 +359,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
-        payTypeID: 1,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payName: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
         id: this.moneyReceipt.value.id,

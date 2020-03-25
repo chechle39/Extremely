@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="19.2.5.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="AccountBalanceReport" Landscape="true" Margins="54, 63, 303, 101" PaperKind="A4" PageWidth="1169" PageHeight="827" Version="19.2" DataSource="#Ref-0" TextAlignment="TopCenter" Font="Arial, 9.75pt">
+<XtraReportsLayoutSerializer SerializerVersion="19.2.4.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="AccountBalanceReport" DisplayName="AccountBalanceReport" Landscape="true" Margins="54, 63, 305, 101" PaperKind="A4" PageWidth="1169" PageHeight="827" Version="19.2" DataSource="#Ref-0" TextAlignment="TopCenter" Font="Arial, 9.75pt">
   <Bands>
-    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="302.5417">
+    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="305.08">
       <Controls>
         <Item1 Ref="3" ControlType="XRLabel" Name="label6" Multiline="true" Text="label6" TextAlignment="MiddleLeft" SizeF="300,23.0000019" LocationFloat="47.4999428, 17.2916737" Padding="2,2,0,0,100">
           <ExpressionBindings>
@@ -152,122 +152,122 @@
         </Item9>
       </Controls>
     </Item1>
-    <Item2 Ref="69" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="101" />
-    <Item3 Ref="70" ControlType="DetailBand" Name="Detail" HeightF="38.20823">
+    <Item2 Ref="69" ControlType="DetailBand" Name="Detail" HeightF="38.2">
       <Controls>
-        <Item1 Ref="71" ControlType="XRTable" Name="table8" SizeF="948.6112,38.0832977" LocationFloat="47.4999428, 0" Padding="2,2,0,0,96" BorderColor="Gainsboro" Borders="Left, Top, Right">
+        <Item1 Ref="70" ControlType="XRTable" Name="table8" SizeF="948.6112,38.0832977" LocationFloat="47.4999428, 0" Padding="2,2,0,0,96" BorderColor="Gainsboro" Borders="Left, Top, Right">
           <Rows>
-            <Item1 Ref="72" ControlType="XRTableRow" Name="tableRow8" Weight="1">
+            <Item1 Ref="71" ControlType="XRTableRow" Name="tableRow8" Weight="1">
               <Cells>
-                <Item1 Ref="73" ControlType="XRTableCell" Name="tableCell18" Weight="0.89233541066600885" Multiline="true" Text="tableCell18" TextAlignment="MiddleCenter">
+                <Item1 Ref="72" ControlType="XRTableCell" Name="tableCell18" Weight="0.89233541066600885" Multiline="true" Text="tableCell18" TextAlignment="MiddleCenter" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="74" EventName="BeforePrint" PropertyName="Text" Expression="[accNumber]" />
+                    <Item1 Ref="73" EventName="BeforePrint" PropertyName="Text" Expression="[accNumber]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="75" UseTextAlignment="false" />
+                  <StylePriority Ref="74" UseBorders="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="76" ControlType="XRTableCell" Name="tableCell15" Weight="2.1076643319676185" Multiline="true" Text="tableCell15" TextAlignment="MiddleLeft">
+                <Item2 Ref="75" ControlType="XRTableCell" Name="tableCell15" Weight="2.1076643319676185" Multiline="true" Text="tableCell15" TextAlignment="MiddleLeft" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="77" EventName="BeforePrint" PropertyName="Text" Expression="[accName]" />
+                    <Item1 Ref="76" EventName="BeforePrint" PropertyName="Text" Expression="[accName]" />
                   </ExpressionBindings>
-                  <StylePriority Ref="78" UseTextAlignment="false" />
+                  <StylePriority Ref="77" UseBorders="false" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="79" ControlType="XRTableCell" Name="tableCell16" Weight="0.80921212046341906" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell16" TextAlignment="MiddleRight">
+                <Item3 Ref="78" ControlType="XRTableCell" Name="tableCell16" Weight="0.80921212046341906" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell16" TextAlignment="MiddleRight" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="80" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debitOpening]=0,'-',[debitOpening])" />
+                    <Item1 Ref="79" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debitOpening]=0,'-',[debitOpening])" />
                   </ExpressionBindings>
-                  <StylePriority Ref="81" UseTextAlignment="false" />
+                  <StylePriority Ref="80" UseBorders="false" UseTextAlignment="false" />
                 </Item3>
-                <Item4 Ref="82" ControlType="XRTableCell" Name="tableCell22" Weight="0.80921237782979161" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell22" TextAlignment="MiddleRight">
+                <Item4 Ref="81" ControlType="XRTableCell" Name="tableCell22" Weight="0.80921237782979161" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell22" TextAlignment="MiddleRight" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="83" EventName="BeforePrint" PropertyName="Text" Expression="Iif([creditOpening]=0,'-',[creditOpening])" />
+                    <Item1 Ref="82" EventName="BeforePrint" PropertyName="Text" Expression="Iif([creditOpening]=0,'-',[creditOpening])" />
                   </ExpressionBindings>
-                  <StylePriority Ref="84" UseTextAlignment="false" />
+                  <StylePriority Ref="83" UseBorders="false" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="85" ControlType="XRTableCell" Name="tableCell19" Weight="0.8431955483853284" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell19" TextAlignment="MiddleRight">
+                <Item5 Ref="84" ControlType="XRTableCell" Name="tableCell19" Weight="0.8431955483853284" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell19" TextAlignment="MiddleRight" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="86" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debit]=0,'-',[debit] )" />
+                    <Item1 Ref="85" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debit]=0,'-',[debit] )" />
                   </ExpressionBindings>
-                  <StylePriority Ref="87" UseTextAlignment="false" />
+                  <StylePriority Ref="86" UseBorders="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="88" ControlType="XRTableCell" Name="tableCell20" Weight="0.8431955483853284" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell20" TextAlignment="MiddleRight">
+                <Item6 Ref="87" ControlType="XRTableCell" Name="tableCell20" Weight="0.8431955483853284" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell20" TextAlignment="MiddleRight" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="89" EventName="BeforePrint" PropertyName="Text" Expression="Iif([credit]=0,'-' ,[credit])" />
+                    <Item1 Ref="88" EventName="BeforePrint" PropertyName="Text" Expression="Iif([credit]=0,'-' ,[credit])" />
                   </ExpressionBindings>
-                  <StylePriority Ref="90" UseTextAlignment="false" />
+                  <StylePriority Ref="89" UseBorders="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="91" ControlType="XRTableCell" Name="tableCell21" Weight="0.84759445442382564" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell21" TextAlignment="MiddleRight">
+                <Item7 Ref="90" ControlType="XRTableCell" Name="tableCell21" Weight="0.84759445442382564" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell21" TextAlignment="MiddleRight" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="92" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debitClosing]=0,'-',[debitClosing])" />
+                    <Item1 Ref="91" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debitClosing]=0,'-',[debitClosing])" />
                   </ExpressionBindings>
-                  <StylePriority Ref="93" UseTextAlignment="false" />
+                  <StylePriority Ref="92" UseBorders="false" UseTextAlignment="false" />
                 </Item7>
-                <Item8 Ref="94" ControlType="XRTableCell" Name="tableCell17" Weight="0.84759020787867956" TextFormatString="{0:###,###,0}" Multiline="true" AllowMarkupText="true" Text="-" TextAlignment="MiddleRight">
+                <Item8 Ref="93" ControlType="XRTableCell" Name="tableCell17" Weight="0.84759020787867956" TextFormatString="{0:###,###,0}" Multiline="true" AllowMarkupText="true" Text="-" TextAlignment="MiddleRight" Borders="Left, Right, Bottom">
                   <ExpressionBindings>
-                    <Item1 Ref="95" EventName="BeforePrint" PropertyName="Text" Expression=" Iif([creditClosing]=0 ,'-' ,[creditClosing])" />
+                    <Item1 Ref="94" EventName="BeforePrint" PropertyName="Text" Expression=" Iif([creditClosing]=0 ,'-' ,[creditClosing])" />
                   </ExpressionBindings>
-                  <StylePriority Ref="96" UseTextAlignment="false" />
+                  <StylePriority Ref="95" UseBorders="false" UseTextAlignment="false" />
                 </Item8>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="97" UseBorderColor="false" UseBorders="false" />
+          <StylePriority Ref="96" UseBorderColor="false" UseBorders="false" />
         </Item1>
       </Controls>
-    </Item3>
-    <Item4 Ref="98" ControlType="ReportFooterBand" Name="ReportFooter">
+    </Item2>
+    <Item3 Ref="97" ControlType="ReportFooterBand" Name="ReportFooter">
       <Controls>
-        <Item1 Ref="99" ControlType="XRTable" Name="table9" SizeF="948.6111,48.0833054" LocationFloat="47.4999428, 0" Padding="2,2,0,0,96" BorderColor="Gainsboro" Borders="All">
+        <Item1 Ref="98" ControlType="XRTable" Name="table9" SizeF="948.6111,48.0833054" LocationFloat="47.4999428, 0" Padding="2,2,0,0,96" BorderColor="Gainsboro" Borders="All">
           <Rows>
-            <Item1 Ref="100" ControlType="XRTableRow" Name="tableRow9" Weight="1">
+            <Item1 Ref="99" ControlType="XRTableRow" Name="tableRow9" Weight="1">
               <Cells>
-                <Item1 Ref="101" ControlType="XRTableCell" Name="tableCell23" Weight="2.2096258374011466" Multiline="true" Text="Cộng" TextAlignment="MiddleCenter" Font="Arial, 9.75pt, style=Bold">
-                  <StylePriority Ref="102" UseFont="false" UseTextAlignment="false" />
+                <Item1 Ref="100" ControlType="XRTableCell" Name="tableCell23" Weight="2.2096258374011466" Multiline="true" Text="Cộng" TextAlignment="MiddleCenter" Font="Arial, 9.75pt, style=Bold">
+                  <StylePriority Ref="101" UseFont="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="103" ControlType="XRTableCell" Name="tableCell25" Weight="0.59601875377707336" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell16" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
+                <Item2 Ref="102" ControlType="XRTableCell" Name="tableCell25" Weight="0.59601875377707336" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell16" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="104" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([debitOpening])=0,'-' ,Sum([debitOpening]) )" />
+                    <Item1 Ref="103" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([debitOpening])=0,'-' ,Sum([debitOpening]) )" />
                   </ExpressionBindings>
-                  <StylePriority Ref="105" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="104" UseFont="false" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="106" ControlType="XRTableCell" Name="tableCell26" Weight="0.59601597816494256" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell22" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
+                <Item3 Ref="105" ControlType="XRTableCell" Name="tableCell26" Weight="0.59601597816494256" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell22" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="107" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([creditOpening])=0,'-' ,Sum([creditOpening]))" />
+                    <Item1 Ref="106" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([creditOpening])=0,'-' ,Sum([creditOpening]))" />
                   </ExpressionBindings>
-                  <StylePriority Ref="108" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="107" UseFont="false" UseTextAlignment="false" />
                 </Item3>
-                <Item4 Ref="109" ControlType="XRTableCell" Name="tableCell27" Weight="0.62105129345324017" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell19" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
+                <Item4 Ref="108" ControlType="XRTableCell" Name="tableCell27" Weight="0.62105129345324017" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell19" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="110" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([debit])=0,'-',Sum([debit]) )" />
+                    <Item1 Ref="109" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([debit])=0,'-',Sum([debit]) )" />
                   </ExpressionBindings>
-                  <StylePriority Ref="111" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="110" UseFont="false" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="112" ControlType="XRTableCell" Name="tableCell28" Weight="0.62104977696398889" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell20" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
+                <Item5 Ref="111" ControlType="XRTableCell" Name="tableCell28" Weight="0.62104977696398889" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell20" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="113" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([credit])=0,'-',Sum([credit]) )" />
+                    <Item1 Ref="112" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([credit])=0,'-',Sum([credit]) )" />
                   </ExpressionBindings>
-                  <StylePriority Ref="114" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="113" UseFont="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="115" ControlType="XRTableCell" Name="tableCell29" Weight="0.62428894784741162" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell21" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
+                <Item6 Ref="114" ControlType="XRTableCell" Name="tableCell29" Weight="0.62428894784741162" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell21" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="116" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([debitClosing])=0,'- ', Sum([debitClosing]))" />
+                    <Item1 Ref="115" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([debitClosing])=0,'- ', Sum([debitClosing]))" />
                   </ExpressionBindings>
-                  <StylePriority Ref="117" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="116" UseFont="false" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="118" ControlType="XRTableCell" Name="tableCell30" Weight="0.62428508042457842" TextFormatString="{0:###,###,0}" Multiline="true" Text="-" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
+                <Item7 Ref="117" ControlType="XRTableCell" Name="tableCell30" Weight="0.62428508042457842" TextFormatString="{0:###,###,0}" Multiline="true" Text="-" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
-                    <Item1 Ref="119" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([creditClosing])=0,'- ', Sum([creditClosing]))" />
+                    <Item1 Ref="118" EventName="BeforePrint" PropertyName="Text" Expression="Iif(Sum([creditClosing])=0,'- ', Sum([creditClosing]))" />
                   </ExpressionBindings>
-                  <StylePriority Ref="120" UseFont="false" UseTextAlignment="false" />
+                  <StylePriority Ref="119" UseFont="false" UseTextAlignment="false" />
                 </Item7>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="121" UseBorderColor="false" UseBorders="false" />
+          <StylePriority Ref="120" UseBorderColor="false" UseBorders="false" />
         </Item1>
       </Controls>
-    </Item4>
+    </Item3>
+    <Item4 Ref="121" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="101" />
   </Bands>
-  <ComponentStorage>
+  <ObjectStorage>
     <Item1 Ref="0" ObjectType="DevExpress.DataAccess.ObjectBinding.ObjectDataSource,DevExpress.DataAccess.v19.2" Name="objectDataSource2" Base64="PE9iamVjdERhdGFTb3VyY2UgTmFtZT0ib2JqZWN0RGF0YVNvdXJjZTIiPjxEYXRhU291cmNlIFR5cGU9IlhCT09LLldlYi5SZXBvcnRzLlRlbXBsYXRlLkFjY291bnRCYWxhbmNlUmVwb3J0K0NyZWF0ZVJlcG9ydCwgWEJPT0suV2ViLCBWZXJzaW9uPTEuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbCIgLz48RGF0YU1lbWJlcj5EYXRhPC9EYXRhTWVtYmVyPjxDb25zdHJ1Y3RvciAvPjwvT2JqZWN0RGF0YVNvdXJjZT4=" />
-  </ComponentStorage>
+  </ObjectStorage>
 </XtraReportsLayoutSerializer>

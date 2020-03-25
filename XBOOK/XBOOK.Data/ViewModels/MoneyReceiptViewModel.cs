@@ -13,11 +13,29 @@ namespace XBOOK.Data.ViewModels
         public string ClientName { get; set; }
         public string ReceiverName { get; set; }
         public System.DateTime PayDate { get; set; }
-        public int PayTypeID { get; set; }
+        public string PayName { get; set; }
         public string PayType { get; set; }
         public string BankAccount { get; set; }
         public decimal Amount { get; set; }
         public string Note { get; set; }
+    }
+
+    public class MoneyReceiptByIdViewModel
+    {
+        public long ID { get; set; }
+        public string ReceiptNumber { get; set; }
+        public string EntryType { get; set; }
+        public Nullable<long> ClientID { get; set; }
+        public string ClientName { get; set; }
+      
+        public string ReceiverName { get; set; }
+        public System.DateTime PayDate { get; set; }
+        public string PayName { get; set; }
+        public string PayType { get; set; }
+        public string BankAccount { get; set; }
+        public decimal Amount { get; set; }
+        public string Note { get; set; }
+        public string Address { get; set; }
     }
     public class MoneyReceiptViewModelPrint
     {
@@ -25,6 +43,8 @@ namespace XBOOK.Data.ViewModels
         public string ReceiptNumber { get; set; }
         public string yourCompanyAddress { get; set; }
         public string yourCompanyName { get; set; }
+        public string companyCode { get; set; }
+        public string address { get; set; }
         public string EntryType { get; set; }
         public Nullable<long> ClientID { get; set; }
         public string ClientName { get; set; }
@@ -35,6 +55,11 @@ namespace XBOOK.Data.ViewModels
         public string BankAccount { get; set; }
         public decimal Amount { get; set; }
         public string Note { get; set; }
+    }
+    public class MoneyReceiptID
+    {
+        public long ID { get; set; }
+      
     }
 
 }

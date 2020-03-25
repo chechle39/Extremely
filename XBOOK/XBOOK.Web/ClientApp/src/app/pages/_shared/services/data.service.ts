@@ -6,6 +6,11 @@ export class DataService {
   data: any;
   private messageSource = new BehaviorSubject<any>(this.data);
   private subject = new Subject<any>();
+  code: any;
+  codeToForm: any;
+  private codeSource = new BehaviorSubject<any>(this.code);
+  private codeSourceToForm = new BehaviorSubject<any>(this.code);
+  private codesubject = new Subject<any>();
   constructor() { }
 
   changeMessage(message: string) {
@@ -21,4 +26,26 @@ export class DataService {
     return this.messageSource.asObservable();
   }
 
+  changeMessageCode(message: string) {
+    this.codeSource.next(message);
+  }
+
+  sendMessageCode(message: any) {
+    this.code = message;
+    this.codeSource.next({ data: message });
+    this.codeSource.asObservable();
+  }
+
+  getMessageCode(): Observable<any> {
+    return this.codeSource.asObservable();
+  }
+
+  sendMessageCodeToFormReset(message: any) {
+    this.codeToForm = message;
+    this.codeSourceToForm.next({ data: message });
+    this.codeSourceToForm.asObservable();
+  }
+  getMessageCodeToFormReset(): Observable<any> {
+    return this.codeSourceToForm.asObservable();
+  }
 }

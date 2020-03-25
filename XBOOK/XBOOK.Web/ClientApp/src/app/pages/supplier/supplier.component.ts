@@ -1,23 +1,23 @@
-import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
-import { ClientService } from '../_shared/services/client.service';
+import { Component, Injector, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientView } from '../_shared/models/client/client-view.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '../../coreapp/app.consts';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
-import { finalize, debounceTime } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { DataService } from '../_shared/services/data.service';
 import { EditSupplierComponent } from './edit-supplier/edit-supplier.component';
 import { CreateSupplierComponent } from './create-supplier/create-supplier.component';
 import { SupplierService } from '../_shared/services/supplier.service';
 import { ImportSupplierComponent } from './import-supplier/import-supplier.component';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
+import { CommonService } from '../../shared/service/common.service';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'xb-supplier',
   templateUrl: './supplier.component.html',
   styleUrls: ['./supplier.component.scss'],
@@ -38,9 +38,13 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
     private data: DataService,
     injector: Injector,
     private supplierService: SupplierService,
+    public authenticationService: AuthenticationService,
+    private commonService: CommonService,
     private modalService: NgbModal,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('Supplier');
+    this.recalculateOnResize(() => this.clientViews = [...this.clientViews]);
   }
   @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   protected list(

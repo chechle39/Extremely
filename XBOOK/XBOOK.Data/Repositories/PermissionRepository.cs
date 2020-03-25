@@ -18,7 +18,7 @@ namespace XBOOK.Data.Repositories
     {
         private readonly IFunctionsRepository _functionsRepository;
         private RoleManager<AppRole> _roleManager;
-        public PermissionRepository(DbContext context, IFunctionsRepository functionsRepository, RoleManager<AppRole> roleManager) : base(context)
+        public PermissionRepository(XBookContext context, IFunctionsRepository functionsRepository, RoleManager<AppRole> roleManager) : base(context)
         {
             _functionsRepository = functionsRepository;
             _roleManager = roleManager;

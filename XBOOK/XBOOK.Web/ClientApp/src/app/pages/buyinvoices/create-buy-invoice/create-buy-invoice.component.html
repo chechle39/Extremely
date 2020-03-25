@@ -6,8 +6,8 @@
         <div class="float-right">
           <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.ACTION.PRINT' | translate}}</button>
           <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
-          <button *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
-          <button *ngIf="viewMode" class="btn btn-raised btn-success" (click)="redirectToEditInvoice()">{{'COMMON.ACTION.EDIT' |translate}}</button>
+          <button [disabled] = "authenticationService.hasPermission('Buy invoice','create')" *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
+          <button [disabled] = "authenticationService.hasPermission('Buy invoice','update')" *ngIf="viewMode" class="btn btn-raised btn-success" (click)="redirectToEditInvoice()">{{'COMMON.ACTION.EDIT' |translate}}</button>
         </div>
       </div>
 
@@ -38,11 +38,11 @@
                         <p class="mb-0">
                           <input style="opacity: unset" kendotextbox id="yourCompanyName"
                             formControlName="yourCompanyName" [readOnly]="true"
-                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__font--medium"
+                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__input__textbox"
                             [value]="companyName" placeholder="Your Company Name" nfNoSpaces maxlength="250"></p>
                         <p class="mb-0">
                           <input style="opacity: unset" kendotextbox [readOnly]="true"
-                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__font--medium"
+                            class="border-0 full-width imput-reference-custom text-right place-holder__color invoice__input__textbox"
                             placeholder="Your Address" id="yourCompanyAddress" formControlName="yourCompanyAddress"
                             [value]="companyAddress" nfNoSpaces maxlength="250">
                         </p>
@@ -51,14 +51,14 @@
                     <div class="row">
                       <div class="col-sm-8">
                         <input kendotextbox
-                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__font--medium"
+                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__input__textbox"
                           placeholder="Your Bank Acount" id="yourBankAccount" formControlName="yourBankAccount"
                           [readOnly]="true" nfNoSpaces maxlength="250" [value]="bankAccount">
                       </div>
                       <div class="col-sm-4">
                         <input style="opacity: unset" kendotextbox id="yourTaxCode" formControlName="yourTaxCode"
                           [readOnly]="true" placeholder="{{'INVOICE.FORM.CREATE.TAXCODEHEADER.PLACEHOLDER' | translate}}" [value]="taxCode"
-                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__font--medium" nfNoSpaces
+                          class="border-0 text-right full-width imput-reference-custom place-holder__color invoice__input__textbox" nfNoSpaces
                           maxlength="250">
                       </div>
                     </div>
@@ -235,10 +235,11 @@
                         <ng-container [formGroupName]="i">
                           <div class="col-md-6 col-5 d-inline-grid pl-0 ngb-typeahead-product">
                             <input formControlName="productName" #productName id="productName{{i}}" kendotextbox
-                              [readOnly]="isRead" placeholder="{{'INVOICE.FORM.CREATE.ENTERITEMNAME.PLACEHOLDER' | translate}}" autocomplete="none"
+                              [readOnly]="isRead" placeholder="{{'INVOICE.FORM.CREATE.ENTERITEMNAME.PLACEHOLDER' | translate}}" autocomplete="off"
                               class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                               [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate"
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
+                              (focus)="onFocus($event)"
                               (keydown)="typeheadScrollHandler($event)"
                               [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
                             <input formControlName="description" #description kendotextbox
@@ -316,16 +317,27 @@
                     <div class="form-group">
                       <div class="row mrl-1">
                         <div>
+                          <span class="invoice__font--medium-2 font-italic">{{'INVOICE.FORM.CREATE.ATTACHFILRS' | translate}}</span>
+                          <a>
+                            <label for="attach-files">
+                              <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png"
+                            [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'">
+                            </label>
+                            <input style="cursor: pointer;" id="attach-files" #file type="file" class="input-upload ipfile"
+                              (change)="showPreviewUploadFile(file.files)">
+                          </a>
+                        </div>
+                        <!-- <div>
                           <a class="invoice__font--medium-2 font-italic">{{'INVOICE.FORM.CREATE.ATTACHFILRS' | translate}}
                             <input style="cursor: pointer;" #file type="file" class="input-upload ipfile"
                               (change)="showPreviewUploadFile(file.files)"></a>
                           <img style="cursor: pointer;" class="img-attach" src="../../../../assets/img/attach.png"
                             [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'">
-                        </div>
-                        <a (click)="uploadFileMultiple(null)" *ngIf="viewMode"
+                        </div> -->
+                        <!-- <a (click)="uploadFileMultiple(null)" *ngIf="viewMode"
                         class="invoice__font--medium-2 font-italic">{{'BUY.INVOICE.CREATE.UPLOAD.FILE' | translate}}</a>
                         <i (click)="uploadFileMultiple(null)" *ngIf="viewMode" style="cursor: pointer;"
-                          class="gg-software-upload mlt-13"></i>
+                          class="gg-software-upload mlt-13"></i> -->
                       </div>
 
                       <ul class="file">
@@ -338,7 +350,7 @@
                                 {{getName(item.name)}}</h6>
 
                             </div>
-                            <span style="cursor: pointer; margin-top: -9px;" (click)="removeFile(item,i)">X</span>
+                            <span style="cursor: pointer;" (click)="removeFile(item,i)">X</span>
                           </div>
 
                         </li>
@@ -440,10 +452,10 @@
           </div>
         </form>
       </div>
-      <ngx-list-payment2 *ngIf="viewMode" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"
+      <xb-list-payment2 *ngIf="viewMode" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"
         (addNewPayment)="addPayment()" [paymentViews]="paymentViews" [outstandingAmount]="amountDue"
         [invoiceNumber]="invoiceNumber" class="w-100 invoice-area">
-      </ngx-list-payment2>
+      </xb-list-payment2>
     </nb-card-body>
   </div>
 </nb-card>

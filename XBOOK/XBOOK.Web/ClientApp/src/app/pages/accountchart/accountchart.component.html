@@ -13,47 +13,18 @@
           <div ngbDropdownMenu aria-labelledby="bulkActions">
             <button class="dropdown-item"><span class="icon-import"></span>
               {{ 'COMMON.MOREACTION.IMPORT' | translate }} </button>
-            <button class="dropdown-item" (click)="showCreateOrEditAccountDialog()"><span class="icon-export"></span>
+            <button [disabled]="authenticationService.hasPermission('Account Chart','create')" class="dropdown-item" (click)="showCreateOrEditAccountDialog()"><span class="icon-export"></span>
               {{ 'ACCOUNT.CHART.CREATE' | translate }} </button>
           </div>
         </div>
       </div>
       <div class="col-4">
-        <button class="btn btn-raised mr-1 btn-success float-right">{{'ACCOUNT.CHART.MENPEN' | translate}}</button>
+        <button routerLink="/pages/journalentries/new" class="btn btn-raised mr-1 btn-success float-right">{{'ACCOUNT.CHART.MENPEN' | translate}}</button>
       </div>
     </div>
   </nb-card-header>
   <nb-card-body>
-    <!-- <div class="row my-3 margin-top-0">
-        <div class=" col-md-4 margintop-13">
-          <p class="label-blue">{{ 'PRODUCT.LIST.HEADER' | translate }}</p>
-        </div>
-        <div class="col-md-4 posion">
-          <div ngbDropdown>
-            <button class="btn btn-flat mr-1" id="bulkActions"
-              ngbDropdownToggle>{{ 'COMMON.ACTION' | translate }}</button>
-            <div ngbDropdownMenu aria-labelledby="bulkActions">
-              <button (click)="edit()" class="dropdown-item"><span class="icon-edit"></span>
-                {{ 'COMMON.ACTION.EDIT' | translate }}</button>
-              <button (click)="delete()" class="dropdown-item"><span class="icon-delete"></span>
-                {{ 'COMMON.ACTION.DELETE' | translate }}</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 float-right">
-          <div class="navbar-form navbar-left mt-1">
-            <form class="form">
-              <div class="position-relative has-icon-left">
-                <input type="text" [(ngModel)]="keywords" name="keywords" autocomplete="off" (keyup)="refresh()"
-                  class="form-control round" placeholder="{{'COMMON.ACTION.SEARCH' | translate}}">
-                <div class="form-control-position">
-                  <i class="ft-search" (click)="refresh()"></i>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div> -->
+   
     <div class="row">
       <div class="col-md-12">
         <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="data"
@@ -103,12 +74,12 @@
             <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
               <div class="icon-actions">
                 <div class="actions">
-                  <a class="icon-action">
+                  <a [hidden] = "authenticationService.hasPermission('Account Chart','update')" class="icon-action">
                     <span (click)="editAccount(row, $event)" class="icon-edit"></span>
                   </a>
                 </div>
                 <div class="actions">
-                  <a class="icon-action">
+                  <a [hidden] = "authenticationService.hasPermission('Account Chart','delete')" class="icon-action">
                     <span (click)="deleteAccount(row)" class="icon-delete"></span>
                   </a>
                 </div>

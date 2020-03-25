@@ -16,9 +16,10 @@ namespace XBOOK.Web.Reports.Template {
 
             // Controls
             this.TopMargin = reportInitializer.GetControl<DevExpress.XtraReports.UI.TopMarginBand>("TopMargin");
-            this.BottomMargin = reportInitializer.GetControl<DevExpress.XtraReports.UI.BottomMarginBand>("BottomMargin");
             this.Detail = reportInitializer.GetControl<DevExpress.XtraReports.UI.DetailBand>("Detail");
             this.ReportFooter = reportInitializer.GetControl<DevExpress.XtraReports.UI.ReportFooterBand>("ReportFooter");
+            this.BottomMargin = reportInitializer.GetControl<DevExpress.XtraReports.UI.BottomMarginBand>("BottomMargin");
+            this.label34 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label34");
             this.label24 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label24");
             this.label31 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label31");
             this.label5 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label5");
@@ -39,8 +40,6 @@ namespace XBOOK.Web.Reports.Template {
             this.label3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label3");
             this.label2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label2");
             this.label1 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label1");
-            this.label25 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label25");
-            this.label33 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label33");
             this.label32 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label32");
             this.label14 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label14");
             this.label15 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label15");
@@ -52,17 +51,17 @@ namespace XBOOK.Web.Reports.Template {
             this.label21 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label21");
             this.label22 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label22");
             this.label23 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label23");
+            this.label25 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label25");
+            this.label33 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label33");
 
             // Data Sources
             this.objectDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.ObjectBinding.ObjectDataSource>("objectDataSource1");
-            this.jsonDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.Json.JsonDataSource>("jsonDataSource1");
-            this.jsonDataSource2 = reportInitializer.GetDataSource<DevExpress.DataAccess.Json.JsonDataSource>("jsonDataSource2");
-            this.objectDataSource2 = reportInitializer.GetDataSource<DevExpress.DataAccess.ObjectBinding.ObjectDataSource>("objectDataSource2");
         }
         private DevExpress.XtraReports.UI.TopMarginBand TopMargin;
-        private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
         private DevExpress.XtraReports.UI.DetailBand Detail;
         private DevExpress.XtraReports.UI.ReportFooterBand ReportFooter;
+        private DevExpress.XtraReports.UI.BottomMarginBand BottomMargin;
+        private DevExpress.XtraReports.UI.XRLabel label34;
         private DevExpress.XtraReports.UI.XRLabel label24;
         private DevExpress.XtraReports.UI.XRLabel label31;
         private DevExpress.XtraReports.UI.XRLabel label5;
@@ -83,8 +82,6 @@ namespace XBOOK.Web.Reports.Template {
         private DevExpress.XtraReports.UI.XRLabel label3;
         private DevExpress.XtraReports.UI.XRLabel label2;
         private DevExpress.XtraReports.UI.XRLabel label1;
-        private DevExpress.XtraReports.UI.XRLabel label25;
-        private DevExpress.XtraReports.UI.XRLabel label33;
         private DevExpress.XtraReports.UI.XRLabel label32;
         private DevExpress.XtraReports.UI.XRLabel label14;
         private DevExpress.XtraReports.UI.XRLabel label15;
@@ -96,9 +93,8 @@ namespace XBOOK.Web.Reports.Template {
         private DevExpress.XtraReports.UI.XRLabel label21;
         private DevExpress.XtraReports.UI.XRLabel label22;
         private DevExpress.XtraReports.UI.XRLabel label23;
+        private DevExpress.XtraReports.UI.XRLabel label25;
+        private DevExpress.XtraReports.UI.XRLabel label33;
         private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
-        private DevExpress.DataAccess.Json.JsonDataSource jsonDataSource1;
-        private DevExpress.DataAccess.Json.JsonDataSource jsonDataSource2;
-        private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource2;
     }
 }

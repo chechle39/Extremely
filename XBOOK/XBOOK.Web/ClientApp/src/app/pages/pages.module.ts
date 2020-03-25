@@ -17,7 +17,7 @@ import { MenuService } from './_shared/services/menu.service';
   declarations: [
     PagesComponent,
   ],
-  providers: [MenuService]
+  providers: [MenuService],
 })
 export class PagesModule {
 }

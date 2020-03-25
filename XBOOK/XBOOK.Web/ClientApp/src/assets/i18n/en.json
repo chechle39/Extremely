@@ -93,7 +93,7 @@
   "ACCOUNT.CHART.GRID.HEADER.NUMBERARISED": "Number Arised",
   "ACCOUNT.CHART.HEADER": "Table Account",
   "ACCOUNT.CHART.CREATE": "Create Account",
-  "ACCOUNT.CHART.MENPEN": "Create Math Pen",
+  "ACCOUNT.CHART.MENPEN": "Create Entry",
   "ACCOUNT.CHART.CREATE.TITLE": "Acount",
   "ACCOUNT.CHART.CREATE.ACCOUNTNAME": "Acount Name",
   "ACCOUNT.CHART.CREATE.ACCOUNTPARENT": "Acount Parent",
@@ -218,10 +218,14 @@
   "JUOURNAL.GRID.DATE.OBJECT": "Date/ Object",
   "JUOURNAL.GRID.ALL.ENTRY": "All entry",
   "JUOURNAL.CREATE.ENTRYNAME.DESCRIPTION": "Entry Name /Description",
-  "JUOURNAL.CREATE.ENTRYNAME": "Name of entry",
-  "JUOURNAL.CREATE.DESCRIPTION": "Entry Description",
+  "JUOURNAL.CREATE.PLACEHOLDER.ENTRYNAME": "Name of entry",
+  "JUOURNAL.CREATE.ENTRYNAME": "Entry Name",
+  "JUOURNAL.CREATE.DESCRIPTION": "Description",
+  "JUOURNAL.CREATE.PLACEHOLDER.DESCRIPTION": "Entry Description",
   "JUOURNAL.CREATE.DATE.OBJECT.NAME": "Date of Entry/ Object Name",
-  "JUOURNAL.CREATE.OBJECT.NAME": "Object Name",
+  "JUOURNAL.CREATE.DATE": "Date of Entry",
+  "JUOURNAL.CREATE.OBJECT.NAME": "Date of Entry",
+  "JUOURNAL.CREATE.PLACEHOLDER.OBJECT.NAME": "Object Name",
   "JUOURNAL.CREATE.ACCOUNT": "Account",
   "JUOURNAL.CREATE.CRSP.ACCOUNT": "Crsp Acc",
   "JUOURNAL.CREATE.CRSP.CREDIT": "Credit",
@@ -272,6 +276,14 @@
   "MONEY.RECEIPT.CREATE.AMOUNT": "Please enter a valid amount, amount > 0!",
   "MONEY.RECEIPT.CREATE.RECEIVER": "Receiver name",
   "MONEY.RECEIPT.CREATE.VALIDATE.RECEIVER": "Please enter a valid receiver name !",
-  "MONEY.RECEIPT.CREATE.VALIDATE.CLIENT": "Please enter a valid client name !"
-}
+  "MONEY.RECEIPT.CREATE.VALIDATE.CLIENT": "Please enter a valid client name !",
 
+  "MasterParam.HEADER": "Master Parameter !",
+  "Choose.MasterParam": "Choose a value Master Param !",
+  "MasterParam.Key": "Key",
+  "MasterParam.Name": "Name",
+  "MasterParam.Add": "+ Add param type"
+
+
+
+}

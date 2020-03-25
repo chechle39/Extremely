@@ -5,10 +5,11 @@ import { AppComponentBase } from '../../../coreapp/app-base.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AcountChartViewModel } from '../../_shared/models/accountchart/account-chart.model';
 import { AccountChartService } from '../../_shared/services/accountchart.service';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 
 @Component({
   selector: 'xb-create-accountchart',
-  templateUrl: './create-accountchart.component.html'
+  templateUrl: './create-accountchart.component.html',
 })
 export class CreateAccountChartComponent extends AppComponentBase implements OnInit {
 
@@ -26,6 +27,7 @@ export class CreateAccountChartComponent extends AppComponentBase implements OnI
     injector: Injector,
     public activeModal: NgbActiveModal,
     public fb: FormBuilder,
+    public authenticationService: AuthenticationService,
     private accountChartService: AccountChartService,
     ) {
     super(injector);
@@ -46,8 +48,9 @@ export class CreateAccountChartComponent extends AppComponentBase implements OnI
           accountMethods: this.row.parentAccount,
           accountNumber: this.row.accountNumber,
           parentAccount: this.row.parentAccount,
-          plusString: this.row.parentAccount === null ? null : this.row.accountNumber.substring(this.row.parentAccount.length),
-          type: this.row.accountType
+          plusString: this.row.parentAccount === null
+          ? null : this.row.accountNumber.substring(this.row.parentAccount.length),
+          type: this.row.accountType,
         });
       }
   }
@@ -59,7 +62,7 @@ export class CreateAccountChartComponent extends AppComponentBase implements OnI
       accountNumber: [''],
       parentAccount: [null],
       plusString: [''],
-      type: [null]
+      type: [null],
     });
   }
 
@@ -89,12 +92,13 @@ export class CreateAccountChartComponent extends AppComponentBase implements OnI
     const request = {
       accountName: submittedForm.controls.accountName.value,
       accountNumber: this.row !== undefined
-      ? submittedForm.controls.accountNumber.value : submittedForm.controls.accountNumber.value + submittedForm.controls.plusString.value,
+      ? submittedForm.controls.accountNumber.value
+      : submittedForm.controls.accountNumber.value + submittedForm.controls.plusString.value,
       isParent: false,
       accountType: submittedForm.controls.type.value,
       parentAccount: submittedForm.controls.accountMethods.value,
       closingBalance: 0,
-      openingBalance: 0
+      openingBalance: 0,
     } as AcountChartViewModel;
     if (this.row === undefined) {
       this.accountChartService.createAccountChart(request).subscribe(rp => {

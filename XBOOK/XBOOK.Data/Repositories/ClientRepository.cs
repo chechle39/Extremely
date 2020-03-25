@@ -13,7 +13,7 @@ namespace XBOOK.Data.Repositories
 {
     public class ClientRepository : Repository<Client>, IClientRepository
     {
-        public ClientRepository(DbContext context) : base(context)
+        public ClientRepository(XBookContext context) : base(context)
         {
         }
 
@@ -33,6 +33,12 @@ namespace XBOOK.Data.Repositories
                 listData = await Entities.ProjectTo<ClientViewModel>().Take(20).ToListAsync();
             }
             return listData;
+        }
+
+        public async Task<string> GetAllClientByID(long? id)
+        {
+            var listData = await Entities.ProjectTo<ClientViewModel>().Where(x => x.ClientId == id).ToListAsync();
+            return listData[0].Address;
         }
 
         public async Task<IEnumerable<ClientViewModel>> GetAllClientData()

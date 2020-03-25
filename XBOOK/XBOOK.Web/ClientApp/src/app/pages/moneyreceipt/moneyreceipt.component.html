@@ -5,7 +5,7 @@
         <span class="card__title">{{'MONEY.RECEIPT.TITLE' | translate}}</span>
       </div>
       <div class="col-6">
-        <a (click)="createReceipt()" class="btn btn-raised mr-1 btn-success float-right">{{'MONEY.RECEIPT.TITLE.NEW' | translate}}</a>
+        <button [disabled]="authenticationService.hasPermission('Money Receipt','create')" (click)="createReceipt()" class="btn btn-raised mr-1 btn-success float-right">{{'MONEY.RECEIPT.TITLE.NEW' | translate}}</button>
       </div>
     </div>
   </nb-card-header>
@@ -20,7 +20,7 @@
             <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{'COMMON.MOREACTION' | translate}}</button>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item"><i class="icon-printer"></i>{{'COMMON.ACTION.PRINT' | translate}}</button>
-              <button (click)="deleteAll()" class="dropdown-item" ><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
+              <button [disabled]="authenticationService.hasPermission('Money Receipt','delete')" (click)="deleteAll()" class="dropdown-item" ><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@
                   </a>
                 </div>
                 <div class="actions">
-                  <a class="icon-action" (click)="delete(row.id,row.receiptNumber)">
+                  <a class="icon-action" [hidden] = "authenticationService.hasPermission('Money Receipt','delete')" (click)="delete(row.id,row.receiptNumber)">
                     <span class="icon-delete"></span>
                   </a>
                 </div>

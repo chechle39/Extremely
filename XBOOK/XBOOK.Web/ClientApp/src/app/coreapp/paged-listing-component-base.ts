@@ -1,5 +1,6 @@
 import { AppComponentBase } from './app-base.component';
 import { OnInit, Injector } from '@angular/core';
+import { LayoutService } from '../@core/utils';
 export class PagedResultDto {
   items: any[];
   totalCount: number;
@@ -19,8 +20,10 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
   public totalPages = 1;
   public totalItems: number;
   public isTableLoading = false;
+  private layoutService: LayoutService;
   constructor(injector: Injector) {
     super(injector);
+    this.layoutService = injector.get(LayoutService);
   }
 
   ngOnInit(): void {
@@ -48,6 +51,25 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
     this.isTableLoading = true;
     this.list(req, page, () => {
       this.isTableLoading = false;
+    });
+  }
+
+  public recalculateOnResize(callback: () => void) {
+    let requestAnimation;
+    const duration = 1;
+    let counter = 0;
+
+    const animationCallback = () => {
+      callback();
+      counter++;
+      if (counter < duration * 60) {
+        window.requestAnimationFrame(animationCallback);
+      }
+    };
+    this.layoutService.onChangeLayoutSize().subscribe(() => {
+      if (requestAnimation) { cancelAnimationFrame(requestAnimation); }
+      counter = 0;
+      requestAnimation = window.requestAnimationFrame(animationCallback);
     });
   }
 

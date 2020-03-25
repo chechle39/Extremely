@@ -20,10 +20,12 @@
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
           <select style="margin-top: -10px;" id="clientName" ngControl="clientName" #clientName formControlName="clientName" class="form-control">
-            <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
-              {{ method.value }}
-            </option>
+            <option [ngValue]="null" style="display: none;"></option>
+             <ng-container *ngFor="let method of SelectedFieldName ; index as i" >
+              <option  *ngIf="i + 1!==importForm.value.address && i + 1!==importForm.value.taxCode &&  i + 1!==importForm.value.contactName && i + 1!==importForm.value.email  && i + 1!==importForm.value.bankAccount && i + 1!==importForm.value.note" [ngValue]="i + 1">
+                {{ method.value }}
+              </option>
+            </ng-container>   
           </select>
           <small class="form-text text-muted danger"
           *ngIf="clientName.valid  || clientName.errors">Please
@@ -41,10 +43,12 @@
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
           <select style="margin-top: -10px;" id="address" formControlName="address" class="form-control">
-            <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
-              {{ method.value }}
-            </option>
+            <option [ngValue]="null" style="display: none;"></option>
+            <ng-container *ngFor="let method of SelectedFieldName ; index as i" >
+              <option  *ngIf="i + 1!==importForm.value.clientName && i + 1!==importForm.value.taxCode &&  i + 1!==importForm.value.contactName && i + 1!==importForm.value.email  && i + 1!==importForm.value.bankAccount && i + 1!==importForm.value.note" [ngValue]="i + 1">
+                {{ method.value }}
+              </option>
+            </ng-container>   
           </select>
         </div>
       </div>
@@ -56,10 +60,12 @@
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
           <select id="taxCode" style="margin-top: -10px;" formControlName="taxCode" class="form-control">
-            <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
-              {{ method.value }}
-            </option>
+            <option [ngValue]="null" style="display: none;"></option>
+            <ng-container *ngFor="let method of SelectedFieldName ; index as i" >
+              <option  *ngIf="i + 1!==importForm.value.clientName && i + 1!==importForm.value.address &&  i + 1!==importForm.value.contactName && i + 1!==importForm.value.email  && i + 1!==importForm.value.bankAccount && i + 1!==importForm.value.note" [ngValue]="i + 1">
+                {{ method.value }}
+              </option>
+            </ng-container>   
           </select>
         </div>
       </div>
@@ -71,10 +77,12 @@
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
           <select id="contactName" style="margin-top: -10px;" formControlName="contactName" class="form-control">
-            <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
-              {{ method.value }}
-            </option>
+            <option [ngValue]="null" style="display: none;"></option>
+            <ng-container *ngFor="let method of SelectedFieldName ; index as i" >
+              <option  *ngIf="i + 1!==importForm.value.clientName && i + 1!==importForm.value.address &&  i + 1!==importForm.value.taxCode && i + 1!==importForm.value.email  && i + 1!==importForm.value.bankAccount && i + 1!==importForm.value.note" [ngValue]="i + 1">
+                {{ method.value }}
+              </option>
+            </ng-container>   
           </select>
         </div>
       </div>
@@ -86,10 +94,12 @@
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
           <select id="email" style="margin-top: -10px;" formControlName="email" class="form-control">
-            <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
-              {{ method.value }}
-            </option>
+            <option [ngValue]="null" style="display: none;"></option>
+            <ng-container *ngFor="let method of SelectedFieldName ; index as i" >
+              <option  *ngIf="i + 1!==importForm.value.clientName && i + 1!==importForm.value.address &&  i + 1!==importForm.value.taxCode && i + 1!==importForm.value.contactName  && i + 1!==importForm.value.bankAccount && i + 1!==importForm.value.note" [ngValue]="i + 1">
+                {{ method.value }}
+              </option>
+            </ng-container>   
           </select>
         </div>
       </div>
@@ -101,10 +111,12 @@
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
           <select id="bankAccount" style="margin-top: -10px;" formControlName="bankAccount" class="form-control">
-            <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
-              {{ method.value }}
-            </option>
+            <option [ngValue]="null" style="display: none;"></option>
+            <ng-container *ngFor="let method of SelectedFieldName ; index as i" >
+              <option  *ngIf="i + 1!==importForm.value.clientName && i + 1!==importForm.value.address &&  i + 1!==importForm.value.taxCode && i + 1!==importForm.value.contactName  && i + 1!==importForm.value.email && i + 1!==importForm.value.note" [ngValue]="i + 1">
+                {{ method.value }}
+              </option>
+            </ng-container>  
           </select>
         </div>
       </div>
@@ -116,10 +128,12 @@
       <div class="form-group col-6 mb-2">
         <div class="form-group" style="margin-left: -15px;">
           <select id="note" style="margin-top: -10px;" formControlName="note" class="form-control">
-            <option [ngValue]="null">Choose a value</option>
-            <option *ngFor="let method of SelectedFieldName ; index as i" [ngValue]="i + 1">
-              {{ method.value }}:
-            </option>
+            <option [ngValue]="null" style="display: none;"></option>
+            <ng-container *ngFor="let method of SelectedFieldName ; index as i" >
+              <option  *ngIf="i + 1!==importForm.value.clientName && i + 1!==importForm.value.address &&  i + 1!==importForm.value.taxCode && i + 1!==importForm.value.contactName  && i + 1!==importForm.value.email && i + 1!==importForm.value.bankAccount" [ngValue]="i + 1">
+                {{ method.value }}
+              </option>
+            </ng-container>  
           </select>
         </div>
       </div>

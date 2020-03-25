@@ -15,7 +15,7 @@ namespace XBOOK.Data.Repositories
     public class JournalDetailRepository : Repository<JournalDetail>, IJournalDetailRepository
     {
         private readonly IUnitOfWork _uow;
-        public JournalDetailRepository(DbContext context, IUnitOfWork uow) : base(context)
+        public JournalDetailRepository(XBookContext context, IUnitOfWork uow) : base(context)
         {
             _uow = uow;
         }

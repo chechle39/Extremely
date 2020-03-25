@@ -80,4 +80,36 @@ export class MessageService {
       }
     }).catch();
   }
+  confirmNotContent(message: string, callBack: () => void) {
+    Swal.fire({
+      title: 'Xbook',
+      html: `<p class="swal2__content">${ message || 'Are you sure?'}<p>
+             `,
+      showCloseButton: true,
+      showCancelButton: false,
+      confirmButtonColor: '#0CC27E',
+      cancelButtonColor: '#FF586B',
+      confirmButtonText: 'Yes',
+    }).then(isConfirm => {
+      if (isConfirm.value) {
+        callBack();
+      }
+    }).catch();
+  }
+  confirmNotContentNoCallBack(message: string) {
+    Swal.fire({
+      title: 'Xbook',
+      html: `<p class="swal2__content">${ message || 'Are you sure?'}<p>
+             `,
+      showCloseButton: true,
+      showCancelButton: false,
+      confirmButtonColor: '#0CC27E',
+      cancelButtonColor: '#FF586B',
+      confirmButtonText: 'Yes',
+    }).then(isConfirm => {
+      // if (isConfirm.value) {
+      //   callBack();
+      // }
+    }).catch();
+  }
 }

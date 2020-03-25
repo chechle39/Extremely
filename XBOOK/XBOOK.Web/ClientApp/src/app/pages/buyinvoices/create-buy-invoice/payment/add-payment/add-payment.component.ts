@@ -7,29 +7,34 @@ import { PaymentMethod } from '../../../../_shared/models/invoice/payment-method
 import { Payment2Service } from '../../../../_shared/services/payment2.service';
 import { MoneyReceiptService } from '../../../../_shared/services/money-receipt.service';
 import { PaymentView } from '../../../../_shared/models/invoice/payment-view.model';
+import { MasterParamService } from '../../../../_shared/services/masterparam.service';
+import { MasterParamModel } from '../../../../_shared/models/masterparam.model';
 @Component({
-  selector: 'ngx-add-payment2',
+  selector: 'xb-add-payment2',
   templateUrl: './add-payment.component.html',
 })
 export class AddPayment2Component extends AppComponentBase implements OnInit {
   public paymentForm: FormGroup;
+  @Input() row: any;
   @Input() title = 'Add a payment';
   @Input() outstandingAmount: any;
   @Input() invoiceId: number;
   @Input() id: number;
   @Input() amountPaid: any;
   @Input() invoiceList: any;
-  paymentMethods = [
-    new PaymentMethod(1, 'Cash'),
-    new PaymentMethod(2, 'Visa card'),
-    new PaymentMethod(3, 'Bank transfer'),
-  ];
+  // paymentMethods = [
+  //   new PaymentMethod(1, 'Cash'),
+  //   new PaymentMethod(2, 'Visa card'),
+  //   new PaymentMethod(3, 'Bank transfer'),
+  // ];
+  payment: MasterParamModel[];
   saving: boolean;
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
     public paymentService: Payment2Service,
     private moneyReceiptService: MoneyReceiptService,
+    private masterParamService: MasterParamService,
     public fb: FormBuilder) {
     super(injector);
     this.paymentForm = this.createPaymentFormGroup();
@@ -41,12 +46,27 @@ export class AddPayment2Component extends AppComponentBase implements OnInit {
     }
     this.paymentForm = this.createPaymentFormGroup();
     // this.getLastDataMoneyReceipt();
+    if (this.id === undefined) {
+      this.getPayType();
+    }
   }
 
   getLastDataMoneyReceipt() {
     this.moneyReceiptService.getLastMoney().subscribe(rp => {
       // this.receiptNumber = rp.receiptNumber;
       this.paymentForm.controls.bankAccount.patchValue(rp.receiptNumber);
+    });
+  }
+
+  getPayType() {
+    this.masterParamService.GetMasTerByPayType().subscribe(rp => {
+      this.payment = rp;
+      if (this.row === undefined) {
+        this.paymentForm.controls.paymentMethods.patchValue(this.payment[0].key);
+      } else {
+        // const entry = this.payment.filter(x => x.name === this.row.payType);
+        // this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
+      }
     });
   }
 
@@ -62,7 +82,7 @@ export class AddPayment2Component extends AppComponentBase implements OnInit {
       id: [0],
       amount: this.outstandingAmount === undefined
         ? ['', [Validators.required]] : [this.outstandingAmount.toString(), [Validators.required]],
-      paymentMethods: [null, [Validators.required]],
+      paymentMethods: [null],
       payDate: issueDatePicker,
       bankAccount: [''],
       note: [''],
@@ -79,28 +99,31 @@ export class AddPayment2Component extends AppComponentBase implements OnInit {
     payment.payDate = [paymentDate.year, paymentDate.month, paymentDate.day].join('-');
     const paymentMethodId = submittedForm.controls.paymentMethods.value;
     payment.payTypeId = paymentMethodId;
-    payment.payType = this.paymentMethods.find(x => x.payTypeId === paymentMethodId).payType;
+    payment.payType = this.payment.find(x => x.key === paymentMethodId).key;
     payment.note = submittedForm.controls.note.value;
+    payment.payName = this.payment.find(x => x.key === paymentMethodId).name;
     return payment;
   }
   getPaymentDetail(id: number) {
     this.paymentService.getPayment(id).pipe(
       finalize(() => {
       })).subscribe((payment: any) => {
-        this.paymentForm.patchValue({
-          amount: payment.amount,
-          bankAccount: payment.receiptNumber,
-          note: payment.note,
-          paymentMethod: payment.payTypeID,
+        this.masterParamService.GetMasTerByPayType().subscribe(rp => {
+          this.payment = rp;
+          this.paymentForm.patchValue({
+            amount: payment.amount,
+            bankAccount: payment.receiptNumber,
+            note: payment.note,
+          });
+          this.paymentForm.controls.paymentMethods.patchValue(this.payment.filter(x =>
+            x.key === payment.payType)[0].key);
+          if (payment.payDate !== '') {
+            const payDateSplit = payment.payDate.split('-');
+            const dayx = payDateSplit[2].substring(0, 2);
+            const payDate = { year: Number(payDateSplit[0]), month: Number(payDateSplit[1]), day: Number(dayx) };
+            this.paymentForm.controls.payDate.patchValue(payDate);
+          }
         });
-
-        this.paymentForm.controls.paymentMethods.patchValue(payment.payTypeID);
-        if (payment.payDate !== '') {
-          const payDateSplit = payment.payDate.split('-');
-          const dayx = payDateSplit[2].substring(0, 2);
-          const payDate = { year: Number(payDateSplit[0]), month: Number(payDateSplit[1]), day: Number(dayx) };
-          this.paymentForm.controls.payDate.patchValue(payDate);
-        }
       });
   }
   savePayment(submittedForm: FormGroup): void {

@@ -15,6 +15,7 @@ import { ActionType, SearchType } from '../../../coreapp/app.enums';
 import { CreatePaymentReceiptComponent } from '../../paymentreceipt/payment-receipt/payment-receipt.component';
 import { AppConsts } from '../../../coreapp/app.consts';
 import { CommonService } from '../../../shared/service/common.service';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -63,10 +64,13 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     private buyInvoiceService: BuyInvoiceService,
     private router: Router,
     private fb: FormBuilder,
+    public authenticationService: AuthenticationService,
     private commonService: CommonService,
     private modalService: NgbModal) {
     super(injector);
+    this.commonService.CheckAssessFunc('Buy invoice');
     this.searchForm = this.createForm();
+    this.recalculateOnResize(() => this.buyinvoiceViews = [...this.buyinvoiceViews]);
   }
 
   createForm() {

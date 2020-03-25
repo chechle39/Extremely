@@ -6,8 +6,8 @@
                 <div class="float-right mt-1">
                     <button *ngIf="!viewMode" (click)="cancel()"
                         class="btn btn-raised mr-3 ml-2 btn-secondary">{{ 'COMMON.BUTTON.CANCEL' | translate }}</button>
-                    <button *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
-                    <button *ngIf="viewMode" (click)="redirectToEditInvoice()"
+                    <button [disabled]="invoiceForm.invalid || authenticationService.hasPermission('Journal Entries','create')" *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
+                    <button [disabled]="authenticationService.hasPermission('Journal Entries','update')" *ngIf="viewMode" (click)="redirectToEditInvoice()"
                         class="btn btn-raised btn-success">{{ 'COMMON.ACTION.EDIT' | translate }}</button>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                             <div class="border px-3 py-3">
                                 <div class="row my-3 justify-content-between">
                                     <div class="col-sm-6 col-md-6">
-                                        <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.ENTRYNAME.DESCRIPTION' | translate }}</p>
+                                        <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.ENTRYNAME' | translate }}</p>
                                         <div class="client-fields">
                                             <div class="row">
 
@@ -29,86 +29,109 @@
                                                     <input style="opacity: unset" kendoTextBox id="entryName"
                                                         formControlName="entryName"
                                                         class="border-0 place-holder__color full-width imput-reference-custom pl-0"
-                                                        placeholder="{{'JUOURNAL.CREATE.ENTRYNAME' | translate}}" nfNoSpaces maxlength="250"
+                                                        placeholder="{{'JUOURNAL.CREATE.PLACEHOLDER.ENTRYNAME' | translate}}" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.entryName.touched === false || invoiceForm.controls.entryName.invalid === false} ">
                                                 </div>
+ 
+                                            </div>
+
+                                        </div>
+
+                                        <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.DESCRIPTION' | translate }}</p>
+                                        <div class="client-fields">
+                                            <div class="row">
+
                                                 <div class="col-12 ">
                                                     <input style="opacity: unset" kendoTextBox id="description"
                                                         formControlName="description"
                                                         class="border-0 place-holder__color full-width imput-reference-custom pl-0"
-                                                        placeholder="{{'JUOURNAL.CREATE.DESCRIPTION' | translate}}" nfNoSpaces maxlength="250"
+                                                        placeholder="{{'JUOURNAL.CREATE.PLACEHOLDER.DESCRIPTION' | translate}}" nfNoSpaces maxlength="250"
                                                         [ngClass]="{'border-0':invoiceForm.controls.description.touched === false || invoiceForm.controls.description.invalid === false} ">
                                                 </div>
                                             </div>
 
                                         </div>
                                     </div>
+
+                                   
                                     <div class="col-sm-6 col-md-4">
-                                        <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.DATE.OBJECT.NAME' | translate }}</p>
-                                        <div class="client-fields">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="input-group mb-0 invoice__datepicker__wrapper">
-                                                        <input #datetiime kendoTextBox [readOnly]="isRead"
-                                                            (click)="d2.toggle()" style="opacity: unset "
-                                                            [disabled]="isRead"
-                                                            class="border-0 full-width imput-reference-custom p-0 place-holder__color invoice__input__textbox invoice__text--height-normal"
-                                                            placeholder="dd/mm/yyyy" name="dp"
-                                                            formControlName="dateCreate" ngbDatepicker
-                                                            #d2="ngbDatepicker">
-                                                        <!-- <span class="k-icon k-i-calendar-date position-absolute"
-                                                        [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
-                                                        style="margin-top: 0.5rem;height: 14px; right: 0;" (click)="d2.toggle()"></span> -->
-                                                        <button [disabled]="isRead"
+                                        <div class="magrin-jounal">
+                                            <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.DATE' | translate }}</p>
+                                            <div class="client-fields">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="input-group mb-0 invoice__datepicker__wrapper">
+                                                            <input #datetiime kendoTextBox [readOnly]="isRead"
+                                                                (click)="d2.toggle()" style="opacity: unset "
+                                                                [disabled]="isRead"
+                                                                class="border-0 full-width imput-reference-custom p-0 place-holder__color invoice__input__textbox invoice__text--height-normal"
+                                                                placeholder="dd/mm/yyyy" name="dp"
+                                                                formControlName="dateCreate" ngbDatepicker
+                                                                #d2="ngbDatepicker">
+                                                            <!-- <span class="k-icon k-i-calendar-date position-absolute"
                                                             [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
-                                                            style="margin-top: 0.5rem;height: 14px; right: 0; border: 0;"
-                                                            class="k-icon k-i-calendar-date position-absolute"
-                                                            (click)="d2.toggle()" type="button"></button>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6 col-md-6 ngb-typeahead-client"
-                                                    style="max-width: 100%;flex: 0 0 100%;">
-                                                    <input style="opacity: unset" #xxx type="text"
-                                                        (focus)="focusClient$.next($event.target.value)"
-                                                        autocomplete="none" [ngbTypeahead]="searchClient"
-                                                        [value]="clientSelected.objectName"
-                                                        [resultTemplate]="customItemTemplate" kendoTextBox
-                                                        [inputFormatter]="clientFormatter" id="objectName"
-                                                        formControlName="objectName" (selectItem)="selectedItem($event)"
-                                                        class="border-0 full-width imput-reference-custom pl-0"
-                                                        placeholder="{{'JUOURNAL.CREATE.OBJECT.NAME' | translate}}" nfNoSpaces maxlength="250"
-                                                        #instance="ngbTypeahead"
-                                                        [ngClass]="{'border-0':invoiceForm.controls.objectName.touched === false || invoiceForm.controls.objectName.invalid === false}" />
-
-                                                    <ng-template #customItemTemplate let-r="result" let-t="term">
-                                                        <div class="row mt-2 client-item">
-                                                            <div class="col-sm-2 ">
-                                                                <ngx-avatar name="{{r.objectName | Split:2}}">
-                                                                </ngx-avatar>
-                                                            </div>
-                                                            <div class="col-sm-10 col-md-10 pb-2 font-small-3">
-                                                                <ngb-highlight [result]="r.objectName" [term]="t">
-                                                                </ngb-highlight>
-                                                                <p class="mb-0">{{r.objectType}}</p>
-                                                            </div>
+                                                            style="margin-top: 0.5rem;height: 14px; right: 0;" (click)="d2.toggle()"></span> -->
+                                                            <button [disabled]="isRead"
+                                                                [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
+                                                                style="margin-top: 0.5rem;height: 14px; right: 0; border: 0;"
+                                                                class="k-icon k-i-calendar-date position-absolute"
+                                                                (click)="d2.toggle()" type="button"></button>
                                                         </div>
-                                                    </ng-template>
-
+                                                    </div>
+    
+                                                  
                                                 </div>
                                             </div>
-
+    
+    
+                                            <p class="invoice__input__title invoice__text--height-normal mb-0">{{ 'JUOURNAL.CREATE.PLACEHOLDER.OBJECT.NAME' | translate }}</p>
+                                            <div class="client-fields">
+                                                <div class="row">
+                                                    
+    
+                                                    <div class="col-sm-6 col-md-6 ngb-typeahead-client"
+                                                        style="max-width: 100%;flex: 0 0 100%;">
+                                                        <input style="opacity: unset" #xxx type="text" 
+                                                            (focus)="focusClient$.next($event.target.value)"
+                                                            autocomplete="none" [ngbTypeahead]="searchClient"
+                                                            [value]="clientSelected.objectName"
+                                                            [resultTemplate]="customItemTemplate" kendoTextBox
+                                                            [inputFormatter]="clientFormatter" id="objectName"
+                                                            formControlName="objectName" (selectItem)="selectedItem($event)"
+                                                            class="border-0 full-width imput-reference-custom pl-0"
+                                                            placeholder="{{'JUOURNAL.CREATE.PLACEHOLDER.OBJECT.NAME' | translate}}" nfNoSpaces maxlength="250"
+                                                            #instance="ngbTypeahead"
+                                                            (keydown)="typeheadScrollHandler($event)"
+                                                            [ngClass]="{'border-0':invoiceForm.controls.objectName.touched === false || invoiceForm.controls.objectName.invalid === false}" />
+    
+                                                        <ng-template #customItemTemplate let-r="result" let-t="term">
+                                                            <div class="row mt-2 client-item">
+                                                                <div class="col-sm-2 ">
+                                                                    <ngx-avatar name="{{r.objectName | Split:2}}">
+                                                                    </ngx-avatar>
+                                                                </div>
+                                                                <div class="col-sm-10 col-md-10 pb-2 font-small-3">
+                                                                    <ngb-highlight [result]="r.objectName" [term]="t">
+                                                                    </ngb-highlight>
+                                                                    <p class="mb-0">{{r.objectType}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+    
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
+                                        
                                     </div>
                                 </div> <!-- end row -->
                                 <div class="row">
                                     <!-- table of items -->
                                     <div class="items-table">
                                         <div class="row header">
-                                            <div class="col-2 pl-0">{{ 'PRODUCT.FORM.CREATE.DESCRIPTION' | translate }}</div>
-                                            <div class="col-3 text-center">{{ 'JUOURNAL.CREATE.ACCOUNT' | translate }}</div>
-                                            <div class="col-3 text-center">{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT' | translate }}</div>
+                                            <div class="col-4 pl-0">{{ 'PRODUCT.FORM.CREATE.DESCRIPTION' | translate }}</div>
+                                            <div class="col-2 text-left">{{ 'JUOURNAL.CREATE.ACCOUNT' | translate }}</div>
+                                            <div class="col-2 text-left">{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT' | translate }}</div>
                                             <div class="col-2 text-right">{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}</div>
                                             <div class="col-2 text-right">{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}</div>
                                         </div>
@@ -117,22 +140,18 @@
                                             <div class="row entryclass align-items-end mt-2"
                                                 *ngFor="let detail of invoiceForm.get('items')['controls']; index as i">
                                                 <ng-container [formGroupName]="i">
-                                                    <div class="col-2 pl-0 ngb-typeahead-product">
+                                                    <div class="col-4 pl-0 ngb-typeahead-product">
                                                         <input #productName style="opacity: unset" kendoTextBox
                                                             id="note" formControlName="note" [readOnly]="isRead"
                                                             class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                                                             placeholder="{{ 'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate }}" nfNoSpaces maxlength="250"
                                                             class="border-0 full-width text-left imput-reference-custom">
                                                     </div>
-                                                    <div class="col-3 text-center">
-
-
-
-                           
+                                                    <div class="col-2 text-center">
                                                             <input style="opacity: unset" #xxx type="text"
                                                                 (focus)="onFocus($event)" autocomplete="none"
                                                                 [ngbTypeahead]="searchData"
-                                                                [resultTemplate]="customItemTemplateacc" kendoTextBox
+                                                                [resultTemplate]="customItemTemplateacc" kendoTextBox [rowItem] = "dataAccount" validateInputAccDirective
                                                                 [inputFormatter]="accFormatter" id="accNumber{{i}}"
                                                                 formControlName="accNumber"
                                                                 (selectItem)="selectedAcc($event)"
@@ -141,65 +160,38 @@
                                                                 #instance="ngbTypeahead"
                                                                 [ngClass]="{'border-0':detail.get('accNumber').touched === false || detail.get('accNumber').invalid === false}" />
 
-                                                            <ng-template #customItemTemplateacc let-r="result"
-                                                                let-t="term">
-                                                                <div class="row mt-2 client-item">
-                                                                    <div class="col-sm-2 ">
-                                                                        <ngx-avatar name="{{r.accountName | Split:2}}">
-                                                                        </ngx-avatar>
-                                                                    </div>
-                                                                    <div class="col-sm-10 col-md-10 pb-2 font-small-3">
-                                                                        <ngb-highlight [result]="r.accountName"
-                                                                            [term]="t">
-                                                                        </ngb-highlight>
-                                                                        <p class="mb-0">{{r.accountNumber}} -
-                                                                            {{r.accountName}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </ng-template>
+                                                            <ng-template #customItemTemplateacc let-r="result" let-t="term">
+                                                                <div class="row m-0 product-item py-1">
+                                                                  <div class="col-sm-12 col-md-12 p-0">
+                                                                    <p class="mb-0 text-left">{{r.accountNumber}} - {{r.accountName}}</p>
+                                                                  </div>
+                                                                </div>                                
+                                                             </ng-template>
 
                                                     </div>
-                                                    <div class="col-3 text-center">
-
-                                                        <!-- <select
-                                                            class="invoice__input__textbox--disable border-0 pt-2 full-width  form-control"
-                                                            formControlName="crspAccNumber" [disabled]="viewMode">
-                                                            <option [ngValue]="null">Choose a acount chart</option>
-                                                            <option *ngFor="let method of dataAccount"
-                                                                [ngValue]="method.accountNumber">
-                                                                {{method.accountNumber}} - {{method.accountName}}
-                                                            </option>
-                                                        </select> -->
-                                                        
+                                                    <div class="col-2 text-center">
                                                             <input style="opacity: unset" #xxx type="text"
                                                                 (focus)="onFocus($event)"
                                                                 autocomplete="none" [ngbTypeahead]="searchData"
                                                                 [resultTemplate]="customItemTemplateCrspAccNumber"
                                                                 kendoTextBox [inputFormatter]="accFormatter"
-                                                                id="crspAccNumber{{i}}" formControlName="crspAccNumber"
+                                                                id="crspAccNumber{{i}}" formControlName="crspAccNumber" [rowItem] = "dataAccount" validateInputAccDirective
                                                                 (selectItem)="selectedCrspAcc($event)"
                                                                 class="border-0 place-holder__color  full-width imput-reference-custom pl-0"
                                                                 placeholder="{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT.NAME' | translate }}" nfNoSpaces
                                                                 maxlength="250" #instance="ngbTypeahead"
                                                                 [ngClass]="{'border-0':detail.get('accNumber').touched === false || detail.get('accNumber').invalid === false}" />
 
-                                                            <ng-template #customItemTemplateCrspAccNumber let-r="result"
-                                                                let-t="term">
-                                                                <div class="row mt-2 client-item">
-                                                                    <div class="col-sm-2 ">
-                                                                        <ngx-avatar name="{{r.accountName | Split:2}}">
-                                                                        </ngx-avatar>
-                                                                    </div>
-                                                                    <div class="col-sm-10 col-md-10 pb-2 font-small-3">
-                                                                        <ngb-highlight [result]="r.accountName"
-                                                                            [term]="t">
-                                                                        </ngb-highlight>
-                                                                        <p class="mb-0">{{r.accountNumber}} -
-                                                                            {{r.accountName}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </ng-template>
+                                                            
+                                                            <ng-template #customItemTemplateCrspAccNumber let-r="result" let-t="term">
+                                                                <div class="row m-0 product-item py-1">
+                                                                  <div class="col-sm-12 col-md-12 p-0">
+                                                                    <p class="mb-0 text-left">{{r.accountNumber}} - {{r.accountName}}</p>
+                                                                  </div>
 
+                                                                </div>
+                                  
+                                                              </ng-template>
 
 
                                                     </div>
@@ -265,11 +257,14 @@
 
                                 </div>
                                 <div class="row mt-3 justify-content-end">
-                                    <div class="col-md-6">
+                                    <div class="col-6 col-md-6">
+                                        <div class="border-bottom mb-1"></div>
                                         <div class="row">
-                                            <div class="col-4">{{ 'JUOURNAL.CREATE.TOTAL' | translate }}</div>
-                                            <div class="col-4 text-center"> {{totalCredit() | currency:'VND':''}}</div>
-                                            <div class="col-4 text-right">{{totalDebit() | currency:'VND':''}}</div>
+
+
+                                            <div class="col-4"><b>{{ 'JUOURNAL.CREATE.TOTAL' | translate }}</b></div>
+                                            <div class="col-4 text-right"><b style="margin-right: 19px;;">{{totalCredit() | currency:'VND':''}}</b></div>
+                                            <div class="col-4 text-right"><b style="margin-right: 20px;">{{totalDebit() | currency:'VND':''}}</b></div>
                                         </div>
                                     </div>
                                 </div>

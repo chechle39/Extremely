@@ -12,7 +12,7 @@ namespace XBOOK.Data.Repositories
 {
     public class TaxRepository : Repository<Tax>, ITaxRepository
     {
-        public TaxRepository(DbContext context) : base(context)
+        public TaxRepository(XBookContext context) : base(context)
         {
         }
         public bool DeleteTax(List<requestDeleted> request)

@@ -1,12 +1,11 @@
-import { Component, OnInit, Injector, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Injector, Input, EventEmitter, Output } from '@angular/core';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '../../../../../coreapp/app-base.component';
 import { PaymentView } from '../../../../_shared/models/invoice/payment-view.model';
-import { Payment2Service } from '../../../../_shared/services/payment2.service';
+import { AuthenticationService } from '../../../../../coreapp/services/authentication.service';
 
 @Component({
-  selector: 'ngx-list-payment2',
+  selector: 'xb-list-payment2',
   templateUrl: './list-payment.component.html',
 })
 export class ListPayment2Component extends AppComponentBase implements OnInit {
@@ -32,8 +31,8 @@ export class ListPayment2Component extends AppComponentBase implements OnInit {
 
   constructor(
     injector: Injector,
-    private paymentService: Payment2Service,
-    private modalService: NgbModal) {
+    public authenticationService: AuthenticationService,
+  ) {
     super(injector);
   }
 

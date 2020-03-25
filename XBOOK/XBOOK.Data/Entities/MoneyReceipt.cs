@@ -8,7 +8,7 @@ namespace XBOOK.Data.Entities
 {
     public partial class MoneyReceipt
     {
-        public MoneyReceipt(decimal amount, string bankAccount, long? clientID, string clientName, string entryType, long iD, string note, DateTime payDate, string payType, int payTypeID, string receiptNumber, string receiverName)
+        public MoneyReceipt(decimal amount, string bankAccount, long? clientID, string clientName, string entryType, long iD, string note, DateTime payDate, string payType, string payName, string receiptNumber, string receiverName)
         {
             this.amount = amount;
             this.bankAccount = bankAccount;
@@ -19,7 +19,7 @@ namespace XBOOK.Data.Entities
             this.note = note;
             this.payDate = payDate;
             this.payType = payType;
-            this.payTypeID = payTypeID;
+            this.payName = payName;
             this.receiptNumber = receiptNumber;
             this.receiverName = receiverName;
         }
@@ -32,7 +32,7 @@ namespace XBOOK.Data.Entities
         public string clientName { get; set; }
         public string receiverName { get; set; }
         public System.DateTime payDate { get; set; }
-        public int payTypeID { get; set; }
+        public string payName { get; set; }
         public string payType { get; set; }
         public string bankAccount { get; set; }
         public decimal amount { get; set; }

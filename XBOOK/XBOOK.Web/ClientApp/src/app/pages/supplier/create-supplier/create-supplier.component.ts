@@ -5,9 +5,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { SupplierService } from '../../_shared/services/supplier.service';
 import { SupplierView } from '../../_shared/models/supplier/supplier-view.model';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'xb-create-supplier',
   templateUrl: './create-supplier.component.html',
 })
@@ -18,6 +18,7 @@ export class CreateSupplierComponent extends AppComponentBase implements OnInit 
     injector: Injector,
     public activeModal: NgbActiveModal,
     private supplierService: SupplierService,
+    public authenticationService: AuthenticationService,
    ) {
     super(injector);
   }

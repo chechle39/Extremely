@@ -14,7 +14,7 @@ namespace XBOOK.Data.Repositories
 {
     public class SaleInvoiceRepository : Repository<SaleInvoice>, ISaleInvoiceRepository
     {
-        public SaleInvoiceRepository(DbContext context) : base(context)
+        public SaleInvoiceRepository(XBookContext context) : base(context)
         {
         }
 

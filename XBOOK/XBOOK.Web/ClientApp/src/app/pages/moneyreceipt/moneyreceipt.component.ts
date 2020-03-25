@@ -1,16 +1,17 @@
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateMoneyReceiptComponent } from './create-money-receipt/create-money-receipt.component';
 import { AppConsts } from '../../coreapp/app.consts';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { GetMoneyReceipyRequest } from '../_shared/models/money-receipt/get-money-receipy-request.model';
 import { MoneyReceiptService } from '../_shared/services/money-receipt.service';
 import { MoneyReceiptViewModel } from '../_shared/models/money-receipt/money-receipt.model';
 import * as _ from 'lodash';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
+import { CommonService } from '../../shared/service/common.service';
 class PagedMoneyReceiptRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -39,11 +40,14 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   constructor(
     injector: Injector,
     private fb: FormBuilder,
-    private router: Router,
     private moneyReceiptService: MoneyReceiptService,
+    public authenticationService: AuthenticationService,
+    private commonService: CommonService,
     private modalService: NgbModal) {
     super(injector);
+    this.commonService.CheckAssessFunc('Money Receipt');
     this.searchForm = this.createForm();
+    this.recalculateOnResize(() => this.moneyReceiptList = [...this.moneyReceiptList]);
   }
   protected list(
     request: PagedMoneyReceiptRequestDto,
@@ -78,14 +82,6 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     let createOrEditClientDialog;
     createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
     createOrEditClientDialog.result.then(result => {
-
-      // const objRequest = {
-      //   currency: '',
-      //   endDate: this.endDate,
-      //   keyword: this.keyword.toLocaleLowerCase(),
-      //   startDate: this.startDate,
-      // } as GetMoneyReceipyRequest;
-      // this.getAllMoneyReceipt(objRequest);
       this.refresh();
 
     });

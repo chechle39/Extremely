@@ -1,18 +1,18 @@
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '../../coreapp/app.consts';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { GetMoneyReceipyRequest } from '../_shared/models/money-receipt/get-money-receipy-request.model';
-import { MoneyReceiptService } from '../_shared/services/money-receipt.service';
 import * as _ from 'lodash';
 import { CreatePaymentReceiptComponent } from './payment-receipt/payment-receipt.component';
 import { PaymentReceiptService } from '../_shared/services/payment-receipt.service';
 import { PaymentReceiptViewModel } from '../_shared/models/payment-receipt/payment-receipt.model';
 import { GetPaymentReceipyRequest } from '../_shared/models/payment-receipt/get-payment-receipy-request.model';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
+import { CommonService } from '../../shared/service/common.service';
 class PagedMoneyReceiptRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -41,11 +41,14 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
   constructor(
     injector: Injector,
     private fb: FormBuilder,
-    private router: Router,
+    public authenticationService: AuthenticationService,
     private paymentReceiptService: PaymentReceiptService,
+    private commonService: CommonService,
     private modalService: NgbModal) {
     super(injector);
+    this.commonService.CheckAssessFunc('Payment Receipt');
     this.searchForm = this.createForm();
+    this.recalculateOnResize(() => this.moneyReceiptList = [...this.moneyReceiptList]);
   }
   protected list(
     request: PagedMoneyReceiptRequestDto,
@@ -202,16 +205,7 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
           AppConsts.modalOptionsCustomSize);
         createOrEditClientDialog.componentInstance.row = event.row;
         createOrEditClientDialog.result.then(result => {
-
-          // const objRequest = {
-          //   currency: '',
-          //   endDate: this.endDate,
-          //   keyword: this.keyword.toLocaleLowerCase(),
-          //   startDate: this.startDate,
-          // } as GetMoneyReceipyRequest;
-          // this.getAllMoneyReceipt(objRequest);
           this.refresh();
-
         });
       }
     }

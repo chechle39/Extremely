@@ -3,6 +3,7 @@ using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
 using DevExpress.Security.Resources;
 using DevExpress.XtraReports.Security;
+using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,7 @@ using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.Service;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
+using XBOOK.Data.EntitiesDBCommon;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
@@ -52,7 +54,7 @@ namespace XBOOK.Web
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-
+     
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
@@ -62,8 +64,14 @@ namespace XBOOK.Web
             .AddDefaultTokenProviders();
             services.AddDbContext<XBookContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddDbContext<XBookComonContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionCommon"));
+            });
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromMinutes(5)
+            );
             services
                 .AddMvc()
                 .AddDefaultReportingControllers()
@@ -119,7 +127,7 @@ namespace XBOOK.Web
 
                         services.AddDevExpressControls();
             services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
-
+            DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -213,7 +221,7 @@ namespace XBOOK.Web
             services.AddTransient<IJournalDetailRepository, JournalDetailRepository>();
             services.AddTransient<IUserRolesRepository, UserRolesRepository>();
             services.AddTransient<IFunctionsRepository, FunctionsRepository>();
-
+            services.AddTransient<IUserCommonRepository, UserCommonRepository>();
             services.AddTransient<IAccountDetailServiceDapper, AccountDetailServiceDapper>();
             services.AddTransient<IPurchaseReportDapper, PurchaseReportServiceDapper>();
             services.AddTransient<IClientServiceDapper, ClientServiceDapper>();
@@ -227,6 +235,7 @@ namespace XBOOK.Web
             services.AddSingleton<IJwtFactory, JwtFactory>();
             services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
+            services.AddScoped<DbContext, XBookComonContext>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IAuthorizationHandler, ResourceAuthorizationHandler>();
 

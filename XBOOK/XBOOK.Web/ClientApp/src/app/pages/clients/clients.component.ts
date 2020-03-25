@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
+import { Component, Injector, ViewChild, ElementRef } from '@angular/core';
 import { ClientService } from '../_shared/services/client.service';
 import { Router } from '@angular/router';
 import { ClientView } from '../_shared/models/client/client-view.model';
@@ -12,11 +12,13 @@ import { finalize, debounceTime } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { DataService } from '../_shared/services/data.service';
 import { ImportClientComponent } from './import-client/import-client.component';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
+import { CommonService } from '../../shared/service/common.service';
+
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'xb-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss'],
@@ -40,10 +42,14 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
   constructor(
     private data: DataService,
     injector: Injector,
+    public authenticationService: AuthenticationService,
     private clientService: ClientService,
+    private commonService: CommonService,
     private modalService: NgbModal,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('Clients');
+    this.recalculateOnResize(() => this.clientViews = [...this.clientViews]);
   }
   @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   protected list(

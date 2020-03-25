@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild, ElementRef } from '@angular/core';
+import { Component, Injector, ViewChild, ElementRef } from '@angular/core';
 import { ProductService } from '../_shared/services/product.service';
 import { Router } from '@angular/router';
 import { ProductView } from '../_shared/models/product/product-view.model';
@@ -9,14 +9,14 @@ import { AppConsts } from '../../coreapp/app.consts';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
-import { finalize, debounceTime } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { ImportProductComponent } from './import-product/import-product.component';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
+import { CommonService } from '../../shared/service/common.service';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'xb-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
@@ -41,9 +41,12 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     injector: Injector,
     private productService: ProductService,
     private modalService: NgbModal,
-    private router: Router,
+    public authenticationService: AuthenticationService,
+    private commonService: CommonService,
     private translate: TranslateService) {
     super(injector);
+    this.commonService.CheckAssessFunc('Products');
+    this.recalculateOnResize(() => this.productViews = [...this.productViews]);
   }
   @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   protected list(

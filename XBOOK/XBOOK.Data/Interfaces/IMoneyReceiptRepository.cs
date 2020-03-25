@@ -13,6 +13,7 @@ namespace XBOOK.Data.Interfaces
         Task<bool> Deleted(List<requestDeleted> request);
         Task<MoneyReceiptViewModel> GetLastMoneyReceipt();
         Task<bool> Update(MoneyReceiptViewModel request);
-        Task<MoneyReceiptViewModel> GetMoneyById(long Id);
+        Task<MoneyReceiptViewModel> GetMoneyByIdAsync(MoneyReceiptID request);
+        Task<MoneyReceiptByIdViewModel> GetMoneyByIdObject(long id);
     }
 }

@@ -33,7 +33,7 @@ namespace XBOOK.Service.AutoMapper
           x.Discount, x.DiscRate, x.DueDate, x.Note, x.Term, x.Status));
 
             CreateMap<PaymentViewModel, Payments>().ConstructUsing(x => new Payments(x.Amount, x.ReceiptNumber, x.Id, x.InvoiceId,
-                x.Note, x.PayDate, x.PayType, x.PayTypeID));
+                x.Note, x.PayDate, x.PayType, x.PayName));
             CreateMap<SaleInvDetailViewModel, SaleInvDetail>().ConstructUsing(x => new SaleInvDetail(x.InvoiceId,x.Price,x.ProductId
                 ,x.ProductName,x.Qty,x.Vat,x.Id,x.Amount));
 
@@ -49,7 +49,7 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<CompanyProfileViewModel, CompanyProfile>().ConstructUsing(x => new CompanyProfile(x.Id,x.address,x.bizPhone,
                 x.city,x.companyName,x.country,x.currency,x.dateFormat,x.directorName,x.logoFilePath,x.mobilePhone,x.taxCode,x.zipCode));
 
-            CreateMap<MoneyReceiptViewModel, MoneyReceipt>().ConstructUsing(x => new MoneyReceipt(x.Amount,x.BankAccount,x.ClientID,x.ClientName,x.EntryType,x.ID,x.Note,x.PayDate,x.PayType,x.PayTypeID,x.ReceiptNumber,x.ReceiverName));
+            CreateMap<MoneyReceiptViewModel, MoneyReceipt>().ConstructUsing(x => new MoneyReceipt(x.Amount,x.BankAccount,x.ClientID,x.ClientName,x.EntryType,x.ID,x.Note,x.PayDate,x.PayType,x.PayName,x.ReceiptNumber,x.ReceiverName));
 
             CreateMap<EntryPatternViewModel, EntryPattern>().ConstructUsing(x => new EntryPattern(x.AccNumber,x.EntryType,x.Note,x.TransactionType,x.CrspAccNumber));
 
@@ -71,9 +71,9 @@ namespace XBOOK.Service.AutoMapper
               , x.productName, x.qty, x.vat, x.ID, x.amount));
 
             CreateMap<Payment2ViewModel, Payments_2>().ConstructUsing(x => new Payments_2(x.amount, x.receiptNumber, x.ID, x.invoiceID,
-               x.note, x.payDate, x.payType, x.payTypeID));
+               x.note, x.payDate, x.payType, x.payName));
 
-            CreateMap<PaymentReceiptViewModel, PaymentReceipt>().ConstructUsing(x => new PaymentReceipt(x.Amount, x.BankAccount, x.SupplierID, x.SupplierName, x.EntryType, x.ID, x.Note, x.PayDate, x.PayType, x.PayTypeID, x.ReceiptNumber, x.ReceiverName));
+            CreateMap<PaymentReceiptViewModel, PaymentReceipt>().ConstructUsing(x => new PaymentReceipt(x.Amount, x.BankAccount, x.SupplierID, x.SupplierName, x.EntryType, x.ID, x.Note, x.PayDate, x.PayType, x.PayName, x.ReceiptNumber, x.ReceiverName));
            CreateMap<ApplicationUserViewModel, AppUser>()
                         .ConstructUsing(c => new AppUser(c.Id, c.FullName, c.UserName,
                         c.Email, c.PhoneNumber, c.Avatar, c.Status, c.Gender, c.BirthDay, c.Address));

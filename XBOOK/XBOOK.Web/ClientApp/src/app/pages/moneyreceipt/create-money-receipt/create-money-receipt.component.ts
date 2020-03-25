@@ -1,13 +1,23 @@
-import { Component, OnInit, Injector, ViewChild, ElementRef, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  Component,
+  OnInit,
+  Injector,
+  ViewChild,
+  ElementRef,
+  Input
+} from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { PaymentMethod } from '../../_shared/models/invoice/payment-method.model';
 import { Observable, Subject, merge, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { ClientService } from '../../_shared/services/client.service';
 import { ClientSearchModel } from '../../_shared/models/client/client-search.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { MoneyReceiptService } from '../../_shared/services/money-receipt.service';
 import { MoneyReceiptViewModel } from '../../_shared/models/money-receipt/money-receipt.model';
 import { InvoiceService } from '../../_shared/services/invoice.service';
@@ -18,6 +28,8 @@ import {
 import * as _ from 'lodash';
 import { MasterParamModel } from '../../_shared/models/masterparam.model';
 import { MasterParamService } from '../../_shared/services/masterparam.service';
+import { AuthenticationService } from '../../../coreapp/services/authentication.service';
+import { DataService } from '../../_shared/services/data.service';
 @Component({
   selector: 'xb-create-money-receipt',
   templateUrl: './create-money-receipt.component.html',
@@ -36,6 +48,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     static: true,
   }) xxx: ElementRef;
   payment: MasterParamModel[];
+  address: any;
   companyName: any;
   companyAddress: any;
   companyCode: any;
@@ -54,13 +67,16 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     injector: Injector,
     private router: Router,
     public activeModal: NgbActiveModal,
+    private data: DataService,
+    public authenticationService: AuthenticationService,
     private clientService: ClientService,
     private invoiceService: InvoiceService,
+    private modalService: NgbModal,
     private moneyReceiptService: MoneyReceiptService,
     private masterParamService: MasterParamService,
     public fb: FormBuilder) {
     super(injector);
-      this.moneyReceipt = this.createMoneyReceiptFormGroup();
+    this.moneyReceipt = this.createMoneyReceiptFormGroup();
   }
 
   ngOnInit() {
@@ -79,35 +95,46 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       this.clientSelected = data;
     }
     if (this.row !== undefined) {
-      const today = new Date(this.row.payDate).toLocaleDateString('en-GB');
-      const payDateSplit = today.split('/');
-      const payDatePicker = { year: Number(payDateSplit[2]),
-        month: Number(payDateSplit[1]), day: Number(payDateSplit[0]) };
-      this.moneyReceipt.controls.id.patchValue(this.row.id);
-      this.moneyReceipt.controls.amount.patchValue(this.row.amount);
-      this.moneyReceipt.controls.receiptNumber.patchValue(this.row.receiptNumber);
-      this.moneyReceipt.controls.receiverName.patchValue(this.row.receiverName);
-      this.moneyReceipt.controls.clientName.patchValue(this.row.clientName);
-      this.moneyReceipt.controls.entryType.patchValue(this.row.entryType);
-      this.moneyReceipt.controls.paymentMethods.patchValue(this.row.payType);
-      this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
-      this.moneyReceipt.controls.bankAccount.patchValue(this.row.bankAccount);
-      this.moneyReceipt.controls.note.patchValue(this.row.note);
-      this.moneyReceipt.controls.clienId.patchValue(this.row.clientID);
+      this.moneyReceiptService.getMoneyReceiptById(this.row.id).subscribe(rp => {
+        this.masterParamService.GetMasTerByMoneyReceipt().subscribe((rpx: MasterParamModel[]) => {
+          this.entryBatternList = rpx;
+          const today = new Date(rp.payDate).toLocaleDateString('en-GB');
+        const payDateSplit = today.split('/');
+        const payDatePicker = {
+          year: Number(payDateSplit[2]),
+          month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
+        };
+        this.address = rp.address
+        this.moneyReceipt.controls.id.patchValue(rp.id);
+        this.moneyReceipt.controls.amount.patchValue(rp.amount);
+        this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
+        this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
+        this.moneyReceipt.controls.clientName.patchValue(rp.clientName);
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.name
+          === this.row.entryType)[0].key);
+        this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
+        this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
+        this.moneyReceipt.controls.bankAccount.patchValue(rp.bankAccount);
+        this.moneyReceipt.controls.note.patchValue(rp.note);
+        this.moneyReceipt.controls.clienId.patchValue(rp.clientID);
 
-      const data = {
-        clientName: this.moneyReceipt.value.clientName,
-        contactName: this.moneyReceipt.value.receiverName,
-        clientId: this.moneyReceipt.value.clienId,
-        bankAccount: this.moneyReceipt.value.bankAccount,
-      } as ClientSearchModel;
-      this.clientSelected = data;
+        const data = {
+          clientName: this.moneyReceipt.value.clientName,
+          contactName: this.moneyReceipt.value.receiverName,
+          clientId: this.moneyReceipt.value.clienId,
+          bankAccount: this.moneyReceipt.value.bankAccount,
+        } as ClientSearchModel;
+        this.clientSelected = data;
+        });
+
+      });
+
     }
     if (this.row === undefined) {
       this.getLastDataMoneyReceipt();
+      this.getAllEntryData();
     }
     this.getPayType();
-    this.getAllEntryData();
     this.getProfiles();
   }
 
@@ -173,8 +200,8 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       if (this.row === undefined) {
         this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
       } else {
-        const entry = this.payment.filter(x => x.name === this.row.payType);
-        this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
+        // const entry = this.payment.filter(x => x.name === this.row.payType);
+        // this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
       }
     });
   }
@@ -185,7 +212,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
       } else {
         const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
-        this.moneyReceipt.controls.entryType.patchValue(entry[0].key);
+        // this.moneyReceipt.controls.entryType.patchValue(entry[0].key);
       }
     });
   }
@@ -231,8 +258,10 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   createMoneyReceiptFormGroup() {
     const today = new Date().toLocaleDateString('en-GB');
     const payDateSplit = today.split('/');
-    const payDatePicker = { year: Number(payDateSplit[2]),
-       month: Number(payDateSplit[1]), day: Number(payDateSplit[0]) };
+    const payDatePicker = {
+      year: Number(payDateSplit[2]),
+      month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
+    };
     return this.fb.group({
       id: [0],
       amount: [0, [Validators.required]],
@@ -262,15 +291,16 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         bankAccount: this.moneyReceipt.value.bankAccount,
         clientID: this.moneyReceipt.value.clienId,
         clientName: this.moneyReceipt.value.clientName.clientName !== undefined
-        ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name ,
+          ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
-        payTypeID: 1,
+        payName: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreateMoneyReceiptRequestList;
+
       this.moneyReceiptService.createMoneyReceiptPayMent(requestList).subscribe(rp => {
         this.notify.info('Saved Successfully');
         this.close(false);
@@ -280,13 +310,13 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         amount: this.moneyReceipt.value.amount,
         bankAccount: this.moneyReceipt.value.bankAccount,
         clientID: this.moneyReceipt.value.clienId,
-        clientName:  this.moneyReceipt.value.clientName.clientName !== undefined
-        ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name ,
+        clientName: this.moneyReceipt.value.clientName.clientName !== undefined
+          ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
-        payTypeID: 1,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payName: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreateMoneyReceiptRequest;
@@ -301,11 +331,11 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         clientID: this.moneyReceipt.value.clienId,
         clientName: this.moneyReceipt.value.clientName.clientName !== undefined
           ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
-          entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name ,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
-        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
-        payTypeID: 1,
+        payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
+        payName: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].name,
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
         id: this.moneyReceipt.value.id,
@@ -327,7 +357,9 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         amount: this.moneyReceipt.value.amount,
         yourCompanyAddress: rp.address,
         yourCompanyName: rp.companyName,
+        companyCode: rp.code,
         payDate: payDateData,
+        address: this.address,
         bankAccount: this.moneyReceipt.value.bankAccount,
         clientID: this.moneyReceipt.value.clienId,
         clientName: this.moneyReceipt.value.clientName.clientName !== undefined
@@ -343,8 +375,10 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       const reportName = 'MoneyReceiptReport';
       this.moneyReceiptService.MoneyReceiptSaveDataPrint(request).subscribe(re => {
         this.router.navigate([`/pages/print/${reportName}`]);
-        this.close(false);
+        this.modalService.dismissAll();
+        return;
       });
     });
+
   }
 }

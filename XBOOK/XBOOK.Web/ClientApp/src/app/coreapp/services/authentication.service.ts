@@ -9,6 +9,7 @@ export interface LoginContext {
   role: any;
   permission: any;
   remember?: boolean;
+  fullName: string;
 }
 
 /**
@@ -35,6 +36,7 @@ export class AuthenticationService {
       token: context.token,
       role: context.role,
       permission: context.permission,
+      fullName: context.fullName,
     };
     this.credentialsService.setCredentials(data, context.remember);
 

@@ -21,7 +21,7 @@ namespace XBOOK.Service.Service
         private readonly ISaleInvoiceRepository _saleInvoiceRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IUnitOfWork _uow;
-        public MoneyReceiptService(IPaymentRepository paymentRepository,ISaleInvoiceRepository saleInvoiceRepository,IUnitOfWork uow, IMoneyReceiptRepository iMoneyReceiptRepository, IPaymentsService paymentsService, ISaleInvoiceService saleInvoiceService)
+        public MoneyReceiptService(IPaymentRepository paymentRepository, ISaleInvoiceRepository saleInvoiceRepository,IUnitOfWork uow, IMoneyReceiptRepository iMoneyReceiptRepository, IPaymentsService paymentsService, ISaleInvoiceService saleInvoiceService)
         {
             _uow = uow;
             _iMoneyReceiptRepository = iMoneyReceiptRepository;
@@ -53,29 +53,16 @@ namespace XBOOK.Service.Service
                         note = request.Note,
                         payDate = request.PayDate,
                         payType = request.PayType,
-                        payTypeID = request.PayTypeID,
+                        payName = request.PayName,
                         receiptNumber = request.ReceiptNumber,
                     };
                     var payUw = _uow.GetRepository<IRepository<Payments>>();
                     payUw.AddData(payMent);
                     _uow.SaveChanges();
-                    //  _paymentsService.SavePayMent(payMent);
-
                     var payMentById = _paymentsService.GetAllPaymentsByInv(item.InvoiceId).Result;
                     var sumPayMent = payMentById.AsEnumerable().Sum(x => x.Amount);
-                    //var data = _saleInvoiceService.GetSaleInvoiceById(item.InvoiceId).Result;
-                   
-                    try
-                    {
-                       // _saleInvoiceService.Update(data.ToList()[0]);
-                        _saleInvoiceRepository.UpdateSaleInvEn(item, sumPayMent);
-                    }catch (Exception ex)
-                    {
-
-                    }
+                   _saleInvoiceRepository.UpdateSaleInvEn(item, sumPayMent);
                     _uow.SaveChanges();
-
-
                 }
                 
             }
@@ -91,7 +78,7 @@ namespace XBOOK.Service.Service
                 Note = request.Note,
                 PayDate = request.PayDate,
                 PayType = request.PayType,
-                PayTypeID = request.PayTypeID,
+                PayName = request.PayName,
                 ReceiptNumber = request.ReceiptNumber,
                 ReceiverName = request.ReceiverName
             };
@@ -112,6 +99,18 @@ namespace XBOOK.Service.Service
         public async Task<MoneyReceiptViewModel> GetLastMoneyReceipt()
         {
             var data = await _iMoneyReceiptRepository.GetLastMoneyReceipt();
+            return data;
+        }
+
+        public async Task<MoneyReceiptViewModel> GetMoneyById(MoneyReceiptID request)
+        {
+            var data = await _iMoneyReceiptRepository.GetMoneyByIdAsync(request);
+            return data;
+        }
+
+        public async Task<MoneyReceiptByIdViewModel> GetMoneyByIdObject(long id)
+        {
+            var data = await _iMoneyReceiptRepository.GetMoneyByIdObject(id);
             return data;
         }
 

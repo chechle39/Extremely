@@ -9,6 +9,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-
 import { finalize, debounceTime } from 'rxjs/operators';
 import { CreateMasterParamComponent } from './create-masterparam/create-masterparam.component';
 import * as _ from 'lodash';
+import { CommonService } from '../../shared/service/common.service';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
@@ -35,8 +36,10 @@ export class MasterParamComponent extends PagedListingComponentBase<ClientView> 
     injector: Injector,
     private companyProfileService: CompanyService,
     private modalService: NgbModal,
+    private commonService: CommonService,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('Master Param');
   }
 
   protected list(

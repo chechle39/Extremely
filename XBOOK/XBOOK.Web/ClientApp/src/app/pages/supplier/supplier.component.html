@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="col-4 col-lg-4">
-        <button (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right">New Supplier</button>
+        <button [disabled] = "authenticationService.hasPermission('Supplier','create')" (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right">New Supplier</button>
       </div>
     </div>
   </nb-card-header>
@@ -48,7 +48,7 @@
             </button>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button (click)="ShowInv()" class="dropdown-item"><span class="icon-edit"></span> Show invoices</button>
-              <button (click)="delete()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
+              <button [disabled] = "authenticationService.hasPermission('Supplier','delete')" (click)="delete()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
             </div>
           </div>
         </div>

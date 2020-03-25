@@ -1,23 +1,28 @@
-import { Component, Injector, ChangeDetectorRef } from '@angular/core';
-import { ProductView } from '../_shared/models/product/product-view.model';
-import { ProductCategory } from '../../coreapp/app.enums';
+import {
+  Component,
+  Injector,
+  ChangeDetectorRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConsts } from '../../coreapp/app.consts';
-import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
-import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
+import { ColumnMode } from '@swimlane/ngx-datatable';
+import {
+  PagedListingComponentBase,
+  PagedRequestDto } from '../../coreapp/paged-listing-component-base';
 import { AccountChartService } from '../_shared/services/accountchart.service';
 import { CreateAccountChartComponent } from './create-accountchart/create-accountchart.component';
 import { AcountChartModel } from '../_shared/models/accountchart/account-chart.model';
 import { DataService } from '../_shared/services/data.service';
 import { Router } from '@angular/router';
 import { SearchgenledComponent } from '../genledgroup/searchgenledgroup/searchgenled.component';
+import { AuthenticationService } from '../../coreapp/services/authentication.service';
+import { CommonService } from '../../shared/service/common.service';
 class PagedProductsRequestDto extends PagedRequestDto {
   productKeyword: string;
 }
 @Component({
   selector: 'xb-accountchart',
   templateUrl: './accountchart.component.html',
-  styleUrls: ['./accountchart.component.scss']
+  styleUrls: ['./accountchart.component.scss'],
 })
 export class AccountChartComponent extends PagedListingComponentBase<any> {
   data: AcountChartModel[];
@@ -30,17 +35,21 @@ export class AccountChartComponent extends PagedListingComponentBase<any> {
     injector: Injector,
     private modalService: NgbModal,
     private cd: ChangeDetectorRef,
+    public authenticationService: AuthenticationService,
     private accountChartService: AccountChartService,
+    private commonService: CommonService,
     private senData: DataService,
-    private router: Router
+    private router: Router,
     ) {
     super(injector);
+    this.commonService.CheckAssessFunc('Account Chart');
+    this.recalculateOnResize(() => this.data = [...this.data]);
   }
 
   protected list(
     request: PagedProductsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
     request.productKeyword = this.keywords;
     this.loadingIndicator = true;
@@ -83,7 +92,7 @@ export class AccountChartComponent extends PagedListingComponentBase<any> {
   deleteAccount(row) {
     const rs = {
       accNumber: row.accountNumber,
-      parentAccNumber: this.data.filter(x => x.accountNumber === row.parentAccount)[0].accountNumber
+      parentAccNumber: this.data.filter(x => x.accountNumber === row.parentAccount)[0].accountNumber,
     };
     this.message.confirm('Do you want to delete acount chart ?', 'Are you sure ?', () => {
       this.accountChartService.deleteAccount(rs).subscribe(rp => {
@@ -140,7 +149,7 @@ export class AccountChartComponent extends PagedListingComponentBase<any> {
         const rs  = {
           start: null,
           end: null,
-          accNumber: event.row.accountNumber
+          accNumber: event.row.accountNumber,
         };
         this.senData.sendMessage(rs);
 
@@ -148,7 +157,7 @@ export class AccountChartComponent extends PagedListingComponentBase<any> {
         const rs  = {
           start: this.genledSearch.startDate,
           end: this.genledSearch.endDate,
-          accNumber: event.row.accountNumber
+          accNumber: event.row.accountNumber,
         };
         this.senData.sendMessage(rs);
 
@@ -171,21 +180,6 @@ export class AccountChartComponent extends PagedListingComponentBase<any> {
           money: result.money,
           accNumber: result.accNumber,
         };
-        // this.exportCSV = result;
-        // this.genLedService.searchGen(genledSearch).subscribe(rp => {
-        //   this.genViews = rp;
-        //   this.case = result.case;
-        //   this.startDay = result.startDate;
-        //   this.endDay = result.endDate;
-        //   this.keyspace = ' - ';
-        // });
-        // this.genLedreportService.searchGen(genledSearch).subscribe(rp => {
-        //   this.genViewsreport = rp;
-        //   this.case = result.case;
-        //   this.startDay = result.startDate;
-        //   this.endDay = result.endDate;
-        //   this.keyspace = ' - ';
-        // });
       }
     });
   }

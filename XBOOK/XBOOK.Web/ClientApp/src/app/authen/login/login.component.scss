@@ -17,15 +17,6 @@
     }
   }
 }
-#login {
-  background-image: url('../../../assets/img/gallery/light-bg.jpg');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-
-  .login-img {
-    padding: 0;
-    background: #f0f0f0;
-  }
 
   .login-btn {
     .btn.btn-outline-primary {
@@ -51,4 +42,9 @@
       font-size: 14px;
     }
   }
-}
+  nb-card-body{
+    @media screen and (min-width: 1200px) {
+      margin-top: 7%;
+    }
+  }
+

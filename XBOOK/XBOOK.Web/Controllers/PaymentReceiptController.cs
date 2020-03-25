@@ -65,11 +65,17 @@ namespace XBOOK.Web.Controllers
             return Ok(saveData);
         }
 
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> GetPaymentReceiptById(long id)
+        {
+            return Ok(await _paymentReceiptService.GetPaymentReceiptById(id));
+        }
+
         [HttpPost("[action]")]
         public IActionResult SaveFileJson(List<PaymentReceiptPaymentPrint> request)
         {
             string json = JsonConvert.SerializeObject(request);
-            var folderName = Path.Combine("Reports", "Data");
+            var folderName = Path.Combine(request[0].companyCode,"Reports", "Data");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = "PaymentReceipt.json";
 

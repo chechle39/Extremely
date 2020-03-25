@@ -19,10 +19,20 @@
     (function (window) {  
       // Initialize PACE
       window.paceOptions = {
-        document: true,
-        eventLag: true,
+        catchupTime : 3000,
+        initialRate: .3,
+        minTime: 5000,
+        easeFactor: 0.5, 
+        ghostTime: 5000,
+        maxProgressPerFrame: 2,
+        eventLag : {
+          minSamples: 1,
+          sampleCount: 500000,
+          lagThreshold: 0.3,
+        },
+        document: false,
         restartOnPushState: false,
-        restartOnRequestAfter: true,
+        restartOnRequestAfter: false,
         ajax: {
           trackMethods: ['POST', 'GET', 'PUT', 'DELETE', 'PATH'],
           trackWebSockets: false,

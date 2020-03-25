@@ -2,7 +2,7 @@
   <div class=" modal-header">
     <div class="row">
       <div class="col-12">
-        <h5 class="modal-title">Master Param</h5>
+        <h5 class="modal-title">{{ 'MasterParam.HEADER' | translate }}</h5>
       </div>
     </div>
   </div>
@@ -11,7 +11,7 @@
       <ng-container>
         <div class="form-group col-12 mb-2">
           <select #paramTypeSelected (change)="onChange($event)" class="form-control">
-            <option>Choose a value Master Param</option>
+            <option>{{ 'Choose.MasterParam' | translate }}</option>
             <option *ngFor="let method of paramType" [ngValue]="method.CurrencyId">
               {{ method.value }}
             </option>
@@ -19,31 +19,34 @@
         </div>
       </ng-container>
     </div>
-    <div  class="mb-1 arrayparam" formArrayName="taxs"
-      *ngFor="let tax of taxForm.get('taxs')['controls']; index as i">
-      <div class="row arrayparam-inner font-weight-500" style="margin-top: -5px;">
+    <div class="arrayparam" formArrayName="taxs" *ngFor="let tax of taxForm.get('taxs')['controls']; index as i">
+      <div class="row arrayparam-inner font-weight-500">
         <ng-container [formGroupName]="i">
-          <div class="col-6 px-0 text-left">Key</div>
-          <div style="margin-left: -28px;" class="col-6 px-0 text-left">Name</div>
-          <div class="col-6 px-0">       
-            <input validateInputDirective [rowItem]="taxForm" *ngIf="taxForm.value.taxs[i].isAdd==null" type="key"  formControlName="key" class="form-control" style="width: 130px" type="text"
-            placeholder="key" id="key" digitOnly maxlength=200 [ngClass]="{ 'is-invalid': key}">   
-            <input  *ngIf="taxForm.value.taxs[i].isAdd!=null" type="key"  formControlName="key" class="form-control" style="width: 130px" type="text"
-            placeholder="key" id="key" digitOnly maxlength=200 >
+          <div class="col-6 px-0 text-left"> {{ 'MasterParam.Key' | translate }}</div>
+          <div class="col-6 px-0 text-left">
+            {{ 'MasterParam.Name' | translate }}
+            <div class="float-right">
+              <a class="icon-action text-right">
+                <span class="icon-delete mr-0"
+                  (click)="delete(tax.value.isAdd,tax.value.paramType,tax.value.key,tax.value.name,i)"></span>
+              </a>
+            </div>
+          </div>
+          <div class="col-6 px-0">
+            <input validateInputDirective [rowItem]="taxForm" *ngIf="taxForm.value.taxs[i].isAdd==null" type="key"
+              formControlName="key" class="form-control" style="width: 130px" type="text" placeholder="key" id="key"
+              digitOnly maxlength=200 [ngClass]="{ 'is-invalid': key}">
+            <input *ngIf="taxForm.value.taxs[i].isAdd!=null" type="key" formControlName="key" class="form-control"
+              style="width: 130px" type="text" placeholder="key" id="key" digitOnly maxlength=200>
             <small class="form-text text-muted danger"
-            *ngIf="!taxs.controls[i].get('key').valid && (!taxs.controls[i].get('key').dirty || !taxs.controls[i].get('key').touched)"></small>
+              *ngIf="!taxs.controls[i].get('key').valid && (!taxs.controls[i].get('key').dirty || !taxs.controls[i].get('key').touched)"></small>
           </div>
-  
-          <div class="col-4 px-0">
-            <input #paramname formControlName="name" class="form-control" style="width: 200px;margin-left: -28px;"
-              type="text" placeholder="name" id="name" maxlength=200>
+
+          <div class="col-6 px-0">
+            <input #paramname formControlName="name" class="form-control" type="text" placeholder="name" id="name"
+              maxlength=200>
           </div>
-          <div class="col-2 px-0" style="margin-top: -25px;">
-            <a class="icon-action">
-              <span style="margin-left: 40px;" class="icon-delete" (click)="delete(tax.value.isAdd,tax.value.paramType,tax.value.key,tax.value.name,i)"></span>
-            </a>
-          </div>
-  
+
           <div class="col-12 px-0" style="margin-bottom: -3px;margin-top: 8px;">
             <textarea #paramdescription formControlName="description" class="form-control" type="text"
               placeholder="description" id="description" maxlength=200 rows=1></textarea>
@@ -54,14 +57,15 @@
     <div class="row" style="border-top: 1px solid #92d050;padding-top: 6px;">
       <div class="add-line-box d-flex align-items-center my-2"
         style="margin-top: 5px;margin-left: 16px;margin-right: 16px;">
-        <div (click)="addTax()" class=" text-center w-100" style="cursor: pointer">+ Add param type </div>
+        <div (click)="addTax()" class=" text-center w-100" style="cursor: pointer">{{ 'MasterParam.Add' | translate }}</div>
       </div>
     </div>
   </div>
   <div class="modal-footer" style="border-top: 1px solid #92d050;margin-top: -9px;">
     <button type="button" (click)="close()" class="btn btn-raised btn-secondary mr-1">
-      Cancel
+      {{ 'COMMON.BUTTON.CANCEL' | translate }}
     </button>
-    <button [disabled]="taxForm.invalid" type="submit" class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.APPLY' | translate }}</button>
+    <button [disabled]="taxForm.invalid" type="submit"
+      class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.APPLY' | translate }}</button>
   </div>
 </form>

@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using XBOOK.Data.Interfaces;
 using XBOOK.Report.PredefinedReports;
+using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Report.Services
 {
@@ -12,8 +14,11 @@ namespace XBOOK.Report.Services
     {
         readonly string ReportDirectory;
         const string FileExtension = ".repx";
-        public ReportStorageWebExtension(IHostingEnvironment env)
+        private readonly ICompanyProfileReponsitory _companyProfileReponsitory;
+        public ReportStorageWebExtension(IHostingEnvironment env, ICompanyProfileReponsitory companyProfileReponsitory)
         {
+            _companyProfileReponsitory = companyProfileReponsitory;
+            var data = _companyProfileReponsitory.GetCompanyProFile().Result;
             ReportDirectory = Path.Combine(env.ContentRootPath, "Reports" , "Template");
             if (!Directory.Exists(ReportDirectory))
             {

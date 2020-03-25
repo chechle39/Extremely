@@ -16,7 +16,7 @@ namespace XBOOK.Data.Repositories
     {
         private readonly IUnitOfWork _uow;
 
-        public SupplierRepository(DbContext context, IUnitOfWork uow) : base(context)
+        public SupplierRepository(XBookContext context, IUnitOfWork uow) : base(context)
         {
             _uow = uow;
         }
@@ -49,6 +49,12 @@ namespace XBOOK.Data.Repositories
                 listData = await Entities.ProjectTo<SupplierViewModel>().Take(20).ToListAsync();
             }
             return listData;
+        }
+
+        public async Task<string> GetSupplierByID(long? id)
+        {
+            var listData = await Entities.ProjectTo<SupplierViewModel>().Where(x=>x.supplierID == id).ToListAsync();
+            return listData[0].address;
         }
 
         public bool removeSupplier(long id)

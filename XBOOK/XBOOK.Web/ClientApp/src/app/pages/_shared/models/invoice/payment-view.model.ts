@@ -9,4 +9,5 @@ export class PaymentView extends BaseModel {
   receiptNumber: string;
   amount: number;
   note: string;
+  payName: string;
 }

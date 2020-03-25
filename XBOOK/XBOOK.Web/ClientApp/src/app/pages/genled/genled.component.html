@@ -67,13 +67,13 @@
           </ngx-datatable-column>
 
 
-          <ngx-datatable-column name="{{ 'GEN.LIST.reference' | translate }}" prop="firstMonth">
+          <ngx-datatable-column name="{{ 'GEN.LIST.reference' | translate }}" prop="note">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div>{{row.note}}</div>
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column prop="invoiceNumber" name="{{ 'GEN.LIST.AccNumber' | translate }}"
+          <ngx-datatable-column prop="accNumber" name="{{ 'GEN.LIST.AccNumber' | translate }}"
             [cellClass]="'col-center'" [headerClass]="'col-center'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <div class="col-center">
@@ -85,7 +85,7 @@
           </ngx-datatable-column>
 
 
-          <ngx-datatable-column prop="invoiceNumber" name="{{ 'GEN.LIST.crspAccNumber' | translate }}"
+          <ngx-datatable-column prop="crspAccNumber" name="{{ 'GEN.LIST.crspAccNumber' | translate }}"
             [cellClass]="'col-center'" [headerClass]="'col-center'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <div class="col-center">
@@ -98,7 +98,7 @@
 
 
 
-          <ngx-datatable-column prop="invoiceNumber" name="{{ 'GEN.LIST.debit' | translate }}" [cellClass]="'col-right'"
+          <ngx-datatable-column prop="debit" name="{{ 'GEN.LIST.debit' | translate }}" [cellClass]="'col-right'"
             [headerClass]="'col-right'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <div class="col-right">
@@ -116,7 +116,7 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column prop="invoiceNumber" name="{{ 'GEN.LIST.credit' | translate }}"
+          <ngx-datatable-column prop="credit" name="{{ 'GEN.LIST.credit' | translate }}"
             [cellClass]="'col-right'" [headerClass]="'col-right'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <div class="col-right" style="padding-left: 3%;">

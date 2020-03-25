@@ -4,7 +4,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Dashboard',
     icon: 'grid',
-    link: '/pages/dashboard',
+    link: '/pages/:key/dashboard',
   },
   {
     title: 'Danh mục chung',

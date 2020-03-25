@@ -44,7 +44,7 @@ namespace XBOOK.Service.Service
                 note = listData.note,
                 payDate = listData.payDate,
                 payType = listData.payType,
-                payTypeID = listData.payTypeID,
+                payName = listData.payName,
             };
             return payment;
         }
@@ -68,7 +68,7 @@ namespace XBOOK.Service.Service
 
         public async Task UpdatePayMent(Payment2ViewModel request)
         {
-            var listData = _paymentUowRepository.GetAll().ProjectTo<PaymentViewModel>().Where(x => x.Id == request.ID).ToList();
+            var listData = _paymentUowRepository.GetAll().ProjectTo<Payment2ViewModel>().Where(x => x.ID == request.ID).ToList();
             var payments = Mapper.Map<Payment2ViewModel, Payments_2>(request);
             await _paymentUowRepository.Update(payments);
         }

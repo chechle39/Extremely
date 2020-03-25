@@ -13,6 +13,7 @@ import { DebitAgeView } from '../_shared/models/debit-age/debitage-view.model';
 import { InvoiceService } from '../_shared/services/invoice.service';
 import { SearchDebitAgeComponent } from './searchdebit-age/searchdebit-age.component';
 import { DataService } from '../_shared/services/data.service';
+import { CommonService } from '../../shared/service/common.service';
 
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
@@ -34,6 +35,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
   today: any;
   endDate1: string;
   endDate: any;
+  companyCode: string;
   tempaccount: any;
   startDay: any;
   debitageViews: any;
@@ -50,8 +52,11 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
     private invoiceService: InvoiceService,
     public debitAgeService: DebitAgeService,
     private modalService: NgbModal,
+    private commonService: CommonService,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('Debit Age');
+    this.recalculateOnResize(() => this.debitageViews = [...this.debitageViews]);
   }
   public getfirstMonth(): number {
     return _.sumBy(this.debitageViewsSum, item => {
@@ -157,6 +162,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
     this.invoiceService.getInfoProfile().subscribe((rp: any) => {
       this.companyName = rp.companyName;
       this.companyAddress = rp.address;
+      this.companyCode = rp.code;
     });
   }
   Print() {
@@ -165,6 +171,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
       const data = {
         companyNameName: this.companyName,
         companyAddress: this.companyAddress,
+        companyCode: this.companyCode,
         companyName: this.debitageViewsSum[j].companyName,
         firstMonth: this.debitageViewsSum[j].firstMonth,
         secondMonth: this.debitageViewsSum[j].secondMonth,

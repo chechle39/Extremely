@@ -49,6 +49,6 @@
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
       {{'COMMON.BUTTON.CANCEL' | translate}}
     </button>
-    <button type="submit" class="btn btn-raised btn-success">{{'COMMON.BUTTON.APPLY' | translate}}</button>
+    <button [disabled] = "authenticationService.hasPermission('Invoice','create')" type="submit" class="btn btn-raised btn-success">{{'COMMON.BUTTON.APPLY' | translate}}</button>
   </div>
 </form>

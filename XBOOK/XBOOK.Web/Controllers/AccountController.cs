@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using XBOOK.Common.Exceptions;
@@ -14,6 +16,8 @@ using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 using XBOOK.Web.Claims.System;
 using XBOOK.Web.Extensions;
+using JwtIssuerOptions = XBOOK.Data.Model.JwtIssuerOptions;
+using XBOOK.Data.Interfaces;
 
 namespace XBOOK.Web.Controllers
 {
@@ -30,6 +34,8 @@ namespace XBOOK.Web.Controllers
         private readonly IJwtFactory _jwtFactory;
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly IPermissionDapper _permissionDapper;
+        ICompanyProfileService _iCompanyProfileService;
+        private readonly IUserCommonRepository _userCommonRepository;
         public AccountController(
             UserManager<AppUser> userManager,
             IEmailSender emailSender,
@@ -39,7 +45,9 @@ namespace XBOOK.Web.Controllers
             IOptions<JwtIssuerOptions> jwtOptions,
             IPermissionDapper permissionDapper,
             IJwtFactory jwtFactory,
-            IUserService userService)
+            IUserService userService,
+            IUserCommonRepository userCommonRepository,
+            ICompanyProfileService iCompanyProfileService)
         {
             _jwtOptions = jwtOptions.Value;
             _userManager = userManager;
@@ -50,6 +58,8 @@ namespace XBOOK.Web.Controllers
             _applicationSetting = applicationSetting.Value;
             _jwtFactory = jwtFactory;
             _permissionDapper = permissionDapper;
+            _iCompanyProfileService = iCompanyProfileService;
+            _userCommonRepository = userCommonRepository;
         }
 
         [HttpPost("[action]")]
@@ -60,7 +70,7 @@ namespace XBOOK.Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            var dataUserCommon = await _userCommonRepository.FindUserCommon(model.Email);
             var identity = await GetClaimsIdentity(model.Email, model.Password);
 
             if (identity == null)
@@ -74,7 +84,7 @@ namespace XBOOK.Web.Controllers
             }
             var roles = await _userManager.GetRolesAsync(finUser);
             var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
-            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList);
+            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList, finUser.FullName);
             return new OkObjectResult(jwt);
         }
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
@@ -155,17 +165,6 @@ namespace XBOOK.Web.Controllers
             return Ok(await _userService.checkUserAcount());
         }
 
-        [HttpGet("[action]")]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
-        {
-            if (code == null)
-            {
-                throw new ApplicationException("A code must be supplied for password reset.");
-            }
-            var model = new ResetPasswordViewModel { Code = code };
-            return Ok(model);
-        }
         [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
@@ -177,16 +176,24 @@ namespace XBOOK.Web.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
-                // return RedirectToAction(nameof(ResetPasswordConfirmation));
+                return Ok(new GenericResult(false,  "User does not exist"));
             }
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
-                //  return RedirectToAction(nameof(ResetPasswordConfirmation));
+                return Ok(new GenericResult(true));
+            }else
+            {
+                if (result.Errors.ToList()[0].Code.ToString() == "InvalidToken")
+                {
+                    return Ok(new GenericResult(false, result.Errors.ToList()[0].Code.ToString()));
+                } else
+                {
+                    return Ok(new GenericResult(false, "xxxx"));
+                }
+                
             }
-            // AddErrors(result);
-            return Ok();
+
         }
         [HttpPost("[action]")]
         [AllowAnonymous]
@@ -197,19 +204,50 @@ namespace XBOOK.Web.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return Ok(new GenericResult(false, " Please check your email to reset your password"));
+                    return Ok(new GenericResult(false, user != null ? "User has not confirmed email" : "User does not exist"));
                 }
 
-                // For more information on how to enable account confirmation and password reset please
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                string codeRS = "";
+                string codeReturn="";
+                var codeSub = code.Split("/");
+                
+                int b = 0;
+                int j = 0;
+                for (int i = 2; i < codeSub.Length; i++)
+                {
+                    
+                    if (codeSub[i].Length > 6)
+                    {
+                        if ( b == 0)
+                        {
+                            b++;
+                            j = i;
+                            codeRS = codeSub[i].Substring(0, codeSub[i].Length + 6 - codeSub[i].Length);
+                        }
+                       
+                    }
+                    if (i == 2 && j == 2)
+                    {
+                        codeReturn += codeSub[0] +"/"+ codeSub[1] + "/"+"b24ctcp" + codeSub[j].Substring( codeSub[j].Length + 6 - codeSub[j].Length);
+                    } else if (i == 1 && j != 1)
+                    {
+                        codeReturn += codeSub[0];
+                    } else if (i == j)
+                    {
+                        codeReturn += "/" + "b24ctcp" + codeSub[j].Substring(codeSub[j].Length + 6 - codeSub[j].Length);
+                    } else
+                    {
+                        codeReturn += "/" + codeSub[i];
+                    }
+                }
+               
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                return Ok(new GenericResult(true, " Please check your email to reset your password"));
-            }
+                   $"Please reset your password by code: <p>{codeRS}</p>");
 
+                return Ok(new GenericResult(true, codeReturn));
+            }
             // If we got this far, something failed, redisplay form
             return Ok(model);
         }

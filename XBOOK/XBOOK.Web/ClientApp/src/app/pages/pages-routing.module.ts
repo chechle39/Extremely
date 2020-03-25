@@ -2,7 +2,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { AuthenticationGuard } from '../coreapp/auth/authentication.guard';
-import { PrintComponent } from './print/print.component';
 import { extract } from '../coreapp/services/i18n.service';
 
 const routes: Routes = [

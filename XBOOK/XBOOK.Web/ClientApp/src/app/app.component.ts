@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { SeoService } from './@core/utils/seo.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PaceService } from './coreapp/services/pace.service';
 
 @Component({
   selector: 'ngx-app',
@@ -16,15 +17,18 @@ export class AppComponent implements OnInit {
 
   constructor(
     private analytics: AnalyticsService,
-     private seoService: SeoService,
-     public translate: TranslateService,
-     ) {
-      translate.addLangs(['vi', 'en']);
-      translate.setDefaultLang('vi');
+    private seoService: SeoService,
+    public translate: TranslateService,
+    private pace: PaceService,
+  ) {
+    translate.addLangs(['vi', 'en']);
+    translate.setDefaultLang('vi');
   }
 
   ngOnInit(): void {
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
+
+    this.pace.trackingLazyLoadModule();
   }
 }

@@ -12,7 +12,7 @@ namespace XBOOK.Web.Helpers
 {
     public class Tokens
     {
-        public static async Task<string> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings, IList<string> roles, IEnumerable<PermissionViewModel> permissions)
+        public static async Task<string> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings, IList<string> roles, IEnumerable<PermissionViewModel> permissions,string name)
         {
             var response = new
             {
@@ -20,7 +20,8 @@ namespace XBOOK.Web.Helpers
                 auth_token = await jwtFactory.GenerateEncodedToken(userName, identity, roles),
                 expires_in = (int)jwtOptions.ValidFor.TotalSeconds,
                 role = roles,
-                permission = permissions
+                permission = permissions,
+                fullName = name
             };
 
             return JsonConvert.SerializeObject(response, serializerSettings);

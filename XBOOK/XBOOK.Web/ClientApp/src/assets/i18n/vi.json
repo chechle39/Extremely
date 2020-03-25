@@ -3,6 +3,7 @@
   "COMMON.BUTTON.APPLY": "Xác nhận",
   "COMMON.BUTTON.DUPLICATE": "Nhân bản",
   "COMMON.BUTTON.CANCEL": "Hủy bỏ",
+  "COMMON.BUTTON.APPLY": "Đồng ý",
   "COMMON.BUTTON.SAVE": "Lưu",
   "COMMON.MOREACTION": "Thêm thao tác",
   "COMMON.MOREACTION.IMPORT": "Nhập ",
@@ -108,7 +109,7 @@
   "Debit.Age.HEADER": "BÁO CÁO TUỔI NỢ",
   "Debit.Age.LIST.CompanyName": "Tên công ty",
   "Debit.Age.LIST.Total": "Tổng Cộng",
-  "Debit.Age.LIST.date": "Ngày",
+  "Debit.Age.LIST.Day": "Ngày",
   "USER.CREATE.FULLNAME.LABEL": "Họ và tên",
   "ROLE.CREATE.ROLENAME.LABEL": "Tên role",
   "SEARCH.TITLE": "Tìm kiếm",
@@ -157,9 +158,12 @@
   "JUOURNAL.GRID.DATE.OBJECT": "Ngày/ Đối tượng",
   "JUOURNAL.CREATE.ENTRYNAME.DESCRIPTION": "Tên bút toán /Mô tả",
   "JUOURNAL.CREATE.ENTRYNAME": "Tên bút toán",
-  "JUOURNAL.CREATE.DESCRIPTION": "Mô tả bút toán",
+  "JUOURNAL.CREATE.DESCRIPTION": "Mô tả",
+  "JUOURNAL.CREATE.PLACEHOLDER.ENTRYNAME": "Tên bút toán",
+  "JUOURNAL.CREATE.PLACEHOLDER.DESCRIPTION": "Mô tả bút toán",
   "JUOURNAL.CREATE.DATE.OBJECT.NAME": "Ngày tạo bút toán/ Tên bút toán",
-  "JUOURNAL.CREATE.OBJECT.NAME": "Tên bút toán",
+  "JUOURNAL.CREATE.DATE": "Ngày tạo bút toán",
+  "JUOURNAL.CREATE.PLACEHOLDER.OBJECT.NAME": "Tên bút toán",
   "JUOURNAL.CREATE.ACCOUNT": "Tài khoản",
   "JUOURNAL.CREATE.CRSP.ACCOUNT": "TK.Đối ứng",
   "JUOURNAL.CREATE.CRSP.CREDIT": "Tín dụng",
@@ -226,7 +230,7 @@
   "TAX.CREATE.TAX.NAME": "Tên thuế",
   "TAX.CREATE.APPLY.ALL": "Áp dụng thuế cho tất cả các chi tiết đơn hàng",
 
-  "INVOICE.HEADER.INVOICE": "Hóa đơn",
+  "INVOICE.HEADER.INVOICE": "Hóa đơn bán hàng",
   "INVOICE.GRID.HEADER.CLIENTINVOICE": "Khách hàng/ Hóa đơn số",
   "INVOICE.GRID.HEADER.CLIENT": "Khách hàng/",
   "INVOICE.GRID.HEADER.INVOICE": "Số hóa đơn",
@@ -238,7 +242,14 @@
   "MONEY.RECEIPT.CREATE.AMOUNT": "Vui lòng nhập số tiền hợp lệ, số tiền> 0!",
   "MONEY.RECEIPT.CREATE.RECEIVER": "Tên người nhận",
   "MONEY.RECEIPT.CREATE.VALIDATE.RECEIVER": "Vui lòng nhập tên người nhận hợp lệ !",
-  "MONEY.RECEIPT.CREATE.VALIDATE.CLIENT": "Vui lòng nhập tên khách hàng hợp lệ !"
+  "MONEY.RECEIPT.CREATE.VALIDATE.CLIENT": "Vui lòng nhập tên khách hàng hợp lệ !",
+
+  "MasterParam.HEADER": "Thông Số Chính!",
+  "Choose.MasterParam": "Chọn một thông số chính !",
+  "MasterParam.Key": "Key",
+  "MasterParam.Name": "Tên",
+  "MasterParam.Add": "+ Thêm thông số"
+
 
 }
 

@@ -1,16 +1,23 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { extract } from '../../coreapp/services/i18n.service';
-import { PrintComponent } from './print.component';
 
 
 const routes: Routes = [
-  { path: ':key', component: PrintComponent, data: { title: extract('print') } },
+  {
+    path: 'design',
+    loadChildren: () => import('./print-designer/print-designer.module')
+      .then(m => m.PrintDesignerModule),
+  },
+  {
+    path: '',
+    loadChildren: () => import('./print-viewer/print-viewer.module')
+      .then(m => m.PrintViewerModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: []
+  providers: [],
 })
 export class PrintRoutingModule { }

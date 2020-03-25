@@ -5,7 +5,7 @@
         <span class="card__title">{{'PAYMENT.RECEIPT.HEADER' | translate}}</span>
       </div>
       <div class="col-6">
-        <a (click)="createReceipt()" class="btn btn-raised mr-1 btn-success float-right">{{'PAYMENT.RECEIPT.NEW.BUTTON' | translate}}</a></div>
+        <button [disabled]="authenticationService.hasPermission('Payment Receipt','create')" (click)="createReceipt()" class="btn btn-raised mr-1 btn-success float-right">{{'PAYMENT.RECEIPT.NEW.BUTTON' | translate}}</button></div>
     </div>
   </nb-card-header>
   <nb-card-body>
@@ -18,15 +18,15 @@
         <div ngbDropdown>
           <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{'COMMON.MOREACTION' | translate}}</button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button class="dropdown-item"><i class="icon-printer"></i> Print</button>
-            <button (click)="deleteAll()" class="dropdown-item"><i class="fa fa-trash"></i> Delete</button>
+            <button class="dropdown-item"><i class="icon-printer"></i> {{'COMMON.ACTION.PRINT' | translate}}</button>
+            <button [disabled]="authenticationService.hasPermission('Payment Receipt','delete')" (click)="deleteAll()" class="dropdown-item"><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
           </div>
         </div>
       </div>
       <div class="col-lg-5 col-md-4 col-12 float-right">
         <div class="position-relative has-icon-left input-group">
           <input type="text" [(ngModel)]="keyword" (keyup)="refresh()" name="keyword" autocomplete="off"
-            class="form-control round pl-4" placeholder="Search">
+            class="form-control round pl-4" placeholder="{{'COMMON.ACTION.SEARCH' | translate}}">
           <div class="form-control-position" style="right: auto;z-index: 1000;">
             <i class="ft-search" (click)="refresh()"></i>
           </div>
@@ -38,7 +38,7 @@
             <div ngbDropdownMenu class="dropdown-menu-right" style="background: #E6EAEC;padding-bottom: 0px"
               aria-labelledby="btnAdvanceSearch">
               <div class="modal-header" style="padding: 0.5rem 0.5rem!important;">
-                <h5 class="modal-title">Filters</h5>
+                <h5 class="modal-title">{{'COMMON.ACTION.SEARCH' | translate}}</h5>
               </div>
 
               <form autocomplete="off" [formGroup]="searchForm" (submit)="applySearchFilter(searchForm)" novalidate
@@ -72,9 +72,9 @@
 
                 </div>
                 <div class="form-actions right mt-1">
-                  <button class="btn btn-raised mr-1 btn-secondary"> <i class="ft-x"></i>Clear</button>
+                  <button class="btn btn-raised mr-1 btn-secondary"> <i class="ft-x"></i>{{'COMMON.BUTTON.CLEAR' | translate}}</button>
                   <button type="submit" class="btn btn-raised mr-1 btn-success"><i class="ft-check-square"></i>
-                    Apply</button>
+                    {{'COMMON.BUTTON.APPLY' | translate}}</button>
                 </div>
               </form>
 
@@ -158,7 +158,7 @@
                   </a>
                 </div>
                 <div class="actions">
-                  <a class="icon-action" (click)="delete(row.id,row.receiptNumber)">
+                  <a [hidden]="authenticationService.hasPermission('Payment Receipt','delete')" class="icon-action" (click)="delete(row.id,row.receiptNumber)">
                     <span class="icon-delete"></span>
                   </a>
                 </div>

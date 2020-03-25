@@ -11,7 +11,7 @@ namespace XBOOK.Data.Repositories
     public class UserRolesRepository: Repository<AppUserRoles>, IUserRolesRepository
     {
         private readonly IUnitOfWork _uow;
-        public UserRolesRepository(DbContext context, IUnitOfWork uow) : base(context)
+        public UserRolesRepository(XBookContext context, IUnitOfWork uow) : base(context)
         {
             _uow = uow;
         }

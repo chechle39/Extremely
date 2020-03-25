@@ -7,6 +7,7 @@ import { PaymentView } from '../../../../_shared/models/invoice/payment-view.mod
 import { PaymentService } from '../../../../_shared/services/payment.service';
 import { AddPaymentComponent } from '../add-payment/add-payment.component';
 import { CheckboxControlValueAccessor } from '@angular/forms';
+import { AuthenticationService } from '../../../../../coreapp/services/authentication.service';
 
 @Component({
   selector: 'xb-list-payment',
@@ -35,8 +36,7 @@ export class ListPaymentComponent extends AppComponentBase implements OnInit {
 
   constructor(
     injector: Injector,
-    private paymentService: PaymentService,
-    private modalService: NgbModal) {
+    public authenticationService: AuthenticationService) {
     super(injector);
   }
 

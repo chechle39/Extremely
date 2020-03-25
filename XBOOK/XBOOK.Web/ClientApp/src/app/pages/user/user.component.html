@@ -6,16 +6,7 @@
         <span class="card__title">{{ 'USER.LIST.HEADER.LABEL' | translate }}</span>
       </div>
       <div class="col-3 col-lg-4">
-        <!-- <div ngbDropdown>
-          <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}
-          </button>
-          <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button class="dropdown-item"><span class="icon-import"></span>
-              {{ 'COMMON.MOREACTION.IMPORT' | translate }} </button>
-            <button class="dropdown-item"><span class="icon-export"></span>
-              {{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
-          </div>
-        </div> -->
+
       </div>
       <div class="col-4 col-lg-4">
         <button (click)="createUser()" [disabled] = "this.authenticationService.hasPermission('User','create')"
@@ -24,7 +15,7 @@
     </div>
   </nb-card-header>
   <nb-card-body class="layout__container--medium">
-      <div class="row my-3 margin-top-0">
+      <div class="row margin-top-0">
         <div class="col-md-4 col-6 margintop-13">
           <div class="label-blue">{{ 'USER.LIST.HEADER.LABEL' | translate }} <span *ngIf="selected.length > 0">> Selected ({{selected.length}})</span></div>
         </div>

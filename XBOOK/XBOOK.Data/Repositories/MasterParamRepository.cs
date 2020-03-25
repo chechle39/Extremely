@@ -13,7 +13,7 @@ namespace XBOOK.Data.Repositories
 {
     public class MasterParamRepository : Repository<MasterParam>, IMasterParamRepository
     {
-        public MasterParamRepository(DbContext context) : base(context)
+        public MasterParamRepository(XBookContext context) : base(context)
         {
         }
         public bool DeleteMaster(List<requestDeletedMaster> request)

@@ -14,7 +14,7 @@ namespace XBOOK.Data.Repositories
     public class AccountChartRepository: Repository<AccountChart>, IAccountChartRepository
     {
         private readonly IUnitOfWork _uow;
-        public AccountChartRepository(DbContext context, IUnitOfWork uow) : base(context)
+        public AccountChartRepository(XBookContext context, IUnitOfWork uow) : base(context)
         {
             _uow = uow;
         }

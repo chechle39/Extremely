@@ -4,6 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '../../../../coreapp/app-base.component';
 import { TaxService } from '../../../_shared/services/tax.service';
+import { AuthenticationService } from '../../../../coreapp/services/authentication.service';
 @Component({
   selector: 'xb-add-tax',
   templateUrl: './add-tax.component.html',
@@ -18,6 +19,7 @@ export class AddTaxComponent extends AppComponentBase implements OnInit {
     private fb: FormBuilder,
     public activeModal: NgbActiveModal,
     private taxService: TaxService,
+    public authenticationService: AuthenticationService,
   ) {
     super(injector);
     this.taxForm = this.createForm();

@@ -4,8 +4,8 @@
             <div class="col-6">
                 <span class="card__title">{{'JUOURNAL.HEADER.ENTRY' | translate}}</span>
             </div>
-            <div class="col-6"> <a (click)='redirectToCreateNewInvoice()'
-                    class="btn btn-raised mr-1 btn-success float-right">{{'JUOURNAL.HEADER.BUTTON' | translate}}</a></div>
+            <div class="col-6"> <button [disabled]="authenticationService.hasPermission('Journal Entries','create')" (click)='redirectToCreateNewInvoice()'
+                    class="btn btn-raised mr-1 btn-success float-right">{{'JUOURNAL.HEADER.BUTTON' | translate}}</button></div>
         </div>
     </nb-card-header>
     <nb-card-body>
@@ -20,7 +20,7 @@
                     <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}</button>
                     <div ngbDropdownMenu aria-labelledby="bulkActions">
                         <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i> {{ 'COMMON.BUTTON.DUPLICATE' | translate }}</button>
-                        <button class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i> {{ 'COMMON.ACTION.DELETE' | translate }}</button>
+                        <button [disabled]="authenticationService.hasPermission('Journal Entries','delete')" class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i> {{ 'COMMON.ACTION.DELETE' | translate }}</button>
                     </div>
                 </div>
             </div>
@@ -163,12 +163,12 @@
                         <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
                             <div class="icon-actions">
                                 <div class="actions">
-                                    <a class="icon-action" (click)="redirectToEditInvoice(row.id)">
+                                    <a [hidden]="authenticationService.hasPermission('Journal Entries','update')" class="icon-action" (click)="redirectToEditInvoice(row.id)">
                                         <span class="icon-edit"></span>
                                     </a>
                                 </div>
                                 <div class="actions">
-                                    <a class="icon-action" (click)="delete(row.id)">
+                                    <a [hidden]="authenticationService.hasPermission('Journal Entries','delete')" class="icon-action" (click)="delete(row.id)">
                                         <span class="icon-delete"></span>
                                     </a>
                                 </div>

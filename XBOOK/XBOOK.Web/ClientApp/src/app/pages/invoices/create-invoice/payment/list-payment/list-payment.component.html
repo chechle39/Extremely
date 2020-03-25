@@ -5,7 +5,7 @@
         <p>{{'PAYMENT.GRID.HEADER' | translate}} {{invoiceNumber}} </p>
       </div>
       <div class="col-md-6 float-left">
-        <button [disabled]="outstandingAmount === 0" (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></button>
+        <button [disabled]="outstandingAmount === 0 || authenticationService.hasPermission('Invoice','create')" (click)='addNewPayment()' class="btn btn-sm btn-raised btn-success float-left"><i class="fa fa-plus"></i></button>
         <!-- <div ngbDropdown class="float-right">
           <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>Bulk Actions
           </button>
@@ -51,7 +51,7 @@
 
       <ngx-datatable-column name="{{'INVOICE.FORM.VIEW.PAYMENT.DATE' | translate}}" [sortable]="false" prop="payDate">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{row.payDate | date: 'dd/MM/yyyy'}}
+           <span>{{row.payDate | date: 'dd/MM/yyyy'}}</span>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="{{'INVOICE.FORM.VIEW.PAYMENT.TYPE' | translate}}" [sortable]="false" prop="payType">

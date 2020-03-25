@@ -9,17 +9,23 @@ import { UserService } from '../pages/_shared/services/user.service';
 import { RegisterComponent } from './register/register.component';
 import { XBookAuthenComponent } from './xbook-authen.component';
 import { XBookAuthenRoutingModule } from './xbook-authen-routing.module';
-import { NbLayoutModule, NbSpinnerModule, NbButtonModule, NbAlertModule, NbCardModule } from '@nebular/theme';
+import { NbLayoutModule, NbSpinnerModule, NbButtonModule, NbAlertModule, NbCardModule, NbIconModule } from '@nebular/theme';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NbAuthModule } from '@nebular/auth';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { AuthenLayoutComponent } from './authen-layout/authen-layout.component';
 
 const components = [
   XBookAuthenComponent,
   RegisterComponent,
+  ResetPasswordComponent,
   ForgotPasswordComponent,
   LoginComponent,
   validateNullDirective,
+  ConfirmEmailComponent,
+  AuthenLayoutComponent,
 ];
 @NgModule({
   imports: [
@@ -36,6 +42,7 @@ const components = [
     NbAlertModule,
     NbCardModule,
     NbAuthModule,
+    NbIconModule,
   ],
   declarations: [
     ...components,

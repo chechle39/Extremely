@@ -29,7 +29,7 @@ namespace XBOOK.Dapper.ViewModels
     }
     public class PurchaseReportPrintViewodel
     {
-    
+        public string companyCode { get; set; }
         public string companyNameName { get; set; }
         public string companyAddress { get; set; }
         public string endDate { get; set; }

@@ -28,10 +28,15 @@
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <select id="paymentMethods" class="form-control" formControlName="paymentMethods">
+        <!-- <select id="paymentMethods" class="form-control" formControlName="paymentMethods">
           <option [ngValue]="null">{{'PAYMENT.CREATE.COMBOBOX.PAYTYPE' | translate}}</option>
           <option *ngFor="let method of paymentMethods" [ngValue]="method.payTypeId">
             {{ method.payType }}
+          </option>
+        </select> -->
+        <select formControlName="paymentMethods" id="paymentMethods" class="form-control">
+          <option *ngFor="let method of payment" [ngValue]="method.key">
+            {{ method.name }}
           </option>
         </select>
         <small class="form-text text-muted danger"
@@ -69,10 +74,10 @@
 
   </div>
   <div class="modal-footer">
-    <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
+    <button  type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
       <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate}}
     </button>
-    <button type="submit" [disabled]="paymentForm.invalid" class="btn btn-raised btn-success"><i class="ft-save"></i>
+    <button type="submit" [disabled]="paymentForm.invalid || authenticationService.hasPermission('Invoice','create')" class="btn btn-raised btn-success"><i class="ft-save"></i>
       {{'COMMON.BUTTON.SAVE' | translate}}</button>
   </div>
 </form>

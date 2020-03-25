@@ -33,12 +33,10 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
     private modalService: NgbModal,
     private commonService: CommonService,
     public authenticationService: AuthenticationService,
-    private router: Router,
     private userService: UserService) {
     super(injector);
-    if (this.authenticationService.checkAccess('User') === false) {
-      this.router.navigate([`/auth/login`]);
-    }
+    this.commonService.CheckAssessFunc('User');
+    this.recalculateOnResize(() => this.userViews = [...this.userViews]);
   }
 
 

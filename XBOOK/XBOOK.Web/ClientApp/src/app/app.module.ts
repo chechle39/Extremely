@@ -57,7 +57,6 @@ import { CoreModuleApp } from './coreapp/core.module';
     CoreModule.forRoot(),
     ToastrModule.forRoot(),
     CoreModuleApp,
-
   ],
   providers: [DataService, LoginService],
   bootstrap: [AppComponent],

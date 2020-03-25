@@ -32,6 +32,7 @@ import { SearchaccountbalanceComponent } from './searchaccountbalance/searchgenl
 import * as _ from 'lodash';
 import { SearchType, ActionType } from '../../coreapp/app.enums';
 import { DataService } from '../_shared/services/data.service';
+import { CommonService } from '../../shared/service/common.service';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
@@ -72,9 +73,12 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
     private accountBalanceService: AccountBalanceService,
     private genLedService: GenLedGroupService,
     private modalService: NgbModal,
+    private commonService: CommonService,
     private invoiceService: InvoiceService,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('Account Balance');
+    this.recalculateOnResize(() => this.accountBalanceViews = [...this.accountBalanceViews]);
   }
 
   getRowHeight(row) {
@@ -200,6 +204,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
       const data = {
         companyName : this.companyName,
         companyAddress : this.companyAddress,
+        companyCode: this.companyCode,
         accName: this.accountBalanceViews1[i].accName,
         accNumber: this.accountBalanceViews1[i].accNumber,
         creditOpening: this.accountBalanceViews1[i].creditOpening,
@@ -214,7 +219,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
       this.accountBalanceViewsreport.push(data);
     }
 
-    const reportName = 'AccountBalanceReport';
+    const reportName = 'Account Balance Report';
     this.accountBalanceService.AccountBalanceSaveDataPrint(this.accountBalanceViewsreport).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

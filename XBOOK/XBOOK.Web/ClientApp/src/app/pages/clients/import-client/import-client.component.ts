@@ -39,11 +39,9 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
   ngOnInit() {
     this.importForm = this.createClientFormGroup();
     this.FieldName = this.id[0];
-    console.log(this.FieldName)
     this.Datareport = this.id;
     // tslint:disable-next-line:prefer-for-of
     for (let j = 1; j < this.FieldName.length; j++) {
-      console.log(this.FieldName)
       if (this.FieldName[j] !== "" ){
       const data = {
         value: this.FieldName[j],
@@ -96,7 +94,7 @@ export class ImportClientComponent extends AppComponentBase implements OnInit {
         }),
       )
       .subscribe(() => {
-     //   this.notify.info('Saved Successfully');
+        this.notify.info('Saved Successfully');
         this.close(true);
       });
   }

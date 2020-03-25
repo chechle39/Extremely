@@ -64,7 +64,7 @@
             [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [limit]="20" [selected]="selected"
             [selectionType]="'checkbox'" (sort)="onSort($event)" [selectAllRowsOnPage]="false">
 
-            <ngx-datatable-column name="{{'ACCOUNT.DETAIL.LIST.INVOICENUMBER' | translate}}" prop="firstMonth">
+            <ngx-datatable-column name="{{'ACCOUNT.DETAIL.LIST.INVOICENUMBER' | translate}}" prop="invoiceNumber">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div>{{row.invoiceNumber}}</div>
               </ng-template>
@@ -81,13 +81,13 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="{{'ACCOUNT.DETAIL.LIST.reference' | translate}}" prop="firstMonth">
+            <ngx-datatable-column name="{{'ACCOUNT.DETAIL.LIST.reference' | translate}}" prop="reference">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div>{{row.reference}}</div>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="invoiceNumber" name="{{'ACCOUNT.DETAIL.LIST.crspAccNumber' | translate}}"
+            <ngx-datatable-column prop="crspAccNumber" name="{{'ACCOUNT.DETAIL.LIST.crspAccNumber' | translate}}"
               [cellClass]="'col-center'" [headerClass]="'col-center'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-center">
@@ -98,7 +98,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="invoiceNumber" name="{{'ACCOUNT.DETAIL.LIST.debit' | translate}}"
+            <ngx-datatable-column prop="debit" name="{{'ACCOUNT.DETAIL.LIST.debit' | translate}}"
               [cellClass]="'col-right'" [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -116,7 +116,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="invoiceNumber" name="{{'ACCOUNT.DETAIL.LIST.credit' | translate}}"
+            <ngx-datatable-column prop="credit" name="{{'ACCOUNT.DETAIL.LIST.credit' | translate}}"
               [cellClass]="'col-right'" [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -134,7 +134,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="invoiceNumber" name="{{'ACCOUNT.DETAIL.LIST.debitClosing' | translate}}"
+            <ngx-datatable-column prop="debitClosing" name="{{'ACCOUNT.DETAIL.LIST.debitClosing' | translate}}"
               [cellClass]="'col-right'" [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
@@ -152,7 +152,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="{{'ACCOUNT.DETAIL.LIST.creditClosing' | translate}}" [cellClass]="'col-right'"
+            <ngx-datatable-column prop="creditClosing" name="{{'ACCOUNT.DETAIL.LIST.creditClosing' | translate}}" [cellClass]="'col-right'"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">

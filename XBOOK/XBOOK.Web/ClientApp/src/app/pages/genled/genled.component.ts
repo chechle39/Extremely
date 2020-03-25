@@ -11,6 +11,7 @@ import { InvoiceService } from '../_shared/services/invoice.service';
 import { GenLedService } from '../_shared/services/genled.service';
 import { SearchgenledComponent } from './searchgenled/searchgenled.component';
 import { saveAs } from 'file-saver';
+import { CommonService } from '../../shared/service/common.service';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
@@ -49,8 +50,11 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
     private genLedService: GenLedService,
     private modalService: NgbModal,
     private invoiceService: InvoiceService,
+    private commonService: CommonService,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('General Ledger');
+    this.recalculateOnResize(() => this.genViews = [...this.genViews]);
   }
 
   protected list(
@@ -155,6 +159,7 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
         credit: this.genViews[j].credit,
         companyName: this.companyName,
         companyAddress: this.companyAddress,
+        companyCode: this.companyCode,
         startDate: this.startDay === undefined ? this.firstDate : this.startDay,
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };

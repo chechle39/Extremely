@@ -14,7 +14,7 @@ namespace XBOOK.Data.Repositories
 {
     public class EntryPatternRepository: Repository<EntryPattern>, IEntryPatternRepository
     {
-        public EntryPatternRepository(DbContext context) : base(context)
+        public EntryPatternRepository(XBookContext context) : base(context)
         {
         }
         public Task<List<EntryPatternViewModel>> GetAllEntry()

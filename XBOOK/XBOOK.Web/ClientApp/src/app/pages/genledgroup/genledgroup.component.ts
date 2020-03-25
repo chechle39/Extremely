@@ -16,6 +16,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AccountBalanceViewModel } from '../_shared/models/accountbalance/accountbalance-view.model';
 import { InvoiceService } from '../_shared/services/invoice.service';
 import { DataService } from '../_shared/services/data.service';
+import { CommonService } from '../../shared/service/common.service';
 
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
@@ -63,8 +64,15 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     private genLedreportService: GenLedService,
     private data: DataService,
     private modalService: NgbModal,
+    private commonService: CommonService,
     private router: Router) {
     super(injector);
+    this.commonService.CheckAssessFunc('General Ledger');
+    this.recalculateOnResize(() => {
+      this.genViews.forEach((view, index) => {
+        this.genViews[index].genneralListData = [...view.genneralListData];
+      });
+    });
   }
 
   protected list(
@@ -241,6 +249,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
               const data = {
                 companyName: i !== undefined ? this.companyName : null,
                 companyAddress: i !== undefined ? this.companyAddress : null,
+                companyCode: i !== undefined ? this.companyCode : null,
                 accNumber: this.genViewsreport[j].accNumber,
                 ledgerID: this.genViewsreport[j].ledgerID,
                 transactionType: this.genViewsreport[j].transactionType,

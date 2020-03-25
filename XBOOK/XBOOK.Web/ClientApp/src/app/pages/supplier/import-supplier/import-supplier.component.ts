@@ -41,7 +41,6 @@ export class ImportSupplierComponent extends AppComponentBase implements OnInit 
     this.Datareport = this.id;
     // tslint:disable-next-line:prefer-for-of
     for (let j = 1; j < this.FieldName.length; j++) {
-      console.log(this.FieldName)
       if (this.FieldName[j] !== "" ){
       const data = {
         value: this.FieldName[j],

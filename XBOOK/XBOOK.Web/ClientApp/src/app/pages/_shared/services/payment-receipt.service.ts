@@ -20,10 +20,13 @@ export class PaymentReceiptService extends BaseService {
     updatePaymentReceipt(request: CreatePaymentReceiptRequest): Observable<any> {
         return this.post<any>(`${API_URI.updatePaymentReceipt}`, request);
     }
-
+    getPaymentReceiptById(id): Observable<any> {
+        return this.post<any>(`${API_URI.getPaymentReceiptByIdURL}/${id}`, null);
+    }
     getAllPaymentReceiptData(request: GetPaymentReceipyRequest): Observable<PaymentReceiptViewModel[]> {
         return this.post<any>(`${API_URI.getAllPaymentReceiptURL}`, request);
     }
+
 
     deletePaymentReceipt(request): Observable<any> {
         return this.post<any>(`${API_URI.deletePaymentReceiptURL}`, request);

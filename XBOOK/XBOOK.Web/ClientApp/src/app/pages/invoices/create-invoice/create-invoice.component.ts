@@ -33,6 +33,7 @@ import { AppConsts } from '../../../coreapp/app.consts';
 import { AddTaxComponent } from './add-tax/add-tax.component';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 import { ngbTypeheadScrollToActiveItem } from '../../../shared/utils/util';
+import { CommonService } from '../../../shared/service/common.service';
 
 @Component({
   selector: 'xb-create-invoice',
@@ -120,6 +121,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   searching = false;
   searchFailed = false;
   isCheckDate: boolean;
+  EditUpload: boolean;
+  oldFileLent: number;
+  ahihi: boolean;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -132,10 +136,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     private invoiceService: InvoiceService,
     private paymentService: PaymentService,
     private authenticationService: AuthenticationService,
+    private commonService: CommonService,
     private taxService: TaxService,
     private fb: FormBuilder,
     private modalService: NgbModal) {
     super(injector);
+    this.commonService.CheckAssessFunc('Invoice');
     this.createForm();
   }
 
@@ -326,9 +332,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   searchProduct = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
-    const inputFocus = this.focusProd$;
-    return merge(debouncedText$, inputFocus).pipe(
+    return text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
       switchMap(term =>
         this.productService.searchProduct(this.requestProduct(term)).pipe(
           catchError(() => {
@@ -401,6 +407,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   private getInForProfile(request) {
+    this.fileUpload = [];
     this.invoiceService.getInfofile(request).subscribe(rp => {
       if (rp !== null) {
         if (rp.length > 0) {
@@ -433,7 +440,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.clientSelected.taxCode = invoice[0].clientData[0].taxCode;
       this.clientSelected.email = invoice[0].clientData[0].email;
 
-      if (this.viewMode) {
+      if (this.invoiceId !== 0) {
         const request = {
           invoice: this.invoiceNumber,
           seri: invoice[0].invoiceSerial,
@@ -512,6 +519,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   cancel() {
+
     if (this.invoiceId > 0) {
       this.getInvoiceById(this.invoiceId);
     }
@@ -530,11 +538,10 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.invoiceForm.reset();
       this.router.navigate([`/pages/invoice`]);
     }
-
   }
 
   save() {
-
+    this.ahihi = true;
     if (this.invoiceForm.controls.invoiceSerial.invalid === true
       || this.invoiceForm.controls.invoiceNumber.invalid === true
       || this.invoiceForm.controls.issueDate.invalid === true
@@ -584,7 +591,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         email: this.invoiceForm.value.email === '' ? '' : this.invoiceForm.value.email,
       };
       const requestInvDt = [];
-      this.uploadFileMultiple(request);
+      if (this.EditUpload !== true) {
+        this.uploadFileMultiple(request);
+      }
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         this.invoiceService.getDF().subscribe((x: any) => {
           this.saleInvId = x.invoiceId;
@@ -740,12 +749,14 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       } else if (request1.clientId !== undefined) {
         this.requestData = request1;
       }
-      this.uploadFileMultiple(this.requestData);
+      if (this.EditUpload !== true) {
+        this.uploadFileMultiple(this.requestData);
+      }
       this.invoiceService.updateSaleInv(this.requestData).pipe(
         finalize(() => {
         })).subscribe(rs => {
           if (this.requestRemove.length <= 0) {
-            this.router.navigate([`/pages/invoice`]);
+            this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
           }
           if (this.requestRemove.length > 0) {
             this.requestRemove.forEach(element => {
@@ -753,7 +764,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
                 // this.notify.success('Successfully Deleted');
                 this.getDataForEditMode();
                 this.requestRemove = [];
-                this.router.navigate([`/pages/invoice`]);
+                this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
               });
             });
           }
@@ -855,18 +866,24 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   showPreviewUploadFile(files) {
+    this.EditUpload = false;
     this.nameFile = this.invoiceForm.controls.invoiceNumber.value + '_' + this.invoiceForm.controls.invoiceSerial.value;
+    this.oldFileLent = this.fileUpload.length;
     this.fileUpload.push(files[0]);
+    if (this.invoiceId !== 0) {
+     this.uploadFileMultiple(null);
+    }
   }
 
   uploadFileMultiple(data) {
     const fileRequest = [];
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.fileUpload.length; i++) {
-      if (this.fileUpload[i].size > 0) {
-        fileRequest.push(this.fileUpload[i]);
-      }
-    }
+    // for (let i = 0; i < this.fileUpload.length; i++) {
+
+    //     fileRequest.push(this.fileUpload[i]);
+
+    // }
+    fileRequest.push(this.fileUpload[ this.fileUpload.length - 1]);
     const requestData = {
       invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
       invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
@@ -875,9 +892,18 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       data: data === null ? requestData : data,
       fileUpload: fileRequest,
     };
-    if (fileRequest.length > 0) {
+
+    if (fileRequest.length > 0 && this.ahihi === true || this.ahihi === undefined) {
       this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
-        this.notify.success('Successfully upload');
+        if (this.EditUpload === false || this.ahihi !== true) {
+          this.notify.success('Successfully upload');
+        }
+        this.fileUpload = [];
+        const requestx = {
+          invoice: this.invoiceNumber,
+          seri: this.invoiceForm.controls.invoiceSerial.value,
+        };
+        this.getInForProfile(requestx);
       });
     }
 
@@ -1100,6 +1126,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.clientSelected.email = null;
   }
   redirectToEditInvoice() {
+    this.EditUpload = true;
+    this.ahihi = false;
     this.invoiceForm.controls.contactName.enable();
     this.invoiceForm.controls.clientName.enable();
     this.invoiceForm.controls.email.enable();
@@ -1216,5 +1244,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
   typeheadScrollHandler(e) {
     ngbTypeheadScrollToActiveItem(e);
+  }
+  public onFocus(e: Event): void {
+    e.stopPropagation();
+    setTimeout(() => {
+      const inputEvent: Event = new Event('input');
+      e.target.dispatchEvent(inputEvent);
+    }, 0);
   }
 }

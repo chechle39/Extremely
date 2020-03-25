@@ -15,8 +15,10 @@ namespace XBOOK.Data.Repositories
 {
     public class PaymentReceiptRepository : Repository<PaymentReceipt>, IPaymentReceiptRepository
     {
-        public PaymentReceiptRepository(DbContext context) : base(context)
+        private readonly ISupplierRepository _supplierRepository;
+        public PaymentReceiptRepository(XBookContext context, ISupplierRepository supplierRepository) : base(context)
         {
+            _supplierRepository = supplierRepository;
         }
 
         public async Task<bool> CreatePayMentReceipt(PaymentReceiptViewModel request)
@@ -59,6 +61,28 @@ namespace XBOOK.Data.Repositories
         public Task<PaymentReceiptViewModel> GetPayMentId(long Id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<PaymentReceiptByIdViewModel> GetPaymentReceiptById(long id)
+        {
+            var data = await Entities.ProjectTo<PaymentReceiptViewModel>().Where(x=>x.ID == id).AsNoTracking().ToListAsync();
+            var dataPayment = new PaymentReceiptByIdViewModel()
+            {
+                Address = await _supplierRepository.GetSupplierByID(data[0].SupplierID),
+                Amount = data[0].Amount,
+                SupplierID = data[0].SupplierID,
+                SupplierName = data[0].SupplierName,
+                BankAccount = data[0].BankAccount,
+                EntryType = data[0].EntryType,
+                ID = data[0].ID,
+                Note = data[0].Note,
+                PayDate = data[0].PayDate,
+                PayName = data[0].PayName,
+                PayType = data[0].PayType,
+                ReceiptNumber = data[0].ReceiptNumber,
+                ReceiverName = data[0].ReceiverName,
+            };
+            return dataPayment;
         }
 
         public async Task<bool> Update(PaymentReceiptViewModel request)
