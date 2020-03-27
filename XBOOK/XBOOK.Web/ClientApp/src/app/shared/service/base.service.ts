@@ -2,17 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { getBaseURL } from '../utils/util';
 
 @Injectable({
   providedIn: 'root',
 })
 export abstract class BaseService {
   protected baseUrl: string;
-  protected location: Location;
+
   constructor(protected http: HttpClient) {
-    this.location = environment.apiBaseUrl;
-    this.baseUrl =  getBaseURL(this.location);
+    this.baseUrl = environment.apiBaseUrl;
   }
   private processUrl<T>(url: string) {
     let endpoint = this.baseUrl + url;
@@ -55,6 +53,9 @@ export abstract class BaseService {
 
   postUploadMuntiple<T>(url: string, files: any): Observable<T> {
     const formData = new FormData();
+    if (files.fileUpload[0] === undefined) {
+      return;
+    }
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < files.fileUpload.length; i++) {
       // tslint:disable-next-line:no-angle-bracket-type-assertion

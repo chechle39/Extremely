@@ -293,7 +293,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
           id: this.moneyReceipt.value.id,
         };
         this.requestSaveJson.push(request);
-        const reportName = 'PaymentReceiptReport';
+        const reportName = 'Payment Receipt';
         this.paymentReceiptService.paymentReceiptSaveDataPrint(this.requestSaveJson).subscribe(rp1 => {
           this.router.navigate([`/pages/print/${reportName}`]);
           this.modalService.dismissAll();

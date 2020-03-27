@@ -31,7 +31,7 @@ export class CreateCompanyprofileComponent extends AppComponentBase implements O
       )
       .subscribe(() => {
         this.notify.info('Saved Successfully');
-        this.close(true);
+        this.close(false);
       });
   }
   close(result: any): void {

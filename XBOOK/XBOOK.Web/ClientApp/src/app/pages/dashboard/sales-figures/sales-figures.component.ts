@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { thousandSuffix } from '../../../shared/utils/util';
+import { thousandSuffix, convertRemToPixels } from '../../../shared/utils/util';
+import { NbMediaBreakpointsService, NbThemeService } from '@nebular/theme';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'xb-sales-figures',
@@ -11,9 +13,14 @@ export class SalesFiguresComponent implements OnInit {
   data: any;
   options: any;
 
-  constructor() {
+  constructor(
+    private breakpointService: NbMediaBreakpointsService,
+    private themeService: NbThemeService,
+  ) {
     this.showByMonth();
     this.options = this.getOption();
+
+    this.rerenderOnBreakpointChange();
   }
 
   ngOnInit() {
@@ -23,23 +30,23 @@ export class SalesFiguresComponent implements OnInit {
     const data = [
       {
         label: 'Feb',
-        value: 2300,
+        value: 23000000,
       },
       {
         label: 'Mar',
-        value: 1200,
+        value: 1200000,
       },
       {
         label: 'Apr',
-        value: 3500,
+        value: 35000000,
       },
       {
         label: 'May',
-        value: 800,
+        value: 8000000,
       },
       {
         label: 'Jun',
-        value: 2500,
+        value: 25000000,
       },
     ];
     this.data = this.chartObjectMapping(data);
@@ -98,7 +105,7 @@ export class SalesFiguresComponent implements OnInit {
     return {
       labels: dataInput.map(item => item.label),
       datasets: [{
-        data: dataInput.map(item => item.value),
+        data: dataInput.map(item => item.value / 1000000),
         label: 'Series1',
         backgroundColor: '#4d75a8',
         borderColor: '#4d75a8',
@@ -112,7 +119,7 @@ export class SalesFiguresComponent implements OnInit {
   }
 
   private getOption() {
-    return {
+    const option = {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
@@ -136,8 +143,8 @@ export class SalesFiguresComponent implements OnInit {
             },
             ticks: {
               fontColor: '#000',
-              fontSize: 8,
               fontFamily: 'Montserrat',
+              precision: 3,
               beginAtZero: true,
               callback: function (label, index, labels) {
                 return thousandSuffix(label);
@@ -151,6 +158,7 @@ export class SalesFiguresComponent implements OnInit {
         labels: {
           fontColor: '#000',
           backgroundColor: '#5177a6',
+          fontFamily: 'Montserrat',
           usePointStyle: true,
         },
       },
@@ -163,5 +171,88 @@ export class SalesFiguresComponent implements OnInit {
       },
       events: ['mousemove', 'click'],
     };
+
+    const customOption = this.responsiveTextOption(window.innerWidth);
+
+    return _.merge(option, customOption);
+  }
+
+  private responsiveTextOption(width: number) {
+    let customOption;
+
+    const breakpoint =  this.breakpointService.getByWidth(width).name;
+    switch (breakpoint) {
+      /**
+       * Breakpoint Medium - 768px
+       */
+      case 'md':
+        customOption = {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: convertRemToPixels(0.8),
+                },
+              },
+            ],
+          },
+          legend: {
+            labels: {
+              fontSize: convertRemToPixels(0.8),
+            },
+          },
+        };
+      break;
+      /**
+       * Breakpoint Large - 992px
+       */
+      case 'lg':
+        customOption = {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: convertRemToPixels(0.5),
+                },
+              },
+            ],
+          },
+          legend: {
+            labels: {
+              fontSize: convertRemToPixels(0.5),
+            },
+          },
+        };
+      break;
+      /**
+       * Default
+       */
+      default:
+        customOption = {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: convertRemToPixels(0.6),
+                },
+              },
+            ],
+          },
+          legend: {
+            labels: {
+              fontSize: convertRemToPixels(0.8),
+            },
+          },
+        };
+    }
+
+    return customOption;
+  }
+
+  private rerenderOnBreakpointChange() {
+    this.themeService.onMediaQueryChange()
+      .subscribe(([, currentBreakpoint]) => {
+          this.options = this.getOption();
+      });
   }
 }

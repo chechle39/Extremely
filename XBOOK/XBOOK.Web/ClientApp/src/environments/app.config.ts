@@ -29,7 +29,9 @@ export const API_URI = {
   createClient: 'api/client/SaveClient',
   createImportClient: 'api/client/CreateImportClient',
   GetFieldName: 'api/client/ImportExcel',
-
+  getMoneyFund:'api/MoneyFund/GetALLMoneyFundServiceDapper',
+  getDataMoneyReport:'api/MoneyFund/GetDataMoneyFundReportServiceDapper',
+  MoneyreportSaveDataPrint:'api/MoneyFund/SaveFileJson',
   taxGetAll: 'api/Tax/GetAllTax',
   MasterGetAll: 'api/MasterParam/GetAllMaster',
   createMaster: 'api/MasterParam/CreateMasterParam',

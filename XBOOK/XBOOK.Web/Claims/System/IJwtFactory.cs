@@ -8,7 +8,7 @@ namespace XBOOK.Web.Claims.System
 {
     public interface IJwtFactory
     {
-        Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity, IList<string> roles);
-        ClaimsIdentity GenerateClaimsIdentity(string userName, string id);
+        Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity, IList<string> roles,string code);
+        ClaimsIdentity GenerateClaimsIdentity(string userName, string id, string code);
     }
 }

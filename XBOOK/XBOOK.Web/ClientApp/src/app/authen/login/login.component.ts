@@ -6,6 +6,7 @@ import { LoginService } from '../../coreapp/services/login.service';
 import { UserService } from '../../pages/_shared/services/user.service';
 import { AuthenticationService, LoginContext } from '../../coreapp/services/authentication.service';
 import { LoginViewModel } from '../../pages/_shared/models/login/login.model';
+import { DataService } from '../../pages/_shared/services/data.service';
 
 @Component({
     selector: 'xb-login',
@@ -25,9 +26,9 @@ export class LoginComponent extends AppComponentBase implements OnInit, AfterVie
         private router: Router,
         private route: ActivatedRoute,
         private userService: UserService,
+        private data: DataService,
         private loginService: LoginService,
         private authenticationService: AuthenticationService,
-        private elRef: ElementRef,
     ) {
         super(injector);
         this.loginForm = this.createForm();
@@ -41,11 +42,11 @@ export class LoginComponent extends AppComponentBase implements OnInit, AfterVie
     }
 
     private checkAcount(): void {
-        this.userService.checkUserAcount().subscribe((rp: boolean) => {
-            if (rp === false) {
-                this.router.navigate([`/auth/register`]);
-            }
-        });
+        // this.userService.checkUserAcount().subscribe((rp: boolean) => {
+        //     if (rp === false) {
+        //         this.router.navigate([`/auth/register`]);
+        //     }
+        // });
     }
 
     public login(submittedForm: FormGroup) {
@@ -53,7 +54,7 @@ export class LoginComponent extends AppComponentBase implements OnInit, AfterVie
             email: submittedForm.value.userName,
             password: submittedForm.value.password,
         } as LoginViewModel;
-
+        this.data.sendMessageEmail(rq.email);
         this.loginService.login(rq).subscribe((rp: any) => {
             const request = {
                 username: submittedForm.value.userName,
@@ -62,6 +63,7 @@ export class LoginComponent extends AppComponentBase implements OnInit, AfterVie
                 role: rp.role,
                 permission: rp.permission,
                 fullName: rp.fullName,
+                companyCode: rp.companyCode,
             } as LoginContext;
             if (rp.success === false) {
                 this.message.error(rp.message, 'Wrong login, please login again');

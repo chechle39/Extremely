@@ -14,11 +14,8 @@ namespace XBOOK.Report.Services
     {
         readonly string ReportDirectory;
         const string FileExtension = ".repx";
-        private readonly ICompanyProfileReponsitory _companyProfileReponsitory;
         public ReportStorageWebExtension(IHostingEnvironment env, ICompanyProfileReponsitory companyProfileReponsitory)
         {
-            _companyProfileReponsitory = companyProfileReponsitory;
-            var data = _companyProfileReponsitory.GetCompanyProFile().Result;
             ReportDirectory = Path.Combine(env.ContentRootPath, "Reports" , "Template");
             if (!Directory.Exists(ReportDirectory))
             {

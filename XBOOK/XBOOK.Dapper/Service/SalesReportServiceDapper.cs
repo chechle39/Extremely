@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,14 +26,17 @@ namespace XBOOK.Dapper.Service
         {
             using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-
+                string deltaFrom = request.StartDate;
+                DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));
+                string deltaTo = request.EndDate;
+                DateTime toDate = DateTime.Parse(deltaTo, new CultureInfo("en-GB"));
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
                     var results = new List<SalesReportGroupViewModel>();
                     dynamicParameters.Add("@productName", request.ProductName);
-                    dynamicParameters.Add("@fromDate", request.StartDate);
-                    dynamicParameters.Add("@toDate", request.EndDate);
+                    dynamicParameters.Add("@fromDate", fromDate);
+                    dynamicParameters.Add("@toDate", toDate);
                     dynamicParameters.Add("@Currency", request.Client);
                     return await sqlConnection.QueryAsync<SalesReportViewModel>(
                        "Book_SalesReport", dynamicParameters, commandType: CommandType.StoredProcedure);
@@ -43,14 +47,17 @@ namespace XBOOK.Dapper.Service
         {
             using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-
+                string deltaFrom = request.StartDate;
+                DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));
+                string deltaTo = request.EndDate;
+                DateTime toDate = DateTime.Parse(deltaTo, new CultureInfo("en-GB"));
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
                     var results = new List<SalesReportGroupViewModel>();
                     dynamicParameters.Add("@productName", request.ProductName);
-                    dynamicParameters.Add("@fromDate", request.StartDate);
-                    dynamicParameters.Add("@toDate", request.EndDate);
+                    dynamicParameters.Add("@fromDate", fromDate);
+                    dynamicParameters.Add("@toDate", toDate);
                     dynamicParameters.Add("@Currency", request.Client);
                     var res = await sqlConnection.QueryAsync<SalesReportViewModel>(
                        "Book_SalesReport", dynamicParameters, commandType: CommandType.StoredProcedure);

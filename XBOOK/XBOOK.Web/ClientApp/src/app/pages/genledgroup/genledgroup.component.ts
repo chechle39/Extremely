@@ -267,7 +267,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
               this.requestSaveJson.push(data);
             }
           }
-          const reportName = 'GeneralLedgerReport';
+          const reportName = 'General Ledger';
           this.genLedService.GenGroupSaveDataPrint(this.requestSaveJson).subscribe(rp1 => {
             this.router.navigate([`/pages/print/${reportName}`]);
           });

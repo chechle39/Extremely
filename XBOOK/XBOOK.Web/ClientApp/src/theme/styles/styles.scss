@@ -586,8 +586,15 @@ body{
 */
 .card__title{
   font-size: 1.3rem;
+  line-height: 2rem;
   font-weight: normal;
   text-transform: uppercase;
+}
+
+.card__sub-title{
+  @extend .label-blue;
+  font-size: 1rem;
+  line-height: 1.6rem;
 }
 
 .card__button-bulk-action{
@@ -602,12 +609,29 @@ body{
     Datatable component
 */
 .ngx-datatable{
+  .datatable-header {
+    height: unset !important;
+  }
+  .datatable-header-inner{
+    width: 100% !important  ;
+  }
+  .datatable-header-cell {
+    height: fit-content;
+    border: none !important;
+  }
   .datatable-body-row{
     padding-top: .35rem!important;
     padding-bottom: .35rem!important;
   }
+  .datatable-row-center {
+    max-width: 99%;
+  }
   .datatable-header-cell-template-wrap{
     white-space: normal;
+    line-height: 0;
+    >*{
+      line-height: 24px;
+    }
   }
   .ngx-datatable.bootstrap{
     @media screen and (min-width: 768px) and (max-width: 992px){
@@ -622,6 +646,9 @@ body{
     &:hover{
       cursor: pointer;
     }
+  }
+  .datatable-row-wrapper, .datatable-scroll, .datatable-body-row{
+    width: 100%!important;
   }
 }
 

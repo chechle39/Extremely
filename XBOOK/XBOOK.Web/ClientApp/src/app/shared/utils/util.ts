@@ -106,18 +106,6 @@ export function ngbTypeheadScrollToActiveItem(e) {
   });
 }
 
-export function getBaseURL(location): string {
-  let uri: string;
-  switch (location.hostname) {
-    case 'localhost':
-      uri = 'http://localhost:58064/';
-      break;
-    case 'xbook.dynu.net':
-      uri = 'http://xbook.dynu.net/';
-      break;
-
-    default:
-      uri = 'http://xbook.dynu.net/';
-  }
-  return uri;
+export function convertRemToPixels(rem) {
+  return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 }

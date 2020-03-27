@@ -17,7 +17,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-6 text-right text-md-left">
           <div ngbDropdown>
-            <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{'COMMON.MOREACTION' | translate}}</button>
+            <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{'COMMON.ACTION' | translate}}</button>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item"><i class="icon-printer"></i>{{'COMMON.ACTION.PRINT' | translate}}</button>
               <button [disabled]="authenticationService.hasPermission('Money Receipt','delete')" (click)="deleteAll()" class="dropdown-item" ><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>

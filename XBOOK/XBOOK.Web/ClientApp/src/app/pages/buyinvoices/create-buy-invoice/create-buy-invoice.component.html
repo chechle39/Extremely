@@ -2,7 +2,8 @@
   <div class="card-invoice mx-auto">
     <nb-card-header class="mx-2 border-0 pb-0">
       <div class="row w-100 mx-0 px-4 d-flex justify-content-between">
-        <h1 class="invoice__title float-left">{{title}}</h1>
+        <h1 [hidden]="viewMode" class="invoice__title float-left">{{'BUY.INVOICE.NEW.HEADER' | translate}}</h1>
+        <h1 [hidden]="!viewMode" class="invoice__title float-left">{{'BUY.INVOICE.NO' | translate}} {{title}}</h1>
         <div class="float-right">
           <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.ACTION.PRINT' | translate}}</button>
           <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>

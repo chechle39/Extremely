@@ -2,8 +2,8 @@
 {
     public class DebitageModelSearchRequest
     {
-        public string Date { get; set; }
-        public string Currency { get; set; }
+        public string Money { get; set; }
+        public string FirstDate { get; set; }
 
     }
 

@@ -129,7 +129,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
       if (result) {
         const genledSearch = {
           money: result.money,
-          endDate: result.endDate,
+          firstDate: result.endDate,
         };
         this.exportCSV = result;
         this.debitAgeService.GetALLDebitAge(genledSearch).subscribe(rp => {
@@ -183,7 +183,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
       };
       this.requestSaveJson.push(data);
     }
-    const reportName = 'DebitAgeReport';
+    const reportName = 'Debit Age';
     this.debitAgeService.DebitAgeSaveDataPrint(this.requestSaveJson).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

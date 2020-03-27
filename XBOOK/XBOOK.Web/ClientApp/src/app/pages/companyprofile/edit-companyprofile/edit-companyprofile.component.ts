@@ -35,7 +35,7 @@ export class EditCompanyprofileComponent extends AppComponentBase implements OnI
       )
       .subscribe(() => {
         this.notify.info('Update Successfully');
-        this.close(true);
+        this.close(false);
       });
   }
   close(result: any): void {

@@ -3,3 +3,31 @@
         height: 100%;
     }
 }
+
+.cash-flow__unit{
+    position: absolute;
+    left: 1.25rem;
+    top: calc(1.1rem + 15px);
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: #666;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    @media screen and (max-width: 1200px) {
+        font-size: 0.5rem;
+        top: calc(1.3rem + 10px);
+    }
+    @media screen and (max-width: 1024px) {
+        top: calc(1.3rem + 10px);
+    }
+    @media screen and (max-width: 992px) {
+        font-size: 0.8rem;
+        top: calc(1.4rem + 10px);
+    }
+    @media screen and (max-width: 768px) {
+        top: calc(1.7rem + 10px);
+    }
+    @media screen and (max-width: 575px) {
+        font-size: 0.9rem;
+        top: calc(1.9rem + 9px);
+    }
+}

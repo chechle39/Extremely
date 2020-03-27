@@ -8,6 +8,7 @@ import { NbButtonModule, NbCardModule, NbSelectModule } from '@nebular/theme';
 import { SalesFiguresComponent } from './sales-figures/sales-figures.component';
 import { SaleChartComponent } from './sale-chart/sale-chart.component';
 import { PurchaseChartComponent } from './purchase-chart/purchase-chart.component';
+import { DataService } from '../_shared/services/data.service';
 
 @NgModule({
   imports: [

@@ -12,16 +12,17 @@ namespace XBOOK.Web.Helpers
 {
     public class Tokens
     {
-        public static async Task<string> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings, IList<string> roles, IEnumerable<PermissionViewModel> permissions,string name)
+        public static async Task<string> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings, IList<string> roles, IEnumerable<PermissionViewModel> permissions,string name, string code)
         {
             var response = new
             {
                 id = identity.Claims.Single(c => c.Type == "id").Value,
-                auth_token = await jwtFactory.GenerateEncodedToken(userName, identity, roles),
+                auth_token = await jwtFactory.GenerateEncodedToken(userName, identity, roles, code),
                 expires_in = (int)jwtOptions.ValidFor.TotalSeconds,
                 role = roles,
                 permission = permissions,
-                fullName = name
+                fullName = name,
+                companyCode = code,
             };
 
             return JsonConvert.SerializeObject(response, serializerSettings);

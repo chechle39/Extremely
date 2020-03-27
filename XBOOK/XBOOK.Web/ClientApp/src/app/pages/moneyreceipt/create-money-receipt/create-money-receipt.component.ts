@@ -372,7 +372,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         receiverName: this.moneyReceipt.value.receiverName,
         id: this.moneyReceipt.value.id,
       };
-      const reportName = 'MoneyReceiptReport';
+      const reportName = 'Money Receipt';
       this.moneyReceiptService.MoneyReceiptSaveDataPrint(request).subscribe(re => {
         this.router.navigate([`/pages/print/${reportName}`]);
         this.modalService.dismissAll();

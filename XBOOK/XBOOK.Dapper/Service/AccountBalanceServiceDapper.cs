@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
@@ -24,14 +25,17 @@ namespace XBOOK.Dapper.Service
         {
             using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-
+                string deltaFrom = request.StartDate;
+                DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));
+                string deltaTo = request.EndDate;
+                DateTime toDate = DateTime.Parse(deltaTo, new CultureInfo("en-GB"));
                 if (!string.IsNullOrEmpty(request.StartDate) && !string.IsNullOrEmpty(request.EndDate))
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
                     dynamicParameters.Add("@accountNumber", request.accountNumber);                  
-                    dynamicParameters.Add("@fromDate", request.StartDate);
-                    dynamicParameters.Add("@toDate", request.EndDate);
+                    dynamicParameters.Add("@fromDate", fromDate);
+                    dynamicParameters.Add("@toDate", toDate);
                     dynamicParameters.Add("@Currency", request.Currency);
                     return await sqlConnection.QueryAsync<AccountBalanceViewModel>(
                        "AccountBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
@@ -54,21 +58,25 @@ namespace XBOOK.Dapper.Service
         {
             using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-
+                string deltaFrom = request.StartDate;
+                DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));
+                string deltaTo = request.EndDate;
+                DateTime toDate = DateTime.Parse(deltaTo,new CultureInfo("en-GB"));
+               
                 if (!string.IsNullOrEmpty(request.StartDate) && !string.IsNullOrEmpty(request.EndDate))
                 {
                     await sqlConnection.OpenAsync();
-                    var dynamicParameters = new DynamicParameters();
+                    var dynamicParameters = new DynamicParameters();                  
                     dynamicParameters.Add("@Currency", request.Currency);
-                    dynamicParameters.Add("@fromDate", request.StartDate);
-                    dynamicParameters.Add("@toDate", request.EndDate);
+                    dynamicParameters.Add("@fromDate", fromDate);
+                    dynamicParameters.Add("@toDate", toDate);
                     return await sqlConnection.QueryAsync<AccountBalanceViewModel>(
                        "Book_AccountBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
                 else
                 {
                     await sqlConnection.OpenAsync();
-                    var dynamicParameters = new DynamicParameters();
+                    var dynamicParameters = new DynamicParameters();                   
                     dynamicParameters.Add("@Currency", null);
                     dynamicParameters.Add("@fromDate", null);
                     dynamicParameters.Add("@toDate", null);

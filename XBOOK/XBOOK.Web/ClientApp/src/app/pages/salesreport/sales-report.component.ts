@@ -202,7 +202,7 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
       };
       this.requestSaveJson.push(data);
     }
-    const reportName = 'SalesReportReport';
+    const reportName = 'Sales Report';
     this.salesReportService.SalesreportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

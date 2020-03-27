@@ -165,7 +165,7 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
       };
       this.genViewsreport.push(data);
     }
-    const reportName = 'GeneralJournalReport';
+    const reportName = 'General Journal';
     this.genLedService.GenSaveDataPrint(this.genViewsreport).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

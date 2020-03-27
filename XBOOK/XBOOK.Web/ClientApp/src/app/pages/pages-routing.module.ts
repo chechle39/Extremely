@@ -131,6 +131,11 @@ const routes: Routes = [
       loadChildren: () => import('./dashboard/dashboard.module')
         .then(m => m.DashboardModule),
     },
+    {
+      path: 'moneyfund',
+      loadChildren: () => import('./moneyfund/money-fund.module')
+        .then(m => m.MoneyFundtModule),
+    },
   ],
 }];
 

@@ -56,7 +56,7 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
 
   public recalculateOnResize(callback: () => void) {
     let requestAnimation;
-    const duration = 1;
+    const duration = 0.5;
     let counter = 0;
 
     const animationCallback = () => {

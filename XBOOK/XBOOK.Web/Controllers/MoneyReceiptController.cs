@@ -68,7 +68,7 @@ namespace XBOOK.Web.Controllers
         public IActionResult SaveFileJson(MoneyReceiptViewModelPrint request)
         {
             string json = JsonConvert.SerializeObject(request);
-            var folderName = Path.Combine(request.companyCode, "Reports", "Data");
+            var folderName = Path.Combine("Reports", "Data");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = "MoneyReceipt.json";
 

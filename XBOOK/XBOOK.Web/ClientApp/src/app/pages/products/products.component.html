@@ -4,25 +4,28 @@
       <div class="col-5 col-lg-4">
         <span class="card__title pt-1">{{ 'PRODUCT.LIST.HEADER' | translate }}</span>
       </div>
-      <div class="col-3 col-lg-4">
-        <div ngbDropdown>
-          <button class="btn btn-flat mr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}
-          </button>
+      <div class="col-3 col-lg-3">
+        <div ngbDropdown class="text-right">
+          <button class="btn btn-flat mr-1 mb-0" id="bulkActions"
+            ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}</button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <div ngbDropdownMenu aria-labelledby="bulkActions">
-              <button class="dropdown-item position-relative"><span class="icon-import"></span>{{ 'COMMON.MOREACTION.IMPORT' | translate }} 
-                <input style="cursor: pointer;" #file1 type="file" class="input-upload" #paramTypeSelected (change)="showPreview(file1.files)"> </button>
-              <button class="dropdown-item" (click)="ExportProduct()"><span class="icon-export"></span>{{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
-            </div>
-            <!-- <button class="dropdown-item"><span class="icon-import"></span>
-              {{ 'COMMON.MOREACTION.IMPORT' | translate }}<input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)"></button> </button>
-            <button class="dropdown-item" (click)="ExportProduct()"><span class="icon-export"></span>{{ 'COMMON.MOREACTION.EXPORT' | translate }} </button> -->
+            <button class="dropdown-item position-relative"><span
+                class="icon-import"></span>{{ 'COMMON.MOREACTION.IMPORT' | translate }}
+              <input style="cursor: pointer;" #file1 type="file" class="input-upload" #paramTypeSelected
+                (change)="showPreview(file1.files)"> </button>
+            <button class="dropdown-item" (click)="ExportProduct()"><span
+                class="icon-export"></span>{{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
           </div>
+          <!-- <div ngbDropdownMenu aria-labelledby="bulkActions">
+            <button class="dropdown-item"><span class="icon-import"></span>
+              {{ 'COMMON.MOREACTION.IMPORT' | translate }}<input style="cursor: pointer;" #file1 type="file" class="input-upload" (change)="showPreview(file1.files)"></button> </button>
+            <button class="dropdown-item" (click)="ExportProduct()"><span class="icon-export"></span>{{ 'COMMON.MOREACTION.EXPORT' | translate }} </button>
+          </div> -->
         </div>
       </div>
-      <div class="col-4 col-lg-4">
-        <span  [hidden] = "authenticationService.hasPermission('Products','create')" ngbDropdown class="float-right">
-          <button class="btn btn-raised mr-1 btn-success" id="dropdownBasic2"
+      <div class="col-4 col-lg-5">
+        <span [hidden]="authenticationService.hasPermission('Products','create')" ngbDropdown class="float-right">
+          <button class="btn btn-raised mr-1 mb-0 btn-success" id="dropdownBasic2"
             ngbDropdownToggle>{{ 'COMMON.MOREACTION.ADDNEW' | translate }}</button>
           <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBasic2">
             <a class="dropdown-item py-1" (click)="createProduct(ProductCategory.product)">
@@ -45,20 +48,22 @@
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body class="layout__container--medium"> 
-    
+  <nb-card-body class="layout__container--medium">
+
     <div class="row margin-top-0">
       <div class="col-lg-4 col-md-4 col-6 pt-1">
-        <div class="label-blue">{{ 'PRODUCT.LIST.HEADER' | translate }}</div>
+        <div class="card__sub-title">{{ 'PRODUCT.LIST.HEADER' | translate }}</div>
       </div>
       <div class="col-lg-3 col-md-4 col-6 text-right text-md-left">
-        <div ngbDropdown>
+        <div ngbDropdown class="text-right">
           <button class="btn btn-flat mr-1 card__button-bulk-action" id="bulkActions"
             ngbDropdownToggle>{{ 'COMMON.ACTION' | translate }}</button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button [disabled] = "authenticationService.hasPermission('Products','update')" (click)="edit()" class="dropdown-item"><span class="icon-edit"></span>
+            <button [disabled]="authenticationService.hasPermission('Products','update')" (click)="edit()"
+              class="dropdown-item"><span class="icon-edit"></span>
               {{ 'COMMON.ACTION.EDIT' | translate }}</button>
-            <button [disabled] = "authenticationService.hasPermission('Products','delete')" (click)="delete()" class="dropdown-item"><span class="icon-delete"></span>
+            <button [disabled]="authenticationService.hasPermission('Products','delete')" (click)="delete()"
+              class="dropdown-item"><span class="icon-delete"></span>
               {{ 'COMMON.ACTION.DELETE' | translate }}</button>
           </div>
         </div>
@@ -115,21 +120,19 @@
           </ngx-datatable-column>
           <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate}}" prop="description">
             <ng-template let-row="row" ngx-datatable-cell-template>
-             <span>{{row.description}}</span> 
+              <span>{{row.description}}</span>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="{{'PRODUCT.LIST.GRID.HEADER.UNITPRICE' | translate}}" prop="unitPrice"
             [cellClass]="'col-right'" [headerClass]="'col-right'">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div class="col-right">
-                {{row.unitPrice | currency:'VND':''}}
-              </div>
+              <div class="col-right">{{row.unitPrice | currency:'VND':''}}</div>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-footer>
             <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
               let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-              <div class="page-count pl-2">
+              <div class="page-count pl-0">
                 <span [translate]="'COMMON.GRID.TOTALROW'" [translateParams]="{rowCount: rowCount}"> </span>
               </div>
               <!-- |

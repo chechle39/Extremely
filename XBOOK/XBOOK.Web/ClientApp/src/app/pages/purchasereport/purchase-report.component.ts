@@ -136,10 +136,10 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
     const dialog = this.modalService.open(SearchPurchaseReportComponent, AppConsts.modalOptionsCustomSize);
     dialog.result.then(result => {
       const genledSearch = {
-        // startDate: result.startDate,
-        // endDate: result.endDate,
-        // client: result.client,
-        // product: result.product,
+        startDate: result.startDate,
+        endDate: result.endDate,
+        client: result.client,
+        product: result.product,
       };
       this.exportCSV = result;
       this.purchaseReportService.searchGen(genledSearch).subscribe(rp => {
@@ -198,7 +198,7 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
       };
       this.requestSaveJson.push(data);
     }
-    const reportName = 'PurchaseReportReport';
+    const reportName = 'Purchase Report';
     this.purchaseReportService.PurchReportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

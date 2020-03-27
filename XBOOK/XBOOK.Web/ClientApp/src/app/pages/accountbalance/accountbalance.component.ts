@@ -132,8 +132,8 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
     this.endDate1 = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     this.loadingIndicator = true;
     const genledSearch = {
-      //  startDate: this.firstDate === undefined ? null : this.firstDate,
-      // endDate: this.endDate1 === undefined ? null : this.endDate1,
+       startDate: this.firstDate === undefined ? null : this.firstDate,
+      endDate: this.endDate1 === undefined ? null : this.endDate1,
       money: null,
     };
     this.
@@ -168,9 +168,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
         const genledSearch = {
           startDate: result.startDate,
           endDate: result.endDate,
-          money: result.money,
-          // accNumber: result.accNumber,
-          // case: result.case,
+          money: result.money,        
         };
         this.accountBalanceService.getAccountBalanceViewModelData(genledSearch).subscribe(rp => {
           this.accountBalanceViews = rp;
@@ -219,7 +217,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
       this.accountBalanceViewsreport.push(data);
     }
 
-    const reportName = 'Account Balance Report';
+    const reportName = 'Account Balance';
     this.accountBalanceService.AccountBalanceSaveDataPrint(this.accountBalanceViewsreport).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

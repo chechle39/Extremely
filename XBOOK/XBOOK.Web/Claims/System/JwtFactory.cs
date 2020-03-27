@@ -22,20 +22,9 @@ namespace XBOOK.Web.Claims.System
             ThrowIfInvalidOptions(_jwtOptions);
         }
 
-        public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity, IList<string> roles)
+        public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity, IList<string> roles, string code)
         {
             var claims = new List<Claim>();
-            //var claims = new[]
-            //{
-            //     new Claim(ClaimTypes.Name, userName),
-            //     new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-            //     new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-            //     identity.FindFirst(XBOOK.Common.Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
-            //     identity.FindFirst(XBOOK.Common.Helpers.Constants.Strings.JwtClaimIdentifiers.Id),
-            //     new Claim(ClaimTypes.Role, roles[0])
-            //   //  new Claim (ClaimTypes.Role, "xx")
-
-            // };
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
@@ -45,6 +34,7 @@ namespace XBOOK.Web.Claims.System
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64));
             claims.Add(identity.FindFirst(XBOOK.Common.Helpers.Constants.Strings.JwtClaimIdentifiers.Rol));
             claims.Add(identity.FindFirst(XBOOK.Common.Helpers.Constants.Strings.JwtClaimIdentifiers.Id));
+            claims.Add(identity.FindFirst("codeCompany"));
             // Create the JWT security token and encode it.
             var jwt = new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,
@@ -59,11 +49,12 @@ namespace XBOOK.Web.Claims.System
             return encodedJwt;
         }
 
-        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id)
+        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id,string code)
         {
             var x = new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
             {
                 new Claim(XBOOK.Common.Helpers.Constants.Strings.JwtClaimIdentifiers.Id, id),
+                new Claim("codeCompany", code),
                 new Claim(XBOOK.Common.Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, XBOOK.Common.Helpers.Constants.Strings.JwtClaims.ApiAccess),
             });
  

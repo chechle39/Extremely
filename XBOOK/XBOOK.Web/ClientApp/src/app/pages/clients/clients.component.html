@@ -1,166 +1,165 @@
 <nb-card>
   <nb-card-header class="layout__container--medium">
     <div class="row">
-      <div class="col-5 col-lg-4">
-        <span class="card__title">Danh Sách Khách Hàng</span>
+      <div class="col-4 col-lg-4">
+        <span class="card__title">{{ 'CLIENT.HEADER' | translate }}</span>
       </div>
-      <div class="col-3 col-lg-4">
-        <div ngbDropdown>
-          <button class="btn btn-flat mr-1 pt-0" id="bulkActions" ngbDropdownToggle>More Actions
-          </button>
+      <div class="col-3 col-lg-3">
+        <div ngbDropdown class="text-right">
+          <button class="btn btn-flat mr-1 mb-0" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}</button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button class="dropdown-item position-relative"><span class="icon-import"></span> Import Clients
-              <input style="cursor: pointer;" #file1 type="file" class="input-upload" #paramTypeSelected (change)="showPreview(file1.files)">              
+            <button class="dropdown-item position-relative"><span class="icon-import"></span> {{ 'COMMON.MOREACTION.IMPORT' | translate }}
+              <input style="cursor: pointer;" #file1 type="file" class="input-upload" #paramTypeSelected
+                (change)="showPreview(file1.files)">
             </button>
-               <button class="dropdown-item" (click)="ExportClient()"><span class="icon-export"></span> Export Client</button>
+            <button class="dropdown-item" (click)="ExportClient()"><span class="icon-export"></span> {{ 'COMMON.MOREACTION.EXPORT' | translate }}</button>
           </div>
-       
+
         </div>
       </div>
-      <div class="col-4 col-lg-4">
-        <button [disabled] = "authenticationService.hasPermission('Clients','create')" (click)="createClient()" class="btn btn-raised mr-1 btn-success float-right mb-0">New Client</button>
+      <div class="col-5 col-lg-5">
+        <button [disabled]="authenticationService.hasPermission('Clients','create')" (click)="createClient()"
+          class="btn btn-raised mr-1 mb-0 btn-success float-right">{{ 'COMMON.MOREACTION.ADDNEW' | translate }}</button>
       </div>
     </div>
   </nb-card-header>
   <nb-card-body class="layout__container--medium">
-      <div class="row">
-        <div class="col-6">
-          <div class="media-body blue text-center mb-4">
-            <h3 class="font-large-1 mb-0 blue font-weight-300" style="text-decoration: underline">
-              {{ getOutstanding() | ThousandSuffixesPipe : 1 }}</h3>
-            <span class="text-muted font-small-3">total outstanding</span>
-          </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="media-body blue text-center mb-4">
+          <h3 class="font-large-1 mb-0 blue font-weight-300" style="text-decoration: underline">
+            {{ getOutstanding() | ThousandSuffixesPipe : 1 }}</h3>
+          <span class="text-muted font-small-3">{{ 'COMMON.TOTALOUTSTANDING' | translate }}</span>
         </div>
-        <div class="col-6">
-          <div class="media-body blue text-center mb-4">
-            <h3 class="font-large-1 mb-0 blue font-weight-300" style="text-decoration: underline">
-              {{ getOverduce() | ThousandSuffixesPipe : 1  }} </h3>
-            <span class="text-muted font-small-3">total overduce</span>
-          </div>
-        </div>
-
       </div>
-      <div class="row my-3 margin-top-0">
-        <div class="col-md-4 col-6 pt-1">
-          <div class="label-blue">Khách Hàng</div>
+      <div class="col-6">
+        <div class="media-body blue text-center mb-4">
+          <h3 class="font-large-1 mb-0 blue font-weight-300" style="text-decoration: underline">
+            {{ getOverduce() | ThousandSuffixesPipe : 1  }} </h3>
+          <span class="text-muted font-small-3">{{ 'COMMON.TOTALOVERDUE' | translate }}</span>
         </div>
-        <div class="col-md-4 col-6 text-right text-md-left">
-          <div ngbDropdown>
-            <button class="btn btn-flat mr-1 card__button-bulk-action" id="bulkActions" ngbDropdownToggle>Chức năng chung
-            </button>
-            <div ngbDropdownMenu aria-labelledby="bulkActions">
-              <button (click)="ShowInv()" class="dropdown-item"><span class="icon-edit"></span> Show invoices</button>
-              <button [disabled] = "authenticationService.hasPermission('Clients','delete')" (click)="delete()" class="dropdown-item"><span class="icon-delete"></span> Delete</button>
-            </div>
+      </div>
+
+    </div>
+    <div class="row mt-1">
+      <div class="col-md-3 col-6 pt-1">
+        <div class="card__sub-title">{{ 'CLIENT.SUBHEADER' | translate }}</div>
+      </div>
+      <div class="col-md-4 col-6 text-right text-md-left">
+        <div ngbDropdown class="text-right">
+          <button class="btn btn-flat mr-1 card__button-bulk-action" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.ACTION' | translate }}</button>
+          <div ngbDropdownMenu aria-labelledby="bulkActions">
+            <button (click)="ShowInv()" class="dropdown-item"><span class="icon-edit"></span>{{ 'COMMON.ACTION.EDIT' | translate }}</button>
+            <button [disabled]="authenticationService.hasPermission('Clients','delete')" (click)="delete()"
+              class="dropdown-item"><span class="icon-delete"></span>{{ 'COMMON.ACTION.DELETE' | translate }}</button>
           </div>
         </div>
-        <div class="col-md-4 col-12 float-right">
-          <div class="navbar-left">
-            <form class="form">
-              <div class="position-relative has-icon-left">
-                <input type="text" [(ngModel)]="clientKeyword" name="keyword" autocomplete="off" (keyup)="refresh()"
-                  class="form-control round" placeholder="Search">
-                <div class="form-control-position">
-                  <i class="ft-search" (click)="refresh()"></i>
+      </div>
+      <div class="col-md-5 col-12 float-right">
+        <div class="navbar-left">
+          <form class="form">
+            <div class="position-relative has-icon-left">
+              <input type="text" [(ngModel)]="clientKeyword" name="keyword" autocomplete="off" (keyup)="refresh()"
+                class="form-control round" placeholder="Search">
+              <div class="form-control-position">
+                <i class="ft-search" (click)="refresh()"></i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="clientViews"
+          [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+          [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
+          [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
+          (select)='onSelect($event)' [selectAllRowsOnPage]="false">
+
+          <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+              let-selectFn="selectFn">
+              <div class="custom-control custom-checkbox m-0">
+                <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                  (change)="selectFn(!allRowsSelected)" />
+                <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+              </div>
+
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+              let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+              <div class="custom-control custom-checkbox m-0">
+                <input type="checkbox" class="custom-control-input" id="{{row.clientID}}" [checked]="isSelected"
+                  (change)="onCheckboxChangeFn($event)" />
+                <label class="custom-control-label col-form-label" for="{{row.clientID}}"></label>
+              </div>
+
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="{{ 'CLIENT.GRID.HEADER.CLIENTADDRESS' | translate }}" prop="clientName">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div>{{row.clientName}}</div>
+              <div class="col-more-info font-small-3">{{row.address}}</div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="{{ 'CLIENT.GRID.HEADER.INTERALNOTE' | translate }}" prop="note">
+            <ng-template let-row="row" ngx-datatable-cell-template><div class="pl-2">{{row.note}}</div></ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="{{ 'CLIENT.GRID.HEADER.OUTSTANDING.OVERDUE' | translate }}" prop="" [cellClass]="'text-right'"
+            [headerClass]="'text-right pl-0'" [maxWidth]="'200'" [minWidth]="'200'">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="text-right">
+                <div>{{row.outstanding | currency:'VND':''}}</div>
+                <div class="col-more-info " style="color: #ed7d31">{{row.overdue | currency:'VND':''}}</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+              let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+              <div class="row"
+                style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px">
+                <div class="row text-right">
+                  <div class="col-3 text-left"><span [translate]="'COMMON.GRID.TOTALROW'" [translateParams]="{rowCount: rowCount}"> </span></div>
+                  <div class="col-3"></div>
+                  <div class="col-3 text-left">
+                    {{ 'COMMON.TOTALOUTSTANDING' | translate }}
+                  </div>
+                  <div class="col-3" style="padding-right: 35px; line-height: 1.625rem;">
+                    {{getOutstanding()| currency:'VND':''}}
+                  </div>
+                </div>
+                <div class="row text-right">
+                  <div class="col-3"></div>
+                  <div class="col-3"></div>
+                  <div class="col-3 text-left">
+                    {{ 'COMMON.TOTALOVERDUE' | translate }}
+                  </div>
+                  <div class="col-3" style="color: #ed7d31; padding-right: 35px; line-height: 1.625rem;">
+                    {{getOverduce()| currency:'VND':''}}
+                  </div>
+                </div>
+                <div class="row mx-0">
+                  <div class="page-count col-md-6 pl-0">
+                    
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <datatable-pager style="margin-right: -3px;" [pagerLeftArrowIcon]="'datatable-icon-left'"
+                      [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                      [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage" [size]="pageSize"
+                      [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                    </datatable-pager>
+                  </div>
                 </div>
               </div>
-            </form>
-          </div>
-        </div>
+
+            </ng-template>
+          </ngx-datatable-footer>
+        </ngx-datatable>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="clientViews"
-            [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
-            [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
-            [selected]="selected" (activate)="onActivate($event)" [selectionType]="SelectionType.checkbox"
-            (select)='onSelect($event)' [selectAllRowsOnPage]="false">
-
-            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
-              [resizeable]="false">
-              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-                let-selectFn="selectFn">
-                <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
-                    (change)="selectFn(!allRowsSelected)" />
-                  <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
-                </div>
-
-              </ng-template>
-              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-                let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
-                <div class="custom-control custom-checkbox m-0">
-                  <input type="checkbox" class="custom-control-input" id="{{row.clientID}}" [checked]="isSelected"
-                    (change)="onCheckboxChangeFn($event)" />
-                  <label class="custom-control-label col-form-label" for="{{row.clientID}}"></label>
-                </div>
-
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Client/ Address" prop="clientName">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div>{{row.clientName}}</div>
-                <div class="col-more-info font-small-3">{{row.address}}</div>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Interal Notes" prop="note">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                {{row.note}}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Outstanding / Overduce" prop="" [cellClass]="'text-right'"
-              [headerClass]="'text-right'">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div class="text-right">
-                  <div>{{row.outstanding | currency:'VND':''}}</div>
-                  <div class="col-more-info " style="color: #ed7d31">{{row.overdue | currency:'VND':''}}</div>
-                </div>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-footer>
-              <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
-                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-                <div class="row px-2" style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px">
-                  <div class="row text-right">
-                    <div class="col-3"></div>
-                    <div class="col-3"></div>
-                    <div class="col-3 text-right">
-                      Tổng sắp thu
-                    </div>
-                    <div class="col-3 pr-3">
-                      {{getOutstanding()| currency:'VND':''}}
-                    </div>
-                  </div>
-                  <div class="row text-right">
-                    <div class="col-3"></div>
-                    <div class="col-3"></div>
-                    <div class="col-3 text-right">
-                      Tổng quá hạn
-                    </div>
-                    <div class="col-3 pr-3" style="color: #ed7d31">
-                      {{getOverduce()| currency:'VND':''}}
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="page-count col-md-6 pl-4">
-                      <span>Total: {{rowCount}} items </span>
-                    </div>
-                    <div class="col-md-6 text-right">
-                      <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
-                        [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
-                        [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage" [size]="pageSize"
-                        [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
-                      </datatable-pager>
-                    </div>
-                  </div>
-                </div>
-
-              </ng-template>
-            </ngx-datatable-footer>
-          </ngx-datatable>
-        </div>
-      </div>
+    </div>
   </nb-card-body>
 </nb-card>
-

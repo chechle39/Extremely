@@ -79,8 +79,8 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
     this.firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     this.endDate1 = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const genledSearch = {
-      // startDate: this.firstDate === undefined ? null : this.firstDate,
-      // endDate: this.endDate1 === undefined ? null : this.endDate1,
+      startDate: this.firstDate === undefined ? null : this.firstDate,
+      endDate: this.endDate1 === undefined ? null : this.endDate1,
       money: null,
       productName: null,
     };
@@ -118,10 +118,10 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
     const dialog = this.modalService.open(SearchAccountDetailComponent, AppConsts.modalOptionsCustomSize);
     dialog.result.then(result => {
         const genledSearch = {
-          // startDate: result.startDate,
-          // endDate: result.endDate,
-          // client: result.client,
-          // product: result.product,
+          startDate: result.startDate,
+          endDate: result.endDate,
+          client: result.client,
+          product: result.product,
         };
         this.exportCSV = result;
         this.accountDetailService.searchGen(genledSearch).subscribe(rp => {
@@ -181,7 +181,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
       };
       this.requestSaveJson.push(data);
     }
-    const reportName = 'AccountDetailReport';
+    const reportName = 'Account Detail';
     this.accountDetailService.AccountDeatilreportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });

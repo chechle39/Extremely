@@ -114,9 +114,9 @@
   </div>
   <div class="modal-footer">
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
-      <i class="ft-x"></i> Cancel
+      <i class="ft-x"></i>{{ 'COMMON.BUTTON.CANCEL' | translate }}
     </button>
     <button type="button" (click)="save()" class="btn btn-raised btn-success" [disabled]="!f.valid"><i
-        class="ft-save"></i> Save</button>
+        class="ft-save"></i>{{ 'COMMON.BUTTON.SAVE' | translate }}</button>
   </div>
 </form>

@@ -2,6 +2,8 @@ export const environment = {
   production: true,
   hmr: false,
   apiKey: 'XB-KEY',
-  apiBaseUrl: window.location,
+  apiBaseUrl: 'http://localhost:58064/',
+  // apiBaseUrl: 'http://xbook.dynu.net/',
+
 };
 

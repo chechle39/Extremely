@@ -8,10 +8,27 @@ export class DataService {
   private subject = new Subject<any>();
   code: any;
   codeToForm: any;
+  sendEmailLogin: any;
   private codeSource = new BehaviorSubject<any>(this.code);
   private codeSourceToForm = new BehaviorSubject<any>(this.code);
+  private sendEmailLoginSource = new BehaviorSubject<any>(this.sendEmailLogin);
+  // private sendEmailLoginSourceToForm = new BehaviorSubject<any>(this.sendEmailLogin);
   private codesubject = new Subject<any>();
   constructor() { }
+
+
+  changeMessageMoneyFund(message: string) {
+    this.messageSource.next(message);
+  }
+  sendMessageMoneyFund(message: any) {
+    this.data = message;
+    this.messageSource.next({ data: message });
+    this.messageSource.asObservable();
+  }
+
+  getMessageMoneyFund(): Observable<any> {
+    return this.messageSource.asObservable();
+  }
 
   changeMessage(message: string) {
     this.messageSource.next(message);
@@ -47,5 +64,27 @@ export class DataService {
   }
   getMessageCodeToFormReset(): Observable<any> {
     return this.codeSourceToForm.asObservable();
+  }
+
+  sendMessageEmail(message: any) {
+    this.codeToForm = message;
+    this.sendEmailLoginSource.next({ data: message });
+    this.sendEmailLoginSource.asObservable();
+  }
+  getMessageEmail(): Observable<any> {
+    return this.sendEmailLoginSource.asObservable();
+  }
+  ///
+  changeMessageReload(message: string) {
+    this.messageSource.next(message);
+  }
+  sendMessagereload(message: any) {
+    this.data = message;
+    this.messageSource.next({ data: message });
+    this.messageSource.asObservable();
+  }
+
+  getMessagereload(): Observable<any> {
+    return this.messageSource.asObservable();
   }
 }

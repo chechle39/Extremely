@@ -51,7 +51,7 @@ namespace XBOOK.Service.AutoMapper
 
             CreateMap<MoneyReceiptViewModel, MoneyReceipt>().ConstructUsing(x => new MoneyReceipt(x.Amount,x.BankAccount,x.ClientID,x.ClientName,x.EntryType,x.ID,x.Note,x.PayDate,x.PayType,x.PayName,x.ReceiptNumber,x.ReceiverName));
 
-            CreateMap<EntryPatternViewModel, EntryPattern>().ConstructUsing(x => new EntryPattern(x.AccNumber,x.EntryType,x.Note,x.TransactionType,x.CrspAccNumber));
+            CreateMap<EntryPatternViewModel, EntryPattern>().ConstructUsing(x => new EntryPattern(x.AccNumber,x.EntryType,x.Note,x.TransactionType,x.CrspAccNumber, x.payType));
 
             CreateMap<BuyInvoiceViewModel, BuyInvoice>().ConstructUsing(x => new BuyInvoice(
                 x.AmountPaid,x.BuyInvDetailView,x.Discount,x.DiscRate,x.DueDate,x.InvoiceId,x.InvoiceNumber,x.InvoiceSerial,x.IssueDate,x.Note,x.PaymentView,x.Reference,x.Status,x.SubTotal,x.SupplierData,x.supplierID,x.Term,x.VatTax

@@ -123,7 +123,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   isCheckDate: boolean;
   EditUpload: boolean;
   oldFileLent: number;
-  ahihi: boolean;
+  checkUpload: boolean;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -142,12 +142,19 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     private modalService: NgbModal) {
     super(injector);
     this.commonService.CheckAssessFunc('Invoice');
-    this.createForm();
   }
 
   ngOnInit() {
+    this.createForm();
     this.isRead = false;
     this.getProfiles();
+    this.getLastIv();
+    // this.methodEdit_View();
+
+  }
+
+  getLastIv() {
+    this.removeItem(0);
     this.invoiceService.getLastInvoice().subscribe(response => {
       this.listInvoice = response;
       this.createForm();
@@ -159,10 +166,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         this.methodEdit_View();
       }
     });
-    // this.methodEdit_View();
-
   }
-
   getProfiles() {
     this.invoiceService.getInfoProfile().subscribe((rp: any) => {
       this.companyName = rp.companyName;
@@ -432,7 +436,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       const invoice = data as InvoiceView;
       this.invoiceList = invoice;
       this.invoiceNumber = invoice[0].invoiceNumber;
-      this.title = `Invoice ${this.invoiceNumber}`;
+      this.title = this.invoiceNumber;
       this.clientSelected.id = invoice[0].clientId;
       this.clientSelected.clientName = invoice[0].clientData[0].clientName;
       this.clientSelected.contactName = invoice[0].clientData[0].contactName;
@@ -541,7 +545,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   save() {
-    this.ahihi = true;
+    this.checkUpload = true;
     if (this.invoiceForm.controls.invoiceSerial.invalid === true
       || this.invoiceForm.controls.invoiceNumber.invalid === true
       || this.invoiceForm.controls.issueDate.invalid === true
@@ -618,7 +622,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
 
           this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
             this.notify.success('Successfully Add');
-            this.router.navigate([`/pages/invoice`]);
+            // this.router.navigate([`/pages/invoice`]);
+            this.invoiceForm.reset();
+            this.viewMode = false;
+            this.clientSelected.clientId = 0;
+            this.createForm();
+            this.getLastIv();
           });
         });
       });
@@ -893,18 +902,20 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       fileUpload: fileRequest,
     };
 
-    if (fileRequest.length > 0 && this.ahihi === true || this.ahihi === undefined) {
-      this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
-        if (this.EditUpload === false || this.ahihi !== true) {
-          this.notify.success('Successfully upload');
-        }
-        this.fileUpload = [];
-        const requestx = {
-          invoice: this.invoiceNumber,
-          seri: this.invoiceForm.controls.invoiceSerial.value,
-        };
-        this.getInForProfile(requestx);
-      });
+    if (fileRequest.length > 0 && this.checkUpload === true || this.checkUpload === undefined) {
+      if (fileRequest[0] !== undefined) {
+        this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
+          if (this.EditUpload === false || this.checkUpload !== true) {
+            this.notify.success('Successfully upload');
+          }
+          this.fileUpload = [];
+          const requestx = {
+            invoice: this.invoiceNumber,
+            seri: this.invoiceForm.controls.invoiceSerial.value,
+          };
+          this.getInForProfile(requestx);
+        });
+      }
     }
 
   }
@@ -1127,7 +1138,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
   redirectToEditInvoice() {
     this.EditUpload = true;
-    this.ahihi = false;
+    this.checkUpload = false;
     this.invoiceForm.controls.contactName.enable();
     this.invoiceForm.controls.clientName.enable();
     this.invoiceForm.controls.email.enable();
@@ -1202,7 +1213,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         this.requestSaveJson.push(data);
 
       }
-      const reportName = 'InvoiceReport';
+      const reportName = 'Sales Invoice';
       this.invoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp => {
         this.router.navigate([`/pages//print/${reportName}`]);
       });

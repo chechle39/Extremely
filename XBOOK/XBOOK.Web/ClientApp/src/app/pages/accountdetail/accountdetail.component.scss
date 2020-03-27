@@ -32,100 +32,18 @@
     height: 25px;
   }
   .totalDebit{
-    margin-right: -205px;
+    position: absolute;
+    right: 38.3%;
   }
   .totalCredit{
-    margin-right: -130px;
+    position: absolute;
+    right: 25.7%;
   }
   .totalDebitClosing{
-    margin-right: -60px;
+    position: absolute;
+    right: 13.3%;
   }
-  
-@media only screen and (max-width: 1820px){
-  .totalDebit{
-    margin-right: -178px;
+  .totalPayment{
+    right: 10px;
+    position: absolute;
   }
-  .totalCredit{
-    margin-right: -114px;
-  }
-  .totalDebitClosing{
-    margin-right: -52px;
-  }
-}
-@media only screen and (max-width: 1700px){
-  .totalDebit{
-    margin-right: -171px;
-  }
-  .totalCredit{
-    margin-right: -112px;
-  }
-  .totalDebitClosing{
-  margin-right: -50px;
-  }
-}
-@media only screen and (max-width: 1600px){
-  .totalDebit{
-    margin-right: -158px;
-  }
-  .totalCredit{
-    margin-right: -100px;
-  }
-  .totalDebitClosing{
-    margin-right: -48px;
-  }
-}
-@media only screen and (max-width: 1500px){
-  .totalDebit{
-    margin-right: -155px;
-  }
-  .totalCredit{
-    margin-right: -100px;
-  }
-  .totalDebitClosing{
-    margin-right: -43px;
-  }
-}
-@media only screen and (max-width: 1440px){
-  .totalDebit{
-    margin-right: -147px;
-  }
-  .totalCredit{
-    margin-right: -100px;
-  }
-  .totalDebitClosing{
-    margin-right: -35px;
-  }
-}
-@media only screen and (max-width: 1360px){
-  .totalDebit{
-    margin-right: -137px;
-  }
-  .totalCredit{
-    margin-right: -100px;
-  }
-  .totalDebitClosing{
-    margin-right: -38px;
-  }
-}
-@media only screen and (max-width: 1280px){
-  .totalDebit{
-    margin-right: -128px;
-  }
-  .totalCredit{
-    margin-right: -85px;
-  }
-  .totalDebitClosing{
-    margin-right: -40px;
-  }
-}
-@media only screen and (max-width: 1280px){
-  .totalDebit{
-    margin-right: -101%;
-  }
-  .totalCredit{
-    margin-right: -65%;
-  }
-  .totalDebitClosing{
-    margin-right: -26%;
-  }
-}

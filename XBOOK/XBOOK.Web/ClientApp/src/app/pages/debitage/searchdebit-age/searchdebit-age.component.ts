@@ -136,7 +136,7 @@ export class SearchDebitAgeComponent extends AppComponentBase implements OnInit 
       }
       case 2: {
         this.firstDate = new Date(date.getFullYear() - 1, 0, 1).toLocaleDateString('en-GB');
-        this.endDate = new Date(new Date().getFullYear() - 1, 11, 31).toLocaleDateString('en-GB');
+        this.endDate = new Date(date.getFullYear(), date.getMonth(), 0).toLocaleDateString('en-GB');
         this.genLedForm.patchValue({
           fromDate: this.firstDate,
           toDate: this.endDate,

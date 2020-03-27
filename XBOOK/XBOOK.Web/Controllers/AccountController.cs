@@ -71,7 +71,9 @@ namespace XBOOK.Web.Controllers
                 return BadRequest(ModelState);
             }
             var dataUserCommon = await _userCommonRepository.FindUserCommon(model.Email);
-            var identity = await GetClaimsIdentity(model.Email, model.Password);
+            if (dataUserCommon == null)
+                return  Ok(new GenericResult(false, "Username or password incorrect"));
+            var identity = await GetClaimsIdentity(model.Email, model.Password, dataUserCommon.Code);
 
             if (identity == null)
             {
@@ -84,10 +86,10 @@ namespace XBOOK.Web.Controllers
             }
             var roles = await _userManager.GetRolesAsync(finUser);
             var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
-            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList, finUser.FullName);
+            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList, finUser.FullName, dataUserCommon.Code);
             return new OkObjectResult(jwt);
         }
-        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
+        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password, string code)
         {
             
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
@@ -101,7 +103,7 @@ namespace XBOOK.Web.Controllers
             // check the credentials
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
             {
-                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id.ToString()));
+                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id.ToString(), code));
             }
 
             // Credentials are invalid, or account doesn't exist

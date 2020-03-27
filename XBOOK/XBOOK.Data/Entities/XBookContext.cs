@@ -20,13 +20,11 @@ namespace XBOOK.Data.Entities
         private readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly IConfiguration _configuration;
         private readonly IUserCommonRepository _userCommonRepository;
-        private readonly AppUserCommon code;
         public XBookContext(DbContextOptions<XBookContext> options, IUserCommonRepository userCommonRepository, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(options)
         {
             _userCommonRepository = userCommonRepository;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
-            code = _userCommonRepository.FindUserCommon("xbook@gmail.com").Result;
         }
         public DbSet<AccountChart> AccountChart { get; set; }
         public DbSet<Category> Category { get; set; }
@@ -96,11 +94,27 @@ namespace XBOOK.Data.Entities
         {
             if(_httpContextAccessor.HttpContext != null)
             {
-                var subdomain = _httpContextAccessor.HttpContext.Request.Host.Host;
+                var email = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split("Bearer");
+                if (_httpContextAccessor.HttpContext.User.Claims.ToList().Count > 0)
+                {
+                    var tesst = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+                    var connectionString1 = _configuration.GetConnectionString(tesst);
+                    optionsBuilder.UseSqlServer(connectionString1);
+                }
+                else
+                {
+                    if ("" != email[1].Substring(1))
+                    {
+                        var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
+                        var connectionString1 = _configuration.GetConnectionString(code.Code);
+                        optionsBuilder.UseSqlServer(connectionString1);
+                    }
+                   
+                }
 
             }
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseSqlServer(connectionString);
+            //var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            //optionsBuilder.UseSqlServer(connectionString);
         }
         public override int SaveChanges()
         {

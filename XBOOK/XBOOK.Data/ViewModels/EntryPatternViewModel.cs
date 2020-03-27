@@ -12,5 +12,6 @@ namespace XBOOK.Data.ViewModels
         public string AccNumber { get; set; }
         public string CrspAccNumber { get; set; }
         public string Note { get; set; }
+        public string payType { get; set; }
     }
 }

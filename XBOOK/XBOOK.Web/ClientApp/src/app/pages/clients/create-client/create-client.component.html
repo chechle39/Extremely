@@ -1,82 +1,77 @@
 
 <form class="form" name="form" autocomplete="off" #f="ngForm" (ngSubmit)="f.form.valid && save()">
   <div class="modal-header">
-    <h4 class="modal-title">Khách Hàng</h4>
+    <h4 class="modal-title">{{ 'CLIENT.SUBHEADER' | translate }}</h4>
   </div>
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="clientName">Tên</label>
+        <label for="clientName">{{ 'CLIENT.FORM.TITLE.NAME' | translate }}</label>
         <input [(ngModel)]="client.clientName" #clientName="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="clientName" placeholder="Tên khách hàng"
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="clientName" placeholder="{{ 'CLIENT.FORM.PLACEHOLDER.NAME' | translate }}"
           id="clientName">
         <small class="form-text text-muted danger"
-          *ngIf="!clientName.valid && (clientName.dirty || clientName.touched)">Please
-          enter client name</small>
+          *ngIf="!clientName.valid && (clientName.dirty || clientName.touched)">{{ 'CLIENT.FORM.VALIDATE.NAME' | translate }}</small>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="address">Địa chỉ</label>
+        <label for="address">{{ 'CLIENT.FORM.TITLE.ADDRESS' | translate }}</label>
         <input [(ngModel)]="client.address" #address="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="address" placeholder="Địa chỉ khách hàng"
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="address" placeholder="{{ 'CLIENT.FORM.PLACEHOLDER.ADDRESS' | translate }}"
           id="address">
-        <small class="form-text text-muted danger" *ngIf="!address.valid && (address.dirty || address.touched)">Please
-          enter address</small>
+        <small class="form-text text-muted danger" *ngIf="!address.valid && (address.dirty || address.touched)">{{ 'CLIENT.FORM.VALIDATE.ADDRESS' | translate }}</small>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="taxCode">Mã số thuế</label>
+        <label for="taxCode">{{ 'CLIENT.FORM.TITLE.TAXNUMBER' | translate }}</label>
         <input [(ngModel)]="client.taxCode" #taxCode="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="taxCode" placeholder="Mã số thuế khách hàng"
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="taxCode" placeholder="{{ 'CLIENT.FORM.PLACEHOLDER.TAXNUMBER' | translate }}"
           id="taxCode">
-        <small class="form-text text-muted danger" *ngIf="!taxCode.valid && (taxCode.dirty || taxCode.touched)">Please
-          enter tax code</small>
+        <small class="form-text text-muted danger" *ngIf="!taxCode.valid && (taxCode.dirty || taxCode.touched)">{{ 'CLIENT.FORM.VALIDATE.TAXNUMBER' | translate }}</small>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="contactName">Người liên hệ</label>
+        <label for="contactName">{{ 'CLIENT.FORM.TITLE.CONTACTNAME' | translate }}</label>
         <input [(ngModel)]="client.contactName" #contactName="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="contactName" placeholder="Người liên hệ"
+          [ngModelOptions]="{updateOn: 'blur'}" type="text" name="contactName" placeholder="{{ 'CLIENT.FORM.PLACEHOLDER.CONTACTNAME' | translate }}"
           id="contactName">
         <small class="form-text text-muted danger"
-          *ngIf="!contactName.valid && (contactName.dirty || contactName.touched)">Please
-          enter contact name</small>
+          *ngIf="!contactName.valid && (contactName.dirty || contactName.touched)">{{ 'CLIENT.FORM.VALIDATE.CONTACTNAME' | translate }}</small>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="email">Email liên hệ</label>
+        <label for="email">{{ 'CLIENT.FORM.TITLE.EMAIL' | translate }}</label>
         <input [(ngModel)]="client.email" #email="ngModel" required class="form-control"
-          [ngModelOptions]="{updateOn: 'blur'}" [email]="true" type="email" name="email" placeholder="Email liên hệ"
+          [ngModelOptions]="{updateOn: 'blur'}" [email]="true" type="email" name="email" placeholder="{{ 'CLIENT.FORM.PLACEHOLDER.EMAIL' | translate }}"
           id="email">
-        <small class="form-text text-muted danger" *ngIf="!email.valid && (email.dirty || email.touched)">Please
-          enter email</small>
+        <small class="form-text text-muted danger" *ngIf="!email.valid && (email.dirty || email.touched)">{{ 'CLIENT.FORM.VALIDATE.EMAIL' | translate }}</small>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="bankAccount">Tài khoản ngân hàng</label>
+        <label for="bankAccount">{{ 'CLIENT.FORM.TITLE.BANKACCOUNT' | translate }}</label>
         <input   [(ngModel)]="client.bankAccount" #bankAccount="ngModel" class="form-control"
-        [ngModelOptions]="{updateOn: 'blur'}"  type="text" name="bankAccount" placeholder="Tài khoản ngân hàng"
+        [ngModelOptions]="{updateOn: 'blur'}"  type="text" name="bankAccount" placeholder="{{ 'CLIENT.FORM.PLACEHOLDER.BANKACCOUNT' | translate }}"
         id="bankAccount">
       </div>
     </div>
     <div class="row">
       <div class="form-group col-12 mb-2">
-        <label for="note">Ghi chú</label>
+        <label for="note">{{ 'CLIENT.FORM.TITLE.NOTE' | translate }}</label>
         <textarea id="note" [(ngModel)]="client.note" rows="2" class="form-control " name="note"
-          placeholder="Ghi chú"></textarea>
+          placeholder="{{ 'CLIENT.FORM.PLACEHOLDER.NOTE' | translate }}"></textarea>
       </div>
     </div>
   </div>
   <div class="modal-footer">
     <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1">
-      <i class="ft-x"></i> Cancel
+      <i class="ft-x"></i> {{ 'COMMON.BUTTON.CANCEL' | translate }}
     </button>
     <button type="button" (click)="save()" class="btn btn-raised btn-success" [disabled]="!f.valid || authenticationService.hasPermission('Clients','Create')"><i
-        class="ft-save"></i> Save</button>
+        class="ft-save"></i> {{ 'COMMON.BUTTON.SAVE' | translate }}</button>
   </div>
 </form>

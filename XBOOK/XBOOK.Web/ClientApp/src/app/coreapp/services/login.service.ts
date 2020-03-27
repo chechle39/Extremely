@@ -6,16 +6,12 @@ import { API_URI } from '../../../environments/app.config';
 import { HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class LoginService extends BaseService {
-    // login(request): Observable<LoginViewModel> {
-    //     return this.post<LoginViewModel>(
-    //         `${API_URI.login}`, request,
-    //     );
-    // }
-    login(request): Observable<any> {
-        const headers = new HttpHeaders().set('Authorization', 'foobar');
-        // var test = {name: "hello"} //dummy data
-        return this.http.post(`${API_URI.login}`, request, {headers: headers});
-      }
+    login(request): Observable<LoginViewModel> {
+        return this.post<LoginViewModel>(
+            `${API_URI.login}`, request,
+        );
+    }
+
     logOut(): Observable<any> {
         return this.post<any>(
             `${API_URI.logout}`, null,

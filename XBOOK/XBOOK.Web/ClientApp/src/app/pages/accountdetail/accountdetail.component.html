@@ -3,11 +3,10 @@
     <div class="row">
       <div class="col-5 col-lg-4">
         <div class="d-flex">
-          <span class="card__title pr-3 pt-1" >{{ 'ACCOUNT.DETAIL.HEADER' | translate }}
+          <span class="card__title pr-3 pt-1">{{ 'ACCOUNT.DETAIL.HEADER' | translate }}
           </span>
           <div (click)='SearchGenLed()'>
-            <img src="../../../assets/search.png" class="button__search"
-              alt="search General Ledger"></div>
+            <img src="../../../assets/search.png" class="button__search" alt="search General Ledger"></div>
         </div>
         <div class="btn btn-flat mr-1 p-0 mb-0 text-nowrap" style="color: #546D74;">
           <div *ngIf="case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
@@ -42,14 +41,14 @@
   <nb-card-body>
     <div *ngFor="let group of genViews">
       <div>
-        <div class="row" style="color: #546D74">         
-          <div class="col-12"style="color: #546D74;font-size: 1.1rem;">
+        <div class="row" style="color: #546D74">
+          <div class="col-12" style="color: #546D74;font-size: 1.1rem;">
             {{group.accountNumber}}- {{group.accountName}}</div>
-        </div>         
-        <div class="row" style="color: #546D74;">         
+        </div>
+        <div class="row" style="color: #546D74;">
           <div class="col-lg-4 col-md-5 col-6" style="color: #546D74; font-size: 1.1rem;">
             {{group.companyName}}</div>
-          <div style="color: #546D74;font-weight: bold;" class="col-lg-8 col-md-7 col-6">Số Dư Đầu Kỳ:  {{122990 | currency:'VND':''}}</div>
+          <div style="color: #546D74;font-weight: bold;" class="col-lg-8 col-md-7 col-6 text-right">Số Dư Đầu Kỳ:  {{122990 | currency:'VND':''}}</div>
         </div>      
       </div>
 
@@ -152,8 +151,8 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="creditClosing" name="{{'ACCOUNT.DETAIL.LIST.creditClosing' | translate}}" [cellClass]="'col-right'"
-              [headerClass]="'col-right'">
+            <ngx-datatable-column prop="creditClosing" name="{{'ACCOUNT.DETAIL.LIST.creditClosing' | translate}}"
+              [cellClass]="'col-right'" [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right">
                   <div>
@@ -176,42 +175,33 @@
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
                 <div class="row" style="display: block;width: 101%;border-top: 3px double #ccc;padding-top: 10px;">
                   <div class="row text-right">
-                    <div class="col-2" style="text-align: left;">
+                    <div class="col-2 text-nowrap" style="text-align: left;">
                       <span class="card__title"
                         style="color: rgb(16, 20, 20);margin-left: 30px;inset-block: inherit;width: 300px;">
                         {{'ACCOUNT.DETAIL.LIST.Total' | translate}}
                       </span>
                     </div>
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                      <div class="totalDebit">
-                        <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                          {{group.totalDebit  | currency:'VND':''}}
-                        </div>
+                    <div class="totalDebit">
+                      <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
+                        {{group.totalDebit  | currency:'VND':''}}
                       </div>
                     </div>
 
-                    <div class="col-2">
-                      <div class="totalCredit">
-                        <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                          {{group.totalCredit  | currency:'VND':''}}
-                        </div>
+                    <div class="totalCredit">
+                      <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
+                        {{group.totalCredit  | currency:'VND':''}}
                       </div>
                     </div>
 
-                    <div class="col-2">
-                      <div class="totalDebitClosing">
-                        <div *ngIf="group.totalDiscount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                          {{group.totalDebitClosing  | currency:'VND':''}}
-                        </div>
+                    <div class="totalDebitClosing">
+                      <div *ngIf="group.totalDiscount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
+                        {{group.totalDebitClosing  | currency:'VND':''}}
                       </div>
                     </div>
 
-                    <div class="col-2">
-                      <div style="padding-right: 12px;">
-                        <div *ngIf="group.totalPayment  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                          {{group.totalCreditClosing  | currency:'VND':''}}
-                        </div>
+                    <div class="totalPayment">
+                      <div *ngIf="group.totalPayment  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
+                        {{group.totalCreditClosing  | currency:'VND':''}}
                       </div>
                     </div>
 

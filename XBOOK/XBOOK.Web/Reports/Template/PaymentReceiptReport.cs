@@ -4,6 +4,7 @@ using System.IO;
 using DevExpress.XtraReports.UI;
 using Newtonsoft.Json;
 using XBOOK.Data.Model;
+using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Web.Reports.Template
 {
@@ -20,8 +21,10 @@ namespace XBOOK.Web.Reports.Template
         }
         public class CreateReport
         {
+            private  IPaymentReceiptService _paymentReceiptService;
             public List<PaymentReceiptPaymentPrint> Data()
             {
+              
                 var itemss = new List<PaymentReceiptPaymentPrint>();
                 var folderName = Path.Combine("Reports", "Data");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);

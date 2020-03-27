@@ -157,7 +157,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       productKeyword: '',
       isGrid: false,
     };
+    this.getLastIv();
+    // this.methodEdit_View();
 
+  }
+  getLastIv() {
+    this.removeItem(0);
     this.buyInvoiceService.getLastBuyInvoice().subscribe(response => {
       this.listInvoice = response;
       this.createForm();
@@ -168,10 +173,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         this.methodEdit_View();
       }
     });
-    // this.methodEdit_View();
-
   }
-
   getProfiles() {
     this.invoiceService.getInfoProfile().subscribe((rp: any) => {
       this.companyName = rp.companyName;
@@ -434,7 +436,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       const invoice = data as BuyInvoiceView;
       this.invoiceList = invoice;
       this.invoiceNumber = invoice[0].invoiceNumber;
-      this.title = `Buy Invoice ${this.invoiceNumber}`;
+      this.title = this.invoiceNumber;
       this.supplierSelected.id = invoice[0].supplierID;
       this.supplierSelected.supplierName = invoice[0].supplierData[0].supplierName;
       this.supplierSelected.contactName = invoice[0].supplierData[0].contactName;
@@ -624,7 +626,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
 
           this.buyInvoiceService.CreateBuyInvDetail(requestInvDt).subscribe(xs => {
             this.notify.success('Successfully Add');
-            this.router.navigate([`/pages/buyinvoice`]);
+            // this.router.navigate([`/pages/buyinvoice`]);
+            this.invoiceForm.reset();
+            this.viewMode = false;
+            this.supplierSelected.supplierID = 0;
+            this.createForm();
+            this.getLastIv();
           }, () => {
             this.notify.error('Error Add');
           });
@@ -907,6 +914,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       fileUpload: fileRequest,
     };
     if (fileRequest.length > 0 && this.checkUpload === true || this.checkUpload === undefined) {
+      if (fileRequest[0] !== undefined)
       this.buyInvoiceService.uploadFileInvMt(request).subscribe(rp => {
         if (this.EditUpload === false || this.checkUpload !== true) {
           this.notify.success('Successfully upload');
