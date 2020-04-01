@@ -1,6 +1,6 @@
-@import '../../../@theme/styles/themes';
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~@nebular/theme/styles/global/breakpoints';
+@import "../../../@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
 @include nb-install-component() {
   .header-container {
     display: flex;
@@ -10,7 +10,7 @@
       position: relative;
       overflow: hidden;
     }
-  
+
     nb-card-header {
       display: flex;
       align-items: center;
@@ -19,7 +19,8 @@
       padding-bottom: nb-theme(card-header-with-select-padding-bottom);
       margin-bottom: -1px;
     }
-  
+
+
     .logo-container {
       display: flex;
       align-items: center;
@@ -39,7 +40,7 @@
       display: flex;
       align-content: center;
     }
-  
+
     nb-user {
       cursor: pointer;
     }
@@ -57,7 +58,7 @@
       margin: -0.5rem;
     }
 
-    div[class^=col-] {
+    div[class^="col-"] {
       padding: 0.5rem;
       box-sizing: border-box;
 
@@ -83,33 +84,78 @@
   }
   .withapp {
     width: 98%;
-}
-.full-width1 {
-  width: 100% !important;
-  padding-bottom: 10px;
+  }
+  .full-width1 {
+    width: 100% !important;
+    padding-bottom: 10px;
+  }
+
+  // ::ng-deep{
+  //   .datatable-body-row{
+  //     padding-top: .35rem!important;
+  //     padding-bottom: .35rem!important;
+  //   }
+  //   .datatable-header-cell-template-wrap{
+  //     white-space: normal;
+  //   }
+  //   .ngx-datatable.bootstrap{
+  //     @media screen and (min-width: 768px) and (max-width: 992px){
+  //       font-size: 0.8rem;
+  //     }
+  //   }
+  //   .datatable-footer-inner{
+  //     height: auto;
+  //   }
+  //   .datatable-body-row{
+  //     &:hover{
+  //       cursor: pointer;
+  //     }
+  //   }
+  // }
 }
 
-// ::ng-deep{
-//   .datatable-body-row{
-//     padding-top: .35rem!important;
-//     padding-bottom: .35rem!important;
-//   }
-//   .datatable-header-cell-template-wrap{
-//     white-space: normal;
-//   }
-//   .ngx-datatable.bootstrap{
-//     @media screen and (min-width: 768px) and (max-width: 992px){
-//       font-size: 0.8rem;
-//     }
-//   }
-//   .datatable-footer-inner{
-//     height: auto;
-//   }
-//   .datatable-body-row{
-//     &:hover{
-//       cursor: pointer;
-//     }
-//   }
-// }
+:host ::ng-deep {
+  .datatable-header-cell,
+  .datatable-body-cell,
+  .datatable__footer__row > * {
+    &:nth-child(1) {
+      flex: 0 0 50px;
+    }
+    &:nth-child(2) {
+      flex: 0 0 15rem;
+    }
+    &:nth-child(3) {
+      flex: 1 1 auto;
+    }
+    &:nth-child(4) {
+      flex: 0 0 11rem;
+    }
+    &:nth-child(5) {
+      flex: 0 0 7rem;
+    }
+    &:nth-child(6) {
+      flex: 0 0 40px;
+    }
+  }
 
+  .datatable__footer__row {
+    position: relative;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+}
+::ng-deep :root {
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    font-size: 11px;
+  }
+  @media screen and (max-width: 767px){
+    font-size: 8px;
+  }
+}
+
+
+nb-card-header, nb-card-body {
+  @media screen and (min-width: 992px) {
+    min-width: 750px;
+  }
 }

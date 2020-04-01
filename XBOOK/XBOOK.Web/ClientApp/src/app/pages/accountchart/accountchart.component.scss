@@ -73,3 +73,24 @@
         }
     }
 }
+:host ::ng-deep {
+    .datatable-header-cell,
+    .datatable-body-cell {
+      &:nth-child(1) {
+        flex: 0 0 20%;
+      }
+      &:nth-child(2) {
+        flex: 1 1 auto;
+      }
+      &:nth-child(3) {
+        flex: 0 0 20%;
+        padding-left: 0!important;
+      }
+      &:nth-child(4) {
+        flex: 0 0 20%;
+      }
+      &:nth-child(5) {
+        flex: 0 0 5rem;
+      }
+    }
+  }

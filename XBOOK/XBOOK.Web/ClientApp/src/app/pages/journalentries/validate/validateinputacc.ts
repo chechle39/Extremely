@@ -14,15 +14,17 @@ export class validateInputAccDirective implements Validator {
 
   }
   validate(control: AbstractControl): { [key: string]: any } {
-    if (control.value.accountNumber !== undefined || control.value === '') {
-      return null;
-    }
-    if (control.value.length > 0) {
-      if (this.rowItem.filter(x => x.accountNumber === control.value.split('-')[0]).length > 0
-      && this.rowItem.filter(x => x.accountName === control.value.split('-')[1]).length > 0 ) {
+    if (control.value !== null) {
+      if (control.value.accountNumber !== undefined || control.value === '') {
         return null;
       }
+      if (control.value.length > 0) {
+        if (this.rowItem.filter(x => x.accountNumber === control.value.split('-')[0]).length > 0
+        && this.rowItem.filter(x => x.accountName === control.value.split('-')[1]).length > 0 ) {
+          return null;
+        }
+      }
+      return { accNumber: true };
     }
-    return { accNumber: true };
   }
 }

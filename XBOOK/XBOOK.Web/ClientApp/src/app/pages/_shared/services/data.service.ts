@@ -29,6 +29,32 @@ export class DataService {
   getMessageMoneyFund(): Observable<any> {
     return this.messageSource.asObservable();
   }
+  changeMessagebuyInvoice(message: string) {
+    this.messageSource.next(message);
+  }
+  sendMessagebuyInvoice(message: any) {
+    this.data = message;
+    this.messageSource.next({ data: message });
+    this.messageSource.asObservable();
+  }
+
+  getMessagebuyInvoice(): Observable<any> {
+    return this.messageSource.asObservable();
+  }
+
+
+  changeMessageInvoice(message: string) {
+    this.messageSource.next(message);
+  }
+  sendMessageInvoice(message: any) {
+    this.data = message;
+    this.messageSource.next({ data: message });
+    this.messageSource.asObservable();
+  }
+
+  getMessageInvoice(): Observable<any> {
+    return this.messageSource.asObservable();
+  }
 
   changeMessage(message: string) {
     this.messageSource.next(message);

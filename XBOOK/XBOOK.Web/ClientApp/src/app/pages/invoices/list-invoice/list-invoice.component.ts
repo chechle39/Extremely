@@ -56,6 +56,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   isDue: false;
   startDate: string;
   endDate: string;
+  firstDate: any;
   constructor(
     private data: DataService,
     injector: Injector,
@@ -79,7 +80,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     const firstDateMonthCurent = {
       year: Number(firstDateMonth[2]),
       month: Number(firstDateMonth[1]),
-      day: Number(firstDateMonth[0]) };
+      day: Number(firstDateMonth[0])
+    };
     const endDateMonth = endDate.split('/');
     const endDateMonthCurent = {
       year: Number(endDateMonth[2]),
@@ -110,10 +112,37 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     // if (this.client !== undefined){
     //   this.getInvoice(requestList);
     // }
-
-    this.invoiceOfClient(requestList);
+    this.data.getMessageInvoice().subscribe(rp => {
+      if(rp !== undefined){
+        this.invoiceOfChart();       
+      } else {
+        this.invoiceOfClient(requestList);
+      }
+    });  
+  
   }
+  invoiceOfChart() {
+    this.data.getMessageInvoice().subscribe(rp => {
+      if (rp !== undefined) {
+        console.log(rp.data.startDate);
+        console.log(rp.data.endDate);
+        const rs = {
+          keyword: '',
+          startDate:  rp.data.startDate,
+          endDate: rp.data.endDate,
+          isIssueDate: this.ischeck,
+        };
+        this.invoiceService.getAll(rs).pipe(
+        ).subscribe((i: any) => {
+          this.loadingIndicator = false;
+          this.invoiceViews = [];
+          this.invoiceViews = i;
+          this.listInvoice = this.invoiceViews;
+        });
+      }
+    });
 
+  }
   invoiceOfClient(request) {
     this.data.getMessage().subscribe(rp => {
 
@@ -229,7 +258,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     return plus;
   }
   redirectToCreateNewInvoice() {
-   // this.data.sendMessage('');
+    // this.data.sendMessage('');
     this.router.navigate([`pages/invoice/new`]);
   }
   redirectToEditInvoice(id) {

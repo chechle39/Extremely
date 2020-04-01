@@ -1,0 +1,44 @@
+nb-sidebar{
+    transition: 0.5s ease-in-out;
+    .main-container{
+        transition: 0.5s ease-in-out;
+        .menu-title{
+            transition: 0.5s ease-in-out;
+            font-size: 0.9rem;
+
+            @media screen and (max-width: 575px) {
+                transition-delay: 0.5s;
+            }
+        }
+        .menu-item{
+            .menu-items{
+                max-height: 500px;
+                transition: 0.65s ease-in-out;
+                &~a span{
+                    color: red;
+                }
+            }
+        } 
+        nb-menu{
+            position: absolute;
+            width: 100% !important;
+        }
+    }
+    &.compacted{
+        .menu-title{
+            display: flex!important;
+            font-size: 0;
+        }
+        .menu-item{
+            .menu-items{
+                max-height: 0px;
+                display: block!important;
+            }
+        }
+    }
+    @media screen and (max-width: 1200px) and (min-width: 575px) {
+        ~.content{
+            margin-left: 3.5rem;
+        }
+    }
+}

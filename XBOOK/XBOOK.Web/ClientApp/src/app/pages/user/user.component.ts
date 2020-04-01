@@ -104,7 +104,7 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
   showCreateUserDialog(): void {
     let createOrEditProductDialog;
     const title = 'Create user';
-    createOrEditProductDialog = this.modalService.open(CreateUserComponent, AppConsts.modalOptionsSmallSize);
+    createOrEditProductDialog = this.modalService.open(CreateUserComponent, AppConsts.modalOptionsCustomSizeX);
     createOrEditProductDialog.componentInstance.title = title;
     createOrEditProductDialog.componentInstance.edit = false;
 
@@ -131,7 +131,7 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
 
   private editById(event: any) {
     let createOrEditProductDialog;
-    createOrEditProductDialog = this.modalService.open(CreateUserComponent, AppConsts.modalOptionsSmallSize);
+    createOrEditProductDialog = this.modalService.open(CreateUserComponent, AppConsts.modalOptionsCustomSizeX);
     createOrEditProductDialog.componentInstance.edit = true;
     createOrEditProductDialog.componentInstance.id = event.row !== undefined ? event.row.id : event;
     const title = 'Edit user';

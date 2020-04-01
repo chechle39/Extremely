@@ -1,9 +1,11 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
@@ -15,14 +17,17 @@ namespace XBOOK.Dapper.Service
     public class PaymentReceiptServiceDapper : IPaymentReceiptServiceDapper
     {
         private readonly IConfiguration _configuration;
-        public PaymentReceiptServiceDapper(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public PaymentReceiptServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<PaymentReceiptViewModel>> GetPaymentReceipt(MoneyReceiptRequest request)
         {
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();

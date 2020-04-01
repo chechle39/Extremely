@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-//using XAccLib.Payment;
+//using XAccLib;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.ViewModels;

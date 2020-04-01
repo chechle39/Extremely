@@ -1,10 +1,10 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
@@ -15,15 +15,16 @@ namespace XBOOK.Dapper.Service
     public class InvoiceServiceDapper : IInvoiceServiceDapper
     {
         private readonly IConfiguration _configuration;
-
-        public InvoiceServiceDapper(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public InvoiceServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
-
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceAsync(SaleInvoiceListRequest request)
         {
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 if(!string.IsNullOrEmpty(request.StartDate) && !string.IsNullOrEmpty(request.EndDate))
                 {

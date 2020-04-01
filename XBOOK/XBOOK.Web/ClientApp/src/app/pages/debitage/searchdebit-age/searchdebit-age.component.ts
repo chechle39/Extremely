@@ -97,19 +97,20 @@ export class SearchDebitAgeComponent extends AppComponentBase implements OnInit 
           .format(AppConsts.defaultDateFormat);
         const endFrom = moment([this.genLedForm.value.toDate.year, this.genLedForm.value.toDate.month - 1,
         this.genLedForm.value.toDate.day]).format(AppConsts.defaultDateFormat);
-        this.firstDate = endFrom;
-        this.endDate = endFrom;
+        this.firstDate = dateFrom;
+        this.endDate = dateFrom;
       }
       if (this.genLedForm.value.genLedMethods === 1) {
         const date = new Date();
         this.firstDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()).toLocaleDateString('en-GB');
+        this.endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()).toLocaleDateString('en-GB');
         this.genLedForm.patchValue({
-          fromDate: this.endDate,
+          fromDate: this.firstDate,
           toDate: this.endDate,
         });
       }
       const genledSearch = {
-        startDate: this.endDate === undefined ? null : this.endDate,
+        startDate: this.endDate === undefined ? null : this.firstDate,
         endDate: this.endDate === undefined ? null : this.endDate,
         isaccount: this.genLedForm.value.account,
         isAccountReciprocal: this.genLedForm.value.accountReciprocal,
@@ -128,9 +129,11 @@ export class SearchDebitAgeComponent extends AppComponentBase implements OnInit 
     this.case6 = 0;
     switch (this.genLedForm.value.genLedMethods) {
       case 1: {
+        this.firstDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()).toLocaleDateString('en-GB');
         this.endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()).toLocaleDateString('en-GB');
         this.genLedForm.patchValue({
-          toDate: this.endDate
+          fromDate: this.firstDate,
+          toDate: this.endDate,
         });
         break;
       }

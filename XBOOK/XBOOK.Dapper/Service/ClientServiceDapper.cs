@@ -1,9 +1,11 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
@@ -15,13 +17,16 @@ namespace XBOOK.Dapper.Service
     public class ClientServiceDapper : IClientServiceDapper
     {
         private readonly IConfiguration _configuration;
-        public ClientServiceDapper(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ClientServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IEnumerable<ClientViewModel>> GetClientAsync(ClientSerchRequest request)
         {
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();

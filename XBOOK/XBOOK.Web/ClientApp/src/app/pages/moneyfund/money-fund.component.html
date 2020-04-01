@@ -1,0 +1,208 @@
+<nb-card>
+  <nb-card-header class="pb-1 border-0">
+    <div class="row">
+      <div class="col-5 col-lg-4">
+        <div class="d-flex">
+          <!-- <span class="card__title pr-3 pt-1" >{{ 'SALE.HEADER' | translate }}
+          </span> -->
+          <span class="card__title pr-3 pt-1" >{{ 'MONEYFUND.HEADER' | translate }}
+          </span>
+          <div (click)='SearchGenLed()'>
+            <img src="../../../assets/search.png" class="button__search"
+              alt="search General Ledger"></div>
+        </div>
+        <div class="btn btn-flat mr-1 p-0 mb-0" style="color: #546D74;">
+          <div>{{ 'COMMON.DAY.Dateoptions' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+        </div>
+      </div>
+      <div class="col-3 col-lg-4">
+      </div>
+      <div class="col-4 col-lg-4">
+        <div ngbDropdown class="float-right">
+          <div class="d-inline-block mx-2">
+            <button (click)="Print()" class="btn btn-raised mr-1 btn-secondary">Print</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+      <div *ngFor="let group of genViews" style="padding-top: 2%;">
+        <div class="row w-100">
+          <div class="col-6" style="color: #546D74;font-size: 15px;font-weight: bold;">
+            {{group.moneyFund}}</div>
+            <div class="col-6 text-right pr-0" style="color: #546D74; font-size: 15px;float: right;font-weight: bold;">
+              {{ 'ACCOUNT.DETAIL.LIST.openingbalance' | translate }}:        122,990</div>
+        </div>
+        <div class="row">
+          <hr width="98%" style="height: 2px;;background: #6A0888;" class="mb-0" />
+          <div class="col-md-12">
+
+            <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="group.moneyFundData"
+              [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]"
+              [columnMode]="ColumnMode.flex" [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight"
+              [limit]="20" [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)"
+              [selectAllRowsOnPage]="false">
+              
+
+              <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.invoiceNumber' | translate }}" [flexGrow]="2"
+                [cellClass]="'col-left'" [headerClass]="'col-left'">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  <div class="col-left" style="color: cadetblue;">
+                    <div (click)="redirectToEditInvoice(row.invoiceID)">
+                      {{row.invoiceNumber}}
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column prop="date" name="{{ 'SALE.LIST.date' | translate }}" [flexGrow]="1"
+                [cellClass]="'col-left'" [headerClass]="'col-left'">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  <div class="col-left">
+                    <div>
+                      {{row.date | date: 'dd/MM/yyyy'}}
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column prop="note" name="{{ 'SALE.LIST.Note' | translate }}" [flexGrow]="2"
+              [cellClass]="'col-left'" [headerClass]="'col-left'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-left">
+                  <div (click)="redirectToEditInvoice(row.invoiceID)">
+                    {{row.note}}
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+              <ngx-datatable-column prop="collectMoney" name="{{ 'MONEYFUND.LIST.collectMoney' | translate }}" [flexGrow]="1"
+                [cellClass]="'col-right'" [headerClass]="'col-right'">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  <div class="col-right">
+                    <div>
+                      <div>
+                        <div *ngIf="row.collectMoney !== 0" class="col-more-info">
+                          {{row.collectMoney | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="row.collectMoney === 0">
+                          <a>-</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column prop="payMoney" name="{{ 'MONEYFUND.LIST.payMoney' | translate }}" [flexGrow]="1"
+              [cellClass]="'col-right'" [headerClass]="'col-right'">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="col-right">
+                  <div>
+                    <div>
+                      <div *ngIf="row.payMoney !== 0" class="col-more-info">
+                        {{row.payMoney | currency:'VND':''}}
+                      </div>
+                      <div *ngIf="row.payMoney === 0">
+                        <a>-</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            
+
+              <ngx-datatable-column prop="residualFund" name="{{ 'MONEYFUND.LIST.residualFund' | translate }}" [flexGrow]="1"
+                [cellClass]="'col-right'" [headerClass]="'col-right'">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                  <div class="col-right">
+                    <div>
+                      <div>
+                        <div *ngIf="row.residualFund !== 0" class="col-more-info">
+                          {{row.residualFund | currency:'VND':''}}
+                        </div>
+                        <div *ngIf="row.residualFund === 0">
+                          <a>-</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>            
+
+
+              <ngx-datatable-footer>
+                <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                  let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+                  <div class="row" style="display: block;width: 101%;border-top: 3px double #ccc;padding-top: 10px;">
+                    <div class="row text-right">
+                      <div class="col-2" style="text-align: left;">
+                        <div class="card__title"
+                          style="color: rgb(16, 20, 20);margin-left: 30px;inset-block: inherit;width: 300px;">
+                          {{ 'SALE.LIST.Total' | translate }}
+                        </div>
+                      </div>
+
+
+                      <div style="color: rgb(16, 20, 20)">
+                        <div class="totalAmount">
+                          <div *ngIf="group.totalCollectMoney  !== 0" class="col-more-info"
+                            style="color: rgb(16, 20, 20)">
+                            {{group.totalCollectMoney  | currency:'VND':''}}
+                          </div>
+                          <div *ngIf="group.totalCollectMoney   === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style="color: rgb(16, 20, 20)">
+                        <div class="totalDiscount">
+                          <div *ngIf="group.totalPayMoney  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
+                            {{group.totalPayMoney  | currency:'VND':''}}
+                          </div>
+                          <div *ngIf="group.totalPayMoney   === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style="color: rgb(16, 20, 20)">
+                        <div class="totalPayment">
+                          <div *ngIf="group.totalResidualFund  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
+                            {{group.totalResidualFund  | currency:'VND':''}}
+                          </div>
+                          <div *ngIf="group.totalResidualFund  === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- <div class="col-md-3" style="padding-right:35px">
+                      <b>{{getGrantTotal()| currency:'VND':''}}</b>
+                    </div> -->
+                    </div>
+                    <div class="row">
+                      <div class="page-count col-md-6 pl-4">
+                      </div>
+                      <div class="col-md-6 text-right">
+                        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                          [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                          [pagerNextIcon]="'datatable-icon-skip'" [count]="rowCount" [page]="curPage" [size]="pageSize"
+                          [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                        </datatable-pager>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-footer>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+  </nb-card-body>
+</nb-card>

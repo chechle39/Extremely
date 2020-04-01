@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,17 @@ namespace XBOOK.Dapper.Service
     public class SalesReportServiceDapper : ISalesReportServiceDapper
     {
         private readonly IConfiguration _configuration;
-        public SalesReportServiceDapper(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public SalesReportServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<SalesReportViewModel>> GetISalesDataReportServiceDapperAsync(SalesReportModelSearchRequest request)
         {
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 string deltaFrom = request.StartDate;
                 DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));

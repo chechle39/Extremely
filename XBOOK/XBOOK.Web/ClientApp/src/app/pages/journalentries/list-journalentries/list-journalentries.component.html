@@ -20,7 +20,7 @@
                     <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.ACTION' | translate }}</button>
                     <div ngbDropdownMenu aria-labelledby="bulkActions">
                         <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i> {{ 'COMMON.BUTTON.DUPLICATE' | translate }}</button>
-                        <button [disabled]="authenticationService.hasPermission('Journal Entries','delete')" class="dropdown-item" (click)="deleteAll()"><i class="fa fa-trash"></i> {{ 'COMMON.ACTION.DELETE' | translate }}</button>
+                        <button [disabled]="authenticationService.hasPermission('Journal Entries','delete')" class="dropdown-item" (click)="deleteAll()"><i class="icon-delete"></i> {{ 'COMMON.ACTION.DELETE' | translate }}</button>
                     </div>
                 </div>
             </div>
@@ -145,16 +145,14 @@
                             <div class="col-more-info">{{row.description}}</div>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column prop="issueDate" name="{{'JUOURNAL.GRID.DATE.OBJECT' | translate}}" [cellClass]="'col-right'"
-                        [headerClass]="'col-right'">
+                    <ngx-datatable-column prop="issueDate" name="{{'JUOURNAL.GRID.DATE.OBJECT' | translate}}" [cellClass]="'text-right'"
+                        [headerClass]="'text-right'">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <div class="col-right">{{row.dateCreate | date: 'dd/MM/yyyy'}}</div>
-                            <div *ngIf="row.objectType === 'Client' " class="col-more-info col-right">
-                                Khách hàng
-                            </div>
-                            <div *ngIf="row.objectType === 'Supplier' " class="col-more-info col-right">
-                                Nhân viên
-                            </div>
+                            <div class="text-right">{{row.dateCreate | date: 'dd/MM/yyyy'}}</div>
+                            <div *ngIf="row.objectType === 'Client' " class="col-more-info text-right">
+                                Khách hàng</div>
+                            <div *ngIf="row.objectType === 'Supplier' " class="col-more-info text-right">
+                                Nhân viên</div>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column [width]="40" [sortable]="false" [canAutoResize]="false" [draggable]="false"

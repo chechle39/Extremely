@@ -1,6 +1,5 @@
 <nb-card>
-    <div class="layout__container--medium px-3 d-flex flex-column">
-        <nb-card-header class="pb-1 border-0">
+        <nb-card-header class="pb-1 border-0 layout__container--medium">
             <div class="row">
                 <div class="col-5 col-lg-5">
                     <div class="d-flex">
@@ -10,13 +9,13 @@
                             <img src="../../../assets/search.png" class="button__search" alt="search General Ledger"></div>
                     </div>
                     <div class="btn btn-flat mr-1 p-0 mb-0 text-left text-nowrap" style="color: #546D74;">
-                        <div *ngIf=" case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
-                        <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
-                        <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
-                        <div *ngIf="case=== 3">Năm này: {{startDay}} {{keyspace}} {{endDay}}</div>
-                        <div *ngIf="case=== 4">Quý trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-                        <div *ngIf="case=== 5">Năm trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-                        <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf=" case==null">{{ 'COMMON.DAY.Thismonth' | translate }}: {{firstDate}} - {{endDate1}}</div>
+                        <div *ngIf="case=== 1">{{ 'COMMON.DAY.Thismonth' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 2">{{ 'COMMON.DAY.Thisquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 3">{{ 'COMMON.DAY.Thisyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 4">{{ 'COMMON.DAY.Lastquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 5">{{ 'COMMON.DAY.Lastyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+                        <div *ngIf="case=== 6">{{ 'COMMON.DAY.Dateoptions' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
                     </div>
                 </div>
                 <div class="col-3 col-lg-3">
@@ -42,7 +41,7 @@
                 </div>
             </div>
         </nb-card-header>
-        <nb-card-body class="pt-0">
+        <nb-card-body class="pt-0 layout__container--medium">
             <div class="row">
                 <hr width="98%" style="height: 2px;;background: #6A0888;" class="my-0" />
                 <div class="col-12 ">
@@ -56,18 +55,16 @@
                             <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir"
                                 ngx-datatable-header-template>
                                 <span class="column-header"
-                                    style="cursor: pointer;margin-left: -10px;font-weight: 400;">{{ 'ACCOUNT.BALANCE.LIST.accNumber' | translate }}</span>
+                                    style="cursor: pointer;font-weight: 400;">{{ 'ACCOUNT.BALANCE.LIST.accNumber' | translate }}</span>
                                 <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
                                     [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
                                     [class.datatable-icon-down]="sortDir === 'desc'"></span>
     
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <div (click)="getaccNumber(row.accNumber)" style="margin-left: 4px;">
-                                    <a>{{row.accNumber}}</a>
+                                <div (click)="getaccNumber(row.accNumber)"><a style="color: cadetblue;">{{row.accNumber}}</a>
                                 </div>
-                                <div (click)="getaccNumber(row.accNumber)">
-                                    {{row.accName}}
+                                <div (click)="getaccNumber(row.accNumber)">{{row.accName}}
                                 </div>
                             </ng-template>
                         </ngx-datatable-column>
@@ -86,19 +83,15 @@
     
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <div class="Opening pr-2">
+                                <div class="Opening">
                                     <div>
-                                        <div *ngIf="row.debitOpening !== 0" style="color: darkslategray;">
-                                            {{row.debitOpening | currency:'VND':''}}
-                                        </div>
+                                        <div *ngIf="row.debitOpening !== 0" style="color: darkslategray;">{{row.debitOpening | currency:'VND':''}}</div>
                                         <div *ngIf="row.debitOpening === 0">
                                             <a>-</a>
                                         </div>
                                     </div>
                                     <div>
-                                        <div *ngIf="row.creditOpening !== 0" class="col-more-info">
-                                            {{row.creditOpening | currency:'VND':''}}
-                                        </div>
+                                        <div *ngIf="row.creditOpening !== 0" class="col-more-info">{{row.creditOpening | currency:'VND':''}}</div>
                                         <div *ngIf="row.creditOpening === 0">
                                             <a>-</a>
                                         </div>
@@ -122,19 +115,17 @@
                                 </div>
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <div class="creditdebit pr-2">
+                                <div class="creditdebit">
                                     <div>
                                         <div *ngIf="row.debit !== 0" style="color: darkslategray;">
-                                            {{row.debit | currency:'VND':''}}
-                                        </div>
+                                            {{row.debit | currency:'VND':''}}</div>
                                         <div *ngIf="row.debit === 0">
                                             <a>-</a>
                                         </div>
                                     </div>
                                     <div>
                                         <div *ngIf="row.credit !== 0" class="col-more-info">
-                                            {{row.credit | currency:'VND':''}}
-                                        </div>
+                                            {{row.credit | currency:'VND':''}}</div>
                                         <div *ngIf="row.credit === 0">
                                             <a>-</a>
                                         </div>
@@ -159,19 +150,17 @@
                             </ng-template>
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template
                                 style="text-align: right;">
-                                <div class="Closing pr-2">
+                                <div class="Closing">
                                     <div>
                                         <div *ngIf="row.debitClosing !== 0" style="color: darkslategray;">
-                                            {{row.debitClosing | currency:'VND':''}}
-                                        </div>
+                                            {{row.debitClosing | currency:'VND':''}}</div>
                                         <div *ngIf="row.debitClosing === 0">
                                             <a>-</a>
                                         </div>
                                     </div>
                                     <div>
                                         <div *ngIf="row.creditClosing !== 0" class="col-more-info">
-                                            {{row.creditClosing | currency:'VND':''}}
-                                        </div>
+                                            {{row.creditClosing | currency:'VND':''}}</div>
                                         <div *ngIf="row.creditClosing === 0">
                                             <a>-</a>
                                         </div>
@@ -184,11 +173,10 @@
                             <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset"
                                 let-isVisible="isVisible">
-                                <div class="row pt-4" style="display: block;width: 100%;border-top: 3px double #ccc;">
-                                    <div class="row text-right">
-                                        <div class="col-3 d-flex">
-                                            <div>
-                                                <br>
+                                <div class="pt-2" style="display: block;width: 100%;border-top: 3px double #ccc;">
+                                    <div class="text-right datatable__footer__row">
+                                        <div class=" d-flex">
+                                            <div style="line-height: 3rem;">
                                                 <span class="card__title">
                                                     {{ 'ACCOUNT.BALANCE.LIST.Total' | translate }}
                                                 </span>
@@ -198,7 +186,7 @@
                                                 <div>{{ 'ACCOUNT.BALANCE.LIST.credt' | translate }}</div>
                                             </div>
                                         </div>
-                                        <div class="col-3 pr-2">
+                                        <div >
                                             <div class="Openingfooter">
                                                 <div>
                                                     <div *ngIf="getdebitOpeningTotal() !== 0" style="color: darkslategray;">
@@ -218,7 +206,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-3">
+                                        <div >
                                             <div class="debitcreditfooter">
                                                 <div>
                                                     <div *ngIf="getdebitTotal() !== 0" style="color: darkslategray;">
@@ -238,8 +226,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-3">
-                                            <div class="Closingfooter pr-2">
+                                        <div>
+                                            <div class="Closingfooter">
                                                 <div>
                                                     <div *ngIf="getdebitClosingTotal() !== 0" style="color: darkslategray;">
                                                         {{getdebitClosingTotal() | currency:'VND':''}}
@@ -277,5 +265,4 @@
                 </div>
             </div>
         </nb-card-body>
-    </div>
 </nb-card>

@@ -129,7 +129,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
       if (result) {
         const genledSearch = {
           money: result.money,
-          firstDate: result.endDate,
+          firstDate: result.endDate=== null ?  result.startDate : result.endDate,
         };
         this.exportCSV = result;
         this.debitAgeService.GetALLDebitAge(genledSearch).subscribe(rp => {

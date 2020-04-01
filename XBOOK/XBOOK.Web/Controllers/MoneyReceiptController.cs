@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
@@ -16,10 +18,12 @@ namespace XBOOK.Web.Controllers
     {
         private readonly IMoneyReceiptService _iMoneyReceiptService;
         private readonly IMoneyReceiptDapper _moneyReceiptDapper;
-        public MoneyReceiptController(IMoneyReceiptService iMoneyReceiptService, IMoneyReceiptDapper moneyReceiptDapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public MoneyReceiptController(IMoneyReceiptService iMoneyReceiptService, IMoneyReceiptDapper moneyReceiptDapper, IHttpContextAccessor httpContextAccessor)
         {
             _iMoneyReceiptService = iMoneyReceiptService;
             _moneyReceiptDapper = moneyReceiptDapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost("[action]")]
@@ -67,6 +71,7 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public IActionResult SaveFileJson(MoneyReceiptViewModelPrint request)
         {
+            var savejs = XBOOK.Web.Helpers.GetCompanyCode.SaveDataJson(_httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value);
             string json = JsonConvert.SerializeObject(request);
             var folderName = Path.Combine("Reports", "Data");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);

@@ -3,11 +3,6 @@
     border-top-width: 1000%;    
     border-top: none;
 }
-:host ::ng-deep .col-md-12 {
-    margin-bottom: 20px;   
-   
-    line-height: 3rem;
-}
 
 :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
   border-bottom: none;
@@ -16,45 +11,73 @@
   white-space: unset !important;
 }
 
-:host ::ng-deep .datatable-header {
-  height: unset !important;
+:host ::ng-deep{
+  .datatable-header,.datatable-footer-inner {
+    height: unset !important;
+  }
 }
 
-.total{
-    margin-right: -33px;
+:host ::ng-deep {
+  $colWidth1: 15%;
+  $colWidth2: 13%;
+  $colWidth3: 'auto';
+  $colWidth4: 12%;
+  $colWidth5: 11%;
+  $colWidth6: 12%;
+  $colWidth7: 12%;
+  .datatable-header-cell,
+  .datatable-body-cell,
+  .datatable__footer__row > * {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    &:nth-child(1) {
+      flex: 0 0 $colWidth1;
+    }
+    &:nth-child(2) {
+      flex: 0 0 $colWidth2;
+    }
+    &:nth-child(3) {
+      flex: 1 1 $colWidth3;
+    }
+    &:nth-child(4) {
+      flex: 0 0 $colWidth4;
+    }
+    &:nth-child(5) {
+      flex: 0 0 $colWidth5;
+    }
+    &:nth-child(6) {
+      flex: 0 0 $colWidth6;
+    }
+    &:nth-child(7) {
+      flex: 0 0 $colWidth7;
+    }
   }
-@media only screen and (max-width: 1820px){
-    .total{
-        margin-right: -27px;
+  .datatable__footer__row {
+    position: relative;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    > * {
+      &:nth-child(1) {
+        flex: 1 1 $colWidth1;
       }
-  }
-  @media only screen and (max-width: 1700px){
-    .total{
-        margin-right: -25px;
+      &:nth-child(2) {
+        flex: 0 0 $colWidth2;
       }
-  }
-  @media only screen and (max-width: 1600px){
-    .total{
-        margin-right: -22px;
+      &:nth-child(3) {
+        flex: 0 0 $colWidth3;
       }
-  }
-  @media only screen and (max-width: 1500px){
-    .total{
-        margin-right: -22px;
+      &:nth-child(4) {
+        flex: 0 0 $colWidth4;
       }
+    }
   }
-  @media only screen and (max-width: 1440px){
-    .total{
-        margin-right: -22px;
-      }
+}
+
+::ng-deep :root {
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    font-size: 10px;
   }
-  @media only screen and (max-width: 1360px){
-    .total{
-        margin-right: -20px;
-      }
+  @media screen and (max-width: 767px){
+    font-size: 8px;
   }
-  @media only screen and (max-width: 1280px){
-    .total{
-        margin-right: -18px;
-      }
-  }
+}

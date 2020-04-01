@@ -20,7 +20,7 @@
             <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{'COMMON.ACTION' | translate}}</button>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item"><i class="icon-printer"></i>{{'COMMON.ACTION.PRINT' | translate}}</button>
-              <button [disabled]="authenticationService.hasPermission('Money Receipt','delete')" (click)="deleteAll()" class="dropdown-item" ><i class="fa fa-trash"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
+              <button [disabled]="authenticationService.hasPermission('Money Receipt','delete')" (click)="deleteAll()" class="dropdown-item" ><i class="icon-delete"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
             </div>
           </div>
         </div>
@@ -166,18 +166,18 @@
           <ngx-datatable-footer>
             <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
               let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-              <div class="row" style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px; margin-top:-20px;">
-                <div class="row text-right col-12">
-                  <div class="col-3 text-center">
-                    <b>Total: {{rowCount}} items </b>
+              <div style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px; margin-top:-20px;">
+                <div class="datatable__footer__row text-right col-12">
+                  <div class="text-left">
+                    <b style="position: absolute; left: 0;">Total: {{rowCount}} items </b>
                   </div>
-                  <div class="col-3"></div>
-                  <div class="col-3 text-center">
+                  <div class="text-center">
                     <b>{{'BUY.INVOICE.GRID.GRANT.TOTAL' | translate}}</b>
                   </div>
-                  <div class="col-3 pr-3">
+                  <div>
                     <b>{{getGrantTotal()| currency:'VND':''}}</b>
                   </div>
+                  <div></div>
                 </div>
                 <div class="row">
                   <div class="page-count col-md-6 pl-4">

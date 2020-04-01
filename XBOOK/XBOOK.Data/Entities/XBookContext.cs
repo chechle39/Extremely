@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -97,8 +98,8 @@ namespace XBOOK.Data.Entities
                 var email = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split("Bearer");
                 if (_httpContextAccessor.HttpContext.User.Claims.ToList().Count > 0)
                 {
-                    var tesst = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-                    var connectionString1 = _configuration.GetConnectionString(tesst);
+                    var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+                    var connectionString1 = _configuration.GetConnectionString(code);
                     optionsBuilder.UseSqlServer(connectionString1);
                 }
                 else

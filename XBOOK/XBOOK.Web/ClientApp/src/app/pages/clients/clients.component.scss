@@ -25,3 +25,21 @@
 :host ::ng-deep .datatable-footer-inner{
   justify-content: center;
 }
+
+:host ::ng-deep {
+  .datatable-header-cell,
+  .datatable-body-cell {
+      &:nth-child(1) {
+          flex: 0 0 50px;
+      }
+      &:nth-child(2) {
+          flex: 0 0 15rem;
+      }
+      &:nth-child(3) {
+          flex: 1 1 auto;
+      }
+      &:nth-child(4) {
+          flex: 0 0 6.8rem;
+      }
+  }
+}

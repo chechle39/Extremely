@@ -19,6 +19,10 @@ margin-bottom: -30px;
 
 :host ::ng-deep .datatable-header {
   height: unset !important;
+  >.datatable-header-inner{
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
 }
 
 :host ::ng-deep .datatable-body-row {
@@ -31,15 +35,81 @@ padding-bottom: 0.35rem !important;
 :host ::ng-deep .datatable-row-group {
 height: 25px;
 }
-.totalDiscount{
-  position: absolute; 
-  right: 10.8%;
+// .totalDiscount{
+//   position: absolute; 
+//   right: 10.8%;
+// }
+// .totalAmount{
+//   position: absolute; 
+//   right: 23.7%;
+// }
+// .totalPayment{
+//   position: absolute;
+//   right: 8px;
+// }
+
+:host ::ng-deep {
+  $colWidth1: 24%;
+  $colWidth2: "auto";
+  $colWidth3: 6rem;
+  $colWidth4: 6rem;
+  $colWidth5: 6rem;
+  $colWidth6: 6rem;
+  $colWidth7: 7rem;
+  .datatable-header-cell,
+  .datatable-body-cell {
+    padding-right: 0!important;
+    padding-left: 0 !important;
+    &:nth-child(1) {
+      flex: 0 0 $colWidth1;
+    }
+    &:nth-child(2) {
+      flex: 1 1 $colWidth2;
+    }
+    &:nth-child(3) {
+      flex: 0 0 $colWidth3;
+    }
+    &:nth-child(4) {
+      flex: 0 0 $colWidth4;
+    }
+    &:nth-child(5) {
+      flex: 0 0 $colWidth5;
+    }
+    &:nth-child(6) {
+      flex: 0 0 $colWidth6;
+    }
+    &:nth-child(7) {
+      flex: 0 0 $colWidth7;
+    }
+
+    
+  }
+  .datatable__footer__row {
+    position: relative;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    > * {
+      &:nth-child(1) {
+        flex: 1 1 $colWidth1;
+      }
+      &:nth-child(2) {
+        flex: 0 0 $colWidth5;
+      }
+      &:nth-child(3) {
+        flex: 0 0 $colWidth6;
+      }
+      &:nth-child(4) {
+        flex: 0 0 $colWidth7;
+      }
+    }
+  }
 }
-.totalAmount{
-  position: absolute; 
-  right: 23.7%;
-}
-.totalPayment{
-  position: absolute;
-  right: 8px;
+
+::ng-deep :root {
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    font-size: 11px;
+  }
+  @media screen and (max-width: 767px){
+    font-size: 8px;
+  }
 }

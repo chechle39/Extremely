@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-//using XAccLib.SaleInvoice;
+using XAccLib.GL;
 using XBOOK.Common.Method;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -73,18 +73,10 @@ namespace XBOOK.Service.Service
                     ClientId = saleInvoiceViewModel.ClientId,
                 };
                 var saleInvoiceCreate = Mapper.Map<SaleInvoiceModelRequest, SaleInvoice>(saleInvoiceModelRequest);
-                try
-                {
-                    _uow.BeginTransaction();
-                    _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
-                    _uow.SaveChanges();
-                    _uow.CommitTransaction();
-                }
-                catch (Exception ex)
-                {
-
-                }
-
+                _uow.BeginTransaction();
+                _saleInvoiceUowRepository.AddData(saleInvoiceCreate);
+                _uow.SaveChanges();
+                _uow.CommitTransaction();
             }
             else if (saleInvoiceViewModel.ClientId == 0 && saleInvoiceViewModel.ClientName != null)
             {
@@ -164,8 +156,8 @@ namespace XBOOK.Service.Service
                 AmountPaid = listData[0].VatTax,
                 ClientData = listData[0].ClientData,
                 ClientId = listData[0].ClientId,
-                Discount = listData[0].Discount,
-                DiscRate = listData[0].DiscRate,
+                Discount = listData[0].Discount == null ? 0 : listData[0].Discount,
+                DiscRate = listData[0].DiscRate == null ? 0 : listData[0].DiscRate,
                 DueDate = listData[0].DueDate,
                 InvoiceId = listData[0].InvoiceId,
                 InvoiceNumber = listData[0].InvoiceNumber,
@@ -181,8 +173,8 @@ namespace XBOOK.Service.Service
             };
             try
             {
-                //var saleInvoiceGL = new SaleInvoiceGL(_uow);
-                //saleInvoiceGL.InvoiceGL(objData);
+                var saleInvoiceGL = new SaleInvoiceGL(_uow);
+                saleInvoiceGL.Insert(objData);
             }
             catch (Exception ex)
             {
@@ -332,110 +324,60 @@ namespace XBOOK.Service.Service
                             ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
                             Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
                         };
-                        try
-                        {
-                            _SaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
-                            _uow.SaveChanges();
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-
+                        _SaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
+                        _uow.SaveChanges();
                     }
                 }
             }
+            var sale = new List<SaleInvoiceViewModel>()
+            {
+                new SaleInvoiceViewModel()
+                {
+                    VatTax = saleInvoiceViewModel.VatTax,
+                    AmountPaid = saleInvoiceViewModel.VatTax,
+                    ClientData = saleInvoiceViewModel.ClientData,
+                    ClientId = saleInvoiceViewModel.ClientId,
+                    Discount = saleInvoiceViewModel.Discount,
+                    DiscRate = saleInvoiceViewModel.DiscRate,
+                    DueDate = saleInvoiceViewModel.DueDate,
+                    InvoiceId = saleInvoiceViewModel.InvoiceId,
+                    InvoiceNumber = saleInvoiceViewModel.InvoiceNumber,
+                    InvoiceSerial = saleInvoiceViewModel.InvoiceSerial,
+                    IssueDate = saleInvoiceViewModel.IssueDate,
+                    Note = saleInvoiceViewModel.Note,
+                    PaymentView = saleInvoiceViewModel.PaymentView,
+                    Reference = saleInvoiceViewModel.Reference,
+                    SaleInvDetailView = saleInvoiceViewModel.SaleInvDetailView,
+                    Status = saleInvoiceViewModel.Status,
+                    SubTotal = saleInvoiceViewModel.SubTotal,
+                    Term = saleInvoiceViewModel.Term,
+                }
+            };
+            var listData = GetAllSaleInv(sale);
+            var objData = new SaleInvoiceViewModel()
+            {
+                VatTax = listData[0].VatTax,
+                AmountPaid = listData[0].VatTax,
+                ClientData = listData[0].ClientData,
+                ClientId = listData[0].ClientId,
+                Discount = listData[0].Discount == null ? 0 : listData[0].Discount,
+                DiscRate = listData[0].DiscRate == null ? 0 : listData[0].DiscRate,
+                DueDate = listData[0].DueDate,
+                InvoiceId = listData[0].InvoiceId,
+                InvoiceNumber = listData[0].InvoiceNumber,
+                InvoiceSerial = listData[0].InvoiceSerial,
+                IssueDate = listData[0].IssueDate,
+                Note = listData[0].Note,
+                PaymentView = listData[0].PaymentView,
+                Reference = listData[0].Reference,
+                SaleInvDetailView = listData[0].SaleInvDetailView,
+                Status = listData[0].Status,
+                SubTotal = listData[0].SubTotal,
+                Term = listData[0].Term,
+            };
+            var saleInvoiceGL = new SaleInvoiceGL(_uow);
+            saleInvoiceGL.update(objData);
         }
-
-        //public async Task<IEnumerable<SaleInvoiceViewModel>> GetAllSaleInvoice(SaleInvoiceListRequest request)
-        //{
-        //    var saleInvoie = new List<SaleInvoiceViewModel>();
-        //    if (string.IsNullOrEmpty(request.EndDate) && string.IsNullOrEmpty(request.StartDate) && string.IsNullOrEmpty(request.Keyword))
-        //    {
-        //        saleInvoie = await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().Take(200).ToListAsync();
-        //    }
-        //    else
-        //    {
-        //        saleInvoie = await _saleInvoiceUowRepository.GetAll().ProjectTo<SaleInvoiceViewModel>().ToListAsync();
-        //    }
-        //    List<SaleInvoiceViewModel> listData = GetAllSaleInv(saleInvoie);
-        //    saleInvoie = SerchData(request.Keyword, request.StartDate, request.EndDate, listData, request.isIssueDate);
-        //    return saleInvoie;
-        //}
-
-        //private static List<SaleInvoiceViewModel> SerchData(string keyword, string startDate, string endDate, List<SaleInvoiceViewModel> saleInvoie, bool? searchConditions)
-        //{
-        //    if (searchConditions == true)
-        //    {
-        //        if (!string.IsNullOrEmpty(keyword))
-        //        {
-        //            var lisSerch = new List<SaleInvoiceViewModel>();
-        //            var fill = saleInvoie.Where(x => x.InvoiceNumber.ToLowerInvariant().Contains(keyword) || x.Note.ToLowerInvariant().Contains(keyword)).ToList();
-        //            foreach (var item in saleInvoie)
-        //            {
-        //                var serchItem = item.ClientData.Where(x => x.ClientName.ToLowerInvariant().Contains(keyword) || x.ContactName.ToLowerInvariant().Contains(keyword) || x.Email.ToLowerInvariant().Contains(keyword));
-        //                if (serchItem.Count() > 0 || fill.Count() > 0)
-        //                {
-        //                    lisSerch.Add(item);
-        //                }
-        //            }
-        //            saleInvoie = lisSerch;
-        //        }
-
-        //        if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
-        //        {
-        //            DateTime start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            saleInvoie = saleInvoie.Where(x => x.IssueDate >= start && x.IssueDate <= end).ToList();
-        //        }
-        //        else
-        //        if (!string.IsNullOrEmpty(startDate) && endDate == null)
-        //        {
-        //            DateTime start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            saleInvoie = saleInvoie.Where(x => x.IssueDate >= start).ToList();
-        //        }
-        //        else
-        //        if (!string.IsNullOrEmpty(endDate) && startDate == null)
-        //        {
-        //            DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            saleInvoie = saleInvoie.Where(x => x.IssueDate <= end).ToList();
-        //        }
-
-        //    }
-        //    else
-        //    if (searchConditions == false)
-        //    {
-        //        if (!string.IsNullOrEmpty(keyword))
-        //        {
-        //            saleInvoie = saleInvoie.Where(x => x.InvoiceNumber.Contains(keyword) || x.Note.Contains(keyword)).ToList();
-        //        }
-
-        //        if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
-        //        {
-        //            DateTime start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            saleInvoie = saleInvoie.Where(x => x.DueDate >= start && x.DueDate <= end).ToList();
-        //        }
-        //        else
-        //        if (!string.IsNullOrEmpty(startDate) && endDate == null)
-        //        {
-        //            DateTime start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            saleInvoie = saleInvoie.Where(x => x.DueDate >= start).ToList();
-        //        }
-        //        else
-        //        if (!string.IsNullOrEmpty(endDate) && startDate == null)
-        //        {
-        //            DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-        //            saleInvoie = saleInvoie.Where(x => x.DueDate <= end).ToList();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return saleInvoie;
-        //    }
-
-        //    return saleInvoie.ToList();
-        //}
 
         private IEnumerable<PaymentViewModel> GetByIDPay(long id)
         {
@@ -522,8 +464,8 @@ namespace XBOOK.Service.Service
             foreach (var item in deleted)
             {
                 var saleInvViewModel = await GetSaleInvoiceById(item.id);
-               // var saleInvoiceGL = new SaleInvoiceGL(_uow);
-               // saleInvoiceGL.deleteGL(saleInvViewModel.ToList()[0]);
+                var saleInvoiceGL = new SaleInvoiceGL(_uow);
+                saleInvoiceGL.delete(saleInvViewModel.ToList()[0]);
                 var getSaleInVDt = _SaleInvoiceDetailRepository.GetAll().ProjectTo<SaleInvDetailViewModel>();
                 var getByIdSaleInVDetail = getSaleInVDt.Where(x => x.InvoiceId == item.id);
                 _SaleInvoiceDetailRepository.RemoveAll(getByIdSaleInVDetail.ToList());

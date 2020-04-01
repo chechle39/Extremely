@@ -88,7 +88,7 @@
   "INVOICE.FORM.VIEW.PAYMENT.BANKACOUNT": "Bank Account (Optional)",
   "INVOICE.FORM.VIEW.PAYMENT.NOTES": "Payment Notes (Optional)",
 
-
+  "JUOURNAL.CREATE.BUTTON.NEW": "New JournalEntries",
   "ACCOUNT.CHART.GRID.HEADER.ACCOUNTNUMBER": "Account Number",
   "ACCOUNT.CHART.GRID.HEADER.ACCOUNTNAME": "Account Name",
   "ACCOUNT.CHART.GRID.HEADER.TYPE": "Type",
@@ -136,7 +136,7 @@
   "ACCOUNT.BALANCE.LIST.Total": "Total",
   "ACCOUNT.BALANCE.LIST.dbit": "Debt",
   "ACCOUNT.BALANCE.LIST.credt": "Credt",
-
+  "ACCOUNT.DETAIL.LIST.openingbalance": "Opening balance",
   "GEN.HEADER": "General Journal",
   "GENGROUP.HEADER": "General Ledger",
   "GEN.LIST.INVOICENUMBER": "Invoice Number",
@@ -252,7 +252,7 @@
   "BUY.INVOICE.FROM.SEARCH.DUE": "Due Date",
   "BUY.INVOICE.GRID.SUPPLIER": "Supplier/",
   "BUY.INVOICE.GRID.INVOICE": "Invoice Number",
-  "BUY.INVOICE.GRID.SUPPLIER.INVOICE": "Supplier/Invoice Number",
+  "BUY.INVOICE.GRID.SUPPLIER.INVOICE": "Supplier/ Invoice Number",
   "BUY.INVOICE.GRID.ISSUED.DUE": "Issued/ Due Date",
   "BUY.INVOICE.GRID.AMOUNT.AMOUNTPAID": "Amount/ Amount Paid",
   "BUY.INVOICE.GRID.GRANT.TOTAL": "Grant Total",
@@ -345,5 +345,17 @@
   "SUPPLIER.FORM.TITLE.BANKACCOUNT": "Bank account",
   "SUPPLIER.FORM.PLACEHOLDER.BANKACCOUNT": "Enter bank account",
   "SUPPLIER.FORM.TITLE.NOTE": "Note",
-  "SUPPLIER.FORM.PLACEHOLDER.NOTE": "Note"
+  "SUPPLIER.FORM.PLACEHOLDER.NOTE": "Note",
+
+  "COMMON.DAY.Thismonth": "This month",
+  "COMMON.DAY.Thisquarter": "This quarter",
+  "COMMON.DAY.Thisyear": "This year",
+  "COMMON.DAY.Lastquarter": "Last Thisquarter",
+  "COMMON.DAY.Lastyear": "Last year",
+  "COMMON.DAY.Dateoptions": "Date options",
+  "COMMON.DAY.Today": "Today",
+  "COMMON.DAY.EndofLastMonth": "End of last month",
+  "COMMON.DAY.EndofLastQuarter": "End of last quarter",
+  "COMMON.DAY.EndofLastYear": "End of last year"
+
 }

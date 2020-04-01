@@ -40,7 +40,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   companyName: any;
   companyAddress: any;
   companyCode: any;
-  address:any
+  address: any;
   isCheckFc: boolean;
   focusClient$ = new Subject<string>();
   searchFailed = false;
@@ -92,13 +92,13 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
           year: Number(payDateSplit[2]),
           month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
         };
-        this.address = rp.address
+        this.address = rp.address,
         this.moneyReceipt.controls.id.patchValue(rp.id);
         this.moneyReceipt.controls.amount.patchValue(rp.amount);
         this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
         this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
         this.moneyReceipt.controls.supplierName.patchValue(rp.supplierName);
-        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.name ===
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key ===
           this.row.entryType)[0].key);
         this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
         this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
@@ -318,7 +318,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         supplierID: this.moneyReceipt.value.supplierID,
         supplierName: this.moneyReceipt.value.supplierName.supplierName !== undefined
           ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].key,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
@@ -337,7 +337,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         supplierID: this.moneyReceipt.value.supplierID,
         supplierName: this.moneyReceipt.value.supplierName.supplierName !== undefined
           ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].key,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
@@ -356,7 +356,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         supplierID: this.moneyReceipt.value.supplierID,
         supplierName: this.moneyReceipt.value.supplierName.supplierName !== undefined
           ? this.moneyReceipt.value.supplierName.supplierName : this.moneyReceipt.value.supplierName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].key,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,

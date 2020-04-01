@@ -1,9 +1,9 @@
 <nb-card style="min-height: 70vh;">
-  <nb-card-header>
+  <nb-card-header class="layout__container--medium">
     <span class="card__title" >{{'BUY.INVOICE.HEADER' | translate}}</span>
     <button [disabled] = "authenticationService.hasPermission('Buy invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body class="layout__container--medium">
     <div class="row">
       <div class="col-6">
         <div class="media-body blue text-center mb-4">
@@ -215,18 +215,20 @@
             <ngx-datatable-footer>
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-                <div class="row" style="display: inline-block;width: 99%;border-top: 1px solid #ccc;padding-top: 3px; margin-top:-20px;">
-                  <div class="row text-right mx-0 position-relative">
-                    <div class="col-3 pl-0 text-left">
-                      <b>Total: {{rowCount}} items </b>
+                <div class="row" style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px; margin-top:-20px;">
+                  <div class="row text-right mx-0 position-relative datatable__footer__row">
+                    <div class="text-left">
+                      <b style="position: absolute; left: 0;">Total: {{rowCount}} items </b>
                     </div>
-                    <div class="col-3"></div>
-                    <div class="col-3 text-center" style="position: absolute; right: 26%;">
+                    <div></div>
+                    <div></div>
+                    <div class="text-center">
                       <b>{{'BUY.INVOICE.GRID.GRANT.TOTAL' | translate}}</b>
                     </div>
-                    <div class="col-3" style="padding-right: calc(0.5% + 53px); position: absolute; right: 0;">
+                    <div>
                       <b>{{getGrantTotal()| currency:'VND':''}}</b>
                     </div>
+                    <div></div>
                   </div>
                   <div class="row">
                     <div class="page-count col-md-6 pl-4">

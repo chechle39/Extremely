@@ -12,6 +12,7 @@ import { GenLedService } from '../_shared/services/genled.service';
 import { SearchgenledComponent } from './searchgenled/searchgenled.component';
 import { saveAs } from 'file-saver';
 import { CommonService } from '../../shared/service/common.service';
+import { ActionType } from '../../coreapp/app.enums';
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
 }
@@ -98,7 +99,9 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
       return item.debit;
     });
   }
-
+  redirectToEditInvoice(id) {
+    this.router.navigate([`/pages/invoice/${id}/${ActionType.Edit}`]);
+  }
   SearchGenLed(): void {
 
     const dialog = this.modalService.open(SearchgenledComponent, AppConsts.modalOptionsCustomSize);

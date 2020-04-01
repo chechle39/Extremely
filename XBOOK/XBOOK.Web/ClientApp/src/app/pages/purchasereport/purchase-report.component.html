@@ -10,13 +10,13 @@
               alt="search General Ledger"></div>
         </div>
         <div class="btn btn-flat mr-1 p-0 mb-0" style="color: #546D74;">
-          <div *ngIf="case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
-          <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 3">Năm này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 4">Quý trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 5">Năm trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf=" case==null">{{ 'COMMON.DAY.Thismonth' | translate }}: {{firstDate}} - {{endDate1}}</div>
+          <div *ngIf="case=== 1">{{ 'COMMON.DAY.Thismonth' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 2">{{ 'COMMON.DAY.Thisquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 3">{{ 'COMMON.DAY.Thisyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 4">{{ 'COMMON.DAY.Lastquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 5">{{ 'COMMON.DAY.Lastyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 6">{{ 'COMMON.DAY.Dateoptions' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
         </div>
       </div>
       <div class="col-3 col-lg-4">
@@ -53,7 +53,7 @@
       </div>
       <div *ngFor="let group of genViews" style="padding-top: 2%;">
         <div>
-          <div style="color: #546D74;position: absolute; font-size: 16px;">
+          <div style="color: #546D74;position: absolute; font-size: 1.1rem;">
             {{group.productName}}</div>
         </div>
 
@@ -75,7 +75,7 @@
               </ngx-datatable-column>
 
               <ngx-datatable-column prop="invoiceNumber" name="{{ 'SALE.LIST.invoiceNumber' | translate }}" [flexGrow]="2"
-                [cellClass]="'col-left'" [headerClass]="'col-left'">
+                [cellClass]="'col-left pl-1'" [headerClass]="'col-left'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-left" style="color: cadetblue;">
                     <div (click)="getinvoice(row.invoiceID)">
@@ -143,10 +143,10 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="payment" name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'col-right'" [flexGrow]="1"
-                [headerClass]="'col-right'">
+              <ngx-datatable-column prop="payment" name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'text-right'" [flexGrow]="1"
+                [headerClass]="'text-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                  <div class="col-right">
+                  <div class="text-right">
                     <div>
                       <div>
                         <div *ngIf="row.payment !== 0" class="col-more-info">
@@ -166,10 +166,10 @@
                 <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                   let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
                   <div class="row" style="display: block;width: 101%;border-top: 3px double #ccc;padding-top: 10px;">
-                    <div class="row text-right">
+                    <div class="row text-right ml-0">
                       <div class="col-2" style="text-align: left;">
                         <div class="card__title"
-                          style="color: rgb(16, 20, 20);margin-left: 30px;inset-block: inherit;width: 300px;">
+                          style="color: rgb(16, 20, 20);inset-block: inherit;width: 300px;">
                           {{ 'SALE.LIST.Total' | translate }}
                         </div>
                       </div>

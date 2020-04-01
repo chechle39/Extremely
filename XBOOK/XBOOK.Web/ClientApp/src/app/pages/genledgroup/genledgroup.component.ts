@@ -17,6 +17,7 @@ import { AccountBalanceViewModel } from '../_shared/models/accountbalance/accoun
 import { InvoiceService } from '../_shared/services/invoice.service';
 import { DataService } from '../_shared/services/data.service';
 import { CommonService } from '../../shared/service/common.service';
+import { ActionType } from '../../coreapp/app.enums';
 
 class PagedClientsRequestDto extends PagedRequestDto {
   clientKeyword: string;
@@ -230,13 +231,16 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV);
 
   }
+  redirectToEditInvoice(id) {
+    this.router.navigate([`/pages/invoice/${id}/${ActionType.Edit}`]);
+  }
   Print() {
     if (this.genViews.length > 0) {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.genViews.length; i++) {
         const genledSearch = {
-          startDate: null,
-          endDate: null,
+          startDate:  this.startDay=== undefined ? this.firstDate : this.startDay,
+          endDate: this.endDay=== undefined ? this.endDate1 : this.endDay,
           money: null,
           accountNumber: this.genViews[i].accNumber,
         };

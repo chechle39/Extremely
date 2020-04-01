@@ -1,0 +1,38 @@
+<nb-card class="confirm-email__card">
+  <nb-card-header>
+    <button class="btn float-right shadow-none" (click)="onClose()"><nb-icon icon="arrow-ios-downward-outline"></nb-icon></button>
+    <h4 class="card-title">Confirm Email</h4>
+  </nb-card-header>
+  <nb-card-body class="confirm-email__card__body">
+    <form class="container-fluid px-0" novalidate autocomplete="off" (ngSubmit)="login(loginForm)" [formGroup]="loginForm">
+      <p class="card-text mb-2 pt-4">
+        Enter your OTP Code.
+      </p>
+      <div class="form-group  mb-3">
+        <input formControlName="code" type="text" class="form-control mb-1" placeholder="OTP Code" />
+        <small class="form-text text-muted danger"
+          *ngIf="!loginForm.get('code').valid && (loginForm.get('code').dirty || loginForm.get('code').touched)">Please
+          enter a code!</small>
+          <small class="form-text text-muted danger"
+          *ngIf="!flag">Code không đúng!</small>
+        <button (click)="reSendCode()" class="btn text-success px-0" type="button">
+          Click here to resend!
+        </button>
+      </div>
+      <div class="fg-actions justify-content-between float-right">
+        <div class="recover-pass">
+          <button [disabled]="loginForm.invalid" type="submit" class="btn btn-primary">
+            <a class="text-decoration-none text-white">Next<nb-icon icon="arrow-forward-outline" class="ml-1"></nb-icon></a>
+          </button>
+        </div>
+      </div>
+      <div class="fg-actions justify-content-between">
+        <div class="recover-pass">
+          <button type="button" class="btn btn-secondary" (click)="onClickBackButton()">
+            <a class="text-decoration-none text-white"><nb-icon icon="arrow-back-outline" class="mr-1"></nb-icon>Back</a>
+          </button>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

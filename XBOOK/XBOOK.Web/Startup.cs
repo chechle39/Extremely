@@ -35,7 +35,6 @@ using XBOOK.Data.Repositories;
 using XBOOK.Service.Interfaces;
 using XBOOK.Service.Service;
 using XBOOK.Web.Claims.System;
-using static XBOOK.Web.Reports.InvoiceReport;
 
 namespace XBOOK.Web
 {
@@ -256,14 +255,14 @@ namespace XBOOK.Web
            // var serviceProvider = services.BuildServiceProvider();
             services.AddHttpContextAccessor();
             //here is where you set you accessor
-          //  var accessor = serviceProvider.GetService<IHttpContextAccessor>();
-          //  CreateReport.SetHttpContextAccessor(accessor);
+            //  var accessor = serviceProvider.GetService<IHttpContextAccessor>();
+            //  CreateReport.SetHttpContextAccessor(accessor);
+            services.AddMemoryCache();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
             IHttpContextAccessor accessor = svp.GetService<IHttpContextAccessor>();
-            CreateReport.SetHttpContextAccessor(accessor);
             DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
             app.UseDevExpressControls();
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;

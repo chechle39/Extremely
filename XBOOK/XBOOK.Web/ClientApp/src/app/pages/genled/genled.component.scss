@@ -5,54 +5,77 @@
     border-top: none;
 }
 
+:host ::ng-deep .datatable-footer-inner {
+  height: unset!important;
+}
+
+
 :host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
   white-space: unset !important;
 }
-.total{
-    margin-right: -45px;
-  }
-@media only screen and (max-width: 1820px){
-    .total{
-        margin-right: -45px;
+
+  :host ::ng-deep {
+    $colWidth1: 15%;
+    $colWidth2: 13%;
+    $colWidth3: 'auto';
+    $colWidth4: 12%;
+    $colWidth5: 11%;
+    $colWidth6: 12%;
+    $colWidth7: 12%;
+    .datatable-header-cell,
+    .datatable-body-cell,
+    .datatable__footer__row > * {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      &:nth-child(1) {
+        flex: 0 0 $colWidth1;
       }
-  }
-  @media only screen and (max-width: 1700px){
-    .total{
-        margin-right: -40px;
+      &:nth-child(2) {
+        flex: 0 0 $colWidth2;
       }
-  }
-  @media only screen and (max-width: 1600px){
-    .total{
-        margin-right: -40px;
+      &:nth-child(3) {
+        flex: 1 1 $colWidth3;
       }
-  }
-  @media only screen and (max-width: 1500px){
-    .total{
-        margin-right: -40px;
+      &:nth-child(4) {
+        flex: 0 0 $colWidth4;
       }
-  }
-  @media only screen and (max-width: 1440px){
-    .total{
-        margin-right: -35px;
+      &:nth-child(5) {
+        flex: 0 0 $colWidth5;
       }
-  }
-  @media only screen and (max-width: 1360px){
-    .total{
-        margin-right: -32px;
+      &:nth-child(6) {
+        flex: 0 0 $colWidth6;
       }
-  }
-  @media only screen and (max-width: 1280px){
-    .total{
-        margin-right: -30px;
+      &:nth-child(7) {
+        flex: 0 0 $colWidth7;
       }
-  }
-  @media only screen and (max-width: 992px){
-    .total{
-        margin-right: -25px;
+    }
+    .datatable__footer__row {
+      position: relative;
+      padding-right: 0.75rem;
+      padding-left: 0.75rem;
+      > * {
+        &:nth-child(1) {
+          flex: 1 1 $colWidth1;
+        }
+        &:nth-child(2) {
+          flex: 0 0 $colWidth2;
+        }
+        &:nth-child(3) {
+          flex: 0 0 $colWidth3;
+        }
+        &:nth-child(4) {
+          flex: 0 0 $colWidth4;
+        }
       }
+    }
   }
-  @media only screen and (max-width: 767px){
-    .total{
-        margin-right: -15px;
-      }
+
+  ::ng-deep :root {
+    @media screen and (min-width: 768px) and (max-width: 992px){
+      font-size: 10px;
+    }
+    @media screen and (max-width: 767px){
+      font-size: 8px;
+    }
   }
+  

@@ -29,6 +29,7 @@ import { AccountChartService } from '../../_shared/services/accountchart.service
 import { ngbTypeheadScrollToActiveItem } from '../../../shared/utils/util';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 import { CommonService } from '../../../shared/service/common.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'xb-create-journalentries',
@@ -38,11 +39,11 @@ import { CommonService } from '../../../shared/service/common.service';
 
 export class CreateJournalEntriesComponent extends AppComponentBase implements OnInit, AfterViewInit {
   @ViewChildren('productName') productNameField: QueryList<any>;
-  @ViewChild('inputtab',  { static: true }) inputtab: ElementRef;
-   productInputFocusSub: Subscription = new Subscription();
+  @ViewChild('inputtab', { static: true }) inputtab: ElementRef;
+  productInputFocusSub: Subscription = new Subscription();
   listInvoice: any;
   loadingIndicator = true;
-  title = 'New JournalEntries';
+  title = 'JournalEntries';
   saveText = 'Save';
   clientSelected = new DataMap();
   accSelected = {
@@ -76,6 +77,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     private el: ElementRef,
     private journalEntryService: JournalEntryService,
     private router: Router,
+    private translate: TranslateService,
     public authenticationService: AuthenticationService,
     private commonService: CommonService,
     private accountChartService: AccountChartService,
@@ -92,6 +94,8 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   }
   ngOnInit() {
     this.isRead = false;
+    this.createForm();
+
     this.getAccoutChart();
     this.createForm();
     if (this.invoiceForm !== undefined) {
@@ -160,7 +164,6 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
   }
 
   createForm() {
-
     const today = new Date().toLocaleDateString('en-GB');
     const issueDateSplit = today.split('/');
     const issueDatePicker = {
@@ -225,8 +228,8 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       crspAccNumber: ['', [Validators.required]],
       accNumber: ['', [Validators.required]],
       note: [''],
-      credit: [0, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(16)]],
-      debit: [0, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(16)]],
+      credit: [0, [Validators.pattern(numberPatern), Validators.maxLength(16)]],
+      debit: [0, [Validators.pattern(numberPatern), Validators.maxLength(16)]],
       // taxs: this.fb.array([])
     });
   }
@@ -250,8 +253,8 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       distinctUntilChanged(),
       map(term => (term === '' ? this.dataAccount
         : this.dataAccount.filter(v => v.accountName.toLowerCase().indexOf(term.toLowerCase()) > -1
-        || v.accountNumber.toLowerCase().indexOf(term.toLowerCase()) > -1)),
-    ));
+          || v.accountNumber.toLowerCase().indexOf(term.toLowerCase()) > -1)),
+      ));
   }
   public onFocus(e: Event): void {
     e.stopPropagation();
@@ -282,14 +285,14 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       accountNumber: item.item.accountNumber,
       accountName: item.item.accountNumber + '-' + item.item.accountName,
       acc: item.item.accountNumber,
-    } ;
+    };
   }
   selectedCrspAcc(item) {
     this.crsAccSelected = {
       accountNumber: item.item.accountNumber,
       accountName: item.item.accountNumber + '-' + item.item.accountName,
       acc: item.item.accountNumber,
-    } ;
+    };
   }
   accFormatter(value: any) {
     if (value.accountNumber) {
@@ -323,7 +326,11 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     this.journalEntryService.getJournalById(invoiceId).subscribe(data => {
       const invoice = data as CreateRequest;
       this.invoiceList = invoice;
-      this.title = 'JournalEntry';
+     // this.title = 'JournalEntry';
+      this.translate.get('JUOURNAL.HEADER.ENTRY')
+      .subscribe(text => { this.title = text; });
+      this.translate.get('JUOURNAL.HEADER.ENTRY')
+      .subscribe(text => { this.title = text; });
       this.clientSelected.id = invoice.objectID;
 
       this.getFormArray().controls.splice(0);
@@ -339,7 +346,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
         this.crsAccSelected = {
           accountNumber: invoice.detail[item].crspAccNumber,
           accountName: this.dataAccount
-          .filter(x => x.accountNumber === invoice.detail[item].crspAccNumber)[0].accountName,
+            .filter(x => x.accountNumber === invoice.detail[item].crspAccNumber)[0].accountName,
           acc: invoice.detail[item].accNumber,
         };
         detailInvoiceFormArray.push(this.getItem());
@@ -388,7 +395,7 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       this.invoiceForm.disable();
       this.invoiceForm.controls.items.disable();
     } else {
-    //  this.invoiceForm.reset();
+      //  this.invoiceForm.reset();
       this.router.navigate([`/pages/journalentries`]);
     }
 
@@ -406,12 +413,12 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
     const detailData = [];
     for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
       const data = {
-        id: this.invoiceForm.value.items[i].id,
+        id: this.invoiceForm.value.items[i].id === null ? 0 : this.invoiceForm.value.items[i].id,
         crspAccNumber: this.invoiceForm.value.items[i].crspAccNumber.accountNumber,
         accNumber: this.invoiceForm.value.items[i].accNumber.accountNumber,
         note: this.invoiceForm.value.items[i].note,
-        credit: this.invoiceForm.value.items[i].credit,
-        debit: this.invoiceForm.value.items[i].debit,
+        credit: this.invoiceForm.value.items[i].credit === '' ? 0 : this.invoiceForm.value.items[i].credit,
+        debit: this.invoiceForm.value.items[i].debit === '' ? 0 : this.invoiceForm.value.items[i].debit,
       };
       detailData.push(data);
     }
@@ -433,7 +440,21 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
       } as CreateRequest;
       this.journalEntryService.createJournal(request).subscribe(rp => {
         this.notify.success('Successfully Add');
-        this.router.navigate([`/pages/journalentries`]);
+        // this.router.navigate([`/pages/journalentries`]);
+        this.invoiceForm.reset();
+        this.viewMode = false;
+        this.clientSelected.id = 0;
+        this.isRead = false;
+        const today = new Date().toLocaleDateString('en-GB');
+        const issueDateSplit = today.split('/');
+        const issueDatePicker = {
+          year: Number(issueDateSplit[2]),
+          month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]),
+        };
+        this.invoiceForm.controls.dateCreate.patchValue(issueDatePicker);
+        this.invoiceForm.controls.id.patchValue(0);
+
+      //  this.getDataForEditMode();
       });
 
       return;
@@ -476,38 +497,48 @@ export class CreateJournalEntriesComponent extends AppComponentBase implements O
 
   totalCredit() {
     let Credit = 0;
-    for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-      const credit = this.invoiceForm.value.items[i].credit === 0 ||
-        this.invoiceForm.value.items[i].credit === '0' ||
-        this.invoiceForm.value.items[i].credit === null ? 0 :
-        this.invoiceForm.value.items[i].credit.toString().replace(/,/g, '');
-      const amountDebit = (1 * credit);
-      Credit += amountDebit;
+    if (this.invoiceForm.value.items !== undefined) {
+      for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
+        const credit = this.invoiceForm.value.items[i].credit === 0 ||
+          this.invoiceForm.value.items[i].credit === '0' ||
+          this.invoiceForm.value.items[i].credit === null ? 0 :
+          this.invoiceForm.value.items[i].credit.toString().replace(/,/g, '');
+        const amountDebit = (1 * credit);
+        Credit += amountDebit;
+      }
+      return Credit;
+    } else {
+      return Credit;
     }
-    return Credit;
   }
   totalDebit() {
     this.debitTotal = 0;
-    for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-      const debit1 = this.invoiceForm.value.items[i].debit === 0 ||
-        this.invoiceForm.value.items[i].debit === '0' ||
-        this.invoiceForm.value.items[i].debit === null ? 0 :
-        this.invoiceForm.value.items[i].debit.toString().replace(/,/g, '');
-      const amountDebit = (1 * debit1);
-      this.debitTotal += amountDebit;
+    if (this.invoiceForm.value.items !== undefined) {
+      for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
+        const debit1 = this.invoiceForm.value.items[i].debit === 0 ||
+          this.invoiceForm.value.items[i].debit === '0' ||
+          this.invoiceForm.value.items[i].debit === null ? 0 :
+          this.invoiceForm.value.items[i].debit.toString().replace(/,/g, '');
+        const amountDebit = (1 * debit1);
+        this.debitTotal += amountDebit;
+      }
+      return this.debitTotal;
+    } else {
+      return this.debitTotal;
     }
-    return this.debitTotal;
   }
 
   redirectToEditInvoice() {
     this.invoiceForm.enable();
-    this.viewMode = false;
+   // this.viewMode = false;
     this.isRead = false;
   }
 
   checkDis(e) {
-    const dis = e.toString().replace(/,/g, '');
-    const taltal = 1 * dis;
-    return taltal;
+    if (e !== null) {
+      const dis = e.toString().replace(/,/g, '');
+      const taltal = 1 * dis;
+      return taltal;
+    }
   }
 }

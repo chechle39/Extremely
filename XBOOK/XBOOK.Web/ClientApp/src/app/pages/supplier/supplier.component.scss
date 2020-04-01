@@ -15,3 +15,23 @@
 :host ::ng-deep .datatable-row-center {
   max-width: 99%;
 }
+
+
+:host ::ng-deep {
+  .datatable-header-cell,
+  .datatable-body-cell {
+      &:nth-child(1) {
+          flex: 0 0 50px;
+      }
+      &:nth-child(2) {
+          flex: 0 0 15rem;
+      }
+      &:nth-child(3) {
+          flex: 1 1 auto;
+      }
+      &:nth-child(4) {
+        flex: 0 0 6.6rem;
+        overflow: visible;
+      }
+  }
+}

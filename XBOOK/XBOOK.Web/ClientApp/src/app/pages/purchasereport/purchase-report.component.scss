@@ -1,43 +1,84 @@
-  .ngx-datatable .datatable-footer .datatable-footer-inner {
-      display: inline-block !important;
-    }
-  :host ::ng-deep.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
-      border-bottom: hidden;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-  }
-  
-  :host ::ng-deep .form-line{
-  
-    margin-bottom: -30px;
-  }
+.ngx-datatable .datatable-footer .datatable-footer-inner {
+  display: inline-block !important;
+}
+:host ::ng-deep.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  border-bottom: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  :host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
-    white-space: nowrap!important;
+:host ::ng-deep .form-line {
+  margin-bottom: -30px;
+}
+
+:host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
+  white-space: nowrap !important;
+}
+
+:host ::ng-deep .datatable-body-row {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+}
+
+:host ::ng-deep .datatable-header {
+  height: unset !important;
+}
+
+:host ::ng-deep .datatable-row-group {
+  height: 25px;
+}
+.totalDiscount {
+  position: absolute;
+  right: 10.2rem;
+}
+.totalAmount {
+  position: absolute;
+  right: 17.2rem;
+}
+.totalPayment {
+  position: absolute;
+  right: 1.4rem;
+}
+
+:host ::ng-deep {
+  .datatable-header-cell,
+  .datatable-body-cell {
+    &:nth-child(1) {
+      flex: 0 0 24%;
+    }
+    &:nth-child(2) {
+      flex: 1 1 auto;
+      padding-right: 0 !important;
+    }
+    &:nth-child(3) {
+      flex: 0 0 10%;
+    }
+    &:nth-child(4) {
+      flex: 0 0 6rem;
+    }
+    &:nth-child(5) {
+      flex: 0 0 6rem;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    &:nth-child(6) {
+      flex: 0 0 5rem;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    &:nth-child(7) {
+      flex: 0 0 8rem;
+    }
+
   }
-  
-  :host ::ng-deep .datatable-body-row {
-    padding-top: 0.35rem !important;
-    padding-bottom: 0.35rem !important;
+}
+
+::ng-deep :root {
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    font-size: 11px;
   }
-  
-  :host ::ng-deep .datatable-header {
-    height: unset !important;
+  @media screen and (max-width: 767px){
+    font-size: 8px;
   }
-  
-  :host ::ng-deep .datatable-row-group {
-    height: 25px;
-  }
-  .totalDiscount{
-    position: absolute; 
-    right: 10.8%;
-  }
-  .totalAmount{
-    position: absolute; 
-    right: 23.7%;
-  }
-  .totalPayment{
-    position: absolute;
-    right: 8px;
-  }
+}

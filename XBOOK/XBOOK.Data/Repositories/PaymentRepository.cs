@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Data.Repositories
 {
@@ -32,6 +33,25 @@ namespace XBOOK.Data.Repositories
                 return false;
             }
             
+        }
+
+        public async Task<bool> UpdatePaymentByReceiptNumbe(MoneyReceiptViewModel request)
+        {
+            var finData = Entities.Where(x => x.receiptNumber == request.ReceiptNumber).AsNoTracking().ToList();
+            var update = new Payments()
+            {
+                amount = request.Amount,
+                ID = finData[0].ID,
+                invoiceID = finData[0].invoiceID,
+                receiptNumber = request.ReceiptNumber,
+                note = request.Note,
+                payDate = request.PayDate,
+                payName = request.PayName,
+                payType = request.PayType,
+            };
+            Entities.Update(update);
+
+            return await Task.FromResult(true);
         }
     }
 }

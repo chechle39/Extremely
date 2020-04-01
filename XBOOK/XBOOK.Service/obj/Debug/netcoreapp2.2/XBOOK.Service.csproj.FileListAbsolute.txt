@@ -1,0 +1,15 @@
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XBOOK.Service.deps.json
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XBOOK.Service.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XBOOK.Service.pdb
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XAccLib.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XBOOK.Common.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XBOOK.Data.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XBOOK.Common.pdb
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\bin\Debug\netcoreapp2.2\XBOOK.Data.pdb
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\obj\Debug\netcoreapp2.2\XBOOK.Service.csprojAssemblyReference.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\obj\Debug\netcoreapp2.2\XBOOK.Service.csproj.CoreCompileInputs.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\obj\Debug\netcoreapp2.2\XBOOK.Service.AssemblyInfoInputs.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\obj\Debug\netcoreapp2.2\XBOOK.Service.AssemblyInfo.cs
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\obj\Debug\netcoreapp2.2\XBOOK.Service.csproj.CopyComplete
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\obj\Debug\netcoreapp2.2\XBOOK.Service.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Service\obj\Debug\netcoreapp2.2\XBOOK.Service.pdb

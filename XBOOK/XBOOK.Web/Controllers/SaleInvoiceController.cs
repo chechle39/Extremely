@@ -22,7 +22,7 @@ namespace XBOOK.Web.Controllers
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IUnitOfWork _uow;
         IInvoiceServiceDapper _invoiceServiceDapper;
-        public SaleInvoiceController(IHttpContextAccessor httpContextAccessor, ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
+        public SaleInvoiceController(ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
         {
             _saleInvoiceService = saleInvoiceService;
             _uow = uow;
@@ -104,7 +104,7 @@ namespace XBOOK.Web.Controllers
                                         .FileName
                                         .Trim('"');
                     var prf = _iCompanyProfileService.GetInFoProfile();
-                    var imageFolder = $@"C:\uploaded\{prf.Result.code}";
+                    var imageFolder = $@"C:\uploaded\{prf.Result.code}\SaleInVoice";
 
 
                     if (!Directory.Exists(imageFolder))
@@ -126,7 +126,7 @@ namespace XBOOK.Web.Controllers
         public IActionResult GetFile(requestGetFile request)
         {
             var prf = _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"C:\uploaded\{prf.Result.code}";
+            var imageFolder = $@"C:\uploaded\{prf.Result.code}\SaleInVoice";
             if (!Directory.Exists(imageFolder))
             {
                 return Ok();
@@ -156,7 +156,7 @@ namespace XBOOK.Web.Controllers
         public IActionResult RemoveFile(ResponseFileName request)
         {
             var prf = _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"C:\uploaded\{prf.Result.code}";
+            var imageFolder = $@"C:\uploaded\{prf.Result.code}\SaleInVoice";
             System.IO.File.Delete(imageFolder + "\\" + request.FileName);
             return Ok();
         }
@@ -188,7 +188,7 @@ namespace XBOOK.Web.Controllers
             try
             {
                 var prf = _iCompanyProfileService.GetInFoProfile();
-                var imageFolder = $@"C:\uploaded\{prf.Result.code}";
+                var imageFolder = $@"C:\uploaded\{prf.Result.code}\SaleInVoice";
                 if (!Directory.Exists(imageFolder))
                 {
                     Directory.CreateDirectory(imageFolder);

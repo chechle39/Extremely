@@ -1,31 +1,30 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using DevExpress.XtraReports.UI;
+using Newtonsoft.Json;
+using XBOOK.Data.Entities;
+using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
+using XBOOK.Data.Repositories;
 
 namespace XBOOK.Web.Reports
 {
     public partial class InvoiceReport
     {
-
-        public InvoiceReport()
+        
+     
+        public InvoiceReport(ICompanyProfileReponsitory companyProfileReponsitory)
         {
             InitializeComponent();
         }
 
         public class CreateReport
         {
-            private static IHttpContextAccessor httpContextAccessor { get; set; }
-            public static void SetHttpContextAccessor(IHttpContextAccessor accessor)
-            {
-                httpContextAccessor = accessor;
-            }
-            private static HttpContext User;
+           
             public List<SaleInvoicePrintModel> Data()
             {
-                var x = httpContextAccessor;
-                var myUser = User;
+              
                 var itemss = new List<SaleInvoicePrintModel>();
                 var folderName = Path.Combine("Reports", "Data");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);

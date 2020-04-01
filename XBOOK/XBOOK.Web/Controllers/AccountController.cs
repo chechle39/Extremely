@@ -85,7 +85,7 @@ namespace XBOOK.Web.Controllers
                 return Ok(new GenericResult(false, "User is not active"));
             }
             var roles = await _userManager.GetRolesAsync(finUser);
-            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id);
+            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon.Code);
             var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList, finUser.FullName, dataUserCommon.Code);
             return new OkObjectResult(jwt);
         }

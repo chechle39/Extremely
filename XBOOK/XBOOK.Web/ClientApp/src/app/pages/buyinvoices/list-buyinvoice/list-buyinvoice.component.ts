@@ -110,10 +110,34 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
       endDate: '',
       isIssueDate: true,
     };
-
-    this.buyInvoiceOfClient(requestList);
+    this.data.getMessagebuyInvoice().subscribe(rp => {
+      if(rp !== undefined){
+        this.buyinvoiceOfChart();
+      } else {
+        this.buyInvoiceOfClient(requestList);
+      }
+    });      
   }
+  buyinvoiceOfChart() {
+    this.data.getMessagebuyInvoice().subscribe(rp => {
+      if (rp !== undefined) {
+        console.log(rp.data.startDate);
+        console.log(rp.data.endDate);
+        const rs = {
+          keyword: '',
+          startDate:  rp.data.startDate,
+          endDate: rp.data.endDate,
+          isIssueDate: this.ischeck,
+        };
+        this.buyInvoiceService.getAllBuyInvoiceList(rs).pipe(
+        ).subscribe((i: any) => {         
+          this.buyinvoiceViews = i;
+          this.listInvoice = this.buyinvoiceViews;
+        });
+      }
+    });
 
+  }
   buyInvoiceOfClient(request) {
     this.data.getMessage().subscribe(rp => {
 

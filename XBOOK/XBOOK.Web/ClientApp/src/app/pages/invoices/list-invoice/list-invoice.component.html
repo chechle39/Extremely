@@ -1,10 +1,10 @@
 
      <nb-card style="min-height: 70vh;">
-      <nb-card-header>
+      <nb-card-header class="layout__container--medium">
         <span class="card__title" >{{'INVOICE.HEADER.INVOICE' | translate}}</span>
         <button [disabled] = "this.authenticationService.hasPermission('Invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
       </nb-card-header>
-      <nb-card-body>
+      <nb-card-body class="layout__container--medium">
         <div class="row">
           <div class="col-6">
             <div class="media-body blue text-center mb-4">
@@ -40,9 +40,9 @@
                   {{'COMMON.BULK' | translate}}
               </button>
               <div ngbDropdownMenu aria-labelledby="bulkActions">
-                <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy"></i> {{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
-                <button class="dropdown-item" [disabled]="true"><i class="fa fa-paper-plane"></i>{{'BUY.INVOICE.GRID.MARK.SEND' | translate}}</button>
-                <button class="dropdown-item" (click)="addPayment()"><i class="fa fa-dollar"></i>{{'BUY.INVOICE.GRID.ADD.RECIPT' | translate}}</button>
+                <button class="dropdown-item" [disabled]="true"><i class="fa fa-copy mr-1"></i> {{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
+                <button class="dropdown-item" [disabled]="true"><i class="fa fa-paper-plane mr-1"></i>{{'BUY.INVOICE.GRID.MARK.SEND' | translate}}</button>
+                <button class="dropdown-item" (click)="addPayment()"><i class="fa fa-plus-o mr-1"></i>{{'BUY.INVOICE.GRID.ADD.RECIPT' | translate}}</button>
                 <button class="dropdown-item" (click)="deleteAll()"><i class="icon-delete mr-1"></i>{{'COMMON.ACTION.DELETE' | translate}}</button>
               </div>
             </div>
@@ -225,18 +225,20 @@
             <ngx-datatable-footer>
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-                <div class="row" style="display: inline-block;width: 99%;border-top: 1px solid #ccc;padding-top: 3px;">
-                  <div class="row text-right mx-0 position-relative">
-                    <div class="col-3 pl-0 text-left">
-                      <b>Total: {{rowCount}} items </b>
+                <div class="row" style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px;">
+                  <div class="row text-right mx-0 position-relative datatable__footer__row">
+                    <div class="pl-0 text-left">
+                      <b style="position: absolute; left: 0;">Total: {{rowCount}} items </b>
                     </div>
-                    <div class="col-3"></div>
-                    <div class="col-3 text-center" style="position: absolute; right: 26%;">
+                    <div></div>
+                    <div></div>
+                    <div class="text-center">
                       <b>{{'BUY.INVOICE.GRID.GRANT.TOTAL' | translate}}</b>
                     </div>
-                    <div class="col-3" style="padding-right: calc(0.5% + 50px); position: absolute; right: 0;">
+                    <div>
                       <b>{{getGrantTotal()| currency:'VND':''}}</b>
                     </div>
+                    <div></div>
                   </div>
                   <div class="row">
                     <div class="page-count col-6 pl-4">

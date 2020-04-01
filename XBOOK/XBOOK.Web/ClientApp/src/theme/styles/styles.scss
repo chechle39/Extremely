@@ -399,6 +399,9 @@ span.k-numeric-wrap>input {
 .mzModal>.modal-dialog {
   max-width: 378px !important;
 }
+.mzModalX>.modal-dialog {
+  max-width: 450px !important;
+}
 
 .custom-label {
   text-transform: none;
@@ -613,7 +616,9 @@ body{
     height: unset !important;
   }
   .datatable-header-inner{
-    width: 100% !important  ;
+    width: 100% !important;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
   .datatable-header-cell {
     height: fit-content;
@@ -624,7 +629,7 @@ body{
     padding-bottom: .35rem!important;
   }
   .datatable-row-center {
-    max-width: 99%;
+    // max-width: 99%;
   }
   .datatable-header-cell-template-wrap{
     white-space: normal;
@@ -649,6 +654,22 @@ body{
   }
   .datatable-row-wrapper, .datatable-scroll, .datatable-body-row{
     width: 100%!important;
+  }
+
+  // Setting Flex
+  
+  .datatable-header-cell,
+  .datatable-body-cell {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .datatable-row-center, .datatable-body-row, .datatable__footer__row{
+    display: flex;
+    width: 100%!important;
+  }
+  .datatable-header-cell, .datatable-body-cell, .datatable__footer__row > *{
+    flex: 1 1 auto;
+    width: unset !important;
   }
 }
 

@@ -5,10 +5,29 @@
     max-width: 99%;
 }
 :host ::ng-deep .datatable-header {
-    @media screen and (max-width: 767px){
+    @media screen and (max-width: 767px) {
         height: 50px !important;
     }
 }
 :host ::ng-deep .col-right {
     padding-right: 0px;
-  }
+}
+
+:host ::ng-deep {
+    .datatable-header-cell,
+    .datatable-body-cell {
+        &:nth-child(1) {
+            flex: 0 0 50px;
+        }
+        &:nth-child(2) {
+            flex: 0 0 15rem;
+            padding-right: 0 !important;
+        }
+        &:nth-child(3) {
+            flex: 1 1 auto;
+        }
+        &:nth-child(4) {
+            flex: 0 0 7rem;
+        }
+    }
+}

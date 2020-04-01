@@ -1,0 +1,45 @@
+.ngx-datatable .datatable-footer .datatable-footer-inner {
+  display: inline-block !important;
+}
+:host ::ng-deep.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  border-bottom: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
+  white-space: nowrap!important;
+}
+
+:host ::ng-deep .form-line{
+
+margin-bottom: -30px;
+}
+
+:host ::ng-deep .datatable-header {
+  height: unset !important;
+}
+
+:host ::ng-deep .datatable-body-row {
+padding-top: 0.35rem !important;
+padding-bottom: 0.35rem !important;
+}
+
+
+
+:host ::ng-deep .datatable-row-group {
+height: 25px;
+}
+.totalDiscount{
+  position: absolute; 
+  right: 13.1%;
+}
+.totalAmount{
+  position: absolute; 
+  right: 25.6%;
+}
+.totalPayment{
+  position: absolute;
+  right: 8px;
+}

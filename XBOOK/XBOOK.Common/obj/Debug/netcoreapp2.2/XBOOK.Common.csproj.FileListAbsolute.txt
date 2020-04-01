@@ -1,0 +1,14 @@
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\XBOOK.Common.deps.json
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\XBOOK.Common.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\XBOOK.Common.pdb
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\Microsoft.AspNetCore.Mvc.Abstractions.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\Newtonsoft.Json.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\Microsoft.AspNetCore.Mvc.Abstractions.xml
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\bin\Debug\netcoreapp2.2\Newtonsoft.Json.xml
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\obj\Debug\netcoreapp2.2\XBOOK.Common.csprojAssemblyReference.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\obj\Debug\netcoreapp2.2\XBOOK.Common.csproj.CoreCompileInputs.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\obj\Debug\netcoreapp2.2\XBOOK.Common.AssemblyInfoInputs.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\obj\Debug\netcoreapp2.2\XBOOK.Common.AssemblyInfo.cs
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\obj\Debug\netcoreapp2.2\XBOOK.Common.csproj.CopyComplete
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\obj\Debug\netcoreapp2.2\XBOOK.Common.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Common\obj\Debug\netcoreapp2.2\XBOOK.Common.pdb

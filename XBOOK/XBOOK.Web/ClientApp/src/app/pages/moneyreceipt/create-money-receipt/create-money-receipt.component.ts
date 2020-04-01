@@ -4,7 +4,7 @@ import {
   Injector,
   ViewChild,
   ElementRef,
-  Input
+  Input,
 } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
@@ -16,7 +16,7 @@ import { ClientSearchModel } from '../../_shared/models/client/client-search.mod
 import {
   FormBuilder,
   FormGroup,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { MoneyReceiptService } from '../../_shared/services/money-receipt.service';
 import { MoneyReceiptViewModel } from '../../_shared/models/money-receipt/money-receipt.model';
@@ -104,13 +104,13 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
           year: Number(payDateSplit[2]),
           month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
         };
-        this.address = rp.address
+        this.address = rp.address;
         this.moneyReceipt.controls.id.patchValue(rp.id);
         this.moneyReceipt.controls.amount.patchValue(rp.amount);
         this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
         this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
         this.moneyReceipt.controls.clientName.patchValue(rp.clientName);
-        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.name
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key
           === this.row.entryType)[0].key);
         this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
         this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
@@ -292,7 +292,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         clientID: this.moneyReceipt.value.clienId,
         clientName: this.moneyReceipt.value.clientName.clientName !== undefined
           ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].key,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
@@ -312,7 +312,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         clientID: this.moneyReceipt.value.clienId,
         clientName: this.moneyReceipt.value.clientName.clientName !== undefined
           ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].key,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,
@@ -331,7 +331,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         clientID: this.moneyReceipt.value.clienId,
         clientName: this.moneyReceipt.value.clientName.clientName !== undefined
           ? this.moneyReceipt.value.clientName.clientName : this.moneyReceipt.value.clientName,
-        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].name,
+        entryType: this.entryBatternList.filter(x => x.key === this.moneyReceipt.value.entryType)[0].key,
         note: this.moneyReceipt.value.note,
         payDate: payDateData,
         payType: this.payment.filter(x => x.key === this.moneyReceipt.value.paymentMethods)[0].key,

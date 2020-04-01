@@ -9,13 +9,13 @@
             <img src="../../../assets/search.png" class="button__search" alt="search General Ledger"></div>
         </div>
         <div class="btn btn-flat mr-1 p-0 mb-0 text-nowrap" style="color: #546D74;">
-          <div *ngIf="case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
-          <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 3">Năm này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 4">Quý trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 5">Năm trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf=" case==null">{{ 'COMMON.DAY.Thismonth' | translate }}: {{firstDate}} - {{endDate1}}</div>
+          <div *ngIf="case=== 1">{{ 'COMMON.DAY.Thismonth' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 2">{{ 'COMMON.DAY.Thisquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 3">{{ 'COMMON.DAY.Thisyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 4">{{ 'COMMON.DAY.Lastquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 5">{{ 'COMMON.DAY.Lastyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 6">{{ 'COMMON.DAY.Dateoptions' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
         </div>
       </div>
       <div class="col-3 col-lg-4">
@@ -48,7 +48,7 @@
         <div class="row" style="color: #546D74;">
           <div class="col-lg-4 col-md-5 col-6" style="color: #546D74; font-size: 1.1rem;">
             {{group.companyName}}</div>
-          <div style="color: #546D74;font-weight: bold;" class="col-lg-8 col-md-7 col-6 text-right">Số Dư Đầu Kỳ:  {{122990 | currency:'VND':''}}</div>
+          <div style="color: #546D74;font-weight: bold;" class="col-lg-8 col-md-7 col-6 text-right">{{ 'ACCOUNT.DETAIL.LIST.openingbalance' | translate }}:  {{122990 | currency:'VND':''}}</div>
         </div>      
       </div>
 

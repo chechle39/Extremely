@@ -8,7 +8,7 @@ namespace XBOOK.Dapper.Interfaces
 {
     public interface IPermissionDapper
     {
-        Task<IEnumerable<PermissionViewModel>> GetAppFncPermission(long userId);
+        Task<IEnumerable<PermissionViewModel>> GetAppFncPermission(long userId, string code);
 
     }
 }

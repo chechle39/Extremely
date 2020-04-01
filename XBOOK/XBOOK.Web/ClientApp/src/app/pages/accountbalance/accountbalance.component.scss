@@ -34,7 +34,6 @@
 }
 
 :host ::ng-deep .datatable-header-cell {
-    letter-spacing: -0.1rem;
     height: fit-content;
 }
 
@@ -50,11 +49,15 @@
     margin-left: 150px;
 }
 
+nb-card-header, nb-card-body{
+  @media screen and (min-width: 992px){
+    min-width: 750px;
+  }
+}
+
 :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
     padding-top: 0px;
     padding-bottom: 0px;
-    padding-left: 0;
-    padding-top: 0;
 }
 
 :host ::ng-deep .datatable-header {
@@ -65,206 +68,56 @@
   position: relative;
 }
 
-@media only screen and (max-width: 1800px){
-    :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
-        vertical-align: bottom;
-        padding: 0.75rem;
-        border-bottom: hidden;
+:host ::ng-deep {
+    $colWidth1: 25%;
+    $colWidth2: 25%;
+    $colWidth3: 25%;
+    $colWidth4: 25%;
+    .datatable-header-cell,
+    .datatable-body-cell {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      &:nth-child(1) {
+        flex: 0 0 $colWidth1;
+      }
+      &:nth-child(2) {
+        flex: 0 0 $colWidth2;
+      }
+      &:nth-child(3) {
+        flex: 0 0 $colWidth3;
+      }
+      &:nth-child(4) {
+        flex: 0 0 $colWidth4;
+      }
     }
-    .Closing{
-    margin-right: 10px;
-        text-align: right;
+    .datatable__footer__row {
+      position: relative;
+      padding-right: 0.75rem;
+      padding-left: 0.75rem;
+      > * {
+        &:nth-child(1) {
+          flex: 1 1 $colWidth1;
+        }
+        &:nth-child(2) {
+          flex: 0 0 $colWidth2;
+        }
+        &:nth-child(3) {
+          flex: 0 0 $colWidth3;
+        }
+        &:nth-child(4) {
+          flex: 0 0 $colWidth4;
+        }
+      }
     }
-    .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
-        margin-left: -12px;
+  }
+
+
+  ::ng-deep :root {
+    @media screen and (min-width: 768px) and (max-width: 992px){
+      font-size: 13px;
     }
-    :host ::ng-deep .form-line{
-        border-bottom: hidden;
-        margin-bottom: -30px;
+    @media screen and (max-width: 767px){
+      font-size: 8px;
     }
-    .card {
-        margin-top: -21px;
-        width: 80%;
-        /* align-content: center; */
-        margin-left: 150px;
-    }
-    :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        
-    }
-}
-@media only screen and (max-width: 1700px){
-    :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
-        vertical-align: bottom;
-        padding: 0.75rem;
-        border-bottom: hidden;
-    }
-  .Closing{
-         margin-right: -1px;
-        text-align: right;
-    }
-    .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
-        margin-left: -12px;
-    }
-    :host ::ng-deep .form-line{
-        border-bottom: hidden;
-        margin-bottom: -30px;
-    }
-    .card {
-        margin-top: -21px;
-        width: 80%;
-        /* align-content: center; */
-        margin-left: 150px;
-    }
-    :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        
-    }
-}
-@media only screen and (max-width: 1600px){
-    :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
-        vertical-align: bottom;
-        padding: 0.75rem;
-        border-bottom: hidden;
-    }
-  .Closing{
-         margin-right: -1px;
-        text-align: right;
-    }
-    .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
-        margin-left: -12px;
-    }
-    :host ::ng-deep .form-line{
-        border-bottom: hidden;
-        margin-bottom: -30px;
-    }
-    .card {
-        margin-top: -21px;
-        width: 80%;
-        /* align-content: center; */
-        margin-left: 150px;
-    }
-    :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        
-    }
-}
-@media only screen and (max-width: 1500px){
-    :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
-        vertical-align: bottom;
-        padding: 0.75rem;
-        border-bottom: hidden;
-    }
-  .Closing{
-         margin-right: -1px;
-        text-align: right;
-    }
-    .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
-        margin-left: -12px;
-    }
-    :host ::ng-deep .form-line{
-        border-bottom: hidden;
-        margin-bottom: -30px;
-    }
-    .card {
-        margin-top: -21px;
-        width: 80%;
-        /* align-content: center; */
-        margin-left: 150px;
-    }
-    :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        
-    }
-}
-@media only screen and (max-width: 1440px){
-    :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
-        vertical-align: bottom;
-        padding: 0.75rem;
-        border-bottom: hidden;
-    }
-  .Closing{
-         margin-right: -1px;
-        text-align: right;
-    }
-    .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
-        margin-left: -12px;
-    }
-    :host ::ng-deep .form-line{
-        border-bottom: hidden;
-        margin-bottom: -30px;
-    }
-    .card {
-        margin-top: -21px;
-        width: 80%;
-        /* align-content: center; */
-        margin-left: 150px;
-    }
-    :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        
-    }
-}
-@media only screen and (max-width: 1360px){
-    :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
-        vertical-align: bottom;
-        padding: 0.75rem;
-        border-bottom: hidden;
-    }
-  .Closing{
-         margin-right: -1px;
-        text-align: right;
-    }
-    .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
-        margin-left: -12px;
-    }
-    :host ::ng-deep .form-line{
-        border-bottom: hidden;
-        margin-bottom: -30px;
-    }
-    .card {
-        margin-top: -21px;
-        width: 80%;
-        /* align-content: center; */
-        margin-left: 150px;
-    }
-    :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        
-    }
-}
-@media only screen and (max-width: 1280px){
-    :host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell{
-        vertical-align: bottom;
-        padding: 0.75rem;
-        border-bottom: hidden;
-    }
-  .Closing{
-         margin-right: -1px;
-        text-align: right;
-    }
-    .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
-        margin-left: -12px;
-    }
-    :host ::ng-deep .form-line{
-        border-bottom: hidden;
-        margin-bottom: -30px;
-    }
-    .card {
-        margin-top: -21px;
-        width: 80%;
-        /* align-content: center; */
-        margin-left: 150px;
-    }
-    :host ::ng-deep.ngx-datatable.bootstrap .datatable-body .datatable-body-row {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        
-    }
-}
+  }
+  

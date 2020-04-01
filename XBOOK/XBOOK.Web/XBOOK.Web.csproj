@@ -23,13 +23,14 @@
   <ItemGroup>
     <None Remove="Reports\Template\AccountDetailReport.repx" />
     <None Remove="Reports\Template\InvoiceReport.repx" />
+    <None Remove="Reports\Template\Money Receipt.repx" />
+    <None Remove="Reports\Template\Payment Receipt.repx" />
     <None Remove="Reports\Template\PaymentReceiptReport.repx" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Template\AccountDetailReport.repx" />
-    <EmbeddedResource Include="Reports\Template\InvoiceReport.repx" />
-    <EmbeddedResource Include="Reports\Template\PaymentReceiptReport.repx" />
+    <EmbeddedResource Include="Reports\Template\Money Receipt.repx" />
+    <EmbeddedResource Include="Reports\Template\Payment Receipt.repx" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -64,23 +65,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Reports\Template\AccountDetailReport.cs">
-      <DependentUpon>AccountDetailReport.repx</DependentUpon>
+    <Compile Update="Reports\Template\Money Receipt.cs">
+      <DependentUpon>Money Receipt.repx</DependentUpon>
     </Compile>
-    <Compile Update="Reports\Template\AccountDetailReport.Designer.cs">
-      <DependentUpon>AccountDetailReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\InvoiceReport.cs">
-      <DependentUpon>InvoiceReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\InvoiceReport.Designer.cs">
-      <DependentUpon>InvoiceReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\PaymentReceiptReport.cs">
-      <DependentUpon>PaymentReceiptReport.repx</DependentUpon>
-    </Compile>
-    <Compile Update="Reports\Template\PaymentReceiptReport.Designer.cs">
-      <DependentUpon>PaymentReceiptReport.repx</DependentUpon>
+    <Compile Update="Reports\Template\Money Receipt.Designer.cs">
+      <DependentUpon>Money Receipt.repx</DependentUpon>
     </Compile>
   </ItemGroup>
   

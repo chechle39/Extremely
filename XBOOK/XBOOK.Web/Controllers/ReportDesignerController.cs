@@ -6,19 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
 
 namespace XBOOK.Web.Controllers
 {
-    public class ReportDesignerController : DefaultController
+    public class ReportDesignerController : BaseAPIController
     {
-        public ReportDesignerController(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ReportDesignerController(IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
         }
         [HttpPost("[action]/{reportUrl}")]
         public object GetReportDesignerModel(string reportUrl)
-        {
+        { 
             string modelJsonScript = new ReportDesignerClientSideModelGenerator(HttpContext.RequestServices).GetJsonModelScript(reportUrl, null, "/DXXRD", "/DXXRDV", "/DXXQB");
             return new JavaScriptSerializer().Deserialize<object>(modelJsonScript);
         }
@@ -42,6 +46,19 @@ namespace XBOOK.Web.Controllers
             }
             return Ok(itemss);
         }
-
+        public bool SaveDataJson(CompanyModel code)
+        {
+            string json = JsonConvert.SerializeObject(code);
+            var folderName = Path.Combine("Reports", "Company");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var fileName = "CompanyExist.json";
+            var fullPath = Path.Combine(pathToSave, fileName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+            System.IO.File.WriteAllText(fullPath, json);
+            return true;
+        }
     }
 }

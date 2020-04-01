@@ -5,17 +5,16 @@
         <div class="d-flex">
           <span class="card__title pr-3 pt-1">{{ 'GENGROUP.HEADER' | translate }}</span>
           <div (click)='SearchGenLed()'>
-            <img src="../../../assets/search.png" class="button__search"
-              alt="search General Ledger"></div>
+            <img src="../../../assets/search.png" class="button__search" alt="search General Ledger"></div>
         </div>
         <div class="btn btn-flat mr-1 p-0 mb-0 text-nowrap" style="color: #546D74;">
-          <div *ngIf="case==null">Tháng này: {{firstDate}} - {{endDate1}}</div>
-          <div *ngIf="case=== 1">Tháng này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 2">Quý này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 3">Năm này: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 4">Quý trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 5">Năm trước: {{startDay}} {{keyspace}} {{endDay}}</div>
-          <div *ngIf="case=== 6">Từ ngày: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf=" case==null">{{ 'COMMON.DAY.Thismonth' | translate }}: {{firstDate}} - {{endDate1}}</div>
+          <div *ngIf="case=== 1">{{ 'COMMON.DAY.Thismonth' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 2">{{ 'COMMON.DAY.Thisquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 3">{{ 'COMMON.DAY.Thisyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 4">{{ 'COMMON.DAY.Lastquarter' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 5">{{ 'COMMON.DAY.Lastyear' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
+          <div *ngIf="case=== 6">{{ 'COMMON.DAY.Dateoptions' | translate }}: {{startDay}} {{keyspace}} {{endDay}}</div>
         </div>
       </div>
       <div class="col-3 col-lg-4">
@@ -41,7 +40,7 @@
   <nb-card-body>
     <div *ngFor="let group of genViews">
       <div *ngFor="let account of tempaccount">
-        <div *ngIf="group.accNumber==account.accountNumber" style="color: #546D74;position: absolute; font-size: 16px;">
+        <div *ngIf="group.accNumber==account.accountNumber" style="color: #546D74;position: absolute; font-size: 1.1rem;">
           {{account.accountName}}-{{account.accountNumber}}</div>
       </div>
 
@@ -56,7 +55,8 @@
 
             <ngx-datatable-column name="{{ 'GEN.LIST.INVOICENUMBER' | translate }}" prop="transactionNo">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <div>{{row.transactionNo}}</div>
+                <div (click)="redirectToEditInvoice(row.transactionNo)" style="color: cadetblue;">{{row.transactionNo}}
+                </div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -64,7 +64,7 @@
             <ngx-datatable-column prop="dateIssue" name="{{ 'GEN.LIST.DATE' | translate }}" [cellClass]="'col-left'"
               [headerClass]="'col-left'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-left" style="color: cadetblue;">
+                <div class="col-left">
                   <div>
                     {{row.dateIssue | date: 'dd/MM/yyyy'}}
                   </div>
@@ -104,10 +104,10 @@
 
 
 
-            <ngx-datatable-column prop="debit" name="{{ 'GEN.LIST.debit' | translate }}"
-              [cellClass]="'col-right'" [headerClass]="'col-right'">
+            <ngx-datatable-column prop="debit" name="{{ 'GEN.LIST.debit' | translate }}" [cellClass]="'text-right'"
+              [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-right">
+                <div class="text-right">
                   <div>
                     <div>
                       <div *ngIf="row.debit !== 0" class="col-more-info">
@@ -122,10 +122,10 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="credit" name="{{ 'GEN.LIST.credit' | translate }}"
-              [cellClass]="'col-right'" [headerClass]="'col-right'">
+            <ngx-datatable-column prop="credit" name="{{ 'GEN.LIST.credit' | translate }}" [cellClass]="'text-right'"
+              [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-right" style="padding-left: 3%;">
+                <div class="text-right" style="padding-left: 3%;">
                   <div>
                     <div>
                       <div *ngIf="row.credit !== 0" class="col-more-info">
@@ -145,14 +145,16 @@
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
                 <div class="row"
-                  style="position:relative;display: inline-block;width: 100%;border-top: 3px double #ccc;padding-top: 105px;margin-left: -2px;">
-                  <div class="row text-right" style="position:relative;margin-top: -100px;">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-2 sum">
+                  style="position:relative;display: inline-block;width: 100%;border-top: 3px double #ccc;padding-bottom: 7rem;padding-top: 10px;">
+                  <div class="datatable__footer__row text-right" style="position:relative;">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div class="sum text-center">
                       {{ 'GEN.LIST.Total' | translate }}
                     </div>
-                    <div class="col-md-2" style="color: rgb(16, 20, 20)">
+                    <div style="color: rgb(16, 20, 20)">
                       <div class="total">
                         <div *ngIf="group.totaldebit !== 0">
                           {{group.totaldebit  | currency:'VND':''}}
@@ -162,7 +164,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-2" style="padding-right: 2%;color: rgb(16, 20, 20)">
+                    <div style="color: rgb(16, 20, 20)">
                       <div>
                         <div *ngIf="group.totalcredit !== 0">
                           {{group.totalcredit  | currency:'VND':''}}

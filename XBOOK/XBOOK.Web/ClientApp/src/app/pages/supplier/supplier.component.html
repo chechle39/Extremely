@@ -111,7 +111,7 @@
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="{{ 'SUPPLIER.GRID.HEADER.OUTSTANDING.OVERDUE' | translate }}" prop="" [cellClass]="'text-right'"
-            [headerClass]="'text-right pl-0'" [maxWidth]="'200'" [minWidth]="'200'">
+            [headerClass]="'text-right pl-0'">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div class="text-right">
                 <div>{{row.outstanding | currency:'VND':''}}</div>

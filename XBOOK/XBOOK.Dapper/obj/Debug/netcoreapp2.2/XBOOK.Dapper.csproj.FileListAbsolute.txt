@@ -1,0 +1,14 @@
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\bin\Debug\netcoreapp2.2\XBOOK.Dapper.deps.json
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\bin\Debug\netcoreapp2.2\XBOOK.Dapper.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\bin\Debug\netcoreapp2.2\XBOOK.Dapper.pdb
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\bin\Debug\netcoreapp2.2\XBOOK.Common.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\bin\Debug\netcoreapp2.2\XBOOK.Data.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\bin\Debug\netcoreapp2.2\XBOOK.Data.pdb
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\bin\Debug\netcoreapp2.2\XBOOK.Common.pdb
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\obj\Debug\netcoreapp2.2\XBOOK.Dapper.csprojAssemblyReference.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\obj\Debug\netcoreapp2.2\XBOOK.Dapper.csproj.CoreCompileInputs.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\obj\Debug\netcoreapp2.2\XBOOK.Dapper.AssemblyInfoInputs.cache
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\obj\Debug\netcoreapp2.2\XBOOK.Dapper.AssemblyInfo.cs
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\obj\Debug\netcoreapp2.2\XBOOK.Dapper.csproj.CopyComplete
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\obj\Debug\netcoreapp2.2\XBOOK.Dapper.dll
+C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Dapper\obj\Debug\netcoreapp2.2\XBOOK.Dapper.pdb

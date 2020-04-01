@@ -16,15 +16,18 @@ namespace XBOOK.Data.Repositories
     public class PaymentReceiptRepository : Repository<PaymentReceipt>, IPaymentReceiptRepository
     {
         private readonly ISupplierRepository _supplierRepository;
-        public PaymentReceiptRepository(XBookContext context, ISupplierRepository supplierRepository) : base(context)
+        private readonly IUnitOfWork _uow;
+        public PaymentReceiptRepository(XBookContext context, ISupplierRepository supplierRepository, IUnitOfWork uow) : base(context)
         {
             _supplierRepository = supplierRepository;
+            _uow = uow;
         }
 
         public async Task<bool> CreatePayMentReceipt(PaymentReceiptViewModel request)
         {
             var saveMoneyReceipt = AutoMapper.Mapper.Map<PaymentReceiptViewModel, PaymentReceipt>(request);
             Entities.Add(saveMoneyReceipt);
+            _uow.SaveChanges();
             return await Task.FromResult(true);
         }
 

@@ -1,10 +1,13 @@
 ﻿using DevExpress.XtraReports.UI;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Report.PredefinedReports;
 using XBOOK.Service.Interfaces;
 
@@ -14,12 +17,21 @@ namespace XBOOK.Report.Services
     {
         readonly string ReportDirectory;
         const string FileExtension = ".repx";
-        public ReportStorageWebExtension(IHostingEnvironment env, ICompanyProfileReponsitory companyProfileReponsitory)
+        private readonly ICompanyProfileReponsitory _companyProfileReponsitory;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ReportStorageWebExtension(IHostingEnvironment env, ICompanyProfileReponsitory companyProfileReponsitory, IHttpContextAccessor httpContextAccessor)
         {
-            ReportDirectory = Path.Combine(env.ContentRootPath, "Reports" , "Template");
-            if (!Directory.Exists(ReportDirectory))
+            _httpContextAccessor = httpContextAccessor;
+            _companyProfileReponsitory = companyProfileReponsitory;          
+            if (_httpContextAccessor.HttpContext != null)
             {
-                Directory.CreateDirectory(ReportDirectory);
+                var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+
+                ReportDirectory = Path.Combine(env.ContentRootPath, "Reports", "Template");
+                if (!Directory.Exists(ReportDirectory))
+                {
+                    Directory.CreateDirectory(ReportDirectory);
+                }
             }
         }
 
@@ -95,5 +107,7 @@ namespace XBOOK.Report.Services
             SetData(report, defaultUrl);
             return defaultUrl;
         }
+
+     
     }
 }

@@ -139,10 +139,10 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
     const dialog = this.modalService.open(SearchsalesReportComponent, AppConsts.modalOptionsCustomSize);
     dialog.result.then(result => {
         const genledSearch = {
-          // startDate: result.startDate,
-          // endDate: result.endDate,
-          // client: result.client,
-          // product: result.product,
+          startDate: result.startDate,
+          endDate: result.endDate,
+          client: result.client,
+          product: result.product,
         };
         this.exportCSV = result;
         this.salesReportService.searchGen(genledSearch).subscribe(rp => {
@@ -208,12 +208,10 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
     });
   }
   redirectToEditInvoice(id) {
-
     let clientName = '';
-
     clientName = id;
     this.data.sendMessage(clientName);
-    this.router.navigate([`/pages/invoice`]);
+    this.router.navigate([`/pages/invoice/${id}/${ActionType.Edit}`]);
   }
 
 }

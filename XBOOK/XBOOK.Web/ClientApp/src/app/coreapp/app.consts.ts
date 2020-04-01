@@ -29,4 +29,9 @@ export class AppConsts {
     centered: true,
     backdrop: 'static',
   };
+  static readonly modalOptionsCustomSizeX: NgbModalOptions = {
+    windowClass: 'mzModalX',
+    centered: true,
+    backdrop: 'static',
+  };
 }

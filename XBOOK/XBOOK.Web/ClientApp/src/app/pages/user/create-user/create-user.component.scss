@@ -16,3 +16,7 @@
     background: #d95f00;
     color: #ffffff;
 }
+:host ::ng-deep .ui-multiselect {
+    margin-top: 22px;
+    height: 35px;
+}

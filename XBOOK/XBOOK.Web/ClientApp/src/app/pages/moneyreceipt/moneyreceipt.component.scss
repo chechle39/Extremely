@@ -13,7 +13,61 @@
     padding-bottom: 0.35rem !important;
   }
   
-  :host ::ng-deep .datatable-body-cell {
-    margin-right: -3px;
+:host ::ng-deep {
+  $colWidth1: 50px;
+  $colWidth2: 15rem;
+  $colWidth3: auto;
+  $colWidth4: 25%;
+  $colWidth5: 25%;
+  $colWidth6: 40px;
+  .datatable-header-cell,
+  .datatable-body-cell {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    &:nth-child(1) {
+      flex: 0 0 $colWidth1;
+    }
+    &:nth-child(2) {
+      flex: 0 0 $colWidth2;
+    }
+    &:nth-child(3) {
+      flex: 1 1 $colWidth3;
+    }
+    &:nth-child(4) {
+      flex: 0 0 $colWidth4;
+    }
+    &:nth-child(5) {
+      flex: 0 0 $colWidth5;
+    }
+    &:nth-child(6) {
+      flex: 0 0 $colWidth6;
+    }
   }
-  
+  .datatable__footer__row {
+    position: relative;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    > * {
+      &:nth-child(1) {
+        flex: 1 1 auto;
+      }
+      &:nth-child(2) {
+        flex: 0 0 $colWidth4;
+      }
+      &:nth-child(3) {
+        flex: 0 0 $colWidth5;
+      }
+      &:nth-child(4) {
+        flex: 0 0 $colWidth6;
+      }
+    }
+  }
+}
+::ng-deep :root {
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    font-size: 11px;
+  }
+  @media screen and (max-width: 767px){
+    font-size: 8px;
+  }
+}

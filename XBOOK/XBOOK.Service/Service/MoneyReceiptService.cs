@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using System;
+﻿using AutoMapper.QueryableExtensions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using XAccLib.GL;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -15,6 +14,7 @@ namespace XBOOK.Service.Service
 {
     public class MoneyReceiptService : IMoneyReceiptService
     {
+        private readonly IRepository<MoneyReceipt> _moneyReceiptUowRepository;
         private readonly IPaymentsService _paymentsService;
         private readonly ISaleInvoiceService _saleInvoiceService;
         private readonly IMoneyReceiptRepository _iMoneyReceiptRepository;
@@ -29,13 +29,22 @@ namespace XBOOK.Service.Service
             _saleInvoiceService = saleInvoiceService;
             _saleInvoiceRepository = saleInvoiceRepository;
             _paymentRepository = paymentRepository;
+            _moneyReceiptUowRepository = _uow.GetRepository<IRepository<MoneyReceipt>>();
         }
 
         public async Task<bool> CreateMoneyReceipt(MoneyReceiptViewModel request)
         {
             var save = await _iMoneyReceiptRepository.CreateMoneyReceipt(request);
             _uow.SaveChanges();
+            CreateMoneyReciptGL();
             return save;
+        }
+        private void CreateMoneyReciptGL()
+        {
+            var paymentReceipt = _moneyReceiptUowRepository.GetAll().ProjectTo<MoneyReceiptViewModel>().LastOrDefault();
+            var moneyGL = new MoneyReceiptGL(_uow);
+            moneyGL.Insert(paymentReceipt);
+            _uow.SaveChanges();
         }
 
         public async Task<bool> CreateMoneyReceiptPaymentAsync(MoneyReceiptPayment request)
@@ -82,15 +91,23 @@ namespace XBOOK.Service.Service
                 ReceiptNumber = request.ReceiptNumber,
                 ReceiverName = request.ReceiverName
             };
-            return await CreateMoneyReceipt(rs);
+            var create = await CreateMoneyReceipt(rs);
+            //if(create == true)
+            //{
+            //    CreateMoneyReciptGL();
+            //}
+            return create;
         }
 
         public async Task<bool> DeletedMoneyReceipt(List<requestDeleted> request)
         {
             var remove = await _iMoneyReceiptRepository.Deleted(request);
-            foreach(var item in request)
+            var moneyGL = new MoneyReceiptGL(_uow);
+            foreach (var item in request)
             {
                 await _paymentRepository.DeletedPaymentAsync(item.receiptNumber);
+                var data = _moneyReceiptUowRepository.GetAll().Where(x => x.ID == item.id).ProjectTo<MoneyReceiptViewModel>().ToList();
+                moneyGL.Delete(data[0]);
             }
             _uow.SaveChanges();
             return remove;
@@ -117,6 +134,9 @@ namespace XBOOK.Service.Service
         public async Task<bool> Update(MoneyReceiptViewModel request)
         {
             var data = await _iMoneyReceiptRepository.Update(request);
+            var moneyGL = new MoneyReceiptGL(_uow);
+            await _paymentRepository.UpdatePaymentByReceiptNumbe(request);
+            moneyGL.Update(request);
             _uow.SaveChanges();
             return data;
         }
