@@ -17,7 +17,8 @@ namespace XBOOK.Web.Reports.Template
             public List<SalesReportPrintViewodel> Data()
             {
                 var itemss = new List<SalesReportPrintViewodel>();
-                var folderName = Path.Combine("Reports", "Data");
+                var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
+                var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 var fileName = "SalesReport.json";
                 var fullPath = Path.Combine(pathToSave, fileName);

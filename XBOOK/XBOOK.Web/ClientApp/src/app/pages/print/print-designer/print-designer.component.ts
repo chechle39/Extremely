@@ -50,6 +50,9 @@ export class PrintDesignerComponent implements OnInit, OnDestroy {
       filter((events: RouterEvent[]) => events[0].url === events[1].url),
       takeUntil(this.destroyed)
     ).subscribe(() => {
+      // rerender Designer Component
+      this.ischeck = false;
+
       this.ngOnInit();
     });
   }
@@ -59,10 +62,7 @@ export class PrintDesignerComponent implements OnInit, OnDestroy {
     dialog.result.then(result => {
       if (result) {
         this.case = result.case;
-
-          // rerender Designer Component
-          this.ischeck = false;
-          setTimeout(() => this.ischeck = true,  0);
+        this.ischeck = true;
 
         // this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/InvoiceReport`;
         this.getDesignerModelAction = `api/ReportDesigner/GetReportDesignerModel/${this.case}`;

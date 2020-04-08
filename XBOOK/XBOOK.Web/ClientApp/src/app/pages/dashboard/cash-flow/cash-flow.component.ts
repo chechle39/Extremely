@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, Input, OnChanges } from '@angular/core';
 import { thousandSuffix, convertRemToPixels } from '../../../shared/utils/util';
 import { DataService } from '../../_shared/services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -6,14 +6,16 @@ import { CommonService } from '../../../shared/service/common.service';
 import { Router } from '@angular/router';
 import { NbMediaBreakpointsService, NbThemeService, NbMediaBreakpoint } from '@nebular/theme';
 import * as _ from 'lodash';
+import { DashboardService } from '../../_shared/services/dashboard.service';
+import { DashboardRequest, BalanceChartView } from '../../_shared/models/dashboard/dashboard.model';
 
 @Component({
   selector: 'xb-cash-flow',
   templateUrl: './cash-flow.component.html',
   styleUrls: ['./cash-flow.component.scss'],
 })
-export class CashFlowComponent implements OnInit {
-  data: any;
+export class CashFlowComponent implements OnInit, OnChanges {
+  @Input() data: BalanceChartView = new BalanceChartView();
   options: any;
   fromDay: any;
   toDay: any;
@@ -24,152 +26,47 @@ export class CashFlowComponent implements OnInit {
     private modalService: NgbModal,
     private commonService: CommonService,
     private router: Router,
+    private dashboardService: DashboardService,
   ) {
 
   }
 
   ngOnInit() {
-    this.showByMonth();
-
     this.options = this.getOption();
 
     this.rerenderOnBreakpointChange();
   }
 
+  ngOnChanges(){
+    if (this.data){
+      this.data.chart = this.chartObjectMapping(this.data.chart);
+    }
+  }
+
   showByMonth() {
-    const data = [
-      {
-        label: 'Jan',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 41000000000,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 84000000000,
-          },
-        ],
-      },
-      {
-        label: 'Feb',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 65000000000,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 12000000000,
-          },
-        ],
-      },
-      {
-        label: 'Mar',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 33000000000,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 28000000000,
-          },
-        ],
-      },
-      {
-        label: 'Apr',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 75000000000,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 42000000000,
-          },
-        ],
-      },
-      {
-        label: 'May',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 44000000000,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 55000000000,
-          },
-        ],
-      },
-    ];
-    this.data = this.chartObjectMapping(data);
+    const param = new DashboardRequest();
+    param.interval = 'month';
+    this.dashboardService.getBalanceChart(param).subscribe((data: BalanceChartView) => {
+      this.data = data;
+      this.data.chart = this.chartObjectMapping(data.chart);
+    });
   }
 
   showByQuater() {
-    const data = [
-      {
-        label: 'Q1',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 11,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 24,
-          },
-        ],
-      },
-      {
-        label: 'Q2',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 45,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 72,
-          },
-        ],
-      },
-      {
-        label: 'Q3',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 83,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 18,
-          },
-        ],
-      },
-      {
-        label: 'Q4',
-        datasets: [
-          {
-            label: 'Tiền Thu',
-            value: 55,
-          },
-          {
-            label: 'Tiền Chi',
-            value: 62,
-          },
-        ],
-      },
-    ];
-    this.data = this.chartObjectMapping(data);
+    const param = new DashboardRequest();
+    param.interval = 'quater';
+    this.dashboardService.getBalanceChart(param).subscribe((data: BalanceChartView) => {
+      this.data = data;
+      this.data.chart = this.chartObjectMapping(data.chart);
+    });
   }
 
   chartObjectMapping(dataInput: Array<any>) {
     const colors = ['#0071c1', '#e46c0d'];
     const datasets: Array<Array<any>> = [];
+
     dataInput.forEach((item) => {
-      item['datasets'].forEach(data => {
+      item['bars'].forEach(data => {
         if (datasets[data.label] === undefined) {
           datasets[data.label] = [];
         }
@@ -347,7 +244,7 @@ export class CashFlowComponent implements OnInit {
           endDate: this.endDate,
         };
         send.datarequest.sendMessageMoneyFund(genledSearch);
-        send.router.navigate([`/pages/moneyfund`]);
+        send.router.navigate([`/pages/Cashbalance`]);
 
 
       },
@@ -396,6 +293,7 @@ export class CashFlowComponent implements OnInit {
         },
       },
       tooltips: {
+        intersect: false,
         callbacks: {
           label: function (tooltipItems, data) {
             return thousandSuffix(tooltipItems.yLabel);

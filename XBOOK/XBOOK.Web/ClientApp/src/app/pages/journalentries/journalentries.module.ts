@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -29,6 +29,7 @@ import {
   NbSearchModule,
   NbAlertModule } from '@nebular/theme';
 import { validateInputAccDirective } from './validate/validateinputacc';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { validateInputAccDirective } from './validate/validateinputacc';
     NgbActiveModal,
     JournalEntryService,
     AccountChartService,
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     TaxService],
   entryComponents: [CreateMoneyReceiptComponent],
 })

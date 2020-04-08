@@ -3,10 +3,10 @@ export class SalesReportData {
   customerName: string;
   invoiceNumber: string;
   invoiceID: string;
-  date: Date;
-  unitPrice: number;
+  issueDate: Date;
+  price: number;
   amount: number;
   discount: number;
-  payment: number;
+  quantity: number;
 }
 

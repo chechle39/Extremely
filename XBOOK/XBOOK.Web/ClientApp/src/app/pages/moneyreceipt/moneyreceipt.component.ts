@@ -12,6 +12,8 @@ import { MoneyReceiptViewModel } from '../_shared/models/money-receipt/money-rec
 import * as _ from 'lodash';
 import { AuthenticationService } from '../../coreapp/services/authentication.service';
 import { CommonService } from '../../shared/service/common.service';
+import { forkJoin } from 'rxjs';
+import { MasterParamService } from '../_shared/services/masterparam.service';
 class PagedMoneyReceiptRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -43,11 +45,11 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     private moneyReceiptService: MoneyReceiptService,
     public authenticationService: AuthenticationService,
     private commonService: CommonService,
+    private masterParamService: MasterParamService,
     private modalService: NgbModal) {
     super(injector);
     this.commonService.CheckAssessFunc('Money Receipt');
     this.searchForm = this.createForm();
-    this.recalculateOnResize(() => this.moneyReceiptList = [...this.moneyReceiptList]);
   }
   protected list(
     request: PagedMoneyReceiptRequestDto,

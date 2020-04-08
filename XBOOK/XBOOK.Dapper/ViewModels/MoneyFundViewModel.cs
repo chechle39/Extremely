@@ -6,22 +6,24 @@ namespace XBOOK.Dapper.ViewModels
 {
     public class MoneyFundViewModel
     {
-        public string MoneyFund { get; set; }
-        public string InvoiceNumber { get; set; }
-        public string InvoiceID { get; set; }
-        public DateTime Date { get; set; }
+        public decimal OpeningBalance { get; set; }
+        public string ReceiptType { get; set; }
+        public string CashType { get; set; }
+        public string ReceiptNumber { get; set; }
+        public string ReceiptID { get; set; }
+        public DateTime ReceiptDate { get; set; }
         public string Note { get; set; }
-        public decimal CollectMoney { get; set; }
-        public decimal PayMoney { get; set; }
-        public decimal ResidualFund { get; set; }
-
+        public string CompanyName { get; set; }
+        public decimal Receive { get; set; }
+        public decimal Pay { get; set; }
+        public decimal ClosingBalance { get; set; }
     }
     public class MoneyFundViewModelGroupViewModel
     {
-        public string MoneyFund { get; set; }
-        public decimal totalCollectMoney { get; set; }
-        public decimal TotalPayMoney { get; set; }
-        public decimal totalResidualFund { get; set; }
+        public string CashType { get; set; }
+        public decimal totalReceive { get; set; }
+        public decimal TotalPay { get; set; }
+        public decimal totalClosingBalance { get; set; }
         public List<MoneyFundViewModel> MoneyFundData { get; set; }
     }
     public class MoneyFundViewModelPrintViewodel
@@ -31,14 +33,17 @@ namespace XBOOK.Dapper.ViewModels
         public string companyAddress { get; set; }
         public string endDate { get; set; }
         public string startDate { get; set; }
-        public string MoneyFund { get; set; }
-        public string InvoiceNumber { get; set; }
-        public string InvoiceID { get; set; }
-        public DateTime Date { get; set; }
+        public decimal OpeningBalance { get; set; }
+        public string ReceiptType { get; set; }
+        public string CashType { get; set; }
+        public string ReceiptNumber { get; set; }
+        public string ReceiptID { get; set; }
+        public DateTime ReceiptDate { get; set; }
         public string Note { get; set; }
-        public decimal CollectMoney { get; set; }
-        public decimal PayMoney { get; set; }
-        public decimal ResidualFund { get; set; }
+        public string CompanyName { get; set; }
+        public decimal Receive { get; set; }
+        public decimal Pay { get; set; }
+        public decimal ClosingBalance { get; set; }
 
     }
 

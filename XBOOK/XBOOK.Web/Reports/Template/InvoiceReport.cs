@@ -24,9 +24,9 @@ namespace XBOOK.Web.Reports
            
             public List<SaleInvoicePrintModel> Data()
             {
-              
+                var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
                 var itemss = new List<SaleInvoicePrintModel>();
-                var folderName = Path.Combine("Reports", "Data");
+                var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 var fileName = "InvoiceReport.json";
                 var fullPath = Path.Combine(pathToSave, fileName);

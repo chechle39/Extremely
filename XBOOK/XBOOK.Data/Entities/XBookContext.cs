@@ -98,18 +98,23 @@ namespace XBOOK.Data.Entities
                 var email = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split("Bearer");
                 if (_httpContextAccessor.HttpContext.User.Claims.ToList().Count > 0)
                 {
-                    var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-                    var connectionString1 = _configuration.GetConnectionString(code);
-                    optionsBuilder.UseSqlServer(connectionString1);
+                    var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+                    var findUser = _userCommonRepository.FindUserCommon(code).Result;
+                    optionsBuilder.UseSqlServer(findUser.ConnectionString);
                 }
                 else
                 {
-                    if ("" != email[1].Substring(1))
+                    if (email.ToList().Count() > 1)
                     {
-                        var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
-                        var connectionString1 = _configuration.GetConnectionString(code.Code);
-                        optionsBuilder.UseSqlServer(connectionString1);
+                        if ("" != email[1].Substring(1))
+                        {
+                            var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
+                            var connectionString1 = code.ConnectionString;
+                            optionsBuilder.UseSqlServer(connectionString1);
+                        }
                     }
+                    
+                   
                    
                 }
 

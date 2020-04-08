@@ -62,11 +62,6 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('Account Detail');
-    this.recalculateOnResize(() => {
-      this.genViews.forEach((view, index) => {
-        this.genViews[index].accountDetailViewModel = [...view.accountDetailViewModel];
-      });
-    });
   }
 
   protected list(
@@ -81,8 +76,8 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
     const genledSearch = {
       startDate: this.firstDate === undefined ? null : this.firstDate,
       endDate: this.endDate1 === undefined ? null : this.endDate1,
-      money: null,
-      productName: null,
+      client: null,
+      accountNumber: null,
     };
 
 
@@ -121,7 +116,7 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
           startDate: result.startDate,
           endDate: result.endDate,
           client: result.client,
-          product: result.product,
+          accountNumber: result.acountNumberMethod,
         };
         this.exportCSV = result;
         this.accountDetailService.searchGen(genledSearch).subscribe(rp => {

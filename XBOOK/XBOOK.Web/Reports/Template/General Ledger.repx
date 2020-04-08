@@ -1,262 +1,253 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="19.2.4.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="GenLedGroupReport" DisplayName="General Ledger" ScriptsSource="private void pageInfo1_PrintOnPage(object sender, DevExpress.XtraReports.UI.PrintOnPageEventArgs e) {&#xD;&#xA;  {&#xD;&#xA;            if (e.PageIndex == 0)&#xD;&#xA;                e.Cancel =true;&#xD;&#xA;        }&#xD;&#xA;}&#xD;&#xA;" Margins="49, 50, 51, 51" PageWidth="850" PageHeight="1100" Version="19.2" DataSource="#Ref-0" Font="Arial, 9.75pt">
+<XtraReportsLayoutSerializer SerializerVersion="19.2.4.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="GenLedGroupReport" DisplayName="General Ledger" ScriptsSource="private void pageInfo1_PrintOnPage(object sender, DevExpress.XtraReports.UI.PrintOnPageEventArgs e) {&#xD;&#xA;  {&#xD;&#xA;            if (e.PageIndex == 0)&#xD;&#xA;                e.Cancel =true;&#xD;&#xA;        }&#xD;&#xA;}&#xD;&#xA;" Margins="49, 63, 49, 51" PageWidth="850" PageHeight="1100" Version="19.2" DataSource="#Ref-0" Font="Arial, 9.75pt">
   <Bands>
-    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="51" />
-    <Item2 Ref="3" ControlType="PageHeaderBand" Name="PageHeader" HeightF="135.500015">
+    <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="48.92" />
+    <Item2 Ref="3" ControlType="PageHeaderBand" Name="PageHeader" HeightF="151.65">
       <Controls>
-        <Item1 Ref="4" ControlType="XRLabel" Name="label19" Multiline="true" Text="label19" TextAlignment="MiddleLeft" SizeF="372.916748,23" LocationFloat="26.0417614, 10.0000067" Padding="2,2,0,0,100">
+        <Item1 Ref="4" ControlType="XRLabel" Name="label19" Multiline="true" Text="label19" TextAlignment="MiddleLeft" SizeF="372.916748,25.69" LocationFloat="26.0417614, 0" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="5" EventName="BeforePrint" PropertyName="Text" Expression="[companyName]" />
           </ExpressionBindings>
           <StylePriority Ref="6" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="7" ControlType="XRLabel" Name="label18" Multiline="true" Text="label18" TextAlignment="MiddleLeft" SizeF="259.8867,23.0000038" LocationFloat="26.0417614, 33.0000229" Padding="2,2,0,0,100">
+        <Item2 Ref="7" ControlType="XRLabel" Name="label18" Multiline="true" Text="label18" TextAlignment="MiddleLeft" SizeF="372.91,24.05" LocationFloat="26.0417614, 25.52" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="8" EventName="BeforePrint" PropertyName="Text" Expression="[companyAddress]" />
           </ExpressionBindings>
           <StylePriority Ref="9" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="10" ControlType="XRLabel" Name="label14" Multiline="true" Text="Mẫu số : S03b-DN" SizeF="122.791565,23" LocationFloat="548.9582, 10.0000067" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
-          <StylePriority Ref="11" UseFont="false" />
+        <Item3 Ref="10" ControlType="XRLabel" Name="label14" Multiline="true" Text="Mẫu số : S03b-DN" TextAlignment="MiddleCenter" SizeF="124.45,25.52" LocationFloat="550.21, 0" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="11" UseFont="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="12" ControlType="XRLabel" Name="label15" Multiline="true" Text="(Ban hành theo Thông tư : số 200/2014/TT-BTC Ngày 22/12/21014 của Bộ Tài Chính)" TextAlignment="MiddleCenter" SizeF="267.083466,33.41667" LocationFloat="472.916534, 33.0000076" Padding="2,2,0,0,100">
+        <Item4 Ref="12" ControlType="XRLabel" Name="label15" Multiline="true" Text="(Ban hành theo Thông tư : số 200/2014/TT-BTC Ngày 22/12/21014 của Bộ Tài Chính)" TextAlignment="MiddleCenter" SizeF="275.52,71.88" LocationFloat="450.52, 25.52" Padding="2,2,0,0,100">
           <StylePriority Ref="13" UseTextAlignment="false" />
         </Item4>
-        <Item5 Ref="14" ControlType="XRLabel" Name="label13" Multiline="true" Text="Tới ngày" TextAlignment="MiddleLeft" SizeF="60.4166565,23.0000038" LocationFloat="384.374969, 98.62499" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
-          <StylePriority Ref="15" UseFont="false" UseTextAlignment="false" />
+        <Item5 Ref="14" ControlType="XRLabel" Name="label13" Multiline="true" Text="Tới ngày" TextAlignment="MiddleRight" SizeF="201.75,28.73" LocationFloat="398.96, 98.62499" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="15" EventName="BeforePrint" PropertyName="Text" Expression="Concat('Tới ngày',Max([dateIssue]) ) " />
+          </ExpressionBindings>
+          <StylePriority Ref="16" UseFont="false" UseTextAlignment="false" />
         </Item5>
-        <Item6 Ref="16" ControlType="XRLabel" Name="label12" Multiline="true" Text="Từ ngày" TextAlignment="MiddleLeft" SizeF="59.37509,23.0000038" LocationFloat="240.277771, 98.62499" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
-          <StylePriority Ref="17" UseFont="false" UseTextAlignment="false" />
+        <Item6 Ref="17" ControlType="XRLabel" Name="label11" TextFormatString="{0:yy/MM/dd}" Multiline="true" Text="label11" TextAlignment="MiddleLeft" SizeF="197.92,28.73" LocationFloat="201.04, 98.62499" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="18" EventName="BeforePrint" PropertyName="Text" Expression="Concat('Từ ngày',Min([dateIssue]) ) " />
+          </ExpressionBindings>
+          <StylePriority Ref="19" UseFont="false" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="18" ControlType="XRLabel" Name="label11" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="label11" TextAlignment="MiddleLeft" SizeF="86.80551,23.0000038" LocationFloat="298.611176, 98.62499" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
-          <ExpressionBindings>
-            <Item1 Ref="19" EventName="BeforePrint" PropertyName="Text" Expression="Min([dateIssue])" />
-          </ExpressionBindings>
-          <StylePriority Ref="20" UseFont="false" UseTextAlignment="false" />
+        <Item7 Ref="20" ControlType="XRLabel" Name="label9" Multiline="true" Text="SỔ CÁI" TextAlignment="MiddleCenter" SizeF="151.04,49.04" LocationFloat="299.48, 49.48" Font="Arial, 15.75pt, charSet=0" Padding="2,2,0,0,100">
+          <StylePriority Ref="21" UseFont="false" UseTextAlignment="false" />
         </Item7>
-        <Item8 Ref="21" ControlType="XRLabel" Name="label10" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="label10" TextAlignment="MiddleLeft" SizeF="71.87494,23.0000038" LocationFloat="444.791626, 98.62499" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
-          <ExpressionBindings>
-            <Item1 Ref="22" EventName="BeforePrint" PropertyName="Text" Expression="Max([dateIssue])" />
-          </ExpressionBindings>
-          <StylePriority Ref="23" UseFont="false" UseTextAlignment="false" />
-        </Item8>
-        <Item9 Ref="24" ControlType="XRLabel" Name="label9" Multiline="true" Text="SỔ CÁI" TextAlignment="MiddleCenter" SizeF="145.138733,43.83332" LocationFloat="299.6529, 54.79167" Font="Arial, 15.75pt, charSet=0" Padding="2,2,0,0,100">
-          <StylePriority Ref="25" UseFont="false" UseTextAlignment="false" />
-        </Item9>
       </Controls>
     </Item2>
-    <Item3 Ref="26" ControlType="GroupHeaderBand" Name="GroupHeader1" HeightF="108.333336" KeepTogether="true">
+    <Item3 Ref="22" ControlType="GroupHeaderBand" Name="GroupHeader1" HeightF="108.333336" KeepTogether="true">
       <GroupFields>
-        <Item1 Ref="27" FieldName="accNumber" />
+        <Item1 Ref="23" FieldName="accNumber" />
       </GroupFields>
       <Controls>
-        <Item1 Ref="28" ControlType="XRLabel" Name="label1" Multiline="true" Text="label1" TextAlignment="MiddleCenter" SizeF="56.87497,32.7083244" LocationFloat="106.388885, 10.0000067" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+        <Item1 Ref="24" ControlType="XRLabel" Name="label1" Multiline="true" Text="label1" TextAlignment="MiddleCenter" SizeF="50.6,32.7083244" LocationFloat="100, 10.0000067" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="29" EventName="BeforePrint" PropertyName="Text" Expression="[accNumber]" />
+            <Item1 Ref="25" EventName="BeforePrint" PropertyName="Text" Expression="[accNumber]" />
           </ExpressionBindings>
-          <StylePriority Ref="30" UseFont="false" UseTextAlignment="false" />
+          <StylePriority Ref="26" UseFont="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="31" ControlType="XRLabel" Name="label17" Multiline="true" Text="-" TextAlignment="MiddleLeft" SizeF="10,32.70836" LocationFloat="163.263855, 10.0000381" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
-          <StylePriority Ref="32" UseFont="false" UseTextAlignment="false" />
-        </Item2>
-        <Item3 Ref="33" ControlType="XRLabel" Name="label16" Multiline="true" Text="label16" TextAlignment="MiddleLeft" SizeF="266.874878,32.7083244" LocationFloat="173.26384, 10.0000381" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+        <Item2 Ref="27" ControlType="XRLabel" Name="label16" Multiline="true" Text="label16" TextAlignment="MiddleLeft" SizeF="300.01,31.65" LocationFloat="150.52, 10.0000381" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
-            <Item1 Ref="34" EventName="BeforePrint" PropertyName="Text" Expression="[AccountBalanceViewModel].[accName]" />
+            <Item1 Ref="28" EventName="BeforePrint" PropertyName="Text" Expression="[AccountBalanceViewModel].[accName]" />
           </ExpressionBindings>
-          <StylePriority Ref="35" UseFont="false" UseTextAlignment="false" />
+          <StylePriority Ref="29" UseFont="false" UseTextAlignment="false" />
+        </Item2>
+        <Item3 Ref="30" ControlType="XRLabel" Name="label2" Multiline="true" Text="Tài khoản:" TextAlignment="MiddleCenter" SizeF="73.95,32.7083244" LocationFloat="26.04173, 10.0000067" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="31" UseFont="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="36" ControlType="XRLabel" Name="label2" Multiline="true" Text="Tài khoản:" TextAlignment="MiddleCenter" SizeF="80.34719,32.7083244" LocationFloat="26.04173, 10.0000067" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
-          <StylePriority Ref="37" UseFont="false" UseTextAlignment="false" />
-        </Item4>
-        <Item5 Ref="38" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="696.875,65.625" LocationFloat="26.0416985, 42.7083321" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,96" BorderColor="Gainsboro" Borders="All">
+        <Item4 Ref="32" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="700.005,65.625" LocationFloat="26.0416985, 42.7083321" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,96" BorderColor="Gainsboro" Borders="All">
           <Rows>
-            <Item1 Ref="39" ControlType="XRTableRow" Name="tableRow1" Weight="1.6249995994568482">
+            <Item1 Ref="33" ControlType="XRTableRow" Name="tableRow1" Weight="1.6249995994568482">
               <Cells>
-                <Item1 Ref="40" ControlType="XRTableCell" Name="tableCell1" Weight="0.79723183550604981" Multiline="true" Text="Ngày,tháng ghi sổ" TextAlignment="MiddleCenter">
-                  <StylePriority Ref="41" UseTextAlignment="false" />
+                <Item1 Ref="34" ControlType="XRTableCell" Name="tableCell1" Weight="1.0717688700275492" Multiline="true" Text="Ngày,tháng ghi sổ" TextAlignment="MiddleCenter">
+                  <StylePriority Ref="35" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="42" ControlType="XRTableCell" Name="tableCell2" Weight="1.2027681644939503" Multiline="true" Text="Số hiệu" />
-                <Item3 Ref="43" ControlType="XRTableCell" Name="tableCell4" Weight="1.1972316631714852" Multiline="true" Text="Diễn giải" />
-                <Item4 Ref="44" ControlType="XRTableCell" Name="tableCell5" Weight="0.80276833682851478" Multiline="true" Text="TK đối ứng" />
-                <Item5 Ref="45" ControlType="XRTableCell" Name="tableCell6" Weight="1" Multiline="true" Text="Phát sinh nợ" />
-                <Item6 Ref="46" ControlType="XRTableCell" Name="tableCell3" Weight="1" Multiline="true" Text="Phát sinh có" />
+                <Item2 Ref="36" ControlType="XRTableCell" Name="tableCell2" Weight="0.85651278791350816" Multiline="true" Text="Số hiệu" />
+                <Item3 Ref="37" ControlType="XRTableCell" Name="tableCell4" Weight="1.2825306080377581" Multiline="true" Text="Diễn giải" />
+                <Item4 Ref="38" ControlType="XRTableCell" Name="tableCell5" Weight="0.86546963601082982" Multiline="true" Text="TK đối ứng" />
+                <Item5 Ref="39" ControlType="XRTableCell" Name="tableCell6" Weight="0.87166878183183916" Multiline="true" Text="Phát sinh nợ" />
+                <Item6 Ref="40" ControlType="XRTableCell" Name="tableCell3" Weight="1.078997725219178" Multiline="true" Text="Phát sinh có" />
               </Cells>
             </Item1>
-            <Item2 Ref="47" ControlType="XRTableRow" Name="tableRow2" Weight="1">
+            <Item2 Ref="41" ControlType="XRTableRow" Name="tableRow2" Weight="1">
               <Cells>
-                <Item1 Ref="48" ControlType="XRTableCell" Name="tableCell7" Weight="0.79723168344613982" Multiline="true" Text="A" />
-                <Item2 Ref="49" ControlType="XRTableCell" Name="tableCell8" Weight="1.2027683165538603" Multiline="true" Text="B" />
-                <Item3 Ref="50" ControlType="XRTableCell" Name="tableCell9" Weight="1.1972310549318452" Multiline="true" Text="C" />
-                <Item4 Ref="51" ControlType="XRTableCell" Name="tableCell10" Weight="0.80276894506815477" Multiline="true" Text="D" />
-                <Item5 Ref="52" ControlType="XRTableCell" Name="tableCell11" Weight="1" Multiline="true" Text="1" />
-                <Item6 Ref="53" ControlType="XRTableCell" Name="tableCell12" Weight="1" Multiline="true" Text="2" />
+                <Item1 Ref="42" ControlType="XRTableCell" Name="tableCell7" Weight="1.0716827703432603" Multiline="true" Text="A" />
+                <Item2 Ref="43" ControlType="XRTableCell" Name="tableCell8" Weight="0.8565954811882408" Multiline="true" Text="B" />
+                <Item3 Ref="44" ControlType="XRTableCell" Name="tableCell9" Weight="1.2825255088732572" Multiline="true" Text="C" />
+                <Item4 Ref="45" ControlType="XRTableCell" Name="tableCell10" Weight="0.86538357871482685" Multiline="true" Text="D" />
+                <Item5 Ref="46" ControlType="XRTableCell" Name="tableCell11" Weight="0.87175492333972948" Multiline="true" Text="1" />
+                <Item6 Ref="47" ControlType="XRTableCell" Name="tableCell12" Weight="1.0789977753389532" Multiline="true" Text="2" />
               </Cells>
             </Item2>
           </Rows>
-          <StylePriority Ref="54" UseFont="false" UseBorderColor="false" UseBorders="false" UseTextAlignment="false" />
-        </Item5>
+          <StylePriority Ref="48" UseFont="false" UseBorderColor="false" UseBorders="false" UseTextAlignment="false" />
+        </Item4>
       </Controls>
     </Item3>
-    <Item4 Ref="55" ControlType="DetailBand" Name="Detail" HeightF="40.625">
+    <Item4 Ref="49" ControlType="DetailBand" Name="Detail" HeightF="40.625">
       <Controls>
-        <Item1 Ref="56" ControlType="XRTable" Name="table2" SizeF="696.875061,40.6249962" LocationFloat="26.0416355, 0" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
+        <Item1 Ref="50" ControlType="XRTable" Name="table2" SizeF="700.005066,40.6249962" LocationFloat="26.0416355, 0" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
           <Rows>
-            <Item1 Ref="57" ControlType="XRTableRow" Name="tableRow3" Weight="1.6249995994568482">
+            <Item1 Ref="51" ControlType="XRTableRow" Name="tableRow3" Weight="1.6249995994568482">
               <Cells>
-                <Item1 Ref="58" ControlType="XRTableCell" Name="tableCell13" Weight="0.80069173066783794" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="tableCell1" TextAlignment="MiddleCenter">
+                <Item1 Ref="52" ControlType="XRTableCell" Name="tableCell13" Weight="1.0716672670439329" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="tableCell1" TextAlignment="MiddleCenter">
                   <ExpressionBindings>
-                    <Item1 Ref="59" EventName="BeforePrint" PropertyName="Text" Expression="[dateIssue]" />
+                    <Item1 Ref="53" EventName="BeforePrint" PropertyName="Text" Expression="[dateIssue]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="54" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="55" ControlType="XRTableCell" Name="tableCell14" Weight="0.85658361377897241" Multiline="true" Text="tableCell2" TextAlignment="MiddleCenter">
+                  <ExpressionBindings>
+                    <Item1 Ref="56" EventName="BeforePrint" PropertyName="Text" Expression="[transactionNo]" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="57" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="58" ControlType="XRTableCell" Name="tableCell15" Weight="1.2825938380204394" Multiline="true" Text="tableCell4" TextAlignment="MiddleLeft">
+                  <ExpressionBindings>
+                    <Item1 Ref="59" EventName="BeforePrint" PropertyName="Text" Expression="[note]" />
                   </ExpressionBindings>
                   <StylePriority Ref="60" UseTextAlignment="false" />
-                </Item1>
-                <Item2 Ref="61" ControlType="XRTableCell" Name="tableCell14" Weight="1.1993082693321619" Multiline="true" Text="tableCell2" TextAlignment="MiddleCenter">
+                </Item3>
+                <Item4 Ref="61" ControlType="XRTableCell" Name="tableCell16" Weight="0.8652858746563149" Multiline="true" Text="tableCell5" TextAlignment="MiddleCenter">
                   <ExpressionBindings>
-                    <Item1 Ref="62" EventName="BeforePrint" PropertyName="Text" Expression="[transactionNo]" />
+                    <Item1 Ref="62" EventName="BeforePrint" PropertyName="Text" Expression="[crspAccNumber]" />
                   </ExpressionBindings>
                   <StylePriority Ref="63" UseTextAlignment="false" />
-                </Item2>
-                <Item3 Ref="64" ControlType="XRTableCell" Name="tableCell15" Weight="1.2006910261235884" Multiline="true" Text="tableCell4" TextAlignment="MiddleLeft">
+                </Item4>
+                <Item5 Ref="64" ControlType="XRTableCell" Name="tableCell17" Weight="0.87174323192986947" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell6" TextAlignment="MiddleRight">
                   <ExpressionBindings>
-                    <Item1 Ref="65" EventName="BeforePrint" PropertyName="Text" Expression="[note]" />
+                    <Item1 Ref="65" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debit]=0,'-',[debit])" />
                   </ExpressionBindings>
                   <StylePriority Ref="66" UseTextAlignment="false" />
-                </Item3>
-                <Item4 Ref="67" ControlType="XRTableCell" Name="tableCell16" Weight="0.79930897387641164" Multiline="true" Text="tableCell5" TextAlignment="MiddleCenter">
+                </Item5>
+                <Item6 Ref="67" ControlType="XRTableCell" Name="tableCell18" Weight="1.0789839096119096" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell3" TextAlignment="MiddleRight">
                   <ExpressionBindings>
-                    <Item1 Ref="68" EventName="BeforePrint" PropertyName="Text" Expression="[crspAccNumber]" />
+                    <Item1 Ref="68" EventName="BeforePrint" PropertyName="Text" Expression="Iif([credit]=0,'-',[credit] )" />
                   </ExpressionBindings>
                   <StylePriority Ref="69" UseTextAlignment="false" />
-                </Item4>
-                <Item5 Ref="70" ControlType="XRTableCell" Name="tableCell17" Weight="1" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell6" TextAlignment="MiddleRight">
-                  <ExpressionBindings>
-                    <Item1 Ref="71" EventName="BeforePrint" PropertyName="Text" Expression="Iif([debit]=0,'-',[debit])" />
-                  </ExpressionBindings>
-                  <StylePriority Ref="72" UseTextAlignment="false" />
-                </Item5>
-                <Item6 Ref="73" ControlType="XRTableCell" Name="tableCell18" Weight="1" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell3" TextAlignment="MiddleRight">
-                  <ExpressionBindings>
-                    <Item1 Ref="74" EventName="BeforePrint" PropertyName="Text" Expression="Iif([credit]=0,'-',[credit] )" />
-                  </ExpressionBindings>
-                  <StylePriority Ref="75" UseTextAlignment="false" />
                 </Item6>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="76" UsePadding="false" UseBorderColor="false" UseBorders="false" />
+          <StylePriority Ref="70" UsePadding="false" UseBorderColor="false" UseBorders="false" />
         </Item1>
       </Controls>
     </Item4>
-    <Item5 Ref="77" ControlType="GroupFooterBand" Name="GroupFooter1" HeightF="129.166672" KeepTogether="true">
+    <Item5 Ref="71" ControlType="GroupFooterBand" Name="GroupFooter1" HeightF="129.166672" KeepTogether="true">
       <Controls>
-        <Item1 Ref="78" ControlType="XRTable" Name="table8" SizeF="696.874939,37.4999962" LocationFloat="26.0416355, 74.37502" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
+        <Item1 Ref="72" ControlType="XRTable" Name="table8" SizeF="699.994934,37.4999962" LocationFloat="26.0416355, 74.37502" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
           <Rows>
-            <Item1 Ref="79" ControlType="XRTableRow" Name="tableRow9" Weight="1">
+            <Item1 Ref="73" ControlType="XRTableRow" Name="tableRow9" Weight="1">
               <Cells>
-                <Item1 Ref="80" ControlType="XRTableCell" Name="tableCell34" Weight="2.6666674467918243" Multiline="true" Text="Số dư cuối kỳ" TextAlignment="MiddleCenter">
+                <Item1 Ref="74" ControlType="XRTableCell" Name="tableCell34" Weight="2.7204308956002872" Multiline="true" Text="Số dư cuối kỳ" TextAlignment="MiddleCenter">
+                  <StylePriority Ref="75" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="76" ControlType="XRTableCell" Name="tableCell35" Weight="0.57825085121064479" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
+                  <ExpressionBindings>
+                    <Item1 Ref="77" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[debitClosing]=0,'-',[AccountBalanceViewModel].[debitClosing])" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="78" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="79" ControlType="XRTableCell" Name="tableCell36" Weight="0.71933438819850681" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
+                  <ExpressionBindings>
+                    <Item1 Ref="80" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[creditClosing]=0,'-',[AccountBalanceViewModel].[creditClosing] )" />
+                  </ExpressionBindings>
                   <StylePriority Ref="81" UseTextAlignment="false" />
-                </Item1>
-                <Item2 Ref="82" ControlType="XRTableCell" Name="tableCell35" Weight="0.66666647690107994" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
-                  <ExpressionBindings>
-                    <Item1 Ref="83" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[debitClosing]=0,'-',[AccountBalanceViewModel].[debitClosing])" />
-                  </ExpressionBindings>
-                  <StylePriority Ref="84" UseTextAlignment="false" />
-                </Item2>
-                <Item3 Ref="85" ControlType="XRTableCell" Name="tableCell36" Weight="0.66666610322925213" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
-                  <ExpressionBindings>
-                    <Item1 Ref="86" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[creditClosing]=0,'-',[AccountBalanceViewModel].[creditClosing] )" />
-                  </ExpressionBindings>
-                  <StylePriority Ref="87" UseTextAlignment="false" />
                 </Item3>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="88" UsePadding="false" UseBorderColor="false" UseBorders="false" />
+          <StylePriority Ref="82" UsePadding="false" UseBorderColor="false" UseBorders="false" />
         </Item1>
-        <Item2 Ref="89" ControlType="XRTable" Name="table7" SizeF="696.874939,37.4999962" LocationFloat="26.0416355, 36.8750267" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
+        <Item2 Ref="83" ControlType="XRTable" Name="table7" SizeF="699.994934,37.4999962" LocationFloat="26.0416355, 36.8750267" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
           <Rows>
-            <Item1 Ref="90" ControlType="XRTableRow" Name="tableRow8" Weight="1">
+            <Item1 Ref="84" ControlType="XRTableRow" Name="tableRow8" Weight="1">
               <Cells>
-                <Item1 Ref="91" ControlType="XRTableCell" Name="tableCell31" Weight="2.6666674467918243" Multiline="true" Text="Tổng phát sinh" TextAlignment="MiddleCenter">
-                  <StylePriority Ref="92" UseTextAlignment="false" />
+                <Item1 Ref="85" ControlType="XRTableCell" Name="tableCell31" Weight="2.7174848658535384" Multiline="true" Text="Tổng phát sinh" TextAlignment="MiddleCenter">
+                  <StylePriority Ref="86" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="93" ControlType="XRTableCell" Name="tableCell32" Weight="0.66666647690107994" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
-                  <Summary Ref="94" Running="Report" />
+                <Item2 Ref="87" ControlType="XRTableCell" Name="tableCell32" Weight="0.58117428694352" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
+                  <Summary Ref="88" Running="Group" />
                   <ExpressionBindings>
-                    <Item1 Ref="95" EventName="BeforePrint" PropertyName="Text" Expression="Iif(sumSum([debit])=0, '-',sumSum([debit]))" />
+                    <Item1 Ref="89" EventName="BeforePrint" PropertyName="Text" Expression="Iif(sumSum([debit])=0, '-',sumSum([debit]))" />
                   </ExpressionBindings>
-                  <StylePriority Ref="96" UseTextAlignment="false" />
+                  <StylePriority Ref="90" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="97" ControlType="XRTableCell" Name="tableCell33" Weight="0.66666610322925213" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
-                  <Summary Ref="98" Running="Report" />
+                <Item3 Ref="91" ControlType="XRTableCell" Name="tableCell33" Weight="0.71933438819850681" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
+                  <Summary Ref="92" Running="Group" />
                   <ExpressionBindings>
-                    <Item1 Ref="99" EventName="BeforePrint" PropertyName="Text" Expression="Iif(sumSum([credit])=0,'-',sumSum([credit]) )" />
+                    <Item1 Ref="93" EventName="BeforePrint" PropertyName="Text" Expression="Iif(sumSum([credit])=0,'-',sumSum([credit]) )" />
                   </ExpressionBindings>
-                  <StylePriority Ref="100" UseTextAlignment="false" />
+                  <StylePriority Ref="94" UseTextAlignment="false" />
                 </Item3>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="101" UsePadding="false" UseBorderColor="false" UseBorders="false" />
+          <StylePriority Ref="95" UsePadding="false" UseBorderColor="false" UseBorders="false" />
         </Item2>
-        <Item3 Ref="102" ControlType="XRTable" Name="table6" SizeF="696.874939,36.8750267" LocationFloat="26.0416355, 0" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
+        <Item3 Ref="96" ControlType="XRTable" Name="table6" SizeF="699.994934,36.8750267" LocationFloat="26.0416355, 0" Padding="8,8,0,0,100" BorderColor="Gainsboro" Borders="All">
           <Rows>
-            <Item1 Ref="103" ControlType="XRTableRow" Name="tableRow7" Weight="1">
+            <Item1 Ref="97" ControlType="XRTableRow" Name="tableRow7" Weight="1">
               <Cells>
-                <Item1 Ref="104" ControlType="XRTableCell" Name="tableCell28" Weight="2.6666674467918243" Multiline="true" Text="Số dư đầu kỳ " TextAlignment="MiddleCenter">
-                  <StylePriority Ref="105" UseTextAlignment="false" />
+                <Item1 Ref="98" ControlType="XRTableCell" Name="tableCell28" Weight="2.7174848658535384" Multiline="true" Text="Số dư đầu kỳ " TextAlignment="MiddleCenter">
+                  <StylePriority Ref="99" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="106" ControlType="XRTableCell" Name="tableCell29" Weight="0.66666647690107994" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
+                <Item2 Ref="100" ControlType="XRTableCell" Name="tableCell29" Weight="0.58117428694352" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
                   <ExpressionBindings>
-                    <Item1 Ref="107" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[debitOpening]=0,'-',[AccountBalanceViewModel].[debitOpening])" />
+                    <Item1 Ref="101" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[debitOpening]=0,'-',[AccountBalanceViewModel].[debitOpening])" />
                   </ExpressionBindings>
-                  <StylePriority Ref="108" UseTextAlignment="false" />
+                  <StylePriority Ref="102" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="109" ControlType="XRTableCell" Name="tableCell30" Weight="0.66666610322925213" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
+                <Item3 Ref="103" ControlType="XRTableCell" Name="tableCell30" Weight="0.71933438819850681" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight">
                   <ExpressionBindings>
-                    <Item1 Ref="110" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[creditOpening]=0,'-', [AccountBalanceViewModel].[creditOpening] )" />
+                    <Item1 Ref="104" EventName="BeforePrint" PropertyName="Text" Expression="Iif([AccountBalanceViewModel].[creditOpening]=0,'-', [AccountBalanceViewModel].[creditOpening] )" />
                   </ExpressionBindings>
-                  <StylePriority Ref="111" UseTextAlignment="false" />
+                  <StylePriority Ref="105" UseTextAlignment="false" />
                 </Item3>
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="112" UsePadding="false" UseBorderColor="false" UseBorders="false" />
+          <StylePriority Ref="106" UsePadding="false" UseBorderColor="false" UseBorders="false" />
         </Item3>
       </Controls>
     </Item5>
-    <Item6 Ref="113" ControlType="ReportFooterBand" Name="ReportFooter" HeightF="126.125084">
+    <Item6 Ref="107" ControlType="ReportFooterBand" Name="ReportFooter" HeightF="126.125084">
       <Controls>
-        <Item1 Ref="114" ControlType="XRLabel" Name="label8" Multiline="true" Text="(Ký, họ tên, đóng dấu)" TextAlignment="MiddleCenter" SizeF="160.416718,23.0000057" LocationFloat="562.4999, 23.0000172" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
-          <StylePriority Ref="115" UseFont="false" UseTextAlignment="false" />
+        <Item1 Ref="108" ControlType="XRLabel" Name="label8" Multiline="true" Text="(Ký, họ tên, đóng dấu)" TextAlignment="MiddleCenter" SizeF="150.83,23.0000057" LocationFloat="575.21, 23.0000172" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
+          <StylePriority Ref="109" UseFont="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="116" ControlType="XRLabel" Name="label5" Multiline="true" Text="Giám đốc" TextAlignment="MiddleCenter" SizeF="160.416718,23" LocationFloat="562.4999, 0" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
-          <StylePriority Ref="117" UseFont="false" UseTextAlignment="false" />
+        <Item2 Ref="110" ControlType="XRLabel" Name="label5" Multiline="true" Text="Giám đốc" TextAlignment="MiddleCenter" SizeF="150.83,23" LocationFloat="575.21, 0" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="111" UseFont="false" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="118" ControlType="XRLabel" Name="label4" Multiline="true" Text="Kế toán trưởng" TextAlignment="MiddleCenter" SizeF="112.5,23" LocationFloat="286.458374, 1.66664124" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
-          <StylePriority Ref="119" UseFont="false" UseTextAlignment="false" />
+        <Item3 Ref="112" ControlType="XRLabel" Name="label4" Multiline="true" Text="Kế toán trưởng" TextAlignment="MiddleCenter" SizeF="99.48,23" LocationFloat="299.48, 1.66664124" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="113" UseFont="false" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="120" ControlType="XRLabel" Name="label7" Multiline="true" Text="(Ký, họ tên)" TextAlignment="MiddleCenter" SizeF="112.5,22.9999981" LocationFloat="286.458374, 24.6666584" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
-          <StylePriority Ref="121" UseFont="false" UseTextAlignment="false" />
+        <Item4 Ref="114" ControlType="XRLabel" Name="label7" Multiline="true" Text="(Ký, họ tên)" TextAlignment="MiddleCenter" SizeF="99.48,22.9999981" LocationFloat="299.48, 24.6666584" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
+          <StylePriority Ref="115" UseFont="false" UseTextAlignment="false" />
         </Item4>
-        <Item5 Ref="122" ControlType="XRLabel" Name="label3" Multiline="true" Text="Người ghi sổ" TextAlignment="MiddleCenter" SizeF="100,23" LocationFloat="26.0416985, 1.66664124" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
-          <StylePriority Ref="123" UseFont="false" UseTextAlignment="false" />
+        <Item5 Ref="116" ControlType="XRLabel" Name="label3" Multiline="true" Text="Người ghi sổ" TextAlignment="MiddleCenter" SizeF="100,23" LocationFloat="26.0416985, 1.66664124" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100">
+          <StylePriority Ref="117" UseFont="false" UseTextAlignment="false" />
         </Item5>
-        <Item6 Ref="124" ControlType="XRLabel" Name="label6" Multiline="true" Text="(Ký, họ tên)" TextAlignment="MiddleCenter" SizeF="100,23" LocationFloat="26.041666, 24.6666584" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
-          <StylePriority Ref="125" UseFont="false" UseTextAlignment="false" />
+        <Item6 Ref="118" ControlType="XRLabel" Name="label6" Multiline="true" Text="(Ký, họ tên)" TextAlignment="MiddleCenter" SizeF="100,23" LocationFloat="26.041666, 24.6666584" Font="Arial, 9.75pt, style=Italic" Padding="2,2,0,0,100">
+          <StylePriority Ref="119" UseFont="false" UseTextAlignment="false" />
         </Item6>
       </Controls>
     </Item6>
-    <Item7 Ref="126" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="51" ForeColor="Gainsboro">
+    <Item7 Ref="120" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="51" ForeColor="Gainsboro">
       <Controls>
-        <Item1 Ref="127" ControlType="XRPageInfo" Name="pageInfo1" StartPageNumber="0" TextFormatString="tiep theo trang truoc  -" TextAlignment="MiddleRight" SizeF="147.792084,22.9999962" LocationFloat="504.859833, 17.0000076" ForeColor="DimGray" Padding="2,2,0,0,100" Borders="None">
-          <StylePriority Ref="128" UseForeColor="false" UseBorders="false" UseTextAlignment="false" />
-          <Scripts Ref="129" OnPrintOnPage="pageInfo1_PrintOnPage" />
+        <Item1 Ref="121" ControlType="XRPageInfo" Name="pageInfo1" StartPageNumber="0" TextFormatString="tiep theo trang truoc  -" TextAlignment="MiddleRight" SizeF="152.66,22.9999962" LocationFloat="499.48, 17.0000076" ForeColor="DimGray" Padding="2,2,0,0,100" Borders="None">
+          <StylePriority Ref="122" UseForeColor="false" UseBorders="false" UseTextAlignment="false" />
+          <Scripts Ref="123" OnPrintOnPage="pageInfo1_PrintOnPage" />
         </Item1>
-        <Item2 Ref="130" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Trang {0}/{1}" TextAlignment="MiddleRight" SizeF="73.38977,22.9999962" LocationFloat="652.651855, 17.0000076" ForeColor="DimGray" Padding="2,2,0,0,100" Borders="None">
-          <StylePriority Ref="131" UseForeColor="false" UseBorders="false" UseTextAlignment="false" />
+        <Item2 Ref="124" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Trang {0}/{1}" TextAlignment="MiddleRight" SizeF="73.38977,22.9999962" LocationFloat="652.651855, 17.0000076" ForeColor="DimGray" Padding="2,2,0,0,100" Borders="None">
+          <StylePriority Ref="125" UseForeColor="false" UseBorders="false" UseTextAlignment="false" />
         </Item2>
       </Controls>
-      <StylePriority Ref="132" UseForeColor="false" />
+      <StylePriority Ref="126" UseForeColor="false" />
     </Item7>
   </Bands>
   <ObjectStorage>

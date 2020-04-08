@@ -11,16 +11,17 @@ namespace XBOOK.Web.Reports.Template
     {
         public MoneyFundReport()
         {
-            InitializeComponent();
+           
         }
         public class CreateReport
         {
             public List<MoneyFundViewModelPrintViewodel> Data()
             {
                 var itemss = new List<MoneyFundViewModelPrintViewodel>();
-                var folderName = Path.Combine("Reports", "Data");
+                var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
+                var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                var fileName = "MoneyFundReport.json";
+                var fileName = "CashBalanceReport.json";
                 var fullPath = Path.Combine(pathToSave, fileName);
                 using (StreamReader r = new StreamReader(fullPath))
                 {

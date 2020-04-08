@@ -37,9 +37,10 @@ namespace XBOOK.Dapper.Service
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();                              
                     dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);                  
+                    dynamicParameters.Add("@toDate", toDate);
+                    dynamicParameters.Add("@currency", request.Currency); 
                     return await sqlConnection.QueryAsync<MoneyFundViewModel>(
-                       "Book_MoneyFund", dynamicParameters, commandType: CommandType.StoredProcedure);
+                       "Book_CashBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
             }
         }
@@ -57,21 +58,22 @@ namespace XBOOK.Dapper.Service
                     var dynamicParameters = new DynamicParameters();
                     var results = new List<MoneyFundViewModelGroupViewModel>();                   
                     dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);                   
+                    dynamicParameters.Add("@toDate", toDate);
+                    dynamicParameters.Add("@currency", request.Currency);
                     var res = await sqlConnection.QueryAsync<MoneyFundViewModel>(
-                       "Book_MoneyFund", dynamicParameters, commandType: CommandType.StoredProcedure);
+                       "Book_CashBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
                     List<MoneyFundViewModel> salesReportViewodel = res.ToList();
                     var results1 = from p in salesReportViewodel
-                                   group p by p.MoneyFund into g
-                                   select new { MoneyFund = g.Key, MoneyFundDataListData = g.ToList(), totalCollectMoney = g.Sum(x => x.CollectMoney), TotalPayMoney = g.Sum(x => x.PayMoney), totalResidualFund = g.Sum(x => x.ResidualFund) };
+                                   group p by p.CashType into g
+                                   select new { CashType = g.Key, MoneyFundDataListData = g.ToList(), totalReceive = g.Sum(x => x.Receive), TotalPay = g.Sum(x => x.Pay), totalClosingBalance = g.Sum(x => x.ClosingBalance) };
                     foreach (var item in results1)
                     {
                         var yy = new MoneyFundViewModelGroupViewModel()
                         {
-                            MoneyFund = item.MoneyFund,
-                            totalCollectMoney = item.totalCollectMoney,
-                            TotalPayMoney = item.TotalPayMoney,
-                            totalResidualFund = item.totalResidualFund,
+                            CashType = item.CashType,
+                            totalReceive = item.totalReceive,
+                            TotalPay = item.TotalPay,
+                            totalClosingBalance = item.totalClosingBalance,
                             MoneyFundData = item.MoneyFundDataListData,
                         };
                         results.Add(yy);

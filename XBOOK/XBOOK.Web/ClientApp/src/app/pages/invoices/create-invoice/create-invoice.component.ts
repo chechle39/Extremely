@@ -53,7 +53,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   loadingIndicator = true;
   productViews: any;
   invoiceNumber = '';
-  title = 'New Invoice';
+  title = '';
   saveText = 'Save';
   clients = new Array<ClientSearchModel>();
   clientSelected = new ClientSearchModel();
@@ -86,7 +86,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   taxsText = '% VAT';
   invoiceId = 0;
   editMode = false;
-  viewMode = false;
+  viewMode: boolean;
   focusClient$ = new Subject<string>();
   focusProd$ = new Subject<string>();
   isEditClient = true;
@@ -124,6 +124,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   EditUpload: boolean;
   oldFileLent: number;
   checkUpload: boolean;
+  isCheckHidden: boolean;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -145,12 +146,15 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   ngOnInit() {
+    if (this.router.url === '/pages/invoice/new') {
+      this.viewMode = false;
+    } else {
+      this.viewMode = true;
+    }
     this.createForm();
     this.isRead = false;
     this.getProfiles();
     this.getLastIv();
-    // this.methodEdit_View();
-
   }
 
   getLastIv() {
@@ -159,7 +163,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.listInvoice = response;
       this.createForm();
       if (this.invoiceForm !== undefined) {
-
         this.invoiceFormValueChanges$ = this.invoiceForm.controls.items.valueChanges;
         // subscribe to the stream so listen to changes on units
         this.invoiceFormValueChanges$.subscribe(items => this.updateTotalUnitPrice(items));
@@ -555,7 +558,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.message.warning('Form invalid');
       return;
     }
-    this.viewMode = true;
+    // this.viewMode = true;
     if (!this.invoiceForm.valid && this.invoiceId === 0) {
       const a = this.oldClientId === this.invoiceForm.value.clientId;
       const request = {
@@ -601,7 +604,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         this.invoiceService.getDF().subscribe((x: any) => {
           this.saleInvId = x.invoiceId;
-          // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
             const productId = this.invoiceForm.value.items[i].productName.productID;
             const productName = this.invoiceForm.value.items[i].productName.productName;
@@ -628,6 +630,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
             this.clientSelected.clientId = 0;
             this.createForm();
             this.getLastIv();
+            this.deleteClient();
           });
         });
       });
@@ -637,7 +640,6 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     if (this.invoiceId > 0 && !this.invoiceForm.valid) {
       const checkClientId = this.invoiceForm.value.clientId;
       const saleInvDetailView = [];
-      // tslint:disable-next-line:prefer-for-of
       for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
         if (this.invoiceForm.value.items[ii].productId === undefined) {
           const rs = {
@@ -769,14 +771,18 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           }
           if (this.requestRemove.length > 0) {
             this.requestRemove.forEach(element => {
-              this.invoiceService.deleteInvoiceDetail(element.id).subscribe(() => {
-                // this.notify.success('Successfully Deleted');
-                this.getDataForEditMode();
-                this.requestRemove = [];
-                this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
-              });
+              if (element.id !== 0) {
+                this.invoiceService.deleteInvoiceDetail(element.id).subscribe(() => {
+                  // this.notify.success('Successfully Deleted');
+                  this.getDataForEditMode();
+                  this.requestRemove = [];
+                  this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+                });
+              }
             });
           }
+          this.viewMode = true;
+          this.isCheckHidden = true;
           this.notify.success('Successfully Update');
           this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
         });
@@ -1146,6 +1152,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.invoiceForm.controls.taxCode.enable();
     this.invoiceForm.enable();
     this.viewMode = false;
+    this.isCheckHidden = true;
     this.isRead = false;
   }
   close(result: boolean): void {

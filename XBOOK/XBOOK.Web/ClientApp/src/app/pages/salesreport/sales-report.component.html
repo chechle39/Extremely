@@ -43,11 +43,11 @@
       <div>
         <div class="row" style="padding-top: 3%;color: #546D74">
           <div style="color: #546D74;" class="col-md-6">{{ 'SALE.LIST.TotalAmount' | translate }}</div>
-          <div style="text-align: right;color: #546D74;" class="col-md-6">{{gettotalAmount() | currency:'VND':''}}</div>
+          <div style="text-align: right;color: #546D74;" class="col-md-6">{{gettotalPayment() | currency:'VND':''}}</div>
         </div>
         <div class="row" style="color: #546D74">
           <div style="color: #546D74;" class="col-md-6">{{ 'SALE.LIST.TotalPayment' | translate }}</div>
-          <div style="text-align: right;color: #546D74;" class="col-md-6">{{gettotalPayment() | currency:'VND':''}}
+          <div style="text-align: right;color: #546D74;" class="col-md-6">{{gettotalAmount() | currency:'VND':''}}
           </div>
         </div>
       </div>
@@ -68,9 +68,9 @@
               [limit]="20" [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)"
               [selectAllRowsOnPage]="false">
 
-              <ngx-datatable-column name="{{ 'SALE.LIST.customerName' | translate }}" prop="customerName"  [flexGrow]="3">
+              <ngx-datatable-column name="{{ 'SALE.LIST.customerName' | translate }}" prop="clientName"  [flexGrow]="3">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  <div>{{row.customerName}}</div>
+                  <div>{{row.clientName}}</div>
                 </ng-template>
               </ngx-datatable-column>
 
@@ -85,27 +85,27 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="date" name="{{ 'SALE.LIST.date' | translate }}" [flexGrow]="1"
+              <ngx-datatable-column prop="issueDate" name="{{ 'SALE.LIST.date' | translate }}" [flexGrow]="1"
                 [cellClass]="'col-left'" [headerClass]="'col-left'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="col-left">
                     <div>
-                      {{row.date | date: 'dd/MM/yyyy'}}
+                      {{row.issueDate | date: 'dd/MM/yyyy'}}
                     </div>
                   </div>
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="unitPrice" name="{{ 'SALE.LIST.unitPrice' | translate }}" [flexGrow]="1"
+              <ngx-datatable-column prop="price" name="{{ 'SALE.LIST.unitPrice' | translate }}" [flexGrow]="1"
                 [cellClass]="'text-center'" [headerClass]="'text-center'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="text-center">
                     <div>
                       <div>
-                        <div *ngIf="row.unitPrice !== 0" class="col-more-info">
-                          {{row.unitPrice | currency:'VND':''}}
+                        <div *ngIf="row.price !== 0" class="col-more-info">
+                          {{row.price | currency:'VND':''}}
                         </div>
-                        <div *ngIf="row.unitPrice === 0">
+                        <div *ngIf="row.price === 0">
                           <a>-</a>
                         </div>
                       </div>
@@ -114,12 +114,12 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="amount" name="{{ 'SALE.LIST.amount' | translate }}" [flexGrow]="1"
+              <ngx-datatable-column prop="quantity" name="{{ 'SALE.LIST.amount' | translate }}" [flexGrow]="1"
                 [cellClass]="'text-center'" [headerClass]="'text-center'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="text-center">
                     <div>
-                      {{row.amount}}
+                      {{row.quantity}}
                     </div>
                   </div>
                 </ng-template>
@@ -143,16 +143,16 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column prop="payment" name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'text-right'" [flexGrow]="1"
+              <ngx-datatable-column prop="amount" name="{{ 'SALE.LIST.payment' | translate }}" [cellClass]="'text-right'" [flexGrow]="1"
                 [headerClass]="'text-right'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                   <div class="text-right">
                     <div>
                       <div>
-                        <div *ngIf="row.payment !== 0" class="col-more-info">
-                          {{row.payment | currency:'VND':''}}
+                        <div *ngIf="row.amount !== 0" class="col-more-info">
+                          {{row.amount | currency:'VND':''}}
                         </div>
-                        <div *ngIf="row.payment === 0">
+                        <div *ngIf="row.amount === 0">
                           <a>-</a>
                         </div>
                       </div>
@@ -169,7 +169,7 @@
                     <div class=" text-right datatable__footer__row">
                       <div style="text-align: left;">
                         <div class="card__title"
-                          style="color: rgb(16, 20, 20);inset-block: inherit;width: 300px;">
+                          style="color: rgb(16, 20, 20);inset-block: inherit; position: absolute; left: 0;">
                           {{ 'SALE.LIST.Total' | translate }}
                         </div>
                       </div>
@@ -177,11 +177,11 @@
 
                       <div style="color: rgb(16, 20, 20)">
                         <div class="totalAmount text-center">
-                          <div *ngIf="group.totalAmount  !== 0" class="col-more-info"
+                          <div *ngIf="group.totalQuantity  !== 0" class="col-more-info"
                             style="color: rgb(16, 20, 20)">
-                            {{group.totalAmount  | currency:'VND':''}}
+                            {{group.totalQuantity  | currency:'VND':''}}
                           </div>
-                          <div *ngIf="group.totalAmount   === 0">
+                          <div *ngIf="group.totalQuantity   === 0">
                             <a>-</a>
                           </div>
                         </div>
@@ -200,10 +200,10 @@
 
                       <div style="color: rgb(16, 20, 20)">
                         <div class="totalPayment">
-                          <div *ngIf="group.totalPayment  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                            {{group.totalPayment  | currency:'VND':''}}
+                          <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
+                            {{group.totalAmount  | currency:'VND':''}}
                           </div>
-                          <div *ngIf="group.totalPayment  === 0">
+                          <div *ngIf="group.totalAmount  === 0">
                             <a>-</a>
                           </div>
                         </div>

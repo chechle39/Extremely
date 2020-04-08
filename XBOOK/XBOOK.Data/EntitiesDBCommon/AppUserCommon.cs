@@ -8,5 +8,6 @@ namespace XBOOK.Data.EntitiesDBCommon
         public long ID { get; set; }
         public string Email { get; set; }
         public string Code { get; set; }
+        public string ConnectionString { get; set; }
     }
 }

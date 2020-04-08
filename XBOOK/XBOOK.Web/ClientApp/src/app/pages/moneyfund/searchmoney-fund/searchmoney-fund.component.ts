@@ -113,6 +113,7 @@ export class SearchMoneyFundComponent extends AppComponentBase implements OnInit
         });
       }
       const genledSearch = {
+        money: this.genLedForm.value.currencyMethod,
         startDate: this.firstDate === undefined ? null : this.firstDate,
         endDate: this.endDate === undefined ? null : this.endDate,   
       };

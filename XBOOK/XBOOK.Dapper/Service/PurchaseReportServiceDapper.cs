@@ -36,13 +36,41 @@ namespace XBOOK.Dapper.Service
 
                 {
                     await sqlConnection.OpenAsync();
-                    var dynamicParameters = new DynamicParameters();                   
-                    dynamicParameters.Add("@supplier", request.Supplier);
-                    dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);
-                    dynamicParameters.Add("@productServices", request.ProductName);
-                    return await sqlConnection.QueryAsync<PurchaseReportViewModel>(
-                       "Book_PurchaseReport", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    var dynamicParameters = new DynamicParameters();
+                    if (request.Product != null && request.Client != null)
+                    {
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@supplierName", request.Client);
+                    }
+                    else if (request.Product == null && request.Client != null)
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@supplierName", request.Client);
+                    }
+                    else if (request.Client == null && request.Product != null)
+                    {
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                    else
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                    try
+                    {
+                        return await sqlConnection.QueryAsync<PurchaseReportViewModel>(
+                          "Book_PurchaseReport", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                    
                 }
             }
         }
@@ -58,28 +86,52 @@ namespace XBOOK.Dapper.Service
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
                     var results = new List<PurchaseReportGroupViewModel>();
-                    dynamicParameters.Add("@supplier", request.Supplier);
-                    dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);
-                    dynamicParameters.Add("@productServices", request.ProductName);
-                    var res = await sqlConnection.QueryAsync<PurchaseReportViewModel>(
-                       "Book_PurchaseReport", dynamicParameters, commandType: CommandType.StoredProcedure);
-                    List<PurchaseReportViewModel> salesReportViewodel = res.ToList();
-                    var results1 = from p in salesReportViewodel
-                                   group p by p.ProductName into g
-                                   select new { productName = g.Key, PurchaseReportListData = g.ToList(), TotalAmount = g.Sum(x => x.Amount), TotalDiscount = g.Sum(x => x.Discount), TotalPayment = g.Sum(x => x.Payment) };
-                    foreach (var item in results1)
+                    if (request.Product != null && request.Client != null)
                     {
-                        var yy = new PurchaseReportGroupViewModel()
-                        {
-                            productName = item.productName,
-                            TotalDiscount = item.TotalDiscount,
-                            totalAmount = item.TotalAmount,
-                            totalPayment = item.TotalPayment,
-                            PurchaseReportListData = item.PurchaseReportListData,
-                        };
-                        results.Add(yy);
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@supplierName", request.Client);
                     }
+                    else if (request.Product == null && request.Client != null)
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@supplierName", request.Client);
+                    }
+                    else if (request.Client == null && request.Product != null)
+                    {
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                    else
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                   
+                        var res = await sqlConnection.QueryAsync<PurchaseReportViewModel>(
+                      "Book_PurchaseReport", dynamicParameters, commandType: CommandType.StoredProcedure);
+                        List<PurchaseReportViewModel> salesReportViewodel = res.ToList();
+                        var results1 = from p in salesReportViewodel
+                                       group p by p.ProductName into g
+                                       select new { productName = g.Key, PurchaseReportListData = g.ToList(), TotalAmount = g.Sum(x => x.Amount), TotalDiscount = g.Sum(x => x.Discount), TotalQuantity = g.Sum(x => x.Quantity) };
+                        foreach (var item in results1)
+                        {
+                            var yy = new PurchaseReportGroupViewModel()
+                            {
+                                productName = item.productName,
+                                TotalDiscount = item.TotalDiscount,
+                                totalAmount = item.TotalAmount,
+                                totalQuantity = item.TotalQuantity,
+                                PurchaseReportListData = item.PurchaseReportListData,
+                            };
+                            results.Add(yy);
+                        }
+                  
+                   
+                   
                     return results;
                 }
                 

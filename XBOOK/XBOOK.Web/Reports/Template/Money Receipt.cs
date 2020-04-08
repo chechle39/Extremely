@@ -25,6 +25,7 @@ namespace XBOOK.Web.Reports.Template
     {
         public MoneyReceiptViewModelPrint Data()
         {
+
             var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
             var itemss = new MoneyReceiptViewModelPrint();
             var folderName = Path.Combine("Reports", "Data");

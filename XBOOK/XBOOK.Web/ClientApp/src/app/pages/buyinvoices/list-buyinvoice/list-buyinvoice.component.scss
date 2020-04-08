@@ -9,6 +9,7 @@
 
 nb-card-header,
 nb-card-body {
+  overflow: visible;
   @media screen and (min-width: 992px) {
     min-width: 750px;
   }
@@ -19,9 +20,7 @@ nb-card-body {
   padding-bottom: 0.35rem !important;
 }
 
-:host ::ng-deep .datatable-body-cell {
-  margin-right: -3px;
-}
+
 
 // :host ::ng-deep .datatable-row-group {
 //   height: 45px;
@@ -44,7 +43,7 @@ nb-card-body {
       flex: 0 0 11rem;
     }
     &:nth-child(5) {
-      flex: 0 0 7rem;
+      flex: 0 0 6.5rem;
     }
     &:nth-child(6) {
       flex: 0 0 40px;
@@ -64,4 +63,10 @@ nb-card-body {
   @media screen and (max-width: 767px) {
     font-size: 8px;
   }
+}
+.icon-dollar {
+  white-space: nowrap;
+  margin-right: 5px;
+  margin-left: 3px;
+  opacity: 0.5;
 }

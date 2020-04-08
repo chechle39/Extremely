@@ -79,18 +79,20 @@ export function closest(element: HTMLElement, selector): HTMLElement {
 
 export function thousandSuffix(value: any) {
   // convert to string
-  value += '';
-  return value
-    .split('')
-    .reverse()
-    .map((letter, index, Array) => {
-      if (index !== 0 && index % 3 === 0) {
-        letter += ',';
-      }
-      return letter;
-    })
-    .reverse()
-    .join('');
+  // value += '';
+
+    // return value
+    //   .split('')
+    //   .reverse()
+    //   .map((letter, index, Array) => {
+    //     if (index !== 0 && index % 3 === 0) {
+    //       letter += ',';
+    //     }
+    //     return letter;
+    //   })
+    //   .reverse()
+    //   .join('');
+  return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 
 export function ngbTypeheadScrollToActiveItem(e) {

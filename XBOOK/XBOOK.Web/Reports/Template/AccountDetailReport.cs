@@ -18,7 +18,8 @@ namespace XBOOK.Web.Reports.Template
             public List<AccountDetailPrintViewModel> Data()
             {
                 var itemss = new List<AccountDetailPrintViewModel>();
-                var folderName = Path.Combine("Reports", "Data");
+                var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
+                var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 var fileName = "AccountDetail.json";
                 var fullPath = Path.Combine(pathToSave, fileName);

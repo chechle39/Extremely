@@ -91,7 +91,7 @@
             <div class="form-group col-12 mb-2">
                 <select id="currencyMethod" class="form-control" formControlName="currencyMethod">
                     <option [ngValue]="null">Choose a currency method</option>
-                    <option *ngFor="let method of currencyMethod" [ngValue]="method.CurrencyId">
+                    <option *ngFor="let method of currencyMethod" [ngValue]="method.CurrencyType">
                         {{ method.CurrencyType }}
                     </option>
                 </select>

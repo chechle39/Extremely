@@ -1,7 +1,10 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuService } from './_shared/services/menu.service';
-import { NbMenuComponent } from '@nebular/theme';
+import { NbMenuService } from '@nebular/theme';
+import { DataService } from './_shared/services/data.service';
+import { map, concatAll, mergeMap, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'ngx-pages',
@@ -14,43 +17,70 @@ import { NbMenuComponent } from '@nebular/theme';
   `,
 })
 export class PagesComponent implements OnInit {
+  rawMenu: any;
   menu = [];
   constructor(
     public translate: TranslateService,
     private menuService: MenuService,
+    private menusv: NbMenuService,
+    private data: DataService,
   ) {
+    menusv.onItemClick().subscribe((rp) => {
+      if (rp.item.link !== '/pages/invoice') {
+        this.data.sendApplySearchIv('');
+      }
+      if (rp.item.link !== '/pages/buyinvoice') {
+        this.data.sendApplySearchBuyIv('');
+      }
+      if (rp.item.link !== '/pages/journalentries') {
+        this.data.sendApplySearchJunal('');
+      }
+    });
   }
   ngOnInit(): void {
-    this.menuService.getAllMenu().subscribe((rp: any) => {
-      // this.menu = rp;
+    this.menuService.getAllMenu()
+      .subscribe((rp: any) => {
+        this.rawMenu = rp;
+        this.loadMenu();
+      });
+  }
 
-      for (let i = 0; i < rp.length; i++) {
-        if (rp[i].children.length === 0) {
-          const data = {
-            title: rp[i].title,
-            icon: rp[i].icon,
-            link: rp[i].link,
-          };
-          this.menu.push(data);
-        } else {
-          const data = {
-            title: rp[i].title,
-            icon: rp[i].icon,
-            link: rp[i].link,
-            children: rp[i].children,
-          };
-          this.menu.push(data);
-        }
-
-      }
-      this.setMenuItemActiveWhenExpanded();
+  loadMenu() {
+      const flatenMenu = this.flatten([this.rawMenu, this.rawMenu.map(item => item.children)])
+                              .map(item => item.title);
+      this.translate.stream(flatenMenu)
+        .subscribe(titles => {
+          this.menu = [];
+          for (let i = 0; i < this.rawMenu.length; i++) {
+            if (this.rawMenu[i].children.length === 0) {
+              const data = {
+                title: titles[this.rawMenu[i].title],
+                icon: this.rawMenu[i].icon,
+                link: this.rawMenu[i].link,
+              };
+              this.menu.push(data);
+            } else {
+              const data = {
+                title: titles[this.rawMenu[i].title],
+                icon: this.rawMenu[i].icon,
+                link: this.rawMenu[i].link,
+                children: this.rawMenu[i].children.map(child => {
+                  const subMenu = {...child};
+                  subMenu.title = titles[child.title];
+                  return subMenu;
+                }),
+              };
+              this.menu.push(data);
+            }
+          }
+          this.setMenuItemActiveWhenExpanded();
     });
   }
 
   setMenuItemActiveWhenExpanded() {
     const items = document.getElementById('menuRef')
-    .querySelector('.menu-items')
-    .getElementsByClassName('menu-items');
+      .querySelector('.menu-items')
+      .getElementsByClassName('menu-items');
     if (items) {
       setTimeout(() => {
         Array.from(items).map((element: any) => {
@@ -66,4 +96,15 @@ export class PagesComponent implements OnInit {
       }, 0);
     }
   }
+
+  flatten(ary, ret = []) {
+    for (const entry of ary) {
+        if (Array.isArray(entry)) {
+            this.flatten(entry, ret);
+        } else {
+            ret.push(entry);
+        }
+    }
+    return ret;
+}
 }

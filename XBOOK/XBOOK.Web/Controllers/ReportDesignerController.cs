@@ -46,19 +46,6 @@ namespace XBOOK.Web.Controllers
             }
             return Ok(itemss);
         }
-        public bool SaveDataJson(CompanyModel code)
-        {
-            string json = JsonConvert.SerializeObject(code);
-            var folderName = Path.Combine("Reports", "Company");
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            var fileName = "CompanyExist.json";
-            var fullPath = Path.Combine(pathToSave, fileName);
-            if (!Directory.Exists(pathToSave))
-            {
-                Directory.CreateDirectory(pathToSave);
-            }
-            System.IO.File.WriteAllText(fullPath, json);
-            return true;
-        }
+       
     }
 }

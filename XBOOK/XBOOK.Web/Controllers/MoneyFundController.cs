@@ -41,9 +41,10 @@ namespace XBOOK.Web.Controllers
         public IActionResult SaveFileJson(List<MoneyFundViewModelPrintViewodel> request)
         {
             string json = JsonConvert.SerializeObject(request);
-            var folderName = Path.Combine("Reports", "Data");
+            var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
+            var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            var fileName = "MoneyFundReport.json";
+            var fileName = "CashBalanceReport.json";
 
             var fullPath = Path.Combine(pathToSave, fileName);
             if (!Directory.Exists(pathToSave))

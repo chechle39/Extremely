@@ -31,6 +31,8 @@ namespace XBOOK.Data.Model
         public decimal Credit { get; set; }
         public decimal DebitClosing { get; set; }
         public decimal CreditClosing { get; set; }
+        public decimal DebitOpening { get; set; }
+        public decimal CreditOpening { get; set; }
 
     }
 

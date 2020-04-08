@@ -11,19 +11,19 @@
   <nb-card-body>
     <div class="sale-chart__header">
       <div class="row mx-0">
-        <div class="col-4"><button class="btn sale-chart__button-create">Tạo hoá đơn bán</button></div>
+        <div class="col-4"><button (click)="NewSaleInvoice()" class="btn sale-chart__button-create">Tạo hoá đơn bán</button></div>
         <div class="col-8">
           <div class="row text-right sale-chart__information">
-            <div class="col-9">32 hoá đơn phải thu:</div>
-            <div class="col-3">2.390.000</div>
-            <div class="col-9">4 hoá đơn quá hạn:</div>
-            <div class="col-3">260.000</div>
+            <div class="col-9" *ngIf="data?.ammountOfItemOutstanding && data?.outstanding">{{ data?.ammountOfItemOutstanding }} hoá đơn phải thu:</div>
+            <div class="col-3" *ngIf="data?.ammountOfItemOutstanding && data?.outstanding">{{ data?.outstanding }}</div>
+            <div class="col-9 text-danger" *ngIf="data?.ammountOfItemOverduce && data?.overduce">{{ data?.ammountOfItemOverduce }} hoá đơn quá hạn:</div>
+            <div class="col-3 text-danger" *ngIf="data?.ammountOfItemOverduce && data?.overduce">{{ data?.overduce }}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="sale-chart__chart">
-      <chart type="bar" [data]="data" [options]="options"></chart>
+      <chart type="bar" [data]="data?.chart" [options]="options"></chart>
     </div>
   </nb-card-body>
 </nb-card>

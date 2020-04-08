@@ -1,84 +1,58 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { thousandSuffix } from '../../../shared/utils/util';
 import * as moment from 'moment';
 import { DataService } from '../../_shared/services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../../../shared/service/common.service';
-import { Router } from '@angular/router';
+import { Router, RouterStateSnapshot } from '@angular/router';
+import { DashboardRequest, BalanceChartView, SaleChartView } from '../../_shared/models/dashboard/dashboard.model';
+import { DashboardService } from '../../_shared/services/dashboard.service';
 
 @Component({
   selector: 'xb-sale-chart',
   templateUrl: './sale-chart.component.html',
   styleUrls: ['./sale-chart.component.scss'],
 })
-export class SaleChartComponent implements OnInit {
-  data: any;
+export class SaleChartComponent implements OnInit, OnChanges {
+  @Input() data: SaleChartView = new SaleChartView();
   options: any;
 
   constructor( 
     private datarequest: DataService,
-  
     private modalService: NgbModal,
     private commonService: CommonService,
-    private router: Router) { }
-
+    private router: Router,    
+    private dashboardService: DashboardService) { }
+   
   ngOnInit() {
-    this.showByMonth();
     this.options = this.getOption();
   }
+
+  ngOnChanges(){
+    if (this.data){
+      this.data.chart = this.chartObjectMapping(this.data.chart);
+    }
+  }
+
   NewSaleInvoice(){
     this.router.navigate([`pages/invoice/new`]);
   }
   showByWeek() {
-    const data = [
-      {
-        label: '2 Tuần trước',
-        value: 300,
-      },
-      {
-        label: 'Tuần trước',
-        value: 700,
-      },
-      {
-        label: 'Tuần này',
-        value: 500,
-      },
-      {
-        label: 'Tuần sau',
-        value: 400,
-      },
-      {
-        label: '2 Tuần sau',
-        value: 100,
-      },
-    ];
-    this.data = this.chartObjectMapping(data);
+    const param = new DashboardRequest();
+    param.interval = 'week';
+    this.dashboardService.getSaleChart(param).subscribe((data: SaleChartView) => {
+      this.data = data;
+      this.data.chart = this.chartObjectMapping(data.chart);
+    });
   }
 
   showByMonth() {
-    const data = [
-      {
-        label: 'Feb',
-        value: 2300000000,
-      },
-      {
-        label: 'Mar',
-        value: 1200000000,
-      },
-      {
-        label: 'Tháng này',
-        value: 3500000000,
-      },
-      {
-        label: 'May',
-        value: 800000000,
-      },
-      {
-        label: 'Jun',
-        value: 2500000000,
-      },
-    ];
-    this.data = this.chartObjectMapping(data);
+    const param = new DashboardRequest();
+    param.interval = 'month';
+    this.dashboardService.getSaleChart(param).subscribe((data: SaleChartView) => {
+      this.data = data;
+      this.data.chart = this.chartObjectMapping(data.chart);
+    });
   }
 
   private chartObjectMapping(dataInput: Array<any>) {
@@ -269,15 +243,12 @@ export class SaleChartComponent implements OnInit {
             break;
           }
         }
-        console.log(1)
-        console.log(this.active[0]._view.label)
+       
         const genledSearch = {
           startDate: this.firstDate,
           endDate: this.endDate,          
         };
-        console.log(genledSearch);
-        send.datarequest.sendMessageInvoice(genledSearch);
-        send.router.navigate([`/pages/invoice`]);           
+        send.router.navigate([`/pages/invoice/`], { queryParams: {'startDate': this.firstDate, 'endDate': this.endDate } });           
       },
       responsive: true,
       maintainAspectRatio: false,
@@ -315,6 +286,9 @@ export class SaleChartComponent implements OnInit {
         display: false,
       },
       tooltips: {
+        intersect: false,
+        backgroundColor: 'rgba(0, 0, 0, 0.99)',
+        titleFontColor: '#FFFFFFFF',
         callbacks: {
           label: function (tooltipItems, data) {
             return thousandSuffix(tooltipItems.yLabel);
@@ -335,13 +309,13 @@ export class SaleChartComponent implements OnInit {
         onComplete: function () {
           if (isChartInit) {
             const chartReference = this;
-         //   displayDatasetCallback(chartReference);
+           displayDatasetCallback(chartReference);
             isChartInit = false;
           }
         },
         onProgress: function () {
           const chartReference = this;
-        //  displayDatasetCallback(chartReference);
+         displayDatasetCallback(chartReference);
         },
       },
     };

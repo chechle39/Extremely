@@ -2,10 +2,10 @@
   <div class="card-invoice mx-auto">
     <nb-card-header class="mx-2 border-0 pb-0">
       <div class="row w-100 mx-0 px-4 d-flex justify-content-between">
-        <h1 [hidden]="viewMode" class="invoice__title float-left">{{'INVOICE.NEW.HEADER' | translate}}</h1>
-        <h1 [hidden]="!viewMode" class="invoice__title float-left">{{'INVOICE.NO' | translate}} {{title}}</h1>
+        <h1 *ngIf="viewMode === false && isCheckHidden !== true" class="invoice__title float-left">{{'INVOICE.NEW.HEADER' | translate}}</h1>
+        <h1 *ngIf="viewMode || isCheckHidden === true" class="invoice__title float-left">{{'INVOICE.NO' | translate}} {{title}}</h1>
         <div class="float-right mt-1">
-          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{ 'COMMON.ACTION.PRINT' | translate }}</button>
+          <button *ngIf="viewMode " (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{ 'COMMON.ACTION.PRINT' | translate }}</button>
           <button  *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
           <button [disabled] = "authenticationService.hasPermission('Invoice','create')" *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
           <button [disabled] = "authenticationService.hasPermission('Invoice','update')" *ngIf="viewMode" (click)="redirectToEditInvoice()" class="btn btn-raised btn-success">{{ 'COMMON.ACTION.EDIT' | translate }}</button>
@@ -234,6 +234,7 @@
                               (keydown)="typeheadScrollHandler($event)" placement="bottom"
                               (focus)="onFocus($event)"
                               [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
+
                             <input formControlName="description" #description kendotextbox [readOnly]="isRead"
                               placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}" tabindex="{{i * 4 + 4}}"
                               class="border-0 full-width imput-reference-custom font-italic invoice__font--medium-2 description place-holder__color invoice__input__textbox invoice__input__textbox--disable" />

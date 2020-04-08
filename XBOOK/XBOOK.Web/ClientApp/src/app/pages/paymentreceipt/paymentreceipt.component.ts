@@ -48,7 +48,6 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
     super(injector);
     this.commonService.CheckAssessFunc('Payment Receipt');
     this.searchForm = this.createForm();
-    this.recalculateOnResize(() => this.moneyReceiptList = [...this.moneyReceiptList]);
   }
   protected list(
     request: PagedMoneyReceiptRequestDto,

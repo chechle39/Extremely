@@ -35,6 +35,9 @@ using XBOOK.Data.Repositories;
 using XBOOK.Service.Interfaces;
 using XBOOK.Service.Service;
 using XBOOK.Web.Claims.System;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.Linq;
+using System.IO.Compression;
 
 namespace XBOOK.Web
 {
@@ -235,6 +238,7 @@ namespace XBOOK.Web
             services.AddTransient<ISupplierServiceDapper, SupplierServiceDapper>();
             services.AddTransient<IPaymentReceiptServiceDapper, PaymentReceiptServiceDapper>();
             services.AddTransient<IPermissionDapper, PermissionServiceDapper>();
+            services.AddTransient<IDashboardServiceDapper, DashboardServiceDapper>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
             services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
@@ -258,6 +262,24 @@ namespace XBOOK.Web
             //  var accessor = serviceProvider.GetService<IHttpContextAccessor>();
             //  CreateReport.SetHttpContextAccessor(accessor);
             services.AddMemoryCache();
+
+            //compression static files setting
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+                options.Providers.Add<BrotliCompressionProvider>();
+                options.MimeTypes =
+                    ResponseCompressionDefaults.MimeTypes.Concat(
+                        new[] { "image/svg+xml", "text/css", "application/javascript" });
+            });
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
+            services.Configure<BrotliCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
@@ -274,6 +296,7 @@ namespace XBOOK.Web
             app.UseSwagger();
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
+            app.UseResponseCompression();
 
             app.UseSwaggerUI(c =>
             {

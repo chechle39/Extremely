@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
@@ -72,7 +75,8 @@ namespace XBOOK.Web.Controllers
         public IActionResult SaveFileJson(List<PaymentReceiptPaymentPrint> request)
         {
             string json = JsonConvert.SerializeObject(request);
-            var folderName = Path.Combine("Reports", "Data");
+            var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
+            var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = "PaymentReceipt.json";
 

@@ -38,23 +38,23 @@ namespace XBOOK.Dapper.Service
                     DateTime toDate = DateTime.Parse(deltaTo, new CultureInfo("en-GB"));
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
-                    dynamicParameters.Add("@accountNumber", request.accountNumber);                  
+                    dynamicParameters.Add("@Currency", request.Currency);
                     dynamicParameters.Add("@fromDate", fromDate);
                     dynamicParameters.Add("@toDate", toDate);
-                    dynamicParameters.Add("@Currency", request.Currency);
-                    return await sqlConnection.QueryAsync<AccountBalanceViewModel>(
-                       "AccountBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    var res = await sqlConnection.QueryAsync<AccountBalanceViewModel>(
+                       "Book_AccountBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    return res.Where(x => x.accNumber == request.accountNumber);
                 }
                 else
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
-                    dynamicParameters.Add("@accountNumber", request.accountNumber);
+                    dynamicParameters.Add("@Currency", null);
                     dynamicParameters.Add("@fromDate", null);
                     dynamicParameters.Add("@toDate", null);
-                    dynamicParameters.Add("@Currency", null);
-                    return await sqlConnection.QueryAsync<AccountBalanceViewModel>(
-                       "AccountBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    var res = await sqlConnection.QueryAsync<AccountBalanceViewModel>(
+                      "Book_AccountBalance", dynamicParameters, commandType: CommandType.StoredProcedure);
+                    return res.Where(x => x.accNumber == request.accountNumber);
                 }
             }
         }

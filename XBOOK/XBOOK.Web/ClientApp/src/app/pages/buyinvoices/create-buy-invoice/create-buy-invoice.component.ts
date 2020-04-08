@@ -61,7 +61,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   loadingIndicator = true;
   productViews: any;
   invoiceNumber = '';
-  title = 'New Buy Invoice';
+  title = '';
   saveText = 'Save';
   supplierSelected = new SupplierSearchModel();
   productSelected = new ProductSearchModel();
@@ -93,7 +93,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   taxsText = '% VAT';
   invoiceId = 0;
   editMode = false;
-  viewMode = false;
+  viewMode: boolean ;
   focusClient$ = new Subject<string>();
   focusProd$ = new Subject<string>();
   isEditClient = true;
@@ -128,6 +128,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   isRead: boolean = true;
   EditUpload: boolean;
   checkUpload: boolean;
+  isCheckHidden: boolean;
+
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -151,6 +153,11 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   }
 
   ngOnInit() {
+    if (this.router.url === '/pages/buyinvoice/new') {
+      this.viewMode = false;
+    } else {
+      this.viewMode = true;
+    }
     this.isRead = false;
     this.getProfiles();
     const request = {
@@ -209,12 +216,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   ngAfterViewInit() {
     this.isCheckFc = true;
     this.addEventForInput();
-    this.productInputFocusSub = this.productNameField.changes.subscribe(resp => {
-      if (this.productNameField.length > 1 && this.isCheckFc !== false) {
-        this.productNameField.last.nativeElement.focus();
-        this.isCheckFc = false;
-      }
-    });
+    // this.productInputFocusSub = this.productNameField.changes.subscribe(resp => {
+    //   if (this.productNameField.length > 1 && this.isCheckFc !== false) {
+    //     this.productNameField.last.nativeElement.focus();
+    //     this.isCheckFc = false;
+    //   }
+    // });
   }
   canActionClient(): boolean {
     return (!this.viewMode && this.supplierSelected.supplierID > 0);
@@ -556,7 +563,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       this.message.warning('Form invalid');
       return;
     }
-    this.viewMode = true;
+    // this.viewMode = true;
     if (!this.invoiceForm.valid && this.invoiceId === 0) {
       const a = this.oldsupplierID === this.invoiceForm.value.supplierID;
       const request = {
@@ -632,6 +639,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
             this.supplierSelected.supplierID = 0;
             this.createForm();
             this.getLastIv();
+            this.deleteClient();
           }, () => {
             this.notify.error('Error Add');
           });
@@ -783,14 +791,18 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           }
           if (this.requestRemove.length > 0) {
             this.requestRemove.forEach(element => {
-              this.buyInvoiceService.deleteBuyInvoiceDetail(element.id).subscribe(() => {
-                // this.notify.success('Successfully Deleted');
-                this.getDataForEditMode();
-                this.requestRemove = [];
-                this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
-              });
+              if (element.id  > 0) {
+                this.buyInvoiceService.deleteBuyInvoiceDetail(element.id).subscribe(() => {
+                  // this.notify.success('Successfully Deleted');
+                  this.getDataForEditMode();
+                  this.requestRemove = [];
+                  this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+                });
+              }
             });
           }
+          this.viewMode = true;
+          this.isCheckHidden = true;
           this.notify.success('Successfully Update');
           this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
         });
@@ -1160,6 +1172,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     this.invoiceForm.controls.address.enable();
     this.invoiceForm.controls.taxCode.enable();
     this.isRead = false;
+    this.isCheckHidden = true;
   }
   close(result: boolean): void {
     this.activeModal.close(result);

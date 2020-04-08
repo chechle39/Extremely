@@ -65,11 +65,6 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('Sales Report');
-    this.recalculateOnResize(() => {
-      this.genViews.forEach((view, index) => {
-        this.genViews[index].salesReportListData = [...view.salesReportListData];
-      });
-    });
   }
 
   protected list(
@@ -130,7 +125,7 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
   }
   public gettotalPayment(): number {
     return _.sumBy(this.salesViewsrequst, item => {
-      return item.totalPayment;
+      return item.totalQuantity;
     });
   }
 
@@ -141,8 +136,8 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
         const genledSearch = {
           startDate: result.startDate,
           endDate: result.endDate,
-          client: result.client,
-          product: result.product,
+          client:result.client === '' ? null : result.client ,
+          product:result.product === '' ? null :  result.product,
         };
         this.exportCSV = result;
         this.salesReportService.searchGen(genledSearch).subscribe(rp => {
@@ -190,13 +185,13 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
         companyAddress: this.companyAddress,
         companyCode: this.companyCode,
         productName: this.salesViewsreport[j].productName,
-        customerName: this.salesViewsreport[j].customerName,
+        clientName: this.salesViewsreport[j].clientName,
         invoiceNumber: this.salesViewsreport[j].invoiceNumber,
-        date: this.salesViewsreport[j].date,
-        unitPrice: this.salesViewsreport[j].unitPrice,
+        issueDate: this.salesViewsreport[j].issueDate,
+        price: this.salesViewsreport[j].price,
         amount: this.salesViewsreport[j].amount,
         discount: this.salesViewsreport[j].discount,
-        payment: this.salesViewsreport[j].payment,
+        quantity: this.salesViewsreport[j].quantity,
         startDate: this.startDay === undefined ? this.firstDate : this.startDay,
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };

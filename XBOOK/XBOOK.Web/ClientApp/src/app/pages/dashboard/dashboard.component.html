@@ -1,16 +1,16 @@
 <div class="row dashboard__row">
   <div>
-    <xb-sale-chart class="dashboard__card"></xb-sale-chart>
+    <xb-sale-chart [data]="charts?.chart1" class="dashboard__card"></xb-sale-chart>
   </div>
   <div>
-    <xb-purchase-chart class="dashboard__card"></xb-purchase-chart>
+    <xb-purchase-chart [data]="charts?.chart2" class="dashboard__card"></xb-purchase-chart>
   </div>
 </div>
 <div class="row dashboard__row">
   <div>
-    <xb-cash-flow class="dashboard__card"></xb-cash-flow>
+    <xb-cash-flow [data]="charts?.chart3" class="dashboard__card"></xb-cash-flow>
   </div>
   <div>
-    <xb-sales-figures class="dashboard__card"></xb-sales-figures>
+    <xb-sales-figures [data]="charts?.chart4" class="dashboard__card"></xb-sales-figures>
   </div>
 </div>

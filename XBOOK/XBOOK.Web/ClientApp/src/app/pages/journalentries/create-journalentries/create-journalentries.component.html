@@ -139,10 +139,10 @@
                                         <div class="row header">
                                             <div class="col-4 pl-0">{{ 'PRODUCT.FORM.CREATE.DESCRIPTION' | translate }}</div>
                                             <div class="row col-8 mx-0 border-bottom-0 pl-0">
-                                                <div class="col-4 text-left">{{ 'JUOURNAL.CREATE.ACCOUNT' | translate }}</div>
-                                                <div class="col-4 text-left">{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT' | translate }}</div>
-                                                <div class="col-2 text-right">{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}</div>
-                                                <div class="col-2 text-right">{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}</div>
+                                                <div class="col-3 text-left">{{ 'JUOURNAL.CREATE.ACCOUNT' | translate }}</div>
+                                                <div class="col-3 text-left">{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT' | translate }}</div>
+                                                <div class="col-3 text-right">{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}</div>
+                                                <div class="col-3 text-right">{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}</div>
                                             </div>
                                         </div>
                                         <!-- ngRepeat: item in invoice.items -->
@@ -160,7 +160,7 @@
                                                     </div>
 
                                                     <div class="row col-8 mx-0 border-bottom-0 pl-0 lh-1">
-                                                        <div class="col-4 text-center">
+                                                        <div class="col-3 text-center">
                                                             <input style="opacity: unset" #xxx type="text"
                                                                 (focus)="onFocus($event)" autocomplete="none"
                                                                 [ngbTypeahead]="searchData"
@@ -185,7 +185,7 @@
                                                             </ng-template>
 
                                                         </div>
-                                                        <div class="col-4 text-center">
+                                                        <div class="col-3 text-center">
                                                             <input style="opacity: unset" #xxx type="text"
                                                                 (focus)="onFocus($event)" autocomplete="none"
                                                                 [ngbTypeahead]="searchData"
@@ -214,7 +214,7 @@
 
 
                                                         </div>
-                                                        <div class="col-2 text-left d-inline-grid"
+                                                        <div class="col-3 text-left d-inline-grid"
                                                             *ngIf="isRead === true">
                                                             <input #inputtab
                                                                 [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
@@ -224,7 +224,7 @@
                                                                 class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
                                                                 tabindex="{{i* 4 +3}}" />
                                                         </div>
-                                                        <div class="col-2 text-left" *ngIf="isRead !== true">
+                                                        <div class="col-3 text-left" *ngIf="isRead !== true">
                                                             <input
                                                                 [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                                 digitOnly maxlength="16" formControlName="credit" id="credit{{i}}"
@@ -233,7 +233,7 @@
                                                                 [readOnly]="checkDis(detail.get('debit').value) > 0"
                                                                 class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable" />
                                                         </div>
-                                                        <div class="col-2 text-left d-inline-grid"
+                                                        <div class="col-3 text-left d-inline-grid"
                                                             *ngIf="isRead === true">
                                                             <input #inputtab
                                                                 [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
@@ -243,7 +243,7 @@
                                                                 kendoTextBox
                                                                 class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable" />
                                                         </div>
-                                                        <div class="col-2 text-right" *ngIf="isRead !== true">
+                                                        <div class="col-3 text-right" *ngIf="isRead !== true">
                                                             <input
                                                                 [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
                                                                 digitOnly maxlength="16" formControlName="debit" id="debit{{i}}"

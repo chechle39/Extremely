@@ -5,18 +5,53 @@
     display: inline-block;
     vertical-align:middle;
     height: 1.857em;
+    @media screen  and (max-width:992px){
+        margin: -5px 0.286em 0 0
+    }
 }
 
 :host ::ng-deep .ui-multiselected-item-token {
     background: #007ad9;
     color: #ffffff;
+    @media screen  and (max-width: 766px){
+        height: 18px;
+        margin: -3px 0.286em 0 0;
+        padding: 2px 4px ;
+    }
 }
 
 :host ::ng-deep .ui-multiselected-empty-token {
     background: #d95f00;
     color: #ffffff;
+    @media screen  and (max-width: 766px){
+        height: 18px;
+        margin: -3px 0.286em 0 0;
+        padding: 2px 4px ;
+    }
 }
 :host ::ng-deep .ui-multiselect {
     margin-top: 22px;
-    height: 35px;
+  //  height: 35px;
+}
+
+@media screen  and (max-width:992px){
+   
+    :host ::ng-deep .ui-multiselect {
+        margin-top: 21px;
+      //  height: 30px;
+    }
+}
+@media screen  and (max-width: 766px){
+    :host ::ng-deep .ui-multiselect {
+        margin-top: 11px !important;
+      //  height: 24px !important;
+    }
+   
+}
+.gender {
+    margin-right: 13px;
+}
+.inactive {
+float: left;
+    margin-left: -34px;
 }

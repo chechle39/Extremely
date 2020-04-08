@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { extract } from '../../coreapp/services/i18n.service';
 import { MoneyFundComponent } from './money-fund.component';
 const routes: Routes = [
-  { path: '', component: MoneyFundComponent, data: { title: extract('moneyfund') } }
+  { path: '', component: MoneyFundComponent, data: { title: extract('Cashbalance') } }
 ];
 
 @NgModule({

@@ -91,8 +91,8 @@ namespace XBOOK.Data.Model
 
     public class DateRequest
     {
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string Keyword { get; set; }
     }
 

@@ -1,83 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { thousandSuffix } from '../../../shared/utils/util';
 import * as moment from 'moment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../../../shared/service/common.service';
 import { Router } from '@angular/router';
 import { DataService } from '../../_shared/services/data.service';
+import { DashboardService } from '../../_shared/services/dashboard.service';
+import { DashboardRequest, PurchaseChartView } from '../../_shared/models/dashboard/dashboard.model';
 @Component({
   selector: 'xb-purchase-chart',
   templateUrl: './purchase-chart.component.html',
   styleUrls: ['./purchase-chart.component.scss'],
 })
-export class PurchaseChartComponent implements OnInit {
-  data: any;
+export class PurchaseChartComponent implements OnInit, OnChanges {
+  @Input() data: PurchaseChartView = new PurchaseChartView();
   options: any;
 
   constructor(
     private datarequest: DataService,
     private modalService: NgbModal,
     private commonService: CommonService,
-    private router: Router) { }
+    private router: Router,
+    private dashboardService: DashboardService) { }
 
   ngOnInit() {
-    this.showByMonth();
-
     this.options = this.getOption();
   }
+
+  ngOnChanges(){
+    if (this.data){
+      this.data.chart = this.chartObjectMapping(this.data.chart);
+    }
+  }
+
   NewBuyInvoice() {
     this.router.navigate([`pages/buyinvoice/new`]);
   }
   showByWeek() {
-    const data = [
-      {
-        label: '2 tuần trước',
-        value: 300,
-      },
-      {
-        label: 'Tuần trước',
-        value: 700,
-      },
-      {
-        label: 'Tuần này',
-        value: 500,
-      },
-      {
-        label: 'Tuần sau',
-        value: 400,
-      },
-      {
-        label: '2 Tuần sau',
-        value: 100,
-      },
-    ];
-    this.data = this.chartObjectMapping(data);
+    const param = new DashboardRequest();
+    param.interval = 'week';
+    this.dashboardService.getPurchaseChart(param).subscribe((data: PurchaseChartView) => {
+      this.data = data;
+      this.data.chart = this.chartObjectMapping(data.chart);
+    });
   }
 
   showByMonth() {
-    const data = [
-      {
-        label: 'Feb',
-        value: 23000000000,
-      },
-      {
-        label: 'Mar',
-        value: 1200000000,
-      },
-      {
-        label: 'Tháng này',
-        value: 4500000000,
-      },
-      {
-        label: 'May',
-        value: 800000000,
-      },
-      {
-        label: 'Jun',
-        value: 2500000000,
-      },
-    ];
-    this.data = this.chartObjectMapping(data);
+    const param = new DashboardRequest();
+    param.interval = 'month';
+    this.dashboardService.getPurchaseChart(param).subscribe((data: PurchaseChartView) => {
+      this.data = data;
+      this.data.chart = this.chartObjectMapping(data.chart);
+    });
   }
 
   private chartObjectMapping(dataInput: Array<any>) {
@@ -266,15 +240,14 @@ export class PurchaseChartComponent implements OnInit {
             break;
           }
         }
-        console.log(1)
-        console.log(this.active[0]._view.label)
+      
         const genledSearch = {
           startDate: this.firstDate,
           endDate: this.endDate,          
         };
-        console.log(genledSearch);
-        send.datarequest.sendMessagebuyInvoice(genledSearch);
-        send.router.navigate([`pages/buyinvoice`]);           
+      
+    
+        send.router.navigate([`pages/buyinvoice`], { queryParams: {'startDate': this.firstDate, 'endDate': this.endDate }});           
       },
       responsive: true,
       maintainAspectRatio: false,
@@ -312,6 +285,7 @@ export class PurchaseChartComponent implements OnInit {
         display: false,
       },
       tooltips: {
+        intersect: false,
         callbacks: {
           label: function (tooltipItems, data) {
             return thousandSuffix(tooltipItems.yLabel);

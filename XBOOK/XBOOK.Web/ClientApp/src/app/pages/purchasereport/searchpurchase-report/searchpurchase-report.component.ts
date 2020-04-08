@@ -135,11 +135,25 @@ export class SearchPurchaseReportComponent extends AppComponentBase implements O
           toDate: this.endDate,
         });
       }
+      let supplier = '';
+      // tslint:disable-next-line:prefer-for-of
+      if(this.genLedForm.value.acountNumberMethod1!==null){
+        for (let i = 0; i < this.genLedForm.value.acountNumberMethod1.length; i++) {
+          supplier +=  this.genLedForm.value.acountNumberMethod1[i] + ';' ;
+        }
+      }
+      let product = '';
+      if(this.genLedForm.value.acountNumberMethod!==null){
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.genLedForm.value.acountNumberMethod.length; i++) {
+        product +=  this.genLedForm.value.acountNumberMethod[i] + ';';
+      }
+    }
       const genledSearch = {
         startDate: this.firstDate === undefined ? null : this.firstDate,
         endDate: this.endDate === undefined ? null : this.endDate,
-        client: this.genLedForm.value.acountNumberMethod1,
-        product: this.genLedForm.value.acountNumberMethod,
+        client: supplier,
+        product: product,
         case: this.genLedForm.value.genLedMethods
       };
 

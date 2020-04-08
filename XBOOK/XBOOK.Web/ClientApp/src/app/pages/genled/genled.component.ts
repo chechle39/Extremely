@@ -55,7 +55,6 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('General Ledger');
-    this.recalculateOnResize(() => this.genViews = [...this.genViews]);
   }
 
   protected list(

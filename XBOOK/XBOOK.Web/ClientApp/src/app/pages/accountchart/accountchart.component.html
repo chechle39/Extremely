@@ -13,18 +13,20 @@
           <div ngbDropdownMenu aria-labelledby="bulkActions">
             <button class="dropdown-item"><span class="icon-import"></span>
               {{ 'COMMON.MOREACTION.IMPORT' | translate }} </button>
-            <button [disabled]="authenticationService.hasPermission('Account Chart','create')" class="dropdown-item" (click)="showCreateOrEditAccountDialog()"><span class="icon-export"></span>
+            <button [disabled]="authenticationService.hasPermission('Account Chart','create')" class="dropdown-item"
+              (click)="showCreateOrEditAccountDialog()"><span class="icon-export"></span>
               {{ 'ACCOUNT.CHART.CREATE' | translate }} </button>
           </div>
         </div>
       </div>
       <div class="col-4">
-        <button routerLink="/pages/journalentries/new" class="btn btn-raised mr-1 btn-success float-right">{{'ACCOUNT.CHART.MENPEN' | translate}}</button>
+        <button routerLink="/pages/journalentries/new"
+          class="btn btn-raised mr-1 btn-success float-right">{{'ACCOUNT.CHART.MENPEN' | translate}}</button>
       </div>
     </div>
   </nb-card-header>
   <nb-card-body>
-   
+
     <div class="row">
       <div class="col-md-12">
         <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="data"
@@ -51,13 +53,11 @@
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNAME' | translate}}" prop="accountName">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              {{row.accountName}}
+            <ng-template let-row="row" ngx-datatable-cell-template>{{row.accountName}}
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.TYPE' | translate}}" prop="accountType">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              {{row.accountType}}
+            <ng-template let-row="row" ngx-datatable-cell-template>{{row.accountType}}
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="{{'ACCOUNT.CHART.GRID.HEADER.NUMBERARISED' | translate}}" prop="parentAccount"
@@ -74,12 +74,12 @@
             <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
               <div class="icon-actions">
                 <div class="actions">
-                  <a [hidden] = "authenticationService.hasPermission('Account Chart','update')" class="icon-action">
+                  <a [hidden]="authenticationService.hasPermission('Account Chart','update')" class="icon-action">
                     <span (click)="editAccount(row, $event)" class="icon-edit"></span>
                   </a>
                 </div>
                 <div class="actions">
-                  <a [hidden] = "authenticationService.hasPermission('Account Chart','delete')" class="icon-action">
+                  <a [hidden]="authenticationService.hasPermission('Account Chart','delete')" class="icon-action">
                     <span (click)="deleteAccount(row)" class="icon-delete"></span>
                   </a>
                 </div>

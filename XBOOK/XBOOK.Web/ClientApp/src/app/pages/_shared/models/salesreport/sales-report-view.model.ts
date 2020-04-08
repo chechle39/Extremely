@@ -5,6 +5,6 @@ export class SalesReportListData {
   productName: string;
   totalAmount: number;
   totalDiscount: number;
-  totalPayment: number;
+  totalQuantity: number;
   SalesReportData: SalesReportData[];
 }

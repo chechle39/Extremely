@@ -73,7 +73,8 @@ namespace XBOOK.Web.Controllers
         {
             var savejs = XBOOK.Web.Helpers.GetCompanyCode.SaveDataJson(_httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value);
             string json = JsonConvert.SerializeObject(request);
-            var folderName = Path.Combine("Reports", "Data");
+            var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
+            var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = "MoneyReceipt.json";
 

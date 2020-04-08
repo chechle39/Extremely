@@ -46,7 +46,6 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
     private translate: TranslateService) {
     super(injector);
     this.commonService.CheckAssessFunc('Products');
-    this.recalculateOnResize(() => this.productViews = [...this.productViews]);
   }
   @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   protected list(

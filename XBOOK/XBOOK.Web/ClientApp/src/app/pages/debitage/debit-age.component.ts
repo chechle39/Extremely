@@ -56,31 +56,30 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('Debit Age');
-    this.recalculateOnResize(() => this.debitageViews = [...this.debitageViews]);
   }
   public getfirstMonth(): number {
     return _.sumBy(this.debitageViewsSum, item => {
-      return item.firstMonth;
+      return item.day0To30;
     });
   }
   public getsecondMonth(): number {
     return _.sumBy(this.debitageViewsSum, item => {
-      return item.secondMonth;
+      return item.day31To60;
     });
   }
   public getthirdMonth(): number {
     return _.sumBy(this.debitageViewsSum, item => {
-      return item.thirdMonth;
+      return item.day61To90;
     });
   }
   public getfourthMonth(): number {
     return _.sumBy(this.debitageViewsSum, item => {
-      return item.fourthMonth;
+      return item.day90More;
     });
   }
   public getsumtotal(): number {
     return _.sumBy(this.debitageViewsSum, item => {
-      return item.sumtotal;
+      return item.subTotal;
     });
   }
   protected list(
@@ -172,12 +171,12 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
         companyNameName: this.companyName,
         companyAddress: this.companyAddress,
         companyCode: this.companyCode,
-        companyName: this.debitageViewsSum[j].companyName,
-        firstMonth: this.debitageViewsSum[j].firstMonth,
-        secondMonth: this.debitageViewsSum[j].secondMonth,
-        thirdMonth: this.debitageViewsSum[j].thirdMonth,
-        fourthMonth: this.debitageViewsSum[j].fourthMonth,
-        sumtotal: this.debitageViewsSum[j].sumtotal,
+        clientName: this.debitageViewsSum[j].clientName,
+        day0To30: this.debitageViewsSum[j].day0To30,
+        day31To60: this.debitageViewsSum[j].day31To60,
+        day61To90: this.debitageViewsSum[j].day61To90,
+        day90More: this.debitageViewsSum[j].day90More,
+        subTotal: this.debitageViewsSum[j].subTotal,
         endDate: this.endDate === undefined ? this.today : this.endDate,
         startDate: this.startDay,
       };

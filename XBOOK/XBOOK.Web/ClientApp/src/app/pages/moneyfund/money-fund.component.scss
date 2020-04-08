@@ -1,5 +1,5 @@
-.ngx-datatable .datatable-footer .datatable-footer-inner {
-  display: inline-block !important;
+:host ::ng-deep.ngx-datatable .datatable-footer .datatable-footer-inner {
+  height: unset !important;
 }
 :host ::ng-deep.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
   border-bottom: hidden;
@@ -7,7 +7,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-footer .page-count {
+  height: 0px; 
+}
 :host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
   white-space: nowrap!important;
 }
@@ -26,20 +28,46 @@ padding-top: 0.35rem !important;
 padding-bottom: 0.35rem !important;
 }
 
+:host ::ng-deep {
+  .datatable-header-cell,
+  .datatable-body-cell,
+  .datatable__footer__row > * {
+    &:nth-child(1) {
+      flex: 0 0 6rem;
+    }
+    &:nth-child(2) {
+      flex: 0 0 7rem;
+    }
+    &:nth-child(3) {
+      flex: 1 1 auto;
+    }
+    &:nth-child(4) {
+      flex: 0 0 12rem;
+    }
+    &:nth-child(5) {
+      flex: 0 0 6.5rem;
+    }
+    &:nth-child(6) {
+      flex: 0 0 7rem;
+    }
+  }
+
+  .datatable__footer__row {
+    position: relative;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+}
 
 
 :host ::ng-deep .datatable-row-group {
 height: 25px;
 }
-.totalDiscount{
-  position: absolute; 
-  right: 13.1%;
-}
-.totalAmount{
-  position: absolute; 
-  right: 25.6%;
-}
-.totalPayment{
-  position: absolute;
-  right: 8px;
+::ng-deep :root {
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    font-size: 11px;
+  }
+  @media screen and (max-width: 767px){
+    font-size: 8px;
+  }
 }

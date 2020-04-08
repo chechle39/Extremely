@@ -100,7 +100,7 @@ namespace XBOOK.Web.Controllers
                                         .FileName
                                         .Trim('"');
                     var prf = _iCompanyProfileService.GetInFoProfile();
-                    var imageFolder = $@"C:\uploaded\{prf.Result.code}\BuyInVoice";
+                    var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\BuyInVoice";
 
 
                     if (!Directory.Exists(imageFolder))
@@ -122,7 +122,7 @@ namespace XBOOK.Web.Controllers
         public IActionResult GetFile(requestGetFile request)
         {
             var prf = _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"C:\uploaded\{prf.Result.code}\BuyInVoice";
+            var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\BuyInVoice";
             if (!Directory.Exists(imageFolder))
             {
                 return Ok();
@@ -152,7 +152,7 @@ namespace XBOOK.Web.Controllers
         public IActionResult RemoveFile(ResponseFileName request)
         {
             var prf = _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"C:\uploaded\{prf.Result.code}\BuyInVoice";
+            var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\BuyInVoice";
             System.IO.File.Delete(imageFolder + "\\" + request.FileName);
             return Ok();
         }
@@ -166,7 +166,7 @@ namespace XBOOK.Web.Controllers
             try
             {
                 var prf = _iCompanyProfileService.GetInFoProfile();
-                var imageFolder = $@"C:\uploaded\{prf.Result.code}\BuyInVoice";
+                var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\BuyInVoice";
                 if (!Directory.Exists(imageFolder))
                 {
                     Directory.CreateDirectory(imageFolder);

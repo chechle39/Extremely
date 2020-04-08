@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -41,6 +41,7 @@ import {
    NbActionsModule} from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 import { MasterParamService } from '../_shared/services/masterparam.service';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 
 const components = [
   BuyInvoicesComponent,
@@ -90,6 +91,7 @@ const components = [
     CurrencyPipe,
     NgbActiveModal,
     MasterParamService,
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     TaxService],
   entryComponents: [
     AddPayment2Component,

@@ -44,7 +44,6 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('Supplier');
-    this.recalculateOnResize(() => this.clientViews = [...this.clientViews]);
   }
   @ViewChild('paramTypeSelected', { static: true }) paramTypeSelected: ElementRef;
   protected list(

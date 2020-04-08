@@ -1,48 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="19.2.4.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="AccountBalanceReport" DisplayName="Sales Report" Landscape="true" Margins="54, 65, 46, 101" PaperKind="A4" PageWidth="1169" PageHeight="827" Version="19.2" DataSource="#Ref-0" TextAlignment="TopCenter" Font="Arial, 9.75pt" BorderColor="Gainsboro">
+<XtraReportsLayoutSerializer SerializerVersion="19.2.6.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="AccountBalanceReport" DisplayName="Sales Report" Landscape="true" Margins="50, 65, 46, 101" PaperKind="A4" PageWidth="1169" PageHeight="827" Version="19.2" DataSource="#Ref-0" TextAlignment="TopCenter" Font="Arial, 9.75pt" BorderColor="Gainsboro">
   <Bands>
     <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="46" />
-    <Item2 Ref="3" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="191.458252">
+    <Item2 Ref="3" ControlType="ReportHeaderBand" Name="ReportHeader" HeightF="201.708252">
       <Controls>
-        <Item1 Ref="4" ControlType="XRLine" Name="line1" SizeF="946.625061,14.1667023" LocationFloat="52.2500038, 167.29158" />
-        <Item2 Ref="5" ControlType="XRLabel" Name="label4" Multiline="true" Text="label4" TextAlignment="MiddleLeft" SizeF="294.791656,22.9999981" LocationFloat="52.2500038, 32.9999924" Padding="2,2,0,0,100">
+        <Item1 Ref="4" ControlType="XRLine" Name="line1" SizeF="946.625061,2.708374" LocationFloat="52.2500038, 167.29158" />
+        <Item2 Ref="5" ControlType="XRLabel" Name="label4" Multiline="true" Text="label4" TextAlignment="MiddleLeft" SizeF="294.791656,27.16667" LocationFloat="52.2500038, 23.0000019" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="6" EventName="BeforePrint" PropertyName="Text" Expression="[companyAddress]" />
           </ExpressionBindings>
           <StylePriority Ref="7" UseTextAlignment="false" />
         </Item2>
-        <Item3 Ref="8" ControlType="XRLabel" Name="label3" Multiline="true" Text="label3" TextAlignment="MiddleLeft" SizeF="294.791656,23" LocationFloat="52.2500038, 10.0000067" Padding="2,2,0,0,100">
+        <Item3 Ref="8" ControlType="XRLabel" Name="label3" Multiline="true" Text="label3" TextAlignment="MiddleLeft" SizeF="294.791656,23" LocationFloat="52.2500038, 0" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="9" EventName="BeforePrint" PropertyName="Text" Expression="[companyNameName]" />
           </ExpressionBindings>
           <StylePriority Ref="10" UseTextAlignment="false" />
         </Item3>
-        <Item4 Ref="11" ControlType="XRLabel" Name="label7" TextFormatString="{0:###,###,00}" Multiline="true" Text="label6" TextAlignment="MiddleRight" SizeF="153.125,31.5833435" LocationFloat="845.750061, 135.708237" Font="Arial, 11pt, style=Bold" Padding="10,10,10,10,100">
+        <Item4 Ref="11" ControlType="XRLabel" Name="label7" TextFormatString="{0:###,###,00}" Multiline="true" Text="label6" TextAlignment="BottomRight" SizeF="148.773865,31.5833435" LocationFloat="850.1012, 135.708237" Font="Arial, 11pt, style=Bold" Padding="2,2,0,0,100">
           <Summary Ref="12" Running="Page" />
           <ExpressionBindings>
-            <Item1 Ref="13" EventName="BeforePrint" PropertyName="Text" Expression="sumSum([Payment])" />
+            <Item1 Ref="13" EventName="BeforePrint" PropertyName="Text" Expression="sumSum( [Amount] )" />
           </ExpressionBindings>
           <StylePriority Ref="14" UseFont="false" UsePadding="false" UseTextAlignment="false" />
         </Item4>
-        <Item5 Ref="15" ControlType="XRLabel" Name="label6" TextFormatString="{0:###,###,00}" Multiline="true" Text="label6" TextAlignment="MiddleRight" SizeF="153.125,31.5833435" LocationFloat="845.7502, 104.124893" Font="Arial, 11pt, style=Bold" Padding="10,10,10,10,100">
+        <Item5 Ref="15" ControlType="XRLabel" Name="label6" TextFormatString="{0:###,###,0}" Multiline="true" Text="label6" TextAlignment="BottomRight" SizeF="148.773987,49.4998322" LocationFloat="850.1012, 86.2084045" Font="Arial, 11pt, style=Bold" Padding="2,2,0,0,100">
           <Summary Ref="16" Running="Report" />
           <ExpressionBindings>
-            <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="sumSum([Amount])" />
+            <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="sumSum( [Quantity] )" />
           </ExpressionBindings>
           <StylePriority Ref="18" UseFont="false" UsePadding="false" UseTextAlignment="false" />
         </Item5>
-        <Item6 Ref="19" ControlType="XRLabel" Name="label1" Multiline="true" Text="BÁO CÁO BÁN HÀNG" TextAlignment="MiddleCenter" SizeF="257.291718,42.79167" LocationFloat="414.583435, 43.41672" Font="Arial, 16pt">
+        <Item6 Ref="19" ControlType="XRLabel" Name="label1" Multiline="true" Text="BÁO CÁO BÁN HÀNG" TextAlignment="MiddleCenter" SizeF="354.000122,37.5833168" LocationFloat="347.0417, 48.6250572" Font="Arial, 16pt">
           <StylePriority Ref="20" UseFont="false" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="21" ControlType="XRLabel" Name="label5" Multiline="true" Text="label5" SizeF="257.291718,23" LocationFloat="414.583435, 86.2084045">
+        <Item7 Ref="21" ControlType="XRLabel" Name="label5" Multiline="true" Text="label5" SizeF="354.000275,23" LocationFloat="347.041656, 86.2084045">
           <ExpressionBindings>
             <Item1 Ref="22" EventName="BeforePrint" PropertyName="Text" Expression="Concat('Từ ngày  ',[startDate],'  tới ngày ',[endDate] )" />
           </ExpressionBindings>
         </Item7>
-        <Item8 Ref="23" ControlType="XRLabel" Name="label9" Multiline="true" Text="Tổng giá trị" TextAlignment="MiddleLeft" SizeF="157.291672,31.5833435" LocationFloat="52.2500038, 135.708237" Font="Arial, 11pt, style=Bold" Padding="2,2,0,0,100">
+        <Item8 Ref="23" ControlType="XRLabel" Name="label9" Multiline="true" Text="Tổng giá trị" TextAlignment="BottomLeft" SizeF="146.875,31.5833435" LocationFloat="52.2500038, 135.708237" Font="Arial, 11pt, style=Bold" Padding="2,2,0,0,100">
           <StylePriority Ref="24" UseFont="false" UseTextAlignment="false" />
         </Item8>
-        <Item9 Ref="25" ControlType="XRLabel" Name="label8" Multiline="true" Text="Tổng số lượng" TextAlignment="MiddleLeft" SizeF="157.291672,31.5833588" LocationFloat="52.2500038, 104.124893" Font="Arial, 11pt, style=Bold" Padding="2,2,0,0,100">
+        <Item9 Ref="25" ControlType="XRLabel" Name="label8" Multiline="true" Text="Tổng số lượng" TextAlignment="BottomLeft" SizeF="146.875,49.4998" LocationFloat="52.2500038, 86.2084045" Font="Arial, 11pt, style=Bold" Padding="2,2,0,0,100">
           <StylePriority Ref="26" UseFont="false" UseTextAlignment="false" />
         </Item9>
       </Controls>
@@ -56,19 +56,19 @@
           <Rows>
             <Item1 Ref="30" ControlType="XRTableRow" Name="tableRow2" Weight="1">
               <Cells>
-                <Item1 Ref="31" ControlType="XRTableCell" Name="tableCell7" Weight="1.4866411113700921" Multiline="true" Text="Khách Hàng" />
-                <Item2 Ref="32" ControlType="XRTableCell" Name="tableCell8" Weight="0.77028034582664" Multiline="true" Text="Số Hóa Đơn" />
-                <Item3 Ref="33" ControlType="XRTableCell" Name="tableCell9" Weight="0.743078542803268" Multiline="true" Text="Ngày" />
-                <Item4 Ref="34" ControlType="XRTableCell" Name="tableCell10" Weight="1" Multiline="true" Text="Đơn Giá" />
-                <Item5 Ref="35" ControlType="XRTableCell" Name="tableCell11" Weight="1" Multiline="true" Text="Số Lượng" />
-                <Item6 Ref="36" ControlType="XRTableCell" Name="tableCell12" Weight="1" Multiline="true" Text="Giảm Giá" />
-                <Item7 Ref="37" ControlType="XRTableCell" Name="tableCell14" Weight="1" Multiline="true" Text="Thành Tiền" />
+                <Item1 Ref="31" ControlType="XRTableCell" Name="tableCell7" Weight="1.3171794006320641" Multiline="true" Text="Khách Hàng" />
+                <Item2 Ref="32" ControlType="XRTableCell" Name="tableCell8" Weight="0.86271387287988888" Multiline="true" Text="Số Hóa Đơn" />
+                <Item3 Ref="33" ControlType="XRTableCell" Name="tableCell9" Weight="0.82010672648804717" Multiline="true" Text="Ngày" />
+                <Item4 Ref="34" ControlType="XRTableCell" Name="tableCell10" Weight="1.0847304604498984" Multiline="true" Text="Đơn Giá" />
+                <Item5 Ref="35" ControlType="XRTableCell" Name="tableCell11" Weight="0.71288550956332908" Multiline="true" Text="Số Lượng" />
+                <Item6 Ref="36" ControlType="XRTableCell" Name="tableCell12" Weight="1.1022472106621069" Multiline="true" Text="Giảm Giá" />
+                <Item7 Ref="37" ControlType="XRTableCell" Name="tableCell14" Weight="1.1001368193246657" Multiline="true" Text="Thành Tiền" />
               </Cells>
             </Item1>
           </Rows>
           <StylePriority Ref="38" UseFont="false" UsePadding="false" UseBorders="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="39" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" TextAlignment="MiddleLeft" SizeF="305.208344,36.5416565" LocationFloat="52.2500038, 28.624979" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100">
+        <Item2 Ref="39" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" TextAlignment="MiddleLeft" SizeF="294.791656,36.5416565" LocationFloat="52.2500038, 28.624979" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100">
           <ExpressionBindings>
             <Item1 Ref="40" EventName="BeforePrint" PropertyName="Text" Expression="[ProductName]" />
           </ExpressionBindings>
@@ -83,43 +83,43 @@
           <Rows>
             <Item1 Ref="45" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
-                <Item1 Ref="46" ControlType="XRTableCell" Name="tableCell1" Weight="1.4866411113700921" Multiline="true" Text="tableCell1" TextAlignment="MiddleLeft">
+                <Item1 Ref="46" ControlType="XRTableCell" Name="tableCell1" Weight="1.3171791749639981" Multiline="true" Text="tableCell1" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
-                    <Item1 Ref="47" EventName="BeforePrint" PropertyName="Text" Expression="[CustomerName]" />
+                    <Item1 Ref="47" EventName="BeforePrint" PropertyName="Text" Expression="[clientName]" />
                   </ExpressionBindings>
                   <StylePriority Ref="48" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="49" ControlType="XRTableCell" Name="tableCell2" Weight="0.77028034582663985" Multiline="true" Text="tableCell2" TextAlignment="MiddleLeft">
+                <Item2 Ref="49" ControlType="XRTableCell" Name="tableCell2" Weight="0.86271387287988877" Multiline="true" Text="tableCell2" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="50" EventName="BeforePrint" PropertyName="Text" Expression="[InvoiceNumber]" />
                   </ExpressionBindings>
                   <StylePriority Ref="51" UseTextAlignment="false" />
                 </Item2>
-                <Item3 Ref="52" ControlType="XRTableCell" Name="tableCell3" Weight="0.743078542803268" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="tableCell6">
+                <Item3 Ref="52" ControlType="XRTableCell" Name="tableCell3" Weight="0.82010695215611329" TextFormatString="{0:dd/MM/yyyy}" Multiline="true" Text="tableCell6">
                   <ExpressionBindings>
-                    <Item1 Ref="53" EventName="BeforePrint" PropertyName="Text" Expression="[Date]" />
+                    <Item1 Ref="53" EventName="BeforePrint" PropertyName="Text" Expression="[issueDate]" />
                   </ExpressionBindings>
                 </Item3>
-                <Item4 Ref="54" ControlType="XRTableCell" Name="tableCell4" Weight="1" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell4" TextAlignment="MiddleRight">
+                <Item4 Ref="54" ControlType="XRTableCell" Name="tableCell4" Weight="1.0847304604498984" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell4" TextAlignment="MiddleRight">
                   <ExpressionBindings>
-                    <Item1 Ref="55" EventName="BeforePrint" PropertyName="Text" Expression="Iif([UnitPrice]=0,'-' ,[UnitPrice] )" />
+                    <Item1 Ref="55" EventName="BeforePrint" PropertyName="Text" Expression="Iif([price]=0,'-' , [price] )" />
                   </ExpressionBindings>
                   <StylePriority Ref="56" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="57" ControlType="XRTableCell" Name="tableCell5" Weight="1" Multiline="true" Text="tableCell5">
+                <Item5 Ref="57" ControlType="XRTableCell" Name="tableCell5" Weight="0.71288539672929607" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell5">
                   <ExpressionBindings>
-                    <Item1 Ref="58" EventName="BeforePrint" PropertyName="Text" Expression="[Amount]" />
+                    <Item1 Ref="58" EventName="BeforePrint" PropertyName="Text" Expression="[Quantity]" />
                   </ExpressionBindings>
                 </Item5>
-                <Item6 Ref="59" ControlType="XRTableCell" Name="tableCell13" Weight="1" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell13" TextAlignment="MiddleRight">
+                <Item6 Ref="59" ControlType="XRTableCell" Name="tableCell13" Weight="1.1022473234961399" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell13" TextAlignment="MiddleRight">
                   <ExpressionBindings>
                     <Item1 Ref="60" EventName="BeforePrint" PropertyName="Text" Expression="Iif([Discount]=0,'-' ,[Discount])" />
                   </ExpressionBindings>
                   <StylePriority Ref="61" UseTextAlignment="false" />
                 </Item6>
-                <Item7 Ref="62" ControlType="XRTableCell" Name="tableCell6" Weight="1" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell3" TextAlignment="MiddleRight">
+                <Item7 Ref="62" ControlType="XRTableCell" Name="tableCell6" Weight="1.1001368193246657" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell3" TextAlignment="MiddleRight">
                   <ExpressionBindings>
-                    <Item1 Ref="63" EventName="BeforePrint" PropertyName="Text" Expression="Iif([Payment]=0,'-' ,[Payment])" />
+                    <Item1 Ref="63" EventName="BeforePrint" PropertyName="Text" Expression="Iif( [Amount] =0,'-' , [Amount] )" />
                   </ExpressionBindings>
                   <StylePriority Ref="64" UseTextAlignment="false" />
                 </Item7>
@@ -136,30 +136,30 @@
           <Rows>
             <Item1 Ref="68" ControlType="XRTableRow" Name="tableRow3" Weight="1">
               <Cells>
-                <Item1 Ref="69" ControlType="XRTableCell" Name="tableCell18" Weight="1" Multiline="true" Text="TỔNG" Borders="Left, Top, Bottom">
+                <Item1 Ref="69" ControlType="XRTableCell" Name="tableCell18" Weight="1.31717962630013" Multiline="true" Text="TỔNG" Borders="Left, Top, Bottom">
                   <StylePriority Ref="70" UseBorders="false" />
                 </Item1>
-                <Item2 Ref="71" ControlType="XRTableCell" Name="tableCell20" Weight="1" Multiline="true" Borders="Top, Bottom">
+                <Item2 Ref="71" ControlType="XRTableCell" Name="tableCell20" Weight="0.86271297020762416" Multiline="true" Borders="Top, Bottom">
                   <StylePriority Ref="72" UseBorders="false" />
                 </Item2>
-                <Item3 Ref="73" ControlType="XRTableCell" Name="tableCell21" Weight="1" Multiline="true" Borders="Top, Bottom">
+                <Item3 Ref="73" ControlType="XRTableCell" Name="tableCell21" Weight="0.82010740349224553" Multiline="true" Borders="Top, Bottom">
                   <StylePriority Ref="74" UseBorders="false" />
                 </Item3>
-                <Item4 Ref="75" ControlType="XRTableCell" Name="tableCell19" Weight="1" Multiline="true" Borders="Top, Bottom">
+                <Item4 Ref="75" ControlType="XRTableCell" Name="tableCell19" Weight="1.0847304604498984" Multiline="true" Borders="Top, Bottom">
                   <StylePriority Ref="76" UseBorders="false" />
                 </Item4>
-                <Item5 Ref="77" ControlType="XRTableCell" Name="tableCell15" Weight="1" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell15" TextAlignment="MiddleCenter">
+                <Item5 Ref="77" ControlType="XRTableCell" Name="tableCell15" Weight="0.71288539672929607" TextFormatString="{0:###,###,0}" Multiline="true" Text="tableCell15" TextAlignment="MiddleCenter">
                   <Summary Ref="78" Running="Group" />
                   <ExpressionBindings>
-                    <Item1 Ref="79" EventName="BeforePrint" PropertyName="Text" Expression="sumSum([Amount])" />
+                    <Item1 Ref="79" EventName="BeforePrint" PropertyName="Text" Expression="sumSum( [Quantity] )" />
                   </ExpressionBindings>
                   <StylePriority Ref="80" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="81" ControlType="XRTableCell" Name="tableCell16" Weight="1" Multiline="true" />
-                <Item7 Ref="82" ControlType="XRTableCell" Name="tableCell17" Weight="1" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell17" TextAlignment="MiddleRight">
+                <Item6 Ref="81" ControlType="XRTableCell" Name="tableCell16" Weight="1.1022473234961399" Multiline="true" />
+                <Item7 Ref="82" ControlType="XRTableCell" Name="tableCell17" Weight="1.1001368193246657" TextFormatString="{0:###,###,00}" Multiline="true" Text="tableCell17" TextAlignment="MiddleRight">
                   <Summary Ref="83" Running="Group" />
                   <ExpressionBindings>
-                    <Item1 Ref="84" EventName="BeforePrint" PropertyName="Text" Expression="sumSum([Payment])" />
+                    <Item1 Ref="84" EventName="BeforePrint" PropertyName="Text" Expression="sumSum( [Amount] )" />
                   </ExpressionBindings>
                   <StylePriority Ref="85" UseTextAlignment="false" />
                 </Item7>
@@ -172,7 +172,7 @@
     </Item5>
     <Item6 Ref="87" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="101" />
   </Bands>
-  <ObjectStorage>
+  <ComponentStorage>
     <Item1 Ref="0" ObjectType="DevExpress.DataAccess.ObjectBinding.ObjectDataSource,DevExpress.DataAccess.v19.2" Name="objectDataSource1" Base64="PE9iamVjdERhdGFTb3VyY2UgTmFtZT0ib2JqZWN0RGF0YVNvdXJjZTEiPjxEYXRhU291cmNlIFR5cGU9IlhCT09LLldlYi5SZXBvcnRzLlRlbXBsYXRlLlNhbGVzUmVwb3J0UmVwb3J0K0NyZWF0ZVJlcG9ydCwgWEJPT0suV2ViLCBWZXJzaW9uPTEuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbCIgLz48RGF0YU1lbWJlcj5EYXRhPC9EYXRhTWVtYmVyPjxDb25zdHJ1Y3RvciAvPjwvT2JqZWN0RGF0YVNvdXJjZT4=" />
-  </ObjectStorage>
+  </ComponentStorage>
 </XtraReportsLayoutSerializer>

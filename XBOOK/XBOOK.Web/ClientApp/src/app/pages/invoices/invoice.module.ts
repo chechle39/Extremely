@@ -18,7 +18,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { AvatarModule } from 'ngx-avatar';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
@@ -36,6 +36,7 @@ import { ListPaymentComponent } from './create-invoice/payment/list-payment/list
 import { CreateMoneyReceiptComponent } from '../moneyreceipt/create-money-receipt/create-money-receipt.component';
 import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
 import { MasterParamService } from '../_shared/services/masterparam.service';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 const components = [
   InvoicesComponent,
   ListInvoiceComponent,
@@ -84,6 +85,7 @@ const components = [
     CurrencyPipe,
     MasterParamService,
     NgbActiveModal,
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     TaxService],
 })
 export class InvoicesModule { }

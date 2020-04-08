@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { Observable, Subject, merge, of } from 'rxjs';
+import { Observable, Subject, merge, of, forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { ClientService } from '../../_shared/services/client.service';
@@ -44,6 +44,8 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   @Input() contactName: any;
   @Input() bankAccount: any;
   @Input() row: any;
+  @Input() masTerByPayType;
+  @Input() masTerByMoney;
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
@@ -80,6 +82,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   }
 
   ngOnInit() {
+    this.getDataPayAndEntry();
     if (this.outstandingAmount !== undefined) {
       this.moneyReceipt.controls.amount.patchValue(this.outstandingAmount);
       this.moneyReceipt.controls.clienId.patchValue(this.clientId);
@@ -99,42 +102,38 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         this.masterParamService.GetMasTerByMoneyReceipt().subscribe((rpx: MasterParamModel[]) => {
           this.entryBatternList = rpx;
           const today = new Date(rp.payDate).toLocaleDateString('en-GB');
-        const payDateSplit = today.split('/');
-        const payDatePicker = {
-          year: Number(payDateSplit[2]),
-          month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
-        };
-        this.address = rp.address;
-        this.moneyReceipt.controls.id.patchValue(rp.id);
-        this.moneyReceipt.controls.amount.patchValue(rp.amount);
-        this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
-        this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
-        this.moneyReceipt.controls.clientName.patchValue(rp.clientName);
-        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key
-          === this.row.entryType)[0].key);
-        this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
-        this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
-        this.moneyReceipt.controls.bankAccount.patchValue(rp.bankAccount);
-        this.moneyReceipt.controls.note.patchValue(rp.note);
-        this.moneyReceipt.controls.clienId.patchValue(rp.clientID);
+          const payDateSplit = today.split('/');
+          const payDatePicker = {
+            year: Number(payDateSplit[2]),
+            month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
+          };
+          this.address = rp.address;
+          this.moneyReceipt.controls.id.patchValue(rp.id);
+          this.moneyReceipt.controls.amount.patchValue(rp.amount);
+          this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
+          this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
+          this.moneyReceipt.controls.clientName.patchValue(rp.clientName);
+          this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key
+            === this.row.entryType)[0].key);
+          this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
+          this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
+          this.moneyReceipt.controls.bankAccount.patchValue(rp.bankAccount);
+          this.moneyReceipt.controls.note.patchValue(rp.note);
+          this.moneyReceipt.controls.clienId.patchValue(rp.clientID);
 
-        const data = {
-          clientName: this.moneyReceipt.value.clientName,
-          contactName: this.moneyReceipt.value.receiverName,
-          clientId: this.moneyReceipt.value.clienId,
-          bankAccount: this.moneyReceipt.value.bankAccount,
-        } as ClientSearchModel;
-        this.clientSelected = data;
+          const data = {
+            clientName: this.moneyReceipt.value.clientName,
+            contactName: this.moneyReceipt.value.receiverName,
+            clientId: this.moneyReceipt.value.clienId,
+            bankAccount: this.moneyReceipt.value.bankAccount,
+          } as ClientSearchModel;
+          this.clientSelected = data;
         });
 
       });
 
     }
-    if (this.row === undefined) {
-      this.getLastDataMoneyReceipt();
-      this.getAllEntryData();
-    }
-    this.getPayType();
+
     this.getProfiles();
   }
 
@@ -188,34 +187,26 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     }
   }
 
-  getLastDataMoneyReceipt() {
-    this.moneyReceiptService.getLastMoney().subscribe(rp => {
-      this.LastMoneyReceipt = rp;
-      this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
-    });
-  }
-  getPayType() {
-    this.masterParamService.GetMasTerByPayType().subscribe(rp => {
-      this.payment = rp;
-      if (this.row === undefined) {
-        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
-      } else {
-        // const entry = this.payment.filter(x => x.name === this.row.payType);
-        // this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
-      }
-    });
-  }
-  getAllEntryData() {
-    this.masterParamService.GetMasTerByMoneyReceipt().subscribe((rp: MasterParamModel[]) => {
-      this.entryBatternList = rp;
+  getDataPayAndEntry() {
+    forkJoin(
+      this.masterParamService.GetMasTerByPayType(),
+      this.masterParamService.GetMasTerByMoneyReceipt(),
+      this.moneyReceiptService.getLastMoney(),
+    ).subscribe(([rp1, rp2, rp3]) => {
+      this.payment = rp1;
+      this.entryBatternList = rp2;
       if (this.row === undefined) {
         this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
+        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
       } else {
         const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
-        // this.moneyReceipt.controls.entryType.patchValue(entry[0].key);
       }
+      this.LastMoneyReceipt = rp3;
+      this.moneyReceipt.controls.receiptNumber.patchValue(rp3.receiptNumber);
+
     });
   }
+
   close(result: any): void {
     this.activeModal.close(result);
   }

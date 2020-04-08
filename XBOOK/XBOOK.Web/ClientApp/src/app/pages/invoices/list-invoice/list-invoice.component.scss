@@ -131,7 +131,7 @@
       flex: 0 0 11rem;
     }
     &:nth-child(5) {
-      flex: 0 0 7rem;
+      flex: 0 0 6.5rem;
     }
     &:nth-child(6) {
       flex: 0 0 40px;
@@ -155,7 +155,14 @@
 
 
 nb-card-header, nb-card-body {
+  overflow: visible;
   @media screen and (min-width: 992px) {
     min-width: 750px;
   }
+}
+.icon-dollar {
+  white-space: nowrap;
+  margin-right: 5px;
+  margin-left: 3px;
+  opacity: 0.5;
 }

@@ -1,33 +1,51 @@
-:host ::ng-deep nb-card{
-    chart{
+:host ::ng-deep nb-card {
+    chart {
         height: 100%;
     }
 }
 
-.cash-flow__unit{
+.cash-flow__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.cash-flow__information {
+    font-size: 0.6rem;
+    line-height: 0.9rem;
+    @media screen and (max-width: 1024px) {
+        font-size: 0.8rem;
+        line-height: 1rem;
+    }
+}
+
+.cash-flow__unit {
     position: absolute;
     left: 1.25rem;
-    top: calc(1.1rem + 15px);
+    // top: calc(1.1rem + 15px);
+    top: 10px;
     font-size: 0.6rem;
-    font-weight: 500;
-    color: #666;
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-weight: 400;
+    // color: #666;
+    // font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     @media screen and (max-width: 1200px) {
         font-size: 0.5rem;
-        top: calc(1.3rem + 10px);
+        // top: calc(1.3rem + 10px);
     }
     @media screen and (max-width: 1024px) {
-        top: calc(1.3rem + 10px);
+        // top: calc(1.3rem + 10px);
     }
     @media screen and (max-width: 992px) {
         font-size: 0.8rem;
-        top: calc(1.4rem + 10px);
+        // top: calc(1.4rem + 10px);
     }
     @media screen and (max-width: 768px) {
-        top: calc(1.7rem + 10px);
+        // top: calc(1.7rem + 10px);
     }
     @media screen and (max-width: 575px) {
         font-size: 0.9rem;
-        top: calc(1.9rem + 9px);
+        // top: calc(1.9rem + 9px);
     }
 }

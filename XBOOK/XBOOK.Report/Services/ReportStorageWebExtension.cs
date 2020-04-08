@@ -25,9 +25,10 @@ namespace XBOOK.Report.Services
             _companyProfileReponsitory = companyProfileReponsitory;          
             if (_httpContextAccessor.HttpContext != null)
             {
-                var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-
-                ReportDirectory = Path.Combine(env.ContentRootPath, "Reports", "Template");
+                var code = _companyProfileReponsitory.GetCompanyProFile().Result;
+                //var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\SaleInVoice";
+                //ReportDirectory = Path.Combine(env.ContentRootPath, "Reports", "Template");
+                ReportDirectory = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.code}\Reports\Template";
                 if (!Directory.Exists(ReportDirectory))
                 {
                     Directory.CreateDirectory(ReportDirectory);

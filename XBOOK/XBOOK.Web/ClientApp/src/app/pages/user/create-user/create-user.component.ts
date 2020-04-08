@@ -36,6 +36,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
   listRole: RoleModel[];
   selectedCities: string[];
   selected = [];
+  model;
   constructor(
     injector: Injector,
     public roleService: RoleService,
@@ -65,7 +66,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
           phoneNumber: rp.phoneNumber,
           status: rp.status,
           gender: rp.gender,
-          role: [''],
+          role: rp.roles[0],
         });
         this.selectedCities = rp.roles;
       }, (er) => {
@@ -88,7 +89,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
       gender: submittedForm.controls.gender.value,
       password: submittedForm.controls.password.value,
       phoneNumber: submittedForm.controls.phoneNumber.value,
-      roles: submittedForm.controls.role.value,
+      roles: [submittedForm.controls.role.value],
       status: parseInt(submittedForm.controls.status.value, 2),
     } as UserViewModel;
     if (!this.edit) {
@@ -136,7 +137,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
     return this.fb.group({
       id: [0],
       fullName: ['', [Validators.required]],
-      birthDay: [null],
+      birthDay: null,
       email: ['', [Validators.email]],
       password: [null],
       passwordCF: [''],
@@ -144,7 +145,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
       phoneNumber: [''],
       status: [''],
       gender: [''],
-      role: [''],
+      role: [null],
     });
   }
 }

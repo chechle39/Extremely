@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="19.2.4.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="XtraReport" DisplayName="Sales Invoice" ScriptsSource="&#xD;&#xA;private void pageInfo1_PrintOnPage(object sender, DevExpress.XtraReports.UI.PrintOnPageEventArgs e) {&#xD;&#xA;  {&#xD;&#xA;            if (e.PageIndex == 0)&#xD;&#xA;                e.Cancel =true;&#xD;&#xA;        }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;private void pictureBox1_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e) {&#xD;&#xA;//  string ds =&quot;D:\\uploaded\\Công Ty Cổ Phần Công Nghệ B24\\images\\logo.jfif&quot;;&#xD;&#xA;&#x9;if(GetCurrentColumnValue(&quot;yourCompanyCode&quot;) == null) return;&#xD;&#xA;&#x9;string namefolder=GetCurrentColumnValue(&quot;yourCompanyCode&quot;).ToString(); &#xD;&#xA;&#x9;string urlimages= @&quot;C:\\uploaded\\&quot;+namefolder+&quot;\\images\\logo.png&quot;;&#xD;&#xA; &#x9;pictureBox1.ImageUrl = urlimages;  &#xD;&#xA; &#x9;   }&#xD;&#xA;&#xD;&#xA;&#x9;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;private void tableCell33_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e) {&#xD;&#xA; &#x9;XRLabel label = (XRLabel)sender;&#xD;&#xA; &#xD;&#xA;     double FieldValue = Convert.ToDouble(GetCurrentColumnValue(&quot;totalAmount&quot;));  &#xD;&#xA;  &#x9;string txt = changeToWords(FieldValue.ToString());&#xD;&#xA;       (sender as XRLabel).Text = txt + &quot;Đồng&quot;;  &#xD;&#xA;}&#xD;&#xA;public static String changeToWords(String numb)  &#xD;&#xA;        {  &#xD;&#xA;            String val = &quot;&quot;;  &#xD;&#xA;            String wholeNo = numb;  &#xD;&#xA;            String points = &quot;&quot;;  &#xD;&#xA;            String andStr = &quot;&quot;;  &#xD;&#xA;            String pointStr = &quot;&quot;;  &#xD;&#xA;            String endStr = &quot;&quot;;  &#xD;&#xA;            try  &#xD;&#xA;            {  &#xD;&#xA;                int decimalPlace = numb.IndexOf(&quot;.&quot;);  &#xD;&#xA;                if (decimalPlace &gt; 0)  &#xD;&#xA;                {  &#xD;&#xA;                    wholeNo = numb.Substring(0, decimalPlace);  &#xD;&#xA;                    points = numb.Substring(decimalPlace + 1);  &#xD;&#xA;                    if (Convert.ToInt32(points) &gt; 0)  &#xD;&#xA;                    {  &#xD;&#xA;                                              &#xD;&#xA;                    }  &#xD;&#xA;                }  &#xD;&#xA;                val = String.Format(&quot;{0} {1}{2} {3}&quot;, translateWholeNumber(wholeNo).Trim(), andStr, pointStr, endStr);  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            catch  &#xD;&#xA;            {  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            return val;  &#xD;&#xA;        }  &#xD;&#xA;private static String translateWholeNumber(String number)  &#xD;&#xA;        {  &#xD;&#xA;            string word = &quot;&quot;;  &#xD;&#xA;            try  &#xD;&#xA;            {  &#xD;&#xA;                bool beginsZero = false;  &#xD;&#xA;                //tests for 0XX  &#xD;&#xA;                bool isDone = false;  &#xD;&#xA;                //test if already translated  &#xD;&#xA;                double dblAmt = (Convert.ToDouble(number));  &#xD;&#xA;                //if ((dblAmt &gt; 0) &amp;&amp; number.StartsWith(&quot;0&quot;))  &#xD;&#xA;                if (dblAmt &gt; 0)  &#xD;&#xA;                {  &#xD;&#xA;                    //test for zero or digit zero in a nuemric  &#xD;&#xA;                    beginsZero = number.StartsWith(&quot;0&quot;);  &#xD;&#xA;  &#xD;&#xA;                    int numDigits = number.Length;  &#xD;&#xA;                    int pos = 0;  &#xD;&#xA;                    //store digit grouping  &#xD;&#xA;                    String place = &quot;&quot;;  &#xD;&#xA;                    //digit grouping name:hundres,thousand,etc...  &#xD;&#xA;                    switch (numDigits)  &#xD;&#xA;                    {  &#xD;&#xA;                        case 1:  &#xD;&#xA;                            //ones' range  &#xD;&#xA;                            word = ones(number);  &#xD;&#xA;                            isDone = true;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        case 2:  &#xD;&#xA;                            //tens' range  &#xD;&#xA;                            word = tens(number);  &#xD;&#xA;                            isDone = true;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        case 3:  &#xD;&#xA;                            //hundreds' range  &#xD;&#xA;                            pos = (numDigits % 3) + 1;  &#xD;&#xA;                            place = &quot; Trăm &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        //thousands' range  &#xD;&#xA;                        case 4:  &#xD;&#xA;                        case 5:  &#xD;&#xA;                        case 6:  &#xD;&#xA;                            pos = (numDigits % 4) + 1;  &#xD;&#xA;                            place = &quot; Ngàn &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        //millions' range  &#xD;&#xA;                        case 7:  &#xD;&#xA;                        case 8:  &#xD;&#xA;                        case 9:  &#xD;&#xA;                            pos = (numDigits % 7) + 1;  &#xD;&#xA;                            place = &quot; Triệu &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        case 10:  &#xD;&#xA;                            //Billions's range  &#xD;&#xA;                            pos = (numDigits % 10) + 1;  &#xD;&#xA;                            place = &quot; Tỷ &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;  &#xD;&#xA;                        default:  &#xD;&#xA;                            //add extra case options for anything above Billion...  &#xD;&#xA;                            isDone = true;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;  &#xD;&#xA;                    }  &#xD;&#xA;                    if (!isDone)  &#xD;&#xA;                    {  &#xD;&#xA;                        //if transalation is not done, continue...(Recursion comes in now!!)  &#xD;&#xA;                        word = translateWholeNumber(number.Substring(0, pos)) + place + translateWholeNumber(number.Substring(pos));  &#xD;&#xA;                        //check for trailing zeros  &#xD;&#xA;                        if (beginsZero)  &#xD;&#xA;                        {  &#xD;&#xA;                            word = &quot; and &quot; + word.Trim();  &#xD;&#xA;                        }  &#xD;&#xA;                    }  &#xD;&#xA;                    //ignore digit grouping names  &#xD;&#xA;                    if (word.Trim().Equals(place.Trim()))  &#xD;&#xA;                    {  &#xD;&#xA;                        word = &quot;&quot;;  &#xD;&#xA;                    }  &#xD;&#xA;                }  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            catch  &#xD;&#xA;            {  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            return word.Trim();  &#xD;&#xA;        } &#xD;&#xA; private static String tens(String digit)  &#xD;&#xA;        {  &#xD;&#xA;            int digt = Convert.ToInt32(digit);  &#xD;&#xA;            String name = null;  &#xD;&#xA;            switch (digt)  &#xD;&#xA;            {  &#xD;&#xA;                case 10:  &#xD;&#xA;                    name = &quot;Mười&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select        \  &#xD;&#xA;                case 11:  &#xD;&#xA;                    name = &quot;Mười Một&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 12:  &#xD;&#xA;                    name = &quot;Mười Hai&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 13:  &#xD;&#xA;                    name = &quot;Mười Ba&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 14:  &#xD;&#xA;                    name = &quot;Mười Bốn&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 15:  &#xD;&#xA;                    name = &quot;Mười Năm&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 16:  &#xD;&#xA;                    name = &quot;Mười Sáu&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 17:  &#xD;&#xA;                    name = &quot;Mười Bảy&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 18:  &#xD;&#xA;                    name = &quot;Mười Tám&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 19:  &#xD;&#xA;                    name = &quot;Mười Chín&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 20:  &#xD;&#xA;                    name = &quot;Hai Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 30:  &#xD;&#xA;                    name = &quot;Ba Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 40:  &#xD;&#xA;                    name = &quot;Bốn Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 50:  &#xD;&#xA;                    name = &quot;Năm Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 60:  &#xD;&#xA;                    name = &quot;Sáu Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 70:  &#xD;&#xA;                    name = &quot;Bảy Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 80:  &#xD;&#xA;                    name = &quot;Tám Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 90:  &#xD;&#xA;                    name = &quot;Chín Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                default:  &#xD;&#xA;                    if (digt &gt; 0)  &#xD;&#xA;                    {  &#xD;&#xA;                        name = (tens(digit.Substring(0, 1) + &quot;0&quot;) + &quot; &quot;) + ones(digit.Substring(1));  &#xD;&#xA;                    }  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;            }  &#xD;&#xA;            return name;  &#xD;&#xA;        }  &#xD;&#xA;        private static String ones(String digit)  &#xD;&#xA;        {  &#xD;&#xA;            int digt = Convert.ToInt32(digit);  &#xD;&#xA;            String name = &quot;&quot;;  &#xD;&#xA;            switch (digt)  &#xD;&#xA;            {  &#xD;&#xA;                case 1:  &#xD;&#xA;                    name = &quot;Một&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 2:  &#xD;&#xA;                    name = &quot;Hai&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 3:  &#xD;&#xA;                    name = &quot;Ba&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 4:  &#xD;&#xA;                    name = &quot;Bốn&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 5:  &#xD;&#xA;                    name = &quot;Năm&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 6:  &#xD;&#xA;                    name = &quot;Sáu&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 7:  &#xD;&#xA;                    name = &quot;Bảy&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 8:  &#xD;&#xA;                    name = &quot;Tám&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 9:  &#xD;&#xA;                    name = &quot;Chín&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            return name;  &#xD;&#xA;        }  &#xD;&#xA;        " Margins="91, 84, 79, 46" PaperKind="A4" PaperName="PA4" PageWidth="827" PageHeight="1169" Version="19.2" DataSource="#Ref-0" TextAlignment="MiddleRight" Font="Arial, 9.75pt" Borders="All">
+<XtraReportsLayoutSerializer SerializerVersion="19.2.4.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v19.2, Version=19.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="XtraReport" DisplayName="Sales Invoice" ScriptsSource="&#xD;&#xA;private void pageInfo1_PrintOnPage(object sender, DevExpress.XtraReports.UI.PrintOnPageEventArgs e) {&#xD;&#xA;  {&#xD;&#xA;            if (e.PageIndex == 0)&#xD;&#xA;                e.Cancel =true;&#xD;&#xA;        }&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;private void pictureBox1_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e) {&#xD;&#xA;//  string ds =&quot;D:\\uploaded\\Công Ty Cổ Phần Công Nghệ B24\\images\\logo.jfif&quot;;&#xD;&#xA;&#x9;if(GetCurrentColumnValue(&quot;yourCompanyCode&quot;) == null) return;&#xD;&#xA;&#x9;string namefolder=GetCurrentColumnValue(&quot;yourCompanyCode&quot;).ToString(); &#xD;&#xA;&#x9;string urlimages= @&quot;C:\\uploaded\\&quot;+namefolder+&quot;\\images\\logo.png&quot;;&#xD;&#xA; &#x9;pictureBox1.ImageUrl = urlimages;  &#xD;&#xA; &#x9;   }&#xD;&#xA;&#xD;&#xA;&#x9;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;private void tableCell33_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e) {&#xD;&#xA; &#x9;XRLabel label = (XRLabel)sender;&#xD;&#xA; &#xD;&#xA;     double FieldValue = Convert.ToDouble(GetCurrentColumnValue(&quot;totalAmount&quot;));  &#xD;&#xA;  &#x9;string txt = changeToWords(FieldValue.ToString());&#xD;&#xA;       (sender as XRLabel).Text = txt + &quot;Đồng&quot;;  &#xD;&#xA;}&#xD;&#xA;public static String changeToWords(String numb)  &#xD;&#xA;        {  &#xD;&#xA;            String val = &quot;&quot;;  &#xD;&#xA;            String wholeNo = numb;  &#xD;&#xA;            String points = &quot;&quot;;  &#xD;&#xA;            String andStr = &quot;&quot;;  &#xD;&#xA;            String pointStr = &quot;&quot;;  &#xD;&#xA;            String endStr = &quot;&quot;;  &#xD;&#xA;            try  &#xD;&#xA;            {  &#xD;&#xA;                int decimalPlace = numb.IndexOf(&quot;.&quot;);  &#xD;&#xA;                if (decimalPlace &gt; 0)  &#xD;&#xA;                {  &#xD;&#xA;                    wholeNo = numb.Substring(0, decimalPlace);  &#xD;&#xA;                    points = numb.Substring(decimalPlace + 1);  &#xD;&#xA;                    if (Convert.ToInt32(points) &gt; 0)  &#xD;&#xA;                    {  &#xD;&#xA;                                              &#xD;&#xA;                    }  &#xD;&#xA;                }  &#xD;&#xA;                val = String.Format(&quot;{0} {1}{2} {3}&quot;, translateWholeNumber(wholeNo).Trim(), andStr, pointStr, endStr);  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            catch  &#xD;&#xA;            {  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            return val;  &#xD;&#xA;        }  &#xD;&#xA;private static String translateWholeNumber(String number)  &#xD;&#xA;        {  &#xD;&#xA;            string word = &quot;&quot;;  &#xD;&#xA;            try  &#xD;&#xA;            {  &#xD;&#xA;                bool beginsZero = false;  &#xD;&#xA;                //tests for 0XX  &#xD;&#xA;                bool isDone = false;  &#xD;&#xA;                //test if already translated  &#xD;&#xA;                double dblAmt = (Convert.ToDouble(number));  &#xD;&#xA;                //if ((dblAmt &gt; 0) &amp;&amp; number.StartsWith(&quot;0&quot;))  &#xD;&#xA;                if (dblAmt &gt; 0)  &#xD;&#xA;                {  &#xD;&#xA;                    //test for zero or digit zero in a nuemric  &#xD;&#xA;                    beginsZero = number.StartsWith(&quot;0&quot;);  &#xD;&#xA;  &#xD;&#xA;                    int numDigits = number.Length;  &#xD;&#xA;                    int pos = 0;  &#xD;&#xA;                    //store digit grouping  &#xD;&#xA;                    String place = &quot;&quot;;  &#xD;&#xA;                    //digit grouping name:hundres,thousand,etc...  &#xD;&#xA;                    switch (numDigits)  &#xD;&#xA;                    {  &#xD;&#xA;                        case 1:  &#xD;&#xA;                            //ones' range  &#xD;&#xA;                            word = ones(number);  &#xD;&#xA;                            isDone = true;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        case 2:  &#xD;&#xA;                            //tens' range  &#xD;&#xA;                            word = tens(number);  &#xD;&#xA;                            isDone = true;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        case 3:  &#xD;&#xA;                            //hundreds' range  &#xD;&#xA;                            pos = (numDigits % 3) + 1;  &#xD;&#xA;                            place = &quot; Trăm &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        //thousands' range  &#xD;&#xA;                        case 4:  &#xD;&#xA;                        case 5:  &#xD;&#xA;                        case 6:  &#xD;&#xA;                            pos = (numDigits % 4) + 1;  &#xD;&#xA;                            place = &quot; Ngàn &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        //millions' range  &#xD;&#xA;                        case 7:  &#xD;&#xA;                        case 8:  &#xD;&#xA;                        case 9:  &#xD;&#xA;                            pos = (numDigits % 7) + 1;  &#xD;&#xA;                            place = &quot; Triệu &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                        case 10:  &#xD;&#xA;                            //Billions's range  &#xD;&#xA;                            pos = (numDigits % 10) + 1;  &#xD;&#xA;                            place = &quot; Tỷ &quot;;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;  &#xD;&#xA;                        default:  &#xD;&#xA;                            //add extra case options for anything above Billion...  &#xD;&#xA;                            isDone = true;  &#xD;&#xA;                            break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;  &#xD;&#xA;                    }  &#xD;&#xA;                    if (!isDone)  &#xD;&#xA;                    {  &#xD;&#xA;                        //if transalation is not done, continue...(Recursion comes in now!!)  &#xD;&#xA;                        word = translateWholeNumber(number.Substring(0, pos)) + place + translateWholeNumber(number.Substring(pos));  &#xD;&#xA;                        //check for trailing zeros  &#xD;&#xA;                        if (beginsZero)  &#xD;&#xA;                        {  &#xD;&#xA;                            word = &quot; and &quot; + word.Trim();  &#xD;&#xA;                        }  &#xD;&#xA;                    }  &#xD;&#xA;                    //ignore digit grouping names  &#xD;&#xA;                    if (word.Trim().Equals(place.Trim()))  &#xD;&#xA;                    {  &#xD;&#xA;                        word = &quot;&quot;;  &#xD;&#xA;                    }  &#xD;&#xA;                }  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            catch  &#xD;&#xA;            {  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            return word.Trim();  &#xD;&#xA;        } &#xD;&#xA; private static String tens(String digit)  &#xD;&#xA;        {  &#xD;&#xA;            int digt = Convert.ToInt32(digit);  &#xD;&#xA;            String name = null;  &#xD;&#xA;            switch (digt)  &#xD;&#xA;            {  &#xD;&#xA;                case 10:  &#xD;&#xA;                    name = &quot;Mười&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select        \  &#xD;&#xA;                case 11:  &#xD;&#xA;                    name = &quot;Mười Một&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 12:  &#xD;&#xA;                    name = &quot;Mười Hai&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 13:  &#xD;&#xA;                    name = &quot;Mười Ba&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 14:  &#xD;&#xA;                    name = &quot;Mười Bốn&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 15:  &#xD;&#xA;                    name = &quot;Mười Năm&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 16:  &#xD;&#xA;                    name = &quot;Mười Sáu&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 17:  &#xD;&#xA;                    name = &quot;Mười Bảy&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 18:  &#xD;&#xA;                    name = &quot;Mười Tám&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 19:  &#xD;&#xA;                    name = &quot;Mười Chín&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 20:  &#xD;&#xA;                    name = &quot;Hai Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 30:  &#xD;&#xA;                    name = &quot;Ba Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 40:  &#xD;&#xA;                    name = &quot;Bốn Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 50:  &#xD;&#xA;                    name = &quot;Năm Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 60:  &#xD;&#xA;                    name = &quot;Sáu Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 70:  &#xD;&#xA;                    name = &quot;Bảy Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 80:  &#xD;&#xA;                    name = &quot;Tám Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 90:  &#xD;&#xA;                    name = &quot;Chín Mươi&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                default:  &#xD;&#xA;                    if (digt &gt; 0)  &#xD;&#xA;                    {  &#xD;&#xA;                        name = (tens(digit.Substring(0, 1) + &quot;0&quot;) + &quot; &quot;) + ones(digit.Substring(1));  &#xD;&#xA;                    }  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;            }  &#xD;&#xA;            return name;  &#xD;&#xA;        }  &#xD;&#xA;        private static String ones(String digit)  &#xD;&#xA;        {  &#xD;&#xA;            int digt = Convert.ToInt32(digit);  &#xD;&#xA;            String name = &quot;&quot;;  &#xD;&#xA;            switch (digt)  &#xD;&#xA;            {  &#xD;&#xA;                case 1:  &#xD;&#xA;                    name = &quot;Một&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 2:  &#xD;&#xA;                    name = &quot;Hai&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 3:  &#xD;&#xA;                    name = &quot;Ba&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 4:  &#xD;&#xA;                    name = &quot;Bốn&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 5:  &#xD;&#xA;                    name = &quot;Năm&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 6:  &#xD;&#xA;                    name = &quot;Sáu&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 7:  &#xD;&#xA;                    name = &quot;Bảy&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 8:  &#xD;&#xA;                    name = &quot;Tám&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;                case 9:  &#xD;&#xA;                    name = &quot;Chín&quot;;  &#xD;&#xA;                    break; // TODO: might not be correct. Was : Exit Select  &#xD;&#xA;  &#xD;&#xA;            }  &#xD;&#xA;            return name;  &#xD;&#xA;        }  &#xD;&#xA;        " Margins="94, 83, 79, 46" PaperKind="A4" PaperName="PA4" PageWidth="827" PageHeight="1169" Version="19.2" DataSource="#Ref-0" TextAlignment="MiddleRight" Font="Arial, 9.75pt" Borders="All">
   <CalculatedFields>
     <Item1 Ref="2" Name="calculatedField1" FieldType="String" Expression="[totalAmount]" />
   </CalculatedFields>
@@ -10,26 +10,26 @@
     <Item2 Ref="5" ControlType="GroupHeaderBand" Name="GroupHeader1" RepeatEveryPage="true" HeightF="499.916656" StyleName="baseControlStyle" ForeColor="255,90,86,85" BorderColor="255,203,201,194" Borders="All" BorderWidth="0">
       <Scripts Ref="6" OnAfterPrint="GroupHeader1_AfterPrint" OnBeforePrint="GroupHeader1_BeforePrint" />
       <Controls>
-        <Item1 Ref="7" ControlType="XRTable" Name="table16" SizeF="386.4139,25" LocationFloat="13.5416031, 389.4999" Padding="2,2,0,0,96">
+        <Item1 Ref="7" ControlType="XRTable" Name="table16" SizeF="404.8739,25" LocationFloat="13.5416031, 389.4999" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="8" ControlType="XRTableRow" Name="tableRow28" Weight="1">
               <Cells>
-                <Item1 Ref="9" ControlType="XRTableCell" Name="tableCell58" Weight="1.375" Multiline="true" Text="hình thức thanh toán: " TextAlignment="MiddleLeft">
+                <Item1 Ref="9" ControlType="XRTableCell" Name="tableCell58" Weight="1.3790861163888049" Multiline="true" Text="hình thức thanh toán: " TextAlignment="MiddleLeft">
                   <StylePriority Ref="10" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="11" ControlType="XRTableCell" Name="tableCell59" Weight="2.4891390991210942" Multiline="true" />
+                <Item2 Ref="11" ControlType="XRTableCell" Name="tableCell59" Weight="2.6695461812473971" Multiline="true" />
               </Cells>
             </Item1>
           </Rows>
         </Item1>
-        <Item2 Ref="12" ControlType="XRTable" Name="table15" SizeF="386.082031,25" LocationFloat="13.8734818, 364.499969" Padding="2,2,0,0,96">
+        <Item2 Ref="12" ControlType="XRTable" Name="table15" SizeF="404.962036,25" LocationFloat="13.4534817, 364.499969" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="13" ControlType="XRTableRow" Name="tableRow27" Weight="1">
               <Cells>
-                <Item1 Ref="14" ControlType="XRTableCell" Name="tableCell55" Weight="0.5299997711181641" Multiline="true" Text="Địa chỉ:" TextAlignment="MiddleLeft">
+                <Item1 Ref="14" ControlType="XRTableCell" Name="tableCell55" Weight="0.89130005343799634" Multiline="true" Text="Địa chỉ:" TextAlignment="MiddleLeft">
                   <StylePriority Ref="15" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="16" ControlType="XRTableCell" Name="tableCell56" Weight="3.3308205413818359" Multiline="true" Text="tableCell56" TextAlignment="MiddleLeft">
+                <Item2 Ref="16" ControlType="XRTableCell" Name="tableCell56" Weight="3.1582835930458275" Multiline="true" Text="tableCell56" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="17" EventName="BeforePrint" PropertyName="Text" Expression="[Address]" />
                   </ExpressionBindings>
@@ -39,14 +39,14 @@
             </Item1>
           </Rows>
         </Item2>
-        <Item3 Ref="19" ControlType="XRTable" Name="table14" SizeF="386.082031,25" LocationFloat="13.8734818, 339.499969" Padding="2,2,0,0,96">
+        <Item3 Ref="19" ControlType="XRTable" Name="table14" SizeF="404.962036,25" LocationFloat="13.4534817, 339.499969" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="20" ControlType="XRTableRow" Name="tableRow26" Weight="1">
               <Cells>
-                <Item1 Ref="21" ControlType="XRTableCell" Name="tableCell52" Weight="0.88708465576171869" Multiline="true" Text="Mã số thuế: " TextAlignment="MiddleLeft">
+                <Item1 Ref="21" ControlType="XRTableCell" Name="tableCell52" Weight="0.891300000577144" Multiline="true" Text="Mã số thuế: " TextAlignment="MiddleLeft">
                   <StylePriority Ref="22" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="23" ControlType="XRTableCell" Name="tableCell53" Weight="2.9737356567382811" Multiline="true" Text="tableCell53" TextAlignment="MiddleLeft">
+                <Item2 Ref="23" ControlType="XRTableCell" Name="tableCell53" Weight="3.1583125410534532" Multiline="true" Text="tableCell53" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="24" EventName="BeforePrint" PropertyName="Text" Expression="[TaxCode]" />
                   </ExpressionBindings>
@@ -56,14 +56,14 @@
             </Item1>
           </Rows>
         </Item3>
-        <Item4 Ref="26" ControlType="XRTable" Name="table9" SizeF="386.4139,25" LocationFloat="13.5416031, 314.499969" Padding="2,2,0,0,96">
+        <Item4 Ref="26" ControlType="XRTable" Name="table9" SizeF="404.8739,25" LocationFloat="13.5416031, 314.499969" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="27" ControlType="XRTableRow" Name="tableRow18" Weight="1">
               <Cells>
-                <Item1 Ref="28" ControlType="XRTableCell" Name="tableCell49" Weight="0.77083335876464842" Multiline="true" Text="Tên đơn vị: " TextAlignment="MiddleLeft">
+                <Item1 Ref="28" ControlType="XRTableCell" Name="tableCell49" Weight="0.89038204966387569" Multiline="true" Text="Tên đơn vị: " TextAlignment="MiddleLeft">
                   <StylePriority Ref="29" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="30" ControlType="XRTableCell" Name="tableCell50" Weight="3.0933057403564455" Multiline="true" Text="tableCell50" TextAlignment="MiddleLeft">
+                <Item2 Ref="30" ControlType="XRTableCell" Name="tableCell50" Weight="3.1582044536633287" Multiline="true" Text="tableCell50" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="31" EventName="BeforePrint" PropertyName="Text" Expression="[ClientId]" />
                   </ExpressionBindings>
@@ -73,14 +73,14 @@
             </Item1>
           </Rows>
         </Item4>
-        <Item5 Ref="33" ControlType="XRTable" Name="table2" SizeF="386.4139,25" LocationFloat="13.8734818, 289.4999" Padding="2,2,0,0,96">
+        <Item5 Ref="33" ControlType="XRTable" Name="table2" SizeF="404.9539,25" LocationFloat="13.4534817, 289.4999" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="34" ControlType="XRTableRow" Name="tableRow2" Weight="1">
               <Cells>
-                <Item1 Ref="35" ControlType="XRTableCell" Name="tableCell29" Weight="1.6172268676757813" Multiline="true" Text="Họ tên người mua hàng: " TextAlignment="MiddleLeft">
+                <Item1 Ref="35" ControlType="XRTableCell" Name="tableCell29" Weight="1.6249723897317476" Multiline="true" Text="Họ tên người mua hàng: " TextAlignment="MiddleLeft">
                   <StylePriority Ref="36" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="37" ControlType="XRTableCell" Name="tableCell48" Weight="2.2469122314453123" Multiline="true" Text="tableCell48" TextAlignment="MiddleLeft">
+                <Item2 Ref="37" ControlType="XRTableCell" Name="tableCell48" Weight="2.42443436245825" Multiline="true" Text="tableCell48" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="38" EventName="BeforePrint" PropertyName="Text" Expression="[ClientName]" />
                   </ExpressionBindings>
@@ -90,11 +90,11 @@
             </Item1>
           </Rows>
         </Item5>
-        <Item6 Ref="40" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="305.047974,34.375" LocationFloat="182.862411, 0" Font="Times New Roman, 9.75pt, charSet=0" Padding="0,0,0,0,100">
+        <Item6 Ref="40" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="323.767975,34.375" LocationFloat="176.612411, 0" Font="Times New Roman, 9.75pt, charSet=0" Padding="0,0,0,0,100">
           <Rows>
             <Item1 Ref="41" ControlType="XRTableRow" Name="tableRow1" Weight="1.375">
               <Cells>
-                <Item1 Ref="42" ControlType="XRTableCell" Name="textName" Weight="1" Multiline="true" Text="HÓA ĐƠN GIÁ TRỊ GIA TĂNG" TextAlignment="TopCenter" Font="Segoe UI, 16pt" ForeColor="DimGray">
+                <Item1 Ref="42" ControlType="XRTableCell" Name="textName" Weight="1.061380945840543" Multiline="true" Text="HÓA ĐƠN GIÁ TRỊ GIA TĂNG" TextAlignment="TopCenter" Font="Segoe UI, 16pt" ForeColor="DimGray">
                   <StylePriority Ref="43" UseFont="false" UseForeColor="false" UseTextAlignment="false" />
                 </Item1>
               </Cells>
@@ -102,26 +102,26 @@
           </Rows>
           <StylePriority Ref="44" UseFont="false" UsePadding="false" UseTextAlignment="false" />
         </Item6>
-        <Item7 Ref="45" ControlType="XRPictureBox" Name="pictureBox1" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="151.637833,102.083336" LocationFloat="13.541667, 0">
+        <Item7 Ref="45" ControlType="XRPictureBox" Name="pictureBox1" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="137.11,102.083336" LocationFloat="13.33, 0">
           <Scripts Ref="46" OnBeforePrint="pictureBox1_BeforePrint" />
         </Item7>
-        <Item8 Ref="47" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" SizeF="100,23" LocationFloat="177.866547, 50.49836" Padding="2,2,0,0,100" Visible="false">
+        <Item8 Ref="47" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" SizeF="100.65,24.04" LocationFloat="176.04, 50.49836" Padding="2,2,0,0,100" Visible="false">
           <ExpressionBindings>
             <Item1 Ref="48" EventName="BeforePrint" PropertyName="Text" Expression="[yourCompanyCode]" />
           </ExpressionBindings>
         </Item8>
-        <Item9 Ref="49" ControlType="XRLine" Name="line2" SizeF="623.9583,2" LocationFloat="15.6246824, 272.916626" />
-        <Item10 Ref="50" ControlType="XRLine" Name="line1" SizeF="626.0416,2" LocationFloat="13.54173, 120.833336" ForeColor="255,90,86,85">
+        <Item9 Ref="49" ControlType="XRLine" Name="line2" SizeF="624.27,2" LocationFloat="13.33, 272.916626" />
+        <Item10 Ref="50" ControlType="XRLine" Name="line1" SizeF="624.59,2" LocationFloat="13.33, 120.833336" ForeColor="255,90,86,85">
           <StylePriority Ref="51" UseForeColor="false" />
         </Item10>
-        <Item11 Ref="52" ControlType="XRTable" Name="table13" SizeF="117.3819,75.74754" LocationFloat="534.6181, 0" Padding="2,2,0,0,96">
+        <Item11 Ref="52" ControlType="XRTable" Name="table13" SizeF="137.4719,76.58" LocationFloat="500.4581, 0.21" Padding="2,2,0,0,96">
           <Rows>
             <Item1 Ref="53" ControlType="XRTableRow" Name="tableRow22" Weight="1">
               <Cells>
-                <Item1 Ref="54" ControlType="XRTableCell" Name="tableCell35" Weight="1.5033108213769029" Multiline="true" Text="Mẫu số :" TextAlignment="MiddleLeft" Font="Segoe UI, 9pt">
+                <Item1 Ref="54" ControlType="XRTableCell" Name="tableCell35" Weight="1.7486971109875873" Multiline="true" Text="Mẫu số :" TextAlignment="MiddleLeft" Font="Segoe UI, 9pt">
                   <StylePriority Ref="55" UseFont="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="56" ControlType="XRTableCell" Name="tableCell37" Weight="1.6858094576178102" Multiline="true" TextAlignment="MiddleLeft">
+                <Item2 Ref="56" ControlType="XRTableCell" Name="tableCell37" Weight="1.9858886321988334" Multiline="true" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="57" EventName="BeforePrint" PropertyName="Text" Expression="[InvoiceId]" />
                   </ExpressionBindings>
@@ -131,10 +131,10 @@
             </Item1>
             <Item2 Ref="59" ControlType="XRTableRow" Name="tableRow24" Weight="1">
               <Cells>
-                <Item1 Ref="60" ControlType="XRTableCell" Name="tableCell40" Weight="1.5033108213769029" Multiline="true" Text="Ký hiệu :" TextAlignment="MiddleLeft" Font="Segoe UI, 9pt">
+                <Item1 Ref="60" ControlType="XRTableCell" Name="tableCell40" Weight="1.7486971109875873" Multiline="true" Text="Ký hiệu :" TextAlignment="MiddleLeft" Font="Segoe UI, 9pt">
                   <StylePriority Ref="61" UseFont="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="62" ControlType="XRTableCell" Name="tableCell41" Weight="1.6858094576178102" Multiline="true" TextAlignment="MiddleLeft">
+                <Item2 Ref="62" ControlType="XRTableCell" Name="tableCell41" Weight="1.9858886321988334" Multiline="true" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="63" EventName="BeforePrint" PropertyName="Text" Expression="[InvoiceSerial]" />
                   </ExpressionBindings>
@@ -144,10 +144,10 @@
             </Item2>
             <Item3 Ref="65" ControlType="XRTableRow" Name="tableRow23" Weight="1">
               <Cells>
-                <Item1 Ref="66" ControlType="XRTableCell" Name="tableCell38" Weight="0.85786546201578884" Multiline="true" Text="Số :" TextAlignment="MiddleLeft" Font="Segoe UI, 10pt">
+                <Item1 Ref="66" ControlType="XRTableCell" Name="tableCell38" Weight="1.7488434184517088" Multiline="true" Text="Số :" TextAlignment="MiddleLeft" Font="Segoe UI, 10pt">
                   <StylePriority Ref="67" UseFont="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="68" ControlType="XRTableCell" Name="tableCell39" Weight="2.331254816978924" Multiline="true" TextAlignment="MiddleLeft" Font="Segoe UI, 10pt">
+                <Item2 Ref="68" ControlType="XRTableCell" Name="tableCell39" Weight="1.9860547846605598" Multiline="true" TextAlignment="MiddleLeft" Font="Segoe UI, 10pt">
                   <ExpressionBindings>
                     <Item1 Ref="69" EventName="BeforePrint" PropertyName="Text" Expression="[InvoiceNumber]" />
                   </ExpressionBindings>
@@ -157,14 +157,14 @@
             </Item3>
           </Rows>
         </Item11>
-        <Item12 Ref="71" ControlType="XRTable" Name="vendorTable" TextAlignment="TopRight" SizeF="386.413849,88.28125" LocationFloat="13.541667, 171.791656">
+        <Item12 Ref="71" ControlType="XRTable" Name="vendorTable" TextAlignment="TopRight" SizeF="405.083862,89.11" LocationFloat="13.3316669, 171.88">
           <Rows>
             <Item1 Ref="72" ControlType="XRTableRow" Name="vendorNameRow" Weight="1">
               <Cells>
-                <Item1 Ref="73" ControlType="XRTableCell" Name="vendorName" Weight="0.46085467164017968" CanShrink="true" Text="Mã số thuế :" TextAlignment="MiddleLeft">
+                <Item1 Ref="73" ControlType="XRTableCell" Name="vendorName" Weight="0.46193996530388326" CanShrink="true" Text="Mã số thuế :" TextAlignment="MiddleLeft">
                   <StylePriority Ref="74" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="75" ControlType="XRTableCell" Name="tableCell1" Weight="1.5391453283598202" Multiline="true" Text="tableCell1" TextAlignment="MiddleLeft">
+                <Item2 Ref="75" ControlType="XRTableCell" Name="tableCell1" Weight="1.6346709338611116" Multiline="true" Text="tableCell1" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="76" EventName="BeforePrint" PropertyName="Text" Expression="[YourTaxCode]" />
                   </ExpressionBindings>
@@ -174,10 +174,10 @@
             </Item1>
             <Item2 Ref="78" ControlType="XRTableRow" Name="vendorAddressRow" Weight="1">
               <Cells>
-                <Item1 Ref="79" ControlType="XRTableCell" Name="tableCell23" Weight="0.2760345534425066" Multiline="true" Text="Địa chỉ :" TextAlignment="MiddleLeft">
+                <Item1 Ref="79" ControlType="XRTableCell" Name="tableCell23" Weight="0.27814362214440286" Multiline="true" Text="Địa chỉ :" TextAlignment="MiddleLeft">
                   <StylePriority Ref="80" UseFont="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="81" ControlType="XRTableCell" Name="vendorAddress" Weight="1.7239654465574934" CanShrink="true" Text="VendorAddress" TextAlignment="MiddleLeft">
+                <Item2 Ref="81" ControlType="XRTableCell" Name="vendorAddress" Weight="1.8184402717568759" CanShrink="true" Text="VendorAddress" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="82" EventName="BeforePrint" PropertyName="Text" Expression="[YourCompanyAddress]" />
                   </ExpressionBindings>
@@ -187,10 +187,10 @@
             </Item2>
             <Item3 Ref="84" ControlType="XRTableRow" Name="vendorCityRow" Weight="1">
               <Cells>
-                <Item1 Ref="85" ControlType="XRTableCell" Name="tableCell28" Weight="0.46085451368736197" Multiline="true" Text="Số tài khoản :" TextAlignment="MiddleLeft">
+                <Item1 Ref="85" ControlType="XRTableCell" Name="tableCell28" Weight="0.46297046138731651" Multiline="true" Text="Số tài khoản :" TextAlignment="MiddleLeft">
                   <StylePriority Ref="86" UseFont="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="87" ControlType="XRTableCell" Name="vendorCity" Weight="1.5391454863126381" CanShrink="true" Text="VendorCity" TextAlignment="MiddleLeft">
+                <Item2 Ref="87" ControlType="XRTableCell" Name="vendorCity" Weight="1.6336206453625344" CanShrink="true" Text="VendorCity" TextAlignment="MiddleLeft">
                   <ExpressionBindings>
                     <Item1 Ref="88" EventName="BeforePrint" PropertyName="Text" Expression="[YourBankAccount]" />
                   </ExpressionBindings>
@@ -201,11 +201,11 @@
           </Rows>
           <StylePriority Ref="90" UseTextAlignment="false" />
         </Item12>
-        <Item13 Ref="91" ControlType="XRTable" Name="customerTable" SizeF="386.082031,37.5" LocationFloat="13.8734818, 134.291687">
+        <Item13 Ref="91" ControlType="XRTable" Name="customerTable" SizeF="404.952026,37.5" LocationFloat="13.4534817, 134.291687">
           <Rows>
             <Item1 Ref="92" ControlType="XRTableRow" Name="customerNameRow" Weight="1">
               <Cells>
-                <Item1 Ref="93" ControlType="XRTableCell" Name="customerName" Weight="2.1978139779568404" CanShrink="true" Text="CustomerName" TextAlignment="MiddleLeft" Font="Segoe UI, 14.25pt, charSet=0" Padding="2,2,0,5,100">
+                <Item1 Ref="93" ControlType="XRTableCell" Name="customerName" Weight="2.3051977284913225" CanShrink="true" Text="CustomerName" TextAlignment="MiddleLeft" Font="Segoe UI, 14.25pt, charSet=0" Padding="2,2,0,5,100">
                   <ExpressionBindings>
                     <Item1 Ref="94" EventName="BeforePrint" PropertyName="Text" Expression="[YourCompanyName]" />
                   </ExpressionBindings>
@@ -215,14 +215,14 @@
             </Item1>
           </Rows>
         </Item13>
-        <Item14 Ref="96" ControlType="XRTable" Name="headerTable" TextAlignment="TopCenter" SizeF="626.041443,53.99997" LocationFloat="13.541667, 437.955872" Font="Segoe UI, 8pt" ForeColor="255,90,86,85" Padding="2,2,5,0,100" BorderColor="255,203,201,194" Borders="All" BorderWidth="0.01">
+        <Item14 Ref="96" ControlType="XRTable" Name="headerTable" TextAlignment="TopCenter" SizeF="624.60144,53.99997" LocationFloat="13.3316669, 437.955872" Font="Segoe UI, 8pt" ForeColor="255,90,86,85" Padding="2,2,5,0,100" BorderColor="255,203,201,194" Borders="All" BorderWidth="0.01">
           <Rows>
             <Item1 Ref="97" ControlType="XRTableRow" Name="headerTableRow" Weight="11.5">
               <Cells>
-                <Item1 Ref="98" ControlType="XRTableCell" Name="No" Weight="0.22027606095635802" Text="STT" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
+                <Item1 Ref="98" ControlType="XRTableCell" Name="No" Weight="0.23843028309284622" Text="STT" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
                   <StylePriority Ref="99" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="100" ControlType="XRTableCell" Name="tableCell12" Weight="0.95685656979991029" Multiline="true" Text="Tên hàng hóa, dịch vụ" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
+                <Item2 Ref="100" ControlType="XRTableCell" Name="tableCell12" Weight="0.93960413578183843" Multiline="true" Text="Tên hàng hóa, dịch vụ" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
                   <StylePriority Ref="101" UseFont="false" UseTextAlignment="false" />
                 </Item2>
                 <Item3 Ref="102" ControlType="XRTableCell" Name="tableCell13" Weight="0.31083120888726545" Multiline="true" Text="Đơn vị tính" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
@@ -231,20 +231,20 @@
                 <Item4 Ref="104" ControlType="XRTableCell" Name="quantityCaption" Weight="0.3267394754345847" Text="Số lượng" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
                   <StylePriority Ref="105" UseFont="false" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="106" ControlType="XRTableCell" Name="unitPriceCaption" Weight="0.46314891722193308" Text="Đơn giá" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
+                <Item5 Ref="106" ControlType="XRTableCell" Name="unitPriceCaption" Weight="0.46207152184676387" Text="Đơn giá" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
                   <StylePriority Ref="107" UseFont="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="108" ControlType="XRTableCell" Name="lineTotalCaptionCell" Weight="0.5101325356190668" Text="Thành tiền" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
+                <Item6 Ref="108" ControlType="XRTableCell" Name="lineTotalCaptionCell" Weight="0.50384321493584161" Text="Thành tiền" TextAlignment="TopCenter" Font="Segoe UI, 8pt, style=Bold">
                   <StylePriority Ref="109" UseFont="false" UseTextAlignment="false" />
                 </Item6>
               </Cells>
             </Item1>
             <Item2 Ref="110" ControlType="XRTableRow" Name="tableRow25" Weight="11.5">
               <Cells>
-                <Item1 Ref="111" ControlType="XRTableCell" Name="tableCell42" Weight="0.22027606095635802" Multiline="true" Text="A" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
+                <Item1 Ref="111" ControlType="XRTableCell" Name="tableCell42" Weight="0.238429900667615" Multiline="true" Text="A" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
                   <StylePriority Ref="112" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="113" ControlType="XRTableCell" Name="tableCell43" Weight="0.95685656979991041" Multiline="true" Text="B" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
+                <Item2 Ref="113" ControlType="XRTableCell" Name="tableCell43" Weight="0.9396026287235727" Multiline="true" Text="B" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
                   <StylePriority Ref="114" UseFont="false" UseTextAlignment="false" />
                 </Item2>
                 <Item3 Ref="115" ControlType="XRTableCell" Name="tableCell44" Weight="0.3108312088872654" Multiline="true" Text="C" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
@@ -253,10 +253,10 @@
                 <Item4 Ref="117" ControlType="XRTableCell" Name="tableCell45" Weight="0.32673949121892693" Multiline="true" Text="1" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
                   <StylePriority Ref="118" UseFont="false" UseTextAlignment="false" />
                 </Item4>
-                <Item5 Ref="119" ControlType="XRTableCell" Name="tableCell46" Weight="0.46314890211573218" Multiline="true" Text="2" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
+                <Item5 Ref="119" ControlType="XRTableCell" Name="tableCell46" Weight="0.46207124766280838" Multiline="true" Text="2" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
                   <StylePriority Ref="120" UseFont="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="121" ControlType="XRTableCell" Name="tableCell47" Weight="0.51013253494092536" Multiline="true" Text="3 = 1x2" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
+                <Item6 Ref="121" ControlType="XRTableCell" Name="tableCell47" Weight="0.50384291596540343" Multiline="true" Text="3 = 1x2" TextAlignment="TopCenter" Font="Segoe UI, 8pt">
                   <StylePriority Ref="122" UseFont="false" UseTextAlignment="false" />
                 </Item6>
               </Cells>
@@ -270,18 +270,18 @@
     <Item3 Ref="125" ControlType="DetailBand" Name="Detail" HeightF="39.9315529" TextAlignment="TopLeft" StyleName="baseControlStyle" Padding="0,0,0,0,100" BorderWidth="0">
       <MultiColumn Ref="126" Layout="AcrossThenDown" />
       <Controls>
-        <Item1 Ref="127" ControlType="XRTable" Name="detailTable" SizeF="626.0415,39" LocationFloat="13.5416031, 0" Font="Segoe UI, 9.75pt, style=Bold" ForeColor="255,90,86,85" Padding="2,2,0,0,100" BorderColor="255,203,201,194" Borders="Left, Right, Bottom" BorderWidth="0.01" BorderDashStyle="Solid">
+        <Item1 Ref="127" ControlType="XRTable" Name="detailTable" SizeF="623.1315,39" LocationFloat="13.5416031, 0" Font="Segoe UI, 9.75pt, style=Bold" ForeColor="255,90,86,85" Padding="2,2,0,0,100" BorderColor="255,203,201,194" Borders="Left, Right, Bottom" BorderWidth="0.01" BorderDashStyle="Solid">
           <Rows>
             <Item1 Ref="128" ControlType="XRTableRow" Name="detailTableRow" Weight="12.343333333333334">
               <Cells>
-                <Item1 Ref="129" ControlType="XRTableCell" Name="productName" Weight="0.2218042031231163" CanGrow="false" TextFormatString="{0:0}" Text="1" TextAlignment="MiddleCenter" WordWrap="false" Font="Segoe UI, 8pt">
+                <Item1 Ref="129" ControlType="XRTableCell" Name="productName" Weight="0.23647648369348623" CanGrow="false" TextFormatString="{0:0}" Text="1" TextAlignment="MiddleCenter" WordWrap="false" Font="Segoe UI, 8pt">
                   <Summary Ref="130" Running="Report" />
                   <ExpressionBindings>
                     <Item1 Ref="131" EventName="BeforePrint" PropertyName="Text" Expression="sumRecordNumber([ProductName])" />
                   </ExpressionBindings>
                   <StylePriority Ref="132" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="133" ControlType="XRTableCell" Name="tableCell15" Weight="0.95028314986339046" Multiline="true" Text="tableCell15" TextAlignment="MiddleLeft" Font="Segoe UI, 8pt" Padding="8,8,0,0,100">
+                <Item2 Ref="133" ControlType="XRTableCell" Name="tableCell15" Weight="0.93557422266057866" Multiline="true" Text="tableCell15" TextAlignment="MiddleLeft" Font="Segoe UI, 8pt" Padding="8,8,0,0,100">
                   <ExpressionBindings>
                     <Item1 Ref="134" EventName="BeforePrint" PropertyName="Text" Expression="[ProductName]" />
                   </ExpressionBindings>
@@ -305,7 +305,7 @@
                   </ExpressionBindings>
                   <StylePriority Ref="144" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item5>
-                <Item6 Ref="145" ControlType="XRTableCell" Name="lineTotal" Weight="0.50794612042142029" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight" Font="Segoe UI, 8pt" ForeColor="255,90,86,85" Padding="2,8,0,0,100">
+                <Item6 Ref="145" ControlType="XRTableCell" Name="lineTotal" Weight="0.49503369254131119" TextFormatString="{0:###,###,0}" Multiline="true" TextAlignment="MiddleRight" Font="Segoe UI, 8pt" ForeColor="255,90,86,85" Padding="2,8,0,0,100">
                   <ExpressionBindings>
                     <Item1 Ref="146" EventName="BeforePrint" PropertyName="Text" Expression="[Amount]" />
                   </ExpressionBindings>
@@ -323,18 +323,18 @@
       <SubBands>
         <Item1 Ref="151" ControlType="SubBand" Name="SubBand2" HeightF="142.417847" KeepTogether="true" Padding="2,0,0,0,100">
           <Controls>
-            <Item1 Ref="152" ControlType="XRTable" Name="table8" SizeF="126.695724,60.41667" LocationFloat="487.7372, 0" Padding="2,2,0,0,96" Borders="None">
+            <Item1 Ref="152" ControlType="XRTable" Name="table8" SizeF="174.8,62.63" LocationFloat="463.13, 0" Padding="2,2,0,0,96" Borders="None">
               <Rows>
                 <Item1 Ref="153" ControlType="XRTableRow" Name="tableRow13" Weight="1">
                   <Cells>
-                    <Item1 Ref="154" ControlType="XRTableCell" Name="tableCell26" Weight="1" Multiline="true" Text="Người bán hàng" TextAlignment="MiddleCenter" Font="Segoe UI, 9.75pt, style=Bold">
+                    <Item1 Ref="154" ControlType="XRTableCell" Name="tableCell26" Weight="1.3831051153691902" Multiline="true" Text="Người bán hàng" TextAlignment="MiddleCenter" Font="Segoe UI, 9.75pt, style=Bold">
                       <StylePriority Ref="155" UseFont="false" UseTextAlignment="false" />
                     </Item1>
                   </Cells>
                 </Item1>
                 <Item2 Ref="156" ControlType="XRTableRow" Name="tableRow14" Weight="1">
                   <Cells>
-                    <Item1 Ref="157" ControlType="XRTableCell" Name="tableCell27" Weight="1" Multiline="true" Text="(Ký và ghi rõ họ tên)" TextAlignment="TopCenter">
+                    <Item1 Ref="157" ControlType="XRTableCell" Name="tableCell27" Weight="1.3831051153691902" Multiline="true" Text="(Ký và ghi rõ họ tên)" TextAlignment="TopCenter">
                       <StylePriority Ref="158" UseTextAlignment="false" />
                     </Item1>
                   </Cells>
@@ -342,18 +342,18 @@
               </Rows>
               <StylePriority Ref="159" UseBorders="false" />
             </Item1>
-            <Item2 Ref="160" ControlType="XRTable" Name="table7" SizeF="126.695724,60.41667" LocationFloat="38.4837456, 0" Padding="2,2,0,0,96" Borders="None">
+            <Item2 Ref="160" ControlType="XRTable" Name="table7" SizeF="264.505737,60.41667" LocationFloat="13.4837456, 0" Padding="2,2,0,0,96" Borders="None">
               <Rows>
                 <Item1 Ref="161" ControlType="XRTableRow" Name="tableRow11" Weight="1">
                   <Cells>
-                    <Item1 Ref="162" ControlType="XRTableCell" Name="tableCell25" Weight="1" Multiline="true" Text="Người mua hàng" TextAlignment="MiddleCenter" Font="Segoe UI, 9.75pt, style=Bold">
+                    <Item1 Ref="162" ControlType="XRTableCell" Name="tableCell25" Weight="2.0881153791802918" Multiline="true" Text="Người mua hàng" TextAlignment="MiddleCenter" Font="Segoe UI, 9.75pt, style=Bold">
                       <StylePriority Ref="163" UseFont="false" UseTextAlignment="false" />
                     </Item1>
                   </Cells>
                 </Item1>
                 <Item2 Ref="164" ControlType="XRTableRow" Name="tableRow12" Weight="1">
                   <Cells>
-                    <Item1 Ref="165" ControlType="XRTableCell" Name="tableCell24" Weight="1" Multiline="true" Text="(Ký và ghi rõ họ tên)" TextAlignment="TopCenter">
+                    <Item1 Ref="165" ControlType="XRTableCell" Name="tableCell24" Weight="2.0881153791802918" Multiline="true" Text="(Ký và ghi rõ họ tên)" TextAlignment="TopCenter">
                       <StylePriority Ref="166" UseTextAlignment="false" />
                     </Item1>
                   </Cells>
@@ -366,21 +366,21 @@
         </Item1>
       </SubBands>
       <Controls>
-        <Item1 Ref="169" ControlType="XRTable" Name="table4" SizeF="626.458435,145.686157" LocationFloat="13.541667, 0" ForeColor="255,90,86,85" Padding="0,0,0,0,100" BorderColor="255,203,201,194" Borders="All" BorderWidth="0.5">
+        <Item1 Ref="169" ControlType="XRTable" Name="table4" SizeF="623.958435,145.686157" LocationFloat="13.33, 0" ForeColor="255,90,86,85" Padding="0,0,0,0,100" BorderColor="255,203,201,194" Borders="All" BorderWidth="0.5">
           <Rows>
             <Item1 Ref="170" ControlType="XRTableRow" Name="tableRow8" Weight="1">
               <Cells>
-                <Item1 Ref="171" ControlType="XRTableCell" Name="tableCell16" Weight="0.95811529018172481" Multiline="true" Borders="All" BorderDashStyle="Solid">
+                <Item1 Ref="171" ControlType="XRTableCell" Name="tableCell16" Weight="0.95429414476922" Multiline="true" Borders="All" BorderDashStyle="Solid">
                   <Summary Ref="172" Running="Page" />
                   <Controls>
-                    <Item1 Ref="173" ControlType="XRTable" Name="table5" SizeF="290.1681,36.42152" LocationFloat="334.121979, 0" Padding="2,2,0,0,96" Borders="None">
+                    <Item1 Ref="173" ControlType="XRTable" Name="table5" SizeF="291.1681,36.42152" LocationFloat="335.162, 0" Padding="2,2,0,0,96" Borders="None">
                       <Rows>
                         <Item1 Ref="174" ControlType="XRTableRow" Name="tableRow16" Weight="1">
                           <Cells>
-                            <Item1 Ref="175" ControlType="XRTableCell" Name="tableCell21" Weight="1.3606028026038282" Multiline="true" Text="Cộng tiền hàng :" TextAlignment="MiddleLeft">
+                            <Item1 Ref="175" ControlType="XRTableCell" Name="tableCell21" Weight="1.3396590175099958" Multiline="true" Text="Cộng tiền hàng :" TextAlignment="MiddleLeft">
                               <StylePriority Ref="176" UseTextAlignment="false" />
                             </Item1>
-                            <Item2 Ref="177" ControlType="XRTableCell" Name="tableCell22" Weight="2.08813937712431" TextFormatString="{0:#,#}" Multiline="true" TextAlignment="MiddleRight" Padding="2,8,0,0,100">
+                            <Item2 Ref="177" ControlType="XRTableCell" Name="tableCell22" Weight="2.1211564924570476" TextFormatString="{0:#,#}" Multiline="true" TextAlignment="MiddleRight" Padding="2,8,0,0,100">
                               <Summary Ref="178" Running="Report" />
                               <ExpressionBindings>
                                 <Item1 Ref="179" EventName="BeforePrint" PropertyName="Text" Expression="[subTotalAmount]" />
@@ -402,9 +402,9 @@
             </Item1>
             <Item2 Ref="184" ControlType="XRTableRow" Name="tableRow9" Weight="1">
               <Cells>
-                <Item1 Ref="185" ControlType="XRTableCell" Name="tableCell17" Weight="0.95811529018172481" Multiline="true" Text="tableCell17" Borders="Left, Right, Bottom">
+                <Item1 Ref="185" ControlType="XRTableCell" Name="tableCell17" Weight="0.95429414476922" Multiline="true" Text="tableCell17" Borders="Left, Right, Bottom">
                   <Controls>
-                    <Item1 Ref="186" ControlType="XRLabel" Name="label1" TextFormatString="{0:###,###,0}" Multiline="true" Text="label1" TextAlignment="MiddleRight" SizeF="177.441833,36.42159" LocationFloat="448.599518, 0" Padding="2,8,0,0,100" Borders="None">
+                    <Item1 Ref="186" ControlType="XRLabel" Name="label1" TextFormatString="{0:###,###,0}" Multiline="true" Text="label1" TextAlignment="MiddleRight" SizeF="176.98,36.42159" LocationFloat="448.96, 0" Padding="2,8,0,0,100" Borders="All">
                       <Scripts Ref="187" OnBeforePrint="label1_BeforePrint" />
                       <Summary Ref="188" Running="Report" />
                       <ExpressionBindings>
@@ -434,17 +434,17 @@
             </Item2>
             <Item3 Ref="198" ControlType="XRTableRow" Name="tableRow10" Weight="1">
               <Cells>
-                <Item1 Ref="199" ControlType="XRTableCell" Name="tableCell18" Weight="0.95811529018172481" Multiline="true" Text="tableCell18" Padding="2,0,0,0,100" Borders="Left, Right, Bottom" BorderWidth="0.5">
+                <Item1 Ref="199" ControlType="XRTableCell" Name="tableCell18" Weight="0.95429414476922" Multiline="true" Text="tableCell18" Padding="2,0,0,0,100" Borders="Left, Right, Bottom" BorderWidth="0.5">
                   <Summary Ref="200" Running="Page" />
                   <Controls>
-                    <Item1 Ref="201" ControlType="XRTable" Name="table10" SizeF="293.336365,36.4215164" LocationFloat="334.121979, 3.05175781E-05" Padding="2,2,0,0,96" Borders="None">
+                    <Item1 Ref="201" ControlType="XRTable" Name="table10" SizeF="291.876373,36.4215164" LocationFloat="334.121979, 3.05175781E-05" Padding="2,2,0,0,96" Borders="None">
                       <Rows>
                         <Item1 Ref="202" ControlType="XRTableRow" Name="tableRow19" Weight="1">
                           <Cells>
-                            <Item1 Ref="203" ControlType="XRTableCell" Name="tableCell30" Weight="1.7253395136102634" Multiline="true" Text="Tổng tiền thanh toán :" TextAlignment="MiddleLeft">
+                            <Item1 Ref="203" ControlType="XRTableCell" Name="tableCell30" Weight="1.4173349576728886" Multiline="true" Text="Tổng tiền thanh toán :" TextAlignment="MiddleLeft">
                               <StylePriority Ref="204" UseTextAlignment="false" />
                             </Item1>
-                            <Item2 Ref="205" ControlType="XRTableCell" Name="tableCell31" Weight="1.8833344235306511" TextFormatString="{0:#,#}" Multiline="true" TextAlignment="MiddleRight" Padding="2,8,0,0,100">
+                            <Item2 Ref="205" ControlType="XRTableCell" Name="tableCell31" Weight="2.17342736717359" TextFormatString="{0:#,#}" Multiline="true" TextAlignment="MiddleRight" Padding="2,8,0,0,100">
                               <Summary Ref="206" Running="Report" />
                               <ExpressionBindings>
                                 <Item1 Ref="207" EventName="BeforePrint" PropertyName="Text" Expression="[totalAmount]" />
@@ -463,16 +463,16 @@
             </Item3>
             <Item4 Ref="211" ControlType="XRTableRow" Name="tableRow15" Weight="1">
               <Cells>
-                <Item1 Ref="212" ControlType="XRTableCell" Name="tableCell19" Weight="0.95811529018172481" Multiline="true" Text="tableCell19" Borders="Left, Right, Bottom">
+                <Item1 Ref="212" ControlType="XRTableCell" Name="tableCell19" Weight="0.95429414476922" Multiline="true" Text="tableCell19" Borders="Left, Right, Bottom">
                   <Controls>
-                    <Item1 Ref="213" ControlType="XRTable" Name="table11" SizeF="616.0415,38.60292" LocationFloat="9.99998951, 1.52587891E-05" Padding="2,2,0,0,96" Borders="None">
+                    <Item1 Ref="213" ControlType="XRTable" Name="table11" SizeF="626.2215,38.60292" LocationFloat="0, 1.52587891E-05" Padding="2,2,0,0,96" Borders="None">
                       <Rows>
                         <Item1 Ref="214" ControlType="XRTableRow" Name="tableRow20" Weight="1">
                           <Cells>
-                            <Item1 Ref="215" ControlType="XRTableCell" Name="tableCell32" Weight="1.72533969626804" Multiline="true" Text="Số tiền viết bằng chữ :" TextAlignment="MiddleLeft" Borders="None">
+                            <Item1 Ref="215" ControlType="XRTableCell" Name="tableCell32" Weight="2.2226923970205985" Multiline="true" Text="Số tiền viết bằng chữ :" TextAlignment="MiddleLeft" Borders="None">
                               <StylePriority Ref="216" UseBorders="false" UseTextAlignment="false" />
                             </Item1>
-                            <Item2 Ref="217" ControlType="XRTableCell" Name="tableCell33" Weight="5.77887513706415" Multiline="true" TextAlignment="MiddleLeft" Borders="None">
+                            <Item2 Ref="217" ControlType="XRTableCell" Name="tableCell33" Weight="5.4053562972150981" Multiline="true" TextAlignment="MiddleLeft" Borders="None">
                               <Scripts Ref="218" OnSummaryCalculated="tableCell33_SummaryCalculated" OnEvaluateBinding="tableCell33_EvaluateBinding" OnBeforePrint="tableCell33_BeforePrint" OnTextChanged="tableCell33_TextChanged" />
                               <StylePriority Ref="219" UseBorders="false" UseTextAlignment="false" />
                             </Item2>
@@ -493,10 +493,10 @@
     </Item4>
     <Item5 Ref="223" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="46" TextAlignment="TopLeft" Padding="0,0,0,0,100">
       <Controls>
-        <Item1 Ref="224" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Trang {0}/{1}" TextAlignment="MiddleRight" SizeF="73.38977,22.9999962" LocationFloat="566.1936, 9.999974" Padding="2,2,0,0,100" Borders="None">
+        <Item1 Ref="224" ControlType="XRPageInfo" Name="pageInfo2" TextFormatString="Trang {0}/{1}" TextAlignment="MiddleRight" SizeF="88.75,22.9999962" LocationFloat="546.88, 9.999974" Padding="2,2,0,0,100" Borders="None">
           <StylePriority Ref="225" UseBorders="false" UseTextAlignment="false" />
         </Item1>
-        <Item2 Ref="226" ControlType="XRPageInfo" Name="pageInfo1" StartPageNumber="0" TextFormatString="tiep theo trang truoc  -" TextAlignment="MiddleRight" SizeF="147.792084,22.9999962" LocationFloat="418.40152, 9.999974" Padding="2,2,0,0,100" Borders="None">
+        <Item2 Ref="226" ControlType="XRPageInfo" Name="pageInfo1" StartPageNumber="0" TextFormatString="tiep theo trang truoc  -" TextAlignment="MiddleRight" SizeF="129.31,22.9999962" LocationFloat="418.40152, 9.999974" Padding="2,2,0,0,100" Borders="None">
           <StylePriority Ref="227" UseBorders="false" UseTextAlignment="false" />
           <Scripts Ref="228" OnPrintOnPage="pageInfo1_PrintOnPage" />
         </Item2>

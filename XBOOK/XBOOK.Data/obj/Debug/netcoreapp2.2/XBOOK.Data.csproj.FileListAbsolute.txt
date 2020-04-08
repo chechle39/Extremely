@@ -1,3 +1,15 @@
+D:\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.deps.json
+D:\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.dll
+D:\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.pdb
+D:\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Common.dll
+D:\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Common.pdb
+D:\svn\XBOOK\XBOOK.Data\obj\Debug\netcoreapp2.2\XBOOK.Data.csprojAssemblyReference.cache
+D:\svn\XBOOK\XBOOK.Data\obj\Debug\netcoreapp2.2\XBOOK.Data.csproj.CoreCompileInputs.cache
+D:\svn\XBOOK\XBOOK.Data\obj\Debug\netcoreapp2.2\XBOOK.Data.AssemblyInfoInputs.cache
+D:\svn\XBOOK\XBOOK.Data\obj\Debug\netcoreapp2.2\XBOOK.Data.AssemblyInfo.cs
+D:\svn\XBOOK\XBOOK.Data\obj\Debug\netcoreapp2.2\XBOOK.Data.csproj.CopyComplete
+D:\svn\XBOOK\XBOOK.Data\obj\Debug\netcoreapp2.2\XBOOK.Data.dll
+D:\svn\XBOOK\XBOOK.Data\obj\Debug\netcoreapp2.2\XBOOK.Data.pdb
 C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.deps.json
 C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.dll
 C:\Users\Welcome\Desktop\svn\XBOOK\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.pdb

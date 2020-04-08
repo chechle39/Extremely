@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ProductService } from '../_shared/services/product.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,6 +21,7 @@ import {
   NbIconModule,
   NbSearchModule,
   NbCardModule } from '@nebular/theme';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 
 @NgModule({
   declarations: [UserComponent, CreateUserComponent],
@@ -43,7 +44,7 @@ import {
     MultiSelectModule,
     RadioButtonModule,
   ],
-  providers: [UserService, RoleService],
+  providers: [UserService, RoleService, {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}],
   entryComponents: [CreateUserComponent],
 })
 export class UserModule { }

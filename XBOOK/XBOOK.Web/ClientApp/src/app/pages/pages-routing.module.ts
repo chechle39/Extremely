@@ -42,17 +42,17 @@ const routes: Routes = [
         .then(m => m.PaymentReceiptModule),
     },
     {
-      path: 'generalentry',
+      path: 'generaljournal',
       loadChildren: () => import('./genled/genled.module')
         .then(m => m.GenledModule),
     },
     {
-      path: 'genledgroup/:key',
+      path: 'generalledger/:key',
       loadChildren: () => import('./genledgroup/genledgroup.module')
         .then(m => m.GenledGroupModule),
     },
     {
-      path: 'genledgroup',
+      path: 'generalledger',
       loadChildren: () => import('./genledgroup/genledgroup.module')
         .then(m => m.GenledGroupModule),
     },
@@ -132,7 +132,7 @@ const routes: Routes = [
         .then(m => m.DashboardModule),
     },
     {
-      path: 'moneyfund',
+      path: 'Cashbalance',
       loadChildren: () => import('./moneyfund/money-fund.module')
         .then(m => m.MoneyFundtModule),
     },

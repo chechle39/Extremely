@@ -10,7 +10,9 @@
 :host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
   white-space: unset !important;
 }
-
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-footer .page-count {
+  height: 0px; 
+}
 :host ::ng-deep{
   .datatable-header,.datatable-footer-inner {
     height: unset !important;

@@ -68,15 +68,15 @@ namespace XBOOK.Data.Repositories
         public async Task<IEnumerable<JournalEntryViewModel>> GetAllJournalEntry(DateRequest request)
         {
             var data = await Entities.ProjectTo<JournalEntryViewModel>().ToListAsync();
-            if (!string.IsNullOrEmpty(request.StartDate))
+            if (!string.IsNullOrEmpty(request.StartDate.ToString()))
             {
-                DateTime start = DateTime.ParseExact(request.StartDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-                data = data.Where(x => x.DateCreate >= start).ToList();
+              //  DateTime start = DateTime.ParseExact(request.StartDate.ToString(), "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
+                data = data.Where(x => x.DateCreate >= request.StartDate).ToList();
             }
-            if (!string.IsNullOrEmpty(request.EndDate))
+            if (!string.IsNullOrEmpty(request.EndDate.ToString()))
             {
-                DateTime end = DateTime.ParseExact(request.EndDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
-                data = data.Where(x => x.DateCreate <= end).ToList();
+               // DateTime end = DateTime.ParseExact(request.EndDate, "dd/MM/yyyy", CultureInfo.GetCultureInfo("vi-VN"));
+                data = data.Where(x => x.DateCreate <= request.EndDate).ToList();
             }
             if (!string.IsNullOrEmpty(request.Keyword))
             {

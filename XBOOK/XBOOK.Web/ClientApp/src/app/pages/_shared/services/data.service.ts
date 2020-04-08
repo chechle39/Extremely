@@ -4,7 +4,13 @@ import { BehaviorSubject, Subject, Observable } from 'rxjs';
 @Injectable()
 export class DataService {
   data: any;
+  search: any;
+  searchBuy: any;
+  searchJunal: any;
   private messageSource = new BehaviorSubject<any>(this.data);
+  private messageApplySearchIv = new BehaviorSubject<any>(this.search);
+  private messageApplySearchBuyIv = new BehaviorSubject<any>(this.searchBuy);
+  private messageApplySearchJunal = new BehaviorSubject<any>(this.searchJunal);
   private subject = new Subject<any>();
   code: any;
   codeToForm: any;
@@ -12,11 +18,35 @@ export class DataService {
   private codeSource = new BehaviorSubject<any>(this.code);
   private codeSourceToForm = new BehaviorSubject<any>(this.code);
   private sendEmailLoginSource = new BehaviorSubject<any>(this.sendEmailLogin);
-  // private sendEmailLoginSourceToForm = new BehaviorSubject<any>(this.sendEmailLogin);
   private codesubject = new Subject<any>();
   constructor() { }
+  sendApplySearchJunal(message: any) {
+    this.searchJunal = message;
+    this.messageApplySearchJunal.next({ data: message });
+    this.messageApplySearchJunal.asObservable();
+  }
 
+  getApplySearchJunal(): Observable<any> {
+    return this.messageApplySearchJunal.asObservable();
+  }
+  sendApplySearchBuyIv(message: any) {
+    this.searchBuy = message;
+    this.messageApplySearchBuyIv.next({ data: message });
+    this.messageApplySearchBuyIv.asObservable();
+  }
 
+  getApplySearchBuyIv(): Observable<any> {
+    return this.messageApplySearchBuyIv.asObservable();
+  }
+  sendApplySearchIv(message: any) {
+    this.search = message;
+    this.messageApplySearchIv.next({ data: message });
+    this.messageApplySearchIv.asObservable();
+  }
+
+  getApplySearchIv(): Observable<any> {
+    return this.messageApplySearchIv.asObservable();
+  }
   changeMessageMoneyFund(message: string) {
     this.messageSource.next(message);
   }

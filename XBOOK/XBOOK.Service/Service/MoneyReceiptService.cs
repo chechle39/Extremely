@@ -1,4 +1,5 @@
 ﻿using AutoMapper.QueryableExtensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -136,7 +137,14 @@ namespace XBOOK.Service.Service
             var data = await _iMoneyReceiptRepository.Update(request);
             var moneyGL = new MoneyReceiptGL(_uow);
             await _paymentRepository.UpdatePaymentByReceiptNumbe(request);
-            moneyGL.Update(request);
+            try
+            {
+                moneyGL.Update(request);
+
+            } catch(Exception ex)
+            {
+
+            }
             _uow.SaveChanges();
             return data;
         }

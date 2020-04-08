@@ -38,10 +38,30 @@ namespace XBOOK.Dapper.Service
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
                     var results = new List<SalesReportGroupViewModel>();
-                    dynamicParameters.Add("@productName", request.ProductName);
-                    dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);
-                    dynamicParameters.Add("@Currency", request.Client);
+                    if (request.Product != null && request.Client != null)
+                    {
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@clientName", request.Client);
+                    }
+                    else if (request.Product == null && request.Client != null)
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@clientName", request.Client);
+                    }
+                    else if (request.Client == null && request.Product != null)
+                    {
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                    else
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
                     return await sqlConnection.QueryAsync<SalesReportViewModel>(
                        "Book_SalesReport", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
@@ -59,16 +79,38 @@ namespace XBOOK.Dapper.Service
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
                     var results = new List<SalesReportGroupViewModel>();
-                    dynamicParameters.Add("@productName", request.ProductName);
-                    dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);
-                    dynamicParameters.Add("@Currency", request.Client);
+                    if (request.Product != null && request.Client != null)
+                    {
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@clientName", request.Client);
+                    }
+                    else if (request.Product == null && request.Client != null)
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@clientName", request.Client);
+                    }
+                    else if (request.Client == null && request.Product != null)
+                    {
+                        dynamicParameters.Add("@productName", request.Product);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                    else
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+
+
                     var res = await sqlConnection.QueryAsync<SalesReportViewModel>(
                        "Book_SalesReport", dynamicParameters, commandType: CommandType.StoredProcedure);
                     List<SalesReportViewModel> salesReportViewodel = res.ToList();
                     var results1 = from p in salesReportViewodel
                                    group p by p.ProductName into g
-                                   select new { productName = g.Key, SalesReportListData = g.ToList(), TotalAmount = g.Sum(x => x.Amount), TotalDiscount = g.Sum(x => x.Discount), TotalPayment = g.Sum(x => x.Payment) };
+                                   select new { productName = g.Key, SalesReportListData = g.ToList(), TotalQuantity = g.Sum(x => x.Quantity), TotalDiscount = g.Sum(x => x.Discount), TotalAmount = g.Sum(x => x.Amount) };
                     foreach (var item in results1)
                     {
                         var yy = new SalesReportGroupViewModel()
@@ -76,7 +118,7 @@ namespace XBOOK.Dapper.Service
                             productName = item.productName,
                             TotalDiscount = item.TotalDiscount,
                             totalAmount = item.TotalAmount,
-                            totalPayment = item.TotalPayment,
+                            TotalQuantity = item.TotalQuantity,
                             SalesReportListData = item.SalesReportListData,
                         };
                         results.Add(yy);

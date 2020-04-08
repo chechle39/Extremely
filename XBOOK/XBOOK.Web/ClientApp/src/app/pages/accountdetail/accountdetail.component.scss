@@ -1,5 +1,7 @@
-  .ngx-datatable .datatable-footer .datatable-footer-inner {
+  :host ::ng-deep .ngx-datatable .datatable-footer .datatable-footer-inner {
       display: inline-block !important;
+      height: unset !important;
+      align-items: flex-start;
     }
   :host ::ng-deep.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
       border-bottom: hidden;
@@ -27,23 +29,80 @@
     height: unset !important;
  }
 
-  
-  :host ::ng-deep .datatable-row-group {
-    height: 25px;
+ :host ::ng-deep .ngx-datatable.bootstrap .datatable-footer .page-count {
+  height: 0px; 
+}
+ :host ::ng-deep .datatable-row-group {
+    // height: 25px;
   }
-  .totalDebit{
-    position: absolute;
-    right: 38.3%;
+  :host ::ng-deep {
+    $colWidth1: 7rem;
+    $colWidth2: 9rem;
+    $colWidth3: auto;
+    $colWidth4: 7rem;
+    $colWidth5: 8rem;
+    $colWidth6: 8rem;
+    $colWidth7: 8rem;
+    $colWidth8: 8rem;
+    .datatable-header-cell,
+    .datatable-body-cell,
+    .datatable__footer__row > * {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      &:nth-child(1) {
+        flex: 0 0 $colWidth1;
+      }
+      &:nth-child(2) {
+        flex: 0 0 $colWidth2;
+      }
+      &:nth-child(3) {
+        flex: 1 1 $colWidth3;
+      }
+      &:nth-child(4) {
+        flex: 0 0 $colWidth4;
+      }
+      &:nth-child(5) {
+        flex: 0 0 $colWidth5;
+      }
+      &:nth-child(6) {
+        flex: 0 0 $colWidth6;
+      }
+      &:nth-child(7) {
+        flex: 0 0 $colWidth7;
+      }
+      &:nth-child(8) {
+        flex: 0 0 $colWidth8;
+      }
+    }
+    .datatable__footer__row {
+      position: relative;
+      padding-right: 0.75rem;
+      padding-left: 0.75rem;
+      > * {
+        &:nth-child(1) {
+          flex: 1 1 $colWidth1;
+        }
+        &:nth-child(2) {
+          flex: 0 0 $colWidth2;
+        }
+        &:nth-child(3) {
+          flex: 0 0 $colWidth3;
+        }
+        &:nth-child(4) {
+          flex: 0 0 $colWidth4;
+        }
+      }
+    }
   }
-  .totalCredit{
-    position: absolute;
-    right: 25.7%;
-  }
-  .totalDebitClosing{
-    position: absolute;
-    right: 13.3%;
-  }
-  .totalPayment{
-    right: 10px;
-    position: absolute;
+
+  ::ng-deep :root {
+    @media screen and (min-width: 993px) and (max-width: 1300px){
+      font-size: 13px;
+    }
+    @media screen and (min-width: 768px) and (max-width: 992px){
+      font-size: 10px;
+    }
+    @media screen and (max-width: 767px){
+      font-size: 7px;
+    }
   }

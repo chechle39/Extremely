@@ -163,6 +163,13 @@ export const API_URI = {
   MasterByMoney: 'api/MasterParam/GetMasTerByMoneyReceipt',
   MasterByPayment: 'api/MasterParam/GetMasTerByPaymentReceipt',
   MasterByPayType: 'api/MasterParam/GetMasTerByPaymentType',
+
+  getPurchaseChart: 'api/Dashboard/GetPurchaseChartDataAsync',
+  getSaleChart: 'api/Dashboard/GetSaleChartDataAsync',
+  getBalanceChart: 'api/Dashboard/GetBalanceChartDataAsync',
+  getSaleInvoiceReport: 'api/Dashboard/GetSaleInvoiceReportAsync',
+  getAllChart: 'api/Dashboard/GetAllChartAsync',
+
 };
 export const PAGING_CONFIG = {
   pageIndex: 1,

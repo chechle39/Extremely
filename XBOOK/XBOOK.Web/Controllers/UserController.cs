@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using XBOOK.Data.Identity;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
+using XBOOK.Web.Extensions;
 
 namespace XBOOK.Web.Controllers
 {
@@ -18,11 +20,15 @@ namespace XBOOK.Web.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;
-        public UserController(IUserService userService, UserManager<AppUser> userManager, IAuthorizationService authorizationService)
+        private readonly IEmailSender _emailSender;
+        private readonly SignInManager<AppUser> _signInManager;
+        public UserController(IUserService userService, SignInManager<AppUser> signInManager, IEmailSender emailSender, UserManager<AppUser> userManager, IAuthorizationService authorizationService)
         {
             _userService = userService;
             _userManager = userManager;
             _authorizationService = authorizationService;
+            _emailSender = emailSender;
+            _signInManager = signInManager;
         }
 
         [HttpPost("[action]")]
@@ -50,8 +56,25 @@ namespace XBOOK.Web.Controllers
                 IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
                 return new BadRequestObjectResult(allErrors);
             }
-            await _userService.AddAsync(userVm);
-            return Ok(userVm);
+            var saveEntity = await _userService.AddAsync(userVm);
+            if (saveEntity == true)
+            {
+                try
+                {
+                    var findUser = await _userManager.FindByEmailAsync(userVm.Email);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(findUser);
+                    await _signInManager.SignInAsync(findUser, isPersistent: false);
+                    var callbackUrl = Url.EmailConfirmationLink(findUser.Id, code, Request.Scheme);
+                    await _emailSender.SendEmailConfirmationAsync(userVm.Email, callbackUrl);
+
+                } catch(Exception ex)
+                {
+
+                }
+            
+                return Ok(userVm);
+            }
+            return BadRequest();
         }
 
         [HttpPut("[action]")]

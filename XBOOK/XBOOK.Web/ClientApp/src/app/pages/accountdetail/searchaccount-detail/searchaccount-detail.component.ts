@@ -131,11 +131,17 @@ export class SearchAccountDetailComponent extends AppComponentBase implements On
           fromDate: this.firstDate,
           toDate: this.endDate,
         });
+      }  
+      let clientName = '';
+      if(this.genLedForm.value.acountNumberMethod1!==null){
+        for (let i = 0; i < this.genLedForm.value.acountNumberMethod1.length; i++) {
+          clientName += this.genLedForm.value.acountNumberMethod1[i] + ';';
+        }
       }
-      const genledSearch = {
+      const genledSearch = {        
         startDate: this.firstDate === undefined ? null : this.firstDate,
         endDate: this.endDate === undefined ? null : this.endDate,
-        client: this.genLedForm.value.acountNumberMethod1,
+        client: clientName,
         acountNumberMethod: this.genLedForm.value.acountNumberMethod,
         case: this.genLedForm.value.genLedMethods
       };

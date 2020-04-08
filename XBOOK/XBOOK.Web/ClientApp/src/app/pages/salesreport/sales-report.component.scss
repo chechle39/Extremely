@@ -1,5 +1,7 @@
-.ngx-datatable .datatable-footer .datatable-footer-inner {
+:host ::ng-deep .ngx-datatable .datatable-footer .datatable-footer-inner {
   display: inline-block !important;
+  height: unset !important;
+  align-items: flex-start;
 }
 :host ::ng-deep.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
   border-bottom: hidden;
@@ -11,7 +13,9 @@
 :host ::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell {
   white-space: nowrap!important;
 }
-
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-footer .page-count {
+  height: 0px; 
+}
 :host ::ng-deep .form-line{
 
 margin-bottom: -30px;

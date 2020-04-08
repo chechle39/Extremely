@@ -3,6 +3,6 @@ export class PurchaseReportListData {
   productName: string;
   totalAmount: number;
   totalDiscount: number;
-  totalPayment: number;
+  totalQuantity: number;
   PurchaseReportData: PurchaseReportData[];
 }

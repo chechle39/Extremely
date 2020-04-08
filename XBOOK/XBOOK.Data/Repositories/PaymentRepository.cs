@@ -38,6 +38,8 @@ namespace XBOOK.Data.Repositories
         public async Task<bool> UpdatePaymentByReceiptNumbe(MoneyReceiptViewModel request)
         {
             var finData = Entities.Where(x => x.receiptNumber == request.ReceiptNumber).AsNoTracking().ToList();
+            if (finData.Count == 0)
+                return false;
             var update = new Payments()
             {
                 amount = request.Amount,

@@ -78,7 +78,6 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('Account Balance');
-    this.recalculateOnResize(() => this.accountBalanceViews = [...this.accountBalanceViews]);
   }
 
   getRowHeight(row) {
@@ -231,7 +230,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };
       this.data.sendMessage(data);
-      this.router.navigate([`/pages/genledgroup/${id}`]);
+      this.router.navigate([`/pages/generalledger/${id}`]);
     }  
    
   }

@@ -71,20 +71,20 @@
 
             </ng-template>
             </ngx-datatable-column> -->
-            <ngx-datatable-column name="{{ 'Debit.Age.LIST.CompanyName' | translate }}" prop="companyName">
+            <ngx-datatable-column name="{{ 'Debit.Age.LIST.CompanyName' | translate }}" prop="clientName">
               <ng-template  let-row="row" ngx-datatable-cell-template>
-                <div (click)="getaccNumber(row.companyName)" >{{row.companyName}}</div>
+                <div (click)="getaccNumber(row.clientName)" >{{row.clientName}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="firstMonth" name="0 - 31 {{ 'Debit.Age.LIST.Day' | translate }}"
+            <ngx-datatable-column prop="day0To30" name="0 - 31 {{ 'Debit.Age.LIST.Day' | translate }}"
               [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="text-right">
                   <div>
-                    <div *ngIf="row.firstMonth !== 0" class="col-more-info">
-                      {{row.firstMonth  | currency:'VND':''}}
+                    <div *ngIf="row.day0To30 !== 0" class="col-more-info">
+                      {{row.day0To30  | currency:'VND':''}}
                     </div>
-                    <div *ngIf="row.firstMonth  === 0">
+                    <div *ngIf="row.day0To30  === 0">
                       <a>-</a>
                     </div>
                   </div> 
@@ -92,15 +92,15 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="secondMonth" name="31 - 60 {{ 'Debit.Age.LIST.Day' | translate }}"
+            <ngx-datatable-column prop="day31To60" name="31 - 60 {{ 'Debit.Age.LIST.Day' | translate }}"
               [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="text-right">
                   <div>
-                    <div *ngIf="row.secondMonth !== 0" class="col-more-info">
-                      {{row.secondMonth  | currency:'VND':''}}
+                    <div *ngIf="row.day31To60 !== 0" class="col-more-info">
+                      {{row.day31To60  | currency:'VND':''}}
                     </div>
-                    <div *ngIf="row.secondMonth  === 0">
+                    <div *ngIf="row.day31To60  === 0">
                       <a>-</a>
                     </div>
                   </div> 
@@ -108,15 +108,15 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="thirdMonth" name="61-90 {{ 'Debit.Age.LIST.Day' | translate }}"
+            <ngx-datatable-column prop="day61To90" name="61-90 {{ 'Debit.Age.LIST.Day' | translate }}"
               [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="text-right">
                   <div>
-                    <div *ngIf="row.thirdMonth !== 0" class="col-more-info">
-                      {{row.thirdMonth  | currency:'VND':''}}
+                    <div *ngIf="row.day61To90 !== 0" class="col-more-info">
+                      {{row.day61To90  | currency:'VND':''}}
                     </div>
-                    <div *ngIf="row.thirdMonth  === 0">
+                    <div *ngIf="row.day61To90  === 0">
                       <a>-</a>
                     </div>
                   </div> 
@@ -124,16 +124,16 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column prop="fourthMonth" name="90+ {{ 'Debit.Age.LIST.Day' | translate }}"
+            <ngx-datatable-column prop="day90More" name="90+ {{ 'Debit.Age.LIST.Day' | translate }}"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-right" style="padding-right: 0;">
                   <!-- {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}} -->
                   <div>
-                    <div *ngIf="row.fourthMonth !== 0" class="col-more-info">
-                      {{row.fourthMonth  | currency:'VND':''}}
+                    <div *ngIf="row.day90More !== 0" class="col-more-info">
+                      {{row.day90More  | currency:'VND':''}}
                     </div>
-                    <div *ngIf="row.fourthMonth  === 0">
+                    <div *ngIf="row.day90More  === 0">
                       <a>-</a>
                     </div>
                   </div> 
@@ -141,15 +141,15 @@
               </ng-template>
             </ngx-datatable-column>
 
-           <ngx-datatable-column prop="sumtotal" name="{{ 'Debit.Age.LIST.Total' | translate }}"
+           <ngx-datatable-column prop="subTotal" name="{{ 'Debit.Age.LIST.Total' | translate }}"
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="text-right">
                   <div>
-                    <div *ngIf="row.sumtotal !== 0" class="col-more-info">
-                      {{row.sumtotal  | currency:'VND':''}}
+                    <div *ngIf="row.subTotal !== 0" class="col-more-info">
+                      {{row.subTotal  | currency:'VND':''}}
                     </div>
-                    <div *ngIf="row.sumtotal  === 0">
+                    <div *ngIf="row.subTotal  === 0">
                       <a>-</a>
                     </div>
                   </div>
@@ -165,7 +165,7 @@
                   <div class="text-right datatable__footer__row">
                     <div  style="text-align: left;">
                       <div class="card__title"
-                      style="color: rgb(16, 20, 20);inset-block: inherit;">
+                      style="color: rgb(16, 20, 20);inset-block: inherit;position: absolute; left: 0;">
                       {{ 'Debit.Age.LIST.Total' | translate }}
                       </div>
                     </div>

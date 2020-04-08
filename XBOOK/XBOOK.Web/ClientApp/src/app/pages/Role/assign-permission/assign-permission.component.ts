@@ -158,7 +158,7 @@ export class AssignPermissionComponent extends PagedListingComponentBase<any> im
         this.senData.sendMessage(rs);
 
       }
-      this.router.navigate([`/pages/genledgroup`]);
+      this.router.navigate([`/pages/generalledger`]);
 
     }
   }

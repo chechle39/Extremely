@@ -7,14 +7,14 @@ namespace XBOOK.Dapper.ViewModels
     public class PurchaseReportViewModel
     {
         public string ProductName { get; set; }
-        public string Supplier { get; set; }
-        public string InvoiceNumber { get; set; }
+        public string supplierName { get; set; }
+        public string invoiceNumber { get; set; }
         public string InvoiceID { get; set; }
-        public DateTime Date { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal Amount { get; set; }
+        public DateTime issueDate { get; set; }
+        public decimal price { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Discount { get; set; }
-        public decimal Payment { get; set; }
+        public decimal Amount { get; set; }
 
     }
     public class PurchaseReportGroupViewModel
@@ -22,7 +22,7 @@ namespace XBOOK.Dapper.ViewModels
         public string productName { get; set; }
         public decimal totalAmount { get; set; }
         public decimal TotalDiscount { get; set; }
-        public decimal totalPayment { get; set; }
+        public decimal totalQuantity { get; set; }
         public List<PurchaseReportViewModel> PurchaseReportListData { get; set; }
 
        
@@ -35,14 +35,14 @@ namespace XBOOK.Dapper.ViewModels
         public string endDate { get; set; }
         public string startDate { get; set; }
         public string ProductName { get; set; }
-        public string Supplier { get; set; }
+        public string supplierName { get; set; }
+        public string invoiceNumber { get; set; }
         public string InvoiceID { get; set; }
-        public string InvoiceNumber { get; set; }
-        public DateTime Date { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal Amount { get; set; }
+        public DateTime issueDate { get; set; }
+        public decimal price { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Discount { get; set; }
-        public decimal Payment { get; set; }
+        public decimal Amount { get; set; }
 
     }
 

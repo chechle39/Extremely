@@ -36,7 +36,6 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
     private userService: UserService) {
     super(injector);
     this.commonService.CheckAssessFunc('User');
-    this.recalculateOnResize(() => this.userViews = [...this.userViews]);
   }
 
 

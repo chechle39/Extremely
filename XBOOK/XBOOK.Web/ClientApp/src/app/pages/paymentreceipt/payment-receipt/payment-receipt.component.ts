@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector, ViewChild, ElementRef, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
-import { Observable, Subject, merge, of } from 'rxjs';
+import { Observable, Subject, merge, of, forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -68,6 +68,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   }
 
   ngOnInit() {
+    this.getDataPayAndEntry();
     if (this.outstandingAmount !== undefined) {
       this.moneyReceipt.controls.amount.patchValue(this.outstandingAmount);
       this.moneyReceipt.controls.supplierID.patchValue(this.supplierID);
@@ -116,11 +117,11 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
 
       });
     }
-    if (this.row === undefined) {
-      this.getLastDataMoneyReceipt();
-      this.getAllEntryData();
-    }
-    this.getPayType();
+    // if (this.row === undefined) {
+    //   this.getLastDataMoneyReceipt();
+    //   this.getAllEntryData();
+    // }
+    // this.getPayType();
   }
 
   getParam(data) {
@@ -176,35 +177,55 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   }
 
 
-  getLastDataMoneyReceipt() {
-    this.paymentReceiptService.getLastPayment().subscribe(rp => {
-      this.LastMoneyReceipt = rp;
-      // this.receiptNumber = rp.receiptNumber;
-      this.moneyReceipt.controls.receiptNumber.patchValue(rp === null ? null : rp.receiptNumber);
-    });
-  }
-  getPayType() {
-    this.masterParamService.GetMasTerByPayType().subscribe(rp => {
-      this.payment = rp;
-      if (this.row === undefined) {
-        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
-      } else {
-        const entry = this.payment.filter(x => x.name === this.row.payType);
-      //  this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
-      }
-    });
-  }
-  getAllEntryData() {
-    this.masterParamService.GetMasTerByPaymentReceipt().subscribe((rp: MasterParamModel[]) => {
-      this.entryBatternList = rp;
+  // getLastDataMoneyReceipt() {
+  //   this.paymentReceiptService.getLastPayment().subscribe(rp => {
+  //     this.LastMoneyReceipt = rp;
+  //     // this.receiptNumber = rp.receiptNumber;
+  //     this.moneyReceipt.controls.receiptNumber.patchValue(rp === null ? null : rp.receiptNumber);
+  //   });
+  // }
+  // getPayType() {
+  //   this.masterParamService.GetMasTerByPayType().subscribe(rp => {
+  //     this.payment = rp;
+  //     if (this.row === undefined) {
+  //       this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
+  //     } else {
+  //       const entry = this.payment.filter(x => x.name === this.row.payType);
+  //     //  this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
+  //     }
+  //   });
+  // }
+  // getAllEntryData() {
+  //   this.masterParamService.GetMasTerByPaymentReceipt().subscribe((rp: MasterParamModel[]) => {
+  //     this.entryBatternList = rp;
+  //     if (this.row === undefined) {
+  //       this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
+  //     } else {
+  //       const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
+  //       this.moneyReceipt.controls.entryType.patchValue(entry[0].key);
+  //     }
+  //   });
+  // }
+  getDataPayAndEntry() {
+    forkJoin(
+      this.masterParamService.GetMasTerByPayType(),
+      this.masterParamService.GetMasTerByMoneyReceipt(),
+      this.paymentReceiptService.getLastPayment(),
+    ).subscribe(([rp1, rp2, rp3]) => {
+      this.payment = rp1;
+      this.entryBatternList = rp2;
       if (this.row === undefined) {
         this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
+        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
       } else {
         const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
-        this.moneyReceipt.controls.entryType.patchValue(entry[0].key);
       }
+      this.LastMoneyReceipt = rp3;
+      this.moneyReceipt.controls.receiptNumber.patchValue(rp3.receiptNumber);
+
     });
   }
+
   close(result: any): void {
     this.activeModal.close(result);
   }

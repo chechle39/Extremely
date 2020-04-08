@@ -27,8 +27,8 @@ namespace XBOOK.Dapper.Service
 
         public async Task<IEnumerable<AccountDetailGroupViewModel>> GetAccountDetailAsync(AccountDetailSerchRequest request)
         {
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            //var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 string deltaFrom = request.StartDate;
                 DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));
@@ -38,16 +38,36 @@ namespace XBOOK.Dapper.Service
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
                     var results = new List<AccountDetailGroupViewModel>();
-                    dynamicParameters.Add("@accountName", request.accountNumber);
-                    dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);
-                    dynamicParameters.Add("@Client", request.client);
+                    if (request.accountNumber != null && request.client != null)
+                    {
+                        dynamicParameters.Add("@accountNumber", request.accountNumber);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@Client", request.client);
+                    }
+                    else if (request.accountNumber == null && request.client != null)
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@Client", request.client);
+                    }
+                    else if (request.client == null && request.accountNumber != null)
+                    {
+                        dynamicParameters.Add("@accountNumber", request.accountNumber);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                    else
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
                     var res = await sqlConnection.QueryAsync<AccountDetailViewModel>(
                     "Book_AccountDetail", dynamicParameters, commandType: CommandType.StoredProcedure);                   
                     List<AccountDetailViewModel> salesReportViewodel = res.ToList();
                     var results1 = from p in salesReportViewodel
                                    group p by p.companyName into g
-                                   select new { companyName = g.Key, accountNumber = g.Key, SalesReportListData = g.ToList(),  totaCredit = g.Sum(x => x.Credit), totalDebit = g.Sum(x => x.Debit), totalCreditClosing = g.Sum(x => x.CreditClosing), totalDebitClosing = g.Sum(x => x.DebitClosing) };
+                                   select new { companyName = g.Key, accountNumber = g.Key, SalesReportListData = g.ToList(),  totaCredit = g.Sum(x => x.Credit), totalDebit = g.Sum(x => x.Debit), totalCreditClosing = g.Sum(x => x.CreditClosing), totalDebitClosing = g.Sum(x => x.DebitClosing), totalDebitOpening = g.Sum(x => x.DebitOpening), totalCreditOpening = g.Sum(x => x.CreditOpening) };
                     foreach (var item in results1)
                     {
                         var yy = new AccountDetailGroupViewModel()
@@ -59,6 +79,8 @@ namespace XBOOK.Dapper.Service
                             totalCredit = item.totaCredit,
                             totalDebitClosing = item.totalDebitClosing,
                             totalCreditClosing = item.totalCreditClosing,
+                            totalCreditOpening = item.totalCreditOpening,
+                            totalDebitOpening = item.totalDebitOpening,
                             AccountDetailViewModel = item.SalesReportListData
                         };
                         results.Add(yy);
@@ -80,10 +102,30 @@ namespace XBOOK.Dapper.Service
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
-                    dynamicParameters.Add("@accountName", request.accountNumber);
-                    dynamicParameters.Add("@fromDate", fromDate);
-                    dynamicParameters.Add("@toDate", toDate);
-                    dynamicParameters.Add("@Client", request.client);
+                    if (request.accountNumber != null && request.client != null)
+                    {
+                        dynamicParameters.Add("@accountNumber", request.accountNumber);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@Client", request.client);
+                    }
+                    else if (request.accountNumber == null && request.client != null)
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                        dynamicParameters.Add("@Client", request.client);
+                    }
+                    else if (request.client == null && request.accountNumber != null)
+                    {
+                        dynamicParameters.Add("@accountNumber", request.accountNumber);
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
+                    else
+                    {
+                        dynamicParameters.Add("@fromDate", fromDate);
+                        dynamicParameters.Add("@toDate", toDate);
+                    }
                     return await sqlConnection.QueryAsync<AccountDetailViewModel>(
                        "Book_AccountDetail", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }

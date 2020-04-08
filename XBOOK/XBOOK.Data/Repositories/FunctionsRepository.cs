@@ -40,7 +40,7 @@ namespace XBOOK.Data.Repositories
                 var children = new List<children>();
                 foreach (var item2 in data.Where(x=>x.ParentId == item.Id))
                 {
-                    var result = await _authorizationService.AuthorizeAsync(user, item2.Name, Operations.Read);
+                    var result = await _authorizationService.AuthorizeAsync(user, item2.Id, Operations.Read);
                     if (result.Succeeded == true)
                     {
                         var child = new children()

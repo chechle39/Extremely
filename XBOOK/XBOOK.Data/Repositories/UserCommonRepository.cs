@@ -22,6 +22,7 @@ namespace XBOOK.Data.Repositories
                 {
                     Code = data[0].Code,
                     Email = data[0].Email,
+                    ConnectionString = data[0].ConnectionString
                 };
                 return result;
             } else

@@ -63,11 +63,6 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('Purchase Report');
-    this.recalculateOnResize(() => {
-      this.genViews.forEach((view, index) => {
-        this.genViews[index].purchaseReportListData = [...view.purchaseReportListData];
-      });
-    });
   }
 
   protected list(
@@ -106,7 +101,7 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
         this.genViews = i;
         this.purchaseViewsrequst = this.genViews;
         this.gettotalAmount();
-        this.gettotalPayment();
+        this.gettotalQuantity();
       });
     this.purchaseReportService.getDataReport(genledSearch).subscribe(rp => {
       this.genViewsReport = rp;
@@ -125,9 +120,9 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
       return item.totalDiscount;
     });
   }
- gettotalPayment(): number {
+ gettotalQuantity(): number {
     return _.sumBy(this.purchaseViewsrequst, item => {
-      return item.totalPayment;
+      return item.totalQuantity;
     });
   }
 
@@ -138,8 +133,8 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
       const genledSearch = {
         startDate: result.startDate,
         endDate: result.endDate,
-        client: result.client,
-        product: result.product,
+        client:result.client === '' ? null : result.client ,
+        product:result.product === '' ? null :  result.product,
       };
       this.exportCSV = result;
       this.purchaseReportService.searchGen(genledSearch).subscribe(rp => {
@@ -150,7 +145,7 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
         this.endDay = result.endDate;
         this.keyspace = ' - ';
         this.gettotalAmount();
-        this.gettotalPayment();
+        this.gettotalQuantity();
       });
       this.purchaseReportService.getDataReport(genledSearch).subscribe(rp => {
         this.genViewsReport = rp;
@@ -186,13 +181,13 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
         companyAddress: this.companyAddress,
         companyCode: this.companyCode,
         productName: this.purchaseViewsreport[j].productName,
-        supplier: this.purchaseViewsreport[j].supplier,
+        supplierName: this.purchaseViewsreport[j].supplierName,
         invoiceNumber: this.purchaseViewsreport[j].invoiceNumber,
-        date: this.purchaseViewsreport[j].date,
-        unitPrice: this.purchaseViewsreport[j].unitPrice,
+        date: this.purchaseViewsreport[j].issueDate,
+        price: this.purchaseViewsreport[j].price,
         amount: this.purchaseViewsreport[j].amount,
         discount: this.purchaseViewsreport[j].discount,
-        payment: this.purchaseViewsreport[j].payment,
+        quantity: this.purchaseViewsreport[j].quantity,
         startDate: this.startDay === undefined ? this.firstDate : this.startDay,
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };

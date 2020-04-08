@@ -43,7 +43,6 @@ export class AccountChartComponent extends PagedListingComponentBase<any> {
     ) {
     super(injector);
     this.commonService.CheckAssessFunc('Account Chart');
-    this.recalculateOnResize(() => this.data = [...this.data]);
   }
 
   protected list(
@@ -162,7 +161,7 @@ export class AccountChartComponent extends PagedListingComponentBase<any> {
         this.senData.sendMessage(rs);
 
       }
-      this.router.navigate([`/pages/genledgroup`]);
+      this.router.navigate([`/pages/generalledger`]);
 
     }
   }

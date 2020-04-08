@@ -64,6 +64,9 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
   isDue: false;
   startDate: string;
   endDate: string;
+  isCheckOpen: boolean;
+  isCheckFillter: boolean = false;
+  requesSearchtList: { keyword: string; startDate: string; endDate: string };
   constructor(
     private data: DataService,
     private journalEntryService: JournalEntryService,
@@ -75,9 +78,20 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     super(injector);
     this.commonService.CheckAssessFunc('Journal Entries');
     this.searchForm = this.createForm();
-    this.recalculateOnResize(() => this.invoiceViews = [...this.invoiceViews]);
+    this.getDataSearch();
   }
-
+  getDataSearch() {
+    this.data.getApplySearchJunal().subscribe(rp => {
+      if (rp !== undefined && this.isCheckFillter === false && rp.data !== '') {
+        if (rp.data.startDate !== '') {
+          this.dateFilters = rp.data.startDate + ' ' + '-' + ' ' + rp.data.endDate;
+          this.isCheckOpen = true;
+        }
+        this.keyword = rp.data.keyword;
+        this.requesSearchtList = rp.data;
+      }
+    });
+  }
   createForm() {
     const date = new Date();
     const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
@@ -89,8 +103,8 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     const endDateMonthCurent = { year: Number(endDateMonth[2]),
       month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
     return this.fb.group({
-      startDate: firstDateMonthCurent,
-      endDate: endDateMonthCurent,
+      startDate: [firstDateMonthCurent],
+      endDate: [endDateMonthCurent],
       issueDate: ['IssueDate'],
       // dueDate: this.isDue,
     });
@@ -103,25 +117,44 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
   ): void {
     this.loadingIndicator = true;
     request.keyword = this.searchString;
-    const requestList = {
-      keyword: this.keyword.toLocaleLowerCase(),
-      startDate: '',
-      endDate: '',
-    };
+    // const requestList = {
+    //   keyword: this.keyword.toLocaleLowerCase(),
+    //   startDate: '',
+    //   endDate: '',
+    // };
+    if (this.requesSearchtList === undefined) {
+      const requestList = {
+        keyword: this.keyword.toLocaleLowerCase(),
+        startDate: '',
+        endDate: '',
+       // isIssueDate: true,
+      };
+      this.getJournalEntry(requestList);
+    }
+    if (this.requesSearchtList !== undefined) {
+      const requestList = {
+        keyword: this.keyword.toLocaleLowerCase(),
+        startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
+        endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
+      //  isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+      };
+      this.getJournalEntry(requestList);
+    }
     // if (this.client !== undefined){
     //   this.getInvoice(requestList);
     // }
 
-    this.getJournalEntry(requestList);
+   // this.getJournalEntry(requestList);
   }
 
   getJournalEntry(request) {
     if (this.dateFilters !== '') {
       const rs = {
         keyword: this.keyword.toLocaleLowerCase(),
-        startDate: this.startDate,
-        endDate: this.endDate,
+        startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
+        endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
       };
+      this.data.sendApplySearchJunal(rs);
       this.journalEntryService.searchJournal(rs).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
@@ -129,6 +162,8 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
         this.listInvoice = this.invoiceViews;
       });
     } else {
+      this.data.sendApplySearchJunal(request);
+
       this.journalEntryService.searchJournal(request).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
@@ -212,6 +247,7 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
   }
 
   applySearchFilter(formFilter: FormGroup) {
+    this.isCheckFillter = true;
     this.isSubmitted = true;
     if (!formFilter.valid) {
       return false;

@@ -1,8 +1,8 @@
 import { Component, Injector, ViewChild, QueryList, ViewChildren } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { PagedRequestDto, PagedListingComponentBase } from '../../../coreapp/paged-listing-component-base';
@@ -57,12 +57,18 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   isDue: false;
   startDate: string;
   endDate: string;
+  subscription: Subscription;
+  isCheckOpen: boolean;
+  isCheckFillter: boolean = false;
+  requesSearchtList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; };
+
   constructor(
     private data: DataService,
     injector: Injector,
     private invoiceService: InvoiceService,
     private buyInvoiceService: BuyInvoiceService,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     public authenticationService: AuthenticationService,
     private commonService: CommonService,
@@ -70,9 +76,20 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     super(injector);
     this.commonService.CheckAssessFunc('Buy invoice');
     this.searchForm = this.createForm();
-    this.recalculateOnResize(() => this.buyinvoiceViews = [...this.buyinvoiceViews]);
+    this.getDataSearch();
   }
-
+  getDataSearch() {
+    this.data.getApplySearchBuyIv().subscribe(rp => {
+      if (rp !== undefined && this.isCheckFillter === false && rp.data !== '') {
+        if (rp.data.startDate !== '') {
+          this.dateFilters = rp.data.startDate + ' ' + '-' + ' ' + rp.data.endDate;
+          this.isCheckOpen = true;
+        }
+        this.keyword = rp.data.keyword;
+        this.requesSearchtList = rp.data;
+      }
+    });
+  }
   createForm() {
     const date = new Date();
     const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
@@ -104,44 +121,63 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   ): void {
     this.loadingIndicator = true;
     request.keyword = this.searchString;
-    const requestList = {
-      keyword: this.keyword.toLocaleLowerCase(),
-      startDate: '',
-      endDate: '',
-      isIssueDate: true,
-    };
-    this.data.getMessagebuyInvoice().subscribe(rp => {
-      if(rp !== undefined){
-        this.buyinvoiceOfChart();
-      } else {
-        this.buyInvoiceOfClient(requestList);
-      }
-    });      
+    //Thang code
+    // this.getBuyInVByRequestSearch();
+    if (this.router.url !== '/pages/buyinvoice') {
+      this.buyinvoiceOfChart();
+    } else{
+      this.getBuyInVByRequestSearch();
+    }
   }
-  buyinvoiceOfChart() {
-    this.data.getMessagebuyInvoice().subscribe(rp => {
-      if (rp !== undefined) {
-        console.log(rp.data.startDate);
-        console.log(rp.data.endDate);
-        const rs = {
-          keyword: '',
-          startDate:  rp.data.startDate,
-          endDate: rp.data.endDate,
-          isIssueDate: this.ischeck,
+
+  private getBuyInVByRequestSearch() {
+    if (this.requesSearchtList === undefined) {
+      this.requesSearchtList = {
+        keyword: this.keyword.toLocaleLowerCase(),
+        startDate: '',
+        endDate: '',
+        isIssueDate: true,
+      };
+      this.buyInvoiceOfClient(this.requesSearchtList);
+      this.data.sendApplySearchBuyIv(this.requesSearchtList);
+    } else
+      if (this.requesSearchtList !== undefined) {
+        const requestData = {
+          keyword: this.keyword.toLocaleLowerCase(),
+          startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
+          endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
+          isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
         };
-        this.buyInvoiceService.getAllBuyInvoiceList(rs).pipe(
-        ).subscribe((i: any) => {         
-          this.buyinvoiceViews = i;
-          this.listInvoice = this.buyinvoiceViews;
-        });
+        this.buyInvoiceOfClient(requestData);
+        this.data.sendApplySearchBuyIv(requestData);
       }
-    });
+  }
+
+  buyinvoiceOfChart() {
+    if (this.route !== undefined) {
+      this.route.queryParams     
+      .subscribe(params => {                
+          const requestList = {
+            keyword: '',
+            startDate: params.startDate,
+            endDate: params.endDate,
+            isIssueDate: false,
+          };          
+          this.buyInvoiceService.getAllBuyInvoiceList(requestList).pipe(
+          ).subscribe((i: any) => {
+            this.loadingIndicator = false;
+            this.buyinvoiceViews = i;
+            this.listInvoice = this.buyinvoiceViews;
+          });
+        });              
+    }
 
   }
-  buyInvoiceOfClient(request) {
-    this.data.getMessage().subscribe(rp => {
 
-      if (rp !== undefined) {
+  buyInvoiceOfClient(request) {
+    this.subscription = this.data.getMessage().subscribe(rp => {
+
+      if (rp !== undefined && rp.data !== '') {
         this.client = rp.data;
         if (this.dateFilters !== '') {
           const rs = {
@@ -159,25 +195,51 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
             this.commonService.messeage(er.status);
           });
         } else {
-          const requestList = {
-            keyword: this.keyword.toLocaleLowerCase() + this.client,
-            startDate: '',
-            endDate: '',
-            isIssueDate: true,
-          };
-          this.buyInvoiceService.getAllBuyInvoiceList(requestList).pipe(
-          ).subscribe((i: any) => {
-            this.loadingIndicator = false;
-            this.buyinvoiceViews = i;
-            this.listInvoice = this.buyinvoiceViews;
-          }, (er) => {
-            this.commonService.messeage(er.status);
-          });
+
+          if (this.requesSearchtList === undefined) {
+            const requestList = {
+              keyword: this.keyword.toLocaleLowerCase(),
+              startDate: '',
+              endDate: '',
+              isIssueDate: true,
+            };
+            this.getAllBuyInv(requestList);
+          }
+
+          if (this.requesSearchtList !== undefined) {
+            const requestList = {
+              keyword: this.keyword.toLocaleLowerCase() + this.client,
+              startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
+              endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
+              isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+            };
+            this.getAllBuyInv(requestList);
+          }
         }
       } else {
         this.getBuyInvoice(request);
       }
+      // thắng fix chổ này, chổ này làm cho invoice call rất nhìu lần
+      // khi từ màn hình suplier tìm kiếm với list buyinvoice
 
+      // this.data.getMessagebuyInvoice().subscribe(rp => {
+      //   if (rp !== undefined && rp.data !== '') {
+      //     this.buyinvoiceOfChart();
+      //   }
+      // });
+    });
+    this.subscription.unsubscribe();
+    this.data.sendMessage('');
+  }
+
+
+  private getAllBuyInv(requestList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; }) {
+    this.buyInvoiceService.getAllBuyInvoiceList(requestList).pipe().subscribe((i: any) => {
+      this.loadingIndicator = false;
+      this.buyinvoiceViews = i;
+      this.listInvoice = this.buyinvoiceViews;
+    }, (er) => {
+      this.commonService.messeage(er.status);
     });
   }
 
@@ -185,9 +247,9 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     if (this.dateFilters !== '') {
       const rs = {
         keyword: this.keyword.toLocaleLowerCase(),
-        startDate: this.startDate,
-        endDate: this.endDate,
-        isIssueDate: this.ischeck,
+        startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
+        endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
+        isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
       };
       this.buyInvoiceService.getAllBuyInvoiceList(rs).pipe(
       ).subscribe((i: any) => {
@@ -195,7 +257,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         this.buyinvoiceViews = i;
         this.listInvoice = this.buyinvoiceViews;
       }, (er) => {
-          this.commonService.messeage(er.status);
+        this.commonService.messeage(er.status);
       });
     } else {
       this.buyInvoiceService.getAllBuyInvoiceList(request).pipe(
@@ -289,7 +351,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     this.buyInvoiceService.deleteBuyInvoice(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
-    },  (er) => {
+    }, (er) => {
       this.commonService.messeage(er.status);
     });
   }
@@ -370,6 +432,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   }
 
   applySearchFilter(formFilter: FormGroup) {
+    this.isCheckFillter = true;
     this.isSubmitted = true;
     if (!formFilter.valid) {
       return false;
@@ -398,8 +461,8 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         endDate: searchStr.to,
         isIssueDate: this.ischeck,
       };
+      this.data.sendApplySearchBuyIv(requestList);
       this.getBuyInvoice(requestList);
-      // alert(JSON.stringify(searchStr));
     }
   }
   clearFilter(formFilter: FormGroup) {

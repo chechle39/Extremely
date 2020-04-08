@@ -138,11 +138,26 @@ export class SearchsalesReportComponent extends AppComponentBase implements OnIn
           toDate: this.endDate,
         });
       }
+      let Client = '';
+      if(this.genLedForm.value.acountNumberMethod1!==null){
+        for (let i = 0; i < this.genLedForm.value.acountNumberMethod1.length; i++) {
+          Client +=this.genLedForm.value.acountNumberMethod1[i] + ';';
+        }
+      }
+      // tslint:disable-next-line:prefer-for-of     
+      let Product = '';
+      if(this.genLedForm.value.acountNumberMethod!==null){
+        for (let i = 0; i < this.genLedForm.value.acountNumberMethod.length; i++) {
+          Product += this.genLedForm.value.acountNumberMethod[i] + ';';
+        }
+      }
+      // tslint:disable-next-line:prefer-for-of
+    
       const genledSearch = {
         startDate: this.firstDate === undefined ? null : this.firstDate,
         endDate: this.endDate === undefined ? null : this.endDate,
-        client: this.genLedForm.value.acountNumberMethod1,
-        product: this.genLedForm.value.acountNumberMethod,
+        client: Client,
+        product: Product,
         case: this.genLedForm.value.genLedMethods,
       };
 

@@ -74,7 +74,7 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
     const issueDatePicker = this.tranFormsDate(today);
     return this.fb.group({
       genLedMethods: this.genLedMethods[0].GenLedId,
-      currencyMethod: this.currencyMethod[0].CurrencyId,
+      currencyMethod: this.currencyMethod[0].CurrencyType,
       fromDate: issueDatePicker,
       toDate: issueDatePicker,
       account: this.isSelectedAccount = true,
@@ -115,7 +115,7 @@ export class SearchgenledComponent extends AppComponentBase implements OnInit {
         endDate: this.endDate === undefined ? null : this.endDate,
         isaccount: this.genLedForm.value.account,
         isAccountReciprocal: this.genLedForm.value.accountReciprocal,
-        money: null,
+        money: this.genLedForm.value.currencyMethod,
         accNumber: this.genLedForm.value.acountNumberMethod,
         case: this.genLedForm.value.genLedMethods
       };

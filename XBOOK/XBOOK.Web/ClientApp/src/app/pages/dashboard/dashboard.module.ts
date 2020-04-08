@@ -9,6 +9,8 @@ import { SalesFiguresComponent } from './sales-figures/sales-figures.component';
 import { SaleChartComponent } from './sale-chart/sale-chart.component';
 import { PurchaseChartComponent } from './purchase-chart/purchase-chart.component';
 import { DataService } from '../_shared/services/data.service';
+import { RouterModule } from '@angular/router';
+import { DashboardService } from '../_shared/services/dashboard.service';
 
 @NgModule({
   imports: [
@@ -18,6 +20,7 @@ import { DataService } from '../_shared/services/data.service';
     NbButtonModule,
     NbCardModule,
     NbSelectModule,
+    RouterModule,
   ],
   declarations: [
     DashboardComponent,
@@ -25,6 +28,9 @@ import { DataService } from '../_shared/services/data.service';
     SalesFiguresComponent,
     SaleChartComponent,
     PurchaseChartComponent,
+  ],
+  providers: [
+    DashboardService,
   ],
 })
 export class DashboardModule { }

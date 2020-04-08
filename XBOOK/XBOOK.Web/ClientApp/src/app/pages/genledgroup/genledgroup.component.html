@@ -42,12 +42,13 @@
       <div *ngFor="let account of tempaccount">
         <div *ngIf="group.accNumber==account.accountNumber" style="color: #546D74;position: absolute; font-size: 1.1rem;">
           {{account.accountName}}-{{account.accountNumber}}</div>
+          
       </div>
 
 
       <div class="row">
         <hr width="98%" style="height: 2px;;background: #6A0888;" class="mb-0" />
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-bottom: 2rem;">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="group.genneralListData"
             [sorts]="[{prop: 'id', dir: 'desc'}]" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
             [headerHeight]="75" [footerHeight]="100" [reorderable]="reorderable" [selected]="selected"
@@ -145,7 +146,7 @@
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
                 <div class="row"
-                  style="position:relative;display: inline-block;width: 100%;border-top: 3px double #ccc;padding-bottom: 7rem;padding-top: 10px;">
+                  style="position:relative;display: inline-block;width: 100%;border-top: 3px double #ccc;padding-top: 10px;">
                   <div class="datatable__footer__row text-right" style="position:relative;">
                     <div></div>
                     <div></div>

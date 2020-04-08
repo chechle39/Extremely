@@ -63,11 +63,6 @@ export class MoneyFundComponent extends PagedListingComponentBase<ClientView> {
     private router: Router) {
     super(injector);
     this.commonService.CheckAssessFunc('Money Fund');
-    this.recalculateOnResize(() => {
-      this.genViews.forEach((view, index) => {
-        this.genViews[index].MoneyFundListData = [...view.MoneyFundListData];
-      });
-    });
   }
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const authToken = this.auth.getAuthToken() as string;
@@ -87,7 +82,8 @@ export class MoneyFundComponent extends PagedListingComponentBase<ClientView> {
     this.data.getMessageMoneyFund().subscribe(rp => {
       const genledSearch = {
         startDate: rp.data.startDate === undefined ? null : rp.data.startDate,
-        endDate: rp.data.endDate === undefined ? null : rp.data.endDate,    
+        endDate: rp.data.endDate === undefined ? null : rp.data.endDate,  
+        money:"VND",   
       };
       this.startDay = rp.data.startDate;
       this.keyspace = ' - ';
@@ -139,6 +135,7 @@ export class MoneyFundComponent extends PagedListingComponentBase<ClientView> {
         const genledSearch = {
         startDate:result.startDate === undefined ? null : result.startDate,
         endDate: result.endDate === undefined ? null : result.endDate, 
+        money: result.money === null ? "VND" : result.money, 
         };
         this.moneyFundService.searchMoneyFund(genledSearch).subscribe(rp => {
           this.genViews = rp;
@@ -168,26 +165,26 @@ export class MoneyFundComponent extends PagedListingComponentBase<ClientView> {
   }
   Print() {
     // tslint:disable-next-line:prefer-for-of
-    console.log(this.companyName);
-    console.log(this.salesViewsreport);
     for (let j = 0; j < this.salesViewsreport.length; j++) {
       const data = {
         companyNameName: this.companyName,
         companyAddress: this.companyAddress,
         companyCode: this.companyCode,
-        MoneyFund: this.salesViewsreport[j].moneyFund,
-        invoiceNumber: this.salesViewsreport[j].invoiceNumber,
-        date: this.salesViewsreport[j].date,
+        cashType: this.salesViewsreport[j].cashType,
+        ReceiptNumber: this.salesViewsreport[j].receiptNumber,
+        receiptDate: this.salesViewsreport[j].receiptDate,
         note: this.salesViewsreport[j].note,
-        CollectMoney: this.salesViewsreport[j].collectMoney,
-        PayMoney: this.salesViewsreport[j].payMoney,
-        ResidualFund: this.salesViewsreport[j].residualFund,
+        CompanyName: this.salesViewsreport[j].companyName,
+        Pay: this.salesViewsreport[j].pay,
+        Receive: this.salesViewsreport[j].receive,
+        openingBalance: this.salesViewsreport[j].openingBalance,
+        closingBalance: this.salesViewsreport[j].closingBalance,
         startDate: this.startDay === undefined ? this.firstDate : this.startDay,
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };
       this.requestSaveJson.push(data);
     }
-    const reportName = 'Money Fund';
+    const reportName = 'Cash Balance';
     this.moneyFundService.reportSaveDataPrint(this.requestSaveJson).subscribe(rp => {
       this.router.navigate([`/pages/print/${reportName}`]);
     });
@@ -205,11 +202,11 @@ export class MoneyFundComponent extends PagedListingComponentBase<ClientView> {
   }
   redirectToEditInvoice(id) {
 
-    let clientName = '';
+    // let clientName = '';
 
-    clientName = id;
-    this.data.sendMessage(clientName);
-    this.router.navigate([`/pages/invoice`]);
+    // clientName = id;
+    // this.data.sendMessage(clientName);
+    // this.router.navigate([`/pages/invoice`]);
   }
 
 }

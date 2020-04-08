@@ -9,7 +9,18 @@
     </div>
   </nb-card-header>
   <nb-card-body class="d-flex align-items-center">
-    <div class="cash-flow__unit">(DV: Triệu đồng)</div>
-    <chart class="w-100" type="bar" [data]="data" [options]="options"></chart>
+    <div class="cash-flow__header">
+      <div class="row mx-0">
+        <div class="col-4"></div>
+        <div class="col-8">
+          <div class="cash-flow__information row text-right" *ngIf="data?.cashBalance">
+            <div class="col-9">Tiền tồn quỹ</div>
+            <div class="col-3">{{ data?.cashBalance }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cash-flow__unit" *ngIf="data?.chart">(DV: Triệu đồng)</div>
+    <chart class="w-100" type="bar" *ngIf="data?.chart" [data]="data?.chart" [options]="options"></chart>
   </nb-card-body>
 </nb-card>
