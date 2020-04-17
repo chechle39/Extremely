@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XBOOK.Data.Entities;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -11,10 +13,13 @@ namespace XBOOK.Web.Controllers
     {
         ISaleInvDetailService _iSaleInvDetailService;
         private readonly XBookContext _context;
-        public SaleInvDetailController(ISaleInvDetailService iSaleInvDetailService, XBookContext context)
+        private readonly IAuthorizationService _authorizationService;
+
+        public SaleInvDetailController(ISaleInvDetailService iSaleInvDetailService, XBookContext context, IAuthorizationService authorizationService)
         {
             _iSaleInvDetailService = iSaleInvDetailService;
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
@@ -45,8 +50,8 @@ namespace XBOOK.Web.Controllers
             return Ok(request);
         }
 
-        [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> DeletedSaleInvDetail(long id)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeletedSaleInvDetail(List<Deleted> id)
         {
            await _iSaleInvDetailService.Deleted(id);
             return Ok();

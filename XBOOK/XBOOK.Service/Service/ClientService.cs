@@ -3,9 +3,11 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XBOOK.Common.Exceptions;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -29,44 +31,66 @@ namespace XBOOK.Service.Service
             _context = context;
             _iClientRepository = iClientRepository;
         }
-        public Client CreateClient(ClientCreateRequet request)
-        {
-            var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
-            var client = new Client()
+        public bool CreateClient(ClientCreateRequet request)
+        {            
+            try
             {
-                clientID = 0,
-                address = request.Address,
-                clientName = request.ClientName,
-                contactName = request.ContactName,
-                email = request.Email,
-                note = request.Note,
-                Tag = request.Tag,
-                taxCode = request.TaxCode,
-                bankAccount = request.BankAccount
-            };
-            _clientUowRepository.AddData(client);
-            _uow.SaveChanges();
-            return client;
+                var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
+                var client = new Client()
+                {
+                    clientID = 0,
+                    address = request.Address,
+                    clientName = request.ClientName,
+                    contactName = request.ContactName,
+                    email = request.Email,
+                    note = request.Note,
+                    Tag = request.Tag,
+                    taxCode = request.TaxCode,
+                    bankAccount = request.BankAccount
+                };
+                   _clientUowRepository.AddData(client);
+                _uow.SaveChanges();
+              
+            }
+            catch (DbUpdateException ex)
+            {
+                SqlException innerException = ex.InnerException as SqlException;
+                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+              
+            }
+            return true;               
+               
         }
 
          public bool CreateClientImport(List<ClientCreateRequet> request)
         {
             var clientCreate = Mapper.Map<List<ClientCreateRequet>, List<Client>>(request);
             foreach (var item in request) {
-                var client = new Client()
-                {
-                    clientID = 0,
-                    address = item.Address,
-                    clientName = item.ClientName,
-                    contactName = item.ContactName,
-                    email = item.Email,
-                    note = item.Note,
-                    Tag = item.Tag,
-                    taxCode = item.TaxCode,
-                    bankAccount = item.BankAccount
-                };
-                _clientUowRepository.AddData(client);
-                _uow.SaveChanges();               
+                var lisClient =  _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToListAsync().Result;
+                var listWhere = lisClient.Where(x => x.ClientName == item.ClientName).ToList();
+                if (listWhere.Count <= 0) {
+                    var client = new Client()
+                    {
+                        clientID = 0,
+                        address = item.Address,
+                        clientName = item.ClientName,
+                        contactName = item.ContactName,
+                        email = item.Email,
+                        note = item.Note,
+                        Tag = item.Tag,
+                        taxCode = item.TaxCode,
+                        bankAccount = item.BankAccount
+                    };
+                    _clientUowRepository.AddData(client);
+                    _uow.SaveChanges();
+                }                              
             }
             return true;
         }
@@ -93,7 +117,25 @@ namespace XBOOK.Service.Service
             var dataList = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().Where(x => x.ClientId == id).ToListAsync();
             return dataList[0];
         }
-
+        public Client CreateClientInv(ClientCreateRequet request)
+        {
+            var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
+            var client = new Client()
+            {
+                clientID = 0,
+                address = request.Address,
+                clientName = request.ClientName,
+                contactName = request.ContactName,
+                email = request.Email,
+                note = request.Note,
+                Tag = request.Tag,
+                taxCode = request.TaxCode,
+                bankAccount = request.BankAccount
+            };
+            _clientUowRepository.AddData(client);
+            _uow.SaveChanges();
+            return client;
+        }
         public async Task<IEnumerable<ClientViewModel>> SerchClient(string keyword)
         {
             var lisClient = await _clientUowRepository.GetAll().ProjectTo<ClientViewModel>().ToListAsync();
@@ -103,9 +145,27 @@ namespace XBOOK.Service.Service
 
         public async Task<bool> UpdateClient(ClientCreateRequet request)
         {
-            var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
-            await _clientUowRepository.Update(clientCreate);
-            return true;
+            try
+            {
+                var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
+                await _clientUowRepository.Update(clientCreate);
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                SqlException innerException = ex.InnerException as SqlException;
+                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+
+          
         }
         public byte[] GetDataClientAsync(List<ClientCreateRequet> request)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
@@ -8,9 +9,11 @@ namespace XBOOK.Web.Controllers
     public class Payments2Controller : BaseAPIController
     {
         IPayments2Service _paymentsService;
-        public Payments2Controller(IPayments2Service paymentsService)
+        private readonly IAuthorizationService _authorizationService;
+        public Payments2Controller(IPayments2Service paymentsService, IAuthorizationService authorizationService)
         {
             _paymentsService = paymentsService;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -174,9 +175,10 @@ namespace XBOOK.Service.Service
             await _saleInvDetailUowRepository.Add(saleInvoiceDetailCreate);
         }
 
-        public async Task Deleted(long id)
+        public async Task Deleted(List<Deleted> id)
         {
-            await _iSaleInvoiceDetailRepository.Remove(id);
+            await _iSaleInvoiceDetailRepository.RemoveSale(id);
+            _uow.SaveChanges();
         }
 
         public async Task<IEnumerable<SaleInvDetailViewModel>> GetAllSaleInvoiceDetail()

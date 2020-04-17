@@ -171,6 +171,8 @@ export class AccountDetailComponent extends PagedListingComponentBase<ClientView
         credit: this.accdetailViewsreport[j].credit,
         debitClosing: this.accdetailViewsreport[j].debitClosing,
         creditClosing: this.accdetailViewsreport[j].creditClosing,
+        debitOpening : this.accdetailViewsreport[j].debitOpening,
+        creditOpening: this.accdetailViewsreport[j].creditOpening,
         startDate: this.startDay === undefined ? this.firstDate : this.startDay,
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };

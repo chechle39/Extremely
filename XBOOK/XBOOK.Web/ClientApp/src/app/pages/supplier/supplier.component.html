@@ -49,7 +49,7 @@
         <div ngbDropdown class="text-right">
           <button class="btn btn-flat mr-1 card__button-bulk-action" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.ACTION' | translate }}</button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
-            <button (click)="ShowInv()" class="dropdown-item"><span class="icon-edit"></span>{{ 'COMMON.ACTION.EDIT' | translate }}</button>
+            <button (click)="ShowInv()" class="dropdown-item"><span class="icon-edit"></span>{{ 'COMMON.ACTION.SHOW' | translate }}</button>
             <button [disabled]="authenticationService.hasPermission('Supplier','delete')" (click)="delete()"
               class="dropdown-item"><span class="icon-delete"></span>{{ 'COMMON.ACTION.DELETE' | translate }}</button>
           </div>

@@ -32,8 +32,8 @@ export class BuyInvoiceService extends BaseService {
     uploadFileInvMt(files: any): Observable<any> {
         return this.postUploadMuntiple<any>(`${API_URI.uploadFileBuyInv}`, files);
     }
-    deleteBuyInvoiceDetail(id: number) {
-        return this.post(`${API_URI.deleteBuyInvoiceDetail}/${id}`, id);
+    deleteBuyInvoiceDetail(id) {
+        return this.post(`${API_URI.deleteBuyInvoiceDetail}`, id);
     }
     updateBuyInv(request: any) {
         return this.put<any>(`${API_URI.updateBuyInv}`, request);

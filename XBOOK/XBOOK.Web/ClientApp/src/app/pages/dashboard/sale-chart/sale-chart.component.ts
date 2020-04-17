@@ -1,48 +1,59 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { thousandSuffix } from '../../../shared/utils/util';
+import {Component, OnInit, Input, OnChanges, Renderer2, ElementRef} from '@angular/core';
+import {thousandSuffix} from '../../../shared/utils/util';
 import * as moment from 'moment';
-import { DataService } from '../../_shared/services/data.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CommonService } from '../../../shared/service/common.service';
-import { Router, RouterStateSnapshot } from '@angular/router';
-import { DashboardRequest, BalanceChartView, SaleChartView } from '../../_shared/models/dashboard/dashboard.model';
-import { DashboardService } from '../../_shared/services/dashboard.service';
+import {DataService} from '../../_shared/services/data.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {CommonService} from '../../../shared/service/common.service';
+import {Router, RouterStateSnapshot} from '@angular/router';
+import {DashboardRequest, BalanceChartView, SaleChartView} from '../../_shared/models/dashboard/dashboard.model';
+import {DashboardService} from '../../_shared/services/dashboard.service';
+import { ChartBase } from '../chart-base';
+import { TranslateService } from '@ngx-translate/core';
+import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
   selector: 'xb-sale-chart',
   templateUrl: './sale-chart.component.html',
   styleUrls: ['./sale-chart.component.scss'],
 })
-export class SaleChartComponent implements OnInit, OnChanges {
+export class SaleChartComponent  extends ChartBase implements OnInit, OnChanges {
   @Input() data: SaleChartView = new SaleChartView();
   options: any;
-
-  constructor( 
+  selectedItem = '2';
+  rawLabels: Array<any>;
+  constructor(
     private datarequest: DataService,
     private modalService: NgbModal,
     private commonService: CommonService,
-    private router: Router,    
-    private dashboardService: DashboardService) { }
-   
-  ngOnInit() {
-    this.options = this.getOption();
+    private router: Router,
+    private dashboardService: DashboardService,
+    private renderer: Renderer2,
+    private el: ElementRef,
+    private translateService: TranslateService,
+  ) {
+    super();
   }
 
-  ngOnChanges(){
-    if (this.data){
-      this.data.chart = this.chartObjectMapping(this.data.chart);
+  ngOnInit() {
+    this.options = this.getOption();
+    this.i18nConfig();
+  }
+
+  ngOnChanges() {
+    if (this.data) {
+      this.loadChart(this.data);
     }
   }
 
-  NewSaleInvoice(){
+  NewSaleInvoice() {
     this.router.navigate([`pages/invoice/new`]);
   }
+
   showByWeek() {
     const param = new DashboardRequest();
     param.interval = 'week';
     this.dashboardService.getSaleChart(param).subscribe((data: SaleChartView) => {
-      this.data = data;
-      this.data.chart = this.chartObjectMapping(data.chart);
+      this.loadChart(data);
     });
   }
 
@@ -50,8 +61,7 @@ export class SaleChartComponent implements OnInit, OnChanges {
     const param = new DashboardRequest();
     param.interval = 'month';
     this.dashboardService.getSaleChart(param).subscribe((data: SaleChartView) => {
-      this.data = data;
-      this.data.chart = this.chartObjectMapping(data.chart);
+      this.loadChart(data);
     });
   }
 
@@ -66,8 +76,167 @@ export class SaleChartComponent implements OnInit, OnChanges {
     };
   }
 
+  private navigateToInvoice(monthParam: string) {
+    let firstDate,
+      endDate;
+    const t = new Date();
+    switch (monthParam) {
+      case 'Tháng này':
+      case 'This month': {
+        firstDate = new Date(t.getFullYear(), t.getMonth(), 1).toLocaleDateString('en-US');
+        endDate = new Date(t.getFullYear(), t.getMonth() + 1, 0).toLocaleDateString('en-US');
+        break;
+      }
+      case 'Jan': {
+        const startDay = new Date(t.getFullYear(), 0, 1);
+        const lastDay = new Date(t.getFullYear(), 1, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Feb': {
+        const startDay = new Date(t.getFullYear(), 1, 1);
+        const lastDay = new Date(t.getFullYear(), 2, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Mar': {
+        const startDay = new Date(t.getFullYear(), 2, 1);
+        const lastDay = new Date(t.getFullYear(), 3, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Apr': {
+        const startDay = new Date(t.getFullYear(), 3, 1);
+        const lastDay = new Date(t.getFullYear(), 4, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'May': {
+        const startDay = new Date(t.getFullYear(), 4, 1);
+        const lastDay = new Date(t.getFullYear(), 5, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Jun': {
+        const startDay = new Date(t.getFullYear(), 5, 1);
+        const lastDay = new Date(t.getFullYear(), 6, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Jul': {
+        const startDay = new Date(t.getFullYear(), 6, 1);
+        const lastDay = new Date(t.getFullYear(), 7, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Aug': {
+        const startDay = new Date(t.getFullYear(), 7, 1);
+        const lastDay = new Date(t.getFullYear(), 8, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Sep': {
+        const startDay = new Date(t.getFullYear(), 8, 1);
+        const lastDay = new Date(t.getFullYear(), 9, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Oct': {
+        const startDay = new Date(t.getFullYear(), 9, 1);
+        const lastDay = new Date(t.getFullYear(), 10, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Nov': {
+        const startDay = new Date(t.getFullYear(), 10, 1);
+        const lastDay = new Date(t.getFullYear(), 11, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Dec': {
+        const startDay = new Date(t.getFullYear(), 11, 1);
+        const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+
+        break;
+      }
+      case 'Tuần này':
+      case 'This week': {
+        const startDay = moment().day(1).toDate();
+        const lastDay = moment().day(7).toDate();
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+        break;
+      }
+      case 'Tuần trước':
+      case 'Last week': {
+        const startDay = moment().weekday(-6).toDate();
+        const lastDay = moment().weekday(0).toDate();
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+        break;
+      }
+      case 'Tuần sau':
+      case 'Next week': {
+        const startDay = moment().weekday(8).toDate();
+        const lastDay = moment().weekday(14).toDate();
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+        break;
+      }
+      case '2 tuần trước':
+      case '2 weeks ago': {
+        const startDay = moment().weekday(-13).toDate();
+        const lastDay = moment().weekday(-7).toDate();
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+        break;
+      }
+      case '2 tuần sau':
+      case '2 weeks later': {
+        const startDay = moment().weekday(15).toDate();
+        const lastDay = moment().weekday(21).toDate();
+        firstDate = startDay.toLocaleDateString('en-US');
+        endDate = lastDay.toLocaleDateString('en-US');
+        break;
+      }
+    }
+
+    const genledSearch = {
+      startDate: firstDate,
+      endDate: endDate,
+      keyword: '',
+      isIssueDate: false,
+    };
+    this.datarequest.sendApplySearchIv(genledSearch);
+    this.router.navigate([`/pages/invoice`]);
+  }
+
   private getOption() {
-  
+
     let isChartInit = true;
 
     /**
@@ -89,166 +258,14 @@ export class SaleChartComponent implements OnInit, OnChanges {
         });
       });
     }
-    const send =  this
-    return {      
-      onClick () {       
-        switch (this.active[0]._view.label) {
-          case 'Tháng này': {
-            var t = new Date();
-            this.firstDate = new Date(t.getFullYear(), t.getMonth(), 1).toLocaleDateString('en-US');
-            this.endDate = new Date(t.getFullYear(), t.getMonth() + 1, 0).toLocaleDateString('en-US');       
-            break;
-          }
-          case 'Jan': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 0, 1);
-            const lastDay = new Date(t.getFullYear(), 1, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-           
-            break;
-          }
-          case 'Feb': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 1, 1);
-            const lastDay = new Date(t.getFullYear(), 2, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-           
-            break;
-          }
-          case 'Mar': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 2, 1);
-            const lastDay = new Date(t.getFullYear(), 3, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-          
-            break;
-          }
-          case 'Apr': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 3, 1);
-            const lastDay = new Date(t.getFullYear(), 4, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-           
-            break;
-          }
-          case 'May': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 4, 1);
-            const lastDay = new Date(t.getFullYear(), 5, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            
-            break;
-          }
-          case 'Jun': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 5, 1);
-            const lastDay = new Date(t.getFullYear(), 6, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-          
-            break;
-          }
-          case 'Jul': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 6, 1);
-            const lastDay = new Date(t.getFullYear(), 7, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-           
-            break;
-          }
-          case 'Aug': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 7, 1);
-            const lastDay = new Date(t.getFullYear(), 8, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            
-            break;
-          }
-          case 'Sep': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 8, 1);
-            const lastDay = new Date(t.getFullYear(), 9, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-           
-            break;
-          }
-          case 'Oct': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 9, 1);
-            const lastDay = new Date(t.getFullYear(), 10, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-          
-            break;
-          }
-          case 'Nov': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 10, 1);
-            const lastDay = new Date(t.getFullYear(), 11, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            
-            break;
-          }
-          case 'Dec': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 11, 1);
-            const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            
-            break;
-          }
-          case 'Tuần này': {    
-            const startDay = moment().day(1).toDate();
-            const lastDay = moment().day(7).toDate();
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            break;
-          }
-          case 'Tuần trước': {
-            const startDay = moment().weekday(-6).toDate();
-            const lastDay = moment().weekday(0).toDate();
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            break;
-          }
-          case 'Tuần sau': {
-            const startDay = moment().weekday(8).toDate();
-            const lastDay = moment().weekday(14).toDate();
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            break;
-          }
-          case '2 Tuần trước': {
-            const startDay = moment().weekday(-13).toDate();
-            const lastDay = moment().weekday(-7).toDate();
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            break;
-          }
-          case '2 Tuần sau': {
-            const startDay = moment().weekday(15).toDate();
-            const lastDay = moment().weekday(21).toDate();
-            this.firstDate = startDay.toLocaleDateString('en-US');
-            this.endDate = lastDay.toLocaleDateString('en-US');
-            break;
-          }
+
+    const send = this;
+    return {
+      onClick() {
+        if (!this.active[0]) {
+          return;
         }
-       
-        const genledSearch = {
-          startDate: this.firstDate,
-          endDate: this.endDate,          
-        };
-        send.router.navigate([`/pages/invoice/`], { queryParams: {'startDate': this.firstDate, 'endDate': this.endDate } });           
+        send.navigateToInvoice(this.active[0]._view.label);
       },
       responsive: true,
       maintainAspectRatio: false,
@@ -282,6 +299,13 @@ export class SaleChartComponent implements OnInit, OnChanges {
           },
         ],
       },
+      hover: {
+        onHover: function (e, element) {
+          const point = this.getElementAtEvent(e);
+          if (point.length) e.target.style.cursor = 'pointer';
+          else e.target.style.cursor = 'default';
+        },
+      },
       legend: {
         display: false,
       },
@@ -294,6 +318,43 @@ export class SaleChartComponent implements OnInit, OnChanges {
             return thousandSuffix(tooltipItems.yLabel);
           },
         },
+        custom: function (tooltipModel) {
+          const elementId = 'dashboard__sale-chart_tooltip';
+          // Tooltip Element
+          let tooltipEl = document.getElementById(elementId);
+
+          // Create element on first render
+          if (!tooltipEl) {
+            tooltipEl = send.renderer.createElement('div');
+            tooltipEl.id = elementId;
+            send.renderer.appendChild(send.el.nativeElement, tooltipEl);
+          }
+
+          tooltipEl.onclick = () => {
+            send.navigateToInvoice(this._active[0]._view.label);
+          };
+          // Hide if no tooltip
+          if (tooltipModel.opacity === 0) {
+            tooltipEl.style.opacity = '0';
+            return;
+          }
+
+          // `this` will be the overall tooltip
+          const position = this._chart.canvas.getBoundingClientRect();
+
+          // Display, position, and set styles for font
+          tooltipEl.style.opacity = '1';
+          tooltipEl.style.position = 'absolute';
+          tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.x + 'px';
+          tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.y + 'px';
+          tooltipEl.style.width = tooltipModel.width + 'px';
+          tooltipEl.style.height = tooltipModel.height + 'px';
+          tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+          tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+          tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
+          tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
+          tooltipEl.style.cursor = 'pointer';
+        },
       },
       layout: {
         padding: {
@@ -303,21 +364,47 @@ export class SaleChartComponent implements OnInit, OnChanges {
           bottom: 0,
         },
       },
-      events: ['mousemove','click'],
+      events: ['mousemove', 'click'],
       animation: {
         easing: 'easeOutCirc',
         onComplete: function () {
           if (isChartInit) {
             const chartReference = this;
-           displayDatasetCallback(chartReference);
+            displayDatasetCallback(chartReference);
             isChartInit = false;
           }
         },
         onProgress: function () {
           const chartReference = this;
-         displayDatasetCallback(chartReference);
+          displayDatasetCallback(chartReference);
         },
       },
     };
+  }
+
+  private i18nConfig() {
+    this.translateService.onLangChange
+    .pipe( takeUntil(this._onDestroy))
+    .subscribe(() => {
+      const tempValue = this.selectedItem;
+      this.selectedItem = '';
+      setTimeout(() => this.selectedItem = tempValue, 0);
+      this.translateLabels();
+    });
+
+  }
+
+  private translateLabels() {
+    const translatedLabels = this.translateService.instant(this.rawLabels);
+    this.data.chart.labels =  this.rawLabels.map(label => translatedLabels[label]) ;
+    // refresh chart
+    this.data.chart = {...this.data.chart};
+  }
+
+  private loadChart(data) {
+    this.data = data;
+    this.data.chart = this.chartObjectMapping(data.chart);
+    this.rawLabels = this.data.chart.labels;
+    this.translateLabels();
   }
 }

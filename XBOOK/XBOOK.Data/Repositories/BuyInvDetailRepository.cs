@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Data.Repositories
@@ -168,9 +169,12 @@ namespace XBOOK.Data.Repositories
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> Deleted(long id)
+        public async Task<bool> Deleted(List<Deleted> id)
         {
-            Entities.Remove(Entities.Find(id));
+            foreach(var item in id)
+            {
+                Entities.Remove(Entities.Find(item.id));
+            }
             _uow.SaveChanges();
             return await Task.FromResult(true);
         }

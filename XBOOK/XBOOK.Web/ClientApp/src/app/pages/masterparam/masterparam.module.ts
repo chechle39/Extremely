@@ -20,9 +20,9 @@ import { CreateMasterParamComponent } from './create-masterparam/create-masterpa
     NgxDatatableModule,
     FormsModule,
     SharedModule,
-    NgxCleaveDirectiveModule
+    NgxCleaveDirectiveModule,
   ],
   providers: [MasterParamComponent, MasterParamService, CurrencyPipe, DecimalPipe, CompanyService],
-  entryComponents: [CreateMasterParamComponent]
+  entryComponents: [CreateMasterParamComponent],
 })
 export class MasterParamModule { }

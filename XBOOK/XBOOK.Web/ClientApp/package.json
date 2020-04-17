@@ -27,7 +27,7 @@
     "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s",
     "prepush": "npm run lint:ci",
     "release:changelog": "npm run conventional-changelog -- -p angular -i CHANGELOG.md -s",
-    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration=prod"
+    "ng-high-memory": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng build --configuration=prod"
   },
   "dependencies": {
     "@agm/core": "^1.0.0-beta.5",

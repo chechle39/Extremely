@@ -167,7 +167,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
         const genledSearch = {
           startDate: result.startDate,
           endDate: result.endDate,
-          money: result.money,        
+          money: result.money,
         };
         this.accountBalanceService.getAccountBalanceViewModelData(genledSearch).subscribe(rp => {
           this.accountBalanceViews = rp;
@@ -222,7 +222,7 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
     });
   }
   getaccNumber(id) {
-    if( id !== null || id !==undefined){
+    if ( id !== null || id !== undefined) {
       const data = {
         accNumber: id,
         case: this.case,
@@ -231,8 +231,8 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
       };
       this.data.sendMessage(data);
       this.router.navigate([`/pages/generalledger/${id}`]);
-    }  
-   
+    }
+
   }
 }
 

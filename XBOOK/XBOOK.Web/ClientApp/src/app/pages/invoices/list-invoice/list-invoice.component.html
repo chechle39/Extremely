@@ -40,7 +40,7 @@
                   {{'COMMON.ACTION' | translate}}
               </button>
               <div ngbDropdownMenu aria-labelledby="bulkActions">
-                <button class="dropdown-item" [hidden]="true"><i class="fa fa-copy mr-1"></i> {{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
+                <button class="dropdown-item" (click)="coppy()"><i class="fa fa-copy mr-1 icon-dollar"></i> {{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
                 <button class="dropdown-item" [hidden]="true"><i class="fa fa-paper-plane mr-1"></i>{{'BUY.INVOICE.GRID.MARK.SEND' | translate}}</button>
                 <button class="dropdown-item" (click)="addPayment()"><i class="fas fa-dollar-sign icon-dollar"></i>{{'BUY.INVOICE.GRID.ADD.RECIPT' | translate}}</button>
                 <button class="dropdown-item" (click)="deleteAll()"><i class="icon-delete mr-1"></i>{{'INVOICE.ACTION.DELETE' | translate}}</button>

@@ -9,7 +9,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 @Component({
   selector: 'xb-selectreport',
   templateUrl: './selectreport.component.html',
-  styleUrls: ['./selectreport.component.scss']
+  styleUrls: ['./selectreport.component.scss'],
 })
 export class SelectReportComponent extends AppComponentBase implements OnInit {
   @Input() accChart;
@@ -63,7 +63,7 @@ export class SelectReportComponent extends AppComponentBase implements OnInit {
   close(e: boolean): void {
     if (e === true) {
       const genledSearch = {
-        case: this.genLedForm.value.genLedMethods
+        case: this.genLedForm.value.genLedMethods,
       };
       this.activeModal.close(genledSearch);
       this.activeModal.close();

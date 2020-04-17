@@ -89,7 +89,7 @@ namespace XBOOK.Web.Controllers
                 return Ok(new GenericResult(false, "unconfirmed email !"));
             }
             var roles = await _userManager.GetRolesAsync(finUser);
-            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon.Code);
+            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon.ConnectionString);
             var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList, finUser.FullName, dataUserCommon.Code);
             return new OkObjectResult(jwt);
         }

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
+using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 
 namespace XBOOK.Dapper.Service
@@ -19,16 +20,19 @@ namespace XBOOK.Dapper.Service
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public SalesReportServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        private readonly IUserCommonRepository _userCommonRepository;
+        public SalesReportServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IUserCommonRepository userCommonRepository)
         {
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _userCommonRepository = userCommonRepository;
         }
 
         public async Task<IEnumerable<SalesReportViewModel>> GetISalesDataReportServiceDapperAsync(SalesReportModelSearchRequest request)
         {
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+            var findUser = await _userCommonRepository.FindUserCommon(code);
+            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
             {
                 string deltaFrom = request.StartDate;
                 DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));
@@ -69,7 +73,9 @@ namespace XBOOK.Dapper.Service
         }
         public async Task<IEnumerable<SalesReportGroupViewModel>> GetISalesReportServiceDapperAsync(SalesReportModelSearchRequest request)
         {
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+            var findUser = await _userCommonRepository.FindUserCommon(code);
+            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
             {
                 string deltaFrom = request.StartDate;
                 DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));

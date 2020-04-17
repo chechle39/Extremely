@@ -39,7 +39,7 @@ export class ClientService extends BaseService {
 
   ExportClient(request: any) {
     const data = this.postcsv<any[]>(`${API_URI.ExportClient}`, request).subscribe(rs => {
-      this.downLoadFile(rs, 'text/csv');
+      this.downLoadFile(rs, 'text/csv;charset=utf-8');
     });
     return data;
   }
@@ -60,7 +60,7 @@ export class ClientService extends BaseService {
 
   downLoadFile(data: any, type: string) {
     // tslint:disable-next-line:object-literal-shorthand
-    const blob = new Blob([data], { type: type });
+    const blob = new Blob(['\ufeff' + data], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     saveAs(blob, 'Client.csv');
   }

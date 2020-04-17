@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { API_URI } from '../../../../environments/app.config';
 import { BaseService } from '../../../shared/service/base.service';
+import { switchMap, debounceTime } from 'rxjs/operators';
 
 @Injectable()
 export class InvoiceService extends BaseService {
@@ -33,8 +34,8 @@ export class InvoiceService extends BaseService {
     return this.put<any>(`${API_URI.updateSaleInv}`, request);
   }
 
-  deleteInvoiceDetail(id: number) {
-    return this.post(`${API_URI.deleteSaleInvoiceDetail}/${id}`, id);
+  deleteInvoiceDetail(id) {
+    return this.post(`${API_URI.deleteSaleInvoiceDetail}`, id);
   }
 
   getLastInvoice(): Observable<any> {

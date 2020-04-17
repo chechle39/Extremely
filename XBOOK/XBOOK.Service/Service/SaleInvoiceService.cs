@@ -228,7 +228,7 @@ namespace XBOOK.Service.Service
                     Tag = saleInvoiceViewModel.ClientData[0].Tag,
                     TaxCode = saleInvoiceViewModel.ClientData[0].TaxCode,
                 };
-                var clientdata = _iClientService.CreateClient(requetsCl);
+                var clientdata = _iClientService.CreateClientInv(requetsCl);
                 var saleInvoiceList = _uow.GetRepository<IRepository<SaleInvoice>>();
                 var saleInvoice = Mapper.Map<SaleInvoiceViewModel, SaleInvoice>(saleInvoiceViewModel);
                 saleInvoice.clientID = clientdata.clientID;
@@ -311,7 +311,7 @@ namespace XBOOK.Service.Service
                             _uow.SaveChanges();
                             _uow.CommitTransaction();
                         };
-                        var serchData = _iProductRepository.GetLDFProduct();
+                        // var serchData = _iProductRepository.GetLDFProduct();
                         var saleDetailPrd = new SaleInvDetailViewModel
                         {
                             Amount = saleInvoiceViewModel.SaleInvDetailView[i].Price * saleInvoiceViewModel.SaleInvDetailView[i].Qty,
@@ -320,7 +320,7 @@ namespace XBOOK.Service.Service
                             Description = saleInvoiceViewModel.SaleInvDetailView[i].Description,
                             Id = saleInvoiceViewModel.SaleInvDetailView[i].Id,
                             InvoiceId = saleInvoiceViewModel.SaleInvDetailView[i].InvoiceId,
-                            ProductId = serchData.LastOrDefault().productID,
+                            ProductId = saleInvoiceViewModel.SaleInvDetailView[i].ProductId != 0 ? saleInvoiceViewModel.SaleInvDetailView[i].ProductId : _iProductRepository.GetLDFProduct().LastOrDefault().productID,
                             ProductName = saleInvoiceViewModel.SaleInvDetailView[i].ProductName.Split("(")[0],
                             Vat = saleInvoiceViewModel.SaleInvDetailView[i].Vat
                         };

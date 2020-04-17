@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -19,22 +21,31 @@ namespace XBOOK.Web.Controllers
     {
         ICompanyProfileService _iCompanyProfileService;
         ISaleInvoiceService _saleInvoiceService;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IRepository<SaleInvoice> _saleInvoiceUowRepository;
         private readonly IUnitOfWork _uow;
         IInvoiceServiceDapper _invoiceServiceDapper;
-        public SaleInvoiceController(ICompanyProfileService iCompanyProfileService, ISaleInvoiceService saleInvoiceService, IUnitOfWork uow, IInvoiceServiceDapper invoiceServiceDapper)
+        public SaleInvoiceController(ICompanyProfileService iCompanyProfileService, 
+            ISaleInvoiceService saleInvoiceService, 
+            IUnitOfWork uow, 
+            IInvoiceServiceDapper invoiceServiceDapper,
+            IAuthorizationService authorizationService)
         {
             _saleInvoiceService = saleInvoiceService;
             _uow = uow;
             _saleInvoiceUowRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
             _invoiceServiceDapper = invoiceServiceDapper;
             _iCompanyProfileService = iCompanyProfileService;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
       //  [AuthorizationClaimCustom(Authority.ROLE_VIEW)]
         public async Task<IActionResult> GetAllSaleInvoice([FromBody]SaleInvoiceListRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var saleListInvoice = await _invoiceServiceDapper.GetInvoiceAsync(request);
             return Ok(saleListInvoice);
         }
@@ -42,12 +53,18 @@ namespace XBOOK.Web.Controllers
         [HttpPut("[action]")]
         public ActionResult UpdateSaleInvoice(SaleInvoiceViewModel request)
         {
+            var result = _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Update);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
             _saleInvoiceService.Update(request);
             return Ok(request);
         }
         [HttpPost("[action]")]
         public ActionResult CreateSaleInvoice(SaleInvoiceModelRequest request)
         {
+            var result = _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Create);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
             var CreateData = _saleInvoiceService.CreateSaleInvoice(request);
             return Ok(CreateData);
         }
@@ -55,6 +72,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetSaleInvoiceById(long id)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var saleListInvoice = await _saleInvoiceService.GetSaleInvoiceById(id);
             return Ok(saleListInvoice);
         }
@@ -62,7 +82,10 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async  Task<IActionResult> DeleteSaleInv (List<requestDeleted> deleted)
         {
-             await _saleInvoiceService.DeletedSaleInv(deleted);
+            var result = await _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Delete);
+            if (!result.Succeeded)
+                return Unauthorized();
+            await _saleInvoiceService.DeletedSaleInv(deleted);
             return Ok();
         }
 

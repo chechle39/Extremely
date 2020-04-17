@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { extract } from '../../coreapp/services/i18n.service';
-import { CreateJournalEntriesComponent } from './create-journalentries/create-journalentries.component';
 import { JournalEntriesComponent } from './journalentries.component';
 import { ListJournalEntriesComponent } from './list-journalentries/list-journalentries.component';
 
@@ -12,14 +11,6 @@ const routes: Routes = [
       {
         path: '',
         component: ListJournalEntriesComponent,
-      },
-      {
-        path: 'new',
-        component: CreateJournalEntriesComponent,
-      },
-      {
-        path: ':id/:key',
-        component: CreateJournalEntriesComponent,
       },
     ],
   },

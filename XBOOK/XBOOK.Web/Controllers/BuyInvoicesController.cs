@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
-using XBOOK.Data.Policies;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
-using XBOOK.Web.Claims.System;
 
 namespace XBOOK.Web.Controllers
 {
@@ -20,12 +19,17 @@ namespace XBOOK.Web.Controllers
         private readonly IBuyInvoiceServiceDapper _buyInvoiceServiceDapper;
         private readonly IBuyInvoiceService _buyInvoiceService;
         ICompanyProfileService _iCompanyProfileService;
+        private readonly IAuthorizationService _authorizationService;
 
-        public BuyInvoicesController(IBuyInvoiceServiceDapper buyInvoiceServiceDapper, IBuyInvoiceService buyInvoiceService, ICompanyProfileService iCompanyProfileService)
+        public BuyInvoicesController(IBuyInvoiceServiceDapper buyInvoiceServiceDapper, 
+            IBuyInvoiceService buyInvoiceService, 
+            ICompanyProfileService iCompanyProfileService,
+            IAuthorizationService authorizationService)
         {
             _buyInvoiceServiceDapper = buyInvoiceServiceDapper;
             _buyInvoiceService = buyInvoiceService;
             _iCompanyProfileService = iCompanyProfileService;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
@@ -38,12 +42,18 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllBuyInvoice([FromBody]SaleInvoiceListRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Buy invoice", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var buyListInvoice = await _buyInvoiceServiceDapper.GetBuyInvoice(request);
             return Ok(buyListInvoice);
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> DeleteBuyInv(List<Deleted> deleted)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Buy invoice", Operations.Delete);
+            if (!result.Succeeded)
+                return Unauthorized();
             await _buyInvoiceService.DeleteBuyInvoice(deleted);
             return Ok();
         }
@@ -65,6 +75,9 @@ namespace XBOOK.Web.Controllers
         [HttpPut("[action]")]
         public async Task<ActionResult> UpdateBuyInvoice(BuyInvoiceViewModel request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Buy invoice", Operations.Update);
+            if (!result.Succeeded)
+                return Unauthorized();
             await _buyInvoiceService.Update(request);
             return Ok(request);
         }
@@ -72,6 +85,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetBuyInvoiceById(long id)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Buy invoice", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var buyListInvoice = await _buyInvoiceService.GetBuyInvoiceById(id);
             return Ok(buyListInvoice);
         }
@@ -121,6 +137,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public IActionResult GetFile(requestGetFile request)
         {
+            var result =  _authorizationService.AuthorizeAsync(User, "Buy invoice", Operations.Read);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
             var prf = _iCompanyProfileService.GetInFoProfile();
             var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\BuyInVoice";
             if (!Directory.Exists(imageFolder))

@@ -1,23 +1,29 @@
 <nb-card>
   <nb-card-header style="padding: 0.5rem 1rem;">
-    <nb-select class="float-right" [selected]="'2'" [size]="'tiny'">
-      <nb-option value="1" (click)="showByWeek()">Xem theo tuần</nb-option>
-      <nb-option value='2' (click)="showByMonth()">Xem theo tháng</nb-option>
+    <nb-select class="float-right" [selected]="selectedItem" [size]="'tiny'">
+      <nb-option value="1" (click)="showByWeek()">{{ 'DASHBOARD.COMMON.VIEW.WEEK' | translate }}</nb-option>
+      <nb-option value='2' (click)="showByMonth()">{{ 'DASHBOARD.COMMON.VIEW.MONTH' | translate }}</nb-option>
     </nb-select>
     <div style="font-size: 0.9rem; line-height: 1.5rem;color: #edf1f7;">
-      TIỀN MUA HÀNG PHẢI TRẢ
+      {{ 'DASHBOARD.MONEYPAYABLE.TITLE.HEADER' | translate }}
     </div>
   </nb-card-header>
   <nb-card-body>
     <div class="purchase-chart__header">
       <div class="row mx-0">
-        <div class="col-4"><button (click)="NewBuyInvoice()" class="btn purchase-chart__button-create">Tạo hoá đơn mua</button></div>
+        <div class="col-4"><button (click)="NewBuyInvoice()"
+            class="btn purchase-chart__button-create">{{ 'DASHBOARD.MONEYPAYABLE.TITLE.ADDNEW' | translate }}</button>
+        </div>
         <div class="col-8">
           <div class="row text-right purchase-chart__information">
-            <div class="col-9" *ngIf="data?.ammountOfItemOutstanding && data?.outstanding">{{ data?.ammountOfItemOutstanding }} hoá đơn phải trả:</div>
-            <div class="col-3" *ngIf="data?.ammountOfItemOutstanding && data?.outstanding">{{ data?.outstanding }} </div>
-            <div class="col-9 text-danger" *ngIf="data?.ammountOfItemOverduce && data?.overduce">{{ data?.ammountOfItemOverduce }} hoá đơn quá hạn:</div>
-            <div class="col-3 text-danger" *ngIf="data?.ammountOfItemOverduce && data?.overduce">{{ data?.overduce }}</div>
+            <div class="col-7" *ngIf="data?.ammountOfItemOutstanding && data?.outstanding">
+              {{ data?.ammountOfItemOutstanding }} {{ 'DASHBOARD.MONEYPAYABLE.TITLE.PAYABLEINVOICE' | translate }}</div>
+            <div class="col-5 pl-0" *ngIf="data?.ammountOfItemOutstanding && data?.outstanding">
+              {{ suffix(data?.outstanding) }} </div>
+            <div class="col-7 text-danger" *ngIf="data?.ammountOfItemOverduce && data?.overduce">
+              {{ data?.ammountOfItemOverduce }} {{ 'DASHBOARD.MONEYPAYABLE.TITLE.OVERDUCEINVOICE' | translate }}</div>
+            <div class="col-5 text-danger pl-0" *ngIf="data?.ammountOfItemOverduce && data?.overduce">
+              {{ suffix(data?.overduce) }}</div>
           </div>
         </div>
       </div>

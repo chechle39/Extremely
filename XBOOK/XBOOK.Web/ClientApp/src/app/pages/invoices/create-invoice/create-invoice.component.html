@@ -20,7 +20,7 @@
             <div class="col-sm-12 p-0">
               <div class="border px-3 py-3">
                 <div class="row">
-                  <div class="col-md-3 col-sm-4">
+                  <div class="col-md-3 col-sm-4" style="min-width: 200px;">
                     <div class="text-left" *ngIf="imgURL">
                       <img [src]="imgURL" class="preview-logo" *ngIf="imgURL">
                     </div>
@@ -33,7 +33,7 @@
                     </div>
                     <!-- <p class="text-danger" *ngIf="message">{{message}}</p> -->
                   </div> <!-- end upload col-sm-6 -->
-                  <div class="col-md-9 col-sm-8">
+                  <div class="col-md-9 col-sm-8" style="flex: 1;">
                     <div class="row">
                       <div class="col">
                         <p class="mb-0">
@@ -68,10 +68,10 @@
                 <div class="row my-3">
                   <div class="col-12 col-md-6">
                     <p class="mb-0 invoice__input__title invoice__text--height-normal">{{'BUY.INVOICE.CREATE.BILL' | translate}} &nbsp;&nbsp;<a
-                        (click)="editClient()" *ngIf="canActionClient()" class="icon-action">
+                        (click)="editClient()" *ngIf="checkIcon === true || canActionClient()" class="icon-action">
                         <span class="icon-edit1"></span>
                       </a>
-                      <a class="icon-action" (click)="deleteClient()" *ngIf="canActionClient()">
+                      <a class="icon-action" (click)="deleteClient()" *ngIf="checkIcon === true || canActionClient() || coppyMode === true">
                         <span class="icon-delete1"></span>
                       </a></p>
 
@@ -438,7 +438,7 @@
           </div>
         </form>
       </div>
-      <xb-list-payment *ngIf="viewMode" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"
+      <xb-list-payment *ngIf="viewMode && coppyMode !== true" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"
         (addNewPayment)="addPayment()" [paymentViews]="paymentViews" [outstandingAmount]="amountDue"
         [invoiceNumber]="invoiceNumber" class="w-100 invoice-area">
       </xb-list-payment>

@@ -23,6 +23,9 @@ import { JournalEntryService } from '../../_shared/services/journal-entry.servic
 import { JournalEntryViewModel } from '../../_shared/models/journalentry/journalentry.model';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 import { CommonService } from '../../../shared/service/common.service';
+import { CreateMasterComponent } from '../create/create-masterparam.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EditMasterComponent } from '../update/update-masterparam.component';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -71,6 +74,7 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     private data: DataService,
     private journalEntryService: JournalEntryService,
     injector: Injector,
+    private modalService: NgbModal,
     public authenticationService: AuthenticationService,
     private commonService: CommonService,
     private router: Router,
@@ -221,13 +225,29 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
   }
   redirectToCreateNewInvoice() {
     this.data.sendMessage('');
-    this.router.navigate([`pages/journalentries/new`]);
+    // this.router.navigate([`pages/journalentries/new`]);
+    this.showCreateOrEditClientDialog();
   }
   redirectToEditInvoice(id) {
     this.data.sendMessage('');
-    this.router.navigate([`pages/journalentries/${id}/${ActionType.Edit}`]);
+    this.showCreateOrEditClientDialog(id);
+    // this.router.navigate([`pages/journalentries/${id}/${ActionType.Edit}`]);
   }
 
+  showCreateOrEditClientDialog(id?: number): void {
+    let createOrEditClientDialog;
+    if (id === undefined || id <= 0) {
+      this.modalService.dismissAll();
+      createOrEditClientDialog = this.modalService.open(CreateMasterComponent, AppConsts.modalOptionsLargerSize);
+    } else {
+      this.modalService.dismissAll();
+     createOrEditClientDialog = this.modalService.open(EditMasterComponent, AppConsts.modalOptionsLargerSize);
+      createOrEditClientDialog.componentInstance.id = id;
+    }
+    createOrEditClientDialog.result.then(result => {
+      this.refresh();
+    });
+  }
   delete(id: number): void {
     this.isCheckBackTo = true;
     if (id === 0) { return; }
@@ -290,7 +310,7 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     // If you are using (activated) event, you will get event, row, rowElement, type
     if (event.type === 'click') {
       if (event.cellIndex > 0 && this.isCheckBackTo === false) {
-        this.router.navigate([`/pages/journalentries/${event.row.id}/${ActionType.View}`]);
+        this.redirectToEditInvoice(event.row.id);
       }
     }
   }

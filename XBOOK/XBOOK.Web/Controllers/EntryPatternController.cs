@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using XBOOK.Service.Interfaces;
 
@@ -7,9 +8,11 @@ namespace XBOOK.Web.Controllers
     public class EntryPatternController : BaseAPIController
     {
         private readonly IEntryPatternService _entryPatternService;
-        public EntryPatternController(IEntryPatternService entryPatternService)
+        private readonly IAuthorizationService _authorizationService;
+        public EntryPatternController(IEntryPatternService entryPatternService, IAuthorizationService authorizationService)
         {
             _entryPatternService = entryPatternService;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]

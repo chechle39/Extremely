@@ -129,7 +129,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   EditUpload: boolean;
   checkUpload: boolean;
   isCheckHidden: boolean;
-
+  coppyMode: boolean;
+  checkIcon: boolean;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -198,13 +199,17 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     if (this.activeRoute !== undefined) {
       this.activeRoute.params.subscribe(params => {
         if (!isNaN(params.id)) {
-          this.invoiceId = params.id;
+          this.invoiceId = this.saleInvId !== undefined ? this.saleInvId : params.id;
           //  this.editMode = params.key === ActionType.Edit;
           this.editMode = true;
           this.viewMode = params.key === ActionType.View;
+          this.coppyMode = params.key === ActionType.Coppy;
+          if (this.coppyMode === true) {
+            this.isRead = false;
+          }
           this.getDataForEditMode();
           this.getPayments(this.invoiceId);
-          if (this.viewMode) {
+          if (this.viewMode && this.coppyMode !== true) {
             this.invoiceForm.disable();
             this.invoiceForm.controls.items.disable();
           }
@@ -391,7 +396,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     const arrayControl = this.getFormArray();
     arrayControl.at(index).get('description').setValue(this.productSelected.description);
     arrayControl.at(index).get('productName').setValue(this.productSelected.productName);
-    arrayControl.at(index).get('productID').setValue(this.productSelected.id);
+    arrayControl.at(index).get('productID').setValue(this.productSelected.productID);
     const price = this.productSelected.unitPrice;
     arrayControl.at(index).get('price').setValue(Number(price));
   }
@@ -442,7 +447,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     this.buyInvoiceService.getBuyInvoiceBuyId(invoiceId).subscribe(data => {
       const invoice = data as BuyInvoiceView;
       this.invoiceList = invoice;
-      this.invoiceNumber = invoice[0].invoiceNumber;
+      this.invoiceNumber = this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber;
       this.title = this.invoiceNumber;
       this.supplierSelected.id = invoice[0].supplierID;
       this.supplierSelected.supplierName = invoice[0].supplierData[0].supplierName;
@@ -469,7 +474,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       this.invoiceForm.patchValue({
         invoiceId: invoice[0].invoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
-        invoiceNumber: invoice[0].invoiceNumber,
+        invoiceNumber: this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber,
         supplierID: invoice[0].supplierData[0].supplierID,
         supplierName: invoice[0].supplierData[0].supplierName,
         address: invoice[0].supplierData[0].address,
@@ -489,6 +494,24 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       this.subTotalDiscountIncl = invoice[0].discount;
       this.totalTaxAmount = invoice[0].vatTax;
       this.paymentViews = invoice[0].paymentView;
+
+      const count = this.countDate(invoice[0].issueDate, invoice[0].dueDate);
+      const todayDue = new Date();
+      todayDue.setDate(todayDue.getDate() + count);
+      const date = todayDue.toLocaleDateString('en-GB');
+      const daySplit = date.split('/');
+      const idayPicker = {
+        year: Number(daySplit[2]),
+        month: Number(daySplit[1]),
+        day: Number(daySplit[0]),
+      };
+      const today = new Date().toLocaleDateString('en-GB');
+      const issuetodaySplit = today.split('/');
+      const issueTodayPicker = {
+        year: Number(issuetodaySplit[2]),
+        month: Number(issuetodaySplit[1]),
+        day: Number(issuetodaySplit[0]),
+      };
       if (invoice[0].issueDate) {
         const issueDate = moment(invoice[0].issueDate).format(AppConsts.defaultDateFormat);
         const issueDateSplit = issueDate.split('/');
@@ -497,7 +520,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           month: Number(issueDateSplit[1]),
           day: Number(issueDateSplit[0]),
         };
-        this.invoiceForm.controls.issueDate.patchValue(issueDatePicker);
+        this.invoiceForm.controls.issueDate.patchValue(this.coppyMode !== true ? issueDatePicker : issueTodayPicker);
       }
       if (invoice[0].dueDate) {
         const dueDate = moment(invoice[0].dueDate).format(AppConsts.defaultDateFormat);
@@ -507,7 +530,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           month: Number(dueDateSplit[1]),
           day: Number(dueDateSplit[0]),
         };
-        this.invoiceForm.controls.dueDate.patchValue(dueDatePicker);
+        this.invoiceForm.controls.dueDate.patchValue(this.coppyMode !== true ? dueDatePicker : idayPicker );
       }
       // this.getAllTax();
       detailInvoiceFormArray.controls.forEach((control, i) => {
@@ -522,15 +545,25 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         }
       });
     });
+    if (this.viewMode && this.coppyMode !== true) {
       this.invoiceForm.controls.supplierName.disable();
       this.invoiceForm.controls.email.disable();
       this.invoiceForm.controls.address.disable();
       this.invoiceForm.controls.taxCode.disable();
       this.invoiceForm.controls.contactName.disable();
       this.isRead = true;
+    }
+  }
+
+  countDate(start, end) {
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const firstDate = new Date(start);
+    const secondDate = new Date(end);
+    return Math.round(Math.abs((firstDate.getTime()  - secondDate.getTime()) / oneDay));
   }
 
   cancel() {
+    this.checkIcon = false;
     if (this.invoiceId > 0) {
       this.getBuyInvoiceById(this.invoiceId);
     }
@@ -540,7 +573,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     this.invoiceForm.controls.address.disable();
     this.invoiceForm.controls.taxCode.disable();
     // Resets to blank object
-    if (this.editMode) {
+    if (this.editMode && this.coppyMode !== true) {
       this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
       this.viewMode = true;
       this.isRead = true;
@@ -564,7 +597,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       return;
     }
     // this.viewMode = true;
-    if (!this.invoiceForm.valid && this.invoiceId === 0) {
+    if (!this.invoiceForm.valid && this.invoiceId === 0 || this.coppyMode === true) {
       const a = this.oldsupplierID === this.invoiceForm.value.supplierID;
       const request = {
         invoiceId: 0,
@@ -583,12 +616,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         discRate: this.invoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
         vatTax: this.totalTaxAmount,
-        amountPaid: this.amountPaidData,
+        amountPaid: this.amountPaidData === undefined ? this.amountPaid : this.amountPaidData,
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        supplierID: this.invoiceForm.value.contactName.supplierID !== undefined
-        ? this.invoiceForm.value.contactName.supplierID : 0,
+        supplierID: this.coppyMode !== true ? (this.invoiceForm.value.contactName.supplierID !== undefined
+        ? this.invoiceForm.value.contactName.supplierID : 0) : this.invoiceForm.value.supplierID,
         supplierName: this.invoiceForm.value.supplierName === undefined ?
           this.invoiceForm.value.contactName.supplierName : this.invoiceForm.value.supplierName,
         address: this.invoiceForm.value.address === undefined
@@ -614,12 +647,14 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           this.saleInvId = x.invoiceId;
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-            const productID = this.invoiceForm.value.items[i].productName.productID;
+            const productID =  this.invoiceForm.value.items[i].productName.productName !== undefined
+            ? this.invoiceForm.value.items[i].productName.productID
+            : this.invoiceForm.value.items[i].productID;
             const productName = this.invoiceForm.value.items[i].productName.productName;
             const requestInvDetail = {
               id: 0,
               invoiceId: this.saleInvId,
-              productID: productID > 0 ? this.invoiceForm.value.items[i].productName.productID : 0,
+              productID: productID > 0 ? productID : 0,
               productName: productName !== undefined ? this.invoiceForm.value.items[i].productName.productName
                 : this.invoiceForm.value.items[i].productName,
               description: this.invoiceForm.value.items[i].description,
@@ -632,8 +667,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           }
 
           this.buyInvoiceService.CreateBuyInvDetail(requestInvDt).subscribe(xs => {
-            this.notify.success('Successfully Add');
-            // this.router.navigate([`/pages/buyinvoice`]);
+            if (!this.coppyMode) {
+              this.notify.success('Successfully Add');
+            } else {
+              this.invoiceId = this.saleInvId;
+              this.notify.success('Coppy invoice successfully');
+            }
             this.invoiceForm.reset();
             this.viewMode = false;
             this.supplierSelected.supplierID = 0;
@@ -650,12 +689,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
 
       return;
     }
-    if (this.invoiceId > 0 && !this.invoiceForm.valid) {
+    if (this.invoiceId > 0 && !this.invoiceForm.valid && !this.coppyMode) {
       const checksupplierID = this.invoiceForm.value.supplierID;
       const buyInvDetailView = [];
       // tslint:disable-next-line:prefer-for-of
       for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
-        if (this.invoiceForm.value.items[ii].productID === undefined) {
+        if (this.invoiceForm.value.items[ii].productName.productName !== undefined) {
           const rs = {
             amount: this.invoiceForm.value.items[ii].amount,
             qty: this.invoiceForm.value.items[ii].qty,
@@ -669,7 +708,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           };
           buyInvDetailView.push(rs);
         }
-        if (this.invoiceForm.value.items[ii].productID !== undefined) {
+        if (this.invoiceForm.value.items[ii].productName.productName === undefined) {
           const object2 = Object.assign({}, this.invoiceForm.value.items[ii],
             {
               invoiceId: this.invoiceForm.value.invoiceId, productID: this.invoiceForm.value.items[ii].productID === ''
@@ -782,7 +821,13 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       if (this.EditUpload !== true) {
         this.uploadFileMultiple(this.requestData);
       }
-
+      const requestDl = [];
+      this.requestRemove.forEach(element => {
+        if (element.id !== 0) {
+          const id = element.id;
+          requestDl.push({ id });
+        }
+      });
       this.buyInvoiceService.updateBuyInv(this.requestData).pipe(
         finalize(() => {
         })).subscribe(rs => {
@@ -790,21 +835,24 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
             this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
           }
           if (this.requestRemove.length > 0) {
-            this.requestRemove.forEach(element => {
-              if (element.id  > 0) {
-                this.buyInvoiceService.deleteBuyInvoiceDetail(element.id).subscribe(() => {
-                  // this.notify.success('Successfully Deleted');
-                  this.getDataForEditMode();
-                  this.requestRemove = [];
-                  this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
-                });
-              }
-            });
+            if (requestDl.length > 0) {
+              this.buyInvoiceService.deleteBuyInvoiceDetail(requestDl).subscribe(() => {
+                // this.notify.success('Successfully Deleted');
+                this.getDataForEditMode();
+                this.requestRemove = [];
+                this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+              });
+            }
+
           }
           this.viewMode = true;
           this.isCheckHidden = true;
           this.notify.success('Successfully Update');
           this.router.navigate([`/pages/buyinvoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+          if (requestDl.length < 1) {
+            this.getBuyInvoiceById(this.invoiceId);
+          }
+
         });
     }
 

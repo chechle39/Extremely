@@ -32,7 +32,7 @@
         <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="data"
           [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force" [headerHeight]="60" [footerHeight]="50"
           [rowHeight]="getRowHeight" [reorderable]="reorderable" (activate)="onActivate($event)"
-          [selectAllRowsOnPage]="false" [limit]="20" (treeAction)="onTreeAction($event)"
+          [selectAllRowsOnPage]="false" [limit]="50" (treeAction)="onTreeAction($event)"
           [treeToRelation]="'accountNumber'" [treeFromRelation]="'parentId'">
 
           <ngx-datatable-column [treeLevelIndent]="20" name="{{'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNUMBER' | translate}}"

@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../../coreapp/services/authentication.
 export class CreateSupplierComponent extends AppComponentBase implements OnInit {
   saving: false;
   client: SupplierView = new SupplierView();
+  mes: any;
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
@@ -33,9 +34,16 @@ export class CreateSupplierComponent extends AppComponentBase implements OnInit 
           this.saving = false;
         }),
       )
-      .subscribe(() => {
-        this.notify.info('Saved Successfully');
-        this.close(true);
+      .subscribe((i: any) => {
+        if (i === undefined ||   i === null)  {
+          this.notify.info('Saved Successfully');
+          this.close(true);
+         }
+        this.mes = i.message;
+       if (this.mes === 'insert false') {
+        this.message.warning('Tên nhà cung cấp  đã tồn tại');
+       }
+
       });
   }
   close(result: any): void {

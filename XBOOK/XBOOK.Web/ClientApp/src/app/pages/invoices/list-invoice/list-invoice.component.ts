@@ -119,13 +119,12 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   ): void {
     this.loadingIndicator = true;
     request.keyword = this.searchString;
-    //Thang code
     if (this.router.url !== '/pages/invoice') {
       this.invoiceOfChart();
-    } else{
+    } else {
       this.getSaleInVByRequestSearch();
     }
-   // this.getSaleInVByRequestSearch();
+    // this.getSaleInVByRequestSearch();
   }
   private getSaleInVByRequestSearch() {
     if (this.requesSearchtList === undefined) {
@@ -156,8 +155,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   }
   invoiceOfChart() {
     if (this.route !== undefined) {
-      this.route.queryParams     
-      .subscribe(params => {        
+      this.route.queryParams
+        .subscribe(params => {
           const requestList = {
             keyword: '',
             startDate: params.startDate,
@@ -170,8 +169,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
             this.invoiceViews = i;
             this.listInvoice = this.invoiceViews;
           });
-        });   
-      }
+        });
+    }
   }
   invoiceOfClient(request) {
     this.subscription = this.data.getMessage().subscribe(rp => {
@@ -191,6 +190,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
             this.invoiceViews = i;
             this.listInvoice = this.invoiceViews;
           });
+
         } else if (this.client !== '') {
           if (this.requesSearchtList === undefined) {
             const requestList = {
@@ -261,23 +261,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       return item.amountPaid;
     });
   }
-  deleteAll(): void {
-    if (this.selected.length === 0) {
-      this.message.warning('Please select an item from the list?');
-      return;
-    }
-    const requestDl = [];
-    this.selected.forEach(element => {
-      const id = element.invoiceId;
-      requestDl.push({ id });
-    });
-    this.invoiceService.deleteInvoice(requestDl).subscribe(() => {
-      this.notify.success('Successfully Deleted');
-      this.refresh();
-    });
-    this.selected = [];
-  }
-  edit(): void {
+ 
+  coppy() {
     if (this.selected.length === 0) {
       this.message.warning('Please select a item from the list?');
       return;
@@ -286,9 +271,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       this.message.warning('Only one item selected to edit?');
       return;
     }
-    this.redirectToEditInvoice(this.selected[0].id);
+    this.router.navigate([`pages/invoice/${this.selected[0].invoiceId}/${ActionType.Coppy}`]);
   }
-
   onSelect({ selected }): void {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
@@ -327,6 +311,31 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       this.isCheckBackTo = false;
     });
 
+  }
+  deleteAll(): void {
+    if (this.selected.length === 0) {
+      this.message.warning('Please select an item from the list?');
+      return;
+    }
+    const requestDl = [];
+    const file = [];
+    this.selected.forEach(element => {
+      const id = element.invoiceId;
+      const deleted = {
+        invoice: element.invoiceNumber,
+        seri: element.invoiceSerial,
+      };
+      file.push(deleted);
+      requestDl.push({ id });
+    });
+    this.invoiceService.deleteInvoice(requestDl).subscribe(() => {
+      this.notify.success('Successfully Deleted');
+      file.forEach(element => {
+        this.getInFoFile(element);
+      });
+      this.refresh();
+    });
+    this.selected = [];
   }
   private deleteInvoice(id: number): void {
     const request = [{ id }];

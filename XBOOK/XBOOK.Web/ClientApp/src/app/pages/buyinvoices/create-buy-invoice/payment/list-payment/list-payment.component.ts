@@ -6,6 +6,7 @@ import { AuthenticationService } from '../../../../../coreapp/services/authentic
 
 @Component({
   selector: 'xb-list-payment2',
+  styleUrls: ['./list-payment.component.scss'],
   templateUrl: './list-payment.component.html',
 })
 export class ListPayment2Component extends AppComponentBase implements OnInit {

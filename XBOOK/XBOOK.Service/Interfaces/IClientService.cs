@@ -8,7 +8,8 @@ namespace XBOOK.Service.Interfaces
 {
     public interface IClientService
     {
-        Client CreateClient(ClientCreateRequet request);
+        Client CreateClientInv(ClientCreateRequet request);
+        bool CreateClient(ClientCreateRequet request);
         bool CreateClientImport(List<ClientCreateRequet> request);
         Task<ClientViewModel> GetClientById(int id);
         Task<IEnumerable<ClientViewModel>> GetAllClient(ClientSerchRequest request);

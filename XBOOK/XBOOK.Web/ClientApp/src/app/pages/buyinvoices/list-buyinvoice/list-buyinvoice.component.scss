@@ -18,9 +18,14 @@ nb-card-body {
 :host ::ng-deep .datatable-body-row {
   padding-top: 0.35rem !important;
   padding-bottom: 0.35rem !important;
+  &:hover .icon-actions{
+    background-color: transparent!important;
+  }
 }
 
-
+:host ::ng-deep .ngx-datatable {
+  overflow: visible;
+}
 
 // :host ::ng-deep .datatable-row-group {
 //   height: 45px;
@@ -43,10 +48,21 @@ nb-card-body {
       flex: 0 0 11rem;
     }
     &:nth-child(5) {
-      flex: 0 0 6.5rem;
+      flex: 0 0 10.5rem;
     }
     &:nth-child(6) {
-      flex: 0 0 40px;
+      flex: 0 0 0;
+      @media screen and (min-width: 993px){
+        position: absolute;
+        left: calc(100% + 10px);
+        height: 100%;
+        width: 30px !important;
+        &:hover{
+          .icon-actions{
+            display: block;
+          }
+        }
+      }
     }
   }
 

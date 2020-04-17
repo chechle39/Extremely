@@ -23,7 +23,20 @@ export class ProductService extends BaseService {
 
     return products;
   }
+  searchProductForSearch(term: any) {
+    const products = this.post<ProductSearchModel[]>(`${API_URI.searchproductGetAll}`, term)
+      .pipe(
+      //  debounceTime(500),  // WAIT FOR 500 MILISECONDS ATER EACH KEY STROKE.
+        map(
+          (data: any) => {
+            return (
+              data.length !== 0 ? data as ProductSearchModel[] : new Array<ProductSearchModel>()
+            );
+          },
+        ));
 
+    return products;
+  }
   getProduct(id: any): Observable<ProductView> {
     return this.post<ProductView>(
       `${API_URI.productById}`, id,
@@ -55,7 +68,7 @@ export class ProductService extends BaseService {
   }
   downLoadFile(data: any, type: string) {
     // tslint:disable-next-line:object-literal-shorthand
-    const blob = new Blob([data], { type: type });
+    const blob = new Blob(['\ufeff', data], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     saveAs(blob, 'Product.csv');
   }

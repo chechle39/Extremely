@@ -7,6 +7,8 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using XBOOK.Common.Exceptions;
+using XBOOK.Common.Helpers;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
@@ -18,10 +20,13 @@ namespace XBOOK.Web.Controllers
     {
         IProductService _iProductService;
         private readonly XBookContext _context;
-        public ProductController(IProductService iProductService, XBookContext context, IHttpContextAccessor httpContextAccessor)
+        private readonly IAuthorizationService _authorizationService;
+
+        public ProductController(IProductService iProductService, XBookContext context, IHttpContextAccessor httpContextAccessor, IAuthorizationService authorizationService)
         {
             _iProductService = iProductService;
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
@@ -41,20 +46,38 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateProduct(ProductViewModel request)
         {
-            await _iProductService.CreateProduct(request);
-            return Ok(request);
+            var result = await _authorizationService.AuthorizeAsync(User, "Products", Operations.Create);
+            if (!result.Succeeded)
+                return Unauthorized();
+            var product = await _iProductService.CreateProduct(request);
+            if (product == false)
+            {
+                return Ok(new GenericResult(true, "insert false"));
+            }
+            return Ok();
+          
         }
 
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateProduct([FromBody]ProductViewModel request)
         {
-            await _iProductService.Update(request);
+            var result = await _authorizationService.AuthorizeAsync(User, "Products", Operations.Update);
+            if (!result.Succeeded)
+                return Unauthorized();
+            var product = await _iProductService.Update(request);
+            if (product == false)
+            {
+                return Ok(new GenericResult(true, "insert false"));
+            }
             return Ok();
         }
 
         [HttpPost("[action]")]
         public IActionResult DeleteProduct([FromBody]List<requestDeleted> request)
         {
+            var result =  _authorizationService.AuthorizeAsync(User, "Products", Operations.Delete);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
             var sttDelProduct = _iProductService.DeleteProduct(request);
             return Ok(sttDelProduct);
         }

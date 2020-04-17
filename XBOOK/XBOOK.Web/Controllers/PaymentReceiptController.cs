@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
@@ -17,14 +19,21 @@ namespace XBOOK.Web.Controllers
     {
         private readonly IPaymentReceiptService _paymentReceiptService;
         private readonly IPaymentReceiptServiceDapper _paymentReceiptServiceDapper;
-        public PaymentReceiptController(IPaymentReceiptService paymentReceiptService, IPaymentReceiptServiceDapper paymentReceiptServiceDapper)
+        private readonly IAuthorizationService _authorizationService;
+        public PaymentReceiptController(IPaymentReceiptService paymentReceiptService, 
+            IPaymentReceiptServiceDapper paymentReceiptServiceDapper,
+            IAuthorizationService authorizationService)
         {
             _paymentReceiptService = paymentReceiptService;
             _paymentReceiptServiceDapper = paymentReceiptServiceDapper;
+            _authorizationService = authorizationService;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> CreatePaymentReceipt(PaymentReceiptViewModel request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Payment Receipt", Operations.Create);
+            if (!result.Succeeded)
+                return Unauthorized();
             var saveData = await _paymentReceiptService.CreatePaymentReceipt(request);
             return Ok(saveData);
         }
@@ -32,6 +41,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> UpdatePaymentReceipt(PaymentReceiptViewModel request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Payment Receipt", Operations.Update);
+            if (!result.Succeeded)
+                return Unauthorized();
             var updateData = await _paymentReceiptService.Update(request);
             return Ok(updateData);
         }
@@ -39,6 +51,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> DeletePaymentReceipt(List<requestDeleted> request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Payment Receipt", Operations.Delete);
+            if (!result.Succeeded)
+                return Unauthorized();
             var removeData = await _paymentReceiptService.DeletedPaymentReceipt(request);
             return Ok(removeData);
         }
@@ -61,6 +76,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> CreatePaymentReceiptPayMent(PaymentReceiptPayment request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Payment Receipt", Operations.Create);
+            if (!result.Succeeded)
+                return Unauthorized();
             var saveData = await _paymentReceiptService.CreatePaymentReceiptPaymentAsync(request);
             return Ok(saveData);
         }

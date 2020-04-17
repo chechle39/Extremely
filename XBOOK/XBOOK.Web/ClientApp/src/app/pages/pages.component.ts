@@ -7,6 +7,7 @@ import { map, concatAll, mergeMap, take } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'ngx-pages',
   styleUrls: ['pages.component.scss'],
   template: `
@@ -35,6 +36,9 @@ export class PagesComponent implements OnInit {
       if (rp.item.link !== '/pages/journalentries') {
         this.data.sendApplySearchJunal('');
       }
+      if (rp.item.link !== '/pages/Cashbalance') {
+        this.data.sendMessageMoneyFund('');
+      }
     });
   }
   ngOnInit(): void {
@@ -55,14 +59,14 @@ export class PagesComponent implements OnInit {
             if (this.rawMenu[i].children.length === 0) {
               const data = {
                 title: titles[this.rawMenu[i].title],
-                icon: this.rawMenu[i].icon,
+                icon: this.iconFactory(this.rawMenu[i].icon),
                 link: this.rawMenu[i].link,
               };
               this.menu.push(data);
             } else {
               const data = {
                 title: titles[this.rawMenu[i].title],
-                icon: this.rawMenu[i].icon,
+                icon: this.iconFactory(this.rawMenu[i].icon),
                 link: this.rawMenu[i].link,
                 children: this.rawMenu[i].children.map(child => {
                   const subMenu = {...child};
@@ -75,6 +79,19 @@ export class PagesComponent implements OnInit {
           }
           this.setMenuItemActiveWhenExpanded();
     });
+  }
+
+  iconFactory(icon: string) {
+    if (icon == null){
+      return null;
+    }
+    if (icon.match(/^fa.*$/)) {
+      return { icon: icon, pack: 'font-awesome' };
+    }
+    if (icon.match(/^custom.*$/)) {
+      return { icon: icon, pack: 'custom' };
+    }
+    return icon;
   }
 
   setMenuItemActiveWhenExpanded() {

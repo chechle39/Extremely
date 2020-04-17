@@ -271,7 +271,7 @@ namespace XBOOK.Data.Repositories
                                 _uow.SaveChanges();
                                 _uow.CommitTransaction();
                             };
-                            var serchData = _productRepository.GetLDFProduct();
+                           // var serchData = _productRepository.GetLDFProduct();
                             var buyDetailPrd = new BuyInvDetailViewModel
                             {
                                 amount = buyInvoiceViewModel.BuyInvDetailView[i].price * buyInvoiceViewModel.BuyInvDetailView[i].qty,
@@ -280,7 +280,7 @@ namespace XBOOK.Data.Repositories
                                 description = buyInvoiceViewModel.BuyInvDetailView[i].description,
                                 ID = buyInvoiceViewModel.BuyInvDetailView[i].ID,
                                 invoiceID = buyInvoiceViewModel.BuyInvDetailView[i].invoiceID,
-                                productID = serchData.LastOrDefault().productID,
+                                productID = buyInvoiceViewModel.BuyInvDetailView[i].productID > 0 ? buyInvoiceViewModel.BuyInvDetailView[i].productID : _productRepository.GetLDFProduct().LastOrDefault().productID,
                                 productName = buyInvoiceViewModel.BuyInvDetailView[i].productName.Split("(")[0],
                                 vat = buyInvoiceViewModel.BuyInvDetailView[i].vat
                             };

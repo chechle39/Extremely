@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Model;
@@ -19,22 +21,30 @@ namespace XBOOK.Web.Controllers
     {
 
         IAccountDetailServiceDapper _iAccountDetailServiceDapper;
-        public AccountDetailController(IAccountDetailServiceDapper iAccountDetailServiceDapper)
+        private readonly IAuthorizationService _authorizationService;
+        public AccountDetailController(IAccountDetailServiceDapper iAccountDetailServiceDapper, IAuthorizationService authorizationService)
         {
 
             _iAccountDetailServiceDapper = iAccountDetailServiceDapper;
+            _authorizationService = authorizationService;
         }
 
        
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllAccountDetailAsync([FromBody]AccountDetailSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Account Detail", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iAccountDetailServiceDapper.GetAccountDetailAsync(request);
             return Ok(DebitAgeList);
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAccountDetailReportAsync([FromBody]AccountDetailSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Account Detail", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iAccountDetailServiceDapper.GetAccountDetailReportAsync(request);
             return Ok(DebitAgeList);
         }

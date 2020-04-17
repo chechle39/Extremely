@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+using System;
+using System.IO;
+
 namespace XBOOK.Common.Method
 {
     public class MethodCommon

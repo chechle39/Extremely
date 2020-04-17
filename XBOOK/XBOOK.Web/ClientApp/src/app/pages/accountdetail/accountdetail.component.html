@@ -48,30 +48,30 @@
         <div class="row" style="color: #546D74;">
           <div class="col-lg-4 col-md-5 col-6" style="color: #546D74; font-size: 1.1rem;">
             {{group.companyName}}</div>
-          <div style="color: #546D74;font-weight: bold; position: absolute; right: 18rem;" class="text-right">
+          <div style="position: absolute; right: 18rem;" class="text-right">
             {{ 'ACCOUNT.DETAIL.LIST.openingbalance' | translate }}:
           </div>
-          <div  style="color: #546D74;font-weight: bold; position: absolute; right: 10rem;" class="text-right">
+          <div style="color: #546D74; position: absolute; right: 10rem;" class="text-right">
             <div *ngIf="group.totalDebitOpening !== 0">{{group.totalDebitOpening | currency:'VND':''}} </div>
           </div>
-          <div  style="color: #546D74;font-weight: bold; position: absolute; right: 2rem;" class="text-right">
-            <div *ngIf="group.totalCreditOpening !== 0"> {{group.totalCreditOpening | currency:'VND':''}}</div>  
+          <div style="color: #546D74; position: absolute; right: 2rem;" class="text-right">
+            <div *ngIf="group.totalCreditOpening !== 0"> {{group.totalCreditOpening | currency:'VND':''}}</div>
           </div>
         </div>
+        <hr width="100%" class="my-0" style="height: 1px;background: #6A0888;" />
       </div>
 
 
 
 
       <div class="row">
-        <hr width="98%" class="my-0" style="height: 2px;;background: #6A0888;" />
         <div class="col-md-12" style="margin-bottom: 2rem;">
           <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="group.accountDetailViewModel"
             [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]" [columnMode]="ColumnMode.force"
             [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [limit]="20" [selected]="selected"
             [selectionType]="'checkbox'" (sort)="onSort($event)" [selectAllRowsOnPage]="false">
 
-            <ngx-datatable-column name="{{'ACCOUNT.DETAIL.LIST.INVOICENUMBER' | translate}}" prop="invoiceNumber">
+            <ngx-datatable-column  name="{{'ACCOUNT.DETAIL.LIST.INVOICENUMBER' | translate}}" prop="invoiceNumber">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <div style="color: cadetblue;">{{row.invoiceNumber}}</div>
               </ng-template>
@@ -181,7 +181,8 @@
             <ngx-datatable-footer>
               <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-                <div class="" style="display: block;width: 100%;border-top: 3px double #ccc;padding-top: 10px;margin-top: 3px;">
+                <div class=""
+                  style="display: block;width: 100%;border-top: 3px double #ccc;padding-top: 10px;margin-top: 3px;">
                   <div class="datatable__footer__row text-right">
                     <div class="text-nowrap" style="text-align: left;">
                       <span class="card__title" style="color: rgb(16, 20, 20);inset-block: inherit;width: 300px;
@@ -194,26 +195,51 @@
                     <div></div>
                     <div></div>
                     <div class="totalDebit">
-                      <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                        {{group.totalDebit  | currency:'VND':''}}
+                      <div  style="color: rgb(16, 20, 20)" class="col-more-info">
+                        <div>
+                          <div *ngIf="group.totalDebit !== 0" class="col-more-info">
+                            {{group.totalDebit  | currency:'VND':''}}</div>
+                          <div *ngIf="group.totalDebit === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
 
                     <div class="totalCredit">
-                      <div *ngIf="group.totalAmount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                        {{group.totalCredit  | currency:'VND':''}}
+                      <div  style="color: rgb(16, 20, 20)" class="col-more-info">
+                        <div>
+                          <div *ngIf="group.totalCredit !== 0" class="col-more-info">
+                            {{group.totalCredit  | currency:'VND':''}}</div>
+                          <div *ngIf="group.totalCredit === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
                     <div class="totalDebitClosing">
-                      <div *ngIf="group.totalDiscount  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                        {{group.totalDebitClosing  | currency:'VND':''}}
+                      <div  style="color: rgb(16, 20, 20)" class="col-more-info">
+                        <div>
+                          <div *ngIf="group.totalDebitClosing !== 0" class="col-more-info">
+                            {{group.totalDebitClosing  | currency:'VND':''}}</div>
+                          <div *ngIf="group.totalDebitClosing === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
                     <div class="totalPayment">
-                      <div *ngIf="group.totalPayment  !== 0" style="color: rgb(16, 20, 20)" class="col-more-info">
-                        {{group.totalCreditClosing  | currency:'VND':''}}
+                      <div  style="color: rgb(16, 20, 20)" class="col-more-info">
+                        <div>
+                          <div *ngIf="group.totalCreditClosing !== 0" class="col-more-info">
+                            {{group.totalCreditClosing  | currency:'VND':''}}</div>
+                          <div *ngIf="group.totalCreditClosing === 0">
+                            <a>-</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
 

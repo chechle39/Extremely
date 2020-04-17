@@ -133,8 +133,8 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
       const genledSearch = {
         startDate: result.startDate,
         endDate: result.endDate,
-        client:result.client === '' ? null : result.client ,
-        product:result.product === '' ? null :  result.product,
+        client: result.client === '' ? null : result.client ,
+        product: result.product === '' ? null :  result.product,
       };
       this.exportCSV = result;
       this.purchaseReportService.searchGen(genledSearch).subscribe(rp => {

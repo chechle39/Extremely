@@ -85,21 +85,43 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
     createOrEditClientDialog.result.then(result => {
       this.refresh();
-
+      this.selected = [];
     });
 
   }
-
+  coppy() {
+    if (this.selected.length === 0) {
+      this.message.warning('Please select a item from the list?');
+      return;
+    }
+    if (this.selected.length > 1) {
+      this.message.warning('Only one item selected to edit?');
+      return;
+    }
+    let createOrEditClientDialog;
+    createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent,
+      AppConsts.modalOptionsCustomSize);
+    createOrEditClientDialog.componentInstance.row = this.selected[0];
+    createOrEditClientDialog.componentInstance.coppyMode = true;
+    createOrEditClientDialog.result.then(result => {
+      this.refresh();
+      this.selected = [];
+    });
+  }
   createForm() {
     const date = new Date();
     const firstDate = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
     const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString('en-GB');
     const firstDateMonth = firstDate.split('/');
-    const firstDateMonthCurent = { year: Number(firstDateMonth[2]),
-      month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]) };
+    const firstDateMonthCurent = {
+      year: Number(firstDateMonth[2]),
+      month: Number(firstDateMonth[1]), day: Number(firstDateMonth[0]),
+    };
     const endDateMonth = endDate.split('/');
-    const endDateMonthCurent = { year: Number(endDateMonth[2]),
-      month: Number(endDateMonth[1]), day: Number(endDateMonth[0]) };
+    const endDateMonthCurent = {
+      year: Number(endDateMonth[2]),
+      month: Number(endDateMonth[1]), day: Number(endDateMonth[0]),
+    };
     return this.fb.group({
       startDate: firstDateMonthCurent,
       endDate: endDateMonthCurent,
@@ -215,7 +237,7 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
           // } as GetMoneyReceipyRequest;
           // this.getAllMoneyReceipt(objRequest);
           this.refresh();
-
+          this.selected = [];
         });
       }
     }

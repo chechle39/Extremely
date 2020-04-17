@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Service.Interfaces
@@ -9,7 +10,7 @@ namespace XBOOK.Service.Interfaces
         Task<bool> CreateBuyInvDetail(BuyInvDetailViewModel buyInvoiceViewModel);
         Task<bool> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
         Task<bool> UpdateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
-        Task Deleted(long id);
+        Task Deleted(List<Deleted> id);
 
     }
 }

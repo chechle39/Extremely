@@ -9,8 +9,7 @@ export class CompanyService extends BaseService {
 
   getProfile(id: any): Observable<CompanyprofileView> {
     return this.post<CompanyprofileView>(
-      `${API_URI.companyProfileById}/${id}`, id
-    );
+      `${API_URI.companyProfileById}/${id}`, id);
   }
   createProfile(company: CompanyprofileView): Observable<CompanyprofileView> {
     return this.post<CompanyprofileView>(`${API_URI.createProfile}`, company);

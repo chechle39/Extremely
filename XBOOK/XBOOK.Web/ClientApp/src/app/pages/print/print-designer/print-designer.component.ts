@@ -48,7 +48,7 @@ export class PrintDesignerComponent implements OnInit, OnDestroy {
       filter((event: RouterEvent) => event instanceof NavigationEnd),
       pairwise(),
       filter((events: RouterEvent[]) => events[0].url === events[1].url),
-      takeUntil(this.destroyed)
+      takeUntil(this.destroyed),
     ).subscribe(() => {
       // rerender Designer Component
       this.ischeck = false;

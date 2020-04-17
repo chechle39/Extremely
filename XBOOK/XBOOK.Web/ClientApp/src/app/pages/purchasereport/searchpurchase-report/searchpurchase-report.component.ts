@@ -14,7 +14,7 @@ import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'xb-searchpurchase',
   templateUrl: './searchpurchase-report.component.html',
-  styleUrls: ['./searchpurchase-report.component.scss']
+  styleUrls: ['./searchpurchase-report.component.scss'],
 })
 export class SearchPurchaseReportComponent extends AppComponentBase implements OnInit {
   cars: any[];
@@ -56,7 +56,7 @@ export class SearchPurchaseReportComponent extends AppComponentBase implements O
     public clientService: SupplierService,
     public fb: FormBuilder,
     injector: Injector,
-    public activeModal: NgbActiveModal, ) {
+    public activeModal: NgbActiveModal ) {
     super(injector);
     this.genLedForm = this.createGenLedFormGroup();
   }
@@ -65,7 +65,7 @@ export class SearchPurchaseReportComponent extends AppComponentBase implements O
 
     const request = {
       productKeyword: null,
-      isGrid: false
+      isGrid: false,
     };
     const requestClient = {
       productKeyword: null,
@@ -82,7 +82,7 @@ export class SearchPurchaseReportComponent extends AppComponentBase implements O
         }
         this.cars1 = this.items1;
       });
-    this.productService.searchProduct(request).subscribe(rp => {
+    this.productService.searchProductForSearch(request).subscribe(rp => {
       this.cars = rp;
       this.items = [];
       // tslint:disable-next-line:prefer-for-of
@@ -111,6 +111,7 @@ export class SearchPurchaseReportComponent extends AppComponentBase implements O
 
   private tranFormsDate(today: string) {
     const issueDateSplit = today.split('/');
+    // tslint:disable-next-line:max-line-length
     const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
     return issueDatePicker;
   }
@@ -137,13 +138,13 @@ export class SearchPurchaseReportComponent extends AppComponentBase implements O
       }
       let supplier = '';
       // tslint:disable-next-line:prefer-for-of
-      if(this.genLedForm.value.acountNumberMethod1!==null){
+      if (this.genLedForm.value.acountNumberMethod1 !== null) {
         for (let i = 0; i < this.genLedForm.value.acountNumberMethod1.length; i++) {
           supplier +=  this.genLedForm.value.acountNumberMethod1[i] + ';' ;
         }
       }
       let product = '';
-      if(this.genLedForm.value.acountNumberMethod!==null){
+      if (this.genLedForm.value.acountNumberMethod !== null) {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.genLedForm.value.acountNumberMethod.length; i++) {
         product +=  this.genLedForm.value.acountNumberMethod[i] + ';';
@@ -154,7 +155,7 @@ export class SearchPurchaseReportComponent extends AppComponentBase implements O
         endDate: this.endDate === undefined ? null : this.endDate,
         client: supplier,
         product: product,
-        case: this.genLedForm.value.genLedMethods
+        case: this.genLedForm.value.genLedMethods,
       };
 
       this.activeModal.close(genledSearch);

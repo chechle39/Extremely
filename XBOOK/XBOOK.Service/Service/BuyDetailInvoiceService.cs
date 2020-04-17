@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -30,7 +31,7 @@ namespace XBOOK.Service.Service
             return data;
         }
 
-        public async Task Deleted(long id)
+        public async Task Deleted(List<Deleted> id)
         {
             await _buyInvDetailRepository.Deleted(id);
         }

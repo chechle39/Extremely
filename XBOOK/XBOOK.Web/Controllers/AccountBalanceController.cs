@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 
@@ -12,22 +14,30 @@ namespace XBOOK.Web.Controllers
     {
        
         IAccountBalanceServiceDapper _iAccountBalanceServiceDapperr;
-        public AccountBalanceController(IAccountBalanceServiceDapper iAccountBalanceServiceDapper)
+        private readonly IAuthorizationService _authorizationService;
+        public AccountBalanceController(IAccountBalanceServiceDapper iAccountBalanceServiceDapper, IAuthorizationService authorizationService)
         {
           
             _iAccountBalanceServiceDapperr = iAccountBalanceServiceDapper;
+            _authorizationService = authorizationService;
         }
 
        
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllAccountBalanceDapper([FromBody]AccountBalanceSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Account Balance", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var AccountBalanceList = await _iAccountBalanceServiceDapperr.GetAccountBalanceAsync(request);
             return Ok(AccountBalanceList);
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllAccountBalanceAccountDapper([FromBody]AccountBalanceAccNumberSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Account Balance", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var AccountBalanceList = await _iAccountBalanceServiceDapperr.GetAccountBalanceAcountAsync(request);
             return Ok(AccountBalanceList);
         }

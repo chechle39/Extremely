@@ -1,0 +1,27 @@
+:host ::ng-deep {
+    .datatable-header-cell,
+    .datatable-body-cell,
+    .datatable__footer__row > * {
+      &:nth-child(1) {
+        flex: 0 0 50px;
+      }
+      &:nth-child(2) {
+        flex: 0 0 7rem;
+      }
+      &:nth-child(3) {
+        flex: 0 0 5rem;
+      }
+      &:nth-child(4) {
+        flex: 1 1 auto;
+      }
+      &:nth-child(5) {
+        flex: 0 0 7.5rem;
+      }
+      &:nth-child(6) {
+        flex: 0 0 6.5rem;
+      }
+      &:nth-child(7) {
+        flex: 0 0 20px;
+      }
+    }
+}

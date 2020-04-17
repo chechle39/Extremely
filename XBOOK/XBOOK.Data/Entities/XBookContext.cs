@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
+using XBOOK.Common.Exceptions;
 using XBOOK.Data.EntitiesDBCommon;
 using XBOOK.Data.EntityConfigurations;
 using XBOOK.Data.Identity;
@@ -109,8 +110,11 @@ namespace XBOOK.Data.Entities
                         if ("" != email[1].Substring(1))
                         {
                             var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
-                            var connectionString1 = code.ConnectionString;
-                            optionsBuilder.UseSqlServer(connectionString1);
+                            if (code != null)
+                            {
+                                var connectionString1 = code.ConnectionString;
+                                optionsBuilder.UseSqlServer(connectionString1);
+                            }                         
                         }
                     }
                     

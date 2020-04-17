@@ -17,7 +17,6 @@ import { MoneyReceiptService } from '../_shared/services/money-receipt.service';
 import { EntryBatternService } from '../_shared/services/entry-pattern.service';
 import { JournalEntriesComponent } from './journalentries.component';
 import { ListJournalEntriesComponent } from './list-journalentries/list-journalentries.component';
-import { CreateJournalEntriesComponent } from './create-journalentries/create-journalentries.component';
 import { JournalEntriesRoutingModule } from './journalentries-routing.module';
 import { JournalEntryService } from '../_shared/services/journal-entry.service';
 import { AccountChartService } from '../_shared/services/accountchart.service';
@@ -30,13 +29,18 @@ import {
   NbAlertModule } from '@nebular/theme';
 import { validateInputAccDirective } from './validate/validateinputacc';
 import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
+import { CreateMasterComponent } from './create/create-masterparam.component';
+import { MasterParamService } from '../_shared/services/masterparam.service';
+import { EditMasterComponent } from './update/update-masterparam.component';
 
 @NgModule({
   declarations: [
     validateInputAccDirective,
     JournalEntriesComponent,
     ListJournalEntriesComponent,
-    CreateJournalEntriesComponent],
+    CreateMasterComponent,
+    EditMasterComponent,
+  ],
   imports: [
     NbButtonModule,
     NbCardModule,
@@ -64,9 +68,10 @@ import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapt
     MoneyReceiptService,
     NgbActiveModal,
     JournalEntryService,
+    MasterParamService,
     AccountChartService,
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     TaxService],
-  entryComponents: [CreateMoneyReceiptComponent],
+  entryComponents: [CreateMoneyReceiptComponent, CreateMasterComponent, EditMasterComponent],
 })
 export class JournalEntriesModule { }

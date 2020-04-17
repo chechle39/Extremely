@@ -11,6 +11,7 @@ import { RoleModel } from '../_shared/models/role/role.model';
 import { CommonService } from '../../shared/service/common.service';
 import { AuthenticationService } from '../../coreapp/services/authentication.service';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 class PagedProductsRequestDto extends PagedRequestDto {
   keyWord: string;
 }
@@ -31,6 +32,7 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
   constructor(
     injector: Injector,
     private modalService: NgbModal,
+    private translate: TranslateService,
     private commonService: CommonService,
     public authenticationService: AuthenticationService,
     private userService: UserService) {
@@ -102,7 +104,9 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
   }
   showCreateUserDialog(): void {
     let createOrEditProductDialog;
-    const title = 'Create user';
+    let title = '';
+    this.translate.get('USER.CREATE.CREATE')
+    .subscribe(text => {title = text; });
     createOrEditProductDialog = this.modalService.open(CreateUserComponent, AppConsts.modalOptionsCustomSizeX);
     createOrEditProductDialog.componentInstance.title = title;
     createOrEditProductDialog.componentInstance.edit = false;
@@ -133,7 +137,9 @@ export class UserComponent extends PagedListingComponentBase<ProductView> {
     createOrEditProductDialog = this.modalService.open(CreateUserComponent, AppConsts.modalOptionsCustomSizeX);
     createOrEditProductDialog.componentInstance.edit = true;
     createOrEditProductDialog.componentInstance.id = event.row !== undefined ? event.row.id : event;
-    const title = 'Edit user';
+    let title = '';
+    this.translate.get('USER.EDIT.FORM')
+    .subscribe(text => {title = text; });
     createOrEditProductDialog.componentInstance.title = title;
     createOrEditProductDialog.result.then(result => {
       if (result) {

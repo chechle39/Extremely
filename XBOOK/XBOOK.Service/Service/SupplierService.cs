@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,23 +29,40 @@ namespace XBOOK.Service.Service
             _supUowRepository = _uow.GetRepository<IRepository<Supplier>>();
         }
 
-        public async Task<bool> CreateSupplier(SupplierCreateRequest request)
-        {
-            var sup = new Supplier()
+        public  bool CreateSupplier(SupplierCreateRequest request)
+        {            
+            try
             {
-                supplierID = 0,
-                address = request.Address,
-                supplierName = request.supplierName,
-                contactName = request.ContactName,
-                email = request.Email,
-                note = request.Note,
-                Tag = request.Tag,
-                taxCode = request.TaxCode,
-                bankAccount = request.bankAccount
-            };
-             _supUowRepository.AddData(sup);
-            _uow.SaveChanges();
-            return await Task.FromResult(true);
+                var sup = new Supplier()
+                {
+                    supplierID = 0,
+                    address = request.Address,
+                    supplierName = request.supplierName,
+                    contactName = request.ContactName,
+                    email = request.Email,
+                    note = request.Note,
+                    Tag = request.Tag,
+                    taxCode = request.TaxCode,
+                    bankAccount = request.bankAccount
+                };
+                _supUowRepository.AddData(sup);
+                _uow.SaveChanges();
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                SqlException innerException = ex.InnerException as SqlException;
+                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+
 
         }
 
@@ -82,29 +100,54 @@ namespace XBOOK.Service.Service
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateSupplier(SupplierCreateRequest request)
+        public async Task<bool> UpdateSupplierAsync(SupplierCreateRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var clientCreate = Mapper.Map<SupplierCreateRequest, Supplier>(request);
+                await _supUowRepository.Update(clientCreate);
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                SqlException innerException = ex.InnerException as SqlException;
+                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+
         }
         public bool CreateSupplierImport(List<SupplierCreateRequest> request)
         {
             var clientCreate = Mapper.Map<List<SupplierCreateRequest>, List<Supplier>>(request);
             foreach (var item in request)
             {
-                var supplier = new Supplier()
+                var lisSupplier = _supUowRepository.GetAll().ProjectTo<SupplierViewModel>().ToListAsync().Result;
+                var listWhere = lisSupplier.Where(x => x.supplierName == item.supplierName).ToList();
+                if (listWhere.Count <= 0)
                 {
-                    supplierID = 0,
-                    address = item.Address,
-                    supplierName = item.supplierName,
-                    contactName = item.ContactName,
-                    email = item.Email,
-                    note = item.Note,
-                    Tag = item.Tag,
-                    taxCode = item.TaxCode,
-                    bankAccount = item.bankAccount
-                };
-                _supUowRepository.AddData(supplier);
-                _uow.SaveChanges();
+                    var supplier = new Supplier()
+                    {
+                        supplierID = 0,
+                        address = item.Address,
+                        supplierName = item.supplierName,
+                        contactName = item.ContactName,
+                        email = item.Email,
+                        note = item.Note,
+                        Tag = item.Tag,
+                        taxCode = item.TaxCode,
+                        bankAccount = item.bankAccount
+                    };
+                    _supUowRepository.AddData(supplier);
+                    _uow.SaveChanges();
+                }
+                   
             }
             return true;
         }

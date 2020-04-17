@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using XBOOK.Common.Exceptions;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
@@ -45,17 +46,27 @@ namespace XBOOK.Web.Controllers
             return Ok(getCkientById);
         }
         [HttpPost("[action]")]
-        public IActionResult SaveSupplier(SupplierCreateRequest rs)
+        public  IActionResult SaveSupplier(SupplierCreateRequest rs)
         {
-            _supplierService.CreateSupplier(rs);
+          var supplier = _supplierService.CreateSupplier(rs);
+            if ( supplier == false)
+            {
+                return Ok(new GenericResult(false, "insert false"));
+            }
             return Ok();
+          
         }
 
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateSupplier([FromBody]SupplierCreateRequest request)
         {
-            var update = await _supplierService.UpdateSupplier(request);
-            return Ok();
+            var update = await _supplierService.UpdateSupplierAsync(request);
+            if (update == false)
+            {
+                return Ok(new GenericResult(false, "insert false"));
+            }
+            return Ok();         
+            
         }
 
         [HttpPost("[action]")]

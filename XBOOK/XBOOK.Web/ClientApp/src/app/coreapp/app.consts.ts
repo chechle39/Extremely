@@ -19,6 +19,11 @@ export class AppConsts {
     centered: true,
     backdrop: 'static',
   };
+  static readonly modalOptionsDefault: NgbModalOptions = {
+    size: '700',
+    centered: true,
+    backdrop: 'static',
+  };
   static readonly modalOptionsSmallSize: NgbModalOptions = {
     size: 'sm',
     centered: true,

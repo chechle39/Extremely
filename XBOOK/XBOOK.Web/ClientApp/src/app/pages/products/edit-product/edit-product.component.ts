@@ -25,6 +25,7 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
   saving = false;
   categorySelect: any;
   categories: any;
+  mes: string;
 
   constructor(
     injector: Injector,
@@ -55,9 +56,15 @@ export class EditProductComponent extends AppComponentBase implements OnInit {
           this.saving = false;
         }),
       )
-      .subscribe(() => {
-        this.notify.info('Update Successfully');
-        this.close(true);
+      .subscribe((i: any) => {
+        if (i === undefined ||   i === null)  {
+          this.notify.info('Update Successfully');
+          this.close(true);
+         }
+        this.mes = i.message;
+       if (this.mes === 'insert false') {
+        this.message.warning('Tên hàng hóa  đã tồn tại');
+       }
       });
   }
   close(result: any): void {

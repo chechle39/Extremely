@@ -133,7 +133,7 @@ const routes: Routes = [
     },
     {
       path: 'Cashbalance',
-      loadChildren: () => import('./moneyfund/money-fund.module')
+      loadChildren: () => import('./cashbalance/cash-balance.module')
         .then(m => m.MoneyFundtModule),
     },
   ],

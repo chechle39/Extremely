@@ -83,7 +83,7 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
     createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent, AppConsts.modalOptionsCustomSize);
     createOrEditClientDialog.result.then(result => {
       this.refresh();
-
+      this.selected = [];
     });
 
   }
@@ -193,7 +193,25 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
       return item.amount;
     });
   }
-
+  coppy() {
+    if (this.selected.length === 0) {
+      this.message.warning('Please select a item from the list?');
+      return;
+    }
+    if (this.selected.length > 1) {
+      this.message.warning('Only one item selected to edit?');
+      return;
+    }
+    let createOrEditClientDialog;
+    createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent,
+      AppConsts.modalOptionsCustomSize);
+    createOrEditClientDialog.componentInstance.row = this.selected[0];
+    createOrEditClientDialog.componentInstance.coppyMode = true;
+    createOrEditClientDialog.result.then(result => {
+      this.refresh();
+      this.selected = [];
+    });
+  }
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
     if (event.type === 'click') {
@@ -205,6 +223,7 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
         createOrEditClientDialog.componentInstance.row = event.row;
         createOrEditClientDialog.result.then(result => {
           this.refresh();
+          this.selected = [];
         });
       }
     }

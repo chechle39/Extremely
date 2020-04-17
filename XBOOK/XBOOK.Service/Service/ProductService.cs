@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,10 +30,29 @@ namespace XBOOK.Service.Service
             _iProductRespository = iProductRepository;
         }
 
-        public async Task CreateProduct(ProductViewModel request)
+        public async Task<bool> CreateProduct(ProductViewModel request)
         {
-            var clientCreate = Mapper.Map<ProductViewModel, Product>(request);
-            await _productUowRepository.Add(clientCreate);
+            try
+            {
+                var clientCreate = Mapper.Map<ProductViewModel, Product>(request);
+                await _productUowRepository.Add(clientCreate);
+            }
+            catch (DbUpdateException ex)
+            {
+                SqlException innerException = ex.InnerException as SqlException;
+                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+
+            return true;
+          
         }
 
         public bool DeleteProduct(List<requestDeleted> id)
@@ -68,16 +88,37 @@ namespace XBOOK.Service.Service
             return await _productUowRepository.GetAll().ProjectTo<ProductViewModel>().Where(x => x.productID == id).ToListAsync();
         }
 
-        public async Task Update(ProductViewModel request)
+        public async Task<bool> Update(ProductViewModel request)
         {
-            var product = Mapper.Map<ProductViewModel, Product>(request);
-            await _productUowRepository.Update(product);
+            try
+            {
+                var product = Mapper.Map<ProductViewModel, Product>(request);
+                await _productUowRepository.Update(product);
+            }
+            catch (DbUpdateException ex)
+            {
+                SqlException innerException = ex.InnerException as SqlException;
+                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+
+            return true;
+
         }
         public bool CreateProductImport(List<ProductViewModel> request)
         {
             var productCreate = Mapper.Map<List<ProductViewModel>, List<Product>>(request);
             foreach (var item in request)
             {
+                var lisClient = _productUowRepository.GetAll().ProjectTo<ProductViewModel>().ToListAsync().Result;
+                var listWhere = lisClient.Where(x => x.productName == item.productName).ToList();
                 var product = new Product()
                 {
                     productID = 0,

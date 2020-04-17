@@ -10,4 +10,5 @@ export enum SearchType {
 export enum ActionType {
   View = 'view',
   Edit = 'edit',
+  Coppy = 'coppy',
 }

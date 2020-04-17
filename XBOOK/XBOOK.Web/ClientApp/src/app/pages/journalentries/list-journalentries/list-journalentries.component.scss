@@ -22,7 +22,9 @@
     padding-right: 0.75rem;
   }
 }
-
+:host::ng-deep .modal-dialog.modal-700.modal-dialog-centered {
+  width: 700px;
+}
 :host ::ng-deep {
   .datatable-header-cell,
   .datatable-body-cell {

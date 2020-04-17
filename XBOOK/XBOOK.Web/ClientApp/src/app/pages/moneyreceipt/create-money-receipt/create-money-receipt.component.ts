@@ -46,6 +46,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   @Input() row: any;
   @Input() masTerByPayType;
   @Input() masTerByMoney;
+  @Input() coppyMode: boolean = false;
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
@@ -110,7 +111,8 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
           this.address = rp.address;
           this.moneyReceipt.controls.id.patchValue(rp.id);
           this.moneyReceipt.controls.amount.patchValue(rp.amount);
-          this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
+          this.moneyReceipt.controls.receiptNumber.patchValue(!this.coppyMode ? rp.receiptNumber
+            : this.LastMoneyReceipt.receiptNumber);
           this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
           this.moneyReceipt.controls.clientName.patchValue(rp.clientName);
           this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key
@@ -296,7 +298,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         this.notify.info('Saved Successfully');
         this.close(false);
       });
-    } else if (this.moneyReceipt.value.id === 0) {
+    } else if (this.moneyReceipt.value.id === 0 || this.coppyMode) {
       const request = {
         amount: this.moneyReceipt.value.amount,
         bankAccount: this.moneyReceipt.value.bankAccount,
@@ -312,10 +314,10 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreateMoneyReceiptRequest;
       this.moneyReceiptService.createMoneyReceipt(request).subscribe(rp => {
-        this.notify.info('Saved Successfully');
+        this.notify.info( !this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
         this.close(false);
       });
-    } else if (this.moneyReceipt.value.id > 0) {
+    } else if (this.moneyReceipt.value.id > 0 && !this.coppyMode) {
       const request = {
         amount: this.moneyReceipt.value.amount,
         bankAccount: this.moneyReceipt.value.bankAccount,

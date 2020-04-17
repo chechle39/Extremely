@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../../coreapp/services/authentication.
 export class CreateClientComponent extends AppComponentBase implements OnInit {
   saving: false;
   client: ClientView = new ClientView();
+  mes: any;
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
@@ -31,9 +32,16 @@ export class CreateClientComponent extends AppComponentBase implements OnInit {
           this.saving = false;
         }),
       )
-      .subscribe(() => {
-        this.notify.info('Saved Successfully');
-        this.close(true);
+      .subscribe((i: any) => {
+        if (i === undefined ||   i === null)  {
+          this.notify.info('Saved Successfully');
+          this.close(true);
+         }
+        this.mes = i.message;
+       if (this.mes === 'insert false') {
+        this.message.warning('Tên khách hàng  đã tồn tại');
+       }
+
       });
   }
   close(result: any): void {

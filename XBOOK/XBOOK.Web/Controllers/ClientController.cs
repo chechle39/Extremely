@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using XBOOK.Common.Exceptions;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
@@ -16,15 +20,20 @@ namespace XBOOK.Web.Controllers
     {
         IClientService _iClientService;
         IClientServiceDapper _iClientServiceDapper;
-        public ClientController(IClientService iClientService, IClientServiceDapper iClientServiceDapper)
+        private readonly IAuthorizationService _authorizationService;
+        public ClientController(IClientService iClientService, IClientServiceDapper iClientServiceDapper, IAuthorizationService authorizationService)
         {
             _iClientService = iClientService;
             _iClientServiceDapper = iClientServiceDapper;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllClientAsync([FromBody]ClientSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Clients", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var clientList = await _iClientService.GetAllClient(request);
             return Ok(clientList);
         }
@@ -32,6 +41,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllClientDapper([FromBody]ClientSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Clients", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var clientList = await _iClientServiceDapper.GetClientAsync(request);
             return Ok(clientList);
         }
@@ -40,18 +52,32 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetClientById(int id)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Clients", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var getCkientById = await _iClientService.GetClientById(id);
             return Ok(getCkientById);
         }
         [HttpPost("[action]")]
-        public IActionResult SaveClient(ClientCreateRequet rs)
+        public  IActionResult SaveClient(ClientCreateRequet rs)
         {
-            _iClientService.CreateClient(rs);
+            var result = _authorizationService.AuthorizeAsync(User, "Clients", Operations.Create);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
+            var client =  _iClientService.CreateClient(rs);
+            if (client == false)
+            {
+                return Ok(new GenericResult(true, "insert false"));
+            }
             return Ok();
+           
         }
         [HttpPost("[action]")]
         public IActionResult CreateImportClient(List<ClientCreateRequet> rs)
         {
+            var result =  _authorizationService.AuthorizeAsync(User, "Clients", Operations.Create);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
             _iClientService.CreateClientImport(rs);
             return Ok();
         }
@@ -59,13 +85,23 @@ namespace XBOOK.Web.Controllers
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateClient([FromBody]ClientCreateRequet request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Clients", Operations.Update);
+            if (!result.Succeeded)
+                return Unauthorized();
             var update = await _iClientService.UpdateClient(request);
-            return Ok();
+            if (update == false)
+            {
+                return Ok(new GenericResult(true, "insert false"));
+            }
+            return Ok();    
         }
 
         [HttpPost("[action]")]
         public IActionResult DeleteClient(List<requestDeleted> request)
         {
+            var result =  _authorizationService.AuthorizeAsync(User, "Clients", Operations.Delete);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
             _iClientService.DeletedClient(request);
             return Ok();
         }
@@ -109,13 +145,13 @@ namespace XBOOK.Web.Controllers
             }
             if (filename.EndsWith(".csv"))
             {
-                using (StreamReader r = new StreamReader(fullPath))
+                
+                using (StreamReader reader = new StreamReader(fullPath))
                 {
-                    var json = r.ReadToEnd();
-                    //    var items = JsonConvert.DeserializeObject<List<String[]>>(json);
+                    var json = reader.ReadToEnd();
                     var data = (from row in json.Split('\r')
                                 select row.Split(',')).ToList();
-                    //   string jsonString = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(data);
+
                     return Ok(data);
                 }
             }
@@ -130,12 +166,13 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public IActionResult ExportClient([FromBody]List<ClientCreateRequet> request)
         {
-            Encoding latinEncoding = Encoding.GetEncoding("UTF-8");
             var data = _iClientService.GetDataClientAsync(request);
-            return File(data, "application/csv", $"latinEncoding.csv");
+
+            Encoding latinEncoding = Encoding.GetEncoding("utf-8");
+            return File(data, "text/csv;charset=utf-8");
         }
 
-    
+
     }
 
 }

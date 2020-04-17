@@ -84,7 +84,7 @@ export class SearchsalesReportComponent extends AppComponentBase implements OnIn
         }
         this.cars1 = this.items1;
       });
-    this.productService.searchProduct(request).subscribe(rp => {
+    this.productService.searchProductForSearch(request).subscribe(rp => {
       this.cars = rp;
       this.items = [];
       // tslint:disable-next-line:prefer-for-of
@@ -139,20 +139,19 @@ export class SearchsalesReportComponent extends AppComponentBase implements OnIn
         });
       }
       let Client = '';
-      if(this.genLedForm.value.acountNumberMethod1!==null){
+      if (this.genLedForm.value.acountNumberMethod1 !== null) {
         for (let i = 0; i < this.genLedForm.value.acountNumberMethod1.length; i++) {
-          Client +=this.genLedForm.value.acountNumberMethod1[i] + ';';
+          Client += this.genLedForm.value.acountNumberMethod1[i] + ';';
         }
       }
-      // tslint:disable-next-line:prefer-for-of     
+      // tslint:disable-next-line:prefer-for-of
       let Product = '';
-      if(this.genLedForm.value.acountNumberMethod!==null){
+      if (this.genLedForm.value.acountNumberMethod !== null) {
         for (let i = 0; i < this.genLedForm.value.acountNumberMethod.length; i++) {
           Product += this.genLedForm.value.acountNumberMethod[i] + ';';
         }
       }
       // tslint:disable-next-line:prefer-for-of
-    
       const genledSearch = {
         startDate: this.firstDate === undefined ? null : this.firstDate,
         endDate: this.endDate === undefined ? null : this.endDate,

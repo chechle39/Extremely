@@ -105,6 +105,6 @@
     <button (click)="close(false)" type="button" class="btn btn-raised btn-secondary mr-1">
       <i class="ft-x"></i> {{'COMMON.BUTTON.CANCEL' | translate}}
     </button>
-    <button [disabled]="moneyReceipt.invalid || authenticationService.hasPermission('Payment Receipt','create')" type="submit" class="btn btn-raised btn-success"><i class="ft-save"></i> {{'COMMON.BUTTON.SAVE' | translate}}</button>
+    <button [disabled]="moneyReceipt.invalid || authenticationService.hasPermission('Payment Receipt','create')" type="submit" class="btn btn-raised btn-success"><i class="ft-save"></i><span *ngIf="!coppyMode">{{'COMMON.BUTTON.SAVE' | translate}}</span><span *ngIf="coppyMode">{{'COMMON.BUTTON.DUPLICATE' | translate}}</span></button>
   </div>
 </form>

@@ -623,14 +623,15 @@ body{
   .datatable-header-cell {
     height: fit-content;
     border: none !important;
+    font-size: 0.9rem;
   }
   .datatable-body-row{
     padding-top: .35rem!important;
     padding-bottom: .35rem!important;
   }
-  .datatable-row-center {
+  // .datatable-row-center {
     // max-width: 99%;
-  }
+  // }
   .datatable-header-cell-template-wrap{
     white-space: normal;
     line-height: 0;
@@ -654,6 +655,16 @@ body{
   }
   .datatable-row-wrapper, .datatable-scroll, .datatable-body-row{
     width: 100%!important;
+  }
+  .datatable-body-cell-label{
+    font-weight: 500;
+    >*:nth-child(1){
+      color: #4b526a;
+      font-weight: 500;
+    }
+    >*:nth-child(2){
+      font-weight: 400;
+    }
   }
 
   // Setting Flex

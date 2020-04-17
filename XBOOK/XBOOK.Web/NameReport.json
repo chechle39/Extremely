@@ -1,1 +1,14 @@
-[{"name":"Invoice Report","value":"InvoiceReport"},{"name":"MoneyReceipt Report","value":"MoneyReceiptReport"},{"name":"PaymentReceiptReport","value":"PaymentReceipt Report"}]
+﻿[
+  {
+    "name": "Hóa đơn bán hàng(Sales Report)",
+    "value": "Sales Report"
+  },
+  {
+    "name": "Phiếu thu(MoneyReceipt)",
+    "value": "MoneyReceipt Report"
+  },
+  {
+    "name": "Phiếu chi(PaymentReceipt)",
+    "value": "PaymentReceipt Report"
+  }
+]

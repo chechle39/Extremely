@@ -115,7 +115,7 @@ export class ClientsComponent extends PagedListingComponentBase<ClientView> {
     return;
     }
     const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
+    reader.readAsText(files[0], 'text/csv;charset=utf-8;');
     // tslint:disable-next-line:variable-name
     reader.onload = (_event) => {
       this.img = reader.result;

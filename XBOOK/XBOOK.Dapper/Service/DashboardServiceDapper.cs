@@ -10,6 +10,7 @@ using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using Dapper;
 using System.Data;
+using XBOOK.Data.Interfaces;
 
 namespace XBOOK.Dapper.Service
 {
@@ -17,19 +18,22 @@ namespace XBOOK.Dapper.Service
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserCommonRepository _userCommonRepository;
         private string storedName = "Dashboard";
-        public DashboardServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public DashboardServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IUserCommonRepository userCommonRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            _userCommonRepository = userCommonRepository;
         }
 
         public async Task<PurchaseChartViewModel> getPurchaseChartDataAsync(DashboardRequest request)
         {
             var reportId = 2;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+            var findUser = await _userCommonRepository.FindUserCommon(code);
+            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -54,8 +58,9 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 1;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+            var findUser = await _userCommonRepository.FindUserCommon(code);
+            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -79,8 +84,9 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 3;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+            var findUser = await _userCommonRepository.FindUserCommon(code);
+            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -99,7 +105,7 @@ namespace XBOOK.Dapper.Service
 
                 //mapping data
                 var labels = this.getLabels2(request.interval);
-                var barLabels = new List<string>() { "Tiền thu", "Tiền chi" };
+                var barLabels = new List<string>() { "DASHBOARD.CASHBALANCE.LEGEND.RECEIVE", "DASHBOARD.CASHBALANCE.LEGEND.PAY" };
                 data.chart = this.mappingToMultiBarChart(result, result2, labels, barLabels);
                 data.cashBalance = (int)result.value6;
 
@@ -111,8 +117,9 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 5;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+            var findUser = await _userCommonRepository.FindUserCommon(code);
+            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -133,11 +140,11 @@ namespace XBOOK.Dapper.Service
         {
             if(interval == "week")
             {
-                return new List<string>(new string[] { "2 tuần trước", "Tuần trước", "Tuần này", "Tuần sau", "2 tuần sau" });
+                return new List<string>(new string[] { "DASHBOARD.BAR.LABEL.2WEEKSAGO", "DASHBOARD.BAR.LABEL.LASTWEEK", "DASHBOARD.BAR.LABEL.THISWEEK", "DASHBOARD.BAR.LABEL.NEXTWEEK", "DASHBOARD.BAR.LABEL.2WEEKSLATER" });
             }
             else if(interval == "month")
             {
-                return new List<string>(new string[] { this.getMonth(-2), this.getMonth(-1), "Tháng này", this.getMonth(1), this.getMonth(2) });
+                return new List<string>(new string[] { this.getMonth(-2), this.getMonth(-1), "DASHBOARD.BAR.LABEL.THISMONTH", this.getMonth(1), this.getMonth(2) });
             }
             else if (interval == "quater")
             {
@@ -153,7 +160,7 @@ namespace XBOOK.Dapper.Service
         {
             if (interval == "week")
             {
-                return new List<string>(new string[] { "2 tuần trước", "Tuần trước", "Tuần này", "Tuần sau", "2 tuần sau" });
+                return new List<string>(new string[] { "DASHBOARD.BAR.LABEL.2WEEKSAGO", "DASHBOARD.BAR.LABEL.LASTWEEK", "DASHBOARD.BAR.LABEL.THISWEEK", "DASHBOARD.BAR.LABEL.NEXTWEEK", "DASHBOARD.BAR.LABEL.2WEEKSLATER" });
             }
             else if (interval == "month")
             {

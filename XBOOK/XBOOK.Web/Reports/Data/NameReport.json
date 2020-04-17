@@ -1,1 +1,46 @@
-[{"name":"Sales Invoice","value":"Sales Invoice"},{"name":"Money Receipt","value":"Money Receipt"},{"name":"Payment Receipt","value":"Payment Receipt"}]
+﻿[
+  {
+    "name": "Hóa đơn bán hàng(Sales Invoice)",
+    "value": "Sales Invoice"
+  },
+  {
+    "name": "Phiếu thu(Money Receipt)",
+    "value": "Money Receipt"
+  },
+  {
+    "name": "Phiếu chi(Payment Receipt)",
+    "value": "Payment Receipt"
+  },
+  {
+    "name": "Báo cáo bán hàng(Sales Report)",
+    "value": "Sales Report"
+  },
+  {
+    "name": "Báo cáo mua hàng(Purchase Report)",
+    "value": "Purchase Report"
+  },
+  {
+    "name": "Sổ cái tài khoản(General Ledger)",
+    "value": "General Ledger"
+  },
+  {
+    "name": "Sổ nhật ký chung(General Journal)",
+    "value": "General Journal"
+  },
+  {
+    "name": "Bảng cân đối tài khoản(Account Balance)",
+    "value": "Account Balance"
+  },
+  {
+    "name": "Sổ chi tiết tài khoản(Account Detail)",
+    "value": "Account Detail"
+  },
+  {
+    "name": "Báo cáo tuổi nợ(Debit Age)",
+    "value": "Debit Age"
+  },
+  {
+    "name": "Sổ quỹ tiền(Cash Balance)",
+    "value": "Cash Balance"
+  }
+]

@@ -51,6 +51,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> SaveEntity(ApplicationUserViewModel userVm)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "User", Operations.Create);
+            if (result.Succeeded == false)
+                return new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
             if (!ModelState.IsValid)
             {
                 IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
@@ -80,6 +83,9 @@ namespace XBOOK.Web.Controllers
         [HttpPut("[action]")]
         public async Task<IActionResult> Update([FromBody]ApplicationUserViewModel userVm)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "User", Operations.Update);
+            if (result.Succeeded == false)
+                return new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
             await _userService.UpdateAsync(userVm);
             return Ok(userVm);
         }

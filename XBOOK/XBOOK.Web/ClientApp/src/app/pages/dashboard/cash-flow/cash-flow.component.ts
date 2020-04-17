@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, Input, OnChanges } from '@angular/core';
+import {Component, OnInit, Injector, Input, OnChanges, ElementRef, Renderer2} from '@angular/core';
 import { thousandSuffix, convertRemToPixels } from '../../../shared/utils/util';
 import { DataService } from '../../_shared/services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -8,17 +8,23 @@ import { NbMediaBreakpointsService, NbThemeService, NbMediaBreakpoint } from '@n
 import * as _ from 'lodash';
 import { DashboardService } from '../../_shared/services/dashboard.service';
 import { DashboardRequest, BalanceChartView } from '../../_shared/models/dashboard/dashboard.model';
+import { TranslateService } from '@ngx-translate/core';
+import { takeUntil } from 'rxjs/operators';
+import { ChartBase } from '../chart-base';
 
 @Component({
   selector: 'xb-cash-flow',
   templateUrl: './cash-flow.component.html',
   styleUrls: ['./cash-flow.component.scss'],
 })
-export class CashFlowComponent implements OnInit, OnChanges {
+export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
   @Input() data: BalanceChartView = new BalanceChartView();
   options: any;
   fromDay: any;
   toDay: any;
+  selectedItem = '1';
+  rawLabels: Array<any>;
+  rawLegends: Array<any>;
   constructor(
     private datarequest: DataService,
     private breakpointService: NbMediaBreakpointsService,
@@ -27,19 +33,24 @@ export class CashFlowComponent implements OnInit, OnChanges {
     private commonService: CommonService,
     private router: Router,
     private dashboardService: DashboardService,
+    private renderer: Renderer2,
+    private el: ElementRef,
+    private translateService: TranslateService,
   ) {
-
+    super();
   }
 
   ngOnInit() {
     this.options = this.getOption();
 
     this.rerenderOnBreakpointChange();
+
+    this.i18nConfig();
   }
 
-  ngOnChanges(){
-    if (this.data){
-      this.data.chart = this.chartObjectMapping(this.data.chart);
+  ngOnChanges() {
+    if (this.data) {
+      this.loadChart(this.data);
     }
   }
 
@@ -47,8 +58,7 @@ export class CashFlowComponent implements OnInit, OnChanges {
     const param = new DashboardRequest();
     param.interval = 'month';
     this.dashboardService.getBalanceChart(param).subscribe((data: BalanceChartView) => {
-      this.data = data;
-      this.data.chart = this.chartObjectMapping(data.chart);
+      this.loadChart(data);
     });
   }
 
@@ -56,8 +66,7 @@ export class CashFlowComponent implements OnInit, OnChanges {
     const param = new DashboardRequest();
     param.interval = 'quater';
     this.dashboardService.getBalanceChart(param).subscribe((data: BalanceChartView) => {
-      this.data = data;
-      this.data.chart = this.chartObjectMapping(data.chart);
+      this.loadChart(data);
     });
   }
 
@@ -86,167 +95,157 @@ export class CashFlowComponent implements OnInit, OnChanges {
     };
   }
 
+  private navigateToCashBalance( monthParam: string) {
+    let firstDate,
+        endDate;
+    const t = new Date();
+    switch (monthParam) {
+      case 'Jan': {
+        const startDay = new Date(t.getFullYear(), 0, 1);
+        const lastDay = new Date(t.getFullYear(), 1, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Feb': {
+        const startDay = new Date(t.getFullYear(), 1, 1);
+        const lastDay = new Date(t.getFullYear(), 2, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Mar': {
+        const startDay = new Date(t.getFullYear(), 2, 1);
+        const lastDay = new Date(t.getFullYear(), 3, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Apr': {
+        const startDay = new Date(t.getFullYear(), 3, 1);
+        const lastDay = new Date(t.getFullYear(), 4, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'May': {
+        const startDay = new Date(t.getFullYear(), 4, 1);
+        const lastDay = new Date(t.getFullYear(), 5, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Jun': {
+        const startDay = new Date(t.getFullYear(), 5, 1);
+        const lastDay = new Date(t.getFullYear(), 6, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Jul': {
+        const startDay = new Date(t.getFullYear(), 6, 1);
+        const lastDay = new Date(t.getFullYear(), 7, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Aug': {
+        const startDay = new Date(t.getFullYear(), 7, 1);
+        const lastDay = new Date(t.getFullYear(), 8, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Sep': {
+        const startDay = new Date(t.getFullYear(), 8, 1);
+        const lastDay = new Date(t.getFullYear(), 9, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Oct': {
+        const startDay = new Date(t.getFullYear(), 9, 1);
+        const lastDay = new Date(t.getFullYear(), 10, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Nov': {
+        const startDay = new Date(t.getFullYear(), 10, 1);
+        const lastDay = new Date(t.getFullYear(), 11, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Dec': {
+        const startDay = new Date(t.getFullYear(), 11, 1);
+        const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Q1': {
+        const startDay = new Date(t.getFullYear(), 0, 1);
+        const lastDay = new Date(t.getFullYear(), 3, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Q2': {
+        const startDay = new Date(t.getFullYear(), 3, 1);
+        const lastDay = new Date(t.getFullYear(), 6, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Q3': {
+        const startDay = new Date(t.getFullYear(), 6, 1);
+        const lastDay = new Date(t.getFullYear(), 9, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Q4': {
+        const startDay = new Date(t.getFullYear(), 9, 1);
+        const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
+        firstDate = startDay.toLocaleDateString('en-GB');
+        endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+    }
+    const genledSearch = {
+      startDate: firstDate,
+      endDate: endDate,
+    };
+    this.datarequest.sendMessageMoneyFund(genledSearch);
+    this.router.navigate([`/pages/Cashbalance`]);
+  }
+
   private getOption() {
     const send = this;
     const option = {
-      onClick() {
+      onClick(event, element) {
+
         if (!this.active[0]) {
           return;
         }
-        switch (this.active[0]._view.label) {
-          case 'Jan': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 0, 1);
-            const lastDay = new Date(t.getFullYear(), 1, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Feb': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 1, 1);
-            const lastDay = new Date(t.getFullYear(), 2, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Mar': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 2, 1);
-            const lastDay = new Date(t.getFullYear(), 3, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Apr': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 3, 1);
-            const lastDay = new Date(t.getFullYear(), 4, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'May': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 4, 1);
-            const lastDay = new Date(t.getFullYear(), 5, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Jun': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 5, 1);
-            const lastDay = new Date(t.getFullYear(), 6, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Jul': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 6, 1);
-            const lastDay = new Date(t.getFullYear(), 7, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Aug': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 7, 1);
-            const lastDay = new Date(t.getFullYear(), 8, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Sep': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 8, 1);
-            const lastDay = new Date(t.getFullYear(), 9, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Oct': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 9, 1);
-            const lastDay = new Date(t.getFullYear(), 10, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Nov': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 10, 1);
-            const lastDay = new Date(t.getFullYear(), 11, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Dec': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 11, 1);
-            const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Q1': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 0, 1);
-            const lastDay = new Date(t.getFullYear(), 3, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Q2': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 3, 1);
-            const lastDay = new Date(t.getFullYear(), 6, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Q3': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 6, 1);
-            const lastDay = new Date(t.getFullYear(), 9, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-          case 'Q4': {
-            var t = new Date();
-            const startDay = new Date(t.getFullYear(), 9, 1);
-            const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
-            this.firstDate = startDay.toLocaleDateString('en-GB');
-            this.endDate = lastDay.toLocaleDateString('en-GB');
-
-            break;
-          }
-        }
-        const genledSearch = {
-          startDate: this.firstDate,
-          endDate: this.endDate,
-        };
-        send.datarequest.sendMessageMoneyFund(genledSearch);
-        send.router.navigate([`/pages/Cashbalance`]);
-
-
+        send.navigateToCashBalance(this.active[0]._view.label);
       },
       responsive: true,
       maintainAspectRatio: false,
@@ -292,12 +291,58 @@ export class CashFlowComponent implements OnInit, OnChanges {
           fontFamily: 'Montserrat',
         },
       },
+      hover: {
+        onHover: function (e, element) {
+          const point = this.getElementAtEvent(e);
+          if (point.length) e.target.style.cursor = 'pointer';
+          else e.target.style.cursor = 'default';
+          },
+        },
       tooltips: {
+        mode: 'nearest',
         intersect: false,
         callbacks: {
           label: function (tooltipItems, data) {
             return thousandSuffix(tooltipItems.yLabel);
           },
+        },
+
+        custom: function(tooltipModel){
+          const elementId = 'dashboard__cash-flow_tooltip';
+          // Tooltip Element
+          let tooltipEl = document.getElementById(elementId);
+
+          // Create element on first render
+          if (!tooltipEl) {
+            tooltipEl = send.renderer.createElement('div');
+            tooltipEl.id = elementId;
+            send.renderer.appendChild(send.el.nativeElement, tooltipEl);
+          }
+
+          tooltipEl.onclick = () => {
+            send.navigateToCashBalance(this._active[0]._view.label);
+          };
+          // Hide if no tooltip
+          if (tooltipModel.opacity === 0) {
+            tooltipEl.style.opacity = '0';
+            return;
+          }
+
+          // `this` will be the overall tooltip
+          const position = this._chart.canvas.getBoundingClientRect();
+
+          // Display, position, and set styles for font
+          tooltipEl.style.opacity = '1';
+          tooltipEl.style.position = 'absolute';
+          tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.x + 'px';
+          tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.y + 'px';
+          tooltipEl.style.width = tooltipModel.width + 'px';
+          tooltipEl.style.height = tooltipModel.height + 'px';
+          tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+          tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+          tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
+          tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
+          tooltipEl.style.cursor = 'pointer';
         },
       },
       layout: {
@@ -319,7 +364,7 @@ export class CashFlowComponent implements OnInit, OnChanges {
   private responsiveTextOption(width: number) {
     let customOption;
 
-    const breakpoint =  this.breakpointService.getByWidth(width).name;
+    const breakpoint = this.breakpointService.getByWidth(width).name;
     switch (breakpoint) {
       /**
        * Breakpoint Medium - 768px
@@ -341,7 +386,7 @@ export class CashFlowComponent implements OnInit, OnChanges {
             },
           },
         };
-      break;
+        break;
       /**
        * Breakpoint Large - 992px
        */
@@ -362,7 +407,7 @@ export class CashFlowComponent implements OnInit, OnChanges {
             },
           },
         };
-      break;
+        break;
       /**
        * Default
        */
@@ -391,7 +436,39 @@ export class CashFlowComponent implements OnInit, OnChanges {
   private rerenderOnBreakpointChange() {
     this.themeService.onMediaQueryChange()
       .subscribe(([, currentBreakpoint]) => {
-          this.options = this.getOption();
+        this.options = this.getOption();
       });
+  }
+
+  private i18nConfig() {
+    this.translateService.onLangChange
+    .pipe( takeUntil(this._onDestroy))
+    .subscribe(() => {
+      const tempValue = this.selectedItem;
+      this.selectedItem = '';
+      setTimeout(() => this.selectedItem = tempValue, 0);
+      this.translateLabels();
+    });
+
+  }
+
+  private translateLabels() {
+    const translatedLabels = this.translateService.instant(this.rawLabels);
+    const translatedLegends = this.translateService.instant(this.rawLegends);
+
+    this.data.chart.labels =  this.rawLabels.map(label => translatedLabels[label]);
+    this.rawLegends.forEach((legend, index) => {
+      this.data.chart.datasets[index].label = translatedLegends[legend];
+    });
+    // refresh chart
+    this.data.chart = {...this.data.chart};
+  }
+
+  private loadChart(data) {
+    this.data = data;
+    this.data.chart = this.chartObjectMapping(data.chart);
+    this.rawLegends = this.data.chart.datasets.map(dataset => dataset.label);
+    this.rawLabels = this.data.chart.labels;
+    this.translateLabels();
   }
 }

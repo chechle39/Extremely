@@ -19,6 +19,7 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
   categories: any;
   statusCategory: any;
   product: ProductView = new ProductView();
+  mes: any;
   constructor(
     injector: Injector,
     public activeModal: NgbActiveModal,
@@ -42,9 +43,15 @@ export class CreateProductComponent extends AppComponentBase implements OnInit {
             this.saving = false;
           }),
         )
-        .subscribe(() => {
-          this.notify.info('Saved Successfully');
-          this.close(true);
+        .subscribe((i: any) => {
+          if (i === undefined ||   i === null)  {
+            this.notify.info('Saved Successfully');
+            this.close(true);
+           }
+          this.mes = i.message;
+         if (this.mes === 'insert false') {
+          this.message.warning('Tên hàng hóa đã tồn tại');
+         }
         });
     } else {
       this.notify.error('Error');

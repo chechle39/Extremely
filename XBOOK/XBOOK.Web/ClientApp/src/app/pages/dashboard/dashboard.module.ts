@@ -4,13 +4,14 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { CashFlowComponent } from './cash-flow/cash-flow.component';
 import { ChartModule } from 'angular2-chartjs';
-import { NbButtonModule, NbCardModule, NbSelectModule } from '@nebular/theme';
+import {NbButtonModule, NbCardModule, NbIconModule, NbMenuModule, NbSelectModule} from '@nebular/theme';
 import { SalesFiguresComponent } from './sales-figures/sales-figures.component';
 import { SaleChartComponent } from './sale-chart/sale-chart.component';
 import { PurchaseChartComponent } from './purchase-chart/purchase-chart.component';
 import { DataService } from '../_shared/services/data.service';
 import { RouterModule } from '@angular/router';
 import { DashboardService } from '../_shared/services/dashboard.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { DashboardService } from '../_shared/services/dashboard.service';
     NbCardModule,
     NbSelectModule,
     RouterModule,
+    TranslateModule,
   ],
   declarations: [
     DashboardComponent,

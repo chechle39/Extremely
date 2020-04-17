@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
@@ -19,16 +20,25 @@ namespace XBOOK.Web.Controllers
         private readonly IMoneyReceiptService _iMoneyReceiptService;
         private readonly IMoneyReceiptDapper _moneyReceiptDapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public MoneyReceiptController(IMoneyReceiptService iMoneyReceiptService, IMoneyReceiptDapper moneyReceiptDapper, IHttpContextAccessor httpContextAccessor)
+        private readonly IAuthorizationService _authorizationService;
+
+        public MoneyReceiptController(IMoneyReceiptService iMoneyReceiptService, 
+            IMoneyReceiptDapper moneyReceiptDapper, 
+            IHttpContextAccessor httpContextAccessor,
+            IAuthorizationService authorizationService)
         {
             _iMoneyReceiptService = iMoneyReceiptService;
             _moneyReceiptDapper = moneyReceiptDapper;
             _httpContextAccessor = httpContextAccessor;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateMoneyReceipt(MoneyReceiptViewModel request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Money Receipt", Operations.Create);
+            if (!result.Succeeded)
+                return Unauthorized();
             var saveData = await _iMoneyReceiptService.CreateMoneyReceipt(request);
             return Ok(saveData);
         }
@@ -36,6 +46,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> UpdateMoneyReceipt(MoneyReceiptViewModel request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Money Receipt", Operations.Update);
+            if (!result.Succeeded)
+                return Unauthorized();
             var updateData = await _iMoneyReceiptService.Update(request);
             return Ok(updateData);
         }
@@ -43,6 +56,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> DeleteMoneyReceipt(List<requestDeleted> request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Money Receipt", Operations.Delete);
+            if (!result.Succeeded)
+                return Unauthorized();
             var removeData = await _iMoneyReceiptService.DeletedMoneyReceipt(request);
             return Ok(removeData);
         }
@@ -57,7 +73,6 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllMoneyReceipt([FromBody]MoneyReceiptRequest request)
         {
-            // var saleListInvoice = await _saleInvoiceService.GetAllSaleInvoice(request);
             var data = await _moneyReceiptDapper.GetMoneyReceipt(request);
             return Ok(data);
         }
@@ -91,6 +106,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetMoneyReceiptById(long id)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Money Receipt", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             return Ok(await _iMoneyReceiptService.GetMoneyByIdObject(id));
         }
 

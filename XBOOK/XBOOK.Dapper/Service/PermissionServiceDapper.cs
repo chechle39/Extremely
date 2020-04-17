@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -23,12 +24,14 @@ namespace XBOOK.Dapper.Service
 
         public async Task<IEnumerable<PermissionViewModel>> GetAppFncPermission(long userId, string code)
         {
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(code)))
+            var connectionString = code;
+            using (SqlConnection myCon = new SqlConnection(connectionString))
+            using (var sqlConnection = new SqlConnection(connectionString))
             {
+
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
                 dynamicParameters.Add("@UserId", userId);
-
                 return await sqlConnection.QueryAsync<PermissionViewModel>("GetPermissions", dynamicParameters, commandType: CommandType.StoredProcedure);
 
             }

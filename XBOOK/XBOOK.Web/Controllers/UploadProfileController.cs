@@ -41,7 +41,7 @@ namespace XBOOK.Web.Controllers
                 var prf = await _iCompanyProfileService.GetInFoProfile();
                 var fileName = "logo" + ".png";
 
-                var imageFolder = $@"C:\uploaded\{prf.code}\images";
+                var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.code}\images_SaleInvoce";
 
                 string folder =  imageFolder;
 
@@ -64,7 +64,7 @@ namespace XBOOK.Web.Controllers
         public async Task<IActionResult> GetIMG([FromBody] requestGetIMG request)
         {
             var prf = await _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"C:\uploaded\{prf.code}\images";
+            var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.code}\images_SaleInvoce";
             string folder = imageFolder;
             if (!Directory.Exists(folder))
             {
@@ -95,7 +95,7 @@ namespace XBOOK.Web.Controllers
                 var prf = await _iCompanyProfileService.GetInFoProfile();
                 var fileName = "logo" + ".png";
 
-                var imageFolder = $@"C:\uploaded\{prf.code}\imagesSupplier";
+                var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.code}\images_Supplier";
 
                 string folder = imageFolder;
 
@@ -118,7 +118,7 @@ namespace XBOOK.Web.Controllers
         public async Task<IActionResult> GetIMGSupplier([FromBody] requestGetIMG request)
         {
             var prf = await _iCompanyProfileService.GetInFoProfile();
-            var imageFolder = $@"C:\uploaded\{prf.code}\imagesSupplier";
+            var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.code}\images_Supplier";
             string folder = imageFolder;
             if (!Directory.Exists(folder))
             {

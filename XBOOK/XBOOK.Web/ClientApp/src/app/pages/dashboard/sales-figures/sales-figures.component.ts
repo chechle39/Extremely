@@ -4,6 +4,9 @@ import { NbMediaBreakpointsService, NbThemeService } from '@nebular/theme';
 import * as _ from 'lodash';
 import { DashboardService } from '../../_shared/services/dashboard.service';
 import { DashboardRequest, SaleInvoiceReportView } from '../../_shared/models/dashboard/dashboard.model';
+import { TranslateService } from '@ngx-translate/core';
+import { ChartBase } from '../chart-base';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'xb-sales-figures',
@@ -11,25 +14,30 @@ import { DashboardRequest, SaleInvoiceReportView } from '../../_shared/models/da
   styleUrls: ['./sales-figures.component.scss',
 ],
 })
-export class SalesFiguresComponent implements OnInit, OnChanges {
+export class SalesFiguresComponent extends ChartBase implements OnInit, OnChanges {
   @Input() data: SaleInvoiceReportView;
   options: any;
+  selectedItem = '1';
+
 
   constructor(
     private breakpointService: NbMediaBreakpointsService,
     private themeService: NbThemeService,
     private dashboardService: DashboardService,
+    private translateService: TranslateService,
   ) {
+    super();
     this.options = this.getOption();
 
     this.rerenderOnBreakpointChange();
   }
 
   ngOnInit() {
+    this.i18nConfig();
   }
 
-  ngOnChanges(){
-    if (this.data){
+  ngOnChanges() {
+    if (this.data) {
       this.data.chart = this.chartObjectMapping(this.data.chart);
     }
   }
@@ -207,5 +215,13 @@ export class SalesFiguresComponent implements OnInit, OnChanges {
       .subscribe(([, currentBreakpoint]) => {
           this.options = this.getOption();
       });
+  }
+
+  private i18nConfig() {
+    this.translateService.onLangChange.pipe(takeUntil(this._onDestroy)).subscribe(() => {
+      const tempValue = this.selectedItem;
+      this.selectedItem = '';
+      setTimeout(() => this.selectedItem = tempValue, 0);
+    });
   }
 }

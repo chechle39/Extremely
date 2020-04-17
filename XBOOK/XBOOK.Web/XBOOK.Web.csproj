@@ -21,15 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Reports\Template\AccountDetailReport.cs" />
-    <Compile Remove="Reports\Template\AccountDetailReport.Designer.cs" />
-    <Compile Remove="Reports\Template\InvoiceReport.cs" />
-    <Compile Remove="Reports\Template\InvoiceReport.Designer.cs" />
-    <Compile Remove="Reports\Template\PaymentReceiptReport.cs" />
-    <Compile Remove="Reports\Template\PaymentReceiptReport.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Reports\Template\AccountDetailReport.repx" />
     <None Remove="Reports\Template\InvoiceReport.repx" />
     <None Remove="Reports\Template\PaymentReceiptReport.repx" />

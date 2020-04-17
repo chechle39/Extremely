@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Data.Repositories
@@ -36,6 +38,15 @@ namespace XBOOK.Data.Repositories
                 }
             }
             return true;
+        }
+
+        public async Task<bool> RemoveSale(List<Deleted> id)
+        {
+            foreach (var item in id)
+            {
+                Entities.Remove(Entities.Find(item.id));
+            }
+            return await Task.FromResult(true);
         }
 
         public bool UpdateSaleInvDetail(SaleInvDetailViewModel rs)

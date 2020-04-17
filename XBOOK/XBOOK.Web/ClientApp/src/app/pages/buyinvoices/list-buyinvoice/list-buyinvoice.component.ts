@@ -65,7 +65,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   constructor(
     private data: DataService,
     injector: Injector,
-    private invoiceService: InvoiceService,
+  //  private invoiceService: InvoiceService,
     private buyInvoiceService: BuyInvoiceService,
     private router: Router,
     private route: ActivatedRoute,
@@ -121,13 +121,13 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   ): void {
     this.loadingIndicator = true;
     request.keyword = this.searchString;
-    //Thang code
-    // this.getBuyInVByRequestSearch();
-    if (this.router.url !== '/pages/buyinvoice') {
-      this.buyinvoiceOfChart();
-    } else{
-      this.getBuyInVByRequestSearch();
-    }
+    // Thang code
+    this.getBuyInVByRequestSearch();
+    // if (this.router.url !== '/pages/buyinvoice') {
+    //   this.buyinvoiceOfChart();
+    // } else{
+    //   this.getBuyInVByRequestSearch();
+    // }
   }
 
   private getBuyInVByRequestSearch() {
@@ -155,21 +155,21 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
 
   buyinvoiceOfChart() {
     if (this.route !== undefined) {
-      this.route.queryParams     
-      .subscribe(params => {                
+      this.route.queryParams
+      .subscribe(params => {
           const requestList = {
             keyword: '',
             startDate: params.startDate,
             endDate: params.endDate,
             isIssueDate: false,
-          };          
+          };
           this.buyInvoiceService.getAllBuyInvoiceList(requestList).pipe(
           ).subscribe((i: any) => {
             this.loadingIndicator = false;
             this.buyinvoiceViews = i;
             this.listInvoice = this.buyinvoiceViews;
           });
-        });              
+        });
     }
 
   }
@@ -219,14 +219,6 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
       } else {
         this.getBuyInvoice(request);
       }
-      // thắng fix chổ này, chổ này làm cho invoice call rất nhìu lần
-      // khi từ màn hình suplier tìm kiếm với list buyinvoice
-
-      // this.data.getMessagebuyInvoice().subscribe(rp => {
-      //   if (rp !== undefined && rp.data !== '') {
-      //     this.buyinvoiceOfChart();
-      //   }
-      // });
     });
     this.subscription.unsubscribe();
     this.data.sendMessage('');
@@ -282,14 +274,23 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
       return;
     }
     const requestDl = [];
+    const file = [];
     this.selected.forEach(element => {
       // this.deleteInvoice(element.invoiceId);
       const id = element.invoiceId;
+      const deleted = {
+        invoice: element.invoiceNumber,
+        seri: element.invoiceSerial,
+      };
+      file.push(deleted);
       requestDl.push({ id });
     });
     this.buyInvoiceService.deleteBuyInvoice(requestDl).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
+      file.forEach(element => {
+        this.getInFoFile(element);
+      });
     }, (er) => {
       this.commonService.messeage(er.status);
     });
@@ -357,13 +358,13 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   }
 
   getInFoFile(request) {
-    this.invoiceService.getInfofile(request).subscribe(rp => {
+    this.buyInvoiceService.getInfofile(request).subscribe(rp => {
       // tslint:disable-next-line:prefer-for-of
       for (let index = 0; index < rp.length; index++) {
         const rs = {
           fileName: rp[index].fileName,
         };
-        this.invoiceService.removeFile(rs).subscribe(() => { }, (er) => {
+        this.buyInvoiceService.removeFile(rs).subscribe(() => { }, (er) => {
           this.commonService.messeage(er.status);
         });
       }
@@ -490,5 +491,17 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
 
   onSort(e: any) {
 
+  }
+
+  coppy() {
+    if (this.selected.length === 0) {
+      this.message.warning('Please select a item from the list?');
+      return;
+    }
+    if (this.selected.length > 1) {
+      this.message.warning('Only one item selected to edit?');
+      return;
+    }
+    this.router.navigate([`pages/buyinvoice/${this.selected[0].invoiceId}/${ActionType.Coppy}`]);
   }
 }

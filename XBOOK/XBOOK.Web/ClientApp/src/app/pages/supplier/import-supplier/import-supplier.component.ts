@@ -41,14 +41,14 @@ export class ImportSupplierComponent extends AppComponentBase implements OnInit 
     this.Datareport = this.id;
     // tslint:disable-next-line:prefer-for-of
     for (let j = 1; j < this.FieldName.length; j++) {
-      if (this.FieldName[j] !== "" ){
+      if (this.FieldName[j] !== '' ) {
       const data = {
         value: this.FieldName[j],
       };
-      if (data !== null || data !== undefined){
+      if (data !== null || data !== undefined) {
         this.SelectedFieldName.push(data);
-      }  
-    }       
+      }
+    }
     }
 
   }
@@ -77,12 +77,15 @@ export class ImportSupplierComponent extends AppComponentBase implements OnInit 
         note: this.Datareport[i][this.importForm.value.note],
       };
       let invalid = false;
-      let regex =/[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
-      if( client.email == "" || ! regex.test(client.email)){
-        invalid = true;
-        this.message.warning('Sai định dạng Email dòng thứ '+ [i]);
-        return;
-    }
+      // tslint:disable-next-line:max-line-length
+      const regex = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+      if (client.email !== undefined) {
+        if ( client.email === '' || ! regex.test(client.email)) {
+          invalid = true;
+          this.message.warning('Sai định dạng Email dòng thứ ' + [i]);
+          return;
+      }
+      }
       this.ImportDatareport.push(client);
     }
     this.supplierService

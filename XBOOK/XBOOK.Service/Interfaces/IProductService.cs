@@ -11,8 +11,8 @@ namespace XBOOK.Service.Interfaces
     {
         Task<IEnumerable<ProductViewModel>> GetAllProduct(ProductSerchRequest request);
         Task<IEnumerable<ProductViewModel>> GetProductById(int id);
-        Task CreateProduct(ProductViewModel request);
-        Task Update(ProductViewModel request);
+        Task<bool> CreateProduct(ProductViewModel request);
+        Task<bool> Update(ProductViewModel request);
         Task<ProductViewModel> GetALlPrDF();
         bool DeleteProduct(List<requestDeleted> id);
         byte[] GetDataProductAsync(List<ProductViewModel> request);

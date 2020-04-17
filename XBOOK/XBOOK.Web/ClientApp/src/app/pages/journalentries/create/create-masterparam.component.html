@@ -1,0 +1,189 @@
+<form class="form" name="form" novalidate autocomplete="off"  [formGroup]="invoiceForm">
+  <div class=" modal-header">
+    <div class="row">
+      <div class="col-12">
+        <h5 class="modal-title">{{ 'JUOURNAL.CREATE.Title' | translate }}</h5>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body" style="margin-top: 3px;">
+    <div class="row mb-1">
+      <ng-container>
+        <div class="form-group col-12 mb-2">
+          <div class="row px-0">
+            <div class="col-6 pr-1">
+              <div class="px-0">{{ 'JUOURNAL.CREATE.ENTRYNAME' | translate }}/ {{ 'JUOURNAL.CREATE.DESCRIPTION' | translate }}</div>
+              <input id="entryName" formControlName="entryName"
+                class="form-control"
+                placeholder="{{'JUOURNAL.CREATE.PLACEHOLDER.ENTRYNAME' | translate}}" nfNoSpaces maxlength="250"
+                [ngClass]="{'border-1':invoiceForm.controls.entryName.touched === false || invoiceForm.controls.entryName.invalid === false} ">
+              <div class="pt-2">
+                <input  id="description" formControlName="description"
+                  class="form-control"
+                  placeholder="{{'JUOURNAL.CREATE.PLACEHOLDER.DESCRIPTION' | translate}}" nfNoSpaces maxlength="250"
+                  [ngClass]="{'border-1':invoiceForm.controls.description.touched === false || invoiceForm.controls.description.invalid === false} ">
+              </div>
+            </div>
+            <div class="col-6 pl-1">
+              <div class="px-0">{{ 'JUOURNAL.CREATE.DATE' | translate }}/ {{ 'JUOURNAL.CREATE.PLACEHOLDER.OBJECT.NAME' | translate }}</div>
+              <div class="input-group mb-0 invoice__datepicker__wrapper">
+                <input #datetiime   (click)="d2.toggle()" style="opacity: unset "
+                 
+                  class="form-control"
+                  placeholder="dd/mm/yyyy" name="dp" formControlName="dateCreate" ngbDatepicker #d2="ngbDatepicker">
+                <button [disabled]="isRead" [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
+                  style="margin-top: 0.5rem;height: 14px; right: 0; border: 0;"
+                  class="k-icon k-i-calendar-date position-absolute" (click)="d2.toggle()" type="button"></button>
+              </div>
+              <div class="pt-2">
+                <input  type="text" (focus)="focusClient$.next($event.target.value)"
+                  autocomplete="none" [ngbTypeahead]="searchClient"
+                  [resultTemplate]="customItemTemplate" placeholder="{{ 'JUOURNAL.CREATE.PLACEHOLDER.OBJECT.NAME' | translate }}"  [inputFormatter]="clientFormatter" id="objectName"
+                  formControlName="objectName" (selectItem)="selectedItem($event)"
+                  class="form-control"
+                  nfNoSpaces maxlength="250"
+                  #instance="ngbTypeahead" (keydown)="typeheadScrollHandler($event)"
+                  [ngClass]="{'border-1':invoiceForm.controls.objectName.touched === false || invoiceForm.controls.objectName.invalid === false}" />
+
+                <ng-template #customItemTemplate let-r="result" let-t="term">
+                  <div class="row mt-2 client-item">
+                    <div class="col-sm-2 ">
+                      <ngx-avatar name="{{r.objectName | Split:2}}">
+                      </ngx-avatar>
+                    </div>
+                    <div class="col-sm-10 col-md-10 pb-2 font-small-3">
+                      <ngb-highlight [result]="r.objectName" [term]="t">
+                      </ngb-highlight>
+                      <p class="mb-0">{{r.objectType}}</p>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="arrayparam" formArrayName="items"
+      *ngFor="let detail of invoiceForm.get('items')['controls']; index as i">
+      <div class="row arrayparam-inner font-weight-500">
+        <ng-container [formGroupName]="i">
+          <div class="col-6 px-0 text-left">{{ 'JUOURNAL.CREATE.ACCOUNT' | translate }}</div>
+          <div class="col-6 px-0 text-left">
+            {{ 'JUOURNAL.CREATE.CRSP.ACCOUNT' | translate }}
+
+            <div class="float-right">
+              <a class="icon-action text-right">
+                <span class="icon-delete mr-0"
+                *ngIf="getFormArray().length > 0"
+                (click)="removeItem(i)"x></span>
+              </a>
+            </div>
+
+          </div>
+          <div class="col-6 pr-1 px-0">
+            <input #xxx type="text" (focus)="onFocus($event)" autocomplete="none"
+              [ngbTypeahead]="searchData" [resultTemplate]="customItemTemplateacc" [rowItem]="dataAccount"
+              validateInputAccDirective [inputFormatter]="accFormatter" id="accNumber{{i}}" formControlName="accNumber"
+              (selectItem)="selectedAcc($event)" 
+              class="form-control"
+              placeholder="{{ 'ACCOUNT.CHART.GRID.HEADER.ACCOUNTNAME' | translate }}" nfNoSpaces maxlength="250"
+              #instance="ngbTypeahead"
+              [ngClass]="{'border-1':detail.get('accNumber').touched === false || detail.get('accNumber').invalid === false}" />
+
+            <ng-template #customItemTemplateacc let-r="result" let-t="term">
+              <div class="row m-0 product-item py-1">
+                <div class="col-sm-12 col-md-12 p-0">
+                  <p class="mb-0 text-left">{{r.accountNumber}} -
+                    {{r.accountName}}</p>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+          <div class="col-6 pl-1 px-0">
+            <input #xxx type="text" (focus)="onFocus($event)" autocomplete="none"
+              [ngbTypeahead]="searchData" [resultTemplate]="customItemTemplateCrspAccNumber" 
+              [inputFormatter]="accFormatter" id="crspAccNumber{{i}}" formControlName="crspAccNumber"
+              [rowItem]="dataAccount" validateInputAccDirective (selectItem)="selectedCrspAcc($event)"
+              class="form-control"
+              placeholder="{{ 'JUOURNAL.CREATE.CRSP.ACCOUNT.NAME' | translate }}" nfNoSpaces maxlength="250"
+              #instance="ngbTypeahead"
+              [ngClass]="{'border-1':detail.get('accNumber').touched === false || detail.get('accNumber').invalid === false}" />
+
+
+            <ng-template #customItemTemplateCrspAccNumber let-r="result" let-t="term">
+              <div class="row m-0 product-item py-1">
+                <div class="col-sm-12 col-md-12 p-0">
+                  <p class="mb-0 text-left">{{r.accountNumber}} -
+                    {{r.accountName}}</p>
+                </div>
+
+              </div>
+
+            </ng-template>
+          </div>
+          <div class="col-12 px-0" style="margin-bottom: -3px;margin-top: 8px;">
+            <div class="row">
+              <div class="col-6 pr-1">
+                <textarea #productName style="height: 58px;" id="note" formControlName="note" 
+                  class="productNameClass border-1 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
+                  placeholder="{{ 'PRODUCT.LIST.GRID.HEADER.DESCRIPTION' | translate }}" nfNoSpaces maxlength="250"
+                  class="form-control" rows=4></textarea>
+              </div>
+              <div class="col-6 pl-1">
+                <div class="row">
+                  <div class="col-6 pr-1">
+                    <div class="px-0 text-right">{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}</div>
+                    <input #inputtab
+                    [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}"
+                    digitOnly maxlength="16" formControlName="credit" id="credit{{i}}"
+                    placeholder="{{ 'JUOURNAL.CREATE.CRSP.CREDIT' | translate }}"
+                    [readOnly]="checkDis(detail.get('debit').value) > 0"                     
+                    class="form-control text-right"  />
+                  </div>
+                  <div class="col-6 pl-1">
+                    <div class="px-0 text-right">{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}</div>
+                    <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" maxlength="16"
+                      formControlName="debit" id="debit{{i}}"
+                      [readOnly]="checkDis(detail.get('credit').value) > 0"
+                      placeholder="{{ 'JUOURNAL.CREATE.CRSP.DEBIT' | translate }}"                      
+                      class="form-control text-right" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row" style="border-top: 1px solid #92d050;padding-top: 6px;">
+      <div class="add-line-box d-flex align-items-center my-2"
+        style="margin-top: 5px;margin-left: 16px;margin-right: 16px;">
+        <div (click)="addNewItem()" class=" text-center w-100" style="cursor: pointer">
+          {{ 'MasterParam.Add' | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer d-block" style="border-top: 1px solid #92d050;margin-top: -9px;">
+    <div class="mb-5 position-relative">
+      <div class="sumtitle">
+        {{ 'JUOURNAL.CREATE.TOTAL' | translate }}
+      </div>
+      <div class="sum1">
+        {{totalCredit() | currency:'VND':''}}
+      </div>
+      <div class="sum2">
+        {{totalDebit() | currency:'VND':''}}
+      </div>
+    </div>
+    <div class="text-right">
+      <button type="button" (click)="close()" class="btn btn-raised btn-secondary mr-1">
+        {{ 'COMMON.BUTTON.CANCEL' | translate }}
+      </button>
+      <button [disabled]="invoiceForm.invalid || authenticationService.hasPermission('Journal Entries','create')"
+       (click)="save()" class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.SAVE' | translate }}</button>
+    </div>
+  </div>
+</form>

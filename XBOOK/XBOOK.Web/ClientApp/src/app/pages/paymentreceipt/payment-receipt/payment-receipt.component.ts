@@ -32,6 +32,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   @Input() contactName: any;
   @Input() bankAccount: any;
   @Input() row: any;
+  @Input() coppyMode: boolean = false;
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
@@ -96,7 +97,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         this.address = rp.address,
         this.moneyReceipt.controls.id.patchValue(rp.id);
         this.moneyReceipt.controls.amount.patchValue(rp.amount);
-        this.moneyReceipt.controls.receiptNumber.patchValue(rp.receiptNumber);
+        this.moneyReceipt.controls.receiptNumber.patchValue(!this.coppyMode ? rp.receiptNumber
+          : this.LastMoneyReceipt.receiptNumber);
         this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
         this.moneyReceipt.controls.supplierName.patchValue(rp.supplierName);
         this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key ===
@@ -209,7 +211,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   getDataPayAndEntry() {
     forkJoin(
       this.masterParamService.GetMasTerByPayType(),
-      this.masterParamService.GetMasTerByMoneyReceipt(),
+      this.masterParamService.GetMasTerByPaymentReceipt(),
       this.paymentReceiptService.getLastPayment(),
     ).subscribe(([rp1, rp2, rp3]) => {
       this.payment = rp1;
@@ -351,7 +353,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         this.notify.info('Saved Successfully');
         this.close(false);
       });
-    } else if (this.moneyReceipt.value.id === 0) {
+    } else if (this.moneyReceipt.value.id === 0 ||  this.coppyMode) {
       const request = {
         amount: this.moneyReceipt.value.amount,
         bankAccount: this.moneyReceipt.value.bankAccount,
@@ -367,10 +369,10 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreatePaymentReceiptRequest;
       this.paymentReceiptService.createPaymentReceipt(request).subscribe(rp => {
-        this.notify.info('Saved Successfully');
+        this.notify.info( !this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
         this.close(false);
       });
-    } else if (this.moneyReceipt.value.id > 0) {
+    } else if (this.moneyReceipt.value.id > 0 && !this.coppyMode) {
       const request = {
         amount: this.moneyReceipt.value.amount,
         bankAccount: this.moneyReceipt.value.bankAccount,

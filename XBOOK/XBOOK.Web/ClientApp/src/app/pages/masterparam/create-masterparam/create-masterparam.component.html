@@ -37,18 +37,18 @@
               formControlName="key" class="form-control" style="width: 130px" type="text" placeholder="key" id="key"
               digitOnly maxlength=200 [ngClass]="{ 'is-invalid': key}">
             <input *ngIf="taxForm.value.taxs[i].isAdd!=null" type="key" formControlName="key" class="form-control"
-              style="width: 130px" type="text" placeholder="key" id="key" digitOnly maxlength=200>
+              style="width: 130px;color:darkslategray;" type="text" placeholder="key" id="key" digitOnly maxlength=200>
             <small class="form-text text-muted danger"
               *ngIf="!taxs.controls[i].get('key').valid && (!taxs.controls[i].get('key').dirty || !taxs.controls[i].get('key').touched)"></small>
           </div>
 
           <div class="col-6 px-0">
-            <input #paramname formControlName="name" class="form-control" type="text" placeholder="name" id="name"
+            <input #paramname formControlName="name" style="color:darkslategray;" class="form-control" type="text" placeholder="name" id="name"
               maxlength=200>
           </div>
 
           <div class="col-12 px-0" style="margin-bottom: -3px;margin-top: 8px;">
-            <textarea #paramdescription formControlName="description" class="form-control" type="text"
+            <textarea #paramdescription formControlName="description" style="color:darkslategray;" class="form-control" type="text"
               placeholder="description" id="description" maxlength=200 rows=1></textarea>
           </div>
         </ng-container>
