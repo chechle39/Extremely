@@ -18,6 +18,7 @@ using XBOOK.Web.Claims.System;
 using XBOOK.Web.Extensions;
 using JwtIssuerOptions = XBOOK.Data.Model.JwtIssuerOptions;
 using XBOOK.Data.Interfaces;
+using TokenServices;
 
 namespace XBOOK.Web.Controllers
 {
@@ -88,6 +89,22 @@ namespace XBOOK.Web.Controllers
             {
                 return Ok(new GenericResult(false, "unconfirmed email !"));
             }
+
+            ///////////////////////////////////////////////////////////////
+            var jwtTokenService = new JwtTokenServiceProvider();
+
+            var payload = new TokenPayload
+            {
+                User = finUser.UserName,
+                UserDisplayName = $"{finUser.UserName}",
+                IssuedAt = DateTime.Now,
+                ExpireDate = DateTime.Now.AddDays(1),
+                Issuer = "vida-service",
+                Audience = "integration-services",
+                UserData = new[] {"x" }
+            };
+            var x = jwtTokenService.GenerateToken(payload);
+            ///////////////////////////////////////////////////////////////////////
             var roles = await _userManager.GetRolesAsync(finUser);
             var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon.ConnectionString);
             var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList, finUser.FullName, dataUserCommon.Code);
