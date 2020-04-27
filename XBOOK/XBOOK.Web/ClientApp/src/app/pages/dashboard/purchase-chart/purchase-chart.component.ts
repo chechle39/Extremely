@@ -228,6 +228,7 @@ export class PurchaseChartComponent extends ChartBase implements OnInit, OnChang
 
   private getOption() {
     let isChartInit = true;
+    const send = this;
 
     /**
      * Show data on top of bar chart
@@ -249,7 +250,19 @@ export class PurchaseChartComponent extends ChartBase implements OnInit, OnChang
       });
     }
 
-    const send = this;
+    function isDatasetEqualToZero(): boolean {
+
+      if (send.data) {
+        const dataset: number[] =  send.data.chart.datasets.map(item1 => item1.data).reduce((a, b) => a.concat(b), []);
+
+        for (let i = 0; i < dataset.length; i++) {
+          if (dataset[i] !== 0)
+            return false;
+        }
+
+        return true;
+      }
+    }
 
     return {
       onClick() {
@@ -354,15 +367,17 @@ export class PurchaseChartComponent extends ChartBase implements OnInit, OnChang
       animation: {
         easing: 'easeOutCirc',
         onComplete: function () {
-          if (isChartInit) {
-            const chartReference = this;
-            displayDatasetCallback(chartReference);
-            isChartInit = false;
+          if (isChartInit && !isDatasetEqualToZero()) {
+              const chartReference = this;
+              displayDatasetCallback(chartReference);
+              isChartInit = false;
           }
         },
         onProgress: function () {
           const chartReference = this;
-          displayDatasetCallback(chartReference);
+          if (!isDatasetEqualToZero()) {
+            displayDatasetCallback(chartReference);
+          }
         },
       },
     };
