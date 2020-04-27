@@ -18,7 +18,7 @@ using XBOOK.Web.Claims.System;
 using XBOOK.Web.Extensions;
 using JwtIssuerOptions = XBOOK.Data.Model.JwtIssuerOptions;
 using XBOOK.Data.Interfaces;
-using TokenServices;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace XBOOK.Web.Controllers
 {
@@ -36,7 +36,9 @@ namespace XBOOK.Web.Controllers
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly IPermissionDapper _permissionDapper;
         ICompanyProfileService _iCompanyProfileService;
-        private readonly IUserCommonRepository _userCommonRepository;
+        private readonly IMemoryCache _cache;
+
+        private readonly IUserCommonService _userCommonService;
         public AccountController(
             UserManager<AppUser> userManager,
             IEmailSender emailSender,
@@ -47,7 +49,8 @@ namespace XBOOK.Web.Controllers
             IPermissionDapper permissionDapper,
             IJwtFactory jwtFactory,
             IUserService userService,
-            IUserCommonRepository userCommonRepository,
+            IMemoryCache cache,
+            IUserCommonService userCommonService,
             ICompanyProfileService iCompanyProfileService)
         {
             _jwtOptions = jwtOptions.Value;
@@ -60,18 +63,18 @@ namespace XBOOK.Web.Controllers
             _jwtFactory = jwtFactory;
             _permissionDapper = permissionDapper;
             _iCompanyProfileService = iCompanyProfileService;
-            _userCommonRepository = userCommonRepository;
+            _userCommonService = userCommonService;
+            _cache = cache;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-           
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var dataUserCommon = await _userCommonRepository.FindUserCommon(model.Email);
+            var dataUserCommon = await _userCommonService.FindUserCommon(model.Email);
             if (dataUserCommon == null)
                 return  Ok(new GenericResult(false, "Username or password incorrect"));
             var identity = await GetClaimsIdentity(model.Email, model.Password, dataUserCommon.Code);
@@ -89,25 +92,10 @@ namespace XBOOK.Web.Controllers
             {
                 return Ok(new GenericResult(false, "unconfirmed email !"));
             }
-
-            ///////////////////////////////////////////////////////////////
-            var jwtTokenService = new JwtTokenServiceProvider();
-
-            var payload = new TokenPayload
-            {
-                User = finUser.UserName,
-                UserDisplayName = $"{finUser.UserName}",
-                IssuedAt = DateTime.Now,
-                ExpireDate = DateTime.Now.AddDays(1),
-                Issuer = "vida-service",
-                Audience = "integration-services",
-                UserData = new[] {"x" }
-            };
-            var x = jwtTokenService.GenerateToken(payload);
-            ///////////////////////////////////////////////////////////////////////
+            var company = await _iCompanyProfileService.GetInFoProfile1();
             var roles = await _userManager.GetRolesAsync(finUser);
-            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon.ConnectionString);
-            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, perList, finUser.FullName, dataUserCommon.Code);
+            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon.Code);
+            var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, company, perList, finUser.FullName, dataUserCommon.Code);
             return new OkObjectResult(jwt);
         }
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password, string code)
@@ -274,5 +262,6 @@ namespace XBOOK.Web.Controllers
             // If we got this far, something failed, redisplay form
             return Ok(model);
         }
+       
     }
 }

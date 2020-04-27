@@ -1,7 +1,25 @@
 <nb-card style="min-height: 70vh;">
   <nb-card-header class="layout__container--medium">
-    <span class="card__title" >{{'BUY.INVOICE.HEADER' | translate}}</span>
-    <button [disabled] = "authenticationService.hasPermission('Buy invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
+    <!-- <span class="card__title" >{{'BUY.INVOICE.HEADER' | translate}}</span>
+    <button [disabled] = "authenticationService.hasPermission('Buy invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button> -->
+    <div class="row">
+      <div class="col-4 col-lg-4">
+        <span class="card__title">{{'BUY.INVOICE.HEADER' | translate}}</span>
+      </div>
+      <div class="col-3 col-lg-3">
+        <div ngbDropdown class="text-right">
+          <button class="btn btn-flat mr-3 mb-0" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}</button>
+          <div ngbDropdownMenu aria-labelledby="bulkActions">
+            <button class="dropdown-item" (click)="exportBuyInvoive()"><span class="icon-export"></span> {{ 'COMMON.MOREACTION.EXPORT' | translate }}</button>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-5 col-lg-5">
+        <button [disabled] = "authenticationService.hasPermission('Buy invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
+
+      </div>
+    </div>
   </nb-card-header>
   <nb-card-body class="layout__container--medium">
     <div class="row">
@@ -9,14 +27,14 @@
         <div class="media-body blue text-center mb-4">
           <h3 class="font-large-1 mb-0 blue" style="text-decoration: underline; font-weight: 300;">
             {{ getOverduce()  | ThousandSuffixesPipe : 1  }}</h3>
-          <span class="text-muted font-small-3">overduce</span>
+          <span class="text-muted font-small-3">{{'BUY.INVOICE.GRID.HEADER.AMOUNT' | translate}}</span>
         </div>
       </div>
       <div class="col-6">
         <div class="media-body text-center mb-4">
           <h3 class="font-large-1 mb-0 blue" style="text-decoration: underline; font-weight: 300;">
             {{ getOutstanding()  | ThousandSuffixesPipe : 1 }} </h3>
-          <span class="text-muted font-small-3">total outstanding</span>
+          <span class="text-muted font-small-3">{{'BUY.INVOICE.GRID.HEADER.OUTSTANDING' | translate}}</span>
         </div>
       </div>
      
@@ -29,7 +47,7 @@
       </div>
       <div class="col-md-3 col-6 text-md-left text-right">
         <div ngbDropdown>
-          <button class="btn btn-flat mr-1 card__button-bulk-action" id="bulkActions" ngbDropdownToggle>
+          <button class="btn btn-flat mr-1 float-right card__button-bulk-action" id="bulkActions" ngbDropdownToggle>
               {{'COMMON.ACTION' | translate}}
           </button>
           <div ngbDropdownMenu aria-labelledby="bulkActions">
@@ -178,7 +196,7 @@
               [headerClass]="'col-center'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-center">{{row.issueDate | date: 'dd/MM/yyyy'}}</div>
-                <div class="col-more-info col-center">
+                <div class="col-more-info col-center" *ngIf="row.amount !== row.amountPaid">
                   {{calculateDuceDate(row.issueDate,row.dueDate)}}
                 </div>
               </ng-template>

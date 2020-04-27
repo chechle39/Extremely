@@ -24,7 +24,12 @@ import { AuthenticationService } from '../../../coreapp/services/authentication.
   styleUrls: ['./payment-receipt.component.scss'],
 })
 export class CreatePaymentReceiptComponent extends AppComponentBase implements OnInit {
-  @Input() title = 'Add a payment';
+  @Input() entryBatternList: MasterParamModel[];
+  @Input() LastMoneyReceipt: PaymentReceiptViewModel;
+  @Input() moneyById: any;
+  @Input() payment: MasterParamModel[];
+  @Input() title: string;
+  @Input() note: string;
   @Input() outstandingAmount: any;
   @Input() invoice: any;
   @Input() supplierID: any;
@@ -36,7 +41,6 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
-  payment: MasterParamModel[];
   requestSaveJson: any[] = [];
   companyName: any;
   companyAddress: any;
@@ -46,9 +50,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   focusClient$ = new Subject<string>();
   searchFailed = false;
   clientSelected = new SupplierSearchModel();
-  LastMoneyReceipt: PaymentReceiptViewModel;
   receiptNumber: string;
-  entryBatternList: MasterParamModel[];
   money: number;
   inVoiceList: any = [];
   public moneyReceipt: FormGroup;
@@ -76,6 +78,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       this.moneyReceipt.controls.supplierName.patchValue(this.supplierName);
       this.moneyReceipt.controls.receiverName.patchValue(this.contactName);
       this.moneyReceipt.controls.bankAccount.patchValue(this.bankAccount);
+      this.moneyReceipt.controls.note.patchValue(this.note);
       const data = {
         supplierName: this.supplierName,
         contactName: this.moneyReceipt.value.receiverName,
@@ -85,29 +88,26 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       this.clientSelected = data;
     }
     if (this.row !== undefined) {
-      this.paymentReceiptService.getPaymentReceiptById(this.row.id).subscribe(rp => {
-        this.masterParamService.GetMasTerByPaymentReceipt().subscribe((rpx: MasterParamModel[]) => {
-          this.entryBatternList = rpx;
-          const today = new Date(rp.payDate).toLocaleDateString('en-GB');
+      const today = new Date(this.moneyById.payDate).toLocaleDateString('en-GB');
         const payDateSplit = today.split('/');
         const payDatePicker = {
           year: Number(payDateSplit[2]),
           month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
         };
-        this.address = rp.address,
-        this.moneyReceipt.controls.id.patchValue(rp.id);
-        this.moneyReceipt.controls.amount.patchValue(rp.amount);
-        this.moneyReceipt.controls.receiptNumber.patchValue(!this.coppyMode ? rp.receiptNumber
+        this.address = this.moneyById.address,
+          this.moneyReceipt.controls.id.patchValue(this.moneyById.id);
+        this.moneyReceipt.controls.amount.patchValue(this.moneyById.amount);
+        this.moneyReceipt.controls.receiptNumber.patchValue(!this.coppyMode ? this.moneyById.receiptNumber
           : this.LastMoneyReceipt.receiptNumber);
-        this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
-        this.moneyReceipt.controls.supplierName.patchValue(rp.supplierName);
+        this.moneyReceipt.controls.receiverName.patchValue(this.moneyById.receiverName);
+        this.moneyReceipt.controls.supplierName.patchValue(this.moneyById.supplierName);
         this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key ===
           this.row.entryType)[0].key);
-        this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
+        this.moneyReceipt.controls.paymentMethods.patchValue(this.moneyById.payType);
         this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
-        this.moneyReceipt.controls.bankAccount.patchValue(rp.bankAccount);
-        this.moneyReceipt.controls.note.patchValue(rp.note);
-        this.moneyReceipt.controls.supplierID.patchValue(rp.supplierID);
+        this.moneyReceipt.controls.bankAccount.patchValue(this.moneyById.bankAccount);
+        this.moneyReceipt.controls.note.patchValue(this.moneyById.note);
+        this.moneyReceipt.controls.supplierID.patchValue(this.moneyById.supplierID);
         const data = {
           supplierName: this.moneyReceipt.value.supplierName,
           contactName: this.moneyReceipt.value.receiverName,
@@ -115,15 +115,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
           bankAccount: this.moneyReceipt.value.bankAccount,
         } as SupplierSearchModel;
         this.clientSelected = data;
-        });
 
-      });
     }
-    // if (this.row === undefined) {
-    //   this.getLastDataMoneyReceipt();
-    //   this.getAllEntryData();
-    // }
-    // this.getPayType();
   }
 
   getParam(data) {
@@ -133,7 +126,6 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     });
     const dataList = [];
     this.money = parseFloat(this.moneyReceipt.controls.amount.value.toString().split(',').join(''));
-    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < sortData.length; i++) {
       let y = 0;
       if (this.money >= sortData[i].amountIv) {
@@ -141,15 +133,6 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       } else {
         y = this.money;
       }
-
-
-      // if (this.money < 0){
-      //   if(Math.abs(this.money) < sortData[i].amountIv) {
-      //     this.money = Math.abs(this.money)
-      //   } else if (Math.abs(this.money) === sortData[i].amountIv) {
-      //     this.money = 0;
-      //   }
-      // }
       let sum = 0;
       if (dataList.length > 0) {
         sum = _.sumBy(dataList, item => {
@@ -178,54 +161,15 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     }
   }
 
-
-  // getLastDataMoneyReceipt() {
-  //   this.paymentReceiptService.getLastPayment().subscribe(rp => {
-  //     this.LastMoneyReceipt = rp;
-  //     // this.receiptNumber = rp.receiptNumber;
-  //     this.moneyReceipt.controls.receiptNumber.patchValue(rp === null ? null : rp.receiptNumber);
-  //   });
-  // }
-  // getPayType() {
-  //   this.masterParamService.GetMasTerByPayType().subscribe(rp => {
-  //     this.payment = rp;
-  //     if (this.row === undefined) {
-  //       this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
-  //     } else {
-  //       const entry = this.payment.filter(x => x.name === this.row.payType);
-  //     //  this.moneyReceipt.controls.paymentMethods.patchValue(entry[0].key);
-  //     }
-  //   });
-  // }
-  // getAllEntryData() {
-  //   this.masterParamService.GetMasTerByPaymentReceipt().subscribe((rp: MasterParamModel[]) => {
-  //     this.entryBatternList = rp;
-  //     if (this.row === undefined) {
-  //       this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
-  //     } else {
-  //       const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
-  //       this.moneyReceipt.controls.entryType.patchValue(entry[0].key);
-  //     }
-  //   });
-  // }
   getDataPayAndEntry() {
-    forkJoin(
-      this.masterParamService.GetMasTerByPayType(),
-      this.masterParamService.GetMasTerByPaymentReceipt(),
-      this.paymentReceiptService.getLastPayment(),
-    ).subscribe(([rp1, rp2, rp3]) => {
-      this.payment = rp1;
-      this.entryBatternList = rp2;
-      if (this.row === undefined) {
-        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
-        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
-      } else {
-        const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
-      }
-      this.LastMoneyReceipt = rp3;
-      this.moneyReceipt.controls.receiptNumber.patchValue(rp3.receiptNumber);
-
-    });
+    if (this.row === undefined) {
+      this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
+      this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
+    } else {
+      const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
+    }
+    this.moneyReceipt.controls.receiptNumber.patchValue(this.LastMoneyReceipt !== null
+      ? this.LastMoneyReceipt.receiptNumber : '');
   }
 
   close(result: any): void {
@@ -294,13 +238,13 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
     }
     const payDate = submittedForm.controls.payDate.value;
     const payDateData = [payDate.year, payDate.month, payDate.day].join('-');
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
       if (this.moneyReceipt.value.id > 0) {
         const request = {
-          yourCompanyAddress: rp.address,
-          companyCode: rp.code,
+          yourCompanyAddress: Datasession.companyProfile[0].address,
+          companyCode: Datasession.companyProfile[0].code,
           address: this.address,
-          yourCompanyName: rp.companyName,
+          yourCompanyName: Datasession.companyProfile[0].companyName,
           amount: this.moneyReceipt.value.amount,
           bankAccount: this.moneyReceipt.value.bankAccount,
           supplierID: this.moneyReceipt.value.supplierID,
@@ -320,11 +264,9 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         this.paymentReceiptService.paymentReceiptSaveDataPrint(this.requestSaveJson).subscribe(rp1 => {
           this.router.navigate([`/pages/print/${reportName}`]);
           this.modalService.dismissAll();
-          return ;
+          return;
         });
       }
-
-    });
   }
   saveMoneyReceipt(submittedForm: FormGroup) {
     if (!this.moneyReceipt.valid) {
@@ -351,9 +293,9 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       } as CreatePaymentReceiptRequestList;
       this.paymentReceiptService.createPaymentReceiptPayMent(requestList).subscribe(rp => {
         this.notify.info('Saved Successfully');
-        this.close(false);
+       // this.close(false);
       });
-    } else if (this.moneyReceipt.value.id === 0 ||  this.coppyMode) {
+    } else if (this.moneyReceipt.value.id === 0 || this.coppyMode) {
       const request = {
         amount: this.moneyReceipt.value.amount,
         bankAccount: this.moneyReceipt.value.bankAccount,
@@ -369,8 +311,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreatePaymentReceiptRequest;
       this.paymentReceiptService.createPaymentReceipt(request).subscribe(rp => {
-        this.notify.info( !this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
-        this.close(false);
+        this.notify.info(!this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
+       // this.close(false);
       });
     } else if (this.moneyReceipt.value.id > 0 && !this.coppyMode) {
       const request = {
@@ -390,7 +332,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       } as CreatePaymentReceiptRequest;
       this.paymentReceiptService.updatePaymentReceipt(request).subscribe(rp => {
         this.notify.info('update Successfully');
-        this.close(false);
+      //  this.close(false);
       });
     }
   }

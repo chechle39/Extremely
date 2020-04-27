@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import DevExpress from '@devexpress/analytics-core';
+import DevExpressViewer from 'devexpress-reporting';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 
 @Component({
@@ -33,6 +34,8 @@ export class PrintViewerComponent implements OnInit {
         'Authorization': 'Bearer ' + authToken,
       },
     };
+
+    // DevExpressViewer.Reporting.Viewer.Settings.AsyncExportApproach = true;
   }
 
   ngOnInit() {

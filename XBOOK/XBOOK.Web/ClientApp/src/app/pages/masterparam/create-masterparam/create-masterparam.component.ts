@@ -133,7 +133,8 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
           this.masterParamService.addTax(this.addList).subscribe(rs => {
             this.notify.success('Successfully Save');
            // tslint:disable-next-line:no-shadowed-variable
-            this.onload();
+            // this.onload();
+              this.close();
             return;
           }, (er) => {
           });
@@ -148,7 +149,8 @@ export class CreateMasterParamComponent extends AppComponentBase implements OnIn
           this.masterParamService.updateMaster(this.addList).subscribe(rs => {
             this.notify.success('Successfully Update');
             // tslint:disable-next-line:no-shadowed-variable
-            this.onload();
+            // this.onload();
+            this.close();
             return;
           }, (er) => {
             // this.message.warning('Key này đã tồn tại! Vui lòng kiểm tra lại!');

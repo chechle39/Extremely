@@ -80,14 +80,6 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
       money: null,
       productName: null,
     };
-
-
-    this.invoiceService.getInfoProfile().subscribe((r: any) => {
-      this.companyName = r.companyName;
-      this.taxCode = r.taxCode;
-      this.companyAddress = r.address;
-      this.companyCode = r.code;
-    });
     this.purchaseReportService
       .searchGen(genledSearch)
       .pipe(
@@ -166,12 +158,11 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
 
   }
   getProfiles() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
-      this.companyName = rp.companyName;
-      this.taxCode = rp.taxCode;
-      this.companyAddress = rp.address;
-      this.companyCode = rp.code;
-    });
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
+      this.companyName = Datasession.companyProfile[0].companyName;
+      this.taxCode = Datasession.companyProfile[0].taxCode;
+      this.companyAddress = Datasession.companyProfile[0].address;
+      this.companyCode = Datasession.companyProfile[0].code;
   }
   Print() {
     // tslint:disable-next-line:prefer-for-of
@@ -208,7 +199,7 @@ export class PurchaseReportComponent extends PagedListingComponentBase<ClientVie
   // }
   getinvoice(id) {
     if (id !== 0 || id !== undefined) {
-      this.router.navigate([`/pages/buyinvoice/${id}/${ActionType.Edit}`]);
+      this.router.navigate([`/pages/buyinvoice/${id}/${ActionType.View}`]);
     }
   }
 }

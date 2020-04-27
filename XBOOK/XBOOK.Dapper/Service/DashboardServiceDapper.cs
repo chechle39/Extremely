@@ -11,29 +11,27 @@ using XBOOK.Data.Model;
 using Dapper;
 using System.Data;
 using XBOOK.Data.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
+using XBOOK.Data.EntitiesDBCommon;
 
 namespace XBOOK.Dapper.Service
 {
     public class DashboardServiceDapper: IDashboardServiceDapper
     {
+        private string storedName = "Dashboard";
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IUserCommonRepository _userCommonRepository;
-        private string storedName = "Dashboard";
-        public DashboardServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IUserCommonRepository userCommonRepository)
+        public DashboardServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
-            _userCommonRepository = userCommonRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
-
         public async Task<PurchaseChartViewModel> getPurchaseChartDataAsync(DashboardRequest request)
         {
             var reportId = 2;
 
-            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
-            var findUser = await _userCommonRepository.FindUserCommon(code);
-            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -58,9 +56,8 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 1;
 
-            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
-            var findUser = await _userCommonRepository.FindUserCommon(code);
-            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -84,9 +81,8 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 3;
 
-            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
-            var findUser = await _userCommonRepository.FindUserCommon(code);
-            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -117,9 +113,8 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 5;
 
-            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
-            var findUser = await _userCommonRepository.FindUserCommon(code);
-            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -164,7 +159,7 @@ namespace XBOOK.Dapper.Service
             }
             else if (interval == "month")
             {
-                return new List<string>(new string[] { this.getMonth(-2), this.getMonth(-1), this.getMonth(0), this.getMonth(1), this.getMonth(2) });
+                return new List<string>(new string[] { this.getMonth(-4), this.getMonth(-3), this.getMonth(-2), this.getMonth(-1), this.getMonth(0) });
             }
             else if (interval == "quater")
             {

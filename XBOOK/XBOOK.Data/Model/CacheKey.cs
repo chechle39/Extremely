@@ -6,9 +6,9 @@ namespace XBOOK.Data.Model
 {
     public static class CacheKey
     {
-        public static class AccountChart
+        public static class UserCompany
         {
-            public static string acc = nameof(acc);
+            public static string UseCommon = nameof(UseCommon);
 
         }
 

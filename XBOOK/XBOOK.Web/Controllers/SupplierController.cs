@@ -5,9 +5,11 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XBOOK.Common.Exceptions;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Service.Interfaces;
@@ -18,16 +20,21 @@ namespace XBOOK.Web.Controllers
     {
         private readonly ISupplierService _supplierService;
         ISupplierServiceDapper _supplierServiceDapper;
+        private readonly IAuthorizationService _authorizationService;
 
-        public SupplierController(ISupplierService supplierService, ISupplierServiceDapper supplierServiceDapper)
+        public SupplierController(ISupplierService supplierService, ISupplierServiceDapper supplierServiceDapper, IAuthorizationService authorizationService)
         {
             _supplierService = supplierService;
             _supplierServiceDapper = supplierServiceDapper;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllSupplierAsync([FromBody]ClientSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Supplier", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var supplier = await _supplierService.GetAllSupplier(request);
             return Ok(supplier);
         }
@@ -35,6 +42,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllSupplierDapper([FromBody]ClientSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Supplier", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var clientList = await _supplierServiceDapper.GetSupplierAsync(request);
             return Ok(clientList);
         }
@@ -42,6 +52,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetSupplierById(int id)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Supplier", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var getCkientById = await _supplierService.GetSupplierById(id);
             return Ok(getCkientById);
         }
@@ -60,6 +73,9 @@ namespace XBOOK.Web.Controllers
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateSupplier([FromBody]SupplierCreateRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Supplier", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var update = await _supplierService.UpdateSupplierAsync(request);
             if (update == false)
             {
@@ -72,12 +88,18 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> DeleteClient(List<requestDeleted> request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Supplier", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             await _supplierService.DeletedSupplier(request);
             return Ok();
         }
         [HttpPost("[action]")]
-        public IActionResult ExportSupplier([FromBody]List<SupplierCreateRequest> request)
+        public async Task<IActionResult> ExportSupplier([FromBody]List<SupplierExportRequest> request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Supplier", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             Encoding latinEncoding = Encoding.GetEncoding("UTF-8");
             var data = _supplierService.GetDataSupplierAsync(request);
             return File(data, "application/csv", $"latinEncoding.csv");

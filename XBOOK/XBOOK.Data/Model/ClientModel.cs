@@ -12,6 +12,17 @@
         public string ContactName { get; set; }
         public string BankAccount { get; set; }
     }
+    public class ClientExportRequest
+    {
+        public int ClientID { get; set; }
+        public string ClientName { get; set; }
+        public string Address { get; set; }
+        public string Note { get; set; }
+        public string TaxCode { get; set; }
+        public string Email { get; set; }
+        public string ContactName { get; set; }
+        public string BankAccount { get; set; }
+    }
     public class ClientSerchRequest
     {
         public string ClientKeyword { get; set; }

@@ -10,6 +10,7 @@ namespace XBOOK.Service.Interfaces
     public interface IProductService
     {
         Task<IEnumerable<ProductViewModel>> GetAllProduct(ProductSerchRequest request);
+        Task<IEnumerable<ProductViewModel>> GetAllForSearchProductAsync(ProductSerchRequest request);
         Task<IEnumerable<ProductViewModel>> GetProductById(int id);
         Task<bool> CreateProduct(ProductViewModel request);
         Task<bool> Update(ProductViewModel request);

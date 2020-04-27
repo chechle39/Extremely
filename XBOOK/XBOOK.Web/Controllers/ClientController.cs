@@ -164,7 +164,7 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult ExportClient([FromBody]List<ClientCreateRequet> request)
+        public IActionResult ExportClient([FromBody]List<ClientExportRequest> request)
         {
             var data = _iClientService.GetDataClientAsync(request);
 

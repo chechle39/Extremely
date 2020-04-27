@@ -21,7 +21,7 @@ class PagedClientsRequestDto extends PagedRequestDto {
 @Component({
   selector: 'xb-debit',
   templateUrl: './debit-age.component.html',
-  styleUrls: ['./debit-age.component.scss']
+  styleUrls: ['./debit-age.component.scss'],
 })
 export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
   selected = [];
@@ -85,7 +85,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
   protected list(
     request: PagedClientsRequestDto,
     pageNumber: number,
-    finishedCallback: () => void
+    finishedCallback: () => void,
   ): void {
 
     const date = new Date();
@@ -100,7 +100,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
         // debounceTime(500),
         finalize(() => {
           finishedCallback();
-        })
+        }),
       )
       .subscribe(i => {
         this.loadingIndicator = false;
@@ -128,7 +128,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
       if (result) {
         const genledSearch = {
           money: result.money,
-          firstDate: result.endDate=== null ?  result.startDate : result.endDate,
+          firstDate: result.endDate === null ?  result.startDate : result.endDate,
         };
         this.exportCSV = result;
         this.debitAgeService.GetALLDebitAge(genledSearch).subscribe(rp => {
@@ -158,11 +158,10 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
     return row.height;
   }
   getProfiles() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
-      this.companyName = rp.companyName;
-      this.companyAddress = rp.address;
-      this.companyCode = rp.code;
-    });
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
+      this.companyName = Datasession.companyProfile[0].companyName;
+      this.companyAddress = Datasession.companyProfile[0].address;
+      this.companyCode = Datasession.companyProfile[0].code;
   }
   Print() {
     // tslint:disable-next-line:prefer-for-of
@@ -188,11 +187,25 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
     });
   }
   getaccNumber(id) {
-
+    let firstDate,
+    endDate;
+    const t = new Date();
     let clientName = '';
 
     clientName = id;
-    this.data.sendMessage(clientName);
+   // this.data.sendMessage(clientName);
+    const startDay = new Date(t.getFullYear(), t.getMonth(), t.getDate() - 1);
+    const lastDay = new Date(t.getFullYear(), t.getMonth(), t.getDate() - 90);
+    firstDate = startDay.toLocaleDateString('en-US');
+    endDate = lastDay.toLocaleDateString('en-US');
+    const genledSearch = {
+      startDate: endDate,
+      endDate: firstDate,
+      keyword: clientName,
+      isIssueDate: false,
+      getDebtOnly : true,
+    };
+    this.data.sendApplySearchIv(genledSearch);
     this.router.navigate([`/pages/invoice`]);
   }
 }

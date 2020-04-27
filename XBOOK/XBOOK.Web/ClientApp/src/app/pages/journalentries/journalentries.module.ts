@@ -27,19 +27,17 @@ import {
   NbIconModule,
   NbSearchModule,
   NbAlertModule } from '@nebular/theme';
-import { validateInputAccDirective } from './validate/validateinputacc';
 import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
-import { CreateMasterComponent } from './create/create-masterparam.component';
+import { CreateJournalComponent } from './create/create-journalentries.component';
 import { MasterParamService } from '../_shared/services/masterparam.service';
-import { EditMasterComponent } from './update/update-masterparam.component';
+import { EditJournalComponent } from './update/update-journalentries.component';
 
 @NgModule({
   declarations: [
-    validateInputAccDirective,
     JournalEntriesComponent,
     ListJournalEntriesComponent,
-    CreateMasterComponent,
-    EditMasterComponent,
+    CreateJournalComponent,
+    EditJournalComponent,
   ],
   imports: [
     NbButtonModule,
@@ -72,6 +70,6 @@ import { EditMasterComponent } from './update/update-masterparam.component';
     AccountChartService,
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     TaxService],
-  entryComponents: [CreateMoneyReceiptComponent, CreateMasterComponent, EditMasterComponent],
+  entryComponents: [CreateMoneyReceiptComponent, CreateJournalComponent, EditJournalComponent],
 })
 export class JournalEntriesModule { }

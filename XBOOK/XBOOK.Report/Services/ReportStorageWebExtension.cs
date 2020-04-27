@@ -1,15 +1,15 @@
 ﻿using DevExpress.XtraReports.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using XBOOK.Data.EntitiesDBCommon;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Report.PredefinedReports;
-using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Report.Services
 {
@@ -19,19 +19,26 @@ namespace XBOOK.Report.Services
         const string FileExtension = ".repx";
         private readonly ICompanyProfileReponsitory _companyProfileReponsitory;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ReportStorageWebExtension(IHostingEnvironment env, ICompanyProfileReponsitory companyProfileReponsitory, IHttpContextAccessor httpContextAccessor)
+        private readonly IMemoryCache _cache;
+        public ReportStorageWebExtension(IMemoryCache cache,IHostingEnvironment env, ICompanyProfileReponsitory companyProfileReponsitory, IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _companyProfileReponsitory = companyProfileReponsitory;          
+            _companyProfileReponsitory = companyProfileReponsitory;
+            _cache = cache;
             if (_httpContextAccessor.HttpContext != null)
             {
-                var code = _companyProfileReponsitory.GetCompanyProFile().Result;
-                //var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\SaleInVoice";
-                //ReportDirectory = Path.Combine(env.ContentRootPath, "Reports", "Template");
-                ReportDirectory = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.code}\Reports\Template";
-                if (!Directory.Exists(ReportDirectory))
+                try
                 {
-                    Directory.CreateDirectory(ReportDirectory);
+                    var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+                    ReportDirectory = $@"C:\inetpub\wwwroot\XBOOK_FILE\{Code}\Reports\Template";
+                    if (!Directory.Exists(ReportDirectory))
+                    {
+                        Directory.CreateDirectory(ReportDirectory);
+                    }
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+
                 }
             }
         }

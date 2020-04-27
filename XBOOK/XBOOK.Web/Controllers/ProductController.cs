@@ -35,7 +35,12 @@ namespace XBOOK.Web.Controllers
             var clientprd = await _iProductService.GetAllProduct(request);
             return Ok(clientprd);
         }
-
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetProductForSearchAsync(ProductSerchRequest request)
+        {
+            var clientprd = await _iProductService.GetAllForSearchProductAsync(request);
+            return Ok(clientprd);
+        }
         [HttpPost("[action]")]
         public async Task<IActionResult> GetProductById([FromBody]int id)
         {

@@ -34,6 +34,7 @@ import { AddTaxComponent } from './add-tax/add-tax.component';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 import { ngbTypeheadScrollToActiveItem } from '../../../shared/utils/util';
 import { CommonService } from '../../../shared/service/common.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'xb-create-invoice',
@@ -138,6 +139,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     private activeRoute: ActivatedRoute,
     private invoiceService: InvoiceService,
     private paymentService: PaymentService,
+    private translate: TranslateService,
     private authenticationService: AuthenticationService,
     private commonService: CommonService,
     private taxService: TaxService,
@@ -529,7 +531,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           month: Number(dueDateSplit[1]),
           day: Number(dueDateSplit[0]),
         };
-        this.invoiceForm.controls.dueDate.patchValue(this.coppyMode !== true ? dueDatePicker : idayPicker );
+        this.invoiceForm.controls.dueDate.patchValue(this.coppyMode !== true ? dueDatePicker : idayPicker);
       }
       // this.getAllTax();
       detailInvoiceFormArray.controls.forEach((control, i) => {
@@ -559,7 +561,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const firstDate = new Date(start);
     const secondDate = new Date(end);
-    return Math.round(Math.abs((firstDate.getTime()  - secondDate.getTime()) / oneDay));
+    return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / oneDay));
   }
   cancel() {
     this.checkIcon = false;
@@ -592,6 +594,10 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       || this.invoiceForm.controls.contactName.invalid === true
       || this.invoiceForm.controls.dueDate.invalid === true || this.isCheckDate === true) {
       this.message.warning('Form invalid');
+      this.translate.get('INVOICE.CREATE.VALID')
+      .subscribe(text => {
+        this.message.warning(text);
+      });
       return;
     }
     // this.viewMode = true;
@@ -1232,7 +1238,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           this.invoiceForm.controls.dueDate.value.month,
           this.invoiceForm.controls.dueDate.value.day].join('-') === '--' ?
             '' : [this.invoiceForm.controls.dueDate.value.year,
-            this.invoiceForm.controls.dueDate.value.month, this.invoiceForm.controls.dueDate.value.day].join('-') : null,
+            this.invoiceForm.controls.dueDate.value.month,
+            this.invoiceForm.controls.dueDate.value.day].join('-') : null,
           email: i === 0 ? this.invoiceForm.controls.email.value : null,
           invoiceId: i === 0 ? this.invoiceForm.controls.invoiceId.value : null,
           invoiceNumber: i === 0 ? this.invoiceForm.controls.invoiceNumber.value : null,
@@ -1316,10 +1323,12 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     ngbTypeheadScrollToActiveItem(e);
   }
   public onFocus(e: Event): void {
-    e.stopPropagation();
-    setTimeout(() => {
-      const inputEvent: Event = new Event('input');
-      e.target.dispatchEvent(inputEvent);
-    }, 0);
+    if (!this.viewMode) {
+      e.stopPropagation();
+      setTimeout(() => {
+        const inputEvent: Event = new Event('input');
+        e.target.dispatchEvent(inputEvent);
+      }, 0);
+    }
   }
 }

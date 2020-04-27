@@ -14,7 +14,7 @@ export class AccountDetailService extends BaseService {
                 return (
                   data.length !== 0 ? data as any[] : new Array<any>()
                 );
-              }
+              },
             ));
         return gen;
     }
@@ -27,7 +27,7 @@ export class AccountDetailService extends BaseService {
               return (
                 data.length !== 0 ? data as any[] : new Array<any>()
               );
-            }
+            },
           ));
       return gen;
   }

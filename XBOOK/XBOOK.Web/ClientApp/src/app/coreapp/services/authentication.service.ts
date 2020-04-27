@@ -11,6 +11,7 @@ export interface LoginContext {
   remember?: boolean;
   fullName: string;
   companyCode: string;
+  company: string;
 }
 
 /**
@@ -39,6 +40,7 @@ export class AuthenticationService {
       permission: context.permission,
       fullName: context.fullName,
       companyCode: context.companyCode,
+      companyProfile: context.company,
     };
     this.credentialsService.setCredentials(data, context.remember);
 

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +22,8 @@ namespace XBOOK.Web.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IMemoryCache _cache;
-        public UserController(IMemoryCache cache,IUserService userService, SignInManager<AppUser> signInManager, IEmailSender emailSender, UserManager<AppUser> userManager, IAuthorizationService authorizationService)
+        public UserController(IUserService userService, SignInManager<AppUser> signInManager, IEmailSender emailSender, UserManager<AppUser> userManager, IAuthorizationService authorizationService)
         {
-            _cache = cache;
             _userService = userService;
             _userManager = userManager;
             _authorizationService = authorizationService;
@@ -45,7 +42,6 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetUser(UserRequest rq)
         {
-            var x = _cache;
             var result = await _authorizationService.AuthorizeAsync(User, "User", Operations.Read);
             if (result.Succeeded == false)
                 return new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);

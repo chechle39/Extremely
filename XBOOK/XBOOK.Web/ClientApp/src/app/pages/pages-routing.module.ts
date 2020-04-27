@@ -136,6 +136,11 @@ const routes: Routes = [
       loadChildren: () => import('./cashbalance/cash-balance.module')
         .then(m => m.MoneyFundtModule),
     },
+    {
+      path: 'entrypattern',
+      loadChildren: () => import('./entrypattern/entrypattern.module')
+        .then(m => m.EntrypatternModule),
+    },
   ],
 }];
 

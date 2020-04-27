@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Caching.Memory;
+using System.Text;
 using XBOOK.Service.Interfaces;
 
 namespace XBOOK.Service.Service
@@ -27,8 +28,8 @@ namespace XBOOK.Service.Service
 
             var options = new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expireInMinute),
-                SlidingExpiration = TimeSpan.FromMinutes(5)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(expireInMinute),
+                SlidingExpiration = TimeSpan.FromDays(5)
             };
 
             cachedObject = objectFunction();

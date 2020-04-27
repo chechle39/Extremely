@@ -151,7 +151,7 @@ namespace XBOOK.Service.Service
             }
             return true;
         }
-        public byte[] GetDataSupplierAsync(List<SupplierCreateRequest> request)
+        public byte[] GetDataSupplierAsync(List<SupplierExportRequest> request)
         {
             var comlumHeadrs = new string[]
             {
@@ -159,13 +159,12 @@ namespace XBOOK.Service.Service
                 "supplierName",
                 "address",
                 "taxCode",
-                "Tag",
                 "contactName",
                 "email",
                 "note",
                 "bankAccount",
             };
-            var listGen = new List<SupplierCreateRequest>();
+            var listGen = new List<SupplierExportRequest>();
 
             listGen = request;
 
@@ -175,8 +174,7 @@ namespace XBOOK.Service.Service
                           item.supplierID,
                           item.supplierName,
                           item.Address,
-                          item.TaxCode,
-                          item.Tag,
+                          item.TaxCode,                         
                           item.ContactName,
                           item.Email,
                           item.Note,

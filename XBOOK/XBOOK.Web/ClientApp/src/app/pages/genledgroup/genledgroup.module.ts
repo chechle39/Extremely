@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
@@ -13,7 +13,9 @@ import { GenledgroupComponent } from './genledgroup.component';
 import { GenLedGroupService } from '../_shared/services/genledgroup.service';
 import { AccountBalanceService } from '../_shared/services/accountbalance.service';
 import { InvoiceService } from '../_shared/services/invoice.service';
+// tslint:disable-next-line:max-line-length
 import { NbCardModule, NbSearchModule, NbPopoverModule, NbButtonModule, NbAlertModule, NbIconModule } from '@nebular/theme';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 @NgModule({
   declarations: [GenledgroupComponent,
     // SearchgenledComponent
@@ -33,8 +35,10 @@ import { NbCardModule, NbSearchModule, NbPopoverModule, NbButtonModule, NbAlertM
     FormsModule,
     SharedModule,
     ReactiveFormsModule,
-    MultiSelectModule
+    MultiSelectModule,
   ],
-  providers: [GenLedService, AccountChartService, CurrencyPipe, DecimalPipe, GenLedGroupService, AccountBalanceService, InvoiceService],
+  providers: [GenLedService, AccountChartService, CurrencyPipe, DecimalPipe,
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
+    GenLedGroupService, AccountBalanceService, InvoiceService],
 })
 export class GenledGroupModule { }

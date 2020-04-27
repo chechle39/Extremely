@@ -5,12 +5,12 @@ import { extract } from '../../coreapp/services/i18n.service';
 
 
 const routes: Routes = [
-  { path: '', component: AccountbalanceComponent, data: { title: extract('accountbalance') } }
+  { path: '', component: AccountbalanceComponent, data: { title: extract('accountbalance') } },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: []
+  providers: [],
 })
 export class AccountbalanceMRoutingModule { }

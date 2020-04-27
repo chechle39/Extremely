@@ -6,3 +6,12 @@ export class EntryBatternViewModel {
     crspAccNumber: string;
     note: string;
 }
+
+export class EntryPatternRequest {
+    transactionType: string;
+    entryType: string;
+}
+
+export class TransactionTypeRequest {
+    transactionType: string;
+}

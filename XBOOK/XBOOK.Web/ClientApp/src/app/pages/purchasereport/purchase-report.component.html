@@ -149,7 +149,7 @@
                   <div class="text-right">
                     <div>
                       <div>
-                        <div *ngIf="row.amount !== 0" class="col-more-info">
+                        <div *ngIf="row.amount !== 0">
                           {{row.amount | currency:'VND':''}}
                         </div>
                         <div *ngIf="row.amount === 0">

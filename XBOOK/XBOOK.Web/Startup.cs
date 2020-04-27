@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
-using DevExpress.AspNetCore;
-using DevExpress.AspNetCore.Reporting;
-using DevExpress.Security.Resources;
-using DevExpress.XtraReports.Security;
-using DevExpress.XtraReports.Web.WebDocumentViewer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -35,9 +31,6 @@ using XBOOK.Data.Repositories;
 using XBOOK.Service.Interfaces;
 using XBOOK.Service.Service;
 using XBOOK.Web.Claims.System;
-using Microsoft.AspNetCore.ResponseCompression;
-using System.Linq;
-using System.IO.Compression;
 
 namespace XBOOK.Web
 {
@@ -47,8 +40,7 @@ namespace XBOOK.Web
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
         public Startup(IHostingEnvironment env)
         {
-            ScriptPermissionManager.GlobalInstance = new ScriptPermissionManager(ExecutionMode.Unrestricted);
-            AccessSettings.StaticResources.TrySetRules(DirectoryAccessRule.Allow(@"C:\\uploaded"));
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -79,7 +71,7 @@ namespace XBOOK.Web
             );
             services
                 .AddMvc()
-                .AddDefaultReportingControllers()
+   
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
             services.Configure<JwtIssuerOptions>(options =>
@@ -88,7 +80,6 @@ namespace XBOOK.Web
                 options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
-
 
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -105,7 +96,12 @@ namespace XBOOK.Web
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
-
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Login/Index";
+                    options.AccessDeniedPath = "/User/Forbidden/";
+                });
 
             services.AddAuthentication(options =>
             {
@@ -130,9 +126,9 @@ namespace XBOOK.Web
                 };
             });
 
-                        services.AddDevExpressControls();
-            services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
-            DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
+            //            services.AddDevExpressControls();
+            //services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            //DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -163,14 +159,14 @@ namespace XBOOK.Web
                 }));
 
 
-            services.ConfigureReportingServices(configurator => {
-                configurator.ConfigureReportDesigner(designerConfigurator => {
-                    designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
-                });
-                configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
-                    viewerConfigurator.UseCachedReportSourceBuilder();
-                });
-            });
+            //services.ConfigureReportingServices(configurator => {
+            //    configurator.ConfigureReportDesigner(designerConfigurator => {
+            //        designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
+            //    });
+            //    configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
+            //        viewerConfigurator.UseCachedReportSourceBuilder();
+            //    });
+            //});
 
             services.AddAutoMapper();
             services.AddTransient<IEmailSender, EmailSender>();
@@ -240,11 +236,14 @@ namespace XBOOK.Web
             services.AddTransient<IPermissionDapper, PermissionServiceDapper>();
             services.AddTransient<IDashboardServiceDapper, DashboardServiceDapper>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
-            services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            //services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddScoped<DbContext, XBookComonContext>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IAuthorizationHandler, ResourceAuthorizationHandler>();
+            services.AddTransient<ICachingService, MemoryCacheService>();
+            services.AddTransient<IUserCommonService, UserCommonService>();
+
 
             services.AddSwaggerGen(c =>
             {
@@ -256,37 +255,38 @@ namespace XBOOK.Web
                 configuration.RootPath = "ClientApp/dist";
             });
 
-           // var serviceProvider = services.BuildServiceProvider();
+            // var serviceProvider = services.BuildServiceProvider();
             services.AddHttpContextAccessor();
             //here is where you set you accessor
             //  var accessor = serviceProvider.GetService<IHttpContextAccessor>();
             //  CreateReport.SetHttpContextAccessor(accessor);
             services.AddMemoryCache();
 
+            services.AddResponseCaching();
             //compression static files setting
-            services.AddResponseCompression(options =>
-            {
-                options.Providers.Add<GzipCompressionProvider>();
-                options.Providers.Add<BrotliCompressionProvider>();
-                options.MimeTypes =
-                    ResponseCompressionDefaults.MimeTypes.Concat(
-                        new[] { "image/svg+xml", "text/css", "application/javascript" });
-            });
-            services.Configure<GzipCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Optimal;
-            });
-            services.Configure<BrotliCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Optimal;
-            });
+            //services.AddResponseCompression(options =>
+            //{
+            //    options.Providers.Add<BrotliCompressionProvider>();
+            //    options.Providers.Add<GzipCompressionProvider>();
+            //    options.MimeTypes =
+            //        ResponseCompressionDefaults.MimeTypes.Concat(
+            //            new[] { "image/svg+xml", "text/css", "application/javascript" });
+            //});
+            //services.Configure<GzipCompressionProviderOptions>(options =>
+            //{
+            //    options.Level = CompressionLevel.Optimal;
+            //});
+            //services.Configure<BrotliCompressionProviderOptions>(options =>
+            //{
+            //    options.Level = CompressionLevel.Optimal;
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
             IHttpContextAccessor accessor = svp.GetService<IHttpContextAccessor>();
-            DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
-            app.UseDevExpressControls();
+            //DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
+            //app.UseDevExpressControls();
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 
             //--------------------
@@ -294,10 +294,9 @@ namespace XBOOK.Web
             app.UseAuthentication();
             app.UseMvc();
             app.UseSwagger();
+            //app.UseResponseCompression();
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
-            app.UseResponseCompression();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book API V1");

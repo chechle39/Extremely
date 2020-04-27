@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Interfaces;
-using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
 
@@ -25,11 +23,6 @@ namespace XBOOK.Service.Service
         public async Task<List<FunctionViewModel>> GetAllFunction()
         {
             return await _functionsRepository.GetAllFunction();
-        }
-
-        public async Task<List<MenuModel>> GetMenu(ClaimsPrincipal user)
-        {
-            return await _functionsRepository.GetMenu(user);
         }
     }
 }

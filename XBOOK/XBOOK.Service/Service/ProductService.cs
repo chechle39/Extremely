@@ -168,5 +168,11 @@ namespace XBOOK.Service.Service
             return buffer;
 
         }
+
+        public async Task<IEnumerable<ProductViewModel>> GetAllForSearchProductAsync(ProductSerchRequest request)
+        {
+            var listData = await _iProductRespository.GetAllProductForSearchAsync(request);
+            return listData;
+        }
     }
 }

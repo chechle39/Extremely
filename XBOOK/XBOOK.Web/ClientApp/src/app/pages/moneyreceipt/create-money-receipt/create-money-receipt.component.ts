@@ -36,7 +36,12 @@ import { DataService } from '../../_shared/services/data.service';
   styleUrls: ['./create-money-receipt.component.scss'],
 })
 export class CreateMoneyReceiptComponent extends AppComponentBase implements OnInit {
-  @Input() title = 'Add a payment';
+  @Input() payment: MasterParamModel[];
+  @Input() moneyById: any;
+  @Input() entryBatternList: MasterParamModel[];
+  @Input() LastMoneyReceipt: MoneyReceiptViewModel;
+  @Input() title: string;
+  @Input() note: string;
   @Input() outstandingAmount: any;
   @Input() invoice: any;
   @Input() clientId: any;
@@ -50,7 +55,6 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
-  payment: MasterParamModel[];
   address: any;
   companyName: any;
   companyAddress: any;
@@ -59,9 +63,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   focusClient$ = new Subject<string>();
   searchFailed = false;
   clientSelected = new ClientSearchModel();
-  LastMoneyReceipt: MoneyReceiptViewModel;
   receiptNumber: string;
-  entryBatternList: MasterParamModel[];
   money: number;
   inVoiceList: any = [];
   public moneyReceipt: FormGroup;
@@ -70,13 +72,11 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
     injector: Injector,
     private router: Router,
     public activeModal: NgbActiveModal,
-    private data: DataService,
     public authenticationService: AuthenticationService,
     private clientService: ClientService,
     private invoiceService: InvoiceService,
     private modalService: NgbModal,
     private moneyReceiptService: MoneyReceiptService,
-    private masterParamService: MasterParamService,
     public fb: FormBuilder) {
     super(injector);
     this.moneyReceipt = this.createMoneyReceiptFormGroup();
@@ -90,6 +90,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       this.moneyReceipt.controls.clientName.patchValue(this.clientName);
       this.moneyReceipt.controls.receiverName.patchValue(this.contactName);
       this.moneyReceipt.controls.bankAccount.patchValue(this.bankAccount);
+      this.moneyReceipt.controls.note.patchValue(this.note);
       const data = {
         clientName: this.clientName,
         contactName: this.moneyReceipt.value.receiverName,
@@ -99,53 +100,39 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       this.clientSelected = data;
     }
     if (this.row !== undefined) {
-      this.moneyReceiptService.getMoneyReceiptById(this.row.id).subscribe(rp => {
-        this.masterParamService.GetMasTerByMoneyReceipt().subscribe((rpx: MasterParamModel[]) => {
-          this.entryBatternList = rpx;
-          const today = new Date(rp.payDate).toLocaleDateString('en-GB');
-          const payDateSplit = today.split('/');
-          const payDatePicker = {
-            year: Number(payDateSplit[2]),
-            month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
-          };
-          this.address = rp.address;
-          this.moneyReceipt.controls.id.patchValue(rp.id);
-          this.moneyReceipt.controls.amount.patchValue(rp.amount);
-          this.moneyReceipt.controls.receiptNumber.patchValue(!this.coppyMode ? rp.receiptNumber
-            : this.LastMoneyReceipt.receiptNumber);
-          this.moneyReceipt.controls.receiverName.patchValue(rp.receiverName);
-          this.moneyReceipt.controls.clientName.patchValue(rp.clientName);
-          this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key
-            === this.row.entryType)[0].key);
-          this.moneyReceipt.controls.paymentMethods.patchValue(rp.payType);
-          this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
-          this.moneyReceipt.controls.bankAccount.patchValue(rp.bankAccount);
-          this.moneyReceipt.controls.note.patchValue(rp.note);
-          this.moneyReceipt.controls.clienId.patchValue(rp.clientID);
+      const today = new Date(this.moneyById.payDate).toLocaleDateString('en-GB');
+        const payDateSplit = today.split('/');
+        const payDatePicker = {
+          year: Number(payDateSplit[2]),
+          month: Number(payDateSplit[1]), day: Number(payDateSplit[0]),
+        };
+        this.address = this.moneyById.address;
+        this.moneyReceipt.controls.id.patchValue(this.moneyById.id);
+        this.moneyReceipt.controls.amount.patchValue(this.moneyById.amount);
+        this.moneyReceipt.controls.receiptNumber.patchValue(!this.coppyMode ? this.moneyById.receiptNumber
+          : this.LastMoneyReceipt.receiptNumber);
+        this.moneyReceipt.controls.receiverName.patchValue(this.moneyById.receiverName);
+        this.moneyReceipt.controls.clientName.patchValue(this.moneyById.clientName);
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.key
+          === this.row.entryType)[0].key);
+        this.moneyReceipt.controls.paymentMethods.patchValue(this.moneyById.payType);
+        this.moneyReceipt.controls.payDate.patchValue(payDatePicker);
+        this.moneyReceipt.controls.bankAccount.patchValue(this.moneyById.bankAccount);
+        this.moneyReceipt.controls.note.patchValue(this.moneyById.note);
+        this.moneyReceipt.controls.clienId.patchValue(this.moneyById.clientID);
 
-          const data = {
-            clientName: this.moneyReceipt.value.clientName,
-            contactName: this.moneyReceipt.value.receiverName,
-            clientId: this.moneyReceipt.value.clienId,
-            bankAccount: this.moneyReceipt.value.bankAccount,
-          } as ClientSearchModel;
-          this.clientSelected = data;
-        });
-
-      });
+        const data = {
+          clientName: this.moneyReceipt.value.clientName,
+          contactName: this.moneyReceipt.value.receiverName,
+          clientId: this.moneyReceipt.value.clienId,
+          bankAccount: this.moneyReceipt.value.bankAccount,
+        } as ClientSearchModel;
+        this.clientSelected = data;
 
     }
-
-    this.getProfiles();
   }
 
-  getProfiles() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
-      this.companyName = rp.companyName;
-      this.companyAddress = rp.address;
-      this.companyCode = rp.code;
-    });
-  }
+
   getParam(data) {
     this.inVoiceList = [];
     const sortData = data.sort((a, b) => {
@@ -190,23 +177,20 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   }
 
   getDataPayAndEntry() {
-    forkJoin(
-      this.masterParamService.GetMasTerByPayType(),
-      this.masterParamService.GetMasTerByMoneyReceipt(),
-      this.moneyReceiptService.getLastMoney(),
-    ).subscribe(([rp1, rp2, rp3]) => {
-      this.payment = rp1;
-      this.entryBatternList = rp2;
-      if (this.row === undefined) {
-        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
-        this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
+    if (this.row === undefined) {
+      if (this.outstandingAmount !== undefined) {
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.name
+          === 'Thu tiền bán hàng')[0].key);
       } else {
-        const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
-      }
-      this.LastMoneyReceipt = rp3;
-      this.moneyReceipt.controls.receiptNumber.patchValue(rp3.receiptNumber);
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
 
-    });
+      }
+      this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
+    } else {
+      const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
+    }
+    this.moneyReceipt.controls.receiptNumber.patchValue(this.LastMoneyReceipt !== null
+      ? this.LastMoneyReceipt.receiptNumber : '');
   }
 
   close(result: any): void {
@@ -296,7 +280,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
 
       this.moneyReceiptService.createMoneyReceiptPayMent(requestList).subscribe(rp => {
         this.notify.info('Saved Successfully');
-        this.close(false);
+       // this.close(false);
       });
     } else if (this.moneyReceipt.value.id === 0 || this.coppyMode) {
       const request = {
@@ -314,8 +298,8 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreateMoneyReceiptRequest;
       this.moneyReceiptService.createMoneyReceipt(request).subscribe(rp => {
-        this.notify.info( !this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
-        this.close(false);
+        this.notify.info(!this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
+      //  this.close(false);
       });
     } else if (this.moneyReceipt.value.id > 0 && !this.coppyMode) {
       const request = {
@@ -335,7 +319,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       } as CreateMoneyReceiptRequest;
       this.moneyReceiptService.updateMoneyReceipt(request).subscribe(rp => {
         this.notify.info('update Successfully');
-        this.close(false);
+      //  this.close(false);
       });
     }
   }
@@ -343,14 +327,14 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
 
   // Print
   Print() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
       const payDate = this.moneyReceipt.value.payDate;
       const payDateData = [payDate.year, payDate.month, payDate.day].join('-');
       const request = {
         amount: this.moneyReceipt.value.amount,
-        yourCompanyAddress: rp.address,
-        yourCompanyName: rp.companyName,
-        companyCode: rp.code,
+        yourCompanyAddress: Datasession.companyProfile[0].address,
+        yourCompanyName: Datasession.companyProfile[0].companyName,
+        companyCode: Datasession.companyProfile[0].code,
         payDate: payDateData,
         address: this.address,
         bankAccount: this.moneyReceipt.value.bankAccount,
@@ -371,7 +355,5 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         this.modalService.dismissAll();
         return;
       });
-    });
-
   }
 }

@@ -13,6 +13,9 @@ import { PaymentReceiptViewModel } from '../_shared/models/payment-receipt/payme
 import { GetPaymentReceipyRequest } from '../_shared/models/payment-receipt/get-payment-receipy-request.model';
 import { AuthenticationService } from '../../coreapp/services/authentication.service';
 import { CommonService } from '../../shared/service/common.service';
+import { TranslateService } from '@ngx-translate/core';
+import { MasterParamService } from '../_shared/services/masterparam.service';
+import { forkJoin } from 'rxjs';
 class PagedMoneyReceiptRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -39,10 +42,12 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
   isCheckBackTo = false;
   moneyReceiptList: PaymentReceiptViewModel[];
   constructor(
+    private translate: TranslateService,
     injector: Injector,
     private fb: FormBuilder,
     public authenticationService: AuthenticationService,
     private paymentReceiptService: PaymentReceiptService,
+    private masterParamService: MasterParamService,
     private commonService: CommonService,
     private modalService: NgbModal) {
     super(injector);
@@ -80,12 +85,24 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
 
   showCreateOrEditClientDialog(id?: number): void {
     let createOrEditClientDialog;
-    createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent, AppConsts.modalOptionsCustomSize);
-    createOrEditClientDialog.result.then(result => {
-      this.refresh();
-      this.selected = [];
-    });
 
+    forkJoin(
+      this.masterParamService.GetMasTerByPayType(),
+      this.masterParamService.GetMasTerByPaymentReceipt(),
+      this.paymentReceiptService.getLastPayment(),
+    ).subscribe(([rp1, rp2, rp3]) => {
+      createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent,
+        AppConsts.modalOptionsCustomSize);
+        this.translate.get('PAYMENT.RECEIPT.HEADER')
+        .subscribe(text => { createOrEditClientDialog.componentInstance.title = text; });
+      createOrEditClientDialog.componentInstance.payment = rp1;
+      createOrEditClientDialog.componentInstance.entryBatternList = rp2;
+      createOrEditClientDialog.componentInstance.LastMoneyReceipt = rp3;
+      createOrEditClientDialog.result.then(result => {
+        this.refresh();
+        this.selected = [];
+      });
+    });
   }
 
   createForm() {
@@ -128,7 +145,6 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
         currency: '',
       } as GetPaymentReceipyRequest;
       this.getAllMoneyReceipt(requestList);
-      // alert(JSON.stringify(searchStr));
     }
   }
 
@@ -218,12 +234,25 @@ export class  PaymentReceiptComponent extends PagedListingComponentBase<any> {
       if (event.cellIndex > 0 && event.cellIndex < 5) {
         let createOrEditClientDialog;
         event.cellElement.blur();
-        createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent,
-          AppConsts.modalOptionsCustomSize);
-        createOrEditClientDialog.componentInstance.row = event.row;
-        createOrEditClientDialog.result.then(result => {
-          this.refresh();
-          this.selected = [];
+        forkJoin(
+          this.masterParamService.GetMasTerByPayType(),
+          this.masterParamService.GetMasTerByPaymentReceipt(),
+          this.paymentReceiptService.getLastPayment(),
+          this.paymentReceiptService.getPaymentReceiptById(event.row.id),
+        ).subscribe(([rp1, rp2, rp3, rp4]) => {
+          createOrEditClientDialog = this.modalService.open(CreatePaymentReceiptComponent,
+            AppConsts.modalOptionsCustomSize);
+            this.translate.get('EDIT.PAYMENT.RECEIPT.HEADER')
+            .subscribe(text => { createOrEditClientDialog.componentInstance.title = text; });
+          createOrEditClientDialog.componentInstance.row = event.row;
+          createOrEditClientDialog.componentInstance.payment = rp1;
+          createOrEditClientDialog.componentInstance.entryBatternList = rp2;
+          createOrEditClientDialog.componentInstance.LastMoneyReceipt = rp3;
+          createOrEditClientDialog.componentInstance.moneyById = rp4;
+          createOrEditClientDialog.result.then(result => {
+            this.refresh();
+            this.selected = [];
+          });
         });
       }
     }

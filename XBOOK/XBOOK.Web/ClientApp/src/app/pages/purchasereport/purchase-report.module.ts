@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
@@ -16,6 +16,7 @@ import { SearchPurchaseReportComponent } from './searchpurchase-report/searchpur
 import { SupplierService } from '../_shared/services/supplier.service';
 import { NbCardModule, NbButtonModule, NbPopoverModule,
   NbIconModule, NbAlertModule, NbSearchModule } from '@nebular/theme';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 @NgModule({
   declarations: [PurchaseReportComponent, SearchPurchaseReportComponent],
   entryComponents: [SearchPurchaseReportComponent],
@@ -36,7 +37,7 @@ import { NbCardModule, NbButtonModule, NbPopoverModule,
     MultiSelectModule,
   ],
   providers: [CurrencyPipe, DecimalPipe, ProductService, DebitAgeService, PurchaseReportComponent, AccountChartService,
-    PurchaseReportService,
+    PurchaseReportService,   {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     InvoiceService, SupplierService,  SearchPurchaseReportComponent],
 })
 export class PurchaseReportModule { }

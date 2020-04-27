@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
@@ -14,7 +14,9 @@ import { InvoiceService } from '../_shared/services/invoice.service';
 import { ProductService } from '../_shared/services/product.service';
 import { SearchsalesReportComponent } from './searchsales-report/searchsales-report.component';
 import { ClientService } from '../_shared/services/client.service';
+// tslint:disable-next-line:max-line-length
 import { NbPopoverModule, NbSearchModule, NbIconModule, NbAlertModule, NbCardModule, NbButtonModule } from '@nebular/theme';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 @NgModule({
   declarations: [SalesReportComponent, SearchsalesReportComponent],
   entryComponents: [SearchsalesReportComponent],
@@ -34,7 +36,8 @@ import { NbPopoverModule, NbSearchModule, NbIconModule, NbAlertModule, NbCardMod
     ReactiveFormsModule,
     MultiSelectModule,
   ],
-  providers: [CurrencyPipe, DecimalPipe, ProductService, DebitAgeService, SalesReportComponent, AccountChartService, SalesReportService,
+  providers: [CurrencyPipe, DecimalPipe,   {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
+    ProductService, DebitAgeService, SalesReportComponent, AccountChartService, SalesReportService,
     InvoiceService, ClientService,  SearchsalesReportComponent],
 })
 export class SalesReportModule { }

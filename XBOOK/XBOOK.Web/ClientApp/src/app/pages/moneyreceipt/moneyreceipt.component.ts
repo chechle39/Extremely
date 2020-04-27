@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../coreapp/services/authentication.ser
 import { CommonService } from '../../shared/service/common.service';
 import { forkJoin } from 'rxjs';
 import { MasterParamService } from '../_shared/services/masterparam.service';
+import { TranslateService } from '@ngx-translate/core';
 class PagedMoneyReceiptRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -40,6 +41,7 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
   isCheckBackTo = false;
   moneyReceiptList: MoneyReceiptViewModel[];
   constructor(
+    private translate: TranslateService,
     injector: Injector,
     private fb: FormBuilder,
     private moneyReceiptService: MoneyReceiptService,
@@ -82,12 +84,27 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
 
   showCreateOrEditClientDialog(id?: number): void {
     let createOrEditClientDialog;
-    createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
-    createOrEditClientDialog.result.then(result => {
-      this.refresh();
-      this.selected = [];
-    });
+    // createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
+    // this.translate.get('MONEY.RECEIPT.TITLE.NEW')
+    // .subscribe(text => { createOrEditClientDialog.componentInstance.title = text; });
+    forkJoin(
+      this.masterParamService.GetMasTerByPayType(),
+      this.masterParamService.GetMasTerByMoneyReceipt(),
+      this.moneyReceiptService.getLastMoney(),
 
+    ).subscribe(([rp1, rp2, rp3]) => {
+      createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent,
+        AppConsts.modalOptionsCustomSize);
+      this.translate.get('MONEY.RECEIPT.TITLE.NEW')
+        .subscribe(text => { createOrEditClientDialog.componentInstance.title = text; });
+      createOrEditClientDialog.componentInstance.payment = rp1;
+      createOrEditClientDialog.componentInstance.entryBatternList = rp2;
+      createOrEditClientDialog.componentInstance.LastMoneyReceipt = rp3;
+      createOrEditClientDialog.result.then(result => {
+        this.refresh();
+        this.selected = [];
+      });
+    });
   }
   coppy() {
     if (this.selected.length === 0) {
@@ -218,26 +235,32 @@ export class MoneyreceiptComponent extends PagedListingComponentBase<any> {
     });
   }
 
+
   onActivate(event) {
     // If you are using (activated) event, you will get event, row, rowElement, type
     if (event.type === 'click') {
       event.cellElement.blur();
       if (event.cellIndex > 0 && event.cellIndex < 5) {
         let createOrEditClientDialog;
-        createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent,
-          AppConsts.modalOptionsCustomSize);
-        createOrEditClientDialog.componentInstance.row = event.row;
-        createOrEditClientDialog.result.then(result => {
-
-          // const objRequest = {
-          //   currency: '',
-          //   endDate: this.endDate,
-          //   keyword: this.keyword.toLocaleLowerCase(),
-          //   startDate: this.startDate,
-          // } as GetMoneyReceipyRequest;
-          // this.getAllMoneyReceipt(objRequest);
-          this.refresh();
-          this.selected = [];
+        forkJoin(
+          this.masterParamService.GetMasTerByPayType(),
+          this.masterParamService.GetMasTerByMoneyReceipt(),
+          this.moneyReceiptService.getLastMoney(),
+          this.moneyReceiptService.getMoneyReceiptById(event.row.id),
+        ).subscribe(([rp1, rp2, rp3, rp4]) => {
+          createOrEditClientDialog = this.modalService.open(CreateMoneyReceiptComponent,
+            AppConsts.modalOptionsCustomSize);
+          this.translate.get('MONEY.RECEIPT.TITLE.EDIT')
+            .subscribe(text => { createOrEditClientDialog.componentInstance.title = text; });
+          createOrEditClientDialog.componentInstance.payment = rp1;
+          createOrEditClientDialog.componentInstance.entryBatternList = rp2;
+          createOrEditClientDialog.componentInstance.LastMoneyReceipt = rp3;
+          createOrEditClientDialog.componentInstance.row = event.row;
+          createOrEditClientDialog.componentInstance.moneyById = rp4;
+          createOrEditClientDialog.result.then(result => {
+            this.refresh();
+            this.selected = [];
+          });
         });
       }
     }

@@ -20,12 +20,21 @@ namespace XBOOK.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllChartAsync()
         {
-            AllChartViewModel response = new AllChartViewModel();
             DashboardRequest request = new DashboardRequest() { interval = "month" };
-            response.chart1 = _iDashboardServiceDapper.getSaleChartDataAsync(request).Result;
-            response.chart2 = _iDashboardServiceDapper.getPurchaseChartDataAsync(request).Result;
-            response.chart3 = _iDashboardServiceDapper.getBalanceChartDataAsync(request).Result;
-            response.chart4 = _iDashboardServiceDapper.getSaleInvoiceReportAsync(request).Result;
+            var chart1 = _iDashboardServiceDapper.getSaleChartDataAsync(request);
+            var chart2 = _iDashboardServiceDapper.getPurchaseChartDataAsync(request);
+            var chart3 = _iDashboardServiceDapper.getBalanceChartDataAsync(request);
+            var chart4 = _iDashboardServiceDapper.getSaleInvoiceReportAsync(request);
+            Task.WaitAll(chart1, chart2, chart3, chart4);
+
+            AllChartViewModel response = new AllChartViewModel() 
+            {
+                chart1 = await chart1,
+                chart2 = await chart2,
+                chart3 = await chart3,
+                chart4 = await chart4,
+            };
+
             return Ok(await Task.FromResult(response));
         }
 

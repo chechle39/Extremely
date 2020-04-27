@@ -15,6 +15,9 @@ export const API_URI = {
   clientById: 'api/client/GetClientById',
   clientAll: 'api/Client/GetAllClientAsync',
   ExportClient: 'api/Client/ExportClient',
+  ExportInvoice: 'api/SaleInvoice/ExportInvoice',
+  ExportBuyInvoice: 'api/BuyInvoices/ExportBuyInvoice',
+
   productGetAll: 'api/Product/GetAllProductAsync',
   searchproductGetAll: 'api/Product/GetProductForSearchAsync',
   paymentCreate: 'api/Payments/CreatePayments',
@@ -70,6 +73,11 @@ export const API_URI = {
   getLastMoneyReceipt: 'api/MoneyReceipt/GetLastMoneyReceipt',
   createMoneyReceipt: 'api/MoneyReceipt/CreateMoneyReceipt',
   getAllEntryURL: 'api/EntryPattern/GetAllEntry',
+  getEntryURL: 'api/EntryPattern/GetEntry',
+  getEntryPatternSearchData: 'api/EntryPattern/getSearchData',
+  getTransactionType: 'api/EntryPattern/getTransactionType',
+  getEntryTypeByTransactionType: 'api/EntryPattern/getEntryTypeByTransactionType',
+  updateEntryPattern: 'api/EntryPattern/updateEntry',
   getAllMoneyReceiptURL: 'api/MoneyReceipt/GetAllMoneyReceipt',
   getAllMoneyReceiptByIDURL: 'api/MoneyReceipt/GetMoneyReceiptById',
 
@@ -148,6 +156,8 @@ export const API_URI = {
   checkAcount: 'api/Account/CheckUserAcount',
   register: 'api/Account/Register',
   getAllUser: 'api/User/GetUser',
+  getAllUserX: 'api/User/GetXXXXXXXXXXXXXX',
+
   getUserById: 'api/User/GetById',
   getRoleById: 'api/Role/GetById',
 

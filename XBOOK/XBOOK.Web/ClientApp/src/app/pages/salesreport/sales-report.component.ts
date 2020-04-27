@@ -82,14 +82,6 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
       money: null,
       productName: null,
     };
-
-
-    this.invoiceService.getInfoProfile().subscribe((r: any) => {
-      this.companyName = r.companyName;
-      this.taxCode = r.taxCode;
-      this.companyAddress = r.address;
-      this.companyCode = r.code;
-    });
     this.salesReportService
       .searchGen(genledSearch)
       .pipe(
@@ -136,8 +128,8 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
         const genledSearch = {
           startDate: result.startDate,
           endDate: result.endDate,
-          client:result.client === '' ? null : result.client ,
-          product:result.product === '' ? null :  result.product,
+          client: result.client === '' ? null : result.client ,
+          product: result.product === '' ? null :  result.product,
         };
         this.exportCSV = result;
         this.salesReportService.searchGen(genledSearch).subscribe(rp => {
@@ -170,12 +162,11 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
 
   }
   getProfiles() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
-      this.companyName = rp.companyName;
-      this.taxCode = rp.taxCode;
-      this.companyAddress = rp.address;
-      this.companyCode = rp.code;
-    });
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
+      this.companyName = Datasession.companyProfile[0].companyName;
+      this.taxCode = Datasession.companyProfile[0].taxCode;
+      this.companyAddress = Datasession.companyProfile[0].address;
+      this.companyCode = Datasession.companyProfile[0].code;
   }
   Print() {
     // tslint:disable-next-line:prefer-for-of
@@ -206,7 +197,7 @@ export class SalesReportComponent extends PagedListingComponentBase<ClientView> 
     let clientName = '';
     clientName = id;
     this.data.sendMessage(clientName);
-    this.router.navigate([`/pages/invoice/${id}/${ActionType.Edit}`]);
+    this.router.navigate([`/pages/invoice/${id}/${ActionType.View }`]);
   }
 
 }

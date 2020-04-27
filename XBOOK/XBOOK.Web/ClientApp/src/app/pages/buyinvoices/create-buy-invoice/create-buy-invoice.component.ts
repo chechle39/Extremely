@@ -42,6 +42,7 @@ import { AddPayment2Component } from './payment/add-payment/add-payment.componen
 import { ngbTypeheadScrollToActiveItem } from '../../../shared/utils/util';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 import { CommonService } from '../../../shared/service/common.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'xb-create-buy-invoice',
@@ -147,6 +148,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     public authenticationService: AuthenticationService,
     private fb: FormBuilder,
     private commonService: CommonService,
+    private translate: TranslateService,
     private modalService: NgbModal) {
     super(injector);
     this.commonService.CheckAssessFunc('Buy invoice');
@@ -594,6 +596,10 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       || this.invoiceForm.controls.contactName.invalid === true
       || this.invoiceForm.controls.dueDate.invalid === true || this.isCheckDate === true) {
       this.message.warning('Form invalid');
+      this.translate.get('INVOICE.CREATE.VALID')
+      .subscribe(text => {
+        this.message.warning(text);
+      });
       return;
     }
     // this.viewMode = true;
@@ -1269,10 +1275,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
     ngbTypeheadScrollToActiveItem(e);
   }
   public onFocus(e: Event): void {
-    e.stopPropagation();
-    setTimeout(() => {
-      const inputEvent: Event = new Event('input');
-      e.target.dispatchEvent(inputEvent);
-    }, 0);
+    if (!this.viewMode) {
+      e.stopPropagation();
+      setTimeout(() => {
+        const inputEvent: Event = new Event('input');
+        e.target.dispatchEvent(inputEvent);
+      }, 0);
+    }
   }
 }

@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Model;
@@ -19,16 +21,21 @@ namespace XBOOK.Web.Controllers
     {
 
         ISalesReportServiceDapper _iSalesReportServiceDapper;
-        public SalesReportController(ISalesReportServiceDapper iSalesReportServiceDapper)
+        private readonly IAuthorizationService _authorizationService;
+        public SalesReportController(ISalesReportServiceDapper iSalesReportServiceDapper, IAuthorizationService authorizationService)
         {
 
             _iSalesReportServiceDapper = iSalesReportServiceDapper;
+            _authorizationService = authorizationService;
         }
 
        
         [HttpPost("[action]")]
         public async Task<IActionResult> GetALLDebitageServiceDapper([FromBody]SalesReportModelSearchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Sales Report", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iSalesReportServiceDapper.GetISalesReportServiceDapperAsync(request);
             return Ok(DebitAgeList);
         }
@@ -36,6 +43,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetDatareportServiceDapper([FromBody]SalesReportModelSearchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Sales Report", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iSalesReportServiceDapper.GetISalesDataReportServiceDapperAsync(request);
             return Ok(DebitAgeList);
         }

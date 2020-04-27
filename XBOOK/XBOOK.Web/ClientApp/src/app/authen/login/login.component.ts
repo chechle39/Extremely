@@ -64,6 +64,7 @@ export class LoginComponent extends AppComponentBase implements OnInit, AfterVie
                 permission: rp.permission,
                 fullName: rp.fullName,
                 companyCode: rp.companyCode,
+                company: rp.companyProfile,
             } as LoginContext;
             if (rp.success === false) {
                 this.message.error(rp.message, 'Wrong login, please login again');

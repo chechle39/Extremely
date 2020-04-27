@@ -48,29 +48,8 @@
           [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]" [columnMode]="ColumnMode.force"
           [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight"  [limit]="20"
           [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)" 
-          (select)='onSelect($event)' [selectAllRowsOnPage]="false" >
+          (select)='onSelect($event)' [selectAllRowsOnPage]="false">
 
-          <!-- <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
-            [resizeable]="false">
-            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-              let-selectFn="selectFn">
-              <div class="custom-control custom-checkbox m-0">
-                <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
-                  (change)="selectFn(!allRowsSelected)" />
-                <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
-              </div>
-
-            </ng-template>
-            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-              let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
-              <div class="custom-control custom-checkbox m-0">
-                <input #cb type="checkbox" class="custom-control-input" id="{{row.id}}" [checked]="isSelected"
-              (change)="onCheckboxChangeFn($event)" />
-              <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
-            </div>
-
-            </ng-template>
-            </ngx-datatable-column> -->
             <ngx-datatable-column name="{{ 'Debit.Age.LIST.CompanyName' | translate }}" prop="clientName">
               <ng-template  let-row="row" ngx-datatable-cell-template>
                 <div (click)="getaccNumber(row.clientName)" >{{row.clientName}}</div>
@@ -79,7 +58,7 @@
             <ngx-datatable-column prop="day0To30" name="0 - 31 {{ 'Debit.Age.LIST.Day' | translate }}"
               [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="text-right">
+                <div class="text-right" (click)="getaccNumber(row.clientName)">
                   <div>
                     <div *ngIf="row.day0To30 !== 0" class="col-more-info">
                       {{row.day0To30  | currency:'VND':''}}
@@ -95,7 +74,7 @@
             <ngx-datatable-column prop="day31To60" name="31 - 60 {{ 'Debit.Age.LIST.Day' | translate }}"
               [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="text-right">
+                <div class="text-right" (click)="getaccNumber(row.clientName)">
                   <div>
                     <div *ngIf="row.day31To60 !== 0" class="col-more-info">
                       {{row.day31To60  | currency:'VND':''}}
@@ -111,7 +90,7 @@
             <ngx-datatable-column prop="day61To90" name="61-90 {{ 'Debit.Age.LIST.Day' | translate }}"
               [headerClass]="'text-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="text-right">
+                <div class="text-right"  (click)="getaccNumber(row.clientName)">
                   <div>
                     <div *ngIf="row.day61To90 !== 0" class="col-more-info">
                       {{row.day61To90  | currency:'VND':''}}
@@ -125,9 +104,9 @@
             </ngx-datatable-column>
 
             <ngx-datatable-column prop="day90More" name="90+ {{ 'Debit.Age.LIST.Day' | translate }}"
-              [headerClass]="'col-right'">
+              [headerClass]="'col-right'" >
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-right" style="padding-right: 0;">
+                <div class="col-right" (click)="getaccNumber(row.clientName)" style="padding-right: 0;">
                   <!-- {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}} -->
                   <div>
                     <div *ngIf="row.day90More !== 0" class="col-more-info">
@@ -142,9 +121,9 @@
             </ngx-datatable-column>
 
            <ngx-datatable-column prop="subTotal" name="{{ 'Debit.Age.LIST.Total' | translate }}"
-              [headerClass]="'col-right'">
+              [headerClass]="'col-right'" >
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="text-right">
+                <div class="text-right" (click)="getaccNumber(row.clientName)">
                   <div>
                     <div *ngIf="row.subTotal !== 0" class="col-more-info">
                       {{row.subTotal  | currency:'VND':''}}

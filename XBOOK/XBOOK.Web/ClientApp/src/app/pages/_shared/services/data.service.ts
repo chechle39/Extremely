@@ -143,4 +143,17 @@ export class DataService {
   getMessagereload(): Observable<any> {
     return this.messageSource.asObservable();
   }
+
+  changeMessageGenneral(message: string) {
+    this.messageSource.next(message);
+  }
+  sendMessageGenneral(message: any) {
+    this.data = message;
+    this.messageSource.next({ data: message });
+    this.messageSource.asObservable();
+  }
+
+  getMessageGenneral(): Observable<any> {
+    return this.messageSource.asObservable();
+  }
 }

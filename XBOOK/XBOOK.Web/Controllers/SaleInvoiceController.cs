@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
@@ -202,7 +203,14 @@ namespace XBOOK.Web.Controllers
 
             return Ok();
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ExportInvoice()
+        {
+            var data = await _invoiceServiceDapper.ExportInvoiceAsync();
 
+            Encoding latinEncoding = Encoding.GetEncoding("utf-8");
+            return File(data, "text/csv;charset=utf-8");
+        }
         [HttpPost("[action]")]
         public IActionResult Download(ResponseFileName request)
         {

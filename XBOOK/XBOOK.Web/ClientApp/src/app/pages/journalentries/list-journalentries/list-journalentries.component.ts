@@ -23,9 +23,9 @@ import { JournalEntryService } from '../../_shared/services/journal-entry.servic
 import { JournalEntryViewModel } from '../../_shared/models/journalentry/journalentry.model';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 import { CommonService } from '../../../shared/service/common.service';
-import { CreateMasterComponent } from '../create/create-masterparam.component';
+import { CreateJournalComponent } from '../create/create-journalentries.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EditMasterComponent } from '../update/update-masterparam.component';
+import { EditJournalComponent } from '../update/update-journalentries.component';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -238,10 +238,12 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
     let createOrEditClientDialog;
     if (id === undefined || id <= 0) {
       this.modalService.dismissAll();
-      createOrEditClientDialog = this.modalService.open(CreateMasterComponent, AppConsts.modalOptionsLargerSize);
+      // tslint:disable-next-line:max-line-length
+      createOrEditClientDialog = this.modalService.open(CreateJournalComponent, { windowClass: 'my-class', size: '500', centered: true });
     } else {
       this.modalService.dismissAll();
-     createOrEditClientDialog = this.modalService.open(EditMasterComponent, AppConsts.modalOptionsLargerSize);
+     // tslint:disable-next-line:max-line-length
+     createOrEditClientDialog = this.modalService.open(EditJournalComponent, { windowClass: 'my-class', size: '500', centered: true });
       createOrEditClientDialog.componentInstance.id = id;
     }
     createOrEditClientDialog.result.then(result => {
@@ -297,17 +299,14 @@ export class ListJournalEntriesComponent extends PagedListingComponentBase<Invoi
         isIssueDate: this.ischeck,
       };
       this.getJournalEntry(requestList);
-      // alert(JSON.stringify(searchStr));
     }
   }
   clearFilter(formFilter: FormGroup) {
     this.isSubmitted = false;
     this.dateFilters = this.keyword = '';
-    //  formFilter.resetForm();
     this.dateFilters = '';
   }
   onActivate(event) {
-    // If you are using (activated) event, you will get event, row, rowElement, type
     if (event.type === 'click') {
       if (event.cellIndex > 0 && this.isCheckBackTo === false) {
         this.redirectToEditInvoice(event.row.id);

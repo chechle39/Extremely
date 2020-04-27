@@ -39,6 +39,9 @@ export class PagesComponent implements OnInit {
       if (rp.item.link !== '/pages/Cashbalance') {
         this.data.sendMessageMoneyFund('');
       }
+      if (rp.item.link !== 'pages/generalledger') {
+        this.data.sendMessageGenneral('');
+      }
     });
   }
   ngOnInit(): void {
@@ -82,7 +85,7 @@ export class PagesComponent implements OnInit {
   }
 
   iconFactory(icon: string) {
-    if (icon == null){
+    if (icon == null) {
       return null;
     }
     if (icon.match(/^fa.*$/)) {

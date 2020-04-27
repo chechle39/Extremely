@@ -23,6 +23,7 @@ class PagedProductsRequestDto extends PagedRequestDto {
 })
 export class ProductsComponent extends PagedListingComponentBase<ProductView> {
   productViews: any;
+  productViewsExport: any = [];
   categories: any;
   loadingIndicator = true;
   keywords = '';
@@ -81,7 +82,22 @@ export class ProductsComponent extends PagedListingComponentBase<ProductView> {
       });
   }
   ExportProduct() {
-    this.productService.ExportProduct(this.productViews);
+    if (this.productViews.length > 0) {
+      this.productViewsExport = [];
+      for (let i = 0; i < this.productViews.length ; i++) {
+        const data = {
+          productID : this.productViews[i].productID === null ? '' : this.productViews[i].productID ,
+          // tslint:disable-next-line:max-line-length
+          productName : this.productViews[i].productName === null ? '' : this.productViews[i].productName.replace(/,/g, ';'),
+          description :  this.productViews[i].description === null ? '' : this.productViews[i].description.replace(/,/g, ';'),
+          categoryID : this.productViews[i].categoryID,
+          unit: this.productViews[i].unit,
+          unitPrice : this.productViews[i].unitPrice,
+        };
+        this.productViewsExport.push(data);
+      }
+      this.productService.ExportProduct(this.productViewsExport);
+    }
   }
   public showPreview(files): void {
     if (files.length === 0) {

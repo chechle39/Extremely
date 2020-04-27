@@ -137,11 +137,10 @@ export class GenledComponent extends PagedListingComponentBase<ClientView> {
 
   }
   getProfiles() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
-      this.companyName = rp.companyName;
-      this.companyAddress = rp.address;
-      this.companyCode = rp.code;
-    });
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
+      this.companyName = Datasession.companyProfile[0].companyName;
+      this.companyAddress = Datasession.companyProfile[0].address;
+      this.companyCode = Datasession.companyProfile[0].code;
   }
   Print() {
     // tslint:disable-next-line:prefer-for-of

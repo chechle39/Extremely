@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PagedListingComponentBase, PagedRequestDto } from '../../../coreapp/paged-listing-component-base';
 import { InvoiceView } from '../../_shared/models/invoice/invoice-view.model';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { DatatableSorting } from '../../../shared/model/datatable-sorting.model';
 import { InvoiceService } from '../../_shared/services/invoice.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -15,6 +15,9 @@ import { AppConsts } from '../../../coreapp/app.consts';
 import { CreateMoneyReceiptComponent } from '../../moneyreceipt/create-money-receipt/create-money-receipt.component';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
 import { CommonService } from '../../../shared/service/common.service';
+import { TranslateService } from '@ngx-translate/core';
+import { MoneyReceiptService } from '../../_shared/services/money-receipt.service';
+import { MasterParamService } from '../../_shared/services/masterparam.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -57,20 +60,26 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   startDate: string;
   endDate: string;
   firstDate: any;
-  requesSearchtList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; };
+  // tslint:disable-next-line:max-line-length
+  requesSearchtList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; getDebtOnly: boolean, };
   subscription: Subscription;
   isCheckOpen: boolean;
   isCheckFillter: boolean = false;
   constructor(
+    private translate: TranslateService,
     private data: DataService,
     injector: Injector,
     private invoiceService: InvoiceService,
     private router: Router,
     private route: ActivatedRoute,
+    private moneyReceiptService: MoneyReceiptService,
+    private masterParamService: MasterParamService,
     private fb: FormBuilder,
     public authenticationService: AuthenticationService,
     private commonService: CommonService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private translateService: TranslateService,
+  ) {
     super(injector);
     this.commonService.CheckAssessFunc('Invoice');
     this.searchForm = this.createForm();
@@ -133,6 +142,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         startDate: '',
         endDate: '',
         isIssueDate: true,
+        getDebtOnly: false,
       };
       this.invoiceOfClient(this.requesSearchtList);
       this.data.sendApplySearchIv(this.requesSearchtList);
@@ -143,6 +153,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
           startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
           endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
           isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+          getDebtOnly: this.requesSearchtList.getDebtOnly,
         };
         this.invoiceOfClient(requestData);
         this.data.sendApplySearchIv(requestData);
@@ -162,6 +173,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
             startDate: params.startDate,
             endDate: params.endDate,
             isIssueDate: false,
+            getDebtOnly: false,
           };
           this.invoiceService.getAll(requestList).pipe(
           ).subscribe((i: any) => {
@@ -183,6 +195,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
             startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
             endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
             isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+            getDebtOnly: this.requesSearchtList.getDebtOnly === undefined ? false : this.requesSearchtList.getDebtOnly,
           };
           this.invoiceService.getAll(rs).pipe(
           ).subscribe((i: any) => {
@@ -198,6 +211,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
               startDate: '',
               endDate: '',
               isIssueDate: true,
+              getDebtOnly: false,
             };
             this.getAllInv(requestList);
           }
@@ -208,6 +222,8 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
               startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
               endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
               isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+              // tslint:disable-next-line:max-line-length
+              getDebtOnly: this.requesSearchtList.getDebtOnly === undefined ? false : this.requesSearchtList.getDebtOnly,
             };
             this.getAllInv(requestList);
           }
@@ -239,6 +255,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         startDate: this.startDate,
         endDate: this.endDate,
         isIssueDate: this.ischeck,
+        getDebtOnly: false,
       };
       this.invoiceService.getAll(rs).pipe(
       ).subscribe((i: any) => {
@@ -261,7 +278,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
       return item.amountPaid;
     });
   }
- 
+
   coppy() {
     if (this.selected.length === 0) {
       this.message.warning('Please select a item from the list?');
@@ -282,9 +299,13 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
   }
   calculateDuceDate(issueDate: Date, duceDate: Date): string {
     if (!issueDate || !duceDate) { return ''; }
-    const duration = moment.duration(moment(duceDate).diff(moment(issueDate)));
-    const numberDuceDate = duration.asDays();
-    return `Duce in ${numberDuceDate} days`;
+    const duration = moment(duceDate).diff(moment(), 'days');
+
+    if (duration >= 0) {
+      return this.translateService.instant('INVOICE.GRID.ROW.DUCE', { days: duration });
+    } else {
+      return this.translateService.instant('INVOICE.GRID.ROW.OVERDUCE', { days: Math.abs(duration) });
+    }
   }
   plusRow(subTotal: any, vat: any, discount: any) {
     const plus = (subTotal + vat) - discount;
@@ -369,8 +390,10 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     }
     const data = [];
     const invoiceId = [];
+    let numberInvoice = 'Hóa đơn số: ';
     for (let i = 0; i < this.selected.length; i++) {
       const amountDue = this.selected[i].amount - this.selected[i].amountPaid;
+      numberInvoice += this.selected[i].invoiceNumber + ',' + ' ';
       if (amountDue > 0) {
         data.push(amountDue);
         const invoice = {
@@ -384,31 +407,43 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
     this.sum = _.sumBy(data, item => {
       return item;
     });
-    const dialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
+    forkJoin(
+      this.masterParamService.GetMasTerByPayType(),
+      this.masterParamService.GetMasTerByMoneyReceipt(),
+      this.moneyReceiptService.getLastMoney(),
+    ).subscribe(([rp1, rp2, rp3]) => {
+      const dialog = this.modalService.open(CreateMoneyReceiptComponent, AppConsts.modalOptionsCustomSize);
+      this.translate.get('PAYMENT.TITLE.INVOICE')
+        .subscribe(text => { dialog.componentInstance.title = text; });
+        dialog.componentInstance.payment = rp1;
+        dialog.componentInstance.entryBatternList = rp2;
+      dialog.componentInstance.LastMoneyReceipt = rp3;
+      dialog.componentInstance.outstandingAmount = this.sum;
+      dialog.componentInstance.note = numberInvoice.substring(0, numberInvoice.length - 2);
+      dialog.componentInstance.invoice = invoiceId;
+      dialog.componentInstance.clientId = this.selected[0].clientID;
+      dialog.componentInstance.clientName = this.selected[0].clientName;
+      dialog.componentInstance.contactName = this.selected[0].contactName;
+      dialog.componentInstance.bankAccount = this.selected[0].bankAccount;
+      dialog.result.then(result => {
+        if (result) {
 
-    dialog.componentInstance.outstandingAmount = this.sum;
-    dialog.componentInstance.invoice = invoiceId;
-    dialog.componentInstance.clientId = this.selected[0].clientID;
-    dialog.componentInstance.clientName = this.selected[0].clientName;
-    dialog.componentInstance.contactName = this.selected[0].contactName;
-    dialog.componentInstance.bankAccount = this.selected[0].bankAccount;
-    dialog.result.then(result => {
-      if (result) {
-
-      }
-      this.refresh();
-      this.selected = [];
+        }
+        this.refresh();
+        this.selected = [];
+      });
     });
+
   }
   public getOutstanding(): number {
-    return _.sumBy(this.invoiceViews, item => {
-      return 125.4 * 1000000;
-    });
+    return this.invoiceViews
+      ? this.invoiceViews.reduce((sum: number, invoice: any) => sum + (invoice.amount - invoice.amountPaid), 0)
+      : 0;
   }
   public getOverduce(): number {
-    return _.sumBy(this.invoiceViews, item => {
-      return 12.5 * 1000000;
-    });
+    return this.invoiceViews
+      ? this.invoiceViews.map((item: any) => item.amount).reduce((sum, amount) => sum + amount, 0)
+      : 0;
   }
   public getInDraft(): number {
     return _.sumBy(this.invoiceViews, item => {
@@ -445,6 +480,7 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
         startDate: searchStr.from,
         endDate: searchStr.to,
         isIssueDate: this.ischeck,
+        getDebtOnly: false,
       };
       this.data.sendApplySearchIv(requestList);
 
@@ -477,5 +513,9 @@ export class ListInvoiceComponent extends PagedListingComponentBase<InvoiceView>
 
   onSort(e: any) {
 
+  }
+
+  exportInvoive() {
+    this.invoiceService.ExportInvoice();
   }
 }

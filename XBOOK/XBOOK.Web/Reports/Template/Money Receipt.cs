@@ -4,8 +4,10 @@ using System.IO;
 using System.Security.Claims;
 using DevExpress.XtraReports.UI;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using XBOOK.Data.ViewModels;
+using XBOOK.Service.Service;
 
 namespace XBOOK.Web.Reports.Template
 {
@@ -25,7 +27,6 @@ namespace XBOOK.Web.Reports.Template
     {
         public MoneyReceiptViewModelPrint Data()
         {
-
             var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
             var itemss = new MoneyReceiptViewModelPrint();
             var folderName = Path.Combine("Reports", "Data");

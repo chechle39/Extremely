@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
@@ -23,6 +23,7 @@ import {
   NbIconModule,
   NbAlertModule } from '@nebular/theme';
 import { MasterParamService } from '../_shared/services/masterparam.service';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MasterParamService } from '../_shared/services/masterparam.service';
     NgxCleaveDirectiveModule,
     DigitOnlyModule,
   ],
-  providers: [SupplierService, MasterParamService, InvoiceService, PaymentReceiptService],
+  providers: [SupplierService, MasterParamService, InvoiceService, PaymentReceiptService,
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}],
 })
 export class PaymentReceiptModule { }

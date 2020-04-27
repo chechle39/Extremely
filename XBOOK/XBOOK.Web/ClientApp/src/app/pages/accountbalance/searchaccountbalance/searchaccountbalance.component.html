@@ -1,0 +1,73 @@
+<div></div>
+<form class="form" name="form" novalidate autocomplete="off" [formGroup]="genLedForm">
+    <div class=" modal-header">
+        <div class="row"></div>
+        <div class="col-12">
+            <h5 style="margin-left: -15px;" class="modal-title">{{ 'SEARCH.TITLE' | translate }}</h5>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12">
+                <span class="modal-title font-weight-300">{{ 'SEARCH.AmountofTime' | translate }}</span>
+            </div>
+            <div class="form-group col-12 mb-2">
+                <select (change)="onChange($event)" id="genLedMethods"  class="form-control datapicker" formControlName="genLedMethods"style="position: relative;margin-bottom: 20px;">
+                    <option *ngFor="let method of genLedMethods" [ngValue]="method.GenLedId">
+                        {{ method.publicGenLedType }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row" *ngIf = "case6 === 6" style="margin-top: -20px;position: relative;">
+            <div class="col-12">
+                <span class="modal-title font-weight-300">{{ 'SEARCH.SelectofTime' | translate }}</span>
+            </div>
+            <div class="form-group col-6 mb-2">
+                <div class=" input-group">
+                    <input formControlName="fromDate" required  class="form-control datapicker" name="dp" placeholder="dd/mm/yyyy"
+                     ngbDatepicker id="fromDate"  #d3="ngbDatepicker">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="d3.toggle()" type="button"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-6 mb-2">
+                <div class="input-group">
+                    <input formControlName="toDate" class="form-control datapicker" required  placeholder="dd/mm/yyyy"
+                        name="toDate" ngbDatepicker #d2="ngbDatepicker" id="toDate">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="d2.toggle()" type="button"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="position: relative;margin-top: -19px;">
+       
+             
+            <div class="form-group col-12 mb-2" style="margin-top: -23px;">
+         
+            </div>
+        </div>
+        <div class="row" style="margin-top: 0px;">
+            <div class="col-12">
+                <span class="modal-title  font-weight-300">{{ 'SEARCH.Currency' | translate }}</span>
+            </div>
+            <div class="form-group col-12 mb-2">
+                <select id="currencyMethod" class="form-control" formControlName="currencyMethod">
+                    <option [ngValue]="null">Choose a currency method</option>
+                    <option *ngFor="let method of currencyMethod" [ngValue]="method.CurrencyId">
+                        {{ method.CurrencyType }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <button type="button" (click)="close(false)" class="btn btn-raised btn-secondary mr-1"> {{ 'COMMON.BUTTON.CANCEL' | translate }}</button>
+        <button type="submit" (click)="close(true)" (change)="onChange($event)" [disabled]="genLedForm.invalid" class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.APPLY' | translate }}</button>
+    </div>
+</form>

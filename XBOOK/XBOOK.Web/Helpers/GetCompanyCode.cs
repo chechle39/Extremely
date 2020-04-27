@@ -1,15 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using XBOOK.Data.EntitiesDBCommon;
 using XBOOK.Data.Model;
 
 namespace XBOOK.Web.Helpers
 {
     public class GetCompanyCode
-    {
+    { 
         public static CompanyModel GetCode()
         {
             var folderName = Path.Combine("Reports", "Company");
@@ -23,7 +25,6 @@ namespace XBOOK.Web.Helpers
                 return items;
             }
         }
-
         public static bool SaveDataJson(string code)
         {
             string data = "";

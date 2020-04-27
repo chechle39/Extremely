@@ -4,18 +4,20 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { PagedRequestDto, PagedListingComponentBase } from '../../../coreapp/paged-listing-component-base';
 import { BuyInvoiceView } from '../../_shared/models/invoice/buy-invoice-view.model';
 import { DatatableSorting } from '../../../shared/model/datatable-sorting.model';
 import { DataService } from '../../_shared/services/data.service';
-import { InvoiceService } from '../../_shared/services/invoice.service';
 import { BuyInvoiceService } from '../../_shared/services/buy-invoice.service';
 import { ActionType, SearchType } from '../../../coreapp/app.enums';
 import { CreatePaymentReceiptComponent } from '../../paymentreceipt/payment-receipt/payment-receipt.component';
 import { AppConsts } from '../../../coreapp/app.consts';
 import { CommonService } from '../../../shared/service/common.service';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
+import { TranslateService } from '@ngx-translate/core';
+import { PaymentReceiptService } from '../../_shared/services/payment-receipt.service';
+import { MasterParamService } from '../../_shared/services/masterparam.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -60,19 +62,24 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   subscription: Subscription;
   isCheckOpen: boolean;
   isCheckFillter: boolean = false;
-  requesSearchtList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; };
+  // tslint:disable-next-line:max-line-length
+  requesSearchtList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; getDebtOnly: boolean; };
 
   constructor(
+    private translate: TranslateService,
     private data: DataService,
     injector: Injector,
-  //  private invoiceService: InvoiceService,
     private buyInvoiceService: BuyInvoiceService,
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     public authenticationService: AuthenticationService,
     private commonService: CommonService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private translateService: TranslateService,
+    private paymentReceiptService: PaymentReceiptService,
+    private masterParamService: MasterParamService,
+  ) {
     super(injector);
     this.commonService.CheckAssessFunc('Buy invoice');
     this.searchForm = this.createForm();
@@ -121,13 +128,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   ): void {
     this.loadingIndicator = true;
     request.keyword = this.searchString;
-    // Thang code
     this.getBuyInVByRequestSearch();
-    // if (this.router.url !== '/pages/buyinvoice') {
-    //   this.buyinvoiceOfChart();
-    // } else{
-    //   this.getBuyInVByRequestSearch();
-    // }
   }
 
   private getBuyInVByRequestSearch() {
@@ -137,6 +138,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         startDate: '',
         endDate: '',
         isIssueDate: true,
+        getDebtOnly: false,
       };
       this.buyInvoiceOfClient(this.requesSearchtList);
       this.data.sendApplySearchBuyIv(this.requesSearchtList);
@@ -147,6 +149,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
           startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
           endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
           isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+          getDebtOnly: this.requesSearchtList.getDebtOnly === undefined ? false : this.requesSearchtList.getDebtOnly,
         };
         this.buyInvoiceOfClient(requestData);
         this.data.sendApplySearchBuyIv(requestData);
@@ -156,7 +159,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   buyinvoiceOfChart() {
     if (this.route !== undefined) {
       this.route.queryParams
-      .subscribe(params => {
+        .subscribe(params => {
           const requestList = {
             keyword: '',
             startDate: params.startDate,
@@ -202,6 +205,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
               startDate: '',
               endDate: '',
               isIssueDate: true,
+              getDebtOnly: false,
             };
             this.getAllBuyInv(requestList);
           }
@@ -212,6 +216,8 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
               startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
               endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
               isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+              // tslint:disable-next-line:max-line-length
+              getDebtOnly: this.requesSearchtList.getDebtOnly === undefined ? false : this.requesSearchtList.getDebtOnly,
             };
             this.getAllBuyInv(requestList);
           }
@@ -225,7 +231,8 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   }
 
 
-  private getAllBuyInv(requestList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; }) {
+  // tslint:disable-next-line:max-line-length
+  private getAllBuyInv(requestList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; getDebtOnly: boolean; }) {
     this.buyInvoiceService.getAllBuyInvoiceList(requestList).pipe().subscribe((i: any) => {
       this.loadingIndicator = false;
       this.buyinvoiceViews = i;
@@ -242,6 +249,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         startDate: this.startDate !== undefined ? this.startDate : this.requesSearchtList.startDate,
         endDate: this.endDate !== undefined ? this.endDate : this.requesSearchtList.endDate,
         isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
+        getDebtOnly: this.requesSearchtList.getDebtOnly === undefined ? false : this.requesSearchtList.getDebtOnly,
       };
       this.buyInvoiceService.getAllBuyInvoiceList(rs).pipe(
       ).subscribe((i: any) => {
@@ -276,7 +284,6 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     const requestDl = [];
     const file = [];
     this.selected.forEach(element => {
-      // this.deleteInvoice(element.invoiceId);
       const id = element.invoiceId;
       const deleted = {
         invoice: element.invoiceNumber,
@@ -317,9 +324,13 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   }
   calculateDuceDate(issueDate: Date, duceDate: Date): string {
     if (!issueDate || !duceDate) { return ''; }
-    const duration = moment.duration(moment(duceDate).diff(moment(issueDate)));
-    const numberDuceDate = duration.asDays();
-    return `Duce in ${numberDuceDate} days`;
+    const duration = moment(duceDate).diff(moment(), 'days');
+
+    if (duration >= 0) {
+      return this.translateService.instant('BUY.INVOICE.GRID.ROW.DUCE', { days: duration });
+    } else {
+      return this.translateService.instant('BUY.INVOICE.GRID.ROW.OVERDUCE', { days: Math.abs(duration) });
+    }
   }
   plusRow(subTotal: any, vat: any, discount: any) {
     const plus = (subTotal + vat) - discount;
@@ -359,7 +370,6 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
 
   getInFoFile(request) {
     this.buyInvoiceService.getInfofile(request).subscribe(rp => {
-      // tslint:disable-next-line:prefer-for-of
       for (let index = 0; index < rp.length; index++) {
         const rs = {
           fileName: rp[index].fileName,
@@ -383,9 +393,10 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     }
     const data = [];
     const invoiceId = [];
-    // tslint:disable-next-line:prefer-for-of
+    let numberInvoice = 'Hóa đơn số: ';
     for (let i = 0; i < this.selected.length; i++) {
       const amountDue = this.selected[i].amount - this.selected[i].amountPaid;
+      numberInvoice += this.selected[i].invoiceNumber + ',' + ' ';
       if (amountDue > 0) {
         data.push(amountDue);
         const invoice = {
@@ -399,32 +410,43 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
     this.sum = _.sumBy(data, item => {
       return item;
     });
-    const dialog = this.modalService.open(CreatePaymentReceiptComponent, AppConsts.modalOptionsCustomSize);
+    forkJoin(
+      this.masterParamService.GetMasTerByPayType(),
+      this.masterParamService.GetMasTerByPaymentReceipt(),
+      this.paymentReceiptService.getLastPayment(),
+    ).subscribe(([rp1, rp2, rp3]) => {
 
-    dialog.componentInstance.outstandingAmount = this.sum;
-    dialog.componentInstance.invoice = invoiceId;
-    dialog.componentInstance.supplierID = this.selected[0].supplierID;
-    dialog.componentInstance.supplierName = this.selected[0].supplierName;
-    dialog.componentInstance.contactName = this.selected[0].contactName;
-    dialog.componentInstance.bankAccount = this.selected[0].bankAccount;
-    // dialog.componentInstance.invoiceId = this.selected[0].invoiceId;
-    dialog.result.then(result => {
-      if (result) {
+      const dialog = this.modalService.open(CreatePaymentReceiptComponent, AppConsts.modalOptionsCustomSize);
+      this.translate.get('PAYMENT.TITLE.BUY')
+        .subscribe(text => { dialog.componentInstance.title = text; });
+      dialog.componentInstance.outstandingAmount = this.sum;
+      dialog.componentInstance.invoice = invoiceId;
+      dialog.componentInstance.note = numberInvoice.substring(0, numberInvoice.length - 2);
+      dialog.componentInstance.supplierID = this.selected[0].supplierID;
+      dialog.componentInstance.supplierName = this.selected[0].supplierName;
+      dialog.componentInstance.contactName = this.selected[0].contactName;
+      dialog.componentInstance.bankAccount = this.selected[0].bankAccount;
+      dialog.componentInstance.payment = rp1;
+      dialog.componentInstance.entryBatternList = rp2;
+      dialog.componentInstance.LastMoneyReceipt = rp3;
+      dialog.result.then(result => {
+        if (result) {
 
-      }
-      this.refresh();
-      this.selected = [];
+        }
+        this.refresh();
+        this.selected = [];
+      });
     });
   }
   public getOutstanding(): number {
-    return _.sumBy(this.buyinvoiceViews, item => {
-      return 125.4 * 1000000;
-    });
+    return this.buyinvoiceViews
+      ? this.buyinvoiceViews.reduce((sum: number, invoice: any) => sum + (invoice.amount - invoice.amountPaid), 0)
+      : 0;
   }
   public getOverduce(): number {
-    return _.sumBy(this.buyinvoiceViews, item => {
-      return 12.5 * 1000000;
-    });
+    return this.buyinvoiceViews
+      ? this.buyinvoiceViews.map((item: any) => item.amount).reduce((sum, amount) => sum + amount, 0)
+      : 0;
   }
   public getInDraft(): number {
     return _.sumBy(this.buyinvoiceViews, item => {
@@ -461,6 +483,7 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
         startDate: searchStr.from,
         endDate: searchStr.to,
         isIssueDate: this.ischeck,
+        getDebtOnly: false,
       };
       this.data.sendApplySearchBuyIv(requestList);
       this.getBuyInvoice(requestList);
@@ -469,7 +492,6 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
   clearFilter(formFilter: FormGroup) {
     this.isSubmitted = false;
     this.dateFilters = this.keyword = '';
-    //  formFilter.resetForm();
     this.dateFilters = '';
   }
   onActivate(event) {
@@ -503,5 +525,9 @@ export class ListBuyInvoiceComponent extends PagedListingComponentBase<BuyInvoic
       return;
     }
     this.router.navigate([`pages/buyinvoice/${this.selected[0].invoiceId}/${ActionType.Coppy}`]);
+  }
+
+  exportBuyInvoive() {
+    this.buyInvoiceService.ExportBuyInvoice();
   }
 }

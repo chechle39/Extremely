@@ -10,6 +10,18 @@ import { switchMap, debounceTime } from 'rxjs/operators';
 export class InvoiceService extends BaseService {
   url = API_URI.invoice;
   fileName: any;
+  ExportInvoice() {
+    const data = this.postcsv<any[]>(`${API_URI.ExportInvoice}`, null).subscribe(rs => {
+      this.downLoadFileInvoice(rs, 'text/csv;charset=utf-8');
+    });
+    return data;
+  }
+  downLoadFileInvoice(data: any, type: string) {
+    // tslint:disable-next-line:object-literal-shorthand
+    const blob = new Blob(['\ufeff' + data], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    saveAs(blob, 'SaleInvoice.csv');
+  }
   getAll(request: any): Observable<InvoiceView> {
     return this.post<InvoiceView>(`${this.url}`, request);
   }
@@ -87,4 +99,6 @@ export class InvoiceService extends BaseService {
     const url = window.URL.createObjectURL(blob);
     saveAs(blob);
   }
+
+
 }

@@ -1,5 +1,5 @@
 <nb-card style="min-height: 70vh;">
-  <nb-card-header>
+  <nb-card-header class="layout__container--medium">
     <div class="row">
       <div class="col-6">
         <span class="card__title">{{'MONEY.RECEIPT.TITLE' | translate}}</span>
@@ -9,7 +9,7 @@
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body class="layout__container--medium">
       <div class="row">
         <div class="col-lg-4 col-md-4 col-6" style="padding-top: 6px;">
           <div class="label-blue">{{'PAYMENT.RECEIPT.ALL.HEADER' | translate}}<span *ngIf="selected.length > 0">> {{'COMMON.SELECTED' | translate}} ({{selected.length}})</span>
@@ -20,7 +20,7 @@
             <button class="btn btn-flat mr-1 card__button-bulk-action pr-1" id="bulkActions" ngbDropdownToggle>{{'COMMON.ACTION' | translate}}</button>
             <div ngbDropdownMenu aria-labelledby="bulkActions">
               <button class="dropdown-item" (click)="coppy()"><i class="fa fa-copy mr-1 icon-dollar"></i>{{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
-              <button class="dropdown-item"><i style="margin-left: 2px;opacity: 0.5;" class="fa mr-1 ft-printer"></i> {{'COMMON.ACTION.PRINT' | translate}}</button>
+              <button class="dropdown-item"><i style="margin-left: 2px;opacity: 0.5;" class="fa mr-1 ft-printer"></i> {{'MONEY.RECIPT.ACTION.PRINT' | translate}}</button>
               <button [disabled]="authenticationService.hasPermission('Money Receipt','delete')" (click)="deleteAll()" class="dropdown-item" ><i class="icon-delete"></i>{{'MONEY.RECEIPT.DELETE' | translate}}</button>
             </div>
           </div>

@@ -63,8 +63,8 @@
   }
 
   @include media-breakpoint-down(is) {
-    nb-select {
-      display: none;
-    }
+    // nb-select {
+    //   display: none;
+    // }
   }
 }

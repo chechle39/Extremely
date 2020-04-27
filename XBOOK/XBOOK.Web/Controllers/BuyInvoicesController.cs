@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
@@ -20,16 +22,27 @@ namespace XBOOK.Web.Controllers
         private readonly IBuyInvoiceService _buyInvoiceService;
         ICompanyProfileService _iCompanyProfileService;
         private readonly IAuthorizationService _authorizationService;
-
+        private IMemoryCache _cache;
         public BuyInvoicesController(IBuyInvoiceServiceDapper buyInvoiceServiceDapper, 
             IBuyInvoiceService buyInvoiceService, 
             ICompanyProfileService iCompanyProfileService,
+             IMemoryCache cache,
             IAuthorizationService authorizationService)
         {
             _buyInvoiceServiceDapper = buyInvoiceServiceDapper;
             _buyInvoiceService = buyInvoiceService;
             _iCompanyProfileService = iCompanyProfileService;
             _authorizationService = authorizationService;
+            _cache = cache;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ExportBuyInvoice()
+        {
+            var data = await _buyInvoiceServiceDapper.ExportBuyInvoiceAsync();
+
+            Encoding latinEncoding = Encoding.GetEncoding("utf-8");
+            return File(data, "text/csv;charset=utf-8");
         }
 
         [HttpPost("[action]")]

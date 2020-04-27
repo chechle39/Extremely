@@ -14,16 +14,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Reports\**" />
     <Compile Remove="wwwroot\uploaded\**" />
+    <Content Remove="Reports\**" />
     <Content Remove="wwwroot\uploaded\**" />
+    <EmbeddedResource Remove="Reports\**" />
     <EmbeddedResource Remove="wwwroot\uploaded\**" />
+    <None Remove="Reports\**" />
     <None Remove="wwwroot\uploaded\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Reports\Template\AccountDetailReport.repx" />
-    <None Remove="Reports\Template\InvoiceReport.repx" />
-    <None Remove="Reports\Template\PaymentReceiptReport.repx" />
+    <Compile Remove="Controllers\ReportDesignerController.cs" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -49,7 +51,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XBOOK.Dapper\XBOOK.Dapper.csproj" />
-    <ProjectReference Include="..\XBOOK.Report\XBOOK.Report.csproj" />
     <ProjectReference Include="..\XBOOK.Service\XBOOK.Service.csproj" />
   </ItemGroup>
 

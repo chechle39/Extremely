@@ -17,7 +17,7 @@ import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'xb-searchaccount-detail',
   templateUrl: './searchaccount-detail.component.html',
-  styleUrls: ['./searchaccount-detail.component.scss']
+  styleUrls: ['./searchaccount-detail.component.scss'],
 })
 export class SearchAccountDetailComponent extends AppComponentBase implements OnInit {
   cars: any[];
@@ -60,7 +60,7 @@ export class SearchAccountDetailComponent extends AppComponentBase implements On
     public accountChartService: AccountChartService,
     public fb: FormBuilder,
     injector: Injector,
-    public activeModal: NgbActiveModal, ) {
+    public activeModal: NgbActiveModal ) {
     super(injector);
     this.genLedForm = this.createGenLedFormGroup();
   }
@@ -69,7 +69,7 @@ export class SearchAccountDetailComponent extends AppComponentBase implements On
 
     const request = {
       productKeyword: null,
-      isGrid: false
+      isGrid: false,
     };
     const requestClient = {
       productKeyword: null,
@@ -108,6 +108,7 @@ export class SearchAccountDetailComponent extends AppComponentBase implements On
 
   private tranFormsDate(today: string) {
     const issueDateSplit = today.split('/');
+    // tslint:disable-next-line:max-line-length
     const issueDatePicker = { year: Number(issueDateSplit[2]), month: Number(issueDateSplit[1]), day: Number(issueDateSplit[0]) };
     return issueDatePicker;
   }
@@ -131,19 +132,19 @@ export class SearchAccountDetailComponent extends AppComponentBase implements On
           fromDate: this.firstDate,
           toDate: this.endDate,
         });
-      }  
+      }
       let clientName = '';
-      if(this.genLedForm.value.acountNumberMethod1!==null){
+      if (this.genLedForm.value.acountNumberMethod1 !== null) {
         for (let i = 0; i < this.genLedForm.value.acountNumberMethod1.length; i++) {
           clientName += this.genLedForm.value.acountNumberMethod1[i] + ';';
         }
       }
-      const genledSearch = {        
+      const genledSearch = {
         startDate: this.firstDate === undefined ? null : this.firstDate,
         endDate: this.endDate === undefined ? null : this.endDate,
         client: clientName,
         acountNumberMethod: this.genLedForm.value.acountNumberMethod,
-        case: this.genLedForm.value.genLedMethods
+        case: this.genLedForm.value.genLedMethods,
       };
 
       this.activeModal.close(genledSearch);

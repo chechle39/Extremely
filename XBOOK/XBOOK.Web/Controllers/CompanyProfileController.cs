@@ -20,6 +20,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllClientAsync()
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Company profile", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var clientList = await _iCompanyProfileService. GetInFoProfile1();
             return Ok(clientList);
         }

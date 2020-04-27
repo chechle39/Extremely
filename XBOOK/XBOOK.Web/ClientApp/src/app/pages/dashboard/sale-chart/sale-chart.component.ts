@@ -230,6 +230,7 @@ export class SaleChartComponent  extends ChartBase implements OnInit, OnChanges 
       endDate: endDate,
       keyword: '',
       isIssueDate: false,
+      getDebtOnly : true,
     };
     this.datarequest.sendApplySearchIv(genledSearch);
     this.router.navigate([`/pages/invoice`]);

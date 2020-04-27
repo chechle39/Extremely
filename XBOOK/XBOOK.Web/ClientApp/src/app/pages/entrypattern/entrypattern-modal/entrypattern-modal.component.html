@@ -1,0 +1,102 @@
+<form class="form" name="form" novalidate autocomplete="off" (ngSubmit)="applyTax()" [formGroup]="form">
+  <div class=" modal-header">
+    <div class="row">
+      <div class="col-12">
+        <h5 class="modal-title">Entry Pattern</h5>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body py-0">
+    <div class="row pt-2" style="font-size: 15px; background: #f3f6f7">
+      <ng-container>
+        <div class="form-group col-12 mb-2">
+          <div class="font-weight-500">Transaction Type</div>
+          <select #transactionTypeSelected (change)="onTransactionTypeSelect()" class="form-control">
+            <option value="">Vui lòng chọn Transaction Type</option>
+            <option *ngFor="let item of transactionType" [ngValue]="item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-12 mb-2">
+          <div class="font-weight-500">Entry Type</div>
+          <select #entryTypeSelected (change)="onEntryTypeSelect()" class="form-control">
+            <option value="">Vui lòng chọn Entry Type</option>
+            <option *ngFor="let item of entryType" [ngValue]="item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="form?.get('entry') && form?.get('entry')['controls']">
+    <div class="arrayparam" formArrayName="entry" *ngFor="let control of form.get('entry')['controls']; index as i">
+      <div class="arrayparam-inner font-weight-500" style="font-size: 13px;">
+        <ng-container [formGroupName]="i">
+          <div class="row pb-1" style="border-bottom: 1px solid #a6a6a6;">
+            <div class="col-6">{{ control.get('transactionType').value }}</div>
+            <div class="col-6">{{ control.get('entryType').value }}</div>
+          </div>
+          <div class="row mt-1">
+            <div class="col-6">
+              Tài khoản
+              <input  formControlName="accNumber" autocomplete="none"
+              [ngbTypeahead]="searchData" [resultTemplate]="customItemTemplateacc" [rowItem]="dataAccount"
+              validateInputAccDirective [inputFormatter]="accFormatter"
+              (selectItem)="selectedAcc($event)" 
+              #instance="ngbTypeahead"  (blur)="onBlurCheckvalue(control.get('accNumber').value,control.get('crspAccNumber').value)"
+              style="color:darkslategray;" class="form-control" type="text" id="accNumber{{i}}"
+              maxlength=200
+              [ngClass]="{'border-1':control.get('accNumber').touched === false || control.get('accNumber').invalid === false}" >
+              <ng-template #customItemTemplateacc let-r="result" let-t="term">
+                <div class="row m-0 product-item py-1">
+                  <div class="col-sm-12 col-md-12 p-0">
+                    <p class="mb-0 text-left">{{r.accountNumber}} -
+                      {{r.accountName}}</p>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+            <div class="col-6">
+              TK đối ứng
+              <input  formControlName="crspAccNumber" autocomplete="none"
+              [ngbTypeahead]="searchData" [resultTemplate]="customItemTemplateacc" [rowItem]="dataAccount"
+              validateInputAccDirective [inputFormatter]="accFormatter"
+              (selectItem)="selectedAcc($event)" (blur)="onBlurCheckvalue(control.get('accNumber').value,control.get('crspAccNumber').value)"
+              #instance="ngbTypeahead"
+              style="color:darkslategray;" class="form-control" type="text" id="crspAccNumber{{i}}"
+              maxlength=200
+              [ngClass]="{'border-1':control.get('crspAccNumber').touched === false || control.get('crspAccNumber').invalid === false}" >
+              <ng-template #customItemTemplateacc let-r="result" let-t="term">
+                <div class="row m-0 product-item py-1">
+                  <div class="col-sm-12 col-md-12 p-0">
+                    <p class="mb-0 text-left">{{r.accountNumber}} -
+                      {{r.accountName}}</p>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+          <div class="row mt-1">
+            <div class="col-9">
+              <textarea  formControlName="note" style="color:darkslategray;" class="form-control" type="text" placeholder="Note" id="name"
+              maxlength=200 rows=1></textarea>
+            </div>
+            <div class="col-3">
+              <input [disabled]="'true'" formControlName="payType" style="color:darkslategray;" class="form-control" type="text" placeholder="pay type" id="name"
+              maxlength=200>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer" style="border-top: 1px solid #000; background: #f3f6f7">
+    <button type="button" (click)="close()" class="btn btn-raised btn-secondary mr-1">
+      {{ 'COMMON.BUTTON.CANCEL' | translate }}
+    </button>
+      <button type="submit" [disabled]="!model || model.length == 0"
+      class="btn btn-raised btn-success">{{ 'COMMON.BUTTON.SAVE' | translate }}</button>
+  </div>
+</form>

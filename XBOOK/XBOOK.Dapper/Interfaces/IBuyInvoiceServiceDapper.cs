@@ -8,5 +8,6 @@ namespace XBOOK.Dapper.Interfaces
     public interface IBuyInvoiceServiceDapper
     {
         Task<IEnumerable<BuyInvoiceViewModel>> GetBuyInvoice(SaleInvoiceListRequest request);
+        Task<byte[]> ExportBuyInvoiceAsync();
     }
 }

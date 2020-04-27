@@ -28,7 +28,7 @@ import { AppConsts } from '../../coreapp/app.consts';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { PagedListingComponentBase, PagedRequestDto } from '../../coreapp/paged-listing-component-base';
 import { finalize } from 'rxjs/operators';
-import { SearchaccountbalanceComponent } from './searchaccountbalance/searchgenled.component';
+import { SearchaccountbalanceComponent } from './searchaccountbalance/searchaccountbalance.component';
 import * as _ from 'lodash';
 import { SearchType, ActionType } from '../../coreapp/app.enums';
 import { DataService } from '../_shared/services/data.service';
@@ -188,12 +188,11 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
     });
   }
   getProfiles() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
-      this.companyName = rp.companyName;
-      this.taxCode = rp.taxCode;
-      this.companyAddress = rp.address;
-      this.companyCode = rp.code;
-    });
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
+      this.companyName = Datasession.companyProfile[0].companyName;
+      this.taxCode = Datasession.companyProfile[0].taxCode;
+      this.companyAddress = Datasession.companyProfile[0].address;
+      this.companyCode = Datasession.companyProfile[0].code;
   }
   Print() {
     // tslint:disable-next-line:prefer-for-of
@@ -229,8 +228,8 @@ export class AccountbalanceComponent extends PagedListingComponentBase<ClientVie
         startDate: this.startDay === undefined ? this.firstDate : this.startDay,
         endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
       };
-      this.data.sendMessage(data);
-      this.router.navigate([`/pages/generalledger/${id}`]);
+      this.data.sendMessageGenneral(data);
+      this.router.navigate([`/pages/generalledger`]);
     }
 
   }

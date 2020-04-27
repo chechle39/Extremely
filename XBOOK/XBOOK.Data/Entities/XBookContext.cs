@@ -3,17 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Linq;
-using XBOOK.Common.Exceptions;
 using XBOOK.Data.EntitiesDBCommon;
 using XBOOK.Data.EntityConfigurations;
 using XBOOK.Data.Identity;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 
 namespace XBOOK.Data.Entities
 {
@@ -22,11 +20,13 @@ namespace XBOOK.Data.Entities
         private readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly IConfiguration _configuration;
         private readonly IUserCommonRepository _userCommonRepository;
-        public XBookContext(DbContextOptions<XBookContext> options, IUserCommonRepository userCommonRepository, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(options)
+        private readonly IMemoryCache _cache;
+        public XBookContext(DbContextOptions<XBookContext> options, IMemoryCache cache, IUserCommonRepository userCommonRepository, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(options)
         {
             _userCommonRepository = userCommonRepository;
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            _cache = cache;
         }
         public DbSet<AccountChart> AccountChart { get; set; }
         public DbSet<Category> Category { get; set; }
@@ -94,37 +94,42 @@ namespace XBOOK.Data.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if(_httpContextAccessor.HttpContext != null)
-            {
-                var email = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split("Bearer");
-                if (_httpContextAccessor.HttpContext.User.Claims.ToList().Count > 0)
-                {
-                    var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
-                    var findUser = _userCommonRepository.FindUserCommon(code).Result;
-                    optionsBuilder.UseSqlServer(findUser.ConnectionString);
-                }
-                else
-                {
-                    if (email.ToList().Count() > 1)
-                    {
-                        if ("" != email[1].Substring(1))
-                        {
-                            var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
-                            if (code != null)
-                            {
-                                var connectionString1 = code.ConnectionString;
-                                optionsBuilder.UseSqlServer(connectionString1);
-                            }                         
-                        }
-                    }
-                    
-                   
-                   
-                }
+            //if(_httpContextAccessor.HttpContext != null)
+            //{
+            //    var email = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split("Bearer");
+            //    if (_httpContextAccessor.HttpContext.User.Claims.ToList().Count > 0)
+            //    {
+            //        var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            //        var connectionString = _configuration.GetConnectionString(Code);
+            //        optionsBuilder.UseSqlServer(connectionString);
+            //    }
+            //    else
+            //    {
+            //        if (email.ToList().Count() > 1)
+            //        {
+            //            if ("" != email[1].Substring(1))
+            //            {
+            //                var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
+            //                if (code != null)
+            //                {
+            //                    var connectionString = _configuration.GetConnectionString(code.Code);
+            //                    optionsBuilder.UseSqlServer(connectionString);
+            //                }                         
+            //            }
+            //        }
 
+
+
+            //    }
+
+            //}
+            var data = (AppUserCommon)_cache.Get(CacheKey.UserCompany.UseCommon);
+            if (data != null)
+            {
+                var connectionString1 = _configuration.GetConnectionString("CL001");
+                optionsBuilder.UseSqlServer(connectionString1);
             }
-            //var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            //optionsBuilder.UseSqlServer(connectionString);
+            
         }
         public override int SaveChanges()
         {

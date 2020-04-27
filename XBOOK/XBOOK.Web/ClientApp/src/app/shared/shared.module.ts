@@ -30,8 +30,10 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import { validatePasswordDirective } from './validators/validatePasswordDirective';
 import { validateLengthPasswordDirective } from './validators/validatelengthpasswordirective';
 import { validateInputDirective } from './validators/validateInputDirective';
+import { validateInputAccDirective } from '../pages/journalentries/validate/validateinputacc';
 @NgModule({
   declarations: [
+    validateInputAccDirective,
     validateDateDirective,
     validatePasswordDirective,
     validateLengthPasswordDirective,
@@ -71,6 +73,7 @@ import { validateInputDirective } from './validators/validateInputDirective';
     }),
   ],
   exports: [
+    validateInputAccDirective,
     validateDateDirective,
     validatePasswordDirective,
     validateLengthPasswordDirective,

@@ -217,6 +217,7 @@ export class PurchaseChartComponent extends ChartBase implements OnInit, OnChang
       endDate: endDate,
       keyword: '',
       isIssueDate: false,
+      getDebtOnly : true,
     };
 
     this.datarequest.sendApplySearchBuyIv(genledSearch);

@@ -28,6 +28,7 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
   loadingIndicator = true;
   keyword = '';
   Datareport: any[] = [];
+  SupplierViewsExport: any[] = [];
   reorderable = true;
   selected = [];
   ColumnMode = ColumnMode;
@@ -72,7 +73,26 @@ export class SupplierComponent extends PagedListingComponentBase<ClientView> {
       });
   }
   ExportSupplier() {
-    this.supplierService.ExportSupplier(this.clientViews);
+    if (this.clientViews.length > 0) {
+      this.SupplierViewsExport = [];
+      for (let i = 0; i < this.clientViews.length ; i++) {
+        const data = {
+          supplierID : this.clientViews[i].supplierID === null ? '' : this.clientViews[i].supplierID ,
+          // tslint:disable-next-line:max-line-length
+          supplierName : this.clientViews[i].supplierName === null ? '' :  this.clientViews[i].supplierName.replace(/,/g, ';'),
+          address : this.clientViews[i].address === null ? '' :  this.clientViews[i].address.replace(/,/g, ';'),
+          taxCode : this.clientViews[i].taxCode === null ? '' : this.clientViews[i].taxCode.replace(/,/g, ';'),
+          Tag: this.clientViews[i].Tag === undefined ? '' : this.clientViews[i].Tag.replace(/,/g, ';'),
+          // tslint:disable-next-line:max-line-length
+          contactName : this.clientViews[i].contactName === null ? '' : this.clientViews[i].contactName.replace(/,/g, ';'),
+          email : this.clientViews[i].email,
+          note : this.clientViews[i].note === null ? '' : this.clientViews[i].note.replace(/,/g, ';'),
+          bankAccount : this.clientViews[i].bankAccount,
+        };
+        this.SupplierViewsExport.push(data);
+      }
+      this.supplierService.ExportSupplier(this.SupplierViewsExport);
+    }
   }
   public showPreview(files): void {
     if (files.length === 0) {

@@ -21,14 +21,11 @@ namespace XBOOK.Service.Service
         private readonly IRepository<AccountChart> _accountUowRepository;
         private readonly IUnitOfWork _uow;
         private readonly IAccountChartRepository _accountChartRepository;
-        private readonly ICachingService _cachingService;
-
-        public AccountChartSerVice(IRepository<AccountChart> accountUowRepository, ICachingService cachingService, IUnitOfWork uow, IAccountChartRepository accountChartRepository)
+        public AccountChartSerVice(IRepository<AccountChart> accountUowRepository, IUnitOfWork uow, IAccountChartRepository accountChartRepository)
         {
             _accountUowRepository = accountUowRepository;
             _uow = uow;
             _accountChartRepository = accountChartRepository;
-            _cachingService = cachingService;
         }
 
         public async Task<bool> CreateAccountChartAsync(AccountChartViewModel accountChartViewModel)
@@ -44,11 +41,7 @@ namespace XBOOK.Service.Service
         public async Task<List<AccountChartViewModel>> GetAllAccount()
         {
             var listData = await _accountUowRepository.GetAll().ProjectTo<AccountChartViewModel>().Where(x => x.isParent == false).ToListAsync();
-
-            return _cachingService.GetObject(CacheKey.AccountChart.acc,  () =>
-            {
-                return listData.ToList();
-            });
+            return listData.ToList();
         }
 
         public async Task<List<TreeNode>> GetAllTreeAccountAsync()

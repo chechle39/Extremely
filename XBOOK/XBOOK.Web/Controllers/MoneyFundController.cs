@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Model;
@@ -16,16 +18,21 @@ namespace XBOOK.Web.Controllers
     {
 
         IMoneyFundServiceDapper _iMoneyFundServiceDapper;
-        public MoneyFundController(IMoneyFundServiceDapper iMoneyFundServiceDapper)
+        private readonly IAuthorizationService _authorizationService;
+        public MoneyFundController(IMoneyFundServiceDapper iMoneyFundServiceDapper, IAuthorizationService authorizationService)
         {
 
             _iMoneyFundServiceDapper = iMoneyFundServiceDapper;
+            _authorizationService = authorizationService;
         }
 
        
         [HttpPost("[action]")]
         public async Task<IActionResult> GetALLMoneyFundServiceDapper([FromBody]MoneyFundRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Cash Balance", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iMoneyFundServiceDapper.GetIMoneyFundDapperServiceDapperAsync(request);
             return Ok(DebitAgeList);
         }
@@ -33,6 +40,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetDataMoneyFundReportServiceDapper([FromBody]MoneyFundRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Cash Balance", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iMoneyFundServiceDapper.GetIMoneyFundDapperReportServiceDapperAsync(request);
             return Ok(DebitAgeList);
         }

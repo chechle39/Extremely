@@ -66,7 +66,6 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
     private genLedService: GenLedGroupService,
     private genLedreportService: GenLedService,
     private data: DataService,
-   
     private modalService: NgbModal,
     private commonService: CommonService,
     private router: Router) {
@@ -81,8 +80,7 @@ export class GenledgroupComponent extends PagedListingComponentBase<ClientView> 
   ): void {
     this.getParam();
   }
-ngOnDestroy (){
-  
+ngOnDestroy () {
 }
 
   private getParam() {
@@ -108,16 +106,11 @@ ngOnDestroy (){
       this.genViewsTemp = data;
     //  this.methodEdit_View();
     });
-    this.invoiceService.getInfoProfile().subscribe((r: any) => {
-      this.companyName = r.companyName;
-      this.taxCode = r.taxCode;
-      this.companyAddress = r.address;
-      this.companyCode = r.code;
-    });
-    this.subscription=this.data.getMessage().subscribe((rpp: any) => {
+    this.subscription = this.data.getMessageGenneral().subscribe((rpp: any) => {
       // tslint:disable-next-line:no-console
-      if (rpp === undefined) {
+      if (rpp.data === undefined || rpp.data === '') {
         // tslint:disable-next-line:no-console
+        // tslint:disable-next-line:no-shadowed-variable
         const genledSearch = {
           startDate: this.firstDate === undefined ? null : this.firstDate,
           endDate: this.endDate1 === undefined ? null : this.endDate1,
@@ -126,16 +119,10 @@ ngOnDestroy (){
           money: null,
           accNumber: null,
         };
-          this.invoiceService.getInfoProfile().subscribe((r: any) => {
-          this.companyName = r.companyName;
-          this.taxCode = r.taxCode;
-          this.companyAddress = r.address;
-          this.companyCode = r.code;
-        });
+       this.getProfiles();
        this.accountChartService.searchAcc().subscribe(rp => {
           this.tempaccount = rp;
         });
-        
         this.genLedreportService
           .searchGen(genledSearch)
           .pipe(
@@ -145,10 +132,10 @@ ngOnDestroy (){
             this.loadingIndicator = false;
             this.genViewsreport = i;
           });
-    
        // return genledSearch;
       } else {
         // tslint:disable-next-line:no-console
+        // tslint:disable-next-line:no-shadowed-variable
         const genledSearch = {
           startDate: rpp.data.startDate,
           endDate: rpp.data.endDate,
@@ -161,12 +148,7 @@ ngOnDestroy (){
         this.startDay = rpp.data.startDate  === undefined ? null : rpp.data.startDate;
         this.endDay = rpp.data.endDate === undefined ? null : rpp.data.endDate;
         this.keyspace = ' - ';
-        this.invoiceService.getInfoProfile().subscribe((r: any) => {
-          this.companyName = r.companyName;
-          this.taxCode = r.taxCode;
-          this.companyAddress = r.address;
-          this.companyCode = r.code;
-        });
+        this.getProfiles();
            this.accountChartService.searchAcc().subscribe(rp => {
           this.tempaccount = rp;
         });
@@ -178,8 +160,8 @@ ngOnDestroy (){
             this.loadingIndicator = false;
             this.genViews = i;
             const data = [];
-            this.genViewsTemp = data; 
-            rpp = undefined;         
+            this.genViewsTemp = data;
+            rpp = undefined;
             // this.methodEdit_View();
           });
 
@@ -190,15 +172,20 @@ ngOnDestroy (){
           .subscribe(i => {
             this.loadingIndicator = false;
             this.genViewsreport = i;
-            rpp = undefined; 
+            rpp = undefined;
           });
-      }    
-      
-    })
+      }
+    });
     this.subscription.unsubscribe();
+    this.data.sendMessageGenneral('');
    // return genledSearch;
   }
-
+  getProfiles() {
+    const Datasession = JSON.parse(sessionStorage.getItem('credentials'));
+      this.companyName = Datasession.companyProfile[0].companyName;
+      this.companyAddress = Datasession.companyProfile[0].address;
+      this.companyCode = Datasession.companyProfile[0].code;
+  }
   SearchGenLed(): void {
 
     const dialog = this.modalService.open(SearchgenledComponent, AppConsts.modalOptionsCustomSize);
@@ -249,17 +236,17 @@ ngOnDestroy (){
     this.genLedService.exportCSV(this.exportCSV === undefined ? genledSearch : this.exportCSV);
 
   }
-  redirectToEditInvoice(id) {
-    this.router.navigate([`/pages/invoice/${id}/${ActionType.Edit}`]);
-  }
+  // redirectToEditInvoice(id) {
+  //   this.router.navigate([`/pages/invoice/${id}/${ActionType.Edit}`]);
+  // }
   Print() {
     if (this.genViews.length > 0) {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.genViews.length; i++) {
         const genledSearch = {
-          startDate:  this.startDay=== undefined ? this.firstDate : this.startDay,
-          endDate: this.endDay=== undefined ? this.endDate1 : this.endDay,
-          money: this.currency=== null ? 'VND' : this.currency,
+          startDate:  this.startDay === undefined ? this.firstDate : this.startDay,
+          endDate: this.endDay === undefined ? this.endDate1 : this.endDay,
+          money: this.currency === null ? 'VND' : this.currency,
           accountNumber: this.genViews[i].accNumber,
         };
         this.accountBalanceService.getAccountBalanceAccountViewModelData(genledSearch).subscribe(rp => {

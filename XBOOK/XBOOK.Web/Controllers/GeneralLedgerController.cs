@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using XBOOK.Common.Helpers;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 using XBOOK.Service.Interfaces;
@@ -16,9 +18,11 @@ namespace XBOOK.Web.Controllers
     public class GeneralLedgerController : BaseAPIController
     {
         IGeneralLedgerService _iGeneralLedgerService;
-        public GeneralLedgerController(IGeneralLedgerService iGeneralLedgerService)
+        private readonly IAuthorizationService _authorizationService;
+        public GeneralLedgerController(IGeneralLedgerService iGeneralLedgerService, IAuthorizationService authorizationService)
         {
             _iGeneralLedgerService = iGeneralLedgerService;
+            _authorizationService = authorizationService;
         }
         [HttpPost("[action]")]
         public IActionResult GetCSV([FromBody]genledSearch request)
@@ -29,8 +33,11 @@ namespace XBOOK.Web.Controllers
             return File(data, "application/csv", $"latinEncoding.csv");
         }
         [HttpPost("[action]")]
-        public IActionResult GetAllGen([FromBody]genledSearch request)
+        public async Task<IActionResult> GetAllGen([FromBody]genledSearch request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "General Journal", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var data = _iGeneralLedgerService.GetAllGeneralLed(request);
             return Ok(data);
         }

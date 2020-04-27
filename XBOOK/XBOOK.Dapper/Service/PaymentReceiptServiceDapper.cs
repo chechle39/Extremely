@@ -8,7 +8,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
-using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
@@ -17,21 +16,18 @@ namespace XBOOK.Dapper.Service
 {
     public class PaymentReceiptServiceDapper : IPaymentReceiptServiceDapper
     {
+
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IUserCommonRepository _userCommonRepository;
-        public PaymentReceiptServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IUserCommonRepository userCommonRepository)
+        public PaymentReceiptServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
-            _userCommonRepository = userCommonRepository;
         }
-
         public async Task<IEnumerable<PaymentReceiptViewModel>> GetPaymentReceipt(MoneyReceiptRequest request)
         {
-            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
-            var findUser = await _userCommonRepository.FindUserCommon(code);
-            using (var sqlConnection = new SqlConnection(findUser.ConnectionString))
+            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();

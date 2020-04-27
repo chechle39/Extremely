@@ -90,6 +90,12 @@ namespace XBOOK.Data.Repositories
             return listData;
         }
 
+        public async Task<IEnumerable<ProductViewModel>> GetAllProductForSearchAsync(ProductSerchRequest request)
+        {
+             var  listData = await Entities.ProjectTo<ProductViewModel>().ToListAsync();
+            return listData;
+        }
+
         public Product GetByProductId(int id)
         {
             try

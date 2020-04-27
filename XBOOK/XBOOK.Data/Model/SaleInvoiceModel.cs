@@ -36,6 +36,7 @@ namespace XBOOK.Data.Model
         public string EndDate { get; set; }
 
         public bool isIssueDate { get; set; }
+        public bool getDebtOnly { get; set; }
     }
 
     public class requestDeleted

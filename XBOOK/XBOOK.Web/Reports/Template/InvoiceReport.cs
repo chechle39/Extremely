@@ -24,6 +24,7 @@ namespace XBOOK.Web.Reports
            
             public List<SaleInvoicePrintModel> Data()
             {
+                var x = new Helpers.GetCompanyCode();
                 var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
                 var itemss = new List<SaleInvoicePrintModel>();
                 var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";

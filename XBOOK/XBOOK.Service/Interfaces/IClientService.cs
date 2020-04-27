@@ -16,7 +16,7 @@ namespace XBOOK.Service.Interfaces
         Task<IEnumerable<ClientViewModel>> SerchClient(string keyword);
         Task<bool> UpdateClient(ClientCreateRequet request);
         bool DeletedClient(List<requestDeleted> request);
-        byte[] GetDataClientAsync(List<ClientCreateRequet> request);
+        byte[] GetDataClientAsync(List<ClientExportRequest> request);
 
     }
 }

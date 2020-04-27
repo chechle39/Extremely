@@ -1,19 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { AccountbalanceMRoutingModule } from './accountbalance-routing.module';
 import { GenLedService } from '../_shared/services/genled.service';
-import { SearchaccountbalanceComponent } from './searchaccountbalance/searchgenled.component';
+import { SearchaccountbalanceComponent } from './searchaccountbalance/searchaccountbalance.component';
 import { GenledgroupComponent } from '../genledgroup/genledgroup.component';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { AccountbalanceComponent } from './accountbalance.component';
 import { GenLedGroupService } from '../_shared/services/genledgroup.service';
 import { AccountBalanceService } from '../_shared/services/accountbalance.service';
 import { InvoiceService } from '../_shared/services/invoice.service';
-import { NbCardModule, NbButtonModule, NbPopoverModule, NbSearchModule, NbIconModule, NbAlertModule } from '@nebular/theme';
+import { NbCardModule, NbButtonModule, NbPopoverModule, NbSearchModule,
+  NbIconModule, NbAlertModule } from '@nebular/theme';
+import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 @NgModule({
   declarations: [AccountbalanceComponent, SearchaccountbalanceComponent],
   entryComponents: [SearchaccountbalanceComponent],
@@ -31,8 +33,9 @@ import { NbCardModule, NbButtonModule, NbPopoverModule, NbSearchModule, NbIconMo
     FormsModule,
     SharedModule,
     ReactiveFormsModule,
-    MultiSelectModule
+    MultiSelectModule,
   ],
-  providers: [GenLedService, AccountBalanceService, CurrencyPipe, DecimalPipe, GenLedGroupService,  InvoiceService],
+  providers: [GenLedService, AccountBalanceService, CurrencyPipe, DecimalPipe, GenLedGroupService,  InvoiceService ,
+     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}],
 })
 export class AccountbalanceModule { }

@@ -167,21 +167,20 @@ namespace XBOOK.Service.Service
 
           
         }
-        public byte[] GetDataClientAsync(List<ClientCreateRequet> request)
+        public byte[] GetDataClientAsync(List<ClientExportRequest> request)
         {
             var comlumHeadrs = new string[]
             {
                 "ClientId",
                 "ClientName",
                 "Address",
-                "TaxCode",
-                "Tag",
+                "TaxCode",             
                 "ContactName",
                 "Email",
                 "Note",
                 "bankAccount",
             };
-            var listGen = new List<ClientCreateRequet>();
+            var listGen = new List<ClientExportRequest>();
 
             listGen = request;
 
@@ -191,8 +190,7 @@ namespace XBOOK.Service.Service
                           item.ClientID,
                           item.ClientName,
                           item.Address,
-                          item.TaxCode,
-                          item.Tag,
+                          item.TaxCode,                     
                           item.ContactName,
                           item.Email,
                           item.Note,

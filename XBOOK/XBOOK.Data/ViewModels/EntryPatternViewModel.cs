@@ -14,4 +14,19 @@ namespace XBOOK.Data.ViewModels
         public string Note { get; set; }
         public string payType { get; set; }
     }
+
+    public class EntryPatternSearchDataViewModel
+    {
+        public List<string> TransactionType { get; set; }
+        public List<string> EntryType { get; set; }
+    }
+    public class EntryPatternRequest
+    {
+        public string TransactionType { get; set; }
+        public string EntryType { get; set; }
+    }
+    public class TransactionTypeRequest
+    {
+        public string TransactionType { get; set; }
+    }
 }

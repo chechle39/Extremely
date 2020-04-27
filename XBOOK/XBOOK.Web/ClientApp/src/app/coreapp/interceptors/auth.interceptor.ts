@@ -31,10 +31,12 @@ export class AuthInterceptor implements HttpInterceptor {
       };
     } else {
       this.data.getMessageEmail().subscribe(rp => {
-        requestConfig = {
-          setHeaders: { Authorization: 'Bearer ' + rp.data},
-          withCredentials: true,
-        };
+        if (rp !== undefined) {
+          requestConfig = {
+            setHeaders: { Authorization: 'Bearer ' + rp.data},
+            withCredentials: true,
+          };
+        }
       });
     }
     req = req.clone(requestConfig);

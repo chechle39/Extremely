@@ -16,6 +16,19 @@ export class BuyInvoiceService extends BaseService {
         });
         return;
       }
+
+      ExportBuyInvoice() {
+        const data = this.postcsv<any[]>(`${API_URI.ExportBuyInvoice}`, null).subscribe(rs => {
+          this.downLoadFileInvoice(rs, 'text/csv;charset=utf-8');
+        });
+        return data;
+      }
+      downLoadFileInvoice(data: any, type: string) {
+        // tslint:disable-next-line:object-literal-shorthand
+        const blob = new Blob(['\ufeff' + data], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+        saveAs(blob, 'BuyInvoice.csv');
+      }
     getFile(fileName: any): Observable<any> {
         return this.getFilex<any>(`${API_URI.getFileSupplier}`, fileName);
       }

@@ -231,13 +231,13 @@
                     </div>
                     <!-- ngRepeat: item in invoice.items -->
                     <div formArrayName="items">
-                      <div class="row invoice-item pb-1 mx-0"
+                      <div class="row invoice-item pb-2 mx-0"
                         *ngFor="let detail of invoiceForm.get('items')['controls']; index as i">
                         <ng-container [formGroupName]="i">
                           <div class="col-md-6 col-5 d-inline-grid pl-0 ngb-typeahead-product">
                             <input formControlName="productName" #productName id="productName{{i}}" kendotextbox
                               [readOnly]="isRead" placeholder="{{'INVOICE.FORM.CREATE.ENTERITEMNAME.PLACEHOLDER' | translate}}" autocomplete="off"
-                              class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
+                              class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input"
                               [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate"
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
                               (focus)="onFocus($event)"
@@ -246,7 +246,7 @@
                             <input formControlName="description" #description kendotextbox
                               [readOnly]="isRead" placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}"
                               tabindex="{{i * 4 + 4}}"
-                              class="border-0 full-width imput-reference-custom font-italic invoice__font--medium-2 description place-holder__color invoice__input__textbox invoice__input__textbox--disable" />
+                              class="border-0 full-width imput-reference-custom font-italic invoice__font--medium-2 description place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input" />
                             <ng-template #productTemplate let-r="result" let-t="term">
                               <div class="row m-0 product-item py-1">
                                 <div class="col-sm-8 col-md-8 p-0">
@@ -266,29 +266,29 @@
                             </kendo-numerictextbox> -->
                             <input digitOnly [min]=1 [max]="10000" #quantity tabindex="{{i* 4 + 2}}"
                               formControlName="qty" placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.QTY' | translate}}" kendoTextBox [readOnly]="isRead"
-                              class="text-center border-0 full-width invoice__font--medium-2" />
+                              class="text-center border-0 full-width invoice__font--medium-2 invoice__items-table__input" />
                             <a *ngIf="detail.value.taxs.length > 0" style="color:blue;"
-                              (click)="addTaxPopup(detail,i)" class="lb-discount invoice__font--medium-2">{{taxsText}}</a>
+                              (click)="addTaxPopup(detail,i)" class="lb-discount invoice__font--medium-2 invoice__items-table__input">{{taxsText}}</a>
                             <a *ngIf="detail.value.taxs.length === 0"
-                              style="color:blue;" class="lb-discount invoice__font--medium-2"
+                              style="color:blue;" class="lb-discount invoice__font--medium-2 invoice__items-table__input"
                               (click)="addTaxPopup(detail,i)">{{'INVOICE.FORM.CREATE.ADDTAX' | translate}}</a>
                           </div>
                           <div class="col-md-2 col-2 text-left d-inline-grid">
                             <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly
                               kendotextbox [readOnly]="isRead" maxlength="16" formControlName="price"
                               placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.PRICE' | translate}}"
-                              class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable"
+                              class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input"
                               tabindex="{{i* 4 +3}}" />
 
                             <input kendotextbox style="color: blue"
-                              class="text-right border-0 full-width t-color-blue input-amount input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2"
+                              class="text-right border-0 full-width t-color-blue input-amount input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2 invoice__items-table__input"
                               [min]="1" [max]="100" formControlName="vat" [readOnly]="true" #tax placeholder="" />
                           </div>
                           <div class="col-md-2 col-3 text-right d-inline-grid pr-0">
                             <input formControlName="amount" kendotextbox placeholder="{{'INVOICE.FORM.CREATE.AMOUNT' | translate}}" [readOnly]="true"
-                              class="border-0 full-width t-color-black input-amount mput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable " />
+                              class="border-0 full-width t-color-black input-amount mput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable  invoice__items-table__input" />
                             <input formControlName="vatAmount" kendotextbox [readOnly]="true"
-                              class="border-0 full-width t-color-red input-amount mput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2" />
+                              class="border-0 full-width t-color-red input-amount mput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2 invoice__items-table__input" />
                           </div>
                           <div *ngIf="!viewMode" [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
                             class="text-right d-inline-grid pr-0"> <a class="item-delete mt-2"

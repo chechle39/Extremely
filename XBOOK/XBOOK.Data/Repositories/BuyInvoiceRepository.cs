@@ -148,6 +148,7 @@ namespace XBOOK.Data.Repositories
 
         public async Task<BuyInvoiceViewModel> GetLastBuyInvoice()
         {
+            var lastInvoice = new BuyInvoiceViewModel();
             if (Entities.Count() > 1)
             {
                 var data = await Entities.ProjectTo<BuyInvoiceViewModel>().OrderByDescending(xx => xx.InvoiceId).Take(1).LastOrDefaultAsync();
@@ -162,7 +163,7 @@ namespace XBOOK.Data.Repositories
             }
             else
             {
-                return null;
+                return lastInvoice;
             }
         }
 

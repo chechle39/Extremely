@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Model;
@@ -14,16 +16,21 @@ namespace XBOOK.Web.Controllers
     {
 
         IPurchaseReportDapper _iPurchaseReportDapper;
-        public PurchaseReportController(IPurchaseReportDapper iPurchaseReportDapper)
+        private readonly IAuthorizationService _authorizationService;
+        public PurchaseReportController(IPurchaseReportDapper iPurchaseReportDapper, IAuthorizationService authorizationService)
         {
 
             _iPurchaseReportDapper = iPurchaseReportDapper;
+            _authorizationService = authorizationService;
         }
 
        
         [HttpPost("[action]")]
         public async Task<IActionResult> GetPurchaseReportGroupAsync([FromBody]PurchaseReportSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Purchase Report", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iPurchaseReportDapper.GetPurchaseReportGroupAsync(request);
             return Ok(DebitAgeList);
         }
@@ -31,6 +38,9 @@ namespace XBOOK.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllPurchaseReportAsync([FromBody]PurchaseReportSerchRequest request)
         {
+            var result = await _authorizationService.AuthorizeAsync(User, "Purchase Report", Operations.Read);
+            if (!result.Succeeded)
+                return Unauthorized();
             var DebitAgeList = await _iPurchaseReportDapper.GetAllPurchaseReportAsync(request);
             return Ok(DebitAgeList);
         }
