@@ -40,6 +40,11 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<JournalDetail, JournalEntryDetailModelCreate>();
             CreateMap<Functions, FunctionViewModel>();
             CreateMap<Permission, PermissionViewModel>();
+            CreateMap<TaxSaleInvoice, TaxSaleInvoiceModelRequest>();
+            CreateMap<SaleInvoiceModelRequest, TaxSaleInvoiceModelRequest>(); 
+            CreateMap<TaxSaleInvDetail, TaxInvDetailViewModel>();
+            CreateMap<SaleInvDetailViewModel, TaxInvDetailViewModel>();
+            CreateMap<SaleInvoice, TaxSaleInvoiceModelRequest>();
         }
     }
 }

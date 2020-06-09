@@ -11,9 +11,9 @@ export class UserService extends BaseService {
   getUserById(id): Observable<any> {
     return this.post<any>(`${API_URI.getUserById}/${id}`, null);
   }
-  getAllUserx(): Observable<any> {
-      return this.post<any>(`${API_URI.getAllUserX}`, null);
-  }
+  // getAllUser(): Observable<any> {
+  //     return this.post<any>(`${API_URI.getAllUser}`, null);
+  // }
   getAllUser(term: any) {
     const products = this.post<any[]>(`${API_URI.getAllUser}`, term)
       .pipe(

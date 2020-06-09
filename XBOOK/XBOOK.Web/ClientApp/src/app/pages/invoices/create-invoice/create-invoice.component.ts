@@ -16,7 +16,7 @@ import { ProductSearchModel } from '../../_shared/models/product/product-search.
 import { ItemModel } from '../../_shared/models/invoice/item.model';
 import { PaymentView } from '../../_shared/models/invoice/payment-view.model';
 import { InvoiceView } from '../../_shared/models/invoice/invoice-view.model';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { AddPaymentComponent } from './payment/add-payment/add-payment.component';
 import { ClientService } from '../../_shared/services/client.service';
 import { ProductService } from '../../_shared/services/product.service';
@@ -44,10 +44,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class CreateInvoiceComponent extends AppComponentBase implements OnInit, AfterViewInit {
   @ViewChildren('productName') productNameField: QueryList<any>;
   @ViewChild('amountPaidVC', { static: true }) amountPaidVC: any;
+  @ViewChild('t', { static: true }) t: NgbTooltip;
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
   isRead: boolean = true;
+  isCheckCheckbox: boolean = false;
+  selectedValues: string[] = [];
   productInputFocusSub: Subscription = new Subscription();
   listInvoice: any;
   keywords = '';
@@ -116,6 +119,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   checkEditPayment: boolean;
   img: string | ArrayBuffer;
   isCheckFc: boolean;
+  isCheckFcCoppy: boolean;
   fileUpload: any[] = [];
   requestSaveJson: any = [];
   Unitproduct: any = [];
@@ -128,6 +132,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   checkUpload: boolean;
   isCheckHidden: boolean;
   checkIcon: boolean;
+
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -152,6 +157,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   ngOnInit() {
     if (this.router.url === '/pages/invoice/new') {
       this.viewMode = false;
+      this.isCheckFcCoppy = true;
     } else {
       this.viewMode = true;
     }
@@ -252,7 +258,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.invoiceForm = this.fb.group({
       invoiceNumber: this.listInvoice === undefined
         ? ['', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
-      invoiceSerial: this.listInvoice === undefined ? ['', [Validators.required]] : [this.listInvoice.invoiceSerial],
+      invoiceSerial: this.listInvoice === undefined ? [''] : [this.listInvoice.invoiceSerial],
+      taxInvoiceNumber: [''],
       contactName: ['', [Validators.required]],
       clientName: ['', [Validators.required]],
       clientId: [0],
@@ -273,6 +280,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       termCondition: [''],
       items: this.initItems(),
       invoiceId: [0],
+      checked: false,
     });
   }
   get issueDate() {
@@ -290,6 +298,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
   addNewItem() {
     this.isCheckFc = true;
+    this.isCheckFcCoppy = true;
     const formArray = this.getFormArray();
     formArray.push(this.getItem());
   }
@@ -473,6 +482,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         invoiceId: invoice[0].invoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
         invoiceNumber: this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber,
+        taxInvoiceNumber:  invoice[0].taxInvoiceNumber,
         clientId: invoice[0].clientData[0].clientId,
         clientName: invoice[0].clientData[0].clientName,
         address: invoice[0].clientData[0].address,
@@ -574,11 +584,32 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     this.invoiceForm.controls.address.disable();
     this.invoiceForm.controls.taxCode.disable();
     // Resets to blank object
-    if (this.editMode && this.coppyMode !== true) {
-      this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
-      this.viewMode = true;
-      this.isRead = true;
+    if (this.editMode && this.isRead === false && !this.coppyMode) {
+      if (!this.coppyMode) {
+        this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+        this.viewMode = true;
+        this.isRead = true;
+       } else {
+        this.router.navigate([`/pages/invoice`]);
+       }
       //    this.invoiceForm.disable();
+    } else
+     if (this.isRead === true && !this.coppyMode || this.coppyMode === undefined) {
+       if (!this.viewMode) {
+         if (this.invoiceForm.value.invoiceId > 0) {
+          this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
+          this.viewMode = true;
+          this.isRead = true;
+         } else {
+          this.router.navigate([`/pages/invoice`]);
+         }
+        this.viewMode = true;
+        this.isRead = true;
+       } else {
+        this.router.navigate([`/pages/invoice`]);
+       }
+    } else if (this.coppyMode !== true) {
+      this.router.navigate([`/pages/invoice`]);
     } else {
       this.invoiceForm.reset();
       this.router.navigate([`/pages/invoice`]);
@@ -593,8 +624,14 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       || this.invoiceForm.controls.clientName.invalid === true
       || this.invoiceForm.controls.contactName.invalid === true
       || this.invoiceForm.controls.dueDate.invalid === true || this.isCheckDate === true) {
-      this.message.warning('Form invalid');
       this.translate.get('INVOICE.CREATE.VALID')
+      .subscribe(text => {
+        this.message.warning(text);
+      });
+      return;
+    }
+    if (this.invoiceForm.controls.items.value[0].productName === '') {
+      this.translate.get('INVOICE.CREATE.PRODUCT.LENGHT')
       .subscribe(text => {
         this.message.warning(text);
       });
@@ -615,6 +652,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         this.invoiceForm.value.dueDate.day].join('-') === '--' ? '' : [this.invoiceForm.value.dueDate.year,
         this.invoiceForm.value.dueDate.month, this.invoiceForm.value.dueDate.day].join('-'),
         reference: this.invoiceForm.value.reference,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         subTotal: this.subTotalAmount,
         discRate: this.invoiceForm.controls.totalDiscount.value,
         discount: this.subTotalDiscountIncl.toString().substring(1),
@@ -623,24 +661,35 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        clientId: this.coppyMode !== true ? (this.invoiceForm.value.contactName.clientId !== undefined
-          ? this.invoiceForm.value.contactName.clientId : 0) : this.invoiceForm.value.clientId,
-        clientName: this.invoiceForm.value.clientName === ''
+        clientId: this.invoiceForm.value.contactName.clientId !== undefined
+          ? this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
+        clientName: this.invoiceForm.value.clientName === undefined
           ?
           this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
-        address: this.invoiceForm.value.address === ''
+        address: this.invoiceForm.value.address === undefined
           ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
-        taxCode: this.invoiceForm.value.taxCode === ''
+        taxCode: this.invoiceForm.value.taxCode === undefined
           ? this.invoiceForm.value.contactName.taxCode : this.invoiceForm.value.taxCode,
         tag: '',
         contactName:
           this.invoiceForm.value.contactName.contactName !== undefined ?
             this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
-        email: this.invoiceForm.value.email === '' ? '' : this.invoiceForm.value.email,
+        email: this.invoiceForm.value.email === undefined
+        ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
+        check: this.invoiceForm.value.checked,
       };
+      if (request.invoiceSerial === null) {
+        request.invoiceSerial  = '';
+      }
       const requestInvDt = [];
       if (this.EditUpload !== true) {
         this.uploadFileMultiple(request);
+      }
+      if (request.clientId === null) {
+        request.clientId = 0;
+      }
+      if (this.coppyMode === true) {
+        request.amountPaid = 0;
       }
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
         this.invoiceService.getDF().subscribe((x: any) => {
@@ -666,19 +715,21 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           }
 
           this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
+            this.invoiceId = this.saleInvId;
             if (!this.coppyMode) {
               this.notify.success('Successfully Add');
             } else {
-              this.invoiceId = this.saleInvId;
               this.coppyMode = false;
+              this.checkIcon = false;
               this.notify.success('Coppy invoice successfully');
             }
-            this.invoiceForm.reset();
-            this.viewMode = false;
-            this.clientSelected.clientId = 0;
-            this.createForm();
-            this.getLastIv();
-            this.deleteClient();
+            // this.invoiceForm.reset();
+             this.viewMode = true;
+             this.getInvoiceById(this.invoiceId);
+            //  this.clientSelected.clientId = 0;
+            //  this.createForm();
+            //  this.getLastIv();
+            //  this.deleteClient();
           });
         });
       });
@@ -715,6 +766,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       const request1 = {
         invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
         this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
@@ -761,13 +813,16 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           email: this.invoiceForm.value.contactName !== null
             ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
           note: this.invoiceForm.value.notes,
+          check: this.invoiceForm.value.checked,
         }],
         // tslint:disable-next-line:object-literal-shorthand
         saleInvDetailView: saleInvDetailView,
       };
       const request = {
+        check: this.invoiceForm.value.checked,
         invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
         this.invoiceForm.value.issueDate.month, this.invoiceForm.value.issueDate.day].join('-'),
@@ -821,6 +876,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.invoiceService.updateSaleInv(this.requestData).pipe(
         finalize(() => {
         })).subscribe(rs => {
+          this.viewMode = true;
+          this.checkIcon = false;
           if (this.requestRemove.length <= 0) {
             this.router.navigate([`/pages/invoice/${this.invoiceForm.value.invoiceId}/${ActionType.View}`]);
           }
@@ -1323,12 +1380,24 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     ngbTypeheadScrollToActiveItem(e);
   }
   public onFocus(e: Event): void {
-    if (!this.viewMode) {
-      e.stopPropagation();
-      setTimeout(() => {
-        const inputEvent: Event = new Event('input');
-        e.target.dispatchEvent(inputEvent);
-      }, 0);
+    if ((!this.viewMode ) && this.isRead === false) {
+      if ( this.isCheckFcCoppy === true) {
+        e.stopPropagation();
+        setTimeout(() => {
+          const inputEvent: Event = new Event('input');
+          e.target.dispatchEvent(inputEvent);
+        }, 0);
+      }
+    }
+  }
+
+  focusInvoiceNumber() {
+    if (this.invoiceForm.controls.taxInvoiceNumber.value === '' && this.invoiceForm.controls.checked.value === false) {
+      this.t.toggle();
+    }
+    if (!this.viewMode && !this.editMode && this.invoiceForm.controls.taxInvoiceNumber.value === '') {
+      this.isCheckCheckbox = true;
+      this.invoiceForm.controls.taxInvoiceNumber.patchValue(this.invoiceForm.controls.invoiceNumber.value);
     }
   }
 }

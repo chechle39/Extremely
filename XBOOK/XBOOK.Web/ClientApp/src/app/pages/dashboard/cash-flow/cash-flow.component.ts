@@ -11,6 +11,7 @@ import { DashboardRequest, BalanceChartView } from '../../_shared/models/dashboa
 import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs/operators';
 import { ChartBase } from '../chart-base';
+import * as moment from 'moment';
 
 @Component({
   selector: 'xb-cash-flow',
@@ -100,7 +101,14 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
         endDate;
     const t = new Date();
     switch (monthParam) {
-      case 'Jan': {
+      case 'Tháng này':
+      case 'This month': {
+        firstDate = new Date(t.getFullYear(), t.getMonth(), 1).toLocaleDateString('en-GB');
+        endDate = new Date(t.getFullYear(), t.getMonth() + 1, 0).toLocaleDateString('en-GB');
+        break;
+      }
+      case 'Tháng 1':
+      case 'January': {
         const startDay = new Date(t.getFullYear(), 0, 1);
         const lastDay = new Date(t.getFullYear(), 1, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -108,7 +116,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Feb': {
+      case 'Tháng 2':
+      case 'February': {
         const startDay = new Date(t.getFullYear(), 1, 1);
         const lastDay = new Date(t.getFullYear(), 2, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -116,7 +125,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Mar': {
+      case 'Tháng 3':
+      case 'March': {
         const startDay = new Date(t.getFullYear(), 2, 1);
         const lastDay = new Date(t.getFullYear(), 3, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -124,7 +134,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Apr': {
+      case 'Tháng 4':
+      case 'April': {
         const startDay = new Date(t.getFullYear(), 3, 1);
         const lastDay = new Date(t.getFullYear(), 4, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -132,6 +143,7 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
+      case 'Tháng 5':
       case 'May': {
         const startDay = new Date(t.getFullYear(), 4, 1);
         const lastDay = new Date(t.getFullYear(), 5, 0, 23, 59, 59);
@@ -140,7 +152,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Jun': {
+      case 'Tháng 6':
+      case 'June': {
         const startDay = new Date(t.getFullYear(), 5, 1);
         const lastDay = new Date(t.getFullYear(), 6, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -148,7 +161,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Jul': {
+      case 'Tháng 7':
+      case 'July': {
         const startDay = new Date(t.getFullYear(), 6, 1);
         const lastDay = new Date(t.getFullYear(), 7, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -156,7 +170,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Aug': {
+      case 'Tháng 8':
+      case 'August': {
         const startDay = new Date(t.getFullYear(), 7, 1);
         const lastDay = new Date(t.getFullYear(), 8, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -164,7 +179,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Sep': {
+      case 'Tháng 9':
+      case 'September': {
         const startDay = new Date(t.getFullYear(), 8, 1);
         const lastDay = new Date(t.getFullYear(), 9, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -172,7 +188,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Oct': {
+      case 'Tháng 10':
+      case 'October': {
         const startDay = new Date(t.getFullYear(), 9, 1);
         const lastDay = new Date(t.getFullYear(), 10, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -180,7 +197,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Nov': {
+      case 'Tháng 11':
+      case 'November': {
         const startDay = new Date(t.getFullYear(), 10, 1);
         const lastDay = new Date(t.getFullYear(), 11, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -188,7 +206,8 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
 
         break;
       }
-      case 'Dec': {
+      case 'Tháng 12':
+      case 'December': {
         const startDay = new Date(t.getFullYear(), 11, 1);
         const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
@@ -225,6 +244,13 @@ export class CashFlowComponent extends ChartBase implements OnInit, OnChanges {
         const lastDay = new Date(t.getFullYear(), 12, 0, 23, 59, 59);
         firstDate = startDay.toLocaleDateString('en-GB');
         endDate = lastDay.toLocaleDateString('en-GB');
+
+        break;
+      }
+      case 'Quý này':
+      case 'This quarter': {
+        firstDate = moment().startOf('quarter').toDate().toLocaleDateString('en-GB');
+        endDate = moment().endOf('quarter').toDate().toLocaleDateString('en-GB');
 
         break;
       }

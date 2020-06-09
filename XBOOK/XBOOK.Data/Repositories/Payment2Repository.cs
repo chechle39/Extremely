@@ -13,11 +13,15 @@ namespace XBOOK.Data.Repositories
 {
     public class Payment2Repository : Repository<Payments_2>, IPayment2Repository
     {
-        public Payment2Repository(XBookContext context) : base(context)
-    {
-    }
+        private readonly IUnitOfWork _uow;
+        private readonly IBuyInvoiceRepository _buyInvoiceRepository;
+        public Payment2Repository(XBookContext context, IUnitOfWork uow, IBuyInvoiceRepository buyInvoiceRepository) : base(context)
+        {
+            _uow = uow;
+            _buyInvoiceRepository = buyInvoiceRepository;
+        }
 
-    public async Task<bool> DeletedPaymentAsync(string request)
+        public async Task<bool> DeletedPaymentAsync(string request)
     {
         var finData = Entities.Where(x => x.receiptNumber == request).ToList();
         if (finData.Count() > 0)
@@ -25,8 +29,9 @@ namespace XBOOK.Data.Repositories
             foreach (var item in finData)
             {
                 Entities.Remove(item);
-
-            }
+                await _buyInvoiceRepository.UpdateItem(item.invoiceID, item.amount);
+                    _uow.SaveChanges();
+                }
             return await Task.FromResult(true);
         }
         else

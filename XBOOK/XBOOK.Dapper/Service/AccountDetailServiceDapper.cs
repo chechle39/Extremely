@@ -12,24 +12,29 @@ using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.EntitiesDBCommon;
+using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 
 namespace XBOOK.Dapper.Service
 {
     public class AccountDetailServiceDapper : IAccountDetailServiceDapper
     {
-        private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AccountDetailServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        private readonly IMemoryCache _cache;
+        private readonly IUserCommonRepository _userCommonRepository;
+
+        public AccountDetailServiceDapper(IHttpContextAccessor httpContextAccessor, IMemoryCache cache, IUserCommonRepository userCommonRepository)
         {
-            _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
+            _userCommonRepository = userCommonRepository;
         }
 
         public async Task<IEnumerable<AccountDetailGroupViewModel>> GetAccountDetailAsync(AccountDetailSerchRequest request)
         {
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 string deltaFrom = request.StartDate;
                 DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));
@@ -94,8 +99,9 @@ namespace XBOOK.Dapper.Service
 
         public async Task<IEnumerable<AccountDetailViewModel>> GetAccountDetailReportAsync(AccountDetailSerchRequest request)
         {
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 string deltaFrom = request.StartDate;
                 DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));

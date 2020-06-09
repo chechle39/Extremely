@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../coreapp/services/login.service';
 import { AuthenticationService } from '../../../coreapp/services/authentication.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
@@ -17,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
-
+  slogan: string;
   themes = [
     {
       value: 'default',
@@ -60,7 +61,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private authenticationService: AuthenticationService,
     private router: Router,
-    private breakpointService: NbMediaBreakpointsService) {
+    private breakpointService: NbMediaBreakpointsService,
+    private http: HttpClient,
+    ) {
       menuService.onItemClick()
       .pipe(filter(({ tag }) => tag === this.tag))
       .subscribe((rp) => {
@@ -68,6 +71,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.logout();
         }
       });
+      this.http.get('assets/slogan.txt', { responseType: 'text' }).subscribe((data: any) => {
+        this.slogan = data;
+      })
   }
 
   ngOnInit() {

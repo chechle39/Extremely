@@ -1,0 +1,14 @@
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\bin\Debug\netcoreapp2.2\Xbook.TaxInvoice.deps.json
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\bin\Debug\netcoreapp2.2\Xbook.TaxInvoice.dll
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\bin\Debug\netcoreapp2.2\XBOOK.Data.dll
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\bin\Debug\netcoreapp2.2\XBOOK.Common.dll
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\bin\Debug\netcoreapp2.2\XBOOK.Data.pdb
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\bin\Debug\netcoreapp2.2\XBOOK.Common.pdb
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\obj\Debug\netcoreapp2.2\Xbook.TaxInvoice.csprojAssemblyReference.cache
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\obj\Debug\netcoreapp2.2\Xbook.TaxInvoice.AssemblyInfoInputs.cache
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\obj\Debug\netcoreapp2.2\Xbook.TaxInvoice.AssemblyInfo.cs
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\obj\Debug\netcoreapp2.2\Xbook.TaxInvoice.csproj.CopyComplete
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\bin\Debug\netcoreapp2.2\Xbook.TaxInvoice.pdb
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\obj\Debug\netcoreapp2.2\Xbook.TaxInvoice.dll
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\obj\Debug\netcoreapp2.2\Xbook.TaxInvoice.pdb
+D:\svnnew\XBOOK\Xbook.TaxInvoice\Xbook.TaxInvoice\obj\Debug\netcoreapp2.2\Xbook.TaxInvoice.csproj.CoreCompileInputs.cache

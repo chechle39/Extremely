@@ -68,7 +68,7 @@ namespace XBOOK.Data.Repositories
             var data = await Entities.ProjectTo<MoneyReceiptViewModel>().Where(x => x.ID == id).AsNoTracking().ToListAsync();
             var dataMoney = new MoneyReceiptByIdViewModel()
             {
-                Address = await _clientRepository.GetAllClientByID(data[0].ClientID),
+                Address = data[0].ClientID != null ? await _clientRepository.GetAllClientByID(data[0].ClientID) : null,
                 Amount = data[0].Amount,
                 ClientID = data[0].ClientID,
                 ClientName = data[0].ClientName,

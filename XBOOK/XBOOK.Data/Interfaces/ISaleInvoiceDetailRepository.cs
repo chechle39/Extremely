@@ -11,9 +11,9 @@ namespace XBOOK.Data.Interfaces
 {
     public interface ISaleInvoiceDetailRepository : IRepository<SaleInvDetail>
     {
-        bool CreateSaleIvDetail(SaleInvDetailViewModel request);
+        SaleInvDetail CreateSaleIvDetail(SaleInvDetailViewModel request);
         bool RemoveAll(List<SaleInvDetailViewModel> request);
-        bool UpdateSaleInvDetail(SaleInvDetailViewModel rs);
+        SaleInvDetail UpdateSaleInvDetail(SaleInvDetailViewModel rs);
         Task<bool> RemoveSale(List<Deleted> id);
 
     }

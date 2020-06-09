@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using XBOOK.Data.Model;
 using XBOOK.Common.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Http;
 
 namespace XBOOK.Web.Controllers
 {
@@ -14,10 +16,14 @@ namespace XBOOK.Web.Controllers
     {
         IMasterParamService _iMasterParamService;
         private readonly IAuthorizationService _authorizationService;
-        public MasterParamController(IMasterParamService iMasterParamService, IAuthorizationService authorizationService)
+        private readonly IMemoryCache _cache;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public MasterParamController(IMasterParamService iMasterParamService, IAuthorizationService authorizationService, IMemoryCache cache, IHttpContextAccessor httpContextAccessor)
         {
             _iMasterParamService = iMasterParamService;
             _authorizationService = authorizationService;
+            _cache = cache;
+            _httpContextAccessor = httpContextAccessor;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> GetAllMaster()
@@ -72,7 +78,17 @@ namespace XBOOK.Web.Controllers
             var result = await _authorizationService.AuthorizeAsync(User, "Master Param", Operations.Read);
             if (!result.Succeeded)
                 return Unauthorized();
-            return Ok(await _iMasterParamService.GetMasTerByPaymentReceipt());
+            List<MasterParamViewModel> master ;
+            var code  = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            if (_cache.TryGetValue(CacheKey.Masterparam.MasTerByPaymentReceipt + code, out List<MasterParamViewModel> cacheData))
+            {
+                master = cacheData;
+            } else
+            {
+                master = (List<MasterParamViewModel>)await _iMasterParamService.GetMasTerByPaymentReceipt();
+                _cache.Set(CacheKey.Masterparam.MasTerByPaymentReceipt + code, master);
+            }
+            return Ok(master);
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> GetMasTerByMoneyReceipt()
@@ -80,7 +96,19 @@ namespace XBOOK.Web.Controllers
             var result = await _authorizationService.AuthorizeAsync(User, "Master Param", Operations.Read);
             if (!result.Succeeded)
                 return Unauthorized();
-            return Ok(await _iMasterParamService.GetMasTerByMoneyReceipt());
+            List<MasterParamViewModel> master;
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            if (_cache.TryGetValue(CacheKey.Masterparam.MasTerByMoneyReceipt + code, out List<MasterParamViewModel> cacheData))
+            {
+                master = cacheData;
+            }
+            else
+            {
+                master = (List<MasterParamViewModel>)await _iMasterParamService.GetMasTerByMoneyReceipt();
+                _cache.Set(CacheKey.Masterparam.MasTerByMoneyReceipt + code, master);
+            }
+
+            return Ok(master);
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> GetMasTerByPaymentType()
@@ -88,7 +116,18 @@ namespace XBOOK.Web.Controllers
             var result = await _authorizationService.AuthorizeAsync(User, "Master Param", Operations.Read);
             if (!result.Succeeded)
                 return Unauthorized();
-            return Ok(await _iMasterParamService.GetMasTerByPaymentType());
+            List<MasterParamViewModel> master;
+            var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            if (_cache.TryGetValue(CacheKey.Masterparam.PaymentType + code, out List<MasterParamViewModel> cacheData))
+            {
+                master = cacheData;
+            }
+            else
+            {
+                master = (List<MasterParamViewModel>)await _iMasterParamService.GetMasTerByPaymentType();
+                _cache.Set(CacheKey.Masterparam.PaymentType + code, master);
+            }
+            return Ok(master);
         }
     }
 }

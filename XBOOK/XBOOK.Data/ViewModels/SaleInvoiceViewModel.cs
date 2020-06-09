@@ -25,6 +25,7 @@ namespace XBOOK.Data.ViewModels
             ClientId = clientId;
         }
 
+        public string TaxInvoiceNumber { get; set; }
         public long InvoiceId { get; set; }
         public string InvoiceSerial { get; set; }
         public string InvoiceNumber { get; set; }

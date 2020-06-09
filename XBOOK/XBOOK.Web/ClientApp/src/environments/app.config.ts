@@ -156,8 +156,6 @@ export const API_URI = {
   checkAcount: 'api/Account/CheckUserAcount',
   register: 'api/Account/Register',
   getAllUser: 'api/User/GetUser',
-  getAllUserX: 'api/User/GetXXXXXXXXXXXXXX',
-
   getUserById: 'api/User/GetById',
   getRoleById: 'api/Role/GetById',
 
@@ -180,6 +178,12 @@ export const API_URI = {
   getBalanceChart: 'api/Dashboard/GetBalanceChartDataAsync',
   getSaleInvoiceReport: 'api/Dashboard/GetSaleInvoiceReportAsync',
   getAllChart: 'api/Dashboard/GetAllChartAsync',
+
+  getAllTaxInvoice: 'api/TaxSaleInvoice/GetAllTaxSaleInvoice',
+  taxInvoiceById: 'api/TaxSaleInvoice/GetTaxSaleInvoiceById',
+  getTaxInvoiceFileName: 'api/TaxSaleInvoice/GetFile',
+  lastTaxInvoice: 'api/TaxSaleInvoice/GetLastIndexTaxInvoiceAsync',
+  updateTaxSaleInv: 'api/TaxSaleInvoice/UpdateTaxSaleInvoice',
 
 };
 export const PAGING_CONFIG = {

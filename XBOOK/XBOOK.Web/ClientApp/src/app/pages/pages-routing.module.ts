@@ -12,6 +12,16 @@ const routes: Routes = [
   children: [
     // { path: 'print/:key', component: PrintComponent, data: { title: extract('print') } },
     {
+      path: 'taxinvoice',
+      loadChildren: () => import('./taxinvoices/taxinvoice.module')
+        .then(m => m.TaxInvoicesModule),
+    },
+    {
+      path: 'taxbuyinvoice',
+      loadChildren: () => import('./taxbuyinvoices/taxbuyinvoice.module')
+        .then(m => m.TaxBuyInvoicesModule),
+    },
+    {
       path: 'invoice',
       loadChildren: () => import('./invoices/invoice.module')
         .then(m => m.InvoicesModule),

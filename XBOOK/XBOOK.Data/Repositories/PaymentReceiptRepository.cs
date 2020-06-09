@@ -71,7 +71,7 @@ namespace XBOOK.Data.Repositories
             var data = await Entities.ProjectTo<PaymentReceiptViewModel>().Where(x=>x.ID == id).AsNoTracking().ToListAsync();
             var dataPayment = new PaymentReceiptByIdViewModel()
             {
-                Address = await _supplierRepository.GetSupplierByID(data[0].SupplierID),
+                Address = data[0].SupplierID != null ? await _supplierRepository.GetSupplierByID(data[0].SupplierID) : null,
                 Amount = data[0].Amount,
                 SupplierID = data[0].SupplierID,
                 SupplierName = data[0].SupplierName,

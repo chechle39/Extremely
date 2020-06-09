@@ -5,8 +5,9 @@
         <h1 *ngIf="viewMode === false && isCheckHidden !== true" class="invoice__title float-left">{{'BUY.INVOICE.NEW.HEADER' | translate}}</h1>
         <h1 *ngIf="viewMode || isCheckHidden === true" class="invoice__title float-left">{{'BUY.INVOICE.NO' | translate}} {{title}}</h1>
         <div class="float-right">
-          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.ACTION.PRINT' | translate}}</button>
-          <button *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
+          <!-- <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-2 ml-2 btn-secondary">{{'COMMON.ACTION.PRINT' | translate}}</button> -->
+          <button *ngIf="!viewMode"  (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
+          <button *ngIf="viewMode"  (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'INVOICE.EXIT' | translate}}</button>
           <button [disabled] = "authenticationService.hasPermission('Buy invoice','create')" *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
           <button [disabled] = "authenticationService.hasPermission('Buy invoice','update')" *ngIf="viewMode" class="btn btn-raised btn-success" (click)="redirectToEditInvoice()">{{'COMMON.ACTION.EDIT' |translate}}</button>
         </div>
@@ -21,14 +22,15 @@
               <div class="border px-3 py-3">
                 <div class="row">
                   <div class="col-md-3 col-sm-4" style="min-width: 200px;">
-                    <div class="text-left" *ngIf="imgURL">
+                    <!-- <div class="text-left" *ngIf="imgURL">
                       <img [src]="imgURL" class="preview-logo" *ngIf="imgURL">
-                    </div>
-                    <div class="upload-box d-flex align-items-center" *ngIf="!imgURL">
-                      <div class="text-center w-100 invoice__font--medium-2">
+                    </div> -->
+                    <div class="upload-box d-flex align-items-center" >
+                      <div class="text-center w-100 invoice__font--medium-2" *ngIf="!imgURL">
                         Drag you logo here,
                         <span class="d-inline-block">or select a file</span>
                       </div>
+                      <img [src]="imgURL" class="preview-logo" *ngIf="imgURL">
                       <input #file1 type="file" class="input-upload" (change)="showPreview(file1.files)">
                     </div>
                     <!-- <p class="text-danger" *ngIf="message">{{message}}</p> -->
@@ -416,7 +418,8 @@
                             (valueChange)="amountPaidChange($event)" formControlName="amountPaid"
                             class="amountPaid margin-left-13 border-0 text-right width-100-per input-amount mput-reference-custom amountPaid">
                           </kendo-numerictextbox > -->
-                          {{amountPaid | currency:'VND':''}}
+                          <span *ngIf = "coppyMode !== true">{{amountPaid | currency:'VND':''}}</span>
+                          <span *ngIf = "coppyMode === true">0</span>
                         </div>
                       </div>
 

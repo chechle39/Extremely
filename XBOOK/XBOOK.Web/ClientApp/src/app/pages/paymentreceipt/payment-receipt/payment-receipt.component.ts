@@ -54,6 +54,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
   money: number;
   inVoiceList: any = [];
   public moneyReceipt: FormGroup;
+  isSave: boolean;
 
   constructor(
     injector: Injector,
@@ -163,7 +164,14 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
 
   getDataPayAndEntry() {
     if (this.row === undefined) {
-      this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
+      // this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
+      if (this.outstandingAmount !== undefined) {
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList.filter(x => x.name
+          === 'Chi tiền mua hàng')[0].key);
+      } else {
+        this.moneyReceipt.controls.entryType.patchValue(this.entryBatternList[0].key);
+
+      }
       this.moneyReceipt.controls.paymentMethods.patchValue(this.payment[0].key);
     } else {
       const entry = this.entryBatternList.filter(x => x.name === this.row.entryType);
@@ -293,7 +301,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       } as CreatePaymentReceiptRequestList;
       this.paymentReceiptService.createPaymentReceiptPayMent(requestList).subscribe(rp => {
         this.notify.info('Saved Successfully');
-       // this.close(false);
+        this.isSave = true;
       });
     } else if (this.moneyReceipt.value.id === 0 || this.coppyMode) {
       const request = {
@@ -312,7 +320,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       } as CreatePaymentReceiptRequest;
       this.paymentReceiptService.createPaymentReceipt(request).subscribe(rp => {
         this.notify.info(!this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
-       // this.close(false);
+        this.isSave = true;
       });
     } else if (this.moneyReceipt.value.id > 0 && !this.coppyMode) {
       const request = {
@@ -332,7 +340,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       } as CreatePaymentReceiptRequest;
       this.paymentReceiptService.updatePaymentReceipt(request).subscribe(rp => {
         this.notify.info('update Successfully');
-      //  this.close(false);
+        this.isSave = true;
       });
     }
   }

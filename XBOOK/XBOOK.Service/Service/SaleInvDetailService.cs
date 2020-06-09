@@ -21,18 +21,33 @@ namespace XBOOK.Service.Service
         private readonly IProductRepository _iProductRepository;
         private readonly ISaleInvoiceDetailRepository _iSaleInvoiceDetailRepository;
         private readonly XBookContext _context;
-        public SaleInvDetailService(IUnitOfWork uow, IProductRepository iProductRepository, XBookContext context, ISaleInvoiceDetailRepository iSaleInvoiceDetailRepository)
+        private readonly ITaxInvDetailService _taxInvDetailService;
+        private readonly ISaleInvoiceRepository _saleInvoiceRepository;
+        private readonly ITaxSaleInvoiceRepository _taxSaleInvoiceRepository;
+        public SaleInvDetailService(
+            IUnitOfWork uow, 
+            IProductRepository iProductRepository, 
+            XBookContext context, 
+            ISaleInvoiceDetailRepository iSaleInvoiceDetailRepository,
+             ITaxInvDetailService taxInvDetailService,
+             ISaleInvoiceRepository saleInvoiceRepository,
+             ITaxSaleInvoiceRepository taxSaleInvoiceRepository
+            )
         {
             _uow = uow;
             _saleInvDetailUowRepository = _uow.GetRepository<IRepository<SaleInvDetail>>();
             _iProductRepository = iProductRepository;
             _context = context;
             _iSaleInvoiceDetailRepository = iSaleInvoiceDetailRepository;
+            _taxInvDetailService = taxInvDetailService;
+            _saleInvoiceRepository = saleInvoiceRepository;
+            _taxSaleInvoiceRepository = taxSaleInvoiceRepository;
         }
 
-        public bool CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
+        public async Task<bool> CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
         {
             var productUOW = _uow.GetRepository<IRepository<Product>>();
+           // var getIvTaxId =  GetTaxInvoiceId(saleInvoiceViewModel).Result;
             foreach (var item in saleInvoiceViewModel)
             {
                 SaleInvDetailViewModel saleDetailData = null;
@@ -69,10 +84,18 @@ namespace XBOOK.Service.Service
 
                 if (saleDetailData.ProductId > 0)
                 {
-                    _uow.BeginTransaction();
-                    _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailData);
-                    _uow.SaveChanges();
-                    _uow.CommitTransaction();
+                    try
+                    {
+                           _uow.BeginTransaction();
+                        var saveModel = _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailData);
+                        _uow.SaveChanges();
+                             _uow.CommitTransaction();
+                       // await CreateTaxDetail(saveModel, getIvTaxId.taxInvoiceID);
+                    } catch (Exception ex)
+                    {
+
+                    }
+                
                 }
                 else
                 if (saleDetailData.ProductId == 0 && !string.IsNullOrEmpty(saleDetailData.ProductName))
@@ -151,23 +174,21 @@ namespace XBOOK.Service.Service
                             Vat = item.Vat
                         };
                     }
-
-                    try
-                    {
-                        _uow.BeginTransaction();
-                        _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
-                        _uow.SaveChanges();
-                        _uow.CommitTransaction();
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
+                    _uow.BeginTransaction();
+                    var saveData = _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailPrd);
+                    _uow.SaveChanges();
+                    _uow.CommitTransaction();
+                  //  await CreateTaxDetail(saveData, getIvTaxId.taxInvoiceID);
                 }
             }
-            return true;
-            //var saleInvoiceDetailCreate = Mapper.Map<List<SaleInvDetailViewModel>, List<SaleInvDetail>>(saleDetail);
+            return await Task.FromResult(true);
         }
+
+        //private async Task<TaxSaleInvoice> GetTaxInvoiceId(List<SaleInvDetailViewModel> saleInvoiceViewModel)
+        //{
+        //    var getIvTax = await _taxSaleInvoiceRepository.GetTaxInvoiceBySaleInvId(saleInvoiceViewModel[0].InvoiceId);
+        //    return getIvTax.ToList()[0];
+        //}
 
         public async Task CreateSaleInvDetail(SaleInvDetailViewModel saleInvoiceViewModel)
         {
@@ -208,5 +229,24 @@ namespace XBOOK.Service.Service
             var saleInvoiceDetailCreate = Mapper.Map<List<SaleInvDetailViewModel>, List<SaleInvDetail>>(saleDetail);
             await _saleInvDetailUowRepository.Update(saleInvoiceDetailCreate);
         }
+
+        //private async Task CreateTaxDetail(SaleInvDetail saleDetailData, long id)
+        //{
+        //    var taxSaleInvoiceModelRequest = new TaxInvDetailViewModel()
+        //    {
+        //        amount = saleDetailData.amount,
+        //        description = saleDetailData.description,
+        //        ID = 0,
+        //        price = saleDetailData.price,
+        //        productID = saleDetailData.productID,
+        //        productName = saleDetailData.productName,
+        //        qty = saleDetailData.qty,
+        //        SaleInvoiceDetailId = saleDetailData.ID,
+        //        taxInvoiceID = 0,
+        //        vat = saleDetailData.vat
+        //    };
+        //    taxSaleInvoiceModelRequest.taxInvoiceID = id;
+        //    await _taxInvDetailService.CreateTaxInvDetail(taxSaleInvoiceModelRequest);
+        //}
     }
 }

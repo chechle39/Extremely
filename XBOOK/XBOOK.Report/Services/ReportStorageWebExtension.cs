@@ -29,6 +29,7 @@ namespace XBOOK.Report.Services
             {
                 try
                 {
+                    var savejs = _companyProfileReponsitory.SaveDataJson(_httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value);
                     var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
                     ReportDirectory = $@"C:\inetpub\wwwroot\XBOOK_FILE\{Code}\Reports\Template";
                     if (!Directory.Exists(ReportDirectory))

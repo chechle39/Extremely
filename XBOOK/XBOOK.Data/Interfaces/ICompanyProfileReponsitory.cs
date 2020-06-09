@@ -7,5 +7,6 @@ namespace XBOOK.Data.Interfaces
     {
         void UpdateProfile(CompanyProfile file);
         Task<CompanyProfile> GetCompanyProFile();
+        bool SaveDataJson(string code);
     }
 }

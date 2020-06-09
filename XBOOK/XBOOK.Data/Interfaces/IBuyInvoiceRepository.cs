@@ -17,5 +17,6 @@ namespace XBOOK.Data.Interfaces
         Task<BuyInvoiceViewModel> GetLastBuyInvoice();
         Task<IEnumerable<BuyInvoiceViewModel>> GetBuyInvoiceById(long id);
         bool UpdateSaleInvEn(Invoice request, decimal sum);
+        Task<bool> UpdateItem(long id, decimal sum);
     }
 }

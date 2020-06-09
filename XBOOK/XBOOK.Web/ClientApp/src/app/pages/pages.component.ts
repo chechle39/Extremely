@@ -47,7 +47,7 @@ export class PagesComponent implements OnInit {
   ngOnInit(): void {
     this.menuService.getAllMenu()
       .subscribe((rp: any) => {
-        this.rawMenu = rp;
+        this.rawMenu = rp.filter(item => item.title !== '');
         this.loadMenu();
       });
   }
@@ -59,26 +59,25 @@ export class PagesComponent implements OnInit {
         .subscribe(titles => {
           this.menu = [];
           for (let i = 0; i < this.rawMenu.length; i++) {
+            let data;
             if (this.rawMenu[i].children.length === 0) {
-              const data = {
+              data = {
                 title: titles[this.rawMenu[i].title],
                 icon: this.iconFactory(this.rawMenu[i].icon),
                 link: this.rawMenu[i].link,
               };
-              this.menu.push(data);
             } else {
-              const data = {
+              data = {
                 title: titles[this.rawMenu[i].title],
                 icon: this.iconFactory(this.rawMenu[i].icon),
-                link: this.rawMenu[i].link,
                 children: this.rawMenu[i].children.map(child => {
                   const subMenu = {...child};
                   subMenu.title = titles[child.title];
                   return subMenu;
                 }),
               };
-              this.menu.push(data);
             }
+            this.menu.push(data);
           }
           this.setMenuItemActiveWhenExpanded();
     });

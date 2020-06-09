@@ -6,7 +6,7 @@ import { AppComponentBase } from '../../../../coreapp/app-base.component';
 import { TaxService } from '../../../_shared/services/tax.service';
 
 @Component({
-  selector: 'ngx-add-tax',
+  selector: 'xb-add-tax',
   templateUrl: './add-tax.component.html',
   styleUrls: ['./add-tax.component.scss'],
 })

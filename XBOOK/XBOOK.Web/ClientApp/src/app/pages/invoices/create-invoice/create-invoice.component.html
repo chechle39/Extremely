@@ -5,8 +5,9 @@
         <h1 *ngIf="viewMode === false && isCheckHidden !== true" class="invoice__title float-left">{{'INVOICE.NEW.HEADER' | translate}}</h1>
         <h1 *ngIf="viewMode || isCheckHidden === true" class="invoice__title float-left">{{'INVOICE.NO' | translate}} {{title}}</h1>
         <div class="float-right mt-1">
-          <button *ngIf="viewMode " (click)="Print()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{ 'COMMON.ACTION.PRINT' | translate }}</button>
-          <button  *ngIf="!viewMode" (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
+          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-2 ml-2 btn-secondary"><i class="ft-printer"></i> {{'COMMON.ACTION.PRINT' | translate}}</button>
+          <button *ngIf="!viewMode"  (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
+          <button *ngIf="viewMode"  (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'INVOICE.EXIT' | translate}}</button>
           <button [disabled] = "authenticationService.hasPermission('Invoice','create')" *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
           <button [disabled] = "authenticationService.hasPermission('Invoice','update')" *ngIf="viewMode" (click)="redirectToEditInvoice()" class="btn btn-raised btn-success">{{ 'COMMON.ACTION.EDIT' | translate }}</button>
         </div>
@@ -21,15 +22,18 @@
               <div class="border px-3 py-3">
                 <div class="row">
                   <div class="col-md-3 col-sm-4" style="min-width: 200px;">
-                    <div class="text-left" *ngIf="imgURL">
+                    <!-- <div class="text-left" *ngIf="imgURL">
                       <img [src]="imgURL" class="preview-logo" *ngIf="imgURL">
-                    </div>
-                    <div class="upload-box d-flex align-items-center" *ngIf="!imgURL">
-                      <div class="text-center w-100 invoice__font--medium-2">
+                    </div> -->
+                    <div class="upload-box d-flex align-items-center" >
+                      <div class="text-center w-100 invoice__font--medium-2 " *ngIf="!imgURL">
                         Drag you logo here,
                         <span class="d-inline-block">or select a file</span>
+                        
                       </div>
-                      <input #file1 type="file" class="input-upload" (change)="showPreview(file1.files)">
+                      <img [src]="imgURL" class="preview-logo" *ngIf="imgURL">
+                      <input #file1 [src]="imgURL" type="file" class="input-upload" (change)="showPreview(file1.files)">
+                      
                     </div>
                     <!-- <p class="text-danger" *ngIf="message">{{message}}</p> -->
                   </div> <!-- end upload col-sm-6 -->
@@ -170,25 +174,40 @@
                       </div>
                       <div class="col-6 refer px-0">
                         <div>
-                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.SERI' | translate}}</p>
-                          <div class="row" style="margin-left: 0px">
+                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.INVOICENUMBER' | translate}}</p>
+                          <div class="row mx-0">
                             <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.GRID.INVOICE' | translate}}"
                               class="form-control" type="text" formControlName="invoiceNumber" [readOnly]="isRead"
                               [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false || isMouseEnter == false}"
-                              class="col-6 width-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
+                              class=" w-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
                               required />
-                            <input style="opacity: unset;" kendotextbox placeholder="Seri"
-                              formControlName="invoiceSerial" [readOnly]="isRead"
-                              [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false || isMouseEnter == false}"
-                              class="width-50 imput-reference-custom invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3" />
+                            
                           </div>
 
                         </div>
-                        <div class="mt-0">
-                          <p class="mb-0 invoice__input__title invoice__text--height-normal">{{'ACCOUNT.DETAIL.LIST.reference' | translate}}</p>
-                          <input kendotextbox placeholder="{{'INVOICE.FORM.CREATE.REFERENCE' | translate}}" formControlName="reference"
-                            style="opacity: unset" [readOnly]="isRead"
-                            class="border-0 full-width imput-reference-custom place-holder__color invoice__text--height-normal invoice__font--medium-2" />
+                        
+                        <div>
+                          <div class="row mx-0">
+                            <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.VAT' | translate}}</p>
+                            <p-checkbox 
+                              formControlName="checked"
+                              [hidden] ="isCheckCheckbox === false" 
+                              class="checkbox" 
+                              placement="right" 
+                              ngbTooltip="Check to add new Tax Invoive from this Invoice" 
+                              #t="ngbTooltip" 
+                              [autoClose]="true" 
+                              binary="true">
+                            </p-checkbox>
+                          </div>
+                         
+                          <div class="row mx-0">
+                            <input style="opacity: unset;" kendotextbox placeholder="VAT" (focus)="focusInvoiceNumber()"
+                              formControlName="taxInvoiceNumber" [readOnly]="isRead"
+                              [ngClass]="{'border-0':invoiceForm.controls.taxInvoiceNumber.touched === false || invoiceForm.controls.taxInvoiceNumber.invalid === false || isMouseEnter == false}"
+                              class="w-100 amountPaid invoice__input__textbox place-holder__color invoice__text--height-normal" />
+                          </div>
+
                         </div>
 
                         <!-- <div class="mt-2">
@@ -198,12 +217,20 @@
                         </div> -->
 
                       </div>
-                      <div class="col-sm-12 amountDue px-0">
+                      <!-- <div class="col-sm-12 amountDue px-0">
                         <div class="row mx-0">
                           <p class="invoice__input__title invoice__text--height-normal col-6 px-0">{{'INVOICE.FORM.CREATE.AMOUNTDUE' | translate}}</p>
                           <div class="input-group invoice__text--height-normal invoice__font--medium-2 col-6 px-0">
                             {{amountDue | currency:'VND':''}}
                           </div>
+                        </div>
+                      </div> -->
+                      <div class="col-12 px-0">
+                        <div class="mt-0 d-flex">
+                          <p class="mb-0 text-nowrap mr-2 invoice__input__title invoice__text--height-normal">{{'ACCOUNT.DETAIL.LIST.reference' | translate}}</p>
+                          <textarea kendoTextArea [autoSize]="true" placeholder="{{'INVOICE.FORM.CREATE.REFERENCE' | translate}}" formControlName="reference"
+                            style="opacity: unset" [readOnly]="isRead"
+                            class="p-0 border-0 full-width imput-reference-custom place-holder__color invoice__text--height-normal invoice__font--medium-2"></textarea>
                         </div>
                       </div>
                     </div>
@@ -401,18 +428,18 @@
                             (valueChange)="amountPaidChange($event)" formControlName="amountPaid"
                             class="amountPaid margin-left-13 border-0 text-right width-100-per input-amount mput-reference-custom amountPaid">
                           </kendo-numerictextbox > -->
-                          {{amountPaid | currency:'VND':''}}
+                          <span *ngIf = "coppyMode !== true">{{amountPaid | currency:'VND':''}}</span>
+                          <span *ngIf = "coppyMode === true">0</span>
                         </div>
                       </div>
-
-                      <!-- <div class="row">
-                        <div class="col-6 text-right">
-                          Amount Due
+                      <div class="amountDue">
+                        <div class="row">
+                          <p class="col-6 text-right">{{'INVOICE.FORM.CREATE.AMOUNTDUE' | translate}}</p>
+                          <div class="col-6 text-right">
+                            {{amountDue | currency:'VND':''}}
+                          </div>
                         </div>
-                        <div class="col-6 text-right">
-                          {{amountDue | currency:'VND':''}}
-                        </div>
-                      </div> -->
+                      </div>
                     </div>
 
                   </div>

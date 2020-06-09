@@ -50,9 +50,29 @@
       white-space: nowrap;
       text-decoration: none;
     }
+    &:nth-child(1){
+      flex-basis: 15.75rem;
+      @media screen and (max-width: 1200px){
+        flex-basis: auto;
+      }
+    }
+    &:nth-child(2){
+      flex: 1 1 auto;
+      position: relative;
+      justify-content: flex-end;
+      .header__slogan{
+        color: #922999;
+        @media screen and (max-width: 1200px){
+          position: static;
+        }
+        @media screen and (max-width: 575px){
+          display: none;
+        }
+      }
+    }
   }
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(md) {
     .control-item {
       display: none;
     }

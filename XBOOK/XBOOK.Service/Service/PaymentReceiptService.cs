@@ -114,16 +114,18 @@ namespace XBOOK.Service.Service
 
         public async Task<bool> DeletedPaymentReceipt(List<requestDeleted> request)
         {
-            var remove = await _iPaymentReceiptRepository.Deleted(request);
             var paymentGL = new PaymentReceiptGL(_uow);
-
             foreach (var item in request)
             {
                 await _paymentRepository.DeletedPaymentAsync(item.receiptNumber);
                 var data = _paymentReceiptUowRepository.GetAll().Where(x => x.ID == item.id).ProjectTo<PaymentReceiptViewModel>().ToList();
                 paymentGL.Delete(data[0]);
-                _uow.SaveChanges();
+
             }
+            var remove = await _iPaymentReceiptRepository.Deleted(request);
+   
+
+    
 
             _uow.SaveChanges();
             return remove;

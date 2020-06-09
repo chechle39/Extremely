@@ -22,7 +22,7 @@ namespace XBOOK.Service.AutoMapper
 
             CreateMap<SaleInvoiceViewModel, SaleInvoice>()
             .ConstructUsing(x => new SaleInvoice(x.InvoiceId,x.InvoiceNumber,x.InvoiceSerial,x.IssueDate,
-           x.ClientId,x.Discount,x.DiscRate,x.DueDate,x.Note,x.Term,x.Status));
+           x.ClientId,x.Discount,x.DiscRate,x.DueDate,x.Note,x.Term,x.Status,x.TaxInvoiceNumber));
 
             CreateMap<SaleInvoiceModelRequest, SaleInvoice>()
             .ConstructUsing(x => new SaleInvoice(x.InvoiceId, x.InvoiceNumber, x.InvoiceSerial, x.IssueDate,x.ClientId,
@@ -82,6 +82,18 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<FunctionViewModel, Functions>().ConstructUsing(x => new Functions(x.IconCss, x.Id, x.Name, x.ParentId, x.SortOrder, x.Status, x.URL));
             CreateMap<PermissionViewModel, Permission>().ConstructUsing(x => new Permission(x.Id, x.Read, x.RoleId, x.Update, x.Create, x.Delete, x.FunctionId));
 
+            CreateMap<TaxSaleInvoiceModelRequest, TaxSaleInvoice>()
+            .ConstructUsing(x => new TaxSaleInvoice(x.taxInvoiceID, x.invoiceNumber, x.invoiceSerial, x.issueDate,
+           x.clientID, x.discount, x.discRate, x.dueDate, x.note, x.term, x.status,x.TaxInvoiceNumber));
+            CreateMap<TaxSaleInvoiceModelRequest, SaleInvoiceModelRequest>()
+           .ConstructUsing(x => new SaleInvoiceModelRequest(x.amountPaid, x.invoiceNumber, x.invoiceSerial, x.issueDate,
+          x.clientID, x.discount, x.discRate, x.dueDate, x.note, x.term, x.status,x.TaxInvoiceNumber));
+
+            CreateMap<TaxInvDetailViewModel, TaxSaleInvDetail>().ConstructUsing(x => new TaxSaleInvDetail(x.taxInvoiceID, x.price, x.productID
+             , x.productName, x.qty, x.vat, x.ID, x.amount,x.SaleInvoiceDetailId));
+            CreateMap<TaxInvDetailViewModel, SaleInvDetailViewModel>().ConstructUsing(x => new SaleInvDetailViewModel(x.amount,x.description,x.ID,x.price,x.productID,x.productName,x.qty,x.taxInvoiceID,x.vat,x.SaleInvoiceDetailId));
+            CreateMap<TaxSaleInvoiceModelRequest, SaleInvoice>().ConstructUsing(x => new SaleInvoice(x.taxInvoiceID, x.amountPaid, x.clientID
+            , x.discount, x.discRate, x.dueDate, x.invoiceNumber, x.invoiceSerial,x.issueDate,x.note,x.reference,x.reference,x.TaxInvoiceNumber,x.status,x.subTotal,x.term,x.vatTax));
         }
     }
 }

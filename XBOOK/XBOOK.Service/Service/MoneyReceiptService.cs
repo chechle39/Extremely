@@ -102,7 +102,6 @@ namespace XBOOK.Service.Service
 
         public async Task<bool> DeletedMoneyReceipt(List<requestDeleted> request)
         {
-            var remove = await _iMoneyReceiptRepository.Deleted(request);
             var moneyGL = new MoneyReceiptGL(_uow);
             foreach (var item in request)
             {
@@ -110,6 +109,8 @@ namespace XBOOK.Service.Service
                 var data = _moneyReceiptUowRepository.GetAll().Where(x => x.ID == item.id).ProjectTo<MoneyReceiptViewModel>().ToList();
                 moneyGL.Delete(data[0]);
             }
+            var remove = await _iMoneyReceiptRepository.Deleted(request);
+           
             _uow.SaveChanges();
             return remove;
         }

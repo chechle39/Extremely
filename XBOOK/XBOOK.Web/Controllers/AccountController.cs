@@ -94,7 +94,7 @@ namespace XBOOK.Web.Controllers
             }
             var company = await _iCompanyProfileService.GetInFoProfile1();
             var roles = await _userManager.GetRolesAsync(finUser);
-            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon.Code);
+            var perList = await _permissionDapper.GetAppFncPermission(finUser.Id, dataUserCommon);
             var jwt = await XBOOK.Web.Helpers.Tokens.GenerateJwt(identity, _jwtFactory, model.Email, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented }, roles, company, perList, finUser.FullName, dataUserCommon.Code);
             return new OkObjectResult(jwt);
         }

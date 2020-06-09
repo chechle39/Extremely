@@ -1,5 +1,5 @@
 <nb-card style="min-height: 70vh;">
-  <nb-card-header class="layout__container--medium">
+  <nb-card-header class="layout__container--medium overflow-visible">
     <div class="row">
       <div class="col-6">
         <span class="card__title">{{'MONEY.RECEIPT.TITLE' | translate}}</span>
@@ -9,7 +9,7 @@
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body class="layout__container--medium">
+  <nb-card-body class="layout__container--medium overflow-visible">
       <div class="row">
         <div class="col-lg-4 col-md-4 col-6" style="padding-top: 6px;">
           <div class="label-blue">{{'PAYMENT.RECEIPT.ALL.HEADER' | translate}}<span *ngIf="selected.length > 0">> {{'COMMON.SELECTED' | translate}} ({{selected.length}})</span>
@@ -116,8 +116,14 @@
          
           <ngx-datatable-column name="{{'PAYMENT.RECIPT.GRID.HEADER.CLIENT' | translate}}" prop="clientName">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div class="pr-1">{{row.clientName}}</div>
-              <div class="col-more-info font-small-3">{{row.receiptNumber}}</div>
+              <!-- <div class="pr-1">{{row.clientName}}</div>
+              <div class="col-more-info font-small-3">{{row.receiptNumber}}</div> -->
+              <div>
+                {{row.clientName}}
+              </div>
+              <div class="col-more-info">
+               {{row.receiptNumber}}
+              </div>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="note" name="{{'INVOICE.GRID.HEADER.NOTES' | translate}}" [cellClass]="'col-id'" [headerClass]="'col-id'">

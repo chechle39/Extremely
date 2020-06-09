@@ -5,6 +5,28 @@ namespace XBOOK.Data.Model
 {
     public class SaleInvoiceModelRequest
     {
+        private int? clientID;
+        private string taxInvoiceNumber;
+
+        public SaleInvoiceModelRequest() { }
+
+        public SaleInvoiceModelRequest(decimal? amountPaid, string invoiceNumber, string invoiceSerial, DateTime? issueDate, int? clientID, decimal? discount, decimal? discRate, DateTime? dueDate, string note, string term, string status, string taxInvoiceNumber)
+        {
+            AmountPaid = amountPaid;
+            InvoiceNumber = invoiceNumber;
+            InvoiceSerial = invoiceSerial;
+            IssueDate = issueDate;
+            this.clientID = clientID;
+            Discount = discount;
+            DiscRate = discRate;
+            DueDate = dueDate;
+            Note = note;
+            Term = term;
+            Status = status;
+            this.taxInvoiceNumber = taxInvoiceNumber;
+        }
+        public string TaxInvoiceNumber { get; set; }
+
         public long InvoiceId { get; set; }
         public string InvoiceSerial { get; set; }
         public string InvoiceNumber { get; set; }
@@ -26,6 +48,7 @@ namespace XBOOK.Data.Model
         public string Tag { get; set; }
         public string ContactName { get; set; }
         public string Email { get; set; }
+        public bool Check { get; set; }
     }
 
     public class SaleInvoiceListRequest

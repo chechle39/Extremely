@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using DevExpress.AspNetCore;
+using DevExpress.AspNetCore.Reporting;
+using DevExpress.Security.Resources;
+using DevExpress.XtraReports.Security;
+using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -40,7 +44,8 @@ namespace XBOOK.Web
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
         public Startup(IHostingEnvironment env)
         {
-
+            ScriptPermissionManager.GlobalInstance = new ScriptPermissionManager(ExecutionMode.Unrestricted);
+            AccessSettings.StaticResources.TrySetRules(DirectoryAccessRule.Allow(@"C:\\uploaded"));
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -71,7 +76,7 @@ namespace XBOOK.Web
             );
             services
                 .AddMvc()
-   
+                .AddDefaultReportingControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
             services.Configure<JwtIssuerOptions>(options =>
@@ -96,12 +101,7 @@ namespace XBOOK.Web
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Login/Index";
-                    options.AccessDeniedPath = "/User/Forbidden/";
-                });
+
 
             services.AddAuthentication(options =>
             {
@@ -126,9 +126,9 @@ namespace XBOOK.Web
                 };
             });
 
-            //            services.AddDevExpressControls();
-            //services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
-            //DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
+                        services.AddDevExpressControls();
+            services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -159,14 +159,14 @@ namespace XBOOK.Web
                 }));
 
 
-            //services.ConfigureReportingServices(configurator => {
-            //    configurator.ConfigureReportDesigner(designerConfigurator => {
-            //        designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
-            //    });
-            //    configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
-            //        viewerConfigurator.UseCachedReportSourceBuilder();
-            //    });
-            //});
+            services.ConfigureReportingServices(configurator => {
+                configurator.ConfigureReportDesigner(designerConfigurator => {
+                    designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
+                });
+                configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
+                    viewerConfigurator.UseCachedReportSourceBuilder();
+                });
+            });
 
             services.AddAutoMapper();
             services.AddTransient<IEmailSender, EmailSender>();
@@ -174,6 +174,7 @@ namespace XBOOK.Web
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
             services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            // service
             services.AddTransient<ISaleInvoiceService, SaleInvoiceService>();
             services.AddTransient<IPaymentsService, PaymentsService>();
             services.AddTransient<IClientService, ClientService>();
@@ -198,10 +199,11 @@ namespace XBOOK.Web
             services.AddTransient<IJournalEntryService, JournalEntryService>();
             services.AddTransient<IJournalDetailService, JournalDetailService>();
             services.AddTransient<IFunctionsService, FunctionsService>();
-            services.AddTransient<IMoneyFundServiceDapper, MoneyFundServiceDapper>();
-
-            services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
-            services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();
+            services.AddTransient<ICachingService, MemoryCacheService>();
+            services.AddTransient<IUserCommonService, UserCommonService>();
+            services.AddTransient<ITaxSaleInvoiceService, TaxSaleInvoiceService>();
+            services.AddTransient<ITaxInvDetailService, TaxInvDetailService>();
+            // reponsitory
             services.AddTransient<IPaymentReceiptRepository, PaymentReceiptRepository>();
             services.AddTransient<IClientRepository, ClientRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
@@ -224,6 +226,12 @@ namespace XBOOK.Web
             services.AddTransient<IUserRolesRepository, UserRolesRepository>();
             services.AddTransient<IFunctionsRepository, FunctionsRepository>();
             services.AddTransient<IUserCommonRepository, UserCommonRepository>();
+            services.AddTransient<ITaxSaleInvoiceRepository, TaxSaleInvoiceRepository>();
+            services.AddTransient<ITaxInvDetailRepository, TaxInvDetailRepository>();
+            // dapper
+            services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
+            services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();
+            services.AddTransient<IMoneyFundServiceDapper, MoneyFundServiceDapper>();
             services.AddTransient<IAccountDetailServiceDapper, AccountDetailServiceDapper>();
             services.AddTransient<IPurchaseReportDapper, PurchaseReportServiceDapper>();
             services.AddTransient<IClientServiceDapper, ClientServiceDapper>();
@@ -236,14 +244,16 @@ namespace XBOOK.Web
             services.AddTransient<IPermissionDapper, PermissionServiceDapper>();
             services.AddTransient<IDashboardServiceDapper, DashboardServiceDapper>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
-            //services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+            services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddScoped<DbContext, XBookComonContext>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IAuthorizationHandler, ResourceAuthorizationHandler>();
-            services.AddTransient<ICachingService, MemoryCacheService>();
-            services.AddTransient<IUserCommonService, UserCommonService>();
-
+            
+            services.AddTransient<ITaxSaleInvoiceRepository, TaxSaleInvoiceRepository>();
+            services.AddTransient<ITaxSaleInvoiceDetailRepository, TaxSaleInvoiceDetailRepository>();
+            services.AddTransient<ITaxSaleInvoiceService, TaxSaleInvoiceService>();
+            services.AddTransient<ITaxInvoiceServiceDapper, TaxInvoiceServiceDapper>();
 
             services.AddSwaggerGen(c =>
             {
@@ -262,7 +272,7 @@ namespace XBOOK.Web
             //  CreateReport.SetHttpContextAccessor(accessor);
             services.AddMemoryCache();
 
-            services.AddResponseCaching();
+            //services.AddResponseCaching();
             //compression static files setting
             //services.AddResponseCompression(options =>
             //{
@@ -285,8 +295,8 @@ namespace XBOOK.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
             IHttpContextAccessor accessor = svp.GetService<IHttpContextAccessor>();
-            //DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
-            //app.UseDevExpressControls();
+            DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
+            app.UseDevExpressControls();
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 
             //--------------------

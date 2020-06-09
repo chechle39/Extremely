@@ -1,5 +1,5 @@
 <nb-card style="min-height: 70vh;">
-  <nb-card-header class="layout__container--medium">
+  <nb-card-header class="layout__container--medium overflow-visible">
     <div class="row">
       <div class="col-6">
         <span class="card__title">{{'PAY.RECEIPT.HEADER' | translate}}</span>
@@ -8,7 +8,7 @@
         <button [disabled]="authenticationService.hasPermission('Payment Receipt','create')" (click)="createReceipt()" class="btn btn-raised mr-1 btn-success float-right">{{'PAYMENT.RECEIPT.NEW.BUTTON' | translate}}</button></div>
     </div>
   </nb-card-header>
-  <nb-card-body class="layout__container--medium">
+  <nb-card-body class="layout__container--medium overflow-visible">
     <div class="row">
       <div class="col-lg-4 col-md-4 col-6" style="padding-top: 6px;">
         <div class="label-blue">{{'PAYMENT.RECEIPT.ALL.HEADER' | translate}} <span *ngIf="selected.length > 0">> {{'COMMON.SELECTED' | translate}} ({{selected.length}})</span>
@@ -88,22 +88,25 @@
     <div class="row">
       <div class="col-md-12">
 
+     
+
+
+
         <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="moneyReceiptList"
           [loadingIndicator]="loadingIndicator" [sorts]="[{prop: 'id', dir: 'desc'}]" [columnMode]="ColumnMode.force"
           [headerHeight]="60" [footerHeight]="100" [rowHeight]="getRowHeight" [reorderable]="reorderable" [limit]="20"
           [selected]="selected" [selectionType]="'checkbox'" (sort)="onSort($event)" (activate)="onActivate($event)"
-          (select)='onSelect($event)' [selectAllRowsOnPage]="false">
+          (select)='onSelect($event)' [selectAllRowsOnPage]="false" >
 
           <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
             [resizeable]="false">
             <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
               let-selectFn="selectFn">
               <div class="custom-control custom-checkbox m-0">
-                <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" class="custom-control-input"
+                <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll1" class="custom-control-input"
                   (change)="selectFn(!allRowsSelected)" />
-                <label class="custom-control-label col-form-label" for="chkCheckAll"></label>
+                <label class="custom-control-label col-form-label" for="chkCheckAll1"></label>
               </div>
-
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
               let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
@@ -112,14 +115,19 @@
                   (change)="onCheckboxChangeFn($event)" />
                 <label class="custom-control-label col-form-label" for="{{row.id}}"></label>
               </div>
-
             </ng-template>
           </ngx-datatable-column>
-
-          <ngx-datatable-column name="{{'PAYMENT.RECIPT.GRID.HEADER.CLIENT' | translate}}" prop="supplierName">
+         
+          <ngx-datatable-column name="{{'PAYMENT.RECIPT.GRID.HEADER.CLIENT' | translate}}" prop="clientName">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div>{{row.supplierName}}</div>
-              <div class="col-more-info font-small-3">{{row.receiptNumber}}</div>
+              <!-- <div class="pr-1">{{row.clientName}}</div>
+              <div class="col-more-info font-small-3">{{row.receiptNumber}}</div> -->
+              <div>
+                {{row.supplierName}}
+              </div>
+              <div class="col-more-info">
+               {{row.receiptNumber}}
+              </div>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="note" name="{{'INVOICE.GRID.HEADER.NOTES' | translate}}" [cellClass]="'col-id'" [headerClass]="'col-id'">
@@ -136,7 +144,7 @@
               </div>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column prop="amountPaid" name="{{'PAYMENT.RECIPT.GRID.HEADER.AMOUNT.PAYDATE' | translate}}" [cellClass]="'col-right'"
+          <ngx-datatable-column  prop="amountPaid" name="{{'PAYMENT.RECIPT.GRID.HEADER.AMOUNT.PAYDATE' | translate}}" [cellClass]="'col-right'"
             [headerClass]="'col-right'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <div class="col-right" style="padding-right: 0;">
@@ -159,7 +167,7 @@
                   </a>
                 </div>
                 <div class="actions">
-                  <a [hidden]="authenticationService.hasPermission('Payment Receipt','delete')" class="icon-action" (click)="delete(row.id,row.receiptNumber)">
+                  <a class="icon-action" [hidden] = "authenticationService.hasPermission('Money Receipt','delete')" (click)="delete(row.id,row.receiptNumber)">
                     <span class="icon-delete"></span>
                   </a>
                 </div>
@@ -169,14 +177,13 @@
           <ngx-datatable-footer>
             <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
               let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
-              <div
-                style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px; margin-top:-20px;">
+              <div style="display: inline-block;width: 100%;border-top: 1px solid #ccc;padding-top: 3px; margin-top:-20px;">
                 <div class="datatable__footer__row text-right col-12">
-                  <div class="text-center">
+                  <div class="text-left">
                     <b style="position: absolute; left: 0;">Total: {{rowCount}} items </b>
                   </div>
                   <div class="text-center">
-                    <b>Grant Total</b>
+                    <b>{{'BUY.INVOICE.GRID.GRANT.TOTAL' | translate}}</b>
                   </div>
                   <div>
                     <b>{{getGrantTotal()| currency:'VND':''}}</b>

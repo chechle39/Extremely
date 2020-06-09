@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -17,20 +18,22 @@ namespace XBOOK.Dapper.Service
 {
     public class DebitAgeServiceDapper : IDebitageServiceDapper
     {
-        private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMemoryCache _cache;
         private readonly IUserCommonRepository _userCommonRepository;
-        public DebitAgeServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IUserCommonRepository userCommonRepository)
+
+        public DebitAgeServiceDapper(IHttpContextAccessor httpContextAccessor, IMemoryCache cache, IUserCommonRepository userCommonRepository)
         {
-            _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
             _userCommonRepository = userCommonRepository;
         }
 
         public async Task<IEnumerable<DebitAgeViewodel>> GetDebitageServiceDapperAsync(DebitageModelSearchRequest request)
         {
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 string deltaFrom = request.FirstDate;
                 DateTime fromDate = DateTime.Parse(deltaFrom, new CultureInfo("en-GB"));

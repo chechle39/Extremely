@@ -52,6 +52,9 @@ namespace XBOOK.Data.Entities
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Functions> Functions { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<TaxSaleInvDetail> TaxSaleInvDetail { get; set; }
+        public virtual DbSet<TaxSaleInvoice> TaxSaleInvoice { get; set; }
+        public virtual DbSet<Invoice_TaxInvoice> Invoice_TaxInvoice { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +68,8 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new ProductConfiguration())
                 .ApplyConfiguration(new SaleInvDetailConfiguration())
                 .ApplyConfiguration(new SaleInvoiceConfiguration())
+                .ApplyConfiguration(new TaxSaleInvDetailConfiguration())
+                .ApplyConfiguration(new TaxSaleInvoiceConfiguration())
                 .ApplyConfiguration(new EntryPatternConfiguration())
                 .ApplyConfiguration(new TaxConfiguration())
                 .ApplyConfiguration(new MasterParamConfiguration())
@@ -76,6 +81,7 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new BuyInvoiceConfiguration())
                 .ApplyConfiguration(new FunctionsConfiguration())
                 .ApplyConfiguration(new PermissionConfiguration())
+                .ApplyConfiguration(new Invoice_TaxInvoiceConfiguration())
                 .ApplyConfiguration(new BuyInvDetailConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("AppUserClaims").HasKey(x => x.Id);
@@ -94,42 +100,51 @@ namespace XBOOK.Data.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //if(_httpContextAccessor.HttpContext != null)
-            //{
-            //    var email = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split("Bearer");
-            //    if (_httpContextAccessor.HttpContext.User.Claims.ToList().Count > 0)
-            //    {
-            //        var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            //        var connectionString = _configuration.GetConnectionString(Code);
-            //        optionsBuilder.UseSqlServer(connectionString);
-            //    }
-            //    else
-            //    {
-            //        if (email.ToList().Count() > 1)
-            //        {
-            //            if ("" != email[1].Substring(1))
-            //            {
-            //                var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
-            //                if (code != null)
-            //                {
-            //                    var connectionString = _configuration.GetConnectionString(code.Code);
-            //                    optionsBuilder.UseSqlServer(connectionString);
-            //                }                         
-            //            }
-            //        }
-
-
-
-            //    }
-
-            //}
-            var data = (AppUserCommon)_cache.Get(CacheKey.UserCompany.UseCommon);
-            if (data != null)
+            if (_httpContextAccessor.HttpContext != null)
             {
-                var connectionString1 = _configuration.GetConnectionString("CL001");
-                optionsBuilder.UseSqlServer(connectionString1);
+                var email = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split("Bearer");
+                if (_httpContextAccessor.HttpContext.User.Claims.ToList().Count > 0)
+                {
+                    string codeKey;
+                    var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+                    if (_cache.TryGetValue(CacheKey.UserCompany.UseCommon + code, out AppUserCommon cacheData))
+                    {
+                        codeKey = cacheData.ConnectionString;
+                    }
+                    else
+                    {
+                        var mail = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")).ToList()[0].Value;
+                        var userCommon = _userCommonRepository.FindUserCommon(mail).Result;
+                        codeKey = userCommon.ConnectionString;
+                        _cache.Set(CacheKey.UserCompany.UseCommon + code, userCommon);
+                        //codeKey = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").ToList()[0].Value;
+                    }
+                    optionsBuilder.UseSqlServer(codeKey);
+                }
+                else
+                {
+                    if (email.ToList().Count() > 1)
+                    {
+                        if ("" != email[1].Substring(1))
+                        {
+                            var code = _userCommonRepository.FindUserCommon(email[1].Substring(1)).Result;
+                            if (code != null)
+                            {
+                                var connectionString = _configuration.GetConnectionString(code.Code);
+                                optionsBuilder.UseSqlServer(code.ConnectionString);
+                            }
+                        }
+                    }
+
+
+
+                }
+
             }
-            
+            //  var code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
+            //  var codeKey = (AppUserCommon)_cache.Get(CacheKey.UserCompany.UseCommon + code);
+            ////  var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            //  optionsBuilder.UseSqlServer(codeKey.ConnectionString);
         }
         public override int SaveChanges()
         {

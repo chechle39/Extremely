@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Data.EntitiesDBCommon;
 using XBOOK.Data.Interfaces;
@@ -11,16 +13,20 @@ namespace XBOOK.Service.Service
     {
         private readonly IUserCommonRepository _userCommonRepository;
         private readonly ICachingService _cachingService;
-        public UserCommonService(IUserCommonRepository userCommonRepository, ICachingService cachingService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UserCommonService(IUserCommonRepository userCommonRepository, ICachingService cachingService, IHttpContextAccessor httpContextAccessor)
         {
             _userCommonRepository = userCommonRepository;
             _cachingService = cachingService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<AppUserCommon> FindUserCommon(string email)
         {
             var data = await _userCommonRepository.FindUserCommon(email);
-            return _cachingService.GetObject(CacheKey.UserCompany.UseCommon, () =>
+            //_cachingService.Remove(CacheKey.UserCompany.UseCommon);
+            return _cachingService.GetObject(CacheKey.UserCompany.UseCommon + "-" + data.Code, () =>
             {
                 return data;
             });

@@ -194,7 +194,7 @@ export class DebitAgeComponent extends PagedListingComponentBase<ClientView> {
 
     clientName = id;
    // this.data.sendMessage(clientName);
-    const startDay = new Date(t.getFullYear(), t.getMonth(), t.getDate() - 1);
+    const startDay = new Date(t.getFullYear(), t.getMonth(), t.getDate());
     const lastDay = new Date(t.getFullYear(), t.getMonth(), t.getDate() - 90);
     firstDate = startDay.toLocaleDateString('en-US');
     endDate = lastDay.toLocaleDateString('en-US');

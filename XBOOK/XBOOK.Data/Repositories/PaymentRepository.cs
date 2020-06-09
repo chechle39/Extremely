@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
+using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Data.Repositories
 {
     public class PaymentRepository : Repository<Payments>, IPaymentRepository
     {
-        public PaymentRepository(XBookContext context) : base(context)
+        private readonly IUnitOfWork _uow;
+        private readonly ISaleInvoiceRepository _saleInvoiceRepository;
+        public PaymentRepository(XBookContext context, IUnitOfWork uow, ISaleInvoiceRepository saleInvoiceRepository) : base(context)
         {
+            _uow = uow;
+            _saleInvoiceRepository = saleInvoiceRepository;
         }
 
         public async Task<bool> DeletedPaymentAsync(string request)
@@ -26,6 +31,8 @@ namespace XBOOK.Data.Repositories
                 {
                     Entities.Remove(item);
 
+                    await _saleInvoiceRepository.UpdateItem(item.invoiceID, item.amount);
+                    _uow.SaveChanges();
                 }
                 return await Task.FromResult(true);
             } else

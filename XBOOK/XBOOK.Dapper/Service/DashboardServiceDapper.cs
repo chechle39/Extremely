@@ -16,22 +16,26 @@ using XBOOK.Data.EntitiesDBCommon;
 
 namespace XBOOK.Dapper.Service
 {
-    public class DashboardServiceDapper: IDashboardServiceDapper
+    public class DashboardServiceDapper : IDashboardServiceDapper
     {
         private string storedName = "Dashboard";
-        private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public DashboardServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        private readonly IMemoryCache _cache;
+        private readonly IUserCommonRepository _userCommonRepository;
+
+        public DashboardServiceDapper(IHttpContextAccessor httpContextAccessor, IMemoryCache cache, IUserCommonRepository userCommonRepository)
         {
-            _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
+            _userCommonRepository = userCommonRepository;
         }
         public async Task<PurchaseChartViewModel> getPurchaseChartDataAsync(DashboardRequest request)
         {
             var reportId = 2;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -56,8 +60,9 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 1;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -81,8 +86,9 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 3;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -113,8 +119,9 @@ namespace XBOOK.Dapper.Service
         {
             var reportId = 5;
 
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();
@@ -133,17 +140,17 @@ namespace XBOOK.Dapper.Service
 
         private List<string> getLabels(string interval)
         {
-            if(interval == "week")
+            if (interval == "week")
             {
                 return new List<string>(new string[] { "DASHBOARD.BAR.LABEL.2WEEKSAGO", "DASHBOARD.BAR.LABEL.LASTWEEK", "DASHBOARD.BAR.LABEL.THISWEEK", "DASHBOARD.BAR.LABEL.NEXTWEEK", "DASHBOARD.BAR.LABEL.2WEEKSLATER" });
             }
-            else if(interval == "month")
+            else if (interval == "month")
             {
-                return new List<string>(new string[] { this.getMonth(-2), this.getMonth(-1), "DASHBOARD.BAR.LABEL.THISMONTH", this.getMonth(1), this.getMonth(2) });
+                return new List<string>(new string[] { this.getMonth(-2), this.getMonth(-1), this.getMonth(0), this.getMonth(1), this.getMonth(2) });
             }
             else if (interval == "quater")
             {
-                return new List<string>(new string[] { "Q1", "Q2", "Q3", "Q4", null });
+                return new List<string>(new string[] { null, this.getQuarter(-3), this.getQuarter(-2), this.getQuarter(-1), this.getQuarter(0) });
             }
             else
             {
@@ -163,7 +170,7 @@ namespace XBOOK.Dapper.Service
             }
             else if (interval == "quater")
             {
-                return new List<string>(new string[] { "Q1", "Q2", "Q3", "Q4", null });
+                return new List<string>(new string[] { null, this.getQuarter(-3), this.getQuarter(-2), this.getQuarter(-1), this.getQuarter(0) });
             }
             else
             {
@@ -173,7 +180,72 @@ namespace XBOOK.Dapper.Service
 
         private string getMonth(int input = 0)
         {
-            return DateTime.Now.AddMonths(input).ToString("MMM");
+            if(input == 0)
+            {
+                return "DASHBOARD.BAR.LABEL.THISMONTH";
+            }
+            int month = DateTime.Now.AddMonths(input).Month;
+            
+            return this.monthFactory(month);
+        }
+
+        private string monthFactory(int month)
+        {
+            switch (month)
+            {
+                case 1:
+                    return "DASHBOARD.BAR.LABEL.JAN";
+                case 2:
+                    return "DASHBOARD.BAR.LABEL.FEB";
+                case 3:
+                    return "DASHBOARD.BAR.LABEL.MAR";
+                case 4:
+                    return "DASHBOARD.BAR.LABEL.APR";
+                case 5:
+                    return "DASHBOARD.BAR.LABEL.MAY";
+                case 6:
+                    return "DASHBOARD.BAR.LABEL.JUN";
+                case 7:
+                    return "DASHBOARD.BAR.LABEL.JUL";
+                case 8:
+                    return "DASHBOARD.BAR.LABEL.AUG";
+                case 9:
+                    return "DASHBOARD.BAR.LABEL.SEP";
+                case 10:
+                    return "DASHBOARD.BAR.LABEL.OCT";
+                case 11:
+                    return "DASHBOARD.BAR.LABEL.NOV";
+                case 12:
+                    return "DASHBOARD.BAR.LABEL.DEC";
+            }
+            return "";
+        }
+
+        private string getQuarter(int input = 0)
+        {
+            if (input == 0)
+            {
+                return "DASHBOARD.BAR.LABEL.THISQUARTER";
+            }
+            int quarter = (int)Math.Ceiling(DateTime.Now.AddMonths(input * 3).Month / 3.0);
+
+            return this.quarterFactory(quarter);
+        }
+
+        private string quarterFactory(int quarter)
+        {
+            switch (quarter)
+            {
+                case 1:
+                    return "Q1";
+                case 2:
+                    return "Q2";
+                case 3:
+                    return "Q3";
+                case 4:
+                    return "Q4";
+            }
+            return "";
         }
 
         private List<ChartMultiBar> mappingToMultiBarChart(DashboardRawDataViewModel result, DashboardRawDataViewModel result2, List<string> labels, List<string> barLabels)

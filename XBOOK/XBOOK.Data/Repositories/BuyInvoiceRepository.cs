@@ -61,18 +61,10 @@ namespace XBOOK.Data.Repositories
                     supplierID = BuyInvoiceViewModel.supplierID,
                 };
                 var buyInvoiceCreate = Mapper.Map<BuyInvoiceModelRequest, BuyInvoice>(buyInvoiceModelRequest);
-                try
-                {
-                    _uow.BeginTransaction();
-                    Entities.Add(buyInvoiceCreate);
-                    _uow.SaveChanges();
-                    _uow.CommitTransaction();
-                }
-                catch (Exception ex)
-                {
-
-                }
-
+                _uow.BeginTransaction();
+                Entities.Add(buyInvoiceCreate);
+                _uow.SaveChanges();
+                _uow.CommitTransaction();
             }
             else if (BuyInvoiceViewModel.supplierID == 0 && BuyInvoiceViewModel.supplierName != null)
             {
@@ -172,9 +164,7 @@ namespace XBOOK.Data.Repositories
             if (buyInvoiceViewModel.supplierID > 0)
             {
                 _uow.BeginTransaction();
-                var buyInvoiceList = _uow.GetRepository<IRepository<BuyInvoice>>();
                 var buyInvoice = Mapper.Map<BuyInvoiceViewModel, BuyInvoice>(buyInvoiceViewModel);
-                //_SaleInvoiceRepository.UpdateSaleInv(saleInvoiceViewModel);
                 Entities.Update(buyInvoice);
                 _uow.SaveChanges();
                 _uow.CommitTransaction();
@@ -320,6 +310,31 @@ namespace XBOOK.Data.Repositories
                 _uow.SaveChanges();
             }
             return await Task.FromResult(true);
+        }
+
+        public async Task<bool> UpdateItem(long id, decimal sum)
+        {
+            var invoiceById = await Entities.AsNoTracking().Where(x => x.invoiceID == id).ToListAsync();
+            var saleInRq = new BuyInvoice()
+            {
+                amountPaid = invoiceById[0].amountPaid - sum,
+                supplierID = invoiceById[0].supplierID,
+                discount = invoiceById[0].discount,
+                discRate = invoiceById[0].discRate,
+                dueDate = invoiceById[0].dueDate,
+                invoiceID = invoiceById[0].invoiceID,
+                invoiceNumber = invoiceById[0].invoiceNumber,
+                invoiceSerial = invoiceById[0].invoiceSerial,
+                issueDate = invoiceById[0].issueDate,
+                note = invoiceById[0].note,
+                reference = invoiceById[0].reference,
+                status = invoiceById[0].status,
+                subTotal = invoiceById[0].subTotal,
+                term = invoiceById[0].term,
+                vatTax = invoiceById[0].vatTax,
+            };
+            Entities.Update(saleInRq);
+            return true;
         }
 
         public bool UpdateSaleInvEn(Invoice request, decimal sum)

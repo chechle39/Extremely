@@ -11,6 +11,13 @@ namespace XBOOK.Data.Model
             public static string UseCommon = nameof(UseCommon);
 
         }
+        public static class Masterparam
+        {
+            public static string MasTerByPaymentReceipt = nameof(MasTerByPaymentReceipt);
+            public static string MasTerByMoneyReceipt = nameof(MasTerByMoneyReceipt);
+            public static string PaymentType = nameof(PaymentType);
+
+        }
 
     }
 }

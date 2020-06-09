@@ -12,15 +12,18 @@ namespace XBOOK.Data.Repositories
 {
     public class SaleInvoiceDetailRepository : Repository<SaleInvDetail>, ISaleInvoiceDetailRepository
     {
-        public SaleInvoiceDetailRepository(XBookContext context) : base(context)
+        private readonly ITaxInvDetailRepository _taxInvDetailRepository;
+        public SaleInvoiceDetailRepository(XBookContext context, ITaxInvDetailRepository taxInvDetailRepository) : base(context)
         {
+            _taxInvDetailRepository = taxInvDetailRepository;
         }
 
-        public bool CreateSaleIvDetail(SaleInvDetailViewModel request)
+        public SaleInvDetail CreateSaleIvDetail(SaleInvDetailViewModel request)
         {
             var saleInvoiceDetailCreate = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(request);
             var createData = Entities.Add(saleInvoiceDetailCreate);
-            return true;
+
+            return saleInvoiceDetailCreate;
         }
 
         public bool RemoveAll(List<SaleInvDetailViewModel> request)
@@ -45,15 +48,16 @@ namespace XBOOK.Data.Repositories
             foreach (var item in id)
             {
                 Entities.Remove(Entities.Find(item.id));
+                await _taxInvDetailRepository.RemoveTaxSale(item.id);
             }
             return await Task.FromResult(true);
         }
 
-        public bool UpdateSaleInvDetail(SaleInvDetailViewModel rs)
+        public SaleInvDetail UpdateSaleInvDetail(SaleInvDetailViewModel rs)
         {
             var dataRm = Mapper.Map<SaleInvDetailViewModel, SaleInvDetail>(rs);
             Entities.Update(dataRm);
-            return true;
+            return dataRm;
         }
     }
 }

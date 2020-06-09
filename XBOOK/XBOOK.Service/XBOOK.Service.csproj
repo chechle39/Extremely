@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\XBOOK.Common\XBOOK.Common.csproj" />
     <ProjectReference Include="..\XBOOK.Data\XBOOK.Data.csproj" />
+    <ProjectReference Include="..\Xbook.TaxInvoice\Xbook.TaxInvoice\Xbook.TaxInvoice.csproj" />
   </ItemGroup>
 
   <ItemGroup>

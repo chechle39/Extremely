@@ -29,7 +29,7 @@ namespace XBOOK.Web.Reports.Template
         {
             var code = XBOOK.Web.Helpers.GetCompanyCode.GetCode();
             var itemss = new MoneyReceiptViewModelPrint();
-            var folderName = Path.Combine("Reports", "Data");
+            var folderName = $@"C:\inetpub\wwwroot\XBOOK_FILE\{code.Code}\Reports\Data";
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = "MoneyReceipt.json";
             var fullPath = Path.Combine(pathToSave, fileName);

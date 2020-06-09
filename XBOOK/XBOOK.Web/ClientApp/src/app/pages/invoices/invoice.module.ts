@@ -37,6 +37,9 @@ import { CreateMoneyReceiptComponent } from '../moneyreceipt/create-money-receip
 import { AddTaxComponent } from './create-invoice/add-tax/add-tax.component';
 import { MasterParamService } from '../_shared/services/masterparam.service';
 import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
+import {CheckboxModule} from 'primeng/checkbox';
+import {TooltipModule} from 'primeng/tooltip';
+
 const components = [
   InvoicesComponent,
   ListInvoiceComponent,
@@ -70,6 +73,8 @@ const components = [
     IntlModule,
     InputsModule,
     DateInputsModule,
+    CheckboxModule,
+    TooltipModule,
   ],
   declarations: [
     ...components,

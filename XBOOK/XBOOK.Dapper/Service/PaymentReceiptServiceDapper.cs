@@ -1,13 +1,14 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 using XBOOK.Dapper.Interfaces;
+using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
@@ -16,18 +17,21 @@ namespace XBOOK.Dapper.Service
 {
     public class PaymentReceiptServiceDapper : IPaymentReceiptServiceDapper
     {
-
-        private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public PaymentReceiptServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        private readonly IMemoryCache _cache;
+        private readonly IUserCommonRepository _userCommonRepository;
+
+        public PaymentReceiptServiceDapper(IHttpContextAccessor httpContextAccessor, IMemoryCache cache, IUserCommonRepository userCommonRepository)
         {
-            _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
+            _userCommonRepository = userCommonRepository;
         }
         public async Task<IEnumerable<PaymentReceiptViewModel>> GetPaymentReceipt(MoneyReceiptRequest request)
         {
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();

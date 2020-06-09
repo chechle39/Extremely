@@ -36,7 +36,7 @@ namespace XBOOK.Data.Repositories
 
         public async Task<IEnumerable<SaleInvoiceViewModel>> GetSaleInvoiceById(long id)
         {
-            var data = await Entities.ProjectTo<SaleInvoiceViewModel>().Where(x=>x.InvoiceId == id).ToListAsync();
+            var data = await Entities.AsNoTracking().ProjectTo<SaleInvoiceViewModel>().Where(x=>x.InvoiceId == id).ToListAsync();
             return data;
         }
 
@@ -46,6 +46,7 @@ namespace XBOOK.Data.Repositories
             Entities.Remove(ListClient[0]);
             return true;
         }
+
 
         public bool UpdateSaleInv(SaleInvoiceViewModel rs)
         {
@@ -60,6 +61,30 @@ namespace XBOOK.Data.Repositories
         //    return await Task.FromResult(true);
         //}
 
+        public async Task<bool> UpdateItem(long id, decimal sum)
+        {
+            var invoiceById = await Entities.AsNoTracking().Where(x => x.invoiceID == id).ToListAsync();
+            var saleInRq = new SaleInvoice()
+            {
+                amountPaid = invoiceById[0].amountPaid - sum,
+                clientID = invoiceById[0].clientID,
+                discount = invoiceById[0].discount,
+                discRate = invoiceById[0].discRate,
+                dueDate = invoiceById[0].dueDate,
+                invoiceID = invoiceById[0].invoiceID,
+                invoiceNumber = invoiceById[0].invoiceNumber,
+                invoiceSerial = invoiceById[0].invoiceSerial,
+                issueDate = invoiceById[0].issueDate,
+                note = invoiceById[0].note,
+                reference = invoiceById[0].reference,
+                status = invoiceById[0].status,
+                subTotal = invoiceById[0].subTotal,
+                term = invoiceById[0].term,
+                vatTax = invoiceById[0].vatTax,
+            };
+            Entities.Update(saleInRq);
+            return true;
+        }
         public  bool UpdateSaleInvEn(Invoice request, decimal sum)
         {
             var invoiceById = Entities.AsNoTracking().Where(x => x.invoiceID == request.InvoiceId).ToListAsync();

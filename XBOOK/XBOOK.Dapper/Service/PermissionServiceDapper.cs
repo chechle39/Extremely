@@ -18,17 +18,19 @@ namespace XBOOK.Dapper.Service
     public class PermissionServiceDapper : IPermissionDapper
     {
         private readonly IFunctionsRepository _functionsRepository;
-        private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public PermissionServiceDapper(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IFunctionsRepository functionsRepository)
+        private readonly IMemoryCache _cache;
+        private readonly IUserCommonRepository _userCommonRepository;
+        public PermissionServiceDapper(IHttpContextAccessor httpContextAccessor, IFunctionsRepository functionsRepository, IMemoryCache cache, IUserCommonRepository userCommonRepository)
         {
-            _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _functionsRepository = functionsRepository;
+            _cache = cache;
+            _userCommonRepository = userCommonRepository;
         }
-        public async Task<IEnumerable<PermissionViewModel>> GetAppFncPermission(long userId, string code)
+        public async Task<IEnumerable<PermissionViewModel>> GetAppFncPermission(long userId, AppUserCommon userCommon)
         {
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(code)))
+            using (var sqlConnection = new SqlConnection(userCommon.ConnectionString))
             {
 
                 await sqlConnection.OpenAsync();
@@ -42,8 +44,9 @@ namespace XBOOK.Dapper.Service
         public async Task<List<MenuModel>> GetMenu(long userId)
         {
             var listMenu = await _functionsRepository.GetAllFunction();
-            var Code = _httpContextAccessor.HttpContext.User.Claims.Where(x => x.Type == "codeCompany").ToList()[0].Value;
-            using (var sqlConnection = new SqlConnection(_configuration.GetConnectionString(Code)))
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
             {
                 await sqlConnection.OpenAsync();
                 var dynamicParameters = new DynamicParameters();

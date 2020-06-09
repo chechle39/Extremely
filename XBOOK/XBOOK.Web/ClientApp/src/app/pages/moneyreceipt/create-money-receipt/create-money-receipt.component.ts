@@ -67,7 +67,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
   money: number;
   inVoiceList: any = [];
   public moneyReceipt: FormGroup;
-
+  isSave: boolean;
   constructor(
     injector: Injector,
     private router: Router,
@@ -277,8 +277,8 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         receiptNumber: this.moneyReceipt.value.receiptNumber,
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreateMoneyReceiptRequestList;
-
       this.moneyReceiptService.createMoneyReceiptPayMent(requestList).subscribe(rp => {
+        this.isSave = true;
         this.notify.info('Saved Successfully');
        // this.close(false);
       });
@@ -298,6 +298,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         receiverName: this.moneyReceipt.value.receiverName,
       } as CreateMoneyReceiptRequest;
       this.moneyReceiptService.createMoneyReceipt(request).subscribe(rp => {
+        this.isSave = true;
         this.notify.info(!this.coppyMode ? 'Saved Successfully' : 'Duplicate Successfully');
       //  this.close(false);
       });
@@ -318,6 +319,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
         id: this.moneyReceipt.value.id,
       } as CreateMoneyReceiptRequest;
       this.moneyReceiptService.updateMoneyReceipt(request).subscribe(rp => {
+        this.isSave = true;
         this.notify.info('update Successfully');
       //  this.close(false);
       });

@@ -40,7 +40,7 @@ namespace XBOOK.Common.Method
             }
             if (carry == 1)
             {
-                res = 'A' + res;
+                res = Convert.ToChar(value[0] + 1) + res;
             }
             string resStr = res.Replace(":", "0");
             return resStr;

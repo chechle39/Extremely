@@ -18,6 +18,7 @@ export class SalesFiguresComponent extends ChartBase implements OnInit, OnChange
   @Input() data: SaleInvoiceReportView;
   options: any;
   selectedItem = '1';
+  rawLabels: Array<any>;
 
 
   constructor(
@@ -38,7 +39,7 @@ export class SalesFiguresComponent extends ChartBase implements OnInit, OnChange
 
   ngOnChanges() {
     if (this.data) {
-      this.data.chart = this.chartObjectMapping(this.data.chart);
+      this.loadChart(this.data);
     }
   }
 
@@ -46,8 +47,7 @@ export class SalesFiguresComponent extends ChartBase implements OnInit, OnChange
     const param = new DashboardRequest();
     param.interval = 'month';
     this.dashboardService.getSaleInvoiceReport(param).subscribe((data: SaleInvoiceReportView) => {
-      this.data = data;
-      this.data.chart = this.chartObjectMapping(data.chart);
+      this.loadChart(data);
     });
   }
 
@@ -55,8 +55,7 @@ export class SalesFiguresComponent extends ChartBase implements OnInit, OnChange
     const param = new DashboardRequest();
     param.interval = 'quater';
     this.dashboardService.getSaleInvoiceReport(param).subscribe((data: SaleInvoiceReportView) => {
-      this.data = data;
-      this.data.chart = this.chartObjectMapping(data.chart);
+      this.loadChart(data);
     });
   }
 
@@ -216,12 +215,27 @@ export class SalesFiguresComponent extends ChartBase implements OnInit, OnChange
           this.options = this.getOption();
       });
   }
+  
+  private translateLabels() {
+    const translatedLabels = this.translateService.instant(this.rawLabels);
+    this.data.chart.labels =  this.rawLabels.map(label => translatedLabels[label]) ;
+    // refresh chart
+    this.data.chart = {...this.data.chart};
+  }
 
   private i18nConfig() {
     this.translateService.onLangChange.pipe(takeUntil(this._onDestroy)).subscribe(() => {
       const tempValue = this.selectedItem;
       this.selectedItem = '';
       setTimeout(() => this.selectedItem = tempValue, 0);
+      this.translateLabels();
     });
+  }
+
+  private loadChart(data) {
+    this.data = data;
+    this.data.chart = this.chartObjectMapping(data.chart);
+    this.rawLabels = this.data.chart.labels;
+    this.translateLabels();
   }
 }
