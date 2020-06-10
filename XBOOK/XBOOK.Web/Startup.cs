@@ -251,7 +251,6 @@ namespace XBOOK.Web
             services.AddTransient<IAuthorizationHandler, ResourceAuthorizationHandler>();
             
             services.AddTransient<ITaxSaleInvoiceRepository, TaxSaleInvoiceRepository>();
-            services.AddTransient<ITaxSaleInvoiceDetailRepository, TaxSaleInvoiceDetailRepository>();
             services.AddTransient<ITaxSaleInvoiceService, TaxSaleInvoiceService>();
             services.AddTransient<ITaxInvoiceServiceDapper, TaxInvoiceServiceDapper>();
 

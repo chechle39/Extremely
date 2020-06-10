@@ -184,6 +184,10 @@ export const API_URI = {
   getTaxInvoiceFileName: 'api/TaxSaleInvoice/GetFile',
   lastTaxInvoice: 'api/TaxSaleInvoice/GetLastIndexTaxInvoiceAsync',
   updateTaxSaleInv: 'api/TaxSaleInvoice/UpdateTaxSaleInvoice',
+  createTaxSaleInv: 'api/TaxSaleInvoice/CreateTaxSaleInvoice',
+  uploadFileTaxInv: 'api/TaxSaleInvoice/Upload',
+  removeFileTaxInv: 'api/TaxSaleInvoice/RemoveFile',
+  deleteTaxSaleInvoice: 'api/TaxSaleInvoice/DeleteTaxSaleInv',
 
 };
 export const PAGING_CONFIG = {

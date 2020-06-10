@@ -32,8 +32,9 @@ namespace XBOOK.Service.Service
             _iClientRepository = iClientRepository;
         }
         public bool CreateClient(ClientCreateRequet request)
-        {            
-            try
+        {
+            var tryGetClient = _iClientRepository.GetClientByClientName(request.ClientName).Result;
+            if(tryGetClient == null)
             {
                 var clientCreate = Mapper.Map<ClientCreateRequet, Client>(request);
                 var client = new Client()
@@ -48,23 +49,30 @@ namespace XBOOK.Service.Service
                     taxCode = request.TaxCode,
                     bankAccount = request.BankAccount
                 };
-                   _clientUowRepository.AddData(client);
+                _uow.BeginTransaction();
+                _clientUowRepository.AddData(client);
                 _uow.SaveChanges();
-              
+                _uow.CommitTransaction();
             }
-            catch (DbUpdateException ex)
-            {
-                SqlException innerException = ex.InnerException as SqlException;
-                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+            //try
+            //{
+               
               
-            }
+            //}
+            //catch (DbUpdateException ex)
+            //{
+            //    SqlException innerException = ex.InnerException as SqlException;
+            //    if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+            //    {
+            //        _uow.RollbackTransaction();
+            //        return false;
+            //    }
+            //    else
+            //    {
+            //        return true;
+            //    }
+              
+            //}
             return true;               
                
         }

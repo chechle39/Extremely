@@ -13,18 +13,26 @@ namespace XBOOK.Data.Repositories
 {
     public class TaxSaleInvoiceRepository : Repository<TaxSaleInvoice>, ITaxSaleInvoiceRepository
     {
-        public TaxSaleInvoiceRepository(XBookContext db): base(db)
+        private readonly IUnitOfWork _unitOfWork;
+        public TaxSaleInvoiceRepository(XBookContext db, IUnitOfWork unitOfWork) : base(db)
         {
-
+            _unitOfWork = unitOfWork;
         }
         public async Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
         {
             var taxInvoiceCreate = Mapper.Map<TaxSaleInvoiceModelRequest, TaxSaleInvoice>(taxInvoiceViewModel);
-            var invoiceNumber = taxInvoiceCreate.invoiceSerial;
-            var swap = taxInvoiceCreate;
-            taxInvoiceCreate.invoiceSerial = swap.invoiceNumber;
-            taxInvoiceCreate.invoiceNumber = invoiceNumber;
+            _unitOfWork.BeginTransaction();
             Entities.Add(taxInvoiceCreate);
+            try
+            {
+                _unitOfWork.SaveChanges();
+                _unitOfWork.CommitTransaction();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
             return await Task.FromResult(true);
         }
 
@@ -35,12 +43,9 @@ namespace XBOOK.Data.Repositories
 
         public async Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
         {
-            var getId =  Entities.Where(x => x.TaxInvoiceNumber == taxInvoiceViewModel.TaxInvoiceNumber).AsNoTracking().ToList();
+            var getId =  Entities.Where(x => x.taxInvoiceID == taxInvoiceViewModel.taxInvoiceID).AsNoTracking().ToList();
             var taxInvoiceUpdate = Mapper.Map<TaxSaleInvoiceModelRequest, TaxSaleInvoice>(taxInvoiceViewModel);
-            var invoiceNumber = taxInvoiceUpdate.invoiceNumber;
-            taxInvoiceUpdate.TaxInvoiceNumber = taxInvoiceUpdate.TaxInvoiceNumber;
-            taxInvoiceUpdate.invoiceNumber = invoiceNumber;
-            taxInvoiceUpdate.taxInvoiceID = getId[0].taxInvoiceID;
+           
             Entities.Update(taxInvoiceUpdate);
             return await Task.FromResult(true);
         }
@@ -69,6 +74,22 @@ namespace XBOOK.Data.Repositories
             {
                 return null;
             }
+        }
+
+        public async Task<bool> removeTaxSaleInv(long id)
+        {
+            //Entities.FromSql("DELETE FROM dbo.TaxSaleInvDetail WHERE taxInvoiceID == {0}", id);
+
+            try
+            {
+                var invoice = await Entities.FindAsync(id);
+                Entities.Remove(invoice);
+            }
+            catch(Exception ex)
+            {
+                return await Task.FromResult(false);
+            }
+            return await Task.FromResult(true);
         }
     }
 }

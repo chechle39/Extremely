@@ -41,6 +41,12 @@ namespace XBOOK.Data.Repositories
             return listData[0].Address;
         }
 
+        public async Task<ClientViewModel> GetClientByClientName(string clientName)
+        {
+            var data = await Entities.Where(client => client.clientName == clientName).ProjectTo<ClientViewModel>().AsNoTracking().FirstOrDefaultAsync();
+            return data;
+        }
+
         public async Task<IEnumerable<ClientViewModel>> GetAllClientData()
         {
            var data = await Entities.ProjectTo<ClientViewModel>().AsNoTracking().ToListAsync();

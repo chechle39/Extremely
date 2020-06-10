@@ -3,7 +3,7 @@ import { PaymentView } from '../invoice/payment-view.model';
 import { ClientView } from '../client/client-view.model';
 
 export class TaxInvoiceView {
-    taxInvoiceId: number;
+    taxInvoiceID: number;
     invoiceSerial: string;
     invoiceNumber: string;
     issueDate: Date;
@@ -25,6 +25,6 @@ export class TaxInvoiceView {
     status: string;
     bankAccount: string;
     saleInvoiceId: number;
-    saleInvDetailView: TaxInvoiceDetail[];
+    taxInvDetailView: TaxInvoiceDetail[];
     clientData: ClientView[];
 }

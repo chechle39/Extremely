@@ -86,7 +86,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
   amountPaid: any;
   amountDue = 0;
   taxsText = '% VAT';
-  taxInvoiceId = 0;
+  taxInvoiceID = 0;
   editMode = false;
   viewMode: boolean;
   coppyMode: boolean;
@@ -161,7 +161,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     this.createForm();
     this.isRead = false;
     this.getProfiles();
-    // this.getLastIv();
+    this.getLastIv();
   }
 
   getLastIv() {
@@ -194,7 +194,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     if (this.activeRoute !== undefined) {
       this.activeRoute.params.subscribe(params => {
         if (!isNaN(params.id)) {
-          this.taxInvoiceId = this.saleInvId !== undefined ? this.saleInvId : params.id;
+          this.taxInvoiceID = this.saleInvId !== undefined ? this.saleInvId : params.id;
           //  this.editMode = params.key === ActionType.Edit;
           this.editMode = true;
           this.viewMode = params.key === ActionType.View;
@@ -203,7 +203,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
             this.isRead = false;
           }
           this.getDataForEditMode();
-          this.getPayments(this.taxInvoiceId);
+          this.getPayments(this.taxInvoiceID);
           if (this.viewMode && this.coppyMode !== true) {
             this.invoiceForm.disable();
             this.invoiceForm.controls.items.disable();
@@ -275,7 +275,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       notes: [''],
       termCondition: [''],
       items: this.initItems(),
-      taxInvoiceId: [0],
+      taxInvoiceID: [0],
       saleInvoiceId: [0],
     });
   }
@@ -308,7 +308,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         price: controls.value[i].price,
         description: controls.value[i].description,
         id: controls.value[i].id,
-        taxInvoiceId: controls.value[i].taxInvoiceId,
+        taxInvoiceID: controls.value[i].taxInvoiceID,
         productId: controls.value[i].productName.productID,
         productName: controls.value[i].productName.productName,
         vat: controls.value[i].vat,
@@ -331,7 +331,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       qty: [1, [Validators.required, Validators.pattern(numberPatern), Validators.maxLength(10)]],
       vat: [0],
       amount: [0],
-      taxInvoiceId: [0],
+      taxInvoiceID: [0],
       id: [0],
       vatAmount: [''],
       taxs: this.fb.array([]),
@@ -421,9 +421,9 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
   }
 
   private getDataForEditMode() {
-    if (isNaN(this.taxInvoiceId)) { return; }
+    if (isNaN(this.taxInvoiceID)) { return; }
 
-    this.getInvoiceById(this.taxInvoiceId);
+    this.getInvoiceById(this.taxInvoiceID);
   }
 
   private getInForProfile(request) {
@@ -447,8 +447,8 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     });
   }
 
-  private getInvoiceById(taxInvoiceId: any) {
-    this.invoiceService.getInvoice(taxInvoiceId).subscribe(data => {
+  private getInvoiceById(taxInvoiceID: any) {
+    this.invoiceService.getInvoice(taxInvoiceID).subscribe(data => {
       const invoice = data as TaxInvoiceView;
       this.invoiceList = invoice;
       this.invoiceNumber = this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber;
@@ -460,7 +460,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       this.clientSelected.taxCode = invoice[0].clientData[0].taxCode;
       this.clientSelected.email = invoice[0].clientData[0].email;
 
-      if (this.taxInvoiceId !== 0) {
+      if (this.taxInvoiceID !== 0) {
         const request = {
           invoice: this.invoiceNumber,
           seri: invoice[0].invoiceSerial,
@@ -472,12 +472,12 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       const detailInvoiceFormArray = this.getFormArray();
 
       // tslint:disable-next-line:prefer-for-of
-      for (let item = 0; item < invoice[0].taxSaleInvDetailView.length; item++) {
+      for (let item = 0; item < invoice[0].taxInvDetailView.length; item++) {
         detailInvoiceFormArray.push(this.getItem());
       }
 
       this.invoiceForm.patchValue({
-        taxInvoiceId: invoice[0].taxInvoiceId,
+        taxInvoiceID: invoice[0].taxInvoiceID,
         saleInvoiceId: invoice[0].saleInvoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
         invoiceNumber: this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber,
@@ -492,7 +492,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         totalDiscount: invoice[0].discRate,
         notes: invoice[0].note,
         termCondition: invoice[0].term,
-        items: invoice[0].taxInvotaxSaleInvDetailViewiceId,
+        items: invoice[0].taxInvDetailView,
       });
       this.oldClienName = invoice[0].clientData[0].clientName;
       this.oldClientId = invoice[0].clientData[0].clientId;
@@ -544,7 +544,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       // this.getAllTax();
       detailInvoiceFormArray.controls.forEach((control, i) => {
         const productId = control.get('productId').value;
-        if (invoice[0].taxInvotaxSaleInvDetailViewiceId[i].productId === productId) {
+        if (invoice[0].taxInvDetailView[i].productId === productId) {
           const vatTax = control.get('vat').value;
           const taxFormsArray = control.get('taxs') as FormArray;
           taxFormsArray.push(this.getTax);
@@ -573,8 +573,8 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
   }
   cancel() {
     this.checkIcon = false;
-    if (this.taxInvoiceId > 0) {
-      this.getInvoiceById(this.taxInvoiceId);
+    if (this.taxInvoiceID > 0) {
+      this.getInvoiceById(this.taxInvoiceID);
     }
     this.invoiceForm.controls.contactName.disable();
     this.invoiceForm.controls.clientName.disable();
@@ -584,7 +584,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     // Resets to blank object
     if (this.editMode && this.isRead === false && !this.coppyMode) {
       if (!this.coppyMode) {
-        this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceId}/${ActionType.View}`]);
+        this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceID}/${ActionType.View}`]);
         this.viewMode = true;
         this.isRead = true;
        } else {
@@ -594,8 +594,8 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     } else
      if (this.isRead === true && !this.coppyMode || this.coppyMode === undefined) {
        if (!this.viewMode) {
-         if (this.invoiceForm.value.taxInvoiceId > 0) {
-          this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceId}/${ActionType.View}`]);
+         if (this.invoiceForm.value.taxInvoiceID > 0) {
+          this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceID}/${ActionType.View}`]);
           this.viewMode = true;
           this.isRead = true;
          } else {
@@ -636,9 +636,31 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       return;
     }
     // this.viewMode = true;
-    if (!this.invoiceForm.valid && this.taxInvoiceId === 0 || this.coppyMode === true) {
+    if (!this.invoiceForm.valid && this.taxInvoiceID === 0 || this.coppyMode === true) {
+
+      const requestInvDt = [];
+      for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
+        const productID = this.invoiceForm.value.items[i].productName.productName !== undefined
+          ? this.invoiceForm.value.items[i].productName.productID
+          : this.invoiceForm.value.items[i].productId;
+        const productName = this.invoiceForm.value.items[i].productName !== undefined
+          ? this.invoiceForm.value.items[i].productName : this.invoiceForm.value.items[i].productName.productName;
+        const requestInvDetail = {
+          id: 0,
+          taxInvoiceID: this.saleInvId,
+          productId: productID > 0 ? productID : 0,
+          productName: productName.productName !== undefined ? productName.productName : productName,
+          description: this.invoiceForm.value.items[i].description,
+          qty: this.invoiceForm.value.items[i].qty,
+          price: this.invoiceForm.value.items[i].price,
+          amount: this.invoiceForm.value.items[i].amount,
+          vat: this.invoiceForm.value.items[i].vat,
+        };
+        requestInvDt.push(requestInvDetail);
+      }
+
       const request = {
-        taxInvoiceId: 0,
+        taxInvoiceID: 0,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
@@ -673,11 +695,11 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
             this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
         email: this.invoiceForm.value.email === undefined
         ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
+        taxInvDetailView: requestInvDt,
       };
       if (request.invoiceSerial === null) {
         request.invoiceSerial  = '';
       }
-      const requestInvDt = [];
       if (this.EditUpload !== true) {
         this.uploadFileMultiple(request);
       }
@@ -688,51 +710,63 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         request.amountPaid = 0;
       }
       const data = this.invoiceService.CreateSaleInv(request).subscribe((rs: any) => {
-        this.invoiceService.getDF().subscribe((x: any) => {
-          this.saleInvId = x.taxInvoiceId;
-          for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
-            const productID = this.invoiceForm.value.items[i].productName.productName !== undefined
-              ? this.invoiceForm.value.items[i].productName.productID
-              : this.invoiceForm.value.items[i].productId;
-            const productName = this.invoiceForm.value.items[i].productName !== undefined
-              ? this.invoiceForm.value.items[i].productName : this.invoiceForm.value.items[i].productName.productName;
-            const requestInvDetail = {
-              id: 0,
-              taxInvoiceId: this.saleInvId,
-              productId: productID > 0 ? productID : 0,
-              productName: productName.productName !== undefined ? productName.productName : productName,
-              description: this.invoiceForm.value.items[i].description,
-              qty: this.invoiceForm.value.items[i].qty,
-              price: this.invoiceForm.value.items[i].price,
-              amount: this.invoiceForm.value.items[i].amount,
-              vat: this.invoiceForm.value.items[i].vat,
-            };
-            requestInvDt.push(requestInvDetail);
-          }
+        this.taxInvoiceID = this.saleInvId;
+        if (!this.coppyMode) {
+          this.notify.success('Successfully Add');
+        } else {
+          this.coppyMode = false;
+          this.checkIcon = false;
+          this.notify.success('Coppy invoice successfully');
+        }
+        // this.invoiceForm.reset();
+         this.viewMode = true;
+         this.getInvoiceById(this.taxInvoiceID);
 
-          this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
-            this.taxInvoiceId = this.saleInvId;
-            if (!this.coppyMode) {
-              this.notify.success('Successfully Add');
-            } else {
-              this.coppyMode = false;
-              this.checkIcon = false;
-              this.notify.success('Coppy invoice successfully');
-            }
-            // this.invoiceForm.reset();
-             this.viewMode = true;
-             this.getInvoiceById(this.taxInvoiceId);
-            //  this.clientSelected.clientId = 0;
-            //  this.createForm();
-            //  this.getLastIv();
-            //  this.deleteClient();
-          });
-        });
+        // this.invoiceService.getDF().subscribe((x: any) => {
+        //   this.saleInvId = x.taxInvoiceID;
+        //   for (let i = 0; i < this.invoiceForm.value.items.length; i++) {
+        //     const productID = this.invoiceForm.value.items[i].productName.productName !== undefined
+        //       ? this.invoiceForm.value.items[i].productName.productID
+        //       : this.invoiceForm.value.items[i].productId;
+        //     const productName = this.invoiceForm.value.items[i].productName !== undefined
+        //       ? this.invoiceForm.value.items[i].productName : this.invoiceForm.value.items[i].productName.productName;
+        //     const requestInvDetail = {
+        //       id: 0,
+        //       taxInvoiceID: this.saleInvId,
+        //       productId: productID > 0 ? productID : 0,
+        //       productName: productName.productName !== undefined ? productName.productName : productName,
+        //       description: this.invoiceForm.value.items[i].description,
+        //       qty: this.invoiceForm.value.items[i].qty,
+        //       price: this.invoiceForm.value.items[i].price,
+        //       amount: this.invoiceForm.value.items[i].amount,
+        //       vat: this.invoiceForm.value.items[i].vat,
+        //     };
+        //     requestInvDt.push(requestInvDetail);
+        //   }
+
+        //   this.invoiceService.CreateSaleInvDetail(requestInvDt).subscribe(xs => {
+        //     this.taxInvoiceID = this.saleInvId;
+        //     if (!this.coppyMode) {
+        //       this.notify.success('Successfully Add');
+        //     } else {
+        //       this.coppyMode = false;
+        //       this.checkIcon = false;
+        //       this.notify.success('Coppy invoice successfully');
+        //     }
+        //     // this.invoiceForm.reset();
+        //      this.viewMode = true;
+        //      this.getInvoiceById(this.taxInvoiceID);
+        //     //  this.clientSelected.clientId = 0;
+        //     //  this.createForm();
+        //     //  this.getLastIv();
+        //     //  this.deleteClient();
+        //   });
+        // });
       });
-
+      
       return;
     }
-    if (this.taxInvoiceId > 0 && !this.invoiceForm.valid && !this.coppyMode) {
+    if (this.taxInvoiceID > 0 && !this.invoiceForm.valid && !this.coppyMode) {
       const checkClientId = this.invoiceForm.value.clientId;
       const taxSaleInvDetailView = [];
       for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
@@ -743,7 +777,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
             price: this.invoiceForm.value.items[ii].price,
             description: this.invoiceForm.value.items[ii].description,
             id: this.invoiceForm.value.items[ii].id,
-            taxInvoiceId: this.invoiceForm.value.taxInvoiceId,
+            taxInvoiceID: this.invoiceForm.value.taxInvoiceID,
             productId: this.invoiceForm.value.items[ii].productName.productID,
             productName: this.invoiceForm.value.items[ii].productName.productName,
             vat: this.invoiceForm.value.items[ii].vat,
@@ -753,14 +787,15 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         if (this.invoiceForm.value.items[ii].productName.productName === undefined) {
           const object2 = Object.assign({}, this.invoiceForm.value.items[ii],
             {
-              taxInvoiceId: this.invoiceForm.value.taxInvoiceId, productId: this.invoiceForm.value.items[ii].productId === ''
+              taxInvoiceID:
+               this.invoiceForm.value.taxInvoiceID, productId: this.invoiceForm.value.items[ii].productId === ''
                 ? 0 : this.invoiceForm.value.items[ii].productId,
             });
           taxSaleInvDetailView.push(object2);
         }
       }
       const request1 = {
-        taxInvoiceId: this.invoiceForm.value.taxInvoiceId,
+        taxInvoiceID: this.invoiceForm.value.taxInvoiceID,
         saleInvoiceId: this.invoiceForm.value.saleInvoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
@@ -814,7 +849,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         taxSaleInvDetailView: taxSaleInvDetailView,
       };
       const request = {
-        taxInvoiceId: this.invoiceForm.value.taxInvoiceId,
+        taxInvoiceID: this.invoiceForm.value.taxInvoiceID,
         saleInvoiceId: this.invoiceForm.value.saleInvoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
@@ -852,6 +887,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         // tslint:disable-next-line:object-literal-shorthand
         taxSaleInvDetailView: taxSaleInvDetailView,
       };
+
       if (request1.clientId === undefined) {
         this.requestData = request;
       } else if (request1.clientId !== undefined) {
@@ -873,7 +909,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
           this.viewMode = true;
           this.checkIcon = false;
           if (this.requestRemove.length <= 0) {
-            this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceId}/${ActionType.View}`]);
+            this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceID}/${ActionType.View}`]);
           }
           if (this.requestRemove.length > 0) {
             if (requestDl.length > 0) {
@@ -881,16 +917,16 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
                 // this.notify.success('Successfully Deleted');
                 this.getDataForEditMode();
                 this.requestRemove = [];
-                this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceId}/${ActionType.View}`]);
+                this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceID}/${ActionType.View}`]);
               });
             }
           }
           this.viewMode = true;
           this.isCheckHidden = true;
           this.notify.success('Successfully Update');
-          this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceId}/${ActionType.View}`]);
+          this.router.navigate([`/pages/taxinvoice/${this.invoiceForm.value.taxInvoiceID}/${ActionType.View}`]);
           if (requestDl.length < 1) {
-            this.getInvoiceById(this.taxInvoiceId);
+            this.getInvoiceById(this.taxInvoiceID);
 
           }
         });
@@ -993,7 +1029,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     this.nameFile = this.invoiceForm.controls.invoiceNumber.value + '_' + this.invoiceForm.controls.invoiceSerial.value;
     this.oldFileLent = this.fileUpload.length;
     this.fileUpload.push(files[0]);
-    if (this.taxInvoiceId !== 0) {
+    if (this.taxInvoiceID !== 0) {
       this.uploadFileMultiple(null);
     }
   }
@@ -1056,22 +1092,9 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
   show(): void {
     this.isMouseEnter = true;
   }
-  addPayment(): void {
-
-    const dialog = this.modalService.open(AddPaymentComponent, AppConsts.modalOptionsSmallSize);
-    dialog.componentInstance.outstandingAmount = this.amountDue;
-    dialog.componentInstance.taxInvoiceId = this.taxInvoiceId;
-    dialog.result.then(result => {
-      if (result) {
-        this.amount = result.amount;
-        this.checkAddPayment = true;
-        this.getPayments(this.taxInvoiceId);
-      }
-    });
-  }
   private updateSaleInvAmontPaid() {
     const request = {
-      taxInvoiceId: this.invoiceForm.controls.taxInvoiceId.value,
+      taxInvoiceID: this.invoiceForm.controls.taxInvoiceID.value,
       invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
       invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
       issueDate: [this.invoiceForm.controls.issueDate.value.year,
@@ -1108,14 +1131,14 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       taxSaleInvDetailView: [],
     };
     this.invoiceService.updateSaleInv(request).subscribe(rs => {
-      this.getInvoiceById(this.invoiceForm.controls.taxInvoiceId.value);
+      this.getInvoiceById(this.invoiceForm.controls.taxInvoiceID.value);
       // this.allAmontById = 0;
     });
   }
 
-  getPayments(taxInvoiceId: number) {
+  getPayments(taxInvoiceID: number) {
     this.allAmontById = 0;
-    this.paymentService.getPaymentIvByid(taxInvoiceId).pipe(
+    this.paymentService.getPaymentIvByid(taxInvoiceID).pipe(
       finalize(() => {
       })).subscribe((i: any) => {
         this.paymentViews = i;
@@ -1134,7 +1157,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
   }
   deletePayment(payments: any) {
     if (payments.length === 0) { return; }
-    this.getPayments(this.taxInvoiceId);
+    this.getPayments(this.taxInvoiceID);
     this.deletePaymentAmont = 0;
     this.message.confirm('Do you want to delete those payment ?', 'Are you sure ?', () => {
       payments.forEach(element => {
@@ -1153,11 +1176,11 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     dialog.componentInstance.title = 'Edit Payment';
     dialog.componentInstance.id = payment.id || payment[0].id;
     dialog.componentInstance.outstandingAmount = this.amountDue;
-    dialog.componentInstance.taxInvoiceId = this.taxInvoiceId;
+    dialog.componentInstance.taxInvoiceID = this.taxInvoiceID;
     dialog.componentInstance.invoiceList = this.invoiceList;
     dialog.result.then(result => {
       if (result) {
-        this.getPayments(this.taxInvoiceId);
+        this.getPayments(this.taxInvoiceID);
         this.checkEditPayment = true;
       }
     });
@@ -1292,7 +1315,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
             this.invoiceForm.controls.dueDate.value.month,
             this.invoiceForm.controls.dueDate.value.day].join('-') : null,
           email: i === 0 ? this.invoiceForm.controls.email.value : null,
-          taxInvoiceId: i === 0 ? this.invoiceForm.controls.taxInvoiceId.value : null,
+          taxInvoiceID: i === 0 ? this.invoiceForm.controls.taxInvoiceID.value : null,
           invoiceNumber: i === 0 ? this.invoiceForm.controls.invoiceNumber.value : null,
           invoiceSerial: i === 0 ? this.invoiceForm.controls.invoiceSerial.value : null,
           issueDate: i === 0 ? [this.invoiceForm.controls.issueDate.value.year,

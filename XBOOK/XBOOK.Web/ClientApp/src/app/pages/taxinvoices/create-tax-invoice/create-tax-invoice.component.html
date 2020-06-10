@@ -453,10 +453,6 @@
           </div>
         </form>
       </div>
-      <xb-list-payment *ngIf="viewMode && coppyMode !== true" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"
-        (addNewPayment)="addPayment()" [paymentViews]="paymentViews" [outstandingAmount]="amountDue"
-        [invoiceNumber]="invoiceNumber" class="w-100 invoice-area">
-      </xb-list-payment>
     </nb-card-body>
   </div>
 </nb-card>

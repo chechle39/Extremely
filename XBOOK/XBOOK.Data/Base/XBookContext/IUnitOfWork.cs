@@ -6,6 +6,7 @@
         void BeginTransaction();
 
         void CommitTransaction();
+        void RollbackTransaction();
         TRepository GetRepository<TRepository>()
             where TRepository : IRepository;
     }

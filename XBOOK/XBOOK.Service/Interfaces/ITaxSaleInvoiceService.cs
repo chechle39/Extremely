@@ -8,10 +8,11 @@ namespace XBOOK.Service.Interfaces
 {
     public interface ITaxSaleInvoiceService
     {
-        Task<IEnumerable<TaxSaleInvoice>> GetTaxSaleInvoiceById(long id);
+        Task<IEnumerable<TaxInvoiceViewModel>> GetTaxSaleInvoiceById(long id);
         TaxSaleInvoice GetALlDF();
         TaxSaleInvoice GetLastInvoice();
-        Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
+        bool CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
         Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
+        Task<bool> DeletedTaxSaleInv(List<requestDeleted> deleted);
     }
 }

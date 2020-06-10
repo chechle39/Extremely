@@ -49,7 +49,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     static: true,
   }) xxx: ElementRef;
   isRead: boolean = true;
-  isCheckCheckbox: boolean = false;
+  isCheckCheckbox: boolean;
   selectedValues: string[] = [];
   productInputFocusSub: Subscription = new Subscription();
   listInvoice: any;
@@ -132,7 +132,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   checkUpload: boolean;
   isCheckHidden: boolean;
   checkIcon: boolean;
-
+  oldInvoiceNumber: string;
+  oldTaxInvoiceNumber: string;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -155,6 +156,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   ngOnInit() {
+    this.isCheckCheckbox = false;
     if (this.router.url === '/pages/invoice/new') {
       this.viewMode = false;
       this.isCheckFcCoppy = true;
@@ -478,6 +480,9 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       for (let item = 0; item < invoice[0].saleInvDetailView.length; item++) {
         detailInvoiceFormArray.push(this.getItem());
       }
+      this.oldInvoiceNumber = invoice[0].invoiceNumber;
+      this.oldTaxInvoiceNumber = invoice[0].taxInvoiceNumber;
+      this.isCheckCheckbox = invoice[0].check;
       this.invoiceForm.patchValue({
         invoiceId: invoice[0].invoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
@@ -495,6 +500,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
         notes: invoice[0].note,
         termCondition: invoice[0].term,
         items: invoice[0].saleInvDetailView,
+        checked: invoice[0].check,
       });
       this.oldClienName = invoice[0].clientData[0].clientName;
       this.oldClientId = invoice[0].clientData[0].clientId;
@@ -814,11 +820,17 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
             ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
           note: this.invoiceForm.value.notes,
           check: this.invoiceForm.value.checked,
+          oldInvoiceNumber: this.oldInvoiceNumber,
+          oldTaxInvoiceNumber: this.oldTaxInvoiceNumber,
+          oldCheck: this.isCheckCheckbox,
         }],
         // tslint:disable-next-line:object-literal-shorthand
         saleInvDetailView: saleInvDetailView,
       };
       const request = {
+        oldInvoiceNumber: this.oldInvoiceNumber,
+        oldTaxInvoiceNumber: this.oldTaxInvoiceNumber,
+        oldCheck: this.isCheckCheckbox,
         check: this.invoiceForm.value.checked,
         invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
@@ -1392,12 +1404,15 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   }
 
   focusInvoiceNumber() {
-    if (this.invoiceForm.controls.taxInvoiceNumber.value === '' && this.invoiceForm.controls.checked.value === false) {
+
+    if (!this.viewMode  && this.invoiceForm.controls.taxInvoiceNumber.value === '') {
       this.t.toggle();
-    }
-    if (!this.viewMode && !this.editMode && this.invoiceForm.controls.taxInvoiceNumber.value === '') {
       this.isCheckCheckbox = true;
       this.invoiceForm.controls.taxInvoiceNumber.patchValue(this.invoiceForm.controls.invoiceNumber.value);
+    }
+    if (this.invoiceForm.controls.taxInvoiceNumber.value !== '' && !this.viewMode) {
+      this.t.toggle();
+      this.isCheckCheckbox = true;
     }
   }
 }

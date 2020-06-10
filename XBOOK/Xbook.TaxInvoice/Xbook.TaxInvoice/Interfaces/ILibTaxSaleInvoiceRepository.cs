@@ -9,7 +9,7 @@ namespace Xbook.TaxInvoice.Interfaces
     {
         Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
         Task<IEnumerable<TaxSaleInvoice>> GetTaxInvoiceBySaleInvId(string taxInvoiceNumber);
-        Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
+        Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel, string oldTaxInvoiceNumber);
         Task<TaxSaleInvoice> GetLastInvoice();
         Task<IEnumerable<TaxSaleInvoice>> GetTaxSaleInvoiceById(long id);
     }

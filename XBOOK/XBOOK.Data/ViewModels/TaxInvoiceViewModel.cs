@@ -5,7 +5,7 @@ namespace XBOOK.Data.ViewModels
 {
     public class TaxInvoiceViewModel
     {
-        public long invoiceID { get; set; }
+        public long taxInvoiceID { get; set; }
         public string invoiceSerial { get; set; }
         public string invoiceNumber { get; set; }
         public Nullable<System.DateTime> issueDate { get; set; }
@@ -20,6 +20,8 @@ namespace XBOOK.Data.ViewModels
         public string note { get; set; }
         public string term { get; set; }
         public string status { get; set; }
+        public string taxInvoiceNumber { get; set; }
+        public List<ClientViewModel> ClientData { get; set; }
         public virtual List<TaxInvDetailViewModel> TaxInvDetailView { get; set; }
     }
 }

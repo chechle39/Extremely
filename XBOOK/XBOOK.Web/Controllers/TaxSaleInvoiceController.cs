@@ -60,15 +60,15 @@ namespace XBOOK.Web.Controllers
             _taxSaleInvoiceService.UpdateTaxInvoice(request);
             return Ok(request);
         }
-        //[HttpPost("[action]")]
-        //public ActionResult CreateSaleInvoice(TaxSaleInvoiceModelRequest request)
-        //{
-        //    var result = _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Create);
-        //    if (!result.Result.Succeeded)
-        //        return Unauthorized();
-        //    var CreateData = _taxSaleInvoiceService.CreateTaxSaleInvoice(request);
-        //    return Ok(CreateData);
-        //}
+        [HttpPost("[action]")]
+        public ActionResult CreateTaxSaleInvoice(TaxSaleInvoiceModelRequest request)
+        {
+            var result = _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Create);
+            if (!result.Result.Succeeded)
+                return Unauthorized();
+            var CreateData = _taxSaleInvoiceService.CreateTaxInvoice(request);
+            return Ok(CreateData);
+        }
 
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> GetTaxSaleInvoiceById(long id)
@@ -80,15 +80,15 @@ namespace XBOOK.Web.Controllers
             return Ok(taxSaleListInvoice);
         }
 
-        //  [HttpPost("[action]")]
-        //  public async  Task<IActionResult> DeleteSaleInv (List<requestDeleted> deleted)
-        //  {
-        //      var result = await _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Delete);
-        //      if (!result.Succeeded)
-        //          return Unauthorized();
-        //      await _saleInvoiceService.DeletedSaleInv(deleted);
-        //      return Ok();
-        //  }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteTaxSaleInv(List<requestDeleted> deleted)
+        {
+            var result = await _authorizationService.AuthorizeAsync(User, "Invoice", Operations.Delete);
+            if (!result.Succeeded)
+                return Unauthorized();
+            await _taxSaleInvoiceService.DeletedTaxSaleInv(deleted);
+            return Ok();
+        }
 
         [HttpPost("[action]")]
         public IActionResult GetDF()
@@ -104,47 +104,47 @@ namespace XBOOK.Web.Controllers
             return Ok(saleListInvoice);
         }
 
-        //  [HttpPost("[action]"), DisableRequestSizeLimit]
-        //  public IActionResult Upload(List<IFormFile> request)
-        //  {
-        //      var files = Request.Form.Files;
-        //      if (files.Count == 0)
-        //      {
-        //          return new BadRequestObjectResult(files);
-        //      }
-        //      else
-        //      {
-        //          string name = "";
-        //          foreach(var item1 in Request.Form)
-        //          {
-        //              name = item1.Value.ToString();
-        //          }
-        //          foreach(var item in Request.Form.Files)
-        //          {
-        //             // var x = item;
-        //              var file = item;
-        //              var filename = ContentDispositionHeaderValue
-        //                                  .Parse(file.ContentDisposition)
-        //                                  .FileName
-        //                                  .Trim('"');
-        //              var prf = _iCompanyProfileService.GetInFoProfile();
-        //              var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\SaleInVoice";
+        [HttpPost("[action]"), DisableRequestSizeLimit]
+        public IActionResult Upload(List<IFormFile> request)
+        {
+            var files = Request.Form.Files;
+            if (files.Count == 0)
+            {
+                return new BadRequestObjectResult(files);
+            }
+            else
+            {
+                string name = "";
+                foreach (var item1 in Request.Form)
+                {
+                    name = item1.Value.ToString();
+                }
+                foreach (var item in Request.Form.Files)
+                {
+                    // var x = item;
+                    var file = item;
+                    var filename = ContentDispositionHeaderValue
+                                        .Parse(file.ContentDisposition)
+                                        .FileName
+                                        .Trim('"');
+                    var prf = _iCompanyProfileService.GetInFoProfile();
+                    var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\TaxSaleInVoice";
 
 
-        //              if (!Directory.Exists(imageFolder))
-        //              {
-        //                  Directory.CreateDirectory(imageFolder);
-        //              }
-        //              string filePath = Path.Combine(imageFolder, name + "_" + filename);
-        //              using (FileStream fs = System.IO.File.Create(filePath))
-        //              {
-        //                  file.CopyTo(fs);
-        //                  fs.Flush();
-        //              }
-        //          }
-        //          return Ok();
-        //      }
-        //  }
+                    if (!Directory.Exists(imageFolder))
+                    {
+                        Directory.CreateDirectory(imageFolder);
+                    }
+                    string filePath = Path.Combine(imageFolder, name + "_" + filename);
+                    using (FileStream fs = System.IO.File.Create(filePath))
+                    {
+                        file.CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+                return Ok();
+            }
+        }
 
         [HttpPost("[action]")]
         public IActionResult GetFile(requestGetFile request)
@@ -176,14 +176,14 @@ namespace XBOOK.Web.Controllers
             return Ok(listFile);
         }
 
-        //  [HttpPost("[action]")]
-        //  public IActionResult RemoveFile(ResponseFileName request)
-        //  {
-        //      var prf = _iCompanyProfileService.GetInFoProfile();
-        //      var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\SaleInVoice";
-        //      System.IO.File.Delete(imageFolder + "\\" + request.FileName);
-        //      return Ok();
-        //  }
+        [HttpPost("[action]")]
+        public IActionResult RemoveFile(ResponseFileName request)
+        {
+            var prf = _iCompanyProfileService.GetInFoProfile();
+            var imageFolder = $@"C:\inetpub\wwwroot\XBOOK_FILE\{prf.Result.code}\TaxSaleInVoice";
+            System.IO.File.Delete(imageFolder + "\\" + request.FileName);
+            return Ok();
+        }
 
         //  [HttpPost("[action]")]
         //  public IActionResult SaveFileJson(List<SaleInvoicePrintModel> request)

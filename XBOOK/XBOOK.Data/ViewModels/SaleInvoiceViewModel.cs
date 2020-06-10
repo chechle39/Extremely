@@ -41,6 +41,10 @@ namespace XBOOK.Data.ViewModels
         public string Note { get; set; }
         public string Term { get; set; }
         public string Status { get; set; }
+        public bool Check { get; set; }
+        public bool OldCheck { get; set; }
+        public string OldTaxInvoiceNumber { get; set; }
+        public string OldInvoiceNumber { get; set; }
         public virtual List<SaleInvDetailViewModel> SaleInvDetailView { get; set; }
         public virtual List<PaymentViewModel> PaymentView { get; set; }
         public List<ClientViewModel> ClientData { get; set; }

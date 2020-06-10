@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xbook.TaxInvoice.Repositories;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -21,17 +22,15 @@ namespace XBOOK.Service.Service
         private readonly IProductRepository _iProductRepository;
         private readonly ISaleInvoiceDetailRepository _iSaleInvoiceDetailRepository;
         private readonly XBookContext _context;
-        private readonly ITaxInvDetailService _taxInvDetailService;
+        private readonly LibTaxSaleDetailInvoiceRepository _libTaxSaleDetailInvoiceRepository;
         private readonly ISaleInvoiceRepository _saleInvoiceRepository;
-        private readonly ITaxSaleInvoiceRepository _taxSaleInvoiceRepository;
+        private readonly LibTaxSaleInvoiceRepository _libTaxSaleInvoiceRepository;
         public SaleInvDetailService(
             IUnitOfWork uow, 
             IProductRepository iProductRepository, 
             XBookContext context, 
             ISaleInvoiceDetailRepository iSaleInvoiceDetailRepository,
-             ITaxInvDetailService taxInvDetailService,
-             ISaleInvoiceRepository saleInvoiceRepository,
-             ITaxSaleInvoiceRepository taxSaleInvoiceRepository
+            ISaleInvoiceRepository saleInvoiceRepository
             )
         {
             _uow = uow;
@@ -39,9 +38,9 @@ namespace XBOOK.Service.Service
             _iProductRepository = iProductRepository;
             _context = context;
             _iSaleInvoiceDetailRepository = iSaleInvoiceDetailRepository;
-            _taxInvDetailService = taxInvDetailService;
             _saleInvoiceRepository = saleInvoiceRepository;
-            _taxSaleInvoiceRepository = taxSaleInvoiceRepository;
+            _libTaxSaleDetailInvoiceRepository = new LibTaxSaleDetailInvoiceRepository(_context);
+            _libTaxSaleInvoiceRepository = new LibTaxSaleInvoiceRepository(_context, _uow);
         }
 
         public async Task<bool> CreateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
@@ -90,7 +89,7 @@ namespace XBOOK.Service.Service
                         var saveModel = _iSaleInvoiceDetailRepository.CreateSaleIvDetail(saleDetailData);
                         _uow.SaveChanges();
                              _uow.CommitTransaction();
-                       // await CreateTaxDetail(saveModel, getIvTaxId.taxInvoiceID);
+                        await CreateTaxDetail(saveModel);
                     } catch (Exception ex)
                     {
 
@@ -230,23 +229,29 @@ namespace XBOOK.Service.Service
             await _saleInvDetailUowRepository.Update(saleInvoiceDetailCreate);
         }
 
-        //private async Task CreateTaxDetail(SaleInvDetail saleDetailData, long id)
-        //{
-        //    var taxSaleInvoiceModelRequest = new TaxInvDetailViewModel()
-        //    {
-        //        amount = saleDetailData.amount,
-        //        description = saleDetailData.description,
-        //        ID = 0,
-        //        price = saleDetailData.price,
-        //        productID = saleDetailData.productID,
-        //        productName = saleDetailData.productName,
-        //        qty = saleDetailData.qty,
-        //        SaleInvoiceDetailId = saleDetailData.ID,
-        //        taxInvoiceID = 0,
-        //        vat = saleDetailData.vat
-        //    };
-        //    taxSaleInvoiceModelRequest.taxInvoiceID = id;
-        //    await _taxInvDetailService.CreateTaxInvDetail(taxSaleInvoiceModelRequest);
-        //}
+        private async Task CreateTaxDetail(SaleInvDetail saleDetailData)
+        {
+            var invData = await _saleInvoiceRepository.GetSaleInvoiceById(saleDetailData.invoiceID);
+            var libTaxInv =  _libTaxSaleInvoiceRepository.GetTaxInvoiceBySaleInvId(invData.ToList()[0].TaxInvoiceNumber).Result;
+            if (libTaxInv != null)
+            {
+                var taxSaleInvoiceModelRequest = new TaxInvDetailViewModel()
+                {
+                    amount = saleDetailData.amount,
+                    description = saleDetailData.description,
+                    ID = 0,
+                    price = saleDetailData.price,
+                    productID = saleDetailData.productID,
+                    productName = saleDetailData.productName,
+                    qty = saleDetailData.qty,
+                    taxInvoiceID = libTaxInv.ToList()[0].taxInvoiceID,
+                    vat = saleDetailData.vat
+                };
+
+                await _libTaxSaleDetailInvoiceRepository.CreateTaxSaleIvDetail(taxSaleInvoiceModelRequest);
+                _uow.SaveChanges();
+            }
+            
+        }
     }
 }

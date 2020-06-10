@@ -260,10 +260,10 @@
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
                               (keydown)="typeheadScrollHandler($event)" placement="bottom"
                               (focus)="onFocus($event)"
-                              [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
+                              [inputFormatter]="productFormatter"  />
 
                             <input formControlName="description" #description kendotextbox [readOnly]="isRead"
-                              placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}" tabindex="{{i * 4 + 4}}"
+                              placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}" 
                               class="border-0 full-width imput-reference-custom font-italic invoice__font--medium-2 description place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input" />
                             <ng-template #productTemplate let-r="result" let-t="term">
                               <div class="row m-0 product-item py-1">
@@ -284,7 +284,7 @@
                             </kendo-numerictextbox> -->
                             <input  digitOnly [min]=1
                             [max]="10000" #quantity
-                            tabindex="{{i* 4 + 2}}" formControlName="qty"
+                            formControlName="qty"
                             placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.QTY' | translate}}" kendoTextBox  [readOnly]="isRead"
                             class="text-center border-0 full-width invoice__font--medium-2 invoice__items-table__input"/>
                             <a *ngIf="detail.value.taxs.length > 0" style="color:blue;"
@@ -297,7 +297,7 @@
                             <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly  kendotextbox [readOnly]="isRead" formControlName="price" id="price{{i}}"
                               maxlength="16" placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.PRICE' | translate}}" placeholder="Enter price" 
                               class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input"
-                              tabindex="{{i* 4 +3}}" />
+                              />
 
                             <input kendotextbox style="color: blue"
                               class="text-right border-0 full-width t-color-blue input-amount input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2 invoice__items-table__input"
@@ -322,7 +322,7 @@
                     <div *ngIf="!viewMode" class="row" style="border: none;margin-top: 20px"
                       [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'">
                       <div class="add-line-box d-flex align-items-center">
-                        <input tabindex="{{getFormArray().length * 4 + 1}}" type="button" value="{{'BUY.INVOICE.CREATE.ADD.LINE' | translate}}"
+                        <input  type="button" value="{{'BUY.INVOICE.CREATE.ADD.LINE' | translate}}"
                           (click)="addNewItem()" class=" text-center w-100"
                           style="cursor: pointer;background-color:#fff;border: none" />
                       </div>
@@ -391,7 +391,7 @@
                         <div class="col-6" style="float: left">
                           <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly [min]=1
                             [max]=100 [maxlength]=2 (ngModelChange)="totalDiscountChange()"
-                            tabindex="{{getFormArray().length * 4 + 2}}" formControlName="totalDiscount"
+                            formControlName="totalDiscount"
                             placeholder="{{'INVOICE.FORM.CREATE.ADDDISCOUNT.PLACEHOLDER' | translate}}" kendoTextBox [readOnly]="isRead"
                             class="border-0 width-50-per text-center input-amount mput-reference-custom invoice__font--medium-2 px-0"
                             />

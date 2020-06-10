@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -24,6 +26,13 @@ namespace XBOOK.Data.Repositories
             var createData = Entities.Add(saleInvoiceDetailCreate);
 
             return saleInvoiceDetailCreate;
+        }
+
+        public Task<List<SaleInvDetailViewModel>> GetSaleInvByinID(long id)
+        {
+            var getSaleInVDt = Entities.Where(x=>x.invoiceID == id).AsNoTracking().ProjectTo<SaleInvDetailViewModel>().ToListAsync();
+
+            return getSaleInVDt;
         }
 
         public bool RemoveAll(List<SaleInvDetailViewModel> request)

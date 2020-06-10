@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +16,6 @@ namespace Xbook.TaxInvoice.Repositories
         private readonly IUnitOfWork _uow;
         public LibTaxSaleInvoiceRepository(XBookContext db, IUnitOfWork uow) : base(db)
         {
-            _uow = uow;
         }
 
         public async Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
@@ -32,7 +32,23 @@ namespace Xbook.TaxInvoice.Repositories
 
         public async Task<IEnumerable<TaxSaleInvoice>> GetTaxInvoiceBySaleInvId(string taxInvoiceNumber)
         {
-            return await Entities.Where(x => x.TaxInvoiceNumber == taxInvoiceNumber).ToListAsync();
+            if (!string.IsNullOrEmpty(taxInvoiceNumber))
+            {
+                try
+                {
+                    var data = await Entities.AsNoTracking().Where(x => x.TaxInvoiceNumber == taxInvoiceNumber).ToListAsync();
+                    return data;
+                }
+                catch (Exception ex)
+                {
+
+                }
+                return null;
+            } else
+            {
+                return null;
+
+            }
         }
 
         public Task<IEnumerable<TaxSaleInvoice>> GetTaxSaleInvoiceById(long id)
@@ -40,9 +56,9 @@ namespace Xbook.TaxInvoice.Repositories
             throw new System.NotImplementedException();
         }
 
-        public async Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
+        public async Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel, string oldTaxInvoiceNumber)
         {
-            var getId = Entities.Where(x => x.TaxInvoiceNumber == taxInvoiceViewModel.TaxInvoiceNumber).AsNoTracking().ToList();
+            var getId = Entities.Where(x => x.TaxInvoiceNumber == oldTaxInvoiceNumber).AsNoTracking().ToList();
             var taxInvoiceUpdate = Mapper.Map<TaxSaleInvoiceModelRequest, TaxSaleInvoice>(taxInvoiceViewModel);
             taxInvoiceUpdate.taxInvoiceID = getId[0].taxInvoiceID;
             Entities.Update(taxInvoiceUpdate);

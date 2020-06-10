@@ -8,6 +8,7 @@ using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace XBOOK.Data.Repositories
 {
@@ -41,6 +42,14 @@ namespace XBOOK.Data.Repositories
         {
             var taxInvCreate = Mapper.Map<TaxInvDetailViewModel, TaxSaleInvDetail>(taxInvDetailViewModel);
             Entities.Update(taxInvCreate);
+            return await Task.FromResult(true);
+        }
+        public async Task<bool> RemoveTaxSaleInvByTaxInvoiceID(Deleted taxInvoiceId)
+        {
+            //Entities.FromSql("DELETE FROM dbo.TaxSaleInvDetail WHERE taxInvoiceID == {0}", taxInvoiceId.id);
+
+            var list = await Entities.Where(item => item.taxInvoiceID == taxInvoiceId.id).ToListAsync();
+            Entities.RemoveRange(list);
             return await Task.FromResult(true);
         }
     }

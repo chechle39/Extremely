@@ -15,5 +15,6 @@ namespace XBOOK.Data.Interfaces
         Task<IEnumerable<ClientViewModel>> GetAllClientAsync(ClientSerchRequest request);
         Task<IEnumerable<ClientViewModel>> GetAllClientData();
         Task<string> GetAllClientByID(long? id);
+        Task<ClientViewModel> GetClientByClientName(string clientName);
     }
 }

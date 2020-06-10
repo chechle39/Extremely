@@ -10,9 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="XBOOK.Data">
-      <HintPath>..\..\XBOOK.Data\bin\Debug\netcoreapp2.2\XBOOK.Data.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\XBOOK.Data\XBOOK.Data.csproj" />
   </ItemGroup>
 
 </Project>

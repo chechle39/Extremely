@@ -15,6 +15,7 @@ namespace XBOOK.Data.Interfaces
         bool RemoveAll(List<SaleInvDetailViewModel> request);
         SaleInvDetail UpdateSaleInvDetail(SaleInvDetailViewModel rs);
         Task<bool> RemoveSale(List<Deleted> id);
+        Task<List<SaleInvDetailViewModel>> GetSaleInvByinID(long id);
 
     }
 }
