@@ -35,7 +35,7 @@ export class PrintViewerComponent implements OnInit {
       },
     };
 
-    // DevExpressViewer.Reporting.Viewer.Settings.AsyncExportApproach = true;
+     DevExpressViewer.Reporting.Viewer.Settings.TimeOut = 30000;
   }
 
   ngOnInit() {
@@ -43,5 +43,4 @@ export class PrintViewerComponent implements OnInit {
       this.reportUrl = params.key;
     });
   }
-
 }

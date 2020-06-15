@@ -3,6 +3,7 @@ using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
 using DevExpress.Security.Resources;
 using DevExpress.XtraReports.Security;
+using DevExpress.XtraReports.Web.ClientControls;
 using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using Xbook.TaxInvoice.Interfaces;
 using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.Service;
 using XBOOK.Data.Base;
@@ -203,6 +205,9 @@ namespace XBOOK.Web
             services.AddTransient<IUserCommonService, UserCommonService>();
             services.AddTransient<ITaxSaleInvoiceService, TaxSaleInvoiceService>();
             services.AddTransient<ITaxInvDetailService, TaxInvDetailService>();
+            services.AddTransient<ITaxBuySaleInvoiceService, TaxBuySaleInvoiceService>();
+            services.AddTransient<ITaxBuyInvDetailService, TaxBuyInvDetailService>();
+            services.AddTransient<ITaxBuyInvDetailRepository, TaxBuyInvDetailRepository>();
             // reponsitory
             services.AddTransient<IPaymentReceiptRepository, PaymentReceiptRepository>();
             services.AddTransient<IClientRepository, ClientRepository>();
@@ -228,6 +233,8 @@ namespace XBOOK.Web
             services.AddTransient<IUserCommonRepository, UserCommonRepository>();
             services.AddTransient<ITaxSaleInvoiceRepository, TaxSaleInvoiceRepository>();
             services.AddTransient<ITaxInvDetailRepository, TaxInvDetailRepository>();
+            services.AddTransient<ITaxBuyInvoiceRepository, TaxBuyInvoiceRepository>();
+            services.AddTransient<ITaxBuyInvDetailRepository, TaxBuyInvDetailRepository>();
             // dapper
             services.AddTransient<ISalesReportServiceDapper, SalesReportServiceDapper>();
             services.AddTransient<IDebitageServiceDapper, DebitAgeServiceDapper>();
@@ -243,16 +250,14 @@ namespace XBOOK.Web
             services.AddTransient<IPaymentReceiptServiceDapper, PaymentReceiptServiceDapper>();
             services.AddTransient<IPermissionDapper, PermissionServiceDapper>();
             services.AddTransient<IDashboardServiceDapper, DashboardServiceDapper>();
+            services.AddTransient<ITaxInvoiceServiceDapper, TaxInvoiceServiceDapper>();
+            services.AddTransient<ITaxBuyInvoiceServiceDapper, TaxBuyInvoiceServiceDapper>();
             services.AddSingleton<IJwtFactory, JwtFactory>();
             services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddScoped<DbContext, XBookComonContext>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IAuthorizationHandler, ResourceAuthorizationHandler>();
-            
-            services.AddTransient<ITaxSaleInvoiceRepository, TaxSaleInvoiceRepository>();
-            services.AddTransient<ITaxSaleInvoiceService, TaxSaleInvoiceService>();
-            services.AddTransient<ITaxInvoiceServiceDapper, TaxInvoiceServiceDapper>();
 
             services.AddSwaggerGen(c =>
             {
@@ -297,7 +302,8 @@ namespace XBOOK.Web
             DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
             app.UseDevExpressControls();
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
-
+            DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(new LoggerService());
+            DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(ProcessException);
             //--------------------
             app.UseDefaultFiles();
             app.UseAuthentication();
@@ -310,7 +316,6 @@ namespace XBOOK.Web
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book API V1");
             });
-
             app.UseHttpsRedirection();
             app.UseSpaStaticFiles();
 
@@ -382,6 +387,12 @@ namespace XBOOK.Web
             //    }
 
             //});
+        }
+        void ProcessException(Exception ex, string message)
+        {
+            // Log exceptions here. For instance:
+            System.Diagnostics.Debug.WriteLine("[{0}]: Exception occured. Message: '{1}'. Exception Details:\r\n{2}",
+                DateTime.Now, message, ex);
         }
     }
 }

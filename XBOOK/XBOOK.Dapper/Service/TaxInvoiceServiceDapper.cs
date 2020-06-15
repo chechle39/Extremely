@@ -34,7 +34,7 @@ namespace XBOOK.Dapper.Service
             var connectString = connect.ConnectString();
             using (var sqlConnection = new SqlConnection(connectString))
             {
-                if(!string.IsNullOrEmpty(request.StartDate) && !string.IsNullOrEmpty(request.EndDate))
+                if (!string.IsNullOrEmpty(request.StartDate) && !string.IsNullOrEmpty(request.EndDate))
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
@@ -45,7 +45,7 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@getDebtOnly", request.getDebtOnly);
                     return await sqlConnection.QueryAsync<TaxInvoiceViewModel>(
                        "GetTaxInvoiceList", dynamicParameters, commandType: CommandType.StoredProcedure);
-                }else
+                } else
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
@@ -54,10 +54,17 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@toDate", null);
                     dynamicParameters.Add("@isIssueDate", request.isIssueDate);
                     dynamicParameters.Add("@getDebtOnly", request.getDebtOnly);
-                    return await sqlConnection.QueryAsync<TaxInvoiceViewModel>(
+                    try
+                    {
+                        return await sqlConnection.QueryAsync<TaxInvoiceViewModel>(
                        "GetTaxInvoiceList", dynamicParameters, commandType: CommandType.StoredProcedure);
-                }
-               
+
+                    }
+                    catch(System.Exception ex)
+                    {
+                        return null;
+                    }
+               }
             }
         }
 
@@ -104,7 +111,7 @@ namespace XBOOK.Dapper.Service
                           item.IssueDate,
                           item.DueDate,
                           item.Amount,
-                          item.AmountPaid,
+                          item.TaxAmount,
                           item.ClientID,
                           item.ContactName,
                           item.BankAccount

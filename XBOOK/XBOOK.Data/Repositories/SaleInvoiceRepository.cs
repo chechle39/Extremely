@@ -109,5 +109,11 @@ namespace XBOOK.Data.Repositories
             Entities.Update(saleInRq);
             return true;
         }
+
+        public SaleInvoice SaveSaleInvoice(SaleInvoice save)
+        {
+            Entities.Add(save);
+            return  save;
+        }
     }
 }

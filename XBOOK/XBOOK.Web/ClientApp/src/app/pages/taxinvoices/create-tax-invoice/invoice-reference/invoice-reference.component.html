@@ -1,0 +1,79 @@
+<div>
+  <div class=" modal-header">
+    <div class="row w-100">
+      <div class="col-3">
+        <h5 class="modal-title">Invoices</h5>
+      </div>
+      <div class="col-3 d-flex align-items-center">
+        <input validateDateDirective #d="ngbDatepicker"
+          ngbDatepicker class="d-none" (dateSelect)="onFromDateSelect($event)">
+          From: {{ fromDate.toLocaleDateString('en-GB') }}
+        <button (click)="d.toggle()" style="border: 0; outline: none;"
+          class="k-icon k-i-calendar-date" type="button"></button>
+      </div>
+      <div class="col-3 d-flex align-items-center">
+        <input validateDateDirective #d2="ngbDatepicker"
+          ngbDatepicker class="d-none" (dateSelect)="onToDateSelect($event)">
+          To: {{ toDate.toLocaleDateString('en-GB') }}
+        <button (click)="d2.toggle()" style="border: 0; outline: none;"
+          class="k-icon k-i-calendar-date" type="button"></button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body" style="margin-top: 3px;">
+    <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="invoiceReferenceList"
+      [selectAllRowsOnPage]="false" [selectionType]="selectionType.multiClick" [selected]="selected"
+      (select)="onSelect($event)">
+
+      <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+        [resizeable]="false" [checkboxable]="true" [headerCheckboxable]="true">
+        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+          let-selectFn="selectFn">
+          <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" (change)="selectFn(!allRowsSelected)" />
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+          let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+          <div class="custom-control custom-checkbox m-0">
+            <input #cb type="checkbox" class="custom-control-input" id="{{row.taxInvoiceId}}" [checked]="isSelected"
+              (change)="onCheckboxChangeFn($event)" />
+            <label class="custom-control-label col-form-label" for="{{row.taxInvoiceId}}"></label>
+          </div>
+
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column prop="issueDate" name="Date" [cellClass]="'col-id'" [headerClass]="'col-id'">
+        <!-- <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <span class="column-header" style="cursor: pointer" (click)="sortClient()">{{'INVOICE.GRID.HEADER.CLIENT' | translate}}</span>
+                <span class="column-header" style="cursor: pointer">{{'INVOICE.GRID.HEADER.INVOICE' | translate}}</span>
+                <span class="sort-btn" [class.sort-asc]="sortDir === 'asc'"
+                  [class.datatable-icon-up]="sortDir === 'asc'" [class.sort-desc]="sortDir === 'desc'"
+                  [class.datatable-icon-down]="sortDir === 'desc'"></span>
+            
+              </ng-template> -->
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div class="col-more-info">{{row.issueDate | date: 'dd/MM/yyyy'}}</div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column prop="clientName" name="(Invoice No.) Client Name" [cellClass]="'col-id'"
+        [headerClass]="'col-id'">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div class="col-more-info"><span *ngIf="row.invoiceNumber">(<span
+                class="label-blue p-0">{{ row.invoiceNumber }}</span>)</span>{{ row.clientName }}</div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column prop="amount" name="Amount">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div>{{row.amount | currency:'VND':''}}</div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column prop="notTaxing" name="Not Taxing" [headerClass]="'col-right'">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div class="text-right">{{row.notTaxing | currency:'VND':''}}</div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+  <div class="modal-footer px-3" style="border-top: 1px solid #999;margin-top: -9px; justify-content: center;">
+    <button (click)="onDone()" type="submit" class="btn btn-raised btn-success">Done</button>
+  </div>
+</div>

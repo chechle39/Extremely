@@ -23,16 +23,8 @@ namespace XBOOK.Data.Repositories
             var taxInvoiceCreate = Mapper.Map<TaxSaleInvoiceModelRequest, TaxSaleInvoice>(taxInvoiceViewModel);
             _unitOfWork.BeginTransaction();
             Entities.Add(taxInvoiceCreate);
-            try
-            {
-                _unitOfWork.SaveChanges();
-                _unitOfWork.CommitTransaction();
-
-            }
-            catch (Exception ex)
-            {
-
-            }
+            _unitOfWork.SaveChanges();
+            _unitOfWork.CommitTransaction();
             return await Task.FromResult(true);
         }
 

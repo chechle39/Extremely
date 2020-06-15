@@ -6,6 +6,7 @@ export class InvoiceView {
   invoiceId: number;
   invoiceSerial: string;
   invoiceNumber: string;
+  taxInvoiceNumber: string;
   issueDate: Date;
   dueDate: Date;
   clientID: number;

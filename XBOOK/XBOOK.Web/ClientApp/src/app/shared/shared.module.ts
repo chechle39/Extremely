@@ -31,6 +31,9 @@ import { validatePasswordDirective } from './validators/validatePasswordDirectiv
 import { validateLengthPasswordDirective } from './validators/validatelengthpasswordirective';
 import { validateInputDirective } from './validators/validateInputDirective';
 import { validateInputAccDirective } from '../pages/journalentries/validate/validateinputacc';
+import { InvoiceNumberPipeInv } from './pipe/InvoiceNumberPipe.pipe';
+// tslint:disable-next-line:max-line-length
+import { InvoiceReferenceComponent } from '../pages/taxinvoices/create-tax-invoice/invoice-reference/invoice-reference.component';
 @NgModule({
   declarations: [
     validateInputAccDirective,
@@ -47,8 +50,10 @@ import { validateInputAccDirective } from '../pages/journalentries/validate/vali
     AutoFocusDirective,
     ThousandSuffixesPipe,
     SplitPipe,
+    InvoiceNumberPipeInv,
     CreateMoneyReceiptComponent,
     CreatePaymentReceiptComponent,
+    InvoiceReferenceComponent,
     SearchgenledComponent,
     FilterPipe],
   imports: [
@@ -86,10 +91,12 @@ import { validateInputAccDirective } from '../pages/journalentries/validate/vali
     SidebarListDirective,
     SidebarAnchorToggleDirective,
     SplitPipe,
+    InvoiceNumberPipeInv,
     CreateMoneyReceiptComponent,
     CreatePaymentReceiptComponent,
     SearchgenledComponent,
     SidebarToggleDirective,
+    InvoiceReferenceComponent,
   ],
   providers: [
     { provide: NgbDateParserFormatter, useClass: MomentDateFormatter },

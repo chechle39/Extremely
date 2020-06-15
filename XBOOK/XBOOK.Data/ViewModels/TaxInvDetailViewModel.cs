@@ -7,6 +7,7 @@ namespace XBOOK.Data.ViewModels
     public class TaxInvDetailViewModel
     {
         public long ID { get; set; }
+        public long SaleInvDetailID { get; set; }
         public long taxInvoiceID { get; set; }
         public int productID { get; set; }
         public string productName { get; set; }
@@ -15,6 +16,5 @@ namespace XBOOK.Data.ViewModels
         public Nullable<decimal> price { get; set; }
         public Nullable<decimal> amount { get; set; }
         public Nullable<decimal> vat { get; set; }
-        public long SaleInvoiceDetailId { get; set; }
     }
 }

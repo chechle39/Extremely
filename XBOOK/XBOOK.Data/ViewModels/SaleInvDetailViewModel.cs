@@ -7,7 +7,7 @@
 
         public SaleInvDetailViewModel() { }
 
-        public SaleInvDetailViewModel(decimal? amount, string description, long iD, decimal? price, int productID, string productName, decimal? qty, long taxInvoiceID, decimal? vat, long saleInvoiceDetailId)
+        public SaleInvDetailViewModel(decimal? amount, string description, long iD, decimal? price, int productID, string productName, decimal? qty, long taxInvoiceID, decimal? vat)
         {
             Amount = amount;
             Description = description;
@@ -18,7 +18,6 @@
             Qty = qty;
             this.taxInvoiceID = taxInvoiceID;
             Vat = vat;
-            this.saleInvoiceDetailId = saleInvoiceDetailId;
         }
 
         public long Id { get; set; }

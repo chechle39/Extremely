@@ -19,6 +19,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { MoneyReceiptService } from '../../_shared/services/money-receipt.service';
 import { MasterParamService } from '../../_shared/services/masterparam.service';
 import { TaxInvoiceService } from '../../_shared/services/taxinvoice.service';
+import { TaxBuyInvoiceView } from '../../_shared/models/tax-buy-invoice/tax-buy-invoice-view.model.model';
+import { TaxBuyInvoiceService } from '../../_shared/services/tax-buy-invoice.service';
 class PagedInvoicesRequestDto extends PagedRequestDto {
   keyword: string;
 }
@@ -35,7 +37,7 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
   checkboxInvoice: Subscription = new Subscription();
   client: string;
   searchForm: FormGroup;
-  invoiceViews: InvoiceView[];
+  invoiceViews: TaxBuyInvoiceView[];
   searchKeywordClass: string;
   private defaultSortOrder = 'ASC';
   private defaultSortBy = 'INVOICE_NUMBER';
@@ -80,6 +82,7 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
     private commonService: CommonService,
     private modalService: NgbModal,
     private translateService: TranslateService,
+    private taxBuyInvoiceService: TaxBuyInvoiceService,
   ) {
     super(injector);
     this.commonService.CheckAssessFunc('Invoice');
@@ -176,7 +179,7 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
             isIssueDate: false,
             getDebtOnly: false,
           };
-          this.invoiceService.getAll(requestList).pipe(
+          this.taxBuyInvoiceService.getAll(requestList).pipe(
           ).subscribe((i: any) => {
             this.loadingIndicator = false;
             this.invoiceViews = i;
@@ -198,7 +201,7 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
             isIssueDate: this.ischeck !== undefined ? this.ischeck : this.requesSearchtList.isIssueDate,
             getDebtOnly: this.requesSearchtList.getDebtOnly === undefined ? false : this.requesSearchtList.getDebtOnly,
           };
-          this.invoiceService.getAll(rs).pipe(
+          this.taxBuyInvoiceService.getAll(rs).pipe(
           ).subscribe((i: any) => {
             this.loadingIndicator = false;
             this.invoiceViews = i;
@@ -240,7 +243,7 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
   }
 
   private getAllInv(requestList: { keyword: string; startDate: string; endDate: string; isIssueDate: boolean; }) {
-    this.invoiceService.getAll(requestList).pipe().subscribe((i: any) => {
+    this.taxBuyInvoiceService.getAll(requestList).pipe().subscribe((i: any) => {
       this.loadingIndicator = false;
       this.invoiceViews = i;
       this.listInvoice = this.invoiceViews;
@@ -258,14 +261,14 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
         isIssueDate: this.ischeck,
         getDebtOnly: false,
       };
-      this.invoiceService.getAll(rs).pipe(
+      this.taxBuyInvoiceService.getAll(rs).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
         this.invoiceViews = i;
         this.listInvoice = this.invoiceViews;
       });
     } else {
-      this.invoiceService.getAll(request).pipe(
+      this.taxBuyInvoiceService.getAll(request).pipe(
       ).subscribe((i: any) => {
         this.loadingIndicator = false;
         this.invoiceViews = i;
@@ -518,5 +521,10 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
 
   exportInvoive() {
     this.invoiceService.ExportInvoice();
+  }
+  public getTotalTax(): number {
+    return _.sumBy(this.invoiceViews, item => {
+      return item.taxAmount;
+    });
   }
 }

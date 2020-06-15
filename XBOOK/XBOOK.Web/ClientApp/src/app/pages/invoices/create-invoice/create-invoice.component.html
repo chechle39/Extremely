@@ -202,7 +202,7 @@
                           </div>
                          
                           <div class="row mx-0">
-                            <input style="opacity: unset;" kendotextbox placeholder="VAT" (focus)="focusInvoiceNumber()"
+                            <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.CREATE.INVOICE.VAT' | translate}}" (focus)="focusInvoiceNumber()"
                               formControlName="taxInvoiceNumber" [readOnly]="isRead"
                               [ngClass]="{'border-0':invoiceForm.controls.taxInvoiceNumber.touched === false || invoiceForm.controls.taxInvoiceNumber.invalid === false || isMouseEnter == false}"
                               class="w-100 amountPaid invoice__input__textbox place-holder__color invoice__text--height-normal" />

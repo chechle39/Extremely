@@ -6,7 +6,7 @@
 
         <div class="row">
           <div class="col-4 col-lg-4">
-            <span class="card__title">{{'INVOICE.HEADER.INVOICE' | translate}}</span>
+            <span class="card__title">TAX Invoices</span>
           </div>
           <div class="col-3 col-lg-3">
             <div ngbDropdown class="text-right">
@@ -179,7 +179,7 @@
     
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column  prop="clientName"  name="{{'INVOICE.GRID.HEADER.CLIENTINVOICE' | translate}}" [cellClass]="'col-id'"
+            <ngx-datatable-column  prop="clientName"  name="{{'INVOICE.GRID.HEADER.CLIENT' | translate}}{{'TAX.INVOICE.NO' | translate}}" [cellClass]="'col-id'"
               [headerClass]="'col-id'">
               <!-- <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
                 <span class="column-header" style="cursor: pointer" (click)="sortClient()">{{'INVOICE.GRID.HEADER.CLIENT' | translate}}</span>
@@ -198,9 +198,12 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="note" name="Notes" [cellClass]="'col-id'" [headerClass]="'col-id'">
+            <ngx-datatable-column prop="note" name="{{'BUY.INVOICE.GRID.TAX.DESCRIPTION' | translate}}" [cellClass]="'col-id'" [headerClass]="'col-id'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-more-info">{{row.note}}</div>
+                <div class="col-more-info">
+                  <span *ngIf="row.invoiceNumber">(<span class="label-blue p-0">{{ row.invoiceNumber }}</span>)</span>
+                  Bán hàng cho An@Cuong
+                </div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="issueDate" name="{{'BUY.INVOICE.GRID.ISSUED.DUE' | translate}}" [cellClass]="'col-center'"
@@ -219,7 +222,7 @@
                   <!-- {{plusRow(row.subTotal,row.vatTax,row.discount) | currency:'VND':''}} -->
                   {{row.amount | currency:'VND':''}}</div>
                 <div class="text-right">
-                  <span style="color: #ed7d31">{{row.amountPaid | currency:'VND':''}}</span>
+                  <span class="label-blue" *ngIf="row.taxAmount != 0">{{row.taxAmount | currency:'VND':''}}</span>
                 </div>
               </ng-template>
             </ngx-datatable-column>
@@ -252,10 +255,20 @@
                     <div></div>
                     <div></div>
                     <div class="text-center">
-                      <b>{{'BUY.INVOICE.GRID.GRANT.TOTAL' | translate}}</b>
+                      <div>
+                        <b>{{'BUY.INVOICE.GRID.GRANT.TOTAL' | translate}}</b>
+                      </div>
+                      <div>
+                        <b class="label-blue">Tax Amount</b>
+                      </div>
                     </div>
                     <div>
-                      <b>{{getGrantTotal()| currency:'VND':''}}</b>
+                      <div>
+                        <b>{{getGrantTotal()| currency:'VND':''}}</b>
+                      </div>
+                      <div>
+                        <b class="label-blue">{{getTotalTax()| currency:'VND':''}}</b>
+                      </div>
                     </div>
                     <div></div>
                   </div>

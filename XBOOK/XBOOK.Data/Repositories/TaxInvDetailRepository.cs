@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,16 +26,14 @@ namespace XBOOK.Data.Repositories
             return await Task.FromResult(true);
         }
 
-        public async Task<TaxSaleInvDetail> GetTaxInvoiceBySaleInvDetailId(long Id)
-        {
-            var data = await Entities.Where(x => x.SaleInvoiceDetailId == Id).AsNoTracking().ToListAsync();
-            return data[0];
-        }
+  
 
         public async Task<bool> RemoveTaxSale(long id)
         {
-            var data = await Entities.Where(x => x.SaleInvoiceDetailId == id).AsNoTracking().ToListAsync();
-            Entities.Remove(data[0]);
+            var data = await Entities.Where(x => x.SaleInvDetailID == id).AsNoTracking().ToListAsync();
+            if (data.Count() > 0)
+                Entities.Remove(data[0]);
+
             return await Task.FromResult(true);
         }
 
@@ -48,8 +47,17 @@ namespace XBOOK.Data.Repositories
         {
             //Entities.FromSql("DELETE FROM dbo.TaxSaleInvDetail WHERE taxInvoiceID == {0}", taxInvoiceId.id);
 
-            var list = await Entities.Where(item => item.taxInvoiceID == taxInvoiceId.id).ToListAsync();
-            Entities.RemoveRange(list);
+            try
+            {
+                var list = await Entities.Where(item => item.taxInvoiceID == taxInvoiceId.id).ToListAsync();
+                Entities.RemoveRange(list);
+            }
+            catch(Exception ex)
+            {
+
+            }
+           
+           
             return await Task.FromResult(true);
         }
     }

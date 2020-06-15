@@ -2,8 +2,8 @@
   <div class="card-invoice mx-auto">
     <nb-card-header class="mx-2 border-0 pb-0">
       <div class="row w-100 mx-0 px-4 d-flex justify-content-between">
-        <h1 *ngIf="viewMode === false && isCheckHidden !== true" class="invoice__title float-left">{{'INVOICE.NEW.HEADER' | translate}}</h1>
-        <h1 *ngIf="viewMode || isCheckHidden === true" class="invoice__title float-left">{{'INVOICE.NO' | translate}} {{title}}</h1>
+        <h1 *ngIf="viewMode === false && isCheckHidden !== true" class="invoice__title float-left">{{'TAX.INVOICE.NEW.HEADER' | translate}}</h1>
+        <h1 *ngIf="viewMode || isCheckHidden === true" class="invoice__title float-left">TAX Invoice No {{title}}</h1>
         <div class="float-right mt-1">
           <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-2 ml-2 btn-secondary"><i class="ft-printer"></i> {{'COMMON.ACTION.PRINT' | translate}}</button>
           <button *ngIf="!viewMode"  (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
@@ -173,26 +173,29 @@
                         </div>
                       </div>
                       <div class="col-6 refer px-0">
-                        <div>
-                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.INVOICENUMBER' | translate}}</p>
-                          <div class="row mx-0">
-                            <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.GRID.INVOICE' | translate}}"
-                              class="form-control" type="text" formControlName="invoiceNumber" [readOnly]="isRead"
-                              [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false || isMouseEnter == false}"
-                              class=" w-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
-                              required />
-                            
-                          </div>
-
-                        </div>
                         
                         <div>
                           <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.VAT' | translate}}</p>
                           <div class="row mx-0">
                             <input style="opacity: unset;" kendotextbox placeholder="VAT"
-                              formControlName="invoiceSerial" [readOnly]="isRead"
-                              [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false || isMouseEnter == false}"
+                              formControlName="taxInvoiceNumber" [readOnly]="isRead"
+                              [ngClass]="{'border-0':invoiceForm.controls.taxInvoiceNumber.touched === false || invoiceForm.controls.taxInvoiceNumber.invalid === false || isMouseEnter == false}"
                               class="w-100 amountPaid invoice__input__textbox place-holder__color invoice__text--height-normal" />
+                          </div>
+
+                        </div>
+                        <div>
+                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0 d-flex align-items-baseline">{{'BUY.INVOICE.CREATE.INVOICE.INVOICENUMBER' | translate}}
+                            <button (click)="openInvoiceReference()" class="btn p-0" style="font-size: 29px;line-height: 23px; color: inherit;">
+                            ...
+                            </button>
+                        </p>
+                          <div class="row mx-0">
+                            <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.GRID.INVOICE' | translate}}"
+                              class="form-control" type="text" disabled
+                              [value]="invoiceForm.get('invoiceNumber').valueChanges | async | InvoiceNumberPipeInv"
+                              class=" w-100 border-0 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
+                              required />
                           </div>
 
                         </div>
@@ -233,17 +236,17 @@
                         *ngFor="let detail of invoiceForm.get('items')['controls']; index as i">
                         <ng-container [formGroupName]="i">
                           <div class="col-md-6 col-5 d-inline-grid pl-0 ngb-typeahead-product">
-                            <input formControlName="productName" #productName id="productName{{i}}" kendotextbox [readOnly]="isRead"
+                            <input formControlName="productName" #productName id="productName{{i}}" kendotextbox [readOnly]="isRead || !createMode"
                               placeholder="{{'INVOICE.FORM.CREATE.ENTERITEMNAME.PLACEHOLDER' | translate}}" autocomplete="off"
                               class="productNameClass border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input"
                               [ngbTypeahead]="searchProduct" [resultTemplate]="productTemplate"
                               (selectItem)="selectedProduct($event,i)" #instance="ngbTypeahead"
                               (keydown)="typeheadScrollHandler($event)" placement="bottom"
                               (focus)="onFocus($event)"
-                              [inputFormatter]="productFormatter" tabindex="{{i * 4 + 1}}" />
+                              [inputFormatter]="productFormatter" />
 
-                            <input formControlName="description" #description kendotextbox [readOnly]="isRead"
-                              placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}" tabindex="{{i * 4 + 4}}"
+                            <input formControlName="description" #description kendotextbox [readOnly]="isRead || !createMode"
+                              placeholder="{{'INVOICE.FORM.CREATE.DESCRIPTION' | translate}}" id="description{{i}}" 
                               class="border-0 full-width imput-reference-custom font-italic invoice__font--medium-2 description place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input" />
                             <ng-template #productTemplate let-r="result" let-t="term">
                               <div class="row m-0 product-item py-1">
@@ -264,8 +267,8 @@
                             </kendo-numerictextbox> -->
                             <input  digitOnly [min]=1
                             [max]="10000" #quantity
-                            tabindex="{{i* 4 + 2}}" formControlName="qty"
-                            placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.QTY' | translate}}" kendoTextBox  [readOnly]="isRead"
+                             formControlName="qty"
+                            placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.QTY' | translate}}" kendoTextBox  [readOnly]="isRead || !createMode"
                             class="text-center border-0 full-width invoice__font--medium-2 invoice__items-table__input"/>
                             <a *ngIf="detail.value.taxs.length > 0" style="color:blue;"
                               (click)="addTaxPopup(detail,i)" class="lb-discount invoice__font--medium-2 invoice__items-table__input">{{taxsText}}</a>
@@ -274,10 +277,10 @@
                               (click)="addTaxPopup(detail,i)">Add Tax</a>
                           </div>
                           <div class="col-md-2 col-2 text-left d-inline-grid">
-                            <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly  kendotextbox [readOnly]="isRead" formControlName="price" id="price{{i}}"
+                            <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly  kendotextbox [readOnly]="isRead || !createMode" formControlName="price" id="price{{i}}"
                               maxlength="16" placeholder="{{'BUY.INVOICE.CREATE.PLACEHOLDER.ENTER.PRICE' | translate}}" placeholder="Enter price" 
                               class="border-0 full-width text-right input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__items-table__input"
-                              tabindex="{{i* 4 +3}}" />
+                               />
 
                             <input kendotextbox style="color: blue"
                               class="text-right border-0 full-width t-color-blue input-amount input-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2 invoice__items-table__input"
@@ -289,7 +292,7 @@
                             <input formControlName="vatAmount" kendotextbox [readOnly]="true"
                               class="border-0 full-width t-color-red input-amount mput-reference-custom place-holder__color invoice__input__textbox invoice__input__textbox--disable invoice__font--medium-2 invoice__items-table__input" />
                           </div>
-                          <div *ngIf="!viewMode" [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
+                          <div *ngIf="!viewMode && createMode" [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'"
                             class="text-right d-inline-grid pr-0"> <a class="item-delete mt-2"
                               *ngIf="getFormArray().length > 0" (click)="removeItem(i)">
                               <i class="icon-delete" aria-hidden="true"></i>
@@ -299,10 +302,10 @@
                       </div>
                     </div>
                     <!--end ngRepeat: item in invoice.items -->
-                    <div *ngIf="!viewMode" class="row" style="border: none;margin-top: 20px"
+                    <div *ngIf="!viewMode && createMode" class="row" style="border: none;margin-top: 20px"
                       [ngClass]="(isMouseEnter == true) ? 'visible' : 'invisible'">
                       <div class="add-line-box d-flex align-items-center">
-                        <input tabindex="{{getFormArray().length * 4 + 1}}" type="button" value="{{'BUY.INVOICE.CREATE.ADD.LINE' | translate}}"
+                        <input type="button" value="{{'BUY.INVOICE.CREATE.ADD.LINE' | translate}}"
                           (click)="addNewItem()" class=" text-center w-100"
                           style="cursor: pointer;background-color:#fff;border: none" />
                       </div>
@@ -371,8 +374,8 @@
                         <div class="col-6" style="float: left">
                           <input [cleave]=" {numeral: true,numeralThousandsGroupStyle: 'thousand'}" digitOnly [min]=1
                             [max]=100 [maxlength]=2 (ngModelChange)="totalDiscountChange()"
-                            tabindex="{{getFormArray().length * 4 + 2}}" formControlName="totalDiscount"
-                            placeholder="{{'INVOICE.FORM.CREATE.ADDDISCOUNT.PLACEHOLDER' | translate}}" kendoTextBox [readOnly]="isRead"
+                            formControlName="totalDiscount"
+                            placeholder="{{'INVOICE.FORM.CREATE.ADDDISCOUNT.PLACEHOLDER' | translate}}" kendoTextBox [readOnly]="isRead || !createMode"
                             class="border-0 width-50-per text-center input-amount mput-reference-custom invoice__font--medium-2 px-0"
                             />
                           <label class="border-0 width-50-per text-right form-label t-color-red">
@@ -453,10 +456,6 @@
           </div>
         </form>
       </div>
-      <xb-list-payment *ngIf="viewMode && coppyMode !== true" (editPayment)="editPayment($event)" (deletePayment)="deletePayment($event)"
-        (addNewPayment)="addPayment()" [paymentViews]="paymentViews" [outstandingAmount]="amountDue"
-        [invoiceNumber]="invoiceNumber" class="w-100 invoice-area">
-      </xb-list-payment>
     </nb-card-body>
   </div>
 </nb-card>

@@ -9,5 +9,6 @@ namespace XBOOK.Dapper.Interfaces
     {
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceAsync(SaleInvoiceListRequest request);
         Task<byte[]> ExportInvoiceAsync();
+        Task<IEnumerable<UnTaxDeclaredInvoiceViewModel>> GetUnTaxDeclaredInvoiceAsync(UnTaxDeclaredInvoiceRequest request);
     }
 }

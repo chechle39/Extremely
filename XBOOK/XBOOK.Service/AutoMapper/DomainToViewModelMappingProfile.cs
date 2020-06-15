@@ -41,10 +41,13 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<Functions, FunctionViewModel>();
             CreateMap<Permission, PermissionViewModel>();
             CreateMap<TaxSaleInvoice, TaxSaleInvoiceModelRequest>();
+            CreateMap<TaxBuyInvoice, TaxSaleInvoiceModelRequest>();
             CreateMap<SaleInvoiceModelRequest, TaxSaleInvoiceModelRequest>(); 
             CreateMap<TaxSaleInvDetail, TaxInvDetailViewModel>();
             CreateMap<SaleInvDetailViewModel, TaxInvDetailViewModel>();
             CreateMap<SaleInvoice, TaxSaleInvoiceModelRequest>();
+            CreateMap<TaxBuyInvoice, TaxSaleInvoiceModelRequest>();
+            CreateMap<TaxBuyInvDetail, TaxInvDetailViewModel>();
         }
     }
 }

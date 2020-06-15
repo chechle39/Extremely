@@ -55,7 +55,8 @@ namespace XBOOK.Data.Entities
         public virtual DbSet<TaxSaleInvDetail> TaxSaleInvDetail { get; set; }
         public virtual DbSet<TaxSaleInvoice> TaxSaleInvoice { get; set; }
         public virtual DbSet<Invoice_TaxInvoice> Invoice_TaxInvoice { get; set; }
-
+        public virtual DbSet<TaxBuyInvDetail> TaxBuyInvDetail { get; set; }
+        public virtual DbSet<TaxBuyInvoice> TaxBuyInvoice { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AccountChartConfiguration())
@@ -82,6 +83,8 @@ namespace XBOOK.Data.Entities
                 .ApplyConfiguration(new FunctionsConfiguration())
                 .ApplyConfiguration(new PermissionConfiguration())
                 .ApplyConfiguration(new Invoice_TaxInvoiceConfiguration())
+                .ApplyConfiguration(new TaxBuyInvDetailConfiguration())
+                .ApplyConfiguration(new TaxBuyInvoiceConfiguration())
                 .ApplyConfiguration(new BuyInvDetailConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("AppUserClaims").HasKey(x => x.Id);

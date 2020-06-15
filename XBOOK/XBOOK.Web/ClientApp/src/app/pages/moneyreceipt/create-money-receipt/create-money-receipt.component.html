@@ -11,7 +11,7 @@
 
       </div>
       <div class="col-5">
-        <input formControlName="receiptNumber" class="form-control" name="{{'PAYMENT.GRID.RECIPT.NUMBER' | translate}}" type="text" maxlength="16" placeholder="Receipt No#" id="receiptNumber">
+        <input kendotextbox [readOnly]="true" formControlName="receiptNumber" class="form-control disableftex" name="{{'PAYMENT.GRID.RECIPT.NUMBER' | translate}}" type="text" maxlength="16" placeholder="Receipt No#" id="receiptNumber">
       </div>
       <div class="col-12">
         <small class="form-text text-muted danger"

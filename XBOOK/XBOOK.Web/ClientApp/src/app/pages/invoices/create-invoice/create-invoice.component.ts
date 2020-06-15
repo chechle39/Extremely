@@ -134,6 +134,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
   checkIcon: boolean;
   oldInvoiceNumber: string;
   oldTaxInvoiceNumber: string;
+  oldCheck: boolean = false;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -483,6 +484,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       this.oldInvoiceNumber = invoice[0].invoiceNumber;
       this.oldTaxInvoiceNumber = invoice[0].taxInvoiceNumber;
       this.isCheckCheckbox = invoice[0].check;
+      this.oldCheck = invoice[0].check;
       this.invoiceForm.patchValue({
         invoiceId: invoice[0].invoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
@@ -822,7 +824,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           check: this.invoiceForm.value.checked,
           oldInvoiceNumber: this.oldInvoiceNumber,
           oldTaxInvoiceNumber: this.oldTaxInvoiceNumber,
-          oldCheck: this.isCheckCheckbox,
+          oldCheck: this.oldCheck,
         }],
         // tslint:disable-next-line:object-literal-shorthand
         saleInvDetailView: saleInvDetailView,
@@ -830,7 +832,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
       const request = {
         oldInvoiceNumber: this.oldInvoiceNumber,
         oldTaxInvoiceNumber: this.oldTaxInvoiceNumber,
-        oldCheck: this.isCheckCheckbox,
+        oldCheck: this.oldCheck,
         check: this.invoiceForm.value.checked,
         invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,

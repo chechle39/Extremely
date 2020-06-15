@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xbook.TaxInvoice.Interfaces;
+using Xbook.TaxInvoice.Repositories;
 using XBOOK.Common.Method;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
@@ -26,16 +28,20 @@ namespace XBOOK.Service.Service
         private readonly ITaxInvDetailService _taxInvDetailService;
         private readonly IClientService _iclientService;
         private readonly IClientRepository _iClientRepository;
+        private readonly Invoice_TaxInvoiceRepository _iInvoice_TaxInvoiceRepository;
+        private readonly XBookContext _context;
         public TaxSaleInvoiceService(
             ITaxSaleInvoiceRepository taxSaleInvoiceRepository,
             ITaxInvDetailRepository taxSaleInvDetailRepository,
-            IUnitOfWork uow, 
+            IUnitOfWork uow,
             IProductRepository productRepository,
             ITaxInvDetailService taxInvDetailService,
             IClientService clientService,
-            IClientRepository clientRepository
+            IClientRepository clientRepository,
+            XBookContext context
             )
         {
+            _context = context;
             _taxSaleInvoiceRepository = taxSaleInvoiceRepository;
             _taxSaleInvDetailRepository = taxSaleInvDetailRepository;
             _iProductRepository = productRepository;
@@ -46,8 +52,10 @@ namespace XBOOK.Service.Service
             _taxInvDetailService = taxInvDetailService;
             _iclientService = clientService;
             _iClientRepository = clientRepository;
+            _iInvoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context);
+
         }
-        public bool CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
+        public async Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
         {
             //try add client if not exist
             if (taxInvoiceViewModel.clientID == 0 && 
@@ -62,7 +70,7 @@ namespace XBOOK.Service.Service
                     Note = taxInvoiceViewModel.note,
                     Tag = taxInvoiceViewModel.tag,
                     TaxCode = taxInvoiceViewModel.taxCode,
-                    ClientID = taxInvoiceViewModel.clientID
+                    ClientID = (int)taxInvoiceViewModel.clientID
                 };
                     _iclientService.CreateClient(ClientViewModel);
             }
@@ -86,6 +94,25 @@ namespace XBOOK.Service.Service
                 {
                     item.taxInvoiceID = model.taxInvoiceID;
                     _taxInvDetailService.CreateTaxInvDetail(item);
+                });
+            }
+
+            //update add records table Invoice_TaxInvoice
+            if (!string.IsNullOrEmpty(taxInvoiceViewModel.invoiceNumber))
+            {
+                taxInvoiceViewModel.invoiceNumber.Split(',').ToList().ForEach(async item =>
+                {
+                    var data = new Invoice_TaxInvoiceViewModel()
+                    {
+                        invoiceNumber = item,
+                        ID = 0,
+                        isSale = true,
+                        taxInvoiceNumber = model.TaxInvoiceNumber,
+                        amount = model.subTotal
+                    };
+                     await _iInvoice_TaxInvoiceRepository.SaveInvoiceTaxInvoice(data);
+
+                    _uow.SaveChanges();
                 });
             }
             return true;
@@ -119,7 +146,7 @@ namespace XBOOK.Service.Service
             if (data.Result != null && data.Result.taxInvoiceID > 0)
             {
                 lastInvoice = data.Result;
-                lastInvoice.invoiceNumber = MethodCommon.InputString(lastInvoice.invoiceNumber);
+                lastInvoice.TaxInvoiceNumber = MethodCommon.InputString(lastInvoice.TaxInvoiceNumber);
                 return lastInvoice;
             }
             else
@@ -132,9 +159,15 @@ namespace XBOOK.Service.Service
         {
             foreach (var item in deleted)
             {
+                var getId = (await _taxSaleInvoiceRepository.GetTaxSaleInvoiceById(item.id)).ToList();
                 await _taxSaleInvDetailRepository.RemoveTaxSaleInvByTaxInvoiceID(new Deleted() { id = item.id });
                 //_uow.SaveChanges();
                 await _taxSaleInvoiceRepository.removeTaxSaleInv(item.id);
+
+                if(getId != null)
+                {
+                    await _iInvoice_TaxInvoiceRepository.DeleteInvoiceTaxInvoiceByTaxInvoiceNumber(getId[0].TaxInvoiceNumber);
+                }
                 _uow.SaveChanges();
             }
 
@@ -155,6 +188,7 @@ namespace XBOOK.Service.Service
                     discount = taxSaleInvoice.discount,
                     discRate = taxSaleInvoice.discRate,
                     dueDate = taxSaleInvoice.dueDate,
+                    taxInvoiceNumber = taxSaleInvoice.TaxInvoiceNumber,
                     invoiceNumber = taxSaleInvoice.invoiceNumber,
                     invoiceSerial = taxSaleInvoice.invoiceSerial,
                     issueDate = taxSaleInvoice.issueDate,
@@ -179,24 +213,31 @@ namespace XBOOK.Service.Service
         }
         private List<TaxInvDetailViewModel> GetByIDTaxInvDetail(long id)
         {
-            var payList = _uow.GetRepository<IRepository<TaxSaleInvDetail>>();
-            var listInDetail = payList.GetAll().ProjectTo<TaxInvDetailViewModel>().Where(x => x.taxInvoiceID == id).ToList();
             var dataList = new List<TaxInvDetailViewModel>();
-            foreach (var item in listInDetail)
+            try
             {
-                var data = new TaxInvDetailViewModel()
+                var payList = _uow.GetRepository<IRepository<TaxSaleInvDetail>>();
+                var listInDetail = payList.GetAll().ProjectTo<TaxInvDetailViewModel>().Where(x => x.taxInvoiceID == id).ToList();
+                foreach (var item in listInDetail)
                 {
-                    amount = item.amount,
-                    description = item.description,
-                    ID = item.ID,
-                    taxInvoiceID = item.taxInvoiceID,
-                    price = item.price,
-                    productID = item.productID,
-                    productName = (_iProductRepository.GetByProductId(Int32.Parse(item.productID.ToString())).Unit != null) ? item.productName + " " + "(" + _iProductRepository.GetByProductId(Int32.Parse(item.productID.ToString())).Unit + ")" : item.productName,
-                    qty = item.qty,
-                    vat = item.vat,
-                };
-                dataList.Add(data);
+                    var data = new TaxInvDetailViewModel()
+                    {
+                        amount = item.amount,
+                        description = item.description,
+                        ID = item.ID,
+                        taxInvoiceID = item.taxInvoiceID,
+                        price = item.price,
+                        productID = item.productID,
+                        productName = (_iProductRepository.GetByProductId(Int32.Parse(item.productID.ToString())).Unit != null) ? item.productName + " " + "(" + _iProductRepository.GetByProductId(Int32.Parse(item.productID.ToString())).Unit + ")" : item.productName,
+                        qty = item.qty,
+                        vat = item.vat,
+                    };
+                    dataList.Add(data);
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
             }
             return dataList;
         }

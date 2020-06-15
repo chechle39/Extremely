@@ -11,7 +11,7 @@ namespace XBOOK.Service.Interfaces
         Task<IEnumerable<TaxInvoiceViewModel>> GetTaxSaleInvoiceById(long id);
         TaxSaleInvoice GetALlDF();
         TaxSaleInvoice GetLastInvoice();
-        bool CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
+        Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
         Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
         Task<bool> DeletedTaxSaleInv(List<requestDeleted> deleted);
     }

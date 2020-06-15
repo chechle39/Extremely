@@ -10,7 +10,6 @@ namespace XBOOK.Data.Interfaces
     {
         Task<bool> CreateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel);
         Task<bool> UpdateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel);
-        Task<TaxSaleInvDetail> GetTaxInvoiceBySaleInvDetailId(long Id);
         Task<bool> RemoveTaxSale(long id);
         Task<bool> RemoveTaxSaleInvByTaxInvoiceID(Deleted taxInvoiceId);
     }

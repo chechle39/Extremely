@@ -37,6 +37,11 @@ import { CreateTaxBuyInvoiceComponent } from './create-tax-buyinvoice/create-tax
 import { AddPaymentComponent } from './create-tax-buyinvoice/payment/add-payment/add-payment.component';
 import { ListPaymentComponent } from './create-tax-buyinvoice/payment/list-payment/list-payment.component';
 import { AddTaxComponent } from './create-tax-buyinvoice/add-tax/add-tax.component';
+import { TaxInvoiceService } from '../_shared/services/taxinvoice.service';
+import { TaxBuyInvoiceService } from '../_shared/services/tax-buy-invoice.service';
+// tslint:disable-next-line:max-line-length
+import { InvoiceReferenceComponent } from '../taxinvoices/create-tax-invoice/invoice-reference/invoice-reference.component';
+import { InvoiceReferenceService } from '../_shared/services/invoice-reference.service';
 const components = [
   TaxBuyInvoicesComponent,
   ListTaxBuyInvoiceComponent,
@@ -74,16 +79,18 @@ const components = [
   declarations: [
     ...components,
   ],
-  entryComponents: [AddPaymentComponent, AddTaxComponent, CreateMoneyReceiptComponent],
+  entryComponents: [AddPaymentComponent, AddTaxComponent, CreateMoneyReceiptComponent, InvoiceReferenceComponent],
   providers: [
     EntryBatternService ,
     MoneyReceiptService,
-    InvoiceService,
+    TaxInvoiceService,
+    TaxBuyInvoiceService,
     ClientService,
     ProductService,
     PaymentService,
     CurrencyPipe,
     MasterParamService,
+    InvoiceReferenceService,
     NgbActiveModal,
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     TaxService],

@@ -7,7 +7,7 @@ namespace XBOOK.Data.Entities
 {
     public partial class TaxSaleInvDetail
     {
-        public TaxSaleInvDetail(long taxInvoiceID, decimal? price, int productID, string productName, decimal? qty, decimal? vat, long iD, decimal? amount, long saleInvoiceDetailId)
+        public TaxSaleInvDetail(long taxInvoiceID, decimal? price, int productID, string productName, decimal? qty, decimal? vat, long iD, decimal? amount, long saleInvDetailID)
         {
             this.taxInvoiceID = taxInvoiceID;
             this.price = price;
@@ -17,11 +17,13 @@ namespace XBOOK.Data.Entities
             this.vat = vat;
             ID = iD;
             this.amount = amount;
-            SaleInvoiceDetailId = saleInvoiceDetailId;
+            SaleInvDetailID = saleInvDetailID;
         }
 
         [Key]
         public long ID { get; set; }
+        public long SaleInvDetailID { get; set; }
+
         public long taxInvoiceID { get; set; }
         public int productID { get; set; }
         public string productName { get; set; }
@@ -30,7 +32,6 @@ namespace XBOOK.Data.Entities
         public Nullable<decimal> price { get; set; }
         public Nullable<decimal> amount { get; set; }
         public Nullable<decimal> vat { get; set; }
-        public long SaleInvoiceDetailId { get; set; }
         public virtual Product Product { get; set; }
         public virtual TaxSaleInvoice TaxSaleInvoice { get; set; }
     }

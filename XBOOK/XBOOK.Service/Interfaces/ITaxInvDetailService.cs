@@ -9,6 +9,5 @@ namespace XBOOK.Service.Interfaces
     {
         Task<bool> CreateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel);
         Task<bool> UpdateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel);
-        Task<TaxSaleInvDetail> GetTaxInvoiceBySaleInvDetailId(long Id);
     }
 }

@@ -275,7 +275,12 @@ export class ListTaxInvoiceComponent extends PagedListingComponentBase<TaxInvoic
 
   public getGrantTotal(): number {
     return _.sumBy(this.invoiceViews, item => {
-      return item.amountPaid;
+      return item.amount;
+    });
+  }
+  public getTotalTax(): number {
+    return _.sumBy(this.invoiceViews, item => {
+      return item.taxAmount;
     });
   }
 
@@ -436,9 +441,10 @@ export class ListTaxInvoiceComponent extends PagedListingComponentBase<TaxInvoic
 
   }
   public getOutstanding(): number {
-    return this.invoiceViews
-      ? this.invoiceViews.reduce((sum: number, invoice: any) => sum + (invoice.amount - invoice.amountPaid), 0)
-      : 0;
+    return 0;
+    // return this.invoiceViews
+    //   ? this.invoiceViews.reduce((sum: number, invoice: any) => sum + (invoice.amount - invoice.amountPaid), 0)
+    //   : 0;
   }
   public getOverduce(): number {
     return this.invoiceViews

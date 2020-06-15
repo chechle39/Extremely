@@ -11,7 +11,7 @@ namespace XBOOK.Data.ViewModels
         public string invoiceNumber { get; set; }
         public Nullable<System.DateTime> issueDate { get; set; }
         public Nullable<System.DateTime> dueDate { get; set; }
-        public int clientID { get; set; }
+        public int? clientID { get; set; }
         public string clientName { get; set; }
         public string reference { get; set; }
         public Nullable<decimal> subTotal { get; set; }
@@ -30,6 +30,5 @@ namespace XBOOK.Data.ViewModels
         public string tag { get; set; }
         public string contactName { get; set; }
         public string email { get; set; }
-
     }
 }

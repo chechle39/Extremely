@@ -15,8 +15,7 @@ import { Subscription, Subject, Observable, merge, of } from 'rxjs';
 import { ProductSearchModel } from '../../_shared/models/product/product-search.model';
 import { ItemModel } from '../../_shared/models/invoice/item.model';
 import { PaymentView } from '../../_shared/models/invoice/payment-view.model';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddPaymentComponent } from './payment/add-payment/add-payment.component';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';  
 import { ClientService } from '../../_shared/services/client.service';
 import { ProductService } from '../../_shared/services/product.service';
 import { CurrencyPipe } from '@angular/common';
@@ -36,6 +35,7 @@ import { CommonService } from '../../../shared/service/common.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TaxInvoiceService } from '../../_shared/services/taxinvoice.service';
 import { TaxInvoiceView } from '../../_shared/models/tax-invoice/tax-invoice-view.model';
+import { InvoiceReferenceComponent } from './invoice-reference/invoice-reference.component';
 
 @Component({
   selector: 'xb-create-tax-invoice',
@@ -89,6 +89,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
   taxInvoiceID = 0;
   editMode = false;
   viewMode: boolean;
+  createMode: boolean = false;
   coppyMode: boolean;
   focusClient$ = new Subject<string>();
   focusProd$ = new Subject<string>();
@@ -155,8 +156,10 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     if (this.router.url === '/pages/taxinvoice/new') {
       this.viewMode = false;
       this.isCheckFcCoppy = true;
+      this.createMode = true;
     } else {
       this.viewMode = true;
+      this.createMode = false;
     }
     this.createForm();
     this.isRead = false;
@@ -203,7 +206,6 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
             this.isRead = false;
           }
           this.getDataForEditMode();
-          this.getPayments(this.taxInvoiceID);
           if (this.viewMode && this.coppyMode !== true) {
             this.invoiceForm.disable();
             this.invoiceForm.controls.items.disable();
@@ -253,8 +255,9 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     };
 
     this.invoiceForm = this.fb.group({
-      invoiceNumber: this.listInvoice === undefined
-        ? ['', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
+      taxInvoiceNumber: this.listInvoice === undefined
+        ? ['', [Validators.required]] : [this.listInvoice.taxInvoiceNumber, [Validators.required]],
+      invoiceNumber: [''],
       invoiceSerial: this.listInvoice === undefined ? [''] : [this.listInvoice.invoiceSerial],
       contactName: ['', [Validators.required]],
       clientName: ['', [Validators.required]],
@@ -451,8 +454,8 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     this.invoiceService.getInvoice(taxInvoiceID).subscribe(data => {
       const invoice = data as TaxInvoiceView;
       this.invoiceList = invoice;
-      this.invoiceNumber = this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber;
-      this.title = this.invoiceNumber;
+      //this.invoiceNumber = this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber;
+      this.title = invoice[0].taxInvoiceNumber;
       this.clientSelected.id = invoice[0].clientId;
       this.clientSelected.clientName = invoice[0].clientData[0].clientName;
       this.clientSelected.contactName = invoice[0].clientData[0].contactName;
@@ -462,8 +465,8 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
 
       if (this.taxInvoiceID !== 0) {
         const request = {
-          invoice: this.invoiceNumber,
-          seri: invoice[0].invoiceSerial,
+          invoiceNumber: invoice[0].invoiceNumber,
+          taxInvoiceNumber: invoice[0].taxInvoiceNumber,
         };
         this.getInForProfile(request);
       }
@@ -479,6 +482,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       this.invoiceForm.patchValue({
         taxInvoiceID: invoice[0].taxInvoiceID,
         saleInvoiceId: invoice[0].saleInvoiceId,
+        taxInvoiceNumber: invoice[0].taxInvoiceNumber,
         invoiceSerial: invoice[0].invoiceSerial,
         invoiceNumber: this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber,
         clientId: invoice[0].clientData[0].clientId,
@@ -616,8 +620,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
 
   save() {
     this.checkUpload = true;
-    if (this.invoiceForm.controls.invoiceSerial.invalid === true
-      || this.invoiceForm.controls.invoiceNumber.invalid === true
+    if (this.invoiceForm.controls.taxInvoiceNumber.invalid === true
       || this.invoiceForm.controls.issueDate.invalid === true
       || this.invoiceForm.controls.clientName.invalid === true
       || this.invoiceForm.controls.contactName.invalid === true
@@ -661,6 +664,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
 
       const request = {
         taxInvoiceID: 0,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
@@ -697,8 +701,8 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
         taxInvDetailView: requestInvDt,
       };
-      if (request.invoiceSerial === null) {
-        request.invoiceSerial  = '';
+      if (request.invoiceNumber === null) {
+        request.invoiceNumber  = '';
       }
       if (this.EditUpload !== true) {
         this.uploadFileMultiple(request);
@@ -797,6 +801,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       const request1 = {
         taxInvoiceID: this.invoiceForm.value.taxInvoiceID,
         saleInvoiceId: this.invoiceForm.value.saleInvoiceId,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
@@ -851,6 +856,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
       const request = {
         taxInvoiceID: this.invoiceForm.value.taxInvoiceID,
         saleInvoiceId: this.invoiceForm.value.saleInvoiceId,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
         issueDate: [this.invoiceForm.value.issueDate.year,
@@ -1045,7 +1051,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     fileRequest.push(this.fileUpload[this.fileUpload.length - 1]);
     const requestData = {
       invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
-      invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
+      taxInvoiceNumber: this.invoiceForm.controls.taxInvoiceNumber.value,
     };
     const request = {
       data: data === null ? requestData : data,
@@ -1060,8 +1066,8 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
           }
           this.fileUpload = [];
           const requestx = {
-            invoice: this.invoiceNumber,
-            seri: this.invoiceForm.controls.invoiceSerial.value,
+            invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
+            taxInvoiceNumber: this.invoiceForm.controls.taxInvoiceNumber.value,
           };
           this.getInForProfile(requestx);
         });
@@ -1096,6 +1102,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     const request = {
       taxInvoiceID: this.invoiceForm.controls.taxInvoiceID.value,
       invoiceSerial: this.invoiceForm.controls.invoiceSerial.value,
+      taxInvoiceNumber: this.invoiceForm.controls.taxInvoiceNumber.value,
       invoiceNumber: this.invoiceForm.controls.invoiceNumber.value,
       issueDate: [this.invoiceForm.controls.issueDate.value.year,
       this.invoiceForm.controls.issueDate.value.month,
@@ -1136,55 +1143,6 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     });
   }
 
-  getPayments(taxInvoiceID: number) {
-    this.allAmontById = 0;
-    this.paymentService.getPaymentIvByid(taxInvoiceID).pipe(
-      finalize(() => {
-      })).subscribe((i: any) => {
-        this.paymentViews = i;
-
-
-        if (this.checkAddPaymentDeleted === true || this.checkAddPayment === true || this.checkEditPayment === true) {
-          this.paymentViews.forEach(element => {
-            this.allAmontById += element.amount;
-          });
-          this.updateSaleInvAmontPaid();
-          this.checkAddPaymentDeleted = false;
-          this.checkAddPayment = false;
-          this.checkEditPayment = false;
-        }
-      });
-  }
-  deletePayment(payments: any) {
-    if (payments.length === 0) { return; }
-    this.getPayments(this.taxInvoiceID);
-    this.deletePaymentAmont = 0;
-    this.message.confirm('Do you want to delete those payment ?', 'Are you sure ?', () => {
-      payments.forEach(element => {
-        this.deletePaymentAmont += element.amount;
-        this.paymentService.deletePayment(element.id).subscribe(() => {
-          this.notify.success('Successfully Deleted');
-          this.getPayments(element.id);
-          this.checkAddPaymentDeleted = true;
-        });
-      });
-    });
-  }
-  editPayment(payment: any) {
-    if (payment === null) { return; }
-    const dialog = this.modalService.open(AddPaymentComponent, AppConsts.modalOptionsSmallSize);
-    dialog.componentInstance.title = 'Edit Payment';
-    dialog.componentInstance.id = payment.id || payment[0].id;
-    dialog.componentInstance.outstandingAmount = this.amountDue;
-    dialog.componentInstance.taxInvoiceID = this.taxInvoiceID;
-    dialog.componentInstance.invoiceList = this.invoiceList;
-    dialog.result.then(result => {
-      if (result) {
-        this.getPayments(this.taxInvoiceID);
-        this.checkEditPayment = true;
-      }
-    });
-  }
   get getTax(): FormGroup {
     return this.fb.group({
       taxRate: [null],
@@ -1193,7 +1151,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
     });
   }
   addTaxPopup(item: any, index: number): void {
-    if (!this.viewMode) {
+    if (!this.viewMode && this.createMode) {
       if (item.value.productName === '') {
         this.message.warning('Please select a product');
         return;
@@ -1317,6 +1275,7 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
           email: i === 0 ? this.invoiceForm.controls.email.value : null,
           taxInvoiceID: i === 0 ? this.invoiceForm.controls.taxInvoiceID.value : null,
           invoiceNumber: i === 0 ? this.invoiceForm.controls.invoiceNumber.value : null,
+          taxInvoiceNumber: i === 0 ? this.invoiceForm.controls.taxInvoiceNumber.value : null,
           invoiceSerial: i === 0 ? this.invoiceForm.controls.invoiceSerial.value : null,
           issueDate: i === 0 ? [this.invoiceForm.controls.issueDate.value.year,
           this.invoiceForm.controls.issueDate.value.month,
@@ -1406,5 +1365,17 @@ export class CreateTaxInvoiceComponent extends AppComponentBase implements OnIni
         }, 0);
       }
     }
+  }
+
+  openInvoiceReference(): void {
+
+    const dialog = this.modalService.open(InvoiceReferenceComponent, AppConsts.modalOptionsLargerSize);
+    dialog.result.then(result => {
+      if (result) {
+        this.invoiceForm.patchValue({
+          invoiceNumber: result ? result.map(item => item.invoiceNumber).join() : '',
+        })
+      }
+    });
   }
 }

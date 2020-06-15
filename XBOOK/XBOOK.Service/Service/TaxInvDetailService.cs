@@ -164,10 +164,7 @@ namespace XBOOK.Service.Service
             return await Task.FromResult(true);
         }
 
-        public async Task<TaxSaleInvDetail> GetTaxInvoiceBySaleInvDetailId(long Id)
-        {
-            return await _taxInvDetailRepository.GetTaxInvoiceBySaleInvDetailId(Id);
-        }
+  
 
         public async Task<bool> UpdateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel)
         {

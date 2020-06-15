@@ -19,6 +19,8 @@ export class TaxInvoiceView {
     discRate: number;
     discount: number;
     vatTax: number;
+    amount: number;
+    taxAmount: number;
     amountPaid: number;
     note: string;
     term: string;

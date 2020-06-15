@@ -209,7 +209,9 @@
     
               </ng-template> -->
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <div class="col-more-info">(<span class="label-blue p-0">AA/20 0001</span>) Bán hàng cho An@Cuong
+                <div *ngIf = "row.taxInvoiceNumber != null"  class="col-more-info">(<span class="label-blue p-0">{{row.taxInvoiceNumber}}</span>) Bán hàng cho An@Cuong
+                </div>
+                <div *ngIf = "row.taxInvoiceNumber === null"  class="col-more-info"><span class="label-blue p-0">{{row.taxInvoiceNumber}}</span> Bán hàng cho An@Cuong
                 </div>
               </ng-template>
             </ngx-datatable-column>

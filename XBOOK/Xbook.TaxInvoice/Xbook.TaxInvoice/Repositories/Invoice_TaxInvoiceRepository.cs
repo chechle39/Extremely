@@ -22,7 +22,9 @@ namespace Xbook.TaxInvoice.Repositories
                 ID = requestSave.ID,
                 invoiceNumber = requestSave.invoiceNumber,
                 isSale = requestSave.isSale,
-                taxInvoiceNumber = requestSave.taxInvoiceNumber
+                taxInvoiceNumber = requestSave.taxInvoiceNumber,
+                invoiceID = requestSave.invoiceID,
+                taxInvoiceID = requestSave.taxInvoiceID
             };
             Entities.Add(request);
 
@@ -38,9 +40,19 @@ namespace Xbook.TaxInvoice.Repositories
                 ID = getIdEntity[0].ID,
                 invoiceNumber = requestSave.invoiceNumber,
                 isSale = requestSave.isSale,
-                taxInvoiceNumber = requestSave.taxInvoiceNumber
+                taxInvoiceNumber = requestSave.taxInvoiceNumber,
+                invoiceID = requestSave.invoiceID,
+                taxInvoiceID = requestSave.taxInvoiceID
             };
             Entities.Update(request);
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> DeleteInvoiceTaxInvoiceByTaxInvoiceNumber(string taxInvoiceNumber)
+        {
+            var getIdEntity = await Entities.Where(x => x.taxInvoiceNumber == taxInvoiceNumber).ToListAsync();
+         
+            Entities.RemoveRange(getIdEntity);
             return await Task.FromResult(true);
         }
     }

@@ -22,13 +22,10 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { EntryBatternService } from '../_shared/services/entry-pattern.service';
 import { MoneyReceiptService } from '../_shared/services/money-receipt.service';
-import { InvoiceService } from '../_shared/services/invoice.service';
 import { ClientService } from '../_shared/services/client.service';
 import { ProductService } from '../_shared/services/product.service';
 import { PaymentService } from '../_shared/services/payment.service';
 import { TaxService } from '../_shared/services/tax.service';
-import { AddPaymentComponent } from './create-tax-invoice/payment/add-payment/add-payment.component';
-import { ListPaymentComponent } from './create-tax-invoice/payment/list-payment/list-payment.component';
 import { CreateMoneyReceiptComponent } from '../moneyreceipt/create-money-receipt/create-money-receipt.component';
 import { AddTaxComponent } from './create-tax-invoice/add-tax/add-tax.component';
 import { MasterParamService } from '../_shared/services/masterparam.service';
@@ -38,13 +35,15 @@ import { TaxInvoicesComponent } from './taxinvoice.component';
 import { CreateTaxInvoiceComponent } from './create-tax-invoice/create-tax-invoice.component';
 import { TaxInvoicesRoutingModule } from './taxinvoice-routing.module';
 import { TaxInvoiceService } from '../_shared/services/taxinvoice.service';
+import { InvoiceReferenceComponent } from './create-tax-invoice/invoice-reference/invoice-reference.component';
+import { InvoiceReferenceService } from '../_shared/services/invoice-reference.service';
+import { InvoiceNumberPipe } from './create-tax-invoice/InvoiceNumberPipe.pipe';
 const components = [
   TaxInvoicesComponent,
   ListTaxInvoiceComponent,
   CreateTaxInvoiceComponent,
-  AddPaymentComponent,
-  ListPaymentComponent,
   AddTaxComponent,
+  InvoiceNumberPipe,
 ];
 
 @NgModule({
@@ -75,8 +74,9 @@ const components = [
   declarations: [
     ...components,
   ],
-  entryComponents: [AddPaymentComponent, AddTaxComponent, CreateMoneyReceiptComponent],
+  entryComponents: [InvoiceReferenceComponent, AddTaxComponent, CreateMoneyReceiptComponent],
   providers: [
+    InvoiceReferenceService,
     EntryBatternService ,
     MoneyReceiptService,
     TaxInvoiceService,
@@ -84,6 +84,7 @@ const components = [
     ProductService,
     PaymentService,
     CurrencyPipe,
+    InvoiceNumberPipe,
     MasterParamService,
     NgbActiveModal,
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},

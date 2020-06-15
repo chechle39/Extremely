@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Common.Helpers;
 using XBOOK.Dapper.Interfaces;
+using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
@@ -237,6 +238,13 @@ namespace XBOOK.Web.Controllers
             return Ok();
            
             
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> getUnTaxDeclaredInvoice(UnTaxDeclaredInvoiceRequest request)
+        {
+            return Ok(await _invoiceServiceDapper.GetUnTaxDeclaredInvoiceAsync(request));
         }
 
         private string GetContentType(string path)
