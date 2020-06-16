@@ -26,7 +26,7 @@ namespace XBOOK.Dapper.Service
         private readonly IUserCommonRepository _userCommonRepository;
         private readonly IUnitOfWork _uow;
 
-        public InvoiceServiceDapper(IUnitOfWork uow ,IHttpContextAccessor httpContextAccessor, IMemoryCache cache, IUserCommonRepository userCommonRepository)
+        public InvoiceServiceDapper(IUnitOfWork uow, IHttpContextAccessor httpContextAccessor, IMemoryCache cache, IUserCommonRepository userCommonRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _cache = cache;
@@ -40,7 +40,7 @@ namespace XBOOK.Dapper.Service
             var connectString = connect.ConnectString();
             using (var sqlConnection = new SqlConnection(connectString))
             {
-                if(!string.IsNullOrEmpty(request.StartDate) && !string.IsNullOrEmpty(request.EndDate))
+                if (!string.IsNullOrEmpty(request.StartDate) && !string.IsNullOrEmpty(request.EndDate))
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
@@ -51,7 +51,8 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@getDebtOnly", request.getDebtOnly);
                     return await sqlConnection.QueryAsync<InvoiceViewModel>(
                        "GetInvoiceList", dynamicParameters, commandType: CommandType.StoredProcedure);
-                }else
+                }
+                else
                 {
                     await sqlConnection.OpenAsync();
                     var dynamicParameters = new DynamicParameters();
@@ -63,51 +64,72 @@ namespace XBOOK.Dapper.Service
                     return await sqlConnection.QueryAsync<InvoiceViewModel>(
                        "GetInvoiceList", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
-               
+
             }
         }
 
         public async Task<IEnumerable<UnTaxDeclaredInvoiceViewModel>> GetUnTaxDeclaredInvoiceAsync(UnTaxDeclaredInvoiceRequest request)
         {
-            request.FromDate = request.FromDate != null ? request.FromDate : DateTime.Now.AddDays(-30);
-            request.ToDate = request.ToDate != null ? request.ToDate : DateTime.Now;
+            var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
+            var connectString = connect.ConnectString();
+            using (var sqlConnection = new SqlConnection(connectString))
+            {
 
-            var invoiceRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
-            var invoie_TaxInvoiceRepository = _uow.GetRepository<IRepository<Invoice_TaxInvoice>>();
-            _uow.BeginTransaction();
-            var listTaxInvoice = await invoie_TaxInvoiceRepository
-                                        .AsQueryable()
-                                        .Where(item => item.isSale == request.isSale)
-                                        .AsNoTracking()
-                                        .ToListAsync();
-
-            var listInvoices = await invoiceRepository
-                                        .AsQueryable()
-                                        .Include(item => item.Client)
-                                        .Where(item => item.issueDate >= request.FromDate && item.issueDate <= request.ToDate)
-                                        .AsNoTracking()
-                                        .ToListAsync();
-            _uow.CommitTransaction();
-            var result = listInvoices.Select(item => {
-                var amount = (decimal)item.subTotal - (item.discount != null ? item.discount : 0) + item.vatTax;
-                var taxAmount = (decimal)listTaxInvoice.Where(taxItem => taxItem.invoiceNumber == item.invoiceNumber).Sum(taxItem => taxItem.amount);
-                
-                if (taxAmount >= amount)
+                request.FromDate = request.FromDate != null ? request.FromDate : DateTime.Now.AddDays(-30);
+                request.ToDate = request.ToDate != null ? request.ToDate : DateTime.Now;
+                await sqlConnection.OpenAsync();
+                var dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("@fromDate", request.FromDate);
+                dynamicParameters.Add("@toDate", request.ToDate);
+                dynamicParameters.Add("@isSale", true);
+                try
+                {
+                    return await sqlConnection.QueryAsync<UnTaxDeclaredInvoiceViewModel>(
+                   "GetUn_TaxDeclaredInvoice", dynamicParameters, commandType: CommandType.StoredProcedure);
+                }
+                catch(Exception ex)
                 {
                     return null;
                 }
 
-                return new UnTaxDeclaredInvoiceViewModel()
-                {
-                    IssueDate = item.issueDate,
-                    ClientName = item.Client.clientName,
-                    Description = item.reference,
-                    InvoiceNumber = item.invoiceNumber,
-                    Amount = (decimal)amount,
-                    NotTaxing = (decimal)(amount - taxAmount),
-                };
-            }).Where(item => item != null);
-            return result;
+
+                //var invoiceRepository = _uow.GetRepository<IRepository<SaleInvoice>>();
+                //var invoie_TaxInvoiceRepository = _uow.GetRepository<IRepository<Invoice_TaxInvoice>>();
+                //_uow.BeginTransaction();
+                //var listTaxInvoice = await invoie_TaxInvoiceRepository
+                //                            .AsQueryable()
+                //                            .Where(item => item.isSale == request.isSale)
+                //                            .AsNoTracking()
+                //                            .ToListAsync();
+
+                //var listInvoices = await invoiceRepository
+                //                            .AsQueryable()
+                //                            .Include(item => item.Client)
+                //                            .Where(item => item.issueDate >= request.FromDate && item.issueDate <= request.ToDate)
+                //                            .AsNoTracking()
+                //                            .ToListAsync();
+                //_uow.CommitTransaction();
+                //var result = listInvoices.Select(item => {
+                //    var amount = (decimal)item.subTotal - (item.discount != null ? item.discount : 0) + item.vatTax;
+                //    var taxAmount = (decimal)listTaxInvoice.Where(taxItem => taxItem.invoiceNumber == item.invoiceNumber).Sum(taxItem => taxItem.amount);
+
+                //    if (taxAmount >= amount)
+                //    {
+                //        return null;
+                //    }
+
+                //    return new UnTaxDeclaredInvoiceViewModel()
+                //    {
+                //        IssueDate = item.issueDate,
+                //        ClientName = item.Client.clientName,
+                //        Description = item.reference,
+                //        InvoiceNumber = item.invoiceNumber,
+                //        Amount = (decimal)amount,
+                //        NotTaxing = (decimal)(amount - taxAmount),
+                //    };
+                //}).Where(item => item != null);
+                //return result;
+            }
         }
 
         async Task<byte[]> IInvoiceServiceDapper.ExportInvoiceAsync()

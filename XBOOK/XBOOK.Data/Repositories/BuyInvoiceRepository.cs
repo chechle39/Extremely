@@ -30,10 +30,11 @@ namespace XBOOK.Data.Repositories
             _productRepository = productRepository;
         }
 
-        public async Task<bool> CreateBuyInvoice(BuyInvoiceModelRequest BuyInvoiceViewModel)
+        public async Task<BuyInvoice> CreateBuyInvoice(BuyInvoiceModelRequest BuyInvoiceViewModel)
         {
             var buyInvoie = await Entities.ProjectTo<BuyInvoiceViewModel>().LastOrDefaultAsync();
             var supplierUOW = _uow.GetRepository<IRepository<Supplier>>();
+            var buyInvoiceCreate = new BuyInvoice();
             if (BuyInvoiceViewModel.supplierID != 0)
             {
                 var buyInvoiceModelRequest = new BuyInvoiceModelRequest()
@@ -60,7 +61,7 @@ namespace XBOOK.Data.Repositories
                     VatTax = BuyInvoiceViewModel.VatTax,
                     supplierID = BuyInvoiceViewModel.supplierID,
                 };
-                var buyInvoiceCreate = Mapper.Map<BuyInvoiceModelRequest, BuyInvoice>(buyInvoiceModelRequest);
+                buyInvoiceCreate = Mapper.Map<BuyInvoiceModelRequest, BuyInvoice>(buyInvoiceModelRequest);
                 _uow.BeginTransaction();
                 Entities.Add(buyInvoiceCreate);
                 _uow.SaveChanges();
@@ -106,12 +107,12 @@ namespace XBOOK.Data.Repositories
                     VatTax = BuyInvoiceViewModel.VatTax,
                     supplierID = serchData[0].supplierID,
                 };
-                var buyInvoiceCreate = Mapper.Map<BuyInvoiceModelRequest, BuyInvoice>(buyInvoiceModelRequest);
+                buyInvoiceCreate = Mapper.Map<BuyInvoiceModelRequest, BuyInvoice>(buyInvoiceModelRequest);
                  Entities.Add(buyInvoiceCreate);
                 _uow.SaveChanges();
             }
 
-            return await Task.FromResult(true);
+            return buyInvoiceCreate;
         }
 
         public async Task<bool> DeleteBuyInvoice(List<Deleted> request)
@@ -275,14 +276,7 @@ namespace XBOOK.Data.Repositories
                                 productName = buyInvoiceViewModel.BuyInvDetailView[i].productName.Split("(")[0],
                                 vat = buyInvoiceViewModel.BuyInvDetailView[i].vat
                             };
-                            try
-                            {
-                                await _buyInvDetailRepository.CreateBuyIvDetail(buyDetailPrd);
-                            }
-                            catch (Exception ex)
-                            {
-
-                            }
+                            var save = _buyInvDetailRepository.CreateBuyIvDetail(buyDetailPrd);
 
                         }
                     }
@@ -361,5 +355,8 @@ namespace XBOOK.Data.Repositories
             Entities.Update(saleInRq);
             return true;
         }
+
     }
+
+   
 }

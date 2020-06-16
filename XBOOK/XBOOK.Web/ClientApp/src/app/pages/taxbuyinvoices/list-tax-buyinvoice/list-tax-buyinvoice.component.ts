@@ -445,9 +445,10 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
       : 0;
   }
   public getOverduce(): number {
-    return this.invoiceViews
-      ? this.invoiceViews.map((item: any) => item.amount).reduce((sum, amount) => sum + amount, 0)
-      : 0;
+    return 0;
+    // return this.invoiceViews
+    //   ? this.invoiceViews.map((item: any) => item.amount).reduce((sum, amount) => sum + amount, 0)
+    //   : 0;
   }
   public getInDraft(): number {
     return _.sumBy(this.invoiceViews, item => {
@@ -508,8 +509,8 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
   }
   sortClient() {
     this.invoiceViews.sort((l, r): number => {
-      if (l.clientName < r.clientName) { return -1; }
-      if (l.clientName > r.clientName) { return -1; }
+      if (l.supplierName < r.supplierName) { return -1; }
+      if (l.supplierName > r.supplierName) { return -1; }
       return 0;
     });
     this.invoiceViews = [...this.invoiceViews];

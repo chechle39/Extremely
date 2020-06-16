@@ -15,5 +15,6 @@ namespace XBOOK.Data.Interfaces
         bool removeSupplier(long id);
         Task<IEnumerable<SupplierViewModel>> GetAllSupplier();
         Task<string> GetSupplierByID(long? id);
+        Task<SupplierViewModel> GetSupplierBySupplierName(string supplierName);
     }
 }

@@ -1,14 +1,16 @@
 import { ClientView } from '../client/client-view.model';
 import { TaxInvoiceDetail } from '../tax-invoice/sale-invoice-detail.model';
+import { SupplierView } from '../supplier/supplier-view.model';
+import { TaxBuyInvoiceDetail } from './tax-buy-invoice-detail.model';
 
 export class TaxBuyInvoiceView {
-    taxInvoiceID: number;
+    invoiceID: number;
     invoiceSerial: string;
     invoiceNumber: string;
     issueDate: Date;
     dueDate: Date;
-    clientID: number;
-    clientName: string;
+    supplierID: number;
+    supplierName: string;
     address: string;
     taxCode: string;
     contactName: string;
@@ -26,6 +28,6 @@ export class TaxBuyInvoiceView {
     status: string;
     bankAccount: string;
     saleInvoiceId: number;
-    taxInvDetailView: TaxInvoiceDetail[];
-    clientData: ClientView[];
+    taxBuyInvDetailView: TaxBuyInvoiceDetail[];
+    supplierData: SupplierView[];
 }

@@ -34,8 +34,8 @@ export class PrintViewerComponent implements OnInit {
         'Authorization': 'Bearer ' + authToken,
       },
     };
-
      DevExpressViewer.Reporting.Viewer.Settings.TimeOut = 30000;
+     DevExpressViewer.Reporting.Viewer.Settings.AsyncExportApproach = true;
   }
 
   ngOnInit() {

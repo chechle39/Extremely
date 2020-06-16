@@ -9,11 +9,11 @@ namespace XBOOK.Data.Interfaces
 {
     public interface ITaxBuyInvoiceRepository
     {
-        Task<bool> CreateTaxBuyInvoice(TaxSaleInvoiceModelRequest taxBuyInvoiceViewModel);
-        Task<IEnumerable<TaxBuyInvoice>> GetTaxInvoiceBySaleInvId(string taxInvoiceNumber);
-        Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
+        Task<bool> CreateTaxBuyInvoice(TaxBuyInvoiceModelRequest taxBuyInvoiceViewModel);
+        Task<IEnumerable<TaxBuyInvoice>> GetTaxBuyInvoiceByBuyInvId(string taxInvoiceNumber);
+        Task<bool> UpdateTaxBuyInvoice(TaxBuyInvoiceModelRequest taxInvoiceViewModel);
         Task<TaxBuyInvoice> GetLastInvoice();
-        Task<IEnumerable<TaxBuyInvoice>> GetTaxSaleInvoiceById(long id);
-        Task<bool> removeTaxSaleInv(long id);
+        Task<IEnumerable<TaxBuyInvoice>> GetTaxBuyInvoiceById(long id);
+        Task<bool> removeTaxBuyInv(long id);
     }
 }

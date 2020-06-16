@@ -181,25 +181,40 @@
                       </div>
                       <div class="col-6 refer px-0">
                         <div>
-                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.SERI' | translate}}</p>
-                          <div class="row" style="margin-left: 0px">
-                            <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.CREATE.INVOICE.NUMBER' | translate}}"
-                              class="form-control" type="text" formControlName="invoiceNumber"
+                          <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.INVOICENUMBER' | translate}}</p>
+                          <div class="row mx-0">
+                            <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.GRID.INVOICE' | translate}}"
+                              class="form-control" type="text" formControlName="invoiceNumber" [readOnly]="true"
                               [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false || isMouseEnter == false}"
-                              class="col-6 width-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
+                              class=" w-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
                               required />
-                            <input style="opacity: unset;" kendotextbox placeholder="Seri"
-                              formControlName="invoiceSerial"
-                              [ngClass]="{'border-0':invoiceForm.controls.invoiceSerial.touched === false || invoiceForm.controls.invoiceSerial.invalid === false || isMouseEnter == false}"
-                              class="width-50 imput-reference-custom invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3" />
+                            
                           </div>
 
                         </div>
-                        <div class="mt-0">
-                          <p class="mb-0 invoice__input__title invoice__text--height-normal">{{'ACCOUNT.DETAIL.LIST.reference' | translate}}</p>
-                          <input kendotextbox placeholder="{{'INVOICE.FORM.CREATE.REFERENCE' | translate}}" formControlName="reference"
-                            style="opacity: unset"
-                            class="border-0 full-width imput-reference-custom place-holder__color invoice__text--height-normal invoice__font--medium-2" />
+                        
+                        <div>
+                          <div class="row mx-0">
+                            <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.VAT' | translate}}</p>
+                            <p-checkbox 
+                              formControlName="checked"
+                              [hidden] ="isCheckCheckbox === false" 
+                              class="checkbox" 
+                              placement="right" 
+                              ngbTooltip="Check to add new Tax Invoive from this Invoice" tooltipClass="xb-tooltip"  container="body"
+                              #t="ngbTooltip" 
+                              [autoClose]="true" 
+                              binary="true">
+                            </p-checkbox>
+                          </div>
+                         
+                          <div class="row mx-0">
+                            <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.CREATE.INVOICE.VAT' | translate}}" (focus)="focusInvoiceNumber()"
+                              formControlName="taxInvoiceNumber" [readOnly]="isRead"
+                              [ngClass]="{'border-0':invoiceForm.controls.taxInvoiceNumber.touched === false || invoiceForm.controls.taxInvoiceNumber.invalid === false || isMouseEnter == false}"
+                              class="w-100 amountPaid invoice__input__textbox place-holder__color invoice__text--height-normal" />
+                          </div>
+
                         </div>
 
                         <!-- <div class="mt-2">
@@ -209,12 +224,20 @@
                         </div> -->
 
                       </div>
-                      <div class="col-sm-12 amountDue px-0">
+                      <!-- <div class="col-sm-12 amountDue px-0">
                         <div class="row mx-0">
                           <p class="invoice__input__title invoice__text--height-normal col-6 px-0">{{'INVOICE.FORM.CREATE.AMOUNTDUE' | translate}}</p>
-                          <div class="input-group invoice__text--height-normal col-6 px-0">
+                          <div class="input-group invoice__text--height-normal invoice__font--medium-2 col-6 px-0">
                             {{amountDue | currency:'VND':''}}
                           </div>
+                        </div>
+                      </div> -->
+                      <div class="col-12 px-0">
+                        <div class="mt-0 d-flex">
+                          <p class="mb-0 text-nowrap mr-2 invoice__input__title invoice__text--height-normal">{{'ACCOUNT.DETAIL.LIST.reference' | translate}}</p>
+                          <textarea kendoTextArea [autoSize]="true" placeholder="{{'INVOICE.FORM.CREATE.REFERENCE' | translate}}" formControlName="reference"
+                            style="opacity: unset" [readOnly]="isRead"
+                            class="p-0 border-0 full-width imput-reference-custom place-holder__color invoice__text--height-normal invoice__font--medium-2"></textarea>
                         </div>
                       </div>
                     </div>
@@ -422,7 +445,14 @@
                           <span *ngIf = "coppyMode === true">0</span>
                         </div>
                       </div>
-
+                      <div class="amountDue">
+                        <div class="row">
+                          <p class="col-6 text-right">{{'INVOICE.FORM.CREATE.AMOUNTDUE' | translate}}</p>
+                          <div class="col-6 text-right">
+                            {{amountDue | currency:'VND':''}}
+                          </div>
+                        </div>
+                      </div>
                       <!-- <div class="row">
                         <div class="col-6 text-right">
                           Amount Due

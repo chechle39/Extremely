@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xbook.TaxInvoice.Repositories;
 using XBOOK.Data.Base;
 using XBOOK.Data.Entities;
 using XBOOK.Data.Interfaces;
@@ -15,22 +17,30 @@ namespace XBOOK.Service.Service
     {
         private readonly IUnitOfWork _uow;
         private readonly ITaxBuyInvDetailRepository _taxBuyInvDetailRepository;
+        private readonly IBuyInvoiceRepository _buyInvoiceRepository;
+        private readonly LibTaxSaleDetailInvoiceRepository _libTaxSaleDetailInvoiceRepository;
+        private readonly LibTaxBuyInvoiceRepository _libTaxBuyInvoiceRepository;
         public TaxBuyInvDetailService(
             IUnitOfWork uow,
-            ITaxBuyInvDetailRepository taxBuyInvDetailRepository
+            ITaxBuyInvDetailRepository taxBuyInvDetailRepository,
+            IBuyInvoiceRepository buyInvoiceRepository,
+            XBookContext db
            )
         {
             _uow = uow;
             _taxBuyInvDetailRepository = taxBuyInvDetailRepository;
+            _buyInvoiceRepository = buyInvoiceRepository;
+            _libTaxSaleDetailInvoiceRepository = new LibTaxSaleDetailInvoiceRepository(db);
+            _libTaxBuyInvoiceRepository = new LibTaxBuyInvoiceRepository(db, _uow);
         }
-        public async Task<bool> CreateTaxInvDetail(TaxInvDetailViewModel item)
+        public async Task<bool> CreateTaxInvDetail(TaxBuyInvDetailViewModel item)
         {
             var productUOW = _uow.GetRepository<IRepository<Product>>();
             // var getIvTaxId =  GetTaxInvoiceId(saleInvoiceViewModel).Result;
-            TaxInvDetailViewModel saleDetailData = null;
+            TaxBuyInvDetailViewModel saleDetailData = null;
             if (item.productName.Split("(").Length > 1)
             {
-                saleDetailData = new TaxInvDetailViewModel
+                saleDetailData = new TaxBuyInvDetailViewModel
                 {
                     amount = item.price * item.qty,
                     qty = item.qty,
@@ -45,7 +55,7 @@ namespace XBOOK.Service.Service
             }
             else
             {
-                saleDetailData = new TaxInvDetailViewModel
+                saleDetailData = new TaxBuyInvDetailViewModel
                 {
                     amount = item.price * item.qty,
                     qty = item.qty,
@@ -78,7 +88,7 @@ namespace XBOOK.Service.Service
             else
             if (saleDetailData.productID == 0 && !string.IsNullOrEmpty(saleDetailData.productName))
             {
-                saleDetailData = new TaxInvDetailViewModel
+                saleDetailData = new TaxBuyInvDetailViewModel
                 {
                     amount = item.price * item.qty,
                     qty = item.qty,
@@ -121,10 +131,10 @@ namespace XBOOK.Service.Service
                 productUOW.AddData(productModel);
                 _uow.SaveChanges();
                 _uow.CommitTransaction();
-                TaxInvDetailViewModel saleDetailPrd = null;
+                TaxBuyInvDetailViewModel saleDetailPrd = null;
                 if (item.productName.Split("(").Length > 1)
                 {
-                    saleDetailPrd = new TaxInvDetailViewModel
+                    saleDetailPrd = new TaxBuyInvDetailViewModel
                     {
                         amount = item.price * item.qty,
                         qty = item.qty,
@@ -139,7 +149,7 @@ namespace XBOOK.Service.Service
                 }
                 else
                 {
-                    saleDetailPrd = new TaxInvDetailViewModel
+                    saleDetailPrd = new TaxBuyInvDetailViewModel
                     {
                         amount = item.price * item.qty,
                         qty = item.qty,
@@ -162,7 +172,7 @@ namespace XBOOK.Service.Service
             return await Task.FromResult(true);
         }
 
-        public Task<bool> UpdateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel)
+        public Task<bool> UpdateTaxInvDetail(TaxBuyInvDetailViewModel taxInvDetailViewModel)
         {
             throw new NotImplementedException();
         }

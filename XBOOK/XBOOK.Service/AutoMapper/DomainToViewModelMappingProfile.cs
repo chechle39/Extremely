@@ -48,6 +48,11 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<SaleInvoice, TaxSaleInvoiceModelRequest>();
             CreateMap<TaxBuyInvoice, TaxSaleInvoiceModelRequest>();
             CreateMap<TaxBuyInvDetail, TaxInvDetailViewModel>();
+            CreateMap<TaxBuyInvoice, TaxBuyInvoiceModelRequest>();
+            CreateMap<TaxBuyInvDetail, TaxBuyInvDetailViewModel>();
+            CreateMap<TaxBuyInvoice, TaxBuyInvoiceModelRequest>();
+            CreateMap<BuyInvoiceModelRequest, TaxBuyInvoiceModelRequest>();
         }
+        
     }
 }

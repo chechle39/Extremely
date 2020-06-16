@@ -42,6 +42,7 @@ import { TaxBuyInvoiceService } from '../_shared/services/tax-buy-invoice.servic
 // tslint:disable-next-line:max-line-length
 import { InvoiceReferenceComponent } from '../taxinvoices/create-tax-invoice/invoice-reference/invoice-reference.component';
 import { InvoiceReferenceService } from '../_shared/services/invoice-reference.service';
+import { SupplierService } from '../_shared/services/supplier.service';
 const components = [
   TaxBuyInvoicesComponent,
   ListTaxBuyInvoiceComponent,
@@ -85,7 +86,7 @@ const components = [
     MoneyReceiptService,
     TaxInvoiceService,
     TaxBuyInvoiceService,
-    ClientService,
+    SupplierService,
     ProductService,
     PaymentService,
     CurrencyPipe,

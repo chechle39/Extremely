@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace XBOOK.Data.Entities
@@ -33,6 +34,7 @@ namespace XBOOK.Data.Entities
         public Nullable<decimal> amount { get; set; }
         public Nullable<decimal> vat { get; set; }
         public virtual Product Product { get; set; }
+        [ForeignKey("taxInvoiceID")]
         public virtual TaxSaleInvoice TaxSaleInvoice { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using XBOOK.Data.Entities;
 using XBOOK.Data.Model;
 using XBOOK.Data.ViewModels;
 
@@ -11,6 +12,6 @@ namespace XBOOK.Data.Interfaces
         Task<bool> UpdateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
         Task<bool> Deleted(List<Deleted> id);
         Task<bool> UpdateBuyInvDetail(BuyInvDetailViewModel rs);
-        Task<bool> CreateBuyIvDetail(BuyInvDetailViewModel request);
+        BuyInvDetail CreateBuyIvDetail(BuyInvDetailViewModel request);
     }
 }

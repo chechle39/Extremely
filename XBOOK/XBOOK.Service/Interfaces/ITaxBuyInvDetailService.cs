@@ -8,7 +8,7 @@ namespace XBOOK.Service.Interfaces
 {
     public interface ITaxBuyInvDetailService
     {
-        Task<bool> CreateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel);
-        Task<bool> UpdateTaxInvDetail(TaxInvDetailViewModel taxInvDetailViewModel);
+        Task<bool> CreateTaxInvDetail(TaxBuyInvDetailViewModel taxInvDetailViewModel);
+        Task<bool> UpdateTaxInvDetail(TaxBuyInvDetailViewModel taxInvDetailViewModel);
     }
 }

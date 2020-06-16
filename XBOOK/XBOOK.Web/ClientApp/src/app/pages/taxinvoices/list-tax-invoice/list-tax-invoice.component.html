@@ -9,13 +9,13 @@
             <span class="card__title">TAX Invoices</span>
           </div>
           <div class="col-3 col-lg-3">
-            <div ngbDropdown class="text-right">
+            <!-- <div ngbDropdown class="text-right">
               <button class="btn btn-flat mr-3 mb-0" id="bulkActions" ngbDropdownToggle>{{ 'COMMON.MOREACTION' | translate }}</button>
               <div ngbDropdownMenu aria-labelledby="bulkActions">
                 <button class="dropdown-item" (click)="exportInvoive()"><span class="icon-export"></span> {{ 'COMMON.MOREACTION.EXPORT' | translate }}</button>
               </div>
     
-            </div>
+            </div> -->
           </div>
           <div class="col-5 col-lg-5">
             <button [disabled] = "this.authenticationService.hasPermission('Invoice','create')"  class="btn btn-raised mr-1 btn-success float-right" (click)='redirectToCreateNewInvoice()'>{{'INVOICE.HEADER.New' | translate}}</button>
@@ -61,7 +61,6 @@
               <div ngbDropdownMenu aria-labelledby="bulkActions">
                 <button class="dropdown-item" (click)="coppy()"><i class="fa fa-copy mr-1 icon-dollar"></i> {{'COMMON.BUTTON.DUPLICATE' | translate}}</button>
                 <button class="dropdown-item" [hidden]="true"><i class="fa fa-paper-plane mr-1"></i>{{'BUY.INVOICE.GRID.MARK.SEND' | translate}}</button>
-                <button class="dropdown-item" (click)="addPayment()"><i class="fas fa-dollar-sign icon-dollar"></i>{{'INVOICE.GRID.ADD.RECIPT' | translate}}</button>
                 <button class="dropdown-item" (click)="deleteAll()"><i class="icon-delete mr-1"></i>{{'INVOICE.ACTION.DELETE' | translate}}</button>
               </div>
             </div>
@@ -194,15 +193,15 @@
                   {{row.clientName}}
                 </div>
                 <div class="col-more-info">
-                  {{row.invoiceSerial}}{{row.invoiceNumber}}
+                  {{row.taxInvoiceNumber}}
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="note" name="{{'BUY.INVOICE.GRID.TAX.DESCRIPTION' | translate}}" [cellClass]="'col-id'" [headerClass]="'col-id'">
+            <ngx-datatable-column prop="note" name="{{'BUY.INVOICE.GRID.INVNUMBER.DESCRIPTION' | translate}}" [cellClass]="'col-id'" [headerClass]="'col-id'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="col-more-info">
                   <span *ngIf="row.invoiceNumber">(<span class="label-blue p-0">{{ row.invoiceNumber }}</span>)</span>
-                  Bán hàng cho An@Cuong
+                  {{ row.reference }}
                 </div>
               </ng-template>
             </ngx-datatable-column>
@@ -215,7 +214,7 @@
                 </div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="amount" name="{{'BUY.INVOICE.GRID.AMOUNT.AMOUNTPAID' | translate}}" 
+            <ngx-datatable-column prop="amount" name="{{'BUY.INVOICE.GRID.AMOUNT.TAX' | translate}}" 
               [headerClass]="'col-right'">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="text-right">

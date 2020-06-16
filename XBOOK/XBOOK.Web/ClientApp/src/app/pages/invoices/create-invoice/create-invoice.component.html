@@ -5,7 +5,7 @@
         <h1 *ngIf="viewMode === false && isCheckHidden !== true" class="invoice__title float-left">{{'INVOICE.NEW.HEADER' | translate}}</h1>
         <h1 *ngIf="viewMode || isCheckHidden === true" class="invoice__title float-left">{{'INVOICE.NO' | translate}} {{title}}</h1>
         <div class="float-right mt-1">
-          <button *ngIf="viewMode" (click)="Print()" class="btn btn-raised mr-2 ml-2 btn-secondary"><i class="ft-printer"></i> {{'COMMON.ACTION.PRINT' | translate}}</button>
+          <button (click)="Print()" class="btn btn-raised mr-2 ml-2 btn-secondary"><i class="ft-printer"></i> {{'COMMON.ACTION.PRINT' | translate}}</button>
           <button *ngIf="!viewMode"  (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'COMMON.BUTTON.CANCEL' | translate}}</button>
           <button *ngIf="viewMode"  (click)="cancel()" class="btn btn-raised mr-3 ml-2 btn-secondary">{{'INVOICE.EXIT' | translate}}</button>
           <button [disabled] = "authenticationService.hasPermission('Invoice','create')" *ngIf="!viewMode" (click)="save()" class="btn btn-raised btn-success">{{saveText}}</button>
@@ -177,7 +177,7 @@
                           <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.INVOICENUMBER' | translate}}</p>
                           <div class="row mx-0">
                             <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.GRID.INVOICE' | translate}}"
-                              class="form-control" type="text" formControlName="invoiceNumber" [readOnly]="isRead"
+                              class="form-control" type="text" formControlName="invoiceNumber" [readOnly]="true"
                               [ngClass]="{'border-0':invoiceForm.controls.invoiceNumber.touched === false || invoiceForm.controls.invoiceNumber.invalid === false || isMouseEnter == false}"
                               class=" w-100 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
                               required />
@@ -194,7 +194,7 @@
                               [hidden] ="isCheckCheckbox === false" 
                               class="checkbox" 
                               placement="right" 
-                              ngbTooltip="Check to add new Tax Invoive from this Invoice" 
+                              ngbTooltip="Check to add new Tax Invoive from this Invoice" tooltipClass="xb-tooltip"  container="body"
                               #t="ngbTooltip" 
                               [autoClose]="true" 
                               binary="true">

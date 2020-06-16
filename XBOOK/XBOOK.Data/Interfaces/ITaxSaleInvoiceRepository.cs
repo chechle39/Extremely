@@ -8,7 +8,7 @@ namespace XBOOK.Data.Interfaces
 {
     public interface ITaxSaleInvoiceRepository
     {
-        Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
+        TaxSaleInvoice CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
         Task<IEnumerable<TaxSaleInvoice>> GetTaxInvoiceBySaleInvId(string taxInvoiceNumber);
         Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel);
         Task<TaxSaleInvoice> GetLastInvoice();

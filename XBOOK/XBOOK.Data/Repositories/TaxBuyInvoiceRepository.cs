@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XBOOK.Data.Base;
@@ -17,9 +19,9 @@ namespace XBOOK.Data.Repositories
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> CreateTaxBuyInvoice(TaxSaleInvoiceModelRequest taxBuyInvoiceViewModel)
+        public async Task<bool> CreateTaxBuyInvoice(TaxBuyInvoiceModelRequest taxBuyInvoiceViewModel)
         {
-            var taxInvoiceCreate = Mapper.Map<TaxSaleInvoiceModelRequest, TaxBuyInvoice>(taxBuyInvoiceViewModel);
+            var taxInvoiceCreate = Mapper.Map<TaxBuyInvoiceModelRequest, TaxBuyInvoice>(taxBuyInvoiceViewModel);
             _unitOfWork.BeginTransaction();
             Entities.Add(taxInvoiceCreate);
             _unitOfWork.SaveChanges();
@@ -27,29 +29,56 @@ namespace XBOOK.Data.Repositories
             return await Task.FromResult(true);
         }
 
-        public Task<TaxBuyInvoice> GetLastInvoice()
+        public async Task<TaxBuyInvoice> GetLastInvoice()
         {
-            throw new NotImplementedException();
+            
+            if (Entities.Count() > 1)
+            {
+                var data = await Entities.OrderByDescending(xx => xx.invoiceID).Take(1).LastOrDefaultAsync();
+                return data;
+            }
+            else if (Entities.Count() == 1)
+            {
+                var data = await Entities.ToListAsync();
+                return data[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public Task<IEnumerable<TaxBuyInvoice>> GetTaxInvoiceBySaleInvId(string taxInvoiceNumber)
+        public async Task<IEnumerable<TaxBuyInvoice>> GetTaxBuyInvoiceByBuyInvId(string taxInvoiceNumber)
         {
-            throw new NotImplementedException();
+            return await Entities.Where(x => x.TaxInvoiceNumber == taxInvoiceNumber).ToListAsync();
         }
 
-        public Task<IEnumerable<TaxBuyInvoice>> GetTaxSaleInvoiceById(long id)
+        public async Task<IEnumerable<TaxBuyInvoice>> GetTaxBuyInvoiceById(long id)
         {
-            throw new NotImplementedException();
+            return await Entities.Where(x => x.invoiceID == id).ToListAsync();
         }
 
-        public Task<bool> removeTaxSaleInv(long id)
+        public async Task<bool> removeTaxBuyInv(long id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var invoice = await Entities.FindAsync(id);
+                Entities.Remove(invoice);
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult(false);
+            }
+            return await Task.FromResult(true);
         }
 
-        public Task<bool> UpdateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
+        public async Task<bool> UpdateTaxBuyInvoice(TaxBuyInvoiceModelRequest taxInvoiceViewModel)
         {
-            throw new NotImplementedException();
+            var getId = Entities.Where(x => x.invoiceID == taxInvoiceViewModel.invoiceID).AsNoTracking().ToList();
+            var taxInvoiceUpdate = Mapper.Map<TaxBuyInvoiceModelRequest, TaxBuyInvoice>(taxInvoiceViewModel);
+
+            Entities.Update(taxInvoiceUpdate);
+            return await Task.FromResult(true);
         }
     }
 }

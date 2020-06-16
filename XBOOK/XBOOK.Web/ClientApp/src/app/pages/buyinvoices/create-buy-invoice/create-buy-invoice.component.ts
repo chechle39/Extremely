@@ -19,7 +19,7 @@ import {
 } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { debounceTime, distinctUntilChanged, switchMap, finalize, catchError } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -56,6 +56,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   @ViewChild('xxx', {
     static: true,
   }) xxx: ElementRef;
+  @ViewChild('t', { static: true }) t: NgbTooltip;
   productInputFocusSub: Subscription = new Subscription();
   listInvoice: any;
   keywords = '';
@@ -133,6 +134,10 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   isCheckHidden: boolean;
   coppyMode: boolean;
   checkIcon: boolean;
+  oldInvoiceNumber: string;
+  oldTaxInvoiceNumber: string;
+  oldCheck: boolean = false;
+  isCheckCheckbox: boolean;
   constructor(
     public activeModal: NgbActiveModal,
     injector: Injector,
@@ -157,6 +162,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
   }
 
   ngOnInit() {
+    this.isCheckCheckbox = false;
     if (this.router.url === '/pages/buyinvoice/new') {
       this.viewMode = false;
       this.isCheckFcCoppy = true;
@@ -256,12 +262,12 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       day: Number(issueDateSplit[0]),
     };
     this.invoiceForm = this.fb.group({
-      invoiceNumber: this.listInvoice === undefined
-        ? ['', [Validators.required]]
-        : [this.listInvoice.invoiceNumber, [Validators.required]],
+      invoiceNumber: this.listInvoice === undefined || this.listInvoice.invoiceNumber === null
+      ? ['0001', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
       invoiceSerial: this.listInvoice === undefined
         ? ['']
         : [this.listInvoice.invoiceSerial],
+      taxInvoiceNumber: [''],
       contactName: ['', [Validators.required]],
       supplierName: ['', [Validators.required]],
       supplierID: [0],
@@ -282,6 +288,7 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       termCondition: [''],
       items: this.initItems(),
       invoiceId: [0],
+      checked: false,
     });
   }
 
@@ -476,6 +483,9 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
       for (let item = 0; item < invoice[0].buyInvDetailView.length; item++) {
         detailInvoiceFormArray.push(this.getItem());
       }
+      this.oldInvoiceNumber = invoice[0].invoiceNumber;
+      this.oldTaxInvoiceNumber = invoice[0].taxInvoiceNumber;
+      // this.isCheckCheckbox = invoice[0].check;
       this.invoiceForm.patchValue({
         invoiceId: invoice[0].invoiceId,
         invoiceSerial: invoice[0].invoiceSerial,
@@ -492,6 +502,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         notes: invoice[0].note,
         termCondition: invoice[0].term,
         items: invoice[0].buyInvDetailView,
+        checked: invoice[0].check,
+        taxInvoiceNumber:  invoice[0].taxInvoiceNumber,
       });
       this.oldClienName = invoice[0].supplierData[0].supplierName;
       this.oldsupplierID = invoice[0].supplierData[0].supplierID;
@@ -657,6 +669,8 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         email: this.invoiceForm.value.email === undefined
           ? this.invoiceForm.value.contactName.email
           : this.invoiceForm.value.email,
+          check: this.invoiceForm.value.checked,
+          taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
       };
       if (request.invoiceSerial === null) {
         request.invoiceSerial  = 'A1';
@@ -751,6 +765,11 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         }
       }
       const request1 = {
+        oldInvoiceNumber: this.oldInvoiceNumber,
+        oldTaxInvoiceNumber: this.oldTaxInvoiceNumber,
+        oldCheck: this.oldCheck,
+        check: this.invoiceForm.value.checked,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
@@ -809,6 +828,11 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
         buyInvDetailView: buyInvDetailView,
       };
       const request = {
+        oldInvoiceNumber: this.oldInvoiceNumber,
+        oldTaxInvoiceNumber: this.oldTaxInvoiceNumber,
+        oldCheck: this.oldCheck,
+        check: this.invoiceForm.value.checked,
+        taxInvoiceNumber: this.invoiceForm.value.taxInvoiceNumber,
         invoiceId: this.invoiceForm.value.invoiceId,
         invoiceSerial: this.invoiceForm.value.invoiceSerial,
         invoiceNumber: this.invoiceForm.value.invoiceNumber,
@@ -1310,6 +1334,19 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
           e.target.dispatchEvent(inputEvent);
         }, 0);
       }
+    }
+  }
+
+  focusInvoiceNumber() {
+
+    if (!this.viewMode  && this.invoiceForm.controls.taxInvoiceNumber.value === '') {
+      this.t.toggle();
+      this.isCheckCheckbox = true;
+      this.invoiceForm.controls.taxInvoiceNumber.patchValue(this.invoiceForm.controls.invoiceNumber.value);
+    }
+    if (this.invoiceForm.controls.taxInvoiceNumber.value !== '' && !this.viewMode) {
+      this.t.toggle();
+      this.isCheckCheckbox = true;
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,13 +56,8 @@ namespace XBOOK.Data.Repositories
             return true;
         }
 
-        //public async Task<bool> UpdateSaleInvEn(SaleInvoice rs)
-        //{
-        //    Entities.Update(rs);
-        //    return await Task.FromResult(true);
-        //}
 
-        public async Task<bool> UpdateItem(long id, decimal sum)
+        public async Task<bool> UpdateItem(long id, decimal? sum)
         {
             var invoiceById = await Entities.AsNoTracking().Where(x => x.invoiceID == id).ToListAsync();
             var saleInRq = new SaleInvoice()
@@ -81,6 +77,7 @@ namespace XBOOK.Data.Repositories
                 subTotal = invoiceById[0].subTotal,
                 term = invoiceById[0].term,
                 vatTax = invoiceById[0].vatTax,
+                TaxInvoiceNumber = invoiceById[0].TaxInvoiceNumber
             };
             Entities.Update(saleInRq);
             return true;
@@ -114,6 +111,33 @@ namespace XBOOK.Data.Repositories
         {
             Entities.Add(save);
             return  save;
+        }
+
+        public async Task<bool> UpdateItemTaxNum(long id, string tax)
+        {
+            var invoiceById = await Entities.AsNoTracking().Where(x => x.invoiceID == id).ToListAsync();
+            var saleInRq = new SaleInvoice()
+            {
+                amountPaid = invoiceById[0].amountPaid,
+                clientID = invoiceById[0].clientID,
+                discount = invoiceById[0].discount,
+                discRate = invoiceById[0].discRate,
+                dueDate = invoiceById[0].dueDate,
+                invoiceID = invoiceById[0].invoiceID,
+                invoiceNumber = invoiceById[0].invoiceNumber,
+                invoiceSerial = invoiceById[0].invoiceSerial,
+                issueDate = invoiceById[0].issueDate,
+                note = invoiceById[0].note,
+                reference = invoiceById[0].reference,
+                status = invoiceById[0].status,
+                subTotal = invoiceById[0].subTotal,
+                term = invoiceById[0].term,
+                vatTax = invoiceById[0].vatTax,
+                TaxInvoiceNumber = tax
+            };
+            Entities.Update(saleInRq);
+
+            return true;
         }
     }
 }

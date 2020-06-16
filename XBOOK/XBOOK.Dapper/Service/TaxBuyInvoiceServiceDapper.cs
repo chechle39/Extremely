@@ -11,6 +11,7 @@ using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
+using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Dapper.Service
 {
@@ -27,7 +28,7 @@ namespace XBOOK.Dapper.Service
             _userCommonRepository = userCommonRepository;
         }
 
-        public async Task<IEnumerable<TaxInvoiceViewModel>> GetTaxBuyInvoiceAsync(SaleInvoiceListRequest request)
+        public async Task<IEnumerable<TaxBuyInvoiceViewModel>> GetTaxBuyInvoiceAsync(SaleInvoiceListRequest request)
         {
             var connect = new XBOOK.Dapper.helpers.connect(_httpContextAccessor, _cache, _userCommonRepository);
             var connectString = connect.ConnectString();
@@ -42,7 +43,7 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@toDate", request.EndDate);
                     dynamicParameters.Add("@isIssueDate", request.isIssueDate);
                     dynamicParameters.Add("@getDebtOnly", request.getDebtOnly);
-                    return await sqlConnection.QueryAsync<TaxInvoiceViewModel>(
+                    return await sqlConnection.QueryAsync<TaxBuyInvoiceViewModel>(
                        "GetTaxInvoiceList", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
                 else
@@ -54,7 +55,7 @@ namespace XBOOK.Dapper.Service
                     dynamicParameters.Add("@toDate", null);
                     dynamicParameters.Add("@isIssueDate", request.isIssueDate);
                     dynamicParameters.Add("@getDebtOnly", request.getDebtOnly);
-                    return await sqlConnection.QueryAsync<TaxInvoiceViewModel>(
+                    return await sqlConnection.QueryAsync<TaxBuyInvoiceViewModel>(
                       "GetTaxBuyInvoiceList", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
             }

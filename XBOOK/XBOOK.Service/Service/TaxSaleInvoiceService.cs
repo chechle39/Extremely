@@ -30,6 +30,7 @@ namespace XBOOK.Service.Service
         private readonly IClientRepository _iClientRepository;
         private readonly Invoice_TaxInvoiceRepository _iInvoice_TaxInvoiceRepository;
         private readonly XBookContext _context;
+        private readonly ISaleInvoiceRepository _saleInvoiceRepository;
         public TaxSaleInvoiceService(
             ITaxSaleInvoiceRepository taxSaleInvoiceRepository,
             ITaxInvDetailRepository taxSaleInvDetailRepository,
@@ -38,10 +39,12 @@ namespace XBOOK.Service.Service
             ITaxInvDetailService taxInvDetailService,
             IClientService clientService,
             IClientRepository clientRepository,
-            XBookContext context
+            XBookContext context,
+            ISaleInvoiceRepository saleInvoiceRepository
             )
         {
             _context = context;
+            _saleInvoiceRepository = saleInvoiceRepository;
             _taxSaleInvoiceRepository = taxSaleInvoiceRepository;
             _taxSaleInvDetailRepository = taxSaleInvDetailRepository;
             _iProductRepository = productRepository;
@@ -52,7 +55,7 @@ namespace XBOOK.Service.Service
             _taxInvDetailService = taxInvDetailService;
             _iclientService = clientService;
             _iClientRepository = clientRepository;
-            _iInvoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context);
+            _iInvoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context, _saleInvoiceRepository);
 
         }
         public async Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
@@ -81,18 +84,14 @@ namespace XBOOK.Service.Service
 
             var model = Mapper.Map<TaxSaleInvoiceModelRequest, TaxSaleInvoice>(taxInvoiceViewModel);
 
-            //_taxSaleInvoiceRepository.CreateTaxInvoice(taxInvoiceViewModel);
-            _uow.BeginTransaction();
-            _taxSaleInvoiceUowRepository.AddData(model);
-            _uow.SaveChanges();
-            _uow.CommitTransaction();
+             var saveTax = _taxSaleInvoiceRepository.CreateTaxInvoice(taxInvoiceViewModel);
 
             //add tax invoice detail
             if (taxInvoiceViewModel.TaxInvDetailView != null && taxInvoiceViewModel.TaxInvDetailView.Any())
             {
                 taxInvoiceViewModel.TaxInvDetailView.ForEach(item =>
                 {
-                    item.taxInvoiceID = model.taxInvoiceID;
+                    item.taxInvoiceID = saveTax.taxInvoiceID;
                     _taxInvDetailService.CreateTaxInvDetail(item);
                 });
             }
@@ -100,20 +99,25 @@ namespace XBOOK.Service.Service
             //update add records table Invoice_TaxInvoice
             if (!string.IsNullOrEmpty(taxInvoiceViewModel.invoiceNumber))
             {
-                taxInvoiceViewModel.invoiceNumber.Split(',').ToList().ForEach(async item =>
+
+                foreach (var item in taxInvoiceViewModel.invoiceReferenceList)
                 {
                     var data = new Invoice_TaxInvoiceViewModel()
                     {
-                        invoiceNumber = item,
+                        invoiceNumber = item.invoiceNumber,
                         ID = 0,
                         isSale = true,
-                        taxInvoiceNumber = model.TaxInvoiceNumber,
-                        amount = model.subTotal
+                        taxInvoiceNumber = saveTax.TaxInvoiceNumber,
+                        amount = (saveTax.subTotal + saveTax.vatTax) - saveTax.discount,
+                        invoiceAmount = saveTax.subTotal,
+                        invoiceID = item.InvoiceID,
+                        taxInvoiceID = saveTax.taxInvoiceID,
                     };
-                     await _iInvoice_TaxInvoiceRepository.SaveInvoiceTaxInvoice(data);
+                    await _iInvoice_TaxInvoiceRepository.SaveInvoiceTaxInvoice(data, false);
 
+                    var save = _saleInvoiceRepository.UpdateItemTaxNum(item.InvoiceID, saveTax.TaxInvoiceNumber).Result;
                     _uow.SaveChanges();
-                });
+                }
             }
             return true;
         }
@@ -162,9 +166,9 @@ namespace XBOOK.Service.Service
                 var getId = (await _taxSaleInvoiceRepository.GetTaxSaleInvoiceById(item.id)).ToList();
                 await _taxSaleInvDetailRepository.RemoveTaxSaleInvByTaxInvoiceID(new Deleted() { id = item.id });
                 //_uow.SaveChanges();
-                await _taxSaleInvoiceRepository.removeTaxSaleInv(item.id);
+                var remove = await _taxSaleInvoiceRepository.removeTaxSaleInv(item.id);
 
-                if(getId != null)
+                if(remove)
                 {
                     await _iInvoice_TaxInvoiceRepository.DeleteInvoiceTaxInvoiceByTaxInvoiceNumber(getId[0].TaxInvoiceNumber);
                 }

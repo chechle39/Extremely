@@ -214,6 +214,15 @@ namespace XBOOK.Service.Service
         {
             return await _saleInvDetailUowRepository.GetAll().ProjectTo<SaleInvDetailViewModel>().ToListAsync();
         }
+        public async Task<IEnumerable<SaleInvDetailViewModel>> getSaleInvoiceDetailByInvoiceId(List<long> listId)
+        {
+            return await _saleInvDetailUowRepository
+                                    .AsQueryable()
+                                    .AsNoTracking()
+                                    .Where(item => listId.Contains(item.invoiceID))
+                                    .ProjectTo<SaleInvDetailViewModel>()
+                                    .ToListAsync();
+        }
 
         public async Task UpdateListSaleDetail(List<SaleInvDetailViewModel> saleInvoiceViewModel)
         {

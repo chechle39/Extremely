@@ -42,6 +42,8 @@ import {
 import { ThemeModule } from '../../@theme/theme.module';
 import { MasterParamService } from '../_shared/services/masterparam.service';
 import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
+import {CheckboxModule} from 'primeng/checkbox';
+import {TooltipModule} from 'primeng/tooltip';
 
 const components = [
   BuyInvoicesComponent,
@@ -78,6 +80,8 @@ const components = [
     IntlModule,
     InputsModule,
     DateInputsModule,
+    CheckboxModule,
+    TooltipModule,
   ],
   providers: [
     PaymentReceiptService,

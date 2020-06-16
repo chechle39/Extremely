@@ -18,14 +18,15 @@ namespace XBOOK.Data.Repositories
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
+        public TaxSaleInvoice CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
         {
             var taxInvoiceCreate = Mapper.Map<TaxSaleInvoiceModelRequest, TaxSaleInvoice>(taxInvoiceViewModel);
+            taxInvoiceCreate.invoiceSerial = "";
             _unitOfWork.BeginTransaction();
             Entities.Add(taxInvoiceCreate);
             _unitOfWork.SaveChanges();
             _unitOfWork.CommitTransaction();
-            return await Task.FromResult(true);
+            return taxInvoiceCreate;
         }
 
         public async Task<IEnumerable<TaxSaleInvoice>> GetTaxInvoiceBySaleInvId(string taxInvoiceNumber)

@@ -11,6 +11,7 @@ namespace XBOOK.Data.ViewModels
             BuyInvDetailView = new List<BuyInvDetailViewModel>();
         }
         public long InvoiceId { get; set; }
+        public string TaxInvoiceNumber { get; set; }
         public string InvoiceSerial { get; set; }
         public string InvoiceNumber { get; set; }
         public DateTime? IssueDate { get; set; }
@@ -25,6 +26,10 @@ namespace XBOOK.Data.ViewModels
         public string Note { get; set; }
         public string Term { get; set; }
         public string Status { get; set; }
+        public bool Check { get; set; }
+        public bool OldCheck { get; set; }
+        public string OldTaxInvoiceNumber { get; set; }
+        public string OldInvoiceNumber { get; set; }
         public virtual List<BuyInvDetailViewModel> BuyInvDetailView { get; set; }
         public virtual List<Payment2ViewModel> PaymentView { get; set; }
         public List<SupplierViewModel> SupplierData { get; set; }

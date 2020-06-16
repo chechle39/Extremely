@@ -86,7 +86,7 @@ export class ListTaxInvoiceComponent extends PagedListingComponentBase<TaxInvoic
     this.getDataSearch();
   }
   getDataSearch() {
-    this.data.getApplySearchIv().subscribe(rp => {
+    this.data.getApplySearchTaxSaleInvoiceData().subscribe(rp => {
       if (rp !== undefined && this.isCheckFillter === false && rp.data !== '') {
         if (rp.data.startDate !== '') {
           this.dateFilters = rp.data.startDate + ' ' + '-' + ' ' + rp.data.endDate;
@@ -145,7 +145,7 @@ export class ListTaxInvoiceComponent extends PagedListingComponentBase<TaxInvoic
         getDebtOnly: false,
       };
       this.invoiceOfClient(this.requesSearchtList);
-      this.data.sendApplySearchIv(this.requesSearchtList);
+      this.data.sendApplySearchTaxSaleInvoiceData(this.requesSearchtList);
     } else
       if (this.requesSearchtList !== undefined) {
         const requestData = {
@@ -156,7 +156,7 @@ export class ListTaxInvoiceComponent extends PagedListingComponentBase<TaxInvoic
           getDebtOnly: this.requesSearchtList.getDebtOnly,
         };
         this.invoiceOfClient(requestData);
-        this.data.sendApplySearchIv(requestData);
+        this.data.sendApplySearchTaxSaleInvoiceData(requestData);
 
       }
   }
@@ -488,7 +488,7 @@ export class ListTaxInvoiceComponent extends PagedListingComponentBase<TaxInvoic
         isIssueDate: this.ischeck,
         getDebtOnly: false,
       };
-      this.data.sendApplySearchIv(requestList);
+      this.data.sendApplySearchTaxSaleInvoiceData(requestList);
 
       this.getInvoice(requestList);
       // alert(JSON.stringify(searchStr));

@@ -29,6 +29,7 @@ namespace XBOOK.Dapper.ViewModels
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public decimal NotTaxing { get; set; }
+        public long invoiceID { get; set; }
     }
     public class UnTaxDeclaredInvoiceRequest
     {

@@ -72,10 +72,10 @@
                 <div class="row my-3">
                   <div class="col-12 col-md-6">
                     <p class="mb-0 invoice__input__title invoice__text--height-normal">{{'BUY.INVOICE.CREATE.BILL' | translate}} &nbsp;&nbsp;<a
-                        (click)="editClient()" *ngIf="checkIcon === true || canActionClient()" class="icon-action">
+                        (click)="editSupplier()" *ngIf="checkIcon === true || canActionSupplier()" class="icon-action">
                         <span class="icon-edit1"></span>
                       </a>
-                      <a class="icon-action" (click)="deleteClient()" *ngIf="checkIcon === true || canActionClient() || coppyMode === true">
+                      <a class="icon-action" (click)="deleteSupplier()" *ngIf="checkIcon === true || canActionSupplier() || coppyMode === true">
                         <span class="icon-delete1"></span>
                       </a></p>
 
@@ -86,9 +86,9 @@
 
 
                           <input style="opacity: unset" #xxx type="text" [readOnly]="isRead"
-                            (focus)="focusClient$.next($event.target.value)" autocomplete="none"
-                            [ngbTypeahead]="searchClient" [value]="clientSelected.contactName"
-                            [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="clientFormatter"
+                            (focus)="focusSupplier$.next($event.target.value)" autocomplete="none"
+                            [ngbTypeahead]="searchSupplier" [value]="supplierSelected.contactName"
+                            [resultTemplate]="customItemTemplate" kendoTextBox [inputFormatter]="supplierFormatter"
                             id="contactName" formControlName="contactName" (selectItem)="selectedItem($event)"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal pl-0 invoice__input__textbox--disable"
                             placeholder="{{'INVOICE.FORM.CREATE.CLIENTCONTACTNAME.PLACEHOLDER' | translate}}" nfNoSpaces maxlength="250" #instance="ngbTypeahead"
@@ -98,26 +98,26 @@
                           <ng-template #customItemTemplate let-r="result" let-t="term">
                             <div class="row mt-2 client-item">
                               <div class="col-sm-2 ">
-                                <ngx-avatar name="{{r.clientName | Split:2}}"></ngx-avatar>
+                                <ngx-avatar name="{{r.supplierName | Split:2}}"></ngx-avatar>
                               </div>
                               <div class="col-sm-10 col-md-10 pb-2 font-small-3">
-                                <p class="mb-0">{{r.clientName}}</p>
+                                <p class="mb-0">{{r.supplierName}}</p>
                                 <p class="mb-0">{{r.address}}</p>
                               </div>
                             </div>
                           </ng-template>
                         </div>
                         <div class="col-12 pl-0">
-                          <input style="opacity: unset" kendotextbox id="clientName" formControlName="clientName" [readOnly]="true"
+                          <input style="opacity: unset" kendotextbox id="supplierName" formControlName="supplierName" [readOnly]="true"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal invoice__input__textbox--disable"
-                            [value]="clientSelected.clientName" [readOnly]="!isEditClient" placeholder="{{'INVOICE.FORM.CREATE.CLIENTNAME.PLACEHOLDER' | translate}}"
+                            [value]="supplierSelected.supplierName" [readOnly]="!isEditSupplier" placeholder="{{'INVOICE.FORM.CREATE.CLIENTNAME.PLACEHOLDER' | translate}}"
                             nfNoSpaces maxlength="250"
-                            [ngClass]="{'border-0':invoiceForm.controls.clientName.touched === false || invoiceForm.controls.clientName.invalid === false } ">
+                            [ngClass]="{'border-0':invoiceForm.controls.supplierName.touched === false || invoiceForm.controls.supplierName.invalid === false } ">
                         </div>
                         <div class="col-12 pl-0">
-                          <input style="opacity: unset" kendotextbox id="clientAddress" formControlName="address" [readOnly]="isRead"
+                          <input style="opacity: unset" kendotextbox id="supplierAddress" formControlName="address" [readOnly]="isRead"
                             class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal invoice__input__textbox--disable"
-                            [value]="clientSelected.address" [readOnly]="!isEditClient" placeholder="{{'INVOICE.FORM.CREATE.CLIENTADDRESS.PLACEHOLDER' | translate}}"
+                            [value]="supplierSelected.address" [readOnly]="!isEditSupplier" placeholder="{{'INVOICE.FORM.CREATE.CLIENTADDRESS.PLACEHOLDER' | translate}}"
                             nfNoSpaces maxlength="250">
                         </div>
                         <div class="col-12 pl-0">
@@ -125,12 +125,12 @@
                             <div class="col-sm-6 col-md-5 p-0"> <input kendotextbox id="taxCode" [readOnly]="isRead"
                                 formControlName="taxCode" style="opacity: unset"
                                 class="border-0 full-width imput-reference-custom place-holder__color invoice__input__textbox invoice__text--height-normal invoice__input__textbox--disable"
-                                [value]="clientSelected.taxCode" [readOnly]="!isEditClient" placeholder="{{'INVOICE.FORM.CREATE.TAXCODEHEADER.PLACEHOLDER' | translate}}"
+                                [value]="supplierSelected.taxCode" [readOnly]="!isEditSupplier" placeholder="{{'INVOICE.FORM.CREATE.TAXCODEHEADER.PLACEHOLDER' | translate}}"
                                 nfNoSpaces maxlength="250"></div>
                             <div class="col-sm-6 col-md-7 p-0"> <input kendotextbox id="email" formControlName="email" [readOnly]="isRead"
                                 style="opacity: unset"
                                 class="border-0 full-width imput-reference-custom t-color-blue place-holder__color invoice__input__textbox invoice__text--height-normal invoice__input__textbox--disable"
-                                [value]="clientSelected.email" [readOnly]="!isEditClient" placeholder="Email" nfNoSpaces
+                                [value]="supplierSelected.email" [readOnly]="!isEditSupplier" placeholder="Email" nfNoSpaces
                                 maxlength="250"></div>
                           </div>
                         </div>

@@ -8,13 +8,13 @@ using XBOOK.Data.ViewModels;
 
 namespace Xbook.TaxInvoice.Interfaces
 {
-    public interface ILibTaxSaleDetailInvoiceRepository
+    public interface ILibTaxBuyDetailInvoiceRepository
     {
-        Task<bool> CreateTaxSaleIvDetail(TaxInvDetailViewModel request);
+        Task<bool> CreateTaxBuyIvDetail(TaxInvDetailViewModel request);
         bool RemoveAll(List<TaxInvDetailViewModel> request);
-        bool UpdateTaxSaleInvDetail(TaxInvDetailViewModel rs);
+        bool UpdateTaxBuyInvDetail(TaxInvDetailViewModel rs);
         Task<bool> RemoveSale(List<Deleted> id);
-        Task<TaxSaleInvDetail> GetTaxInvoiceBySaleInvDetailId(long Id);
+        Task<TaxBuyInvDetail> GetTaxBuyInvoiceBySaleInvDetailId(long Id);
         Task<bool> RemoveTaxSale(long id);
     }
 }

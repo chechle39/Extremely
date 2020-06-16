@@ -259,8 +259,8 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
     };
 
     this.invoiceForm = this.fb.group({
-      invoiceNumber: this.listInvoice === undefined
-        ? ['', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
+      invoiceNumber: this.listInvoice === undefined || this.listInvoice.invoiceNumber === null
+        ? ['0001', [Validators.required]] : [this.listInvoice.invoiceNumber, [Validators.required]],
       invoiceSerial: this.listInvoice === undefined ? [''] : [this.listInvoice.invoiceSerial],
       taxInvoiceNumber: [''],
       contactName: ['', [Validators.required]],
@@ -1348,12 +1348,11 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit, 
           yourCompanyCode: i === 0 ? this.companyCode : null,
         };
         this.requestSaveJson.push(data);
-
       }
-      const reportName = 'Sales Invoice';
       this.invoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp => {
-        this.router.navigate([`/pages//print/${reportName}`]);
       });
+      const reportName = 'Sales Invoice';
+      this.router.navigate([`/pages//print/${reportName}`]);
     }
   }
   getName(nameFile) {

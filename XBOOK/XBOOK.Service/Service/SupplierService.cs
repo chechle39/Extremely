@@ -30,8 +30,9 @@ namespace XBOOK.Service.Service
         }
 
         public  bool CreateSupplier(SupplierCreateRequest request)
-        {            
-            try
+        {
+            var tryGetSupplier = _supplierRepository.GetSupplierBySupplierName(request.supplierName);
+            if(tryGetSupplier == null)
             {
                 var sup = new Supplier()
                 {
@@ -49,20 +50,25 @@ namespace XBOOK.Service.Service
                 _uow.SaveChanges();
                 return true;
             }
-            catch (DbUpdateException ex)
-            {
-                SqlException innerException = ex.InnerException as SqlException;
-                if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+            //try
+            //{
 
-            }
+            //    return true;
+            //}
+            //catch (DbUpdateException ex)
+            //{
+            //    SqlException innerException = ex.InnerException as SqlException;
+            //    if (innerException != null && (innerException.Number == 2627 || innerException.Number == 2601))
+            //    {
+            //        return false;
+            //    }
+            //    else
+            //    {
+            //        return true;
+            //    }
 
+            //}
+            return false;
 
         }
 

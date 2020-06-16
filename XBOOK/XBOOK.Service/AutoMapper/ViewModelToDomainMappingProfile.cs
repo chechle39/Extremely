@@ -98,9 +98,14 @@ namespace XBOOK.Service.AutoMapper
             CreateMap<TaxInvoiceViewModel, TaxSaleInvoice>().ConstructUsing(x => new TaxSaleInvoice(x.taxInvoiceID, x.invoiceNumber, x.invoiceSerial, x.issueDate,
            x.clientID, x.discount, x.discRate, x.dueDate, x.note, x.term, x.status, x.taxInvoiceNumber));
 
-            CreateMap<TaxSaleInvoiceModelRequest, TaxBuyInvoice>()
-          .ConstructUsing(x => new TaxBuyInvoice(x.taxInvoiceID,x.taxInvoiceNumber,x.term,x.vatTax,x.address,x.amountPaid,x.clientID,x.clientName,x.contactName,x.discount,x.discRate,x.dueDate,x.email,x.invoiceNumber,x.invoiceSerial,x.issueDate,x.note,x.reference,x.status,x.subTotal,x.tag,x.taxCode,x.TaxInvDetailView));
+            CreateMap<TaxBuyInvoiceModelRequest, TaxBuyInvoice>()
+          .ConstructUsing(x => new TaxBuyInvoice(x.invoiceID,x.taxInvoiceNumber,x.term,x.vatTax,x.address,x.amountPaid,x.supplierID,x.supplierName,x.contactName,x.discount,x.discRate,x.dueDate,x.email,x.invoiceNumber,x.invoiceSerial,x.issueDate,x.note,x.reference,x.status,x.subTotal,x.tag,x.taxCode));
+            CreateMap<TaxBuyInvDetailViewModel, TaxBuyInvDetail>().ConstructUsing(x => new TaxBuyInvDetail(x.amount,x.description,x.ID,x.price,x.productID,x.productName,x.qty,x.SaleInvDetailID,x.InvoiceID,x.vat));
 
+
+            CreateMap<TaxBuyInvoiceModelRequest, BuyInvoiceModelRequest>()
+           .ConstructUsing(x => new BuyInvoiceModelRequest(x.amountPaid, x.invoiceNumber, x.invoiceSerial, x.issueDate,
+          x.supplierID, x.discount, x.discRate, x.dueDate, x.note, x.term, x.status, x.taxInvoiceNumber,x.invoiceID));
         }
     }
 }

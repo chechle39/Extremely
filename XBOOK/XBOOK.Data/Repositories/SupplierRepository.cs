@@ -32,6 +32,11 @@ namespace XBOOK.Data.Repositories
             var listData = await Entities.ProjectTo<SupplierViewModel>().ToListAsync();
             return listData;
         }
+        public async Task<SupplierViewModel> GetSupplierBySupplierName(string supplierName)
+        {
+            var data = await Entities.Where(supplier => supplier.supplierName == supplierName).ProjectTo<SupplierViewModel>().AsNoTracking().FirstOrDefaultAsync();
+            return data;
+        }
 
         public async Task<IEnumerable<SupplierViewModel>> GetAllSupplierAsync(ClientSerchRequest request)
         {

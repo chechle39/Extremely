@@ -15,14 +15,14 @@ export class TaxBuyInvoiceService extends BaseService {
   getAll(request: any): Observable<TaxBuyInvoiceView> {
     return this.post<TaxBuyInvoiceView>(`${this.url}`, request);
   }
-  getInvoice(id: any): Observable<TaxInvoiceView> {
-    return this.post<TaxInvoiceView>(`${API_URI.taxInvoiceById}/${id}`, id);
+  getInvoice(id: any): Observable<TaxBuyInvoiceView> {
+    return this.post<TaxBuyInvoiceView>(`${API_URI.taxBuyInvoiceById}/${id}`, id);
   }
   updateSaleInv(request: any) {
-    return this.put<any>(`${API_URI.updateTaxSaleInv}`, request);
+    return this.put<any>(`${API_URI.updateTaxBuyInv}`, request);
   }
   getInfofile(request): Observable<any> {
-    return this.post<any>(`${API_URI.getTaxInvoiceFileName}`, request);
+    return this.post<any>(`${API_URI.getTaxBuyInvoiceFileName}`, request);
   }
   CreateSaleInv(request: any): Observable<any> {
     return this.post<any>(`${API_URI.createTaxBuySaleInv}`, request);
@@ -34,16 +34,25 @@ export class TaxBuyInvoiceService extends BaseService {
     return this.getFilex<any>(`${API_URI.getFile}`, fileName);
   }
   getLastInvoice(): Observable<any> {
-    return this.post<TaxInvoiceView>(`${API_URI.lastTaxInvoice}`, null);
+    return this.post<TaxBuyInvoiceView>(`${API_URI.lastTaxBuyInvoice}`, null);
   }
   getInfoProfile(): Observable<any> {
     return this.post<any>(`${API_URI.getProfile}`, null);
   }
   uploadFileInvMt(files: any): Observable<any> {
-    return this.postUploadMuntiple<any>(`${API_URI.uploadFileTaxInv}`, files);
+    return this.postUploadMuntiple<any>(`${API_URI.uploadFileTaxBuyInv}`, files);
   }
   removeFile(request): Observable<any> {
-    return this.post<any>(`${API_URI.removeFileTaxInv}`, request);
+    return this.post<any>(`${API_URI.removeFileTaxBuyInv}`, request);
+  }
+  getDF(): Observable<TaxInvoiceView> {
+    return this.post<TaxInvoiceView>(`${API_URI.taxBuyInvoiceDF}`, null);
+  }
+  deleteInvoice(id: any) {
+    return this.post(`${API_URI.deleteTaxBuyInvoice}`, id);
+  }
+  getTaxInvDetailByInvoiceId(request): Observable<any> {
+    return this.post<any>(`${API_URI.getBuyInvDetailByInvoiceId}`, request);
   }
 
 
@@ -61,12 +70,6 @@ export class TaxBuyInvoiceService extends BaseService {
     saveAs(blob, 'SaleInvoice.csv');
   }
 
-  getDF(): Observable<TaxInvoiceView> {
-    return this.post<TaxInvoiceView>(`${API_URI.invoiceDF}`, null);
-  }
-  deleteInvoice(id: any) {
-    return this.post(`${API_URI.deleteTaxSaleInvoice}`, id);
-  }
   CreateSaleInvDetail(request: any): Observable<any> {
     return this.post<any>(`${API_URI.createSaleInvDetail}`, request);
   }

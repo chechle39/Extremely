@@ -39,4 +39,9 @@ export class AppConsts {
     centered: true,
     backdrop: 'static',
   };
+  static readonly modalOptionsCustomSizeInvoiceReference: NgbModalOptions = {
+    windowClass: 'xb-modal__size-md',
+    centered: true,
+    backdrop: 'static',
+  };
 }

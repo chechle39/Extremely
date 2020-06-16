@@ -24,12 +24,12 @@ namespace XBOOK.Data.Repositories
             _saleInvoiceDetailRepository = saleInvoiceDetailRepository;
         }
 
-        public async Task<bool> CreateBuyIvDetail(BuyInvDetailViewModel request)
+        public BuyInvDetail CreateBuyIvDetail(BuyInvDetailViewModel request)
         {
             var buyInvoiceDetailCreate = Mapper.Map<BuyInvDetailViewModel, BuyInvDetail>(request);
             var createData = Entities.Add(buyInvoiceDetailCreate);
             _uow.SaveChanges();
-            return await Task.FromResult(true);
+            return buyInvoiceDetailCreate;
         }
 
         public async Task<bool> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel)

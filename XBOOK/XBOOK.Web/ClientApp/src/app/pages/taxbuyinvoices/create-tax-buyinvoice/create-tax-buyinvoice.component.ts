@@ -9,20 +9,15 @@ import {
   Injector,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
-import { ClientSearchModel } from '../../_shared/models/client/client-search.model';
 import { AppComponentBase } from '../../../coreapp/app-base.component';
 import { Subscription, Subject, Observable, merge, of } from 'rxjs';
 import { ProductSearchModel } from '../../_shared/models/product/product-search.model';
 import { ItemModel } from '../../_shared/models/invoice/item.model';
 import { PaymentView } from '../../_shared/models/invoice/payment-view.model';
-import { InvoiceView } from '../../_shared/models/invoice/invoice-view.model';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddPaymentComponent } from './payment/add-payment/add-payment.component';
-import { ClientService } from '../../_shared/services/client.service';
 import { ProductService } from '../../_shared/services/product.service';
 import { CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { InvoiceService } from '../../_shared/services/invoice.service';
 import { PaymentService } from '../../_shared/services/payment.service';
 import { TaxService } from '../../_shared/services/tax.service';
 import { ActionType } from '../../../coreapp/app.enums';
@@ -40,6 +35,8 @@ import { TaxInvoiceService } from '../../_shared/services/taxinvoice.service';
 // tslint:disable-next-line:max-line-length
 import { InvoiceReferenceComponent } from '../../taxinvoices/create-tax-invoice/invoice-reference/invoice-reference.component';
 import { TaxBuyInvoiceService } from '../../_shared/services/tax-buy-invoice.service';
+import { SupplierSearchModel } from '../../_shared/models/supplier/supplier-search.model';
+import { SupplierService } from '../../_shared/services/supplier.service';
 
 @Component({
   selector: 'xb-create-tax-buyinvoice',
@@ -61,15 +58,15 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
   invoiceNumber = '';
   title = '';
   saveText = 'Save';
-  clients = new Array<ClientSearchModel>();
-  clientSelected = new ClientSearchModel();
+  suppliers = new Array<SupplierSearchModel>();
+  supplierSelected = new SupplierSearchModel();
   productSelected = new ProductSearchModel();
   itemModels: ItemModel[];
   products: any;
   paymentViews: PaymentView[] = [];
   imgURL: any;
   enableInput = false;
-  selectedClient: number = null;
+  selectedSupplier: number = null;
   public selectedMaterial: any;
   public enableAddMode = false;
   dateOfIssue: any;
@@ -95,22 +92,22 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
   viewMode: boolean;
   createMode: boolean = false;
   coppyMode: boolean;
-  focusClient$ = new Subject<string>();
+  focusSupplier$ = new Subject<string>();
   focusProd$ = new Subject<string>();
-  isEditClient = true;
-  clientKey = {
-    clientKeyword: '',
+  isEditSupplier = true;
+  supplierKey = {
+    supplierKeyword: '',
   };
   Unit: any;
   unit: any;
   productNameUnit: any;
   saleInvId: any;
   oldClienName: any;
-  oldClientId: any;
+  oldSupplierId: any;
   requestData: any;
   requestRemove: any[] = [];
   taxData: any;
-  dataClientList: ClientSearchModel[];
+  dataSupplierList: SupplierSearchModel[];
   amountPaidData: any;
   invoiceList: TaxBuyInvoiceView;
   paidAmont: any;
@@ -139,12 +136,11 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     public activeModal: NgbActiveModal,
     injector: Injector,
     private el: ElementRef,
-    private clientService: ClientService,
+    private supplierService: SupplierService,
     private productService: ProductService,
     private currencyPipe: CurrencyPipe,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private invoiceService: TaxInvoiceService,
     private paymentService: PaymentService,
     private translate: TranslateService,
     private authenticationService: AuthenticationService,
@@ -174,7 +170,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
 
   getLastIv() {
     this.removeItem(0);
-    this.invoiceService.getLastInvoice().subscribe(response => {
+    this.taxBuyInvoiceService.getLastInvoice().subscribe(response => {
       this.listInvoice = response;
       this.createForm();
       if (this.invoiceForm !== undefined) {
@@ -186,7 +182,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     });
   }
   getProfiles() {
-    this.invoiceService.getInfoProfile().subscribe((rp: any) => {
+    this.taxBuyInvoiceService.getInfoProfile().subscribe((rp: any) => {
       this.companyName = rp.companyName;
       this.taxCode = rp.taxCode;
       this.companyAddress = rp.address;
@@ -230,8 +226,8 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       }
     });
   }
-  canActionClient(): boolean {
-    return (!this.viewMode && this.clientSelected.clientId > 0);
+  canActionSupplier(): boolean {
+    return (!this.viewMode && this.supplierSelected.supplierID > 0);
   }
   private addEventForInput() {
     const inputList = [].slice.call((this.el.nativeElement as HTMLElement).getElementsByTagName('input'));
@@ -265,8 +261,8 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       invoiceNumber: [''],
       invoiceSerial: this.listInvoice === undefined ? [''] : [this.listInvoice.invoiceSerial],
       contactName: ['', [Validators.required]],
-      clientName: ['', [Validators.required]],
-      clientId: [0],
+      supplierName: ['', [Validators.required]],
+      supplierId: [0],
       address: [''],
       taxCode: [''],
       email: [''],
@@ -345,13 +341,13 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       taxs: this.fb.array([]),
     });
   }
-  searchClient = (text$: Observable<string>) => {
+  searchSupplier = (text$: Observable<string>) => {
     this.isCheckFc = false;
     const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
-    const inputFocus$ = this.focusClient$;
+    const inputFocus$ = this.focusSupplier$;
     return merge(debouncedText$, inputFocus$).pipe(
       switchMap(term =>
-        this.clientService.searchClient(this.requestClient(term)).pipe(
+        this.supplierService.searchSupplier(this.requestSupplier(term)).pipe(
           catchError(() => {
             this.searchFailed = true;
             return of([]);
@@ -371,11 +367,11 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
           })),
       ));
   }
-  requestClient(e: any) {
-    const clientKey = {
-      clientKeyword: e.toLocaleLowerCase(),
+  requestSupplier(e: any) {
+    const supplierKey = {
+      supplierKeyword: e.toLocaleLowerCase(),
     };
-    return clientKey;
+    return supplierKey;
   }
 
   requestProduct(e: any) {
@@ -387,10 +383,10 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
   }
 
   selectedItem(item) {
-    this.clientSelected = item.item as ClientSearchModel;
-    this.isEditClient = false;
-    if (this.clientSelected.clientId > 0) {
-      this.invoiceForm.controls.clientName.disable();
+    this.supplierSelected = item.item as SupplierSearchModel;
+    this.isEditSupplier = false;
+    if (this.supplierSelected.supplierID > 0) {
+      this.invoiceForm.controls.supplierName.disable();
       this.invoiceForm.controls.email.disable();
       this.invoiceForm.controls.address.disable();
       this.invoiceForm.controls.taxCode.disable();
@@ -411,9 +407,9 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     arrayControl.at(index).get('price').setValue(Number(price));
   }
 
-  clientFormatter(value: any) {
-    if (value.clientName) {
-      return value.clientName;
+  supplierFormatter(value: any) {
+    if (value.supplierName) {
+      return value.supplierName;
     }
     return value;
   }
@@ -436,7 +432,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
 
   private getInForProfile(request) {
     this.fileUpload = [];
-    this.invoiceService.getInfofile(request).subscribe(rp => {
+    this.taxBuyInvoiceService.getInfofile(request).subscribe(rp => {
       if (rp !== null) {
         if (rp.length > 0) {
 
@@ -456,16 +452,16 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
   }
 
   private getInvoiceById(taxInvoiceID: any) {
-    this.invoiceService.getInvoice(taxInvoiceID).subscribe(data => {
+    this.taxBuyInvoiceService.getInvoice(taxInvoiceID).subscribe(data => {
       const invoice = data as TaxBuyInvoiceView;
       this.invoiceList = invoice;
       this.title = invoice[0].taxInvoiceNumber;
-      this.clientSelected.id = invoice[0].clientId;
-      this.clientSelected.clientName = invoice[0].clientData[0].clientName;
-      this.clientSelected.contactName = invoice[0].clientData[0].contactName;
-      this.clientSelected.address = invoice[0].clientData[0].address;
-      this.clientSelected.taxCode = invoice[0].clientData[0].taxCode;
-      this.clientSelected.email = invoice[0].clientData[0].email;
+      this.supplierSelected.id = invoice[0].supplierId;
+      this.supplierSelected.supplierName = invoice[0].supplierData[0].supplierName;
+      this.supplierSelected.contactName = invoice[0].supplierData[0].contactName;
+      this.supplierSelected.address = invoice[0].supplierData[0].address;
+      this.supplierSelected.taxCode = invoice[0].supplierData[0].taxCode;
+      this.supplierSelected.email = invoice[0].supplierData[0].email;
 
       if (this.taxInvoiceID !== 0) {
         const request = {
@@ -479,7 +475,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       const detailInvoiceFormArray = this.getFormArray();
 
       // tslint:disable-next-line:prefer-for-of
-      for (let item = 0; item < invoice[0].taxInvDetailView.length; item++) {
+      for (let item = 0; item < invoice[0].taxBuyInvDetailView.length; item++) {
         detailInvoiceFormArray.push(this.getItem());
       }
 
@@ -489,21 +485,21 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
         taxInvoiceNumber: invoice[0].taxInvoiceNumber,
         invoiceSerial: invoice[0].invoiceSerial,
         invoiceNumber: this.coppyMode !== true ? invoice[0].invoiceNumber : this.listInvoice.invoiceNumber,
-        clientId: invoice[0].clientData[0].clientId,
-        clientName: invoice[0].clientData[0].clientName,
-        address: invoice[0].clientData[0].address,
-        taxCode: invoice[0].clientData[0].taxCode,
-        email: invoice[0].clientData[0].email,
-        contactName: invoice[0].clientData[0].contactName,
+        supplierId: invoice[0].supplierData[0].supplierId,
+        supplierName: invoice[0].supplierData[0].supplierName,
+        address: invoice[0].supplierData[0].address,
+        taxCode: invoice[0].supplierData[0].taxCode,
+        email: invoice[0].supplierData[0].email,
+        contactName: invoice[0].supplierData[0].contactName,
         reference: invoice[0].reference,
         amountPaid: invoice[0].amountPaid,
         totalDiscount: invoice[0].discRate,
         notes: invoice[0].note,
         termCondition: invoice[0].term,
-        items: invoice[0].taxInvDetailView,
+        items: invoice[0].taxBuyInvDetailView,
       });
-      this.oldClienName = invoice[0].clientData[0].clientName;
-      this.oldClientId = invoice[0].clientData[0].clientId;
+      this.oldClienName = invoice[0].supplierData[0].supplierName;
+      this.oldSupplierId = invoice[0].supplierData[0].supplierId;
       this.subTotalAmount = invoice[0].subTotal;
       this.subTotalDiscountIncl = invoice[0].discount;
       this.totalTaxAmount = invoice[0].vatTax;
@@ -552,7 +548,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       // this.getAllTax();
       detailInvoiceFormArray.controls.forEach((control, i) => {
         const productId = control.get('productId').value;
-        if (invoice[0].taxInvDetailView[i].productId === productId) {
+        if (invoice[0].taxBuyInvDetailView[i].productId === productId) {
           const vatTax = control.get('vat').value;
           const taxFormsArray = control.get('taxs') as FormArray;
           taxFormsArray.push(this.getTax);
@@ -562,7 +558,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
         }
       });
       if (this.viewMode && this.coppyMode !== true) {
-        this.invoiceForm.controls.clientName.disable();
+        this.invoiceForm.controls.supplierName.disable();
         this.invoiceForm.controls.email.disable();
         this.invoiceForm.controls.address.disable();
         this.invoiceForm.controls.taxCode.disable();
@@ -585,7 +581,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       this.getInvoiceById(this.taxInvoiceID);
     }
     this.invoiceForm.controls.contactName.disable();
-    this.invoiceForm.controls.clientName.disable();
+    this.invoiceForm.controls.supplierName.disable();
     this.invoiceForm.controls.email.disable();
     this.invoiceForm.controls.address.disable();
     this.invoiceForm.controls.taxCode.disable();
@@ -626,7 +622,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     this.checkUpload = true;
     if (this.invoiceForm.controls.taxInvoiceNumber.invalid === true
       || this.invoiceForm.controls.issueDate.invalid === true
-      || this.invoiceForm.controls.clientName.invalid === true
+      || this.invoiceForm.controls.supplierName.invalid === true
       || this.invoiceForm.controls.contactName.invalid === true
       || this.invoiceForm.controls.dueDate.invalid === true || this.isCheckDate === true) {
       this.translate.get('INVOICE.CREATE.VALID')
@@ -688,11 +684,11 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        clientId: this.invoiceForm.value.contactName.clientId !== undefined
-          ? this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
-        clientName: this.invoiceForm.value.clientName === undefined
+        supplierId: this.invoiceForm.value.contactName.supplierId !== undefined
+          ? this.invoiceForm.value.contactName.supplierId : this.invoiceForm.value.supplierId,
+        supplierName: this.invoiceForm.value.supplierName === undefined
           ?
-          this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+          this.invoiceForm.value.contactName.supplierName : this.invoiceForm.value.supplierName,
         address: this.invoiceForm.value.address === undefined
           ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
         taxCode: this.invoiceForm.value.taxCode === undefined
@@ -703,7 +699,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
             this.invoiceForm.value.contactName.contactName : this.xxx.nativeElement.value,
         email: this.invoiceForm.value.email === undefined
         ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
-        taxInvDetailView: requestInvDt,
+        taxBuyInvDetailView: requestInvDt,
       };
       if (request.invoiceNumber === null) {
         request.invoiceNumber  = '';
@@ -711,30 +707,33 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       if (this.EditUpload !== true) {
         this.uploadFileMultiple(request);
       }
-      if (request.clientId === null) {
-        request.clientId = 0;
+      if (request.supplierId === null) {
+        request.supplierId = 0;
       }
       if (this.coppyMode === true) {
         request.amountPaid = 0;
       }
       const data = this.taxBuyInvoiceService.CreateSaleInv(request).subscribe((rs: any) => {
-        this.taxInvoiceID = this.saleInvId;
-        if (!this.coppyMode) {
-          this.notify.success('Successfully Add');
-        } else {
-          this.coppyMode = false;
-          this.checkIcon = false;
-          this.notify.success('Coppy invoice successfully');
-        }
-        // this.invoiceForm.reset();
-         this.viewMode = true;
-         this.getInvoiceById(this.taxInvoiceID);
+        this.taxBuyInvoiceService.getDF().subscribe((x: any) => {
+          this.saleInvId = x.invoiceID;
+          this.taxInvoiceID = this.saleInvId;
+          if (!this.coppyMode) {
+            this.notify.success('Successfully Add');
+          } else {
+            this.coppyMode = false;
+            this.checkIcon = false;
+            this.notify.success('Coppy invoice successfully');
+          }
+          // this.invoiceForm.reset();
+           this.viewMode = true;
+           this.getInvoiceById(this.taxInvoiceID);
+          });
       });
 
       return;
     }
     if (this.taxInvoiceID > 0 && !this.invoiceForm.valid && !this.coppyMode) {
-      const checkClientId = this.invoiceForm.value.clientId;
+      const checkSupplierId = this.invoiceForm.value.supplierId;
       const taxSaleInvDetailView = [];
       for (let ii = 0; ii < this.invoiceForm.value.items.length; ii++) {
         if (this.invoiceForm.value.items[ii].productName.productName !== undefined) {
@@ -780,11 +779,11 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        clientId:
+        supplierId:
           this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
-        clientName: this.invoiceForm.value.contactName !== null ?
-          this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+            this.invoiceForm.value.contactName.supplierId : this.invoiceForm.value.supplierId,
+        supplierName: this.invoiceForm.value.contactName !== null ?
+          this.invoiceForm.value.contactName.supplierName : this.invoiceForm.value.supplierName,
         address: this.invoiceForm.value.contactName !== null
           ? this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
         taxCode: this.invoiceForm.value.contactName !== null
@@ -795,11 +794,11 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
           this.invoiceForm.value.contactName.contactName : this.invoiceForm.value.contactName,
         email: this.invoiceForm.value.contactName !== null
           ? this.invoiceForm.value.contactName.email : this.invoiceForm.value.email,
-        clientData: [{
-          clientId: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.clientId : this.invoiceForm.value.clientId,
-          clientName: this.invoiceForm.value.contactName !== null ?
-            this.invoiceForm.value.contactName.clientName : this.invoiceForm.value.clientName,
+        supplierData: [{
+          supplierId: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.supplierId : this.invoiceForm.value.supplierId,
+          supplierName: this.invoiceForm.value.contactName !== null ?
+            this.invoiceForm.value.contactName.supplierName : this.invoiceForm.value.supplierName,
           address: this.invoiceForm.value.contactName !== null ?
             this.invoiceForm.value.contactName.address : this.invoiceForm.value.address,
           taxCode: this.invoiceForm.value.contactName !== null ?
@@ -836,16 +835,16 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
         note: this.invoiceForm.value.notes,
         term: this.invoiceForm.value.termCondition,
         status: '',
-        clientId: checkClientId !== null ? this.invoiceForm.value.clientId : 0,
-        clientName: this.invoiceForm.value.clientName,
+        supplierId: checkSupplierId !== null ? this.invoiceForm.value.supplierId : 0,
+        supplierName: this.invoiceForm.value.supplierName,
         address: this.invoiceForm.value.address,
         taxCode: this.invoiceForm.value.taxCode,
         tag: null,
         contactName: this.invoiceForm.value.contactName,
         email: this.invoiceForm.value.email,
-        clientData: [{
-          clientId: checkClientId !== null ? this.invoiceForm.value.clientId : 0,
-          clientName: this.invoiceForm.value.clientName,
+        supplierData: [{
+          supplierId: checkSupplierId !== null ? this.invoiceForm.value.supplierId : 0,
+          supplierName: this.invoiceForm.value.supplierName,
           address: this.invoiceForm.value.address,
           taxCode: this.invoiceForm.value.taxCode,
           tag: null,
@@ -857,9 +856,9 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
         taxSaleInvDetailView: taxSaleInvDetailView,
       };
 
-      if (request1.clientId === undefined) {
+      if (request1.supplierId === undefined) {
         this.requestData = request;
-      } else if (request1.clientId !== undefined) {
+      } else if (request1.supplierId !== undefined) {
         this.requestData = request1;
       }
       if (this.EditUpload !== true) {
@@ -872,7 +871,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
           requestDl.push({ id });
         }
       });
-      this.invoiceService.updateSaleInv(this.requestData).pipe(
+      this.taxBuyInvoiceService.updateSaleInv(this.requestData).pipe(
         finalize(() => {
         })).subscribe(rs => {
           this.viewMode = true;
@@ -882,7 +881,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
           }
           if (this.requestRemove.length > 0) {
             if (requestDl.length > 0) {
-              this.invoiceService.deleteInvoiceDetail(requestDl).subscribe(() => {
+              this.taxBuyInvoiceService.deleteInvoiceDetail(requestDl).subscribe(() => {
                 // this.notify.success('Successfully Deleted');
                 this.getDataForEditMode();
                 this.requestRemove = [];
@@ -980,7 +979,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     };
     // tslint:disable-next-line:variable-name
 
-    this.invoiceService.uploadFile(files).subscribe((rp: any) => {
+    this.taxBuyInvoiceService.uploadFile(files).subscribe((rp: any) => {
       this.getProfiles();
     });
   }
@@ -990,7 +989,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     const rs = {
       fileName: item.name,
     };
-    this.invoiceService.removeFile(rs).subscribe(rp => { });
+    this.taxBuyInvoiceService.removeFile(rs).subscribe(rp => { });
   }
 
   showPreviewUploadFile(files) {
@@ -1023,7 +1022,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
 
     if (fileRequest.length > 0 && this.checkUpload === true || this.checkUpload === undefined) {
       if (fileRequest[0] !== undefined) {
-        this.invoiceService.uploadFileInvMt(request).subscribe(rp => {
+        this.taxBuyInvoiceService.uploadFileInvMt(request).subscribe(rp => {
           if (this.EditUpload === false || this.checkUpload !== true) {
             this.notify.success('Successfully upload');
           }
@@ -1044,7 +1043,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       const requestIMG = {
         imgName: serverPath + '.png',
       };
-      this.invoiceService.getFile(requestIMG).subscribe(rp => {
+      this.taxBuyInvoiceService.getFile(requestIMG).subscribe(rp => {
         const a = 'data:image/png;base64,' + rp;
         if (a !== 'data:image/png;base64,') {
           this.imgURL = a;
@@ -1090,17 +1089,17 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
       note: this.invoiceForm.controls.notes.value,
       term: this.invoiceForm.controls.termCondition.value,
       status: '',
-      clientId: this.invoiceForm.controls.clientId.value,
-      clientName: this.invoiceForm.controls.clientName.value,
+      supplierId: this.invoiceForm.controls.supplierId.value,
+      supplierName: this.invoiceForm.controls.supplierName.value,
       address: this.invoiceForm.controls.address.value,
       taxCode: this.invoiceForm.controls.taxCode.value,
       tag: null,
       contactName: this.invoiceForm.controls.contactName.value,
       email: this.invoiceForm.controls.email.value,
-      clientData: [],
+      supplierData: [],
       taxSaleInvDetailView: [],
     };
-    this.invoiceService.updateSaleInv(request).subscribe(rs => {
+    this.taxBuyInvoiceService.updateSaleInv(request).subscribe(rs => {
       this.getInvoiceById(this.invoiceForm.controls.taxInvoiceID.value);
       // this.allAmontById = 0;
     });
@@ -1166,40 +1165,40 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     control.get('vat').patchValue(sumTax);
     control.get('taxs').patchValue(taxs);
   }
-  editClient() {
-    this.isEditClient = true;
+  editSupplier() {
+    this.isEditSupplier = true;
     // tslint:disable-next-line: no-unused-expression
-    // this.invoiceForm.controls.clientName.disabled === false;
+    // this.invoiceForm.controls.supplierName.disabled === false;
     this.invoiceForm.enable();
   }
-  deleteClient() {
-    this.isEditClient = true;
-    this.clientSelected = new ClientSearchModel();
-    this.invoiceForm.controls.clientId.reset();
-    this.invoiceForm.controls.clientName.reset();
+  deleteSupplier() {
+    this.isEditSupplier = true;
+    this.supplierSelected = new SupplierSearchModel();
+    this.invoiceForm.controls.supplierId.reset();
+    this.invoiceForm.controls.supplierName.reset();
     this.invoiceForm.controls.contactName.reset();
     this.invoiceForm.controls.email.reset();
     this.invoiceForm.controls.address.reset();
     this.invoiceForm.controls.taxCode.reset();
 
-    this.invoiceForm.controls.clientName.enable();
+    this.invoiceForm.controls.supplierName.enable();
     this.invoiceForm.controls.email.enable();
     this.invoiceForm.controls.address.enable();
     this.invoiceForm.controls.taxCode.enable();
 
-    this.clientSelected.id = null;
-    this.clientSelected.clientName = null;
-    this.clientSelected.contactName = null;
-    this.clientSelected.address = null;
-    this.clientSelected.taxCode = null;
-    this.clientSelected.email = null;
+    this.supplierSelected.id = null;
+    this.supplierSelected.supplierName = null;
+    this.supplierSelected.contactName = null;
+    this.supplierSelected.address = null;
+    this.supplierSelected.taxCode = null;
+    this.supplierSelected.email = null;
   }
   redirectToEditInvoice() {
-    this.checkIcon = (this.viewMode && this.clientSelected.id > 0);
+    this.checkIcon = (this.viewMode && this.supplierSelected.id > 0);
     this.EditUpload = true;
     this.checkUpload = false;
     this.invoiceForm.controls.contactName.enable();
-    this.invoiceForm.controls.clientName.enable();
+    this.invoiceForm.controls.supplierName.enable();
     this.invoiceForm.controls.email.enable();
     this.invoiceForm.controls.address.enable();
     this.invoiceForm.controls.taxCode.enable();
@@ -1216,7 +1215,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     const request = {
       filename: fileName,
     };
-    this.invoiceService.downLoadFile(request).subscribe(rp => { });
+    this.taxBuyInvoiceService.downLoadFile(request).subscribe(rp => { });
   }
 
   Print() {
@@ -1226,8 +1225,8 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
         const data = {
           address: i === 0 ? this.invoiceForm.controls.address.value : null,
           amountPaid: i === 0 ? this.invoiceForm.controls.amountPaid.value : null,
-          clientId: i === 0 ? this.invoiceForm.controls.clientId.value : null,
-          clientName: i === 0 ? this.invoiceForm.controls.clientName.value : null,
+          supplierId: i === 0 ? this.invoiceForm.controls.supplierId.value : null,
+          supplierName: i === 0 ? this.invoiceForm.controls.supplierName.value : null,
           contactName: i === 0 ? this.invoiceForm.controls.contactName.value : null,
           dueDate: i === 0 ? [this.invoiceForm.controls.dueDate.value.year,
           this.invoiceForm.controls.dueDate.value.month,
@@ -1276,7 +1275,7 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
 
       }
       const reportName = 'Sales Invoice';
-      this.invoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp => {
+      this.taxBuyInvoiceService.SaleInvoiceSaveDataPrint(this.requestSaveJson).subscribe(rp => {
         this.router.navigate([`/pages//print/${reportName}`]);
       });
     }
@@ -1335,8 +1334,42 @@ export class CreateTaxBuyInvoiceComponent extends AppComponentBase implements On
     const dialog = this.modalService.open(InvoiceReferenceComponent, AppConsts.modalOptionsLargerSize);
     dialog.result.then(result => {
       if (result) {
-        this.invoiceForm.patchValue({
-          invoiceNumber: result ? result.map(item => item.invoiceNumber).join() : '',
+        this.taxBuyInvoiceService.getTaxInvDetailByInvoiceId(result.map(item => item.invoiceID))
+        .subscribe((invDetail: Array<any>) => {
+          const list = [];
+          const groupedItems = invDetail.reduce((obj, item) => {
+            obj[item.productId] =  obj[item.productId] || {};
+            obj[item.productId][item.vat] =  obj[item.productId][item.vat] || [];
+            obj[item.productId][item.vat].push(item);
+            return obj;
+          }, {});
+          Object.keys(groupedItems).forEach(key => {
+            Object.keys(groupedItems[key]).forEach(subKey => {
+              list.push(groupedItems[key][subKey].reduce((item, val) => {
+                item.qty += val.qty;
+                return item;
+              }));
+            });
+          });
+
+          this.getFormArray().controls.splice(0);
+          const detailInvoiceFormArray = this.getFormArray();
+
+          for (let item = 0; item < list.length; item++) {
+            detailInvoiceFormArray.push(this.getItem());
+          }
+          this.invoiceForm.patchValue({
+            invoiceNumber: result ? result.map(item => item.invoiceNumber).join() : '',
+            items: list,
+          });
+          // this.invoiceReferenceList = [];
+          // result.forEach(item => {
+          //   const newItem = {};
+          //   newItem['invoiceID'] = item.invoiceID;
+          //   newItem['invoiceNumber'] = item.invoiceNumber;
+          //   this.invoiceReferenceList.push(newItem);
+          // });
+
         });
       }
     });

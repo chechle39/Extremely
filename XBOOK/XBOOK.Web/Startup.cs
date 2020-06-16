@@ -128,7 +128,7 @@ namespace XBOOK.Web
                 };
             });
 
-                        services.AddDevExpressControls();
+              services.AddDevExpressControls();
             services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
 
@@ -301,6 +301,7 @@ namespace XBOOK.Web
             IHttpContextAccessor accessor = svp.GetService<IHttpContextAccessor>();
             DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
             app.UseDevExpressControls();
+            DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(ProcessException);
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
             DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(new LoggerService());
             DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(ProcessException);

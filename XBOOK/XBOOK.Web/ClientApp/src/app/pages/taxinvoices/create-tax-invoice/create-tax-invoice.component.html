@@ -178,23 +178,23 @@
                           <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0">{{'BUY.INVOICE.CREATE.INVOICE.VAT' | translate}}</p>
                           <div class="row mx-0">
                             <input style="opacity: unset;" kendotextbox placeholder="VAT"
-                              formControlName="taxInvoiceNumber" [readOnly]="isRead"
+                              formControlName="taxInvoiceNumber" [readOnly]="true"
                               [ngClass]="{'border-0':invoiceForm.controls.taxInvoiceNumber.touched === false || invoiceForm.controls.taxInvoiceNumber.invalid === false || isMouseEnter == false}"
-                              class="w-100 amountPaid invoice__input__textbox place-holder__color invoice__text--height-normal" />
+                              class="w-100 amountPaid invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3" />
                           </div>
 
                         </div>
                         <div>
                           <p class="mb-0 invoice__input__title invoice__text--height-normal mb-0 d-flex align-items-baseline">{{'BUY.INVOICE.CREATE.INVOICE.INVOICENUMBER' | translate}}
-                            <button (click)="openInvoiceReference()" class="btn p-0" style="font-size: 29px;line-height: 23px; color: inherit;">
+                            <button (click)="openInvoiceReference()" class="btn p-0" style="font-size: 29px;line-height: 23px; color: inherit;" [disabled]="isRead || !createMode">
                             ...
                             </button>
                         </p>
                           <div class="row mx-0">
                             <input style="opacity: unset;" kendotextbox placeholder="{{'BUY.INVOICE.GRID.INVOICE' | translate}}"
-                              class="form-control" type="text" disabled
+                              class="form-control" type="text" [readOnly]="true"
                               [value]="invoiceForm.get('invoiceNumber').valueChanges | async | InvoiceNumberPipe"
-                              class=" w-100 border-0 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal invoice__font--medium-3"
+                              class=" w-100 border-0 imput-reference-custom p-0 invoice__input__textbox place-holder__color invoice__text--height-normal"
                               required />
                           </div>
 

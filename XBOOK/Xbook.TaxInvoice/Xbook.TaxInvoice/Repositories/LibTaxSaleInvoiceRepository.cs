@@ -38,17 +38,8 @@ namespace Xbook.TaxInvoice.Repositories
         {
             if (!string.IsNullOrEmpty(taxInvoiceNumber))
             {
-                try
-                {
-
-                    var data = await Entities.AsNoTracking().Where(x => x.TaxInvoiceNumber == taxInvoiceNumber).ToListAsync();
-                    return data;
-                }
-                catch (Exception ex)
-                {
-
-                }
-                return null;
+                var data = await Entities.AsNoTracking().Where(x => x.TaxInvoiceNumber == taxInvoiceNumber).ToListAsync();
+                return data;
             } else
             {
                 return null;

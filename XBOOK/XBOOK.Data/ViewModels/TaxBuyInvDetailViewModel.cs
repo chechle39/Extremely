@@ -4,7 +4,7 @@ using System.Text;
 
 namespace XBOOK.Data.ViewModels
 {
-    public class TaxInvDetailViewModel
+    public class TaxBuyInvDetailViewModel
     {
         public long ID { get; set; }
         public long SaleInvDetailID { get; set; }

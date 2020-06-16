@@ -36,6 +36,13 @@ namespace XBOOK.Web.Controllers
             return Ok(listSaleInvDetail);
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetSaleInvDetailByInvoiceId(List<long> listId)
+        {
+            var listSaleInvDetail = await _iSaleInvDetailService.getSaleInvoiceDetailByInvoiceId(listId);
+            return Ok(listSaleInvDetail);
+        }
+
         [HttpPost("CreateListSaleDetail")]
         public IActionResult CreateListSaleDetail(List<SaleInvDetailViewModel> request)
         {

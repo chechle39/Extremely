@@ -24,7 +24,7 @@ namespace XBOOK.Data.Entities
             this.TaxBuyInvDetails = new HashSet<TaxBuyInvDetail>();
         }
 
-        public TaxBuyInvoice(long taxInvoiceID, string taxInvoiceNumber, string term, decimal? vatTax, string address, decimal? amountPaid, int? clientID, string clientName, string contactName, decimal? discount, decimal? discRate, DateTime? dueDate, string email, string invoiceNumber, string invoiceSerial, DateTime? issueDate, string note, string reference, string status, decimal? subTotal, string tag, string taxCode, List<TaxInvDetailViewModel> taxInvDetailView)
+        public TaxBuyInvoice(long taxInvoiceID, string taxInvoiceNumber, string term, decimal? vatTax, string address, decimal? amountPaid, int? clientID, string clientName, string contactName, decimal? discount, decimal? discRate, DateTime? dueDate, string email, string invoiceNumber, string invoiceSerial, DateTime? issueDate, string note, string reference, string status, decimal? subTotal, string tag, string taxCode)
         {
             this.taxInvoiceID = taxInvoiceID;
             TaxInvoiceNumber = taxInvoiceNumber;
@@ -32,8 +32,7 @@ namespace XBOOK.Data.Entities
             this.vatTax = vatTax;
             this.address = address;
             this.amountPaid = amountPaid;
-            this.clientID = clientID;
-            this.clientName = clientName;
+            this.supplierID = clientID;
             this.contactName = contactName;
             this.discount = discount;
             this.discRate = discRate;
@@ -48,7 +47,6 @@ namespace XBOOK.Data.Entities
             this.subTotal = subTotal;
             this.tag = tag;
             this.taxCode = taxCode;
-            this.taxInvDetailView = taxInvDetailView;
         }
         [Key]
         public long invoiceID { get; set; }

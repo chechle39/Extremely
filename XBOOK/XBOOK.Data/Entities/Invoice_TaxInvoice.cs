@@ -15,5 +15,6 @@ namespace XBOOK.Data.Entities
         public Nullable<decimal> amount { get; set; }
         public long invoiceID { get; set; }
         public long taxInvoiceID { get; set; }
+        public Nullable<decimal> invoiceAmount { get; set; }
     }
 }

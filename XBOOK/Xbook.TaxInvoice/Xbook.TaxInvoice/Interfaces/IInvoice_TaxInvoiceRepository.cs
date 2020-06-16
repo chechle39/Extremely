@@ -8,7 +8,9 @@ namespace Xbook.TaxInvoice.Interfaces
 {
     public interface IInvoice_TaxInvoiceRepository
     {
-        Task<bool> SaveInvoiceTaxInvoice(Invoice_TaxInvoiceViewModel requestSave);
+        Task<bool> SaveInvoiceTaxInvoice(Invoice_TaxInvoiceViewModel requestSave, bool isSale);
         Task<bool> UpdateInvoiceTaxInvoice(Invoice_TaxInvoiceViewModel requestSave, string oldTaxInvoice, string oldInvoceNumber);
+        Task<bool> UpdateInvoiceTaxInvoiceRecordInvoice(long invId);
+
     }
 }

@@ -51,7 +51,7 @@ namespace XBOOK.Service.Service
             _SaleInvoiceRepository = saleInvoiceRepository;
             _iProductRepository = iProductRepository;
              _libTaxSaleInvoiceRepository = new LibTaxSaleInvoiceRepository(_context,_uow);
-            _invoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context);
+            _invoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context, _SaleInvoiceRepository);
             _libTaxSaleDetailInvoiceRepository = new LibTaxSaleDetailInvoiceRepository(_context);
         }
 
@@ -667,7 +667,9 @@ namespace XBOOK.Service.Service
                 saleInvoiceGL.delete(saleInvViewModel.ToList()[0]);
                 var getSaleInVDt = await _SaleInvoiceDetailRepository.GetSaleInvByinID(item.id);
                 _SaleInvoiceDetailRepository.RemoveAll(getSaleInVDt);
-                _SaleInvoiceRepository.removeInv(item.id);
+                var rmIv = _SaleInvoiceRepository.removeInv(item.id);
+                if (rmIv)
+                   await _invoice_TaxInvoiceRepository.UpdateInvoiceTaxInvoiceRecordInvoice(item.id);
                 _uow.SaveChanges();
             }
            
@@ -708,15 +710,16 @@ namespace XBOOK.Service.Service
                 
                 var request = new Invoice_TaxInvoiceViewModel()
                 {
-                    amount = sale.subTotal,
+                    amount = (sale.subTotal + sale.vatTax) - sale.discount,
                     ID = 0,
                     invoiceNumber = saleInvoiceModelRequest.InvoiceNumber,
                     isSale = true,
                     taxInvoiceNumber = saleInvoiceModelRequest.TaxInvoiceNumber,
                     invoiceID = sale.invoiceID,
-                    taxInvoiceID = taxSaleLib.taxInvoiceID
+                    taxInvoiceID = taxSaleLib.taxInvoiceID,
+                    invoiceAmount = sale.subTotal,
                 };
-                await _invoice_TaxInvoiceRepository.SaveInvoiceTaxInvoice(request);
+                await _invoice_TaxInvoiceRepository.SaveInvoiceTaxInvoice(request, true);
                 _uow.SaveChanges();
             }
             return await Task.FromResult(true);

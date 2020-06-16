@@ -1,12 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace XBOOK.Data.Entities
 {
     public partial class TaxBuyInvDetail
     {
+        public TaxBuyInvDetail(decimal? amount, string description, long iD, decimal? price, int productID, string productName, decimal? qty, long saleInvDetailID, long invoiceID, decimal? vat)
+        {
+            this.amount = amount;
+            this.description = description;
+            ID = iD;
+            this.price = price;
+            this.productID = productID;
+            this.productName = productName;
+            this.qty = qty;
+            SaleInvDetailID = saleInvDetailID;
+            this.invoiceID = invoiceID;
+            this.vat = vat;
+        }
+
         [Key]
         public long ID { get; set; }
         public long invoiceID { get; set; }
@@ -19,6 +32,7 @@ namespace XBOOK.Data.Entities
         public Nullable<decimal> vat { get; set; }
         public long SaleInvDetailID { get; set; }
         public virtual Product Product { get; set; }
+        [ForeignKey("invoiceID")]
         public virtual TaxBuyInvoice TaxBuyInvoice { get; set; }
     }
 }

@@ -53,5 +53,12 @@ namespace XBOOK.Web.Controllers
             await _buyDetailInvoiceService.Deleted(id);
             return Ok();
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetBuyInvDetailByInvoiceId(List<long> listId)
+        {
+            var listSaleInvDetail = await _buyDetailInvoiceService.getBuyInvoiceDetailByInvoiceId(listId);
+            return Ok(listSaleInvDetail);
+        }
     }
 }

@@ -4,25 +4,30 @@
       <div class="col-3">
         <h5 class="modal-title">Invoices</h5>
       </div>
-      <div class="col-3 d-flex align-items-center">
+      <div class="col-4 d-flex align-items-center">
         <input validateDateDirective #d="ngbDatepicker"
           ngbDatepicker class="d-none" (dateSelect)="onFromDateSelect($event)">
           From: {{ fromDate.toLocaleDateString('en-GB') }}
         <button (click)="d.toggle()" style="border: 0; outline: none;"
           class="k-icon k-i-calendar-date" type="button"></button>
       </div>
-      <div class="col-3 d-flex align-items-center">
+      <div class="col-4 d-flex align-items-center">
         <input validateDateDirective #d2="ngbDatepicker"
           ngbDatepicker class="d-none" (dateSelect)="onToDateSelect($event)">
           To: {{ toDate.toLocaleDateString('en-GB') }}
         <button (click)="d2.toggle()" style="border: 0; outline: none;"
           class="k-icon k-i-calendar-date" type="button"></button>
       </div>
+      <div class="col-1 d-flex align-items-center">
+        <button (click)="getinvoiceReference()" style="border: 0; outline: none; background: none; color: var(--orange);"
+          class="k-icon k-i-search" type="button"></button>
+      </div>
     </div>
   </div>
   <div class="modal-body" style="margin-top: 3px;">
     <ngx-datatable #myTable class="bootstrap hover no-striped flex" [rows]="invoiceReferenceList"
       [selectAllRowsOnPage]="false" [selectionType]="selectionType.multiClick" [selected]="selected"
+      rowHeight="auto"
       (select)="onSelect($event)">
 
       <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
@@ -30,15 +35,6 @@
         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
           let-selectFn="selectFn">
           <input type="checkbox" [checked]="allRowsSelected" id="chkCheckAll" (change)="selectFn(!allRowsSelected)" />
-        </ng-template>
-        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-          let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
-          <div class="custom-control custom-checkbox m-0">
-            <input #cb type="checkbox" class="custom-control-input" id="{{row.taxInvoiceId}}" [checked]="isSelected"
-              (change)="onCheckboxChangeFn($event)" />
-            <label class="custom-control-label col-form-label" for="{{row.taxInvoiceId}}"></label>
-          </div>
-
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column prop="issueDate" name="Date" [cellClass]="'col-id'" [headerClass]="'col-id'">

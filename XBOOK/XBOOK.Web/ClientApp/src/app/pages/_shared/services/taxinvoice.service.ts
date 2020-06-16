@@ -45,6 +45,12 @@ export class TaxInvoiceService extends BaseService {
   removeFile(request): Observable<any> {
     return this.post<any>(`${API_URI.removeFileTaxInv}`, request);
   }
+  getSaleInvDetailByInvoiceId(request): Observable<any> {
+    return this.post<any>(`${API_URI.getSaleInvDetailByInvoiceId}`, request);
+  }
+  getDF(): Observable<TaxInvoiceView> {
+    return this.post<TaxInvoiceView>(`${API_URI.taxInvoiceDF}`, null);
+  }
 
 
   // Not update yet
@@ -61,9 +67,6 @@ export class TaxInvoiceService extends BaseService {
     saveAs(blob, 'SaleInvoice.csv');
   }
 
-  getDF(): Observable<TaxInvoiceView> {
-    return this.post<TaxInvoiceView>(`${API_URI.invoiceDF}`, null);
-  }
   deleteInvoice(id: any) {
     return this.post(`${API_URI.deleteTaxSaleInvoice}`, id);
   }

@@ -180,18 +180,30 @@ export const API_URI = {
   getAllChart: 'api/Dashboard/GetAllChartAsync',
 
   getAllTaxInvoice: 'api/TaxSaleInvoice/GetAllTaxSaleInvoice',
-  getAllTaxBuyInvoice: 'api/TaxBuySaleInvoice/GetAllTaxBuySaleInvoice',
   taxInvoiceById: 'api/TaxSaleInvoice/GetTaxSaleInvoiceById',
   getTaxInvoiceFileName: 'api/TaxSaleInvoice/GetFile',
   lastTaxInvoice: 'api/TaxSaleInvoice/GetLastIndexTaxInvoiceAsync',
   updateTaxSaleInv: 'api/TaxSaleInvoice/UpdateTaxSaleInvoice',
   createTaxSaleInv: 'api/TaxSaleInvoice/CreateTaxSaleInvoice',
-  createTaxBuySaleInv: 'api/TaxBuySaleInvoice/CreateTaxBuySaleInvoice',
-
   uploadFileTaxInv: 'api/TaxSaleInvoice/Upload',
   removeFileTaxInv: 'api/TaxSaleInvoice/RemoveFile',
   deleteTaxSaleInvoice: 'api/TaxSaleInvoice/DeleteTaxSaleInv',
+  taxInvoiceDF: 'api/TaxSaleInvoice/GetDF',
+  getSaleInvDetailByInvoiceId : 'api/SaleInvDetail/GetSaleInvDetailByInvoiceId',
+
   getUnTaxDeclaredInvoice : 'api/SaleInvoice/getUnTaxDeclaredInvoice',
+
+  getAllTaxBuyInvoice: 'api/TaxBuySaleInvoice/GetAllTaxBuySaleInvoice',
+  createTaxBuySaleInv: 'api/TaxBuySaleInvoice/CreateTaxBuySaleInvoice',
+  taxBuyInvoiceById: 'api/TaxBuySaleInvoice/GetTaxBuyInvoiceById',
+  getTaxBuyInvoiceFileName: 'api/TaxBuySaleInvoice/GetFile',
+  lastTaxBuyInvoice: 'api/TaxBuySaleInvoice/GetLastIndexTaxBuyInvoiceAsync',
+  updateTaxBuyInv: 'api/TaxBuySaleInvoice/UpdateTaxBuyInvoice',
+  uploadFileTaxBuyInv: 'api/TaxBuySaleInvoice/Upload',
+  removeFileTaxBuyInv: 'api/TaxBuySaleInvoice/RemoveFile',
+  deleteTaxBuyInvoice: 'api/TaxBuySaleInvoice/DeleteTaxBuyInv',
+  taxBuyInvoiceDF: 'api/TaxBuySaleInvoice/GetDF',
+  getBuyInvDetailByInvoiceId : 'api/BuyInvoiceDetail/GetBuyInvDetailByInvoiceId',
 
 };
 export const PAGING_CONFIG = {

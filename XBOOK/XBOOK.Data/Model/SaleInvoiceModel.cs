@@ -25,7 +25,6 @@ namespace XBOOK.Data.Model
             Status = status;
             this.taxInvoiceNumber = taxInvoiceNumber;
         }
-        public string TaxInvoiceNumber { get; set; }
 
         public long InvoiceId { get; set; }
         public string InvoiceSerial { get; set; }
@@ -49,6 +48,8 @@ namespace XBOOK.Data.Model
         public string ContactName { get; set; }
         public string Email { get; set; }
         public bool Check { get; set; }
+        public string TaxInvoiceNumber { get; set; }
+
     }
 
     public class SaleInvoiceListRequest

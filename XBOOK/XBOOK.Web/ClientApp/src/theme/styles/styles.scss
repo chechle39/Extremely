@@ -729,6 +729,50 @@ body{
   
   @media screen and (max-width: 992px){
     width: 100%;
+  }
 }
 
+
+/*
+    Tooltip
+*/
+.xb-tooltip{
+  >*{
+    animation-name: xb-tooltip__animation;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+  }
+  .tooltip-inner{
+    background-color: #137CBD;
+    -webkit-box-shadow: 3px 8px 15px 4px rgba(0, 0, 0, 0.34);
+    -moz-box-shadow: 3px 8px 15px 4px rgba(0, 0, 0, 0.34);
+    box-shadow: 3px 8px 15px 4px rgba(0, 0, 0, 0.34);
+    border-radius: 0.75rem;
+  }
+  .arrow::before {
+    border-right-color: #137CBD !important;
+  }
+}
+
+@keyframes xb-tooltip__animation {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+/*
+  Modal size
+*/
+.xb-modal__size-md > .modal-dialog{
+  width: 650px;
+  max-width: 650px;
+  @media screen and (max-width: 650px){
+    width: 100%;
+    max-width: 100%;
+  }
 }
