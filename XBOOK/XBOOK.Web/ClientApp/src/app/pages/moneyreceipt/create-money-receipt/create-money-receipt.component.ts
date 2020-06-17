@@ -220,6 +220,7 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
 
   selectedItem(item) {
     this.clientSelected = item.item as ClientSearchModel;
+    this.moneyReceipt.controls.clientId.patchValue(this.clientSelected.clientId);
     this.moneyReceipt.controls.clientName.patchValue(this.clientSelected.clientName);
     this.moneyReceipt.controls.receiverName.patchValue(this.clientSelected.contactName);
     this.moneyReceipt.controls.clienId.patchValue(this.clientSelected.clientId);
@@ -243,7 +244,8 @@ export class CreateMoneyReceiptComponent extends AppComponentBase implements OnI
       id: [0],
       amount: [0, [Validators.required]],
       receiptNumber: ['', [Validators.required]],
-      clientName: [''],
+      clientName: ['', [Validators.required]],
+      clientId: 0,
       receiverName: ['', [Validators.required]],
       entryType: [null, Validators.required],
       paymentMethods: [null, [Validators.required]],

@@ -439,5 +439,7 @@
   "DASHBOARD.BAR.LABEL.DEC": "Tháng 12",
   "PAYMENT.TITLE.BUY": "Phiếu chi",
   "PAYMENT.TITLE.INVOICE": "Phiếu thu",
-  "ENTRYPATTERN.TITLE": "Mẫu hạch toán"
+  "ENTRYPATTERN.TITLE": "Mẫu hạch toán",
+  "MONEY.RECEIPT.CREATE.VALIDATE.CLIENT.SL": "Vui lòng chọn khách hàng!",
+  "PAYMENT.EXIST.VALID": "Receipt number không tồn tại"
 }

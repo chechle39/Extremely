@@ -16,4 +16,9 @@ namespace XBOOK.Data.ViewModels
         public decimal? amount { get; set; }
         public decimal? vat { get; set; }
     }
+    public class BuyInvDetailSave
+    {
+        public bool Check { get; set; }
+        public List<BuyInvDetailViewModel> BuyInvDetailViewModel { get; set; }
+    }
 }

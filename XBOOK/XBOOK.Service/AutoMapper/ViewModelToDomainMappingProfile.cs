@@ -65,7 +65,7 @@ namespace XBOOK.Service.AutoMapper
 
             CreateMap<BuyInvoiceModelRequest, BuyInvoice>()
             .ConstructUsing(x => new BuyInvoice(x.InvoiceId, x.InvoiceNumber, x.InvoiceSerial, x.IssueDate,
-           x.supplierID, x.Discount, x.DiscRate, x.DueDate, x.Note, x.Term, x.Status));
+           x.supplierID, x.Discount, x.DiscRate, x.DueDate, x.Note, x.Term, x.Status,x.TaxInvoiceNumber));
 
             CreateMap<BuyInvDetailViewModel, BuyInvDetail>().ConstructUsing(x => new BuyInvDetail(x.invoiceID, x.price, x.productID
               , x.productName, x.qty, x.vat, x.ID, x.amount));

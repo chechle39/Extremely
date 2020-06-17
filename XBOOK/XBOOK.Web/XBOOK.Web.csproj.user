@@ -50,5 +50,8 @@
     <Compile Update="Reports\Template\SalesReportReport.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Reports\XtraReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

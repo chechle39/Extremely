@@ -12,9 +12,11 @@ namespace Xbook.TaxInvoice.Repositories
     public class Invoice_TaxInvoiceRepository: Repository<Invoice_TaxInvoice>, IInvoice_TaxInvoiceRepository
     {
         private readonly ISaleInvoiceRepository _saleInvoiceRepository;
-        public Invoice_TaxInvoiceRepository(XBookContext db, ISaleInvoiceRepository saleInvoiceRepository) : base(db)
+        private readonly IBuyInvoiceRepository _buyInvoiceRepository;
+        public Invoice_TaxInvoiceRepository(XBookContext db, ISaleInvoiceRepository saleInvoiceRepository, IBuyInvoiceRepository buyInvoiceRepository) : base(db)
         {
             _saleInvoiceRepository = saleInvoiceRepository;
+            _buyInvoiceRepository = buyInvoiceRepository;
         }
 
         public async Task<bool> SaveInvoiceTaxInvoice(Invoice_TaxInvoiceViewModel requestSave, bool isSale)
@@ -70,21 +72,28 @@ namespace Xbook.TaxInvoice.Repositories
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteInvoiceTaxInvoiceByTaxInvoiceNumber(string taxInvoiceNumber)
+        public async Task<bool> DeleteInvoiceTaxInvoiceByTaxInvoiceNumber(string taxInvoiceNumber, bool isSale)
         {
-            var getIdEntity = await Entities.Where(x => x.taxInvoiceNumber == taxInvoiceNumber).ToListAsync();
+            var getIdEntity = await Entities.Where(x => x.taxInvoiceNumber == taxInvoiceNumber && x.isSale == isSale).ToListAsync();
             Entities.RemoveRange(getIdEntity);
             foreach (var item in getIdEntity)
             {
-                await _saleInvoiceRepository.UpdateItemTaxNum(item.invoiceID, null);
+                if (isSale)
+                {
+                    await _saleInvoiceRepository.UpdateItemTaxNum(item.invoiceID, null);
+
+                } else
+                {
+                    await _buyInvoiceRepository.UpdateItemTaxNum(item.invoiceID, null);
+                }
             }
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateInvoiceTaxInvoiceRecordInvoice(long invId)
+        public async Task<bool> UpdateInvoiceTaxInvoiceRecordInvoice(long invId, bool isSale)
         {
-            var getIdEntity = await Entities.AsNoTracking().Where(x => x.invoiceID == invId).ToListAsync();
+            var getIdEntity = await Entities.AsNoTracking().Where(x => x.invoiceID == invId && x.isSale == isSale).ToListAsync();
             if (getIdEntity.Count() > 0)
             {
                 getIdEntity[0].invoiceID = 0;

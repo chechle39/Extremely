@@ -1,5 +1,6 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace XBOOK.Service.Service
         private readonly IUnitOfWork _uow;
         private readonly IBuyInvDetailRepository _buyInvDetailRepository;
         private readonly IRepository<BuyInvDetail> _buyInvDetailUowRepository;
-        private readonly LibTaxSaleDetailInvoiceRepository _libTaxSaleDetailInvoiceRepository;
+        private readonly LibTaxBuyDetailInvoiceRepository _libTaxSaleDetailInvoiceRepository;
         private readonly LibTaxBuyInvoiceRepository _libTaxBuyInvoiceRepository;
         private readonly IBuyInvoiceRepository _buyInvoiceRepository;
         public BuyDetailInvoiceService(IUnitOfWork uow, 
@@ -30,7 +31,7 @@ namespace XBOOK.Service.Service
             _uow = uow;
             _buyInvDetailRepository = buyInvDetailRepository;
             _buyInvDetailUowRepository = _uow.GetRepository<IRepository<BuyInvDetail>>();
-            _libTaxSaleDetailInvoiceRepository = new LibTaxSaleDetailInvoiceRepository(db);
+            _libTaxSaleDetailInvoiceRepository = new LibTaxBuyDetailInvoiceRepository(db);
             _libTaxBuyInvoiceRepository = new LibTaxBuyInvoiceRepository(db, _uow);
             _buyInvoiceRepository = buyInvoiceRepository;
         }
@@ -38,14 +39,21 @@ namespace XBOOK.Service.Service
         public async Task<bool> CreateBuyInvDetail(BuyInvDetailViewModel buyInvoiceViewModel)
         {
             var data =  _buyInvDetailRepository.CreateBuyIvDetail(buyInvoiceViewModel);
-            CreateTaxDetail(data);
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel)
+        public async Task<bool> CreateListBuyDetail(BuyInvDetailSave buyInvoiceViewModel)
         {
-            var data = await _buyInvDetailRepository.CreateListBuyDetail(buyInvoiceViewModel);
-            return data;
+            var data =  _buyInvDetailRepository.CreateListBuyDetail(buyInvoiceViewModel.BuyInvDetailViewModel);
+            if (buyInvoiceViewModel.Check == true)
+            {
+                foreach (var item in data)
+                {
+                    CreateTaxDetail(item);
+
+                }
+            }
+            return await Task.FromResult(true);
         }
 
         public async Task Deleted(List<Deleted> id)
@@ -89,8 +97,15 @@ namespace XBOOK.Service.Service
                     SaleInvDetailID = saleDetailData.ID,
                 };
 
-                var save = _libTaxSaleDetailInvoiceRepository.CreateTaxSaleIvDetail(taxSaleInvoiceModelRequest).Result;
-                _uow.SaveChanges();
+                var save = _libTaxSaleDetailInvoiceRepository.CreateTaxBuyIvDetail(taxSaleInvoiceModelRequest).Result;
+                try
+                {
+                    _uow.SaveChanges();
+                } catch (Exception ex)
+                {
+
+                }
+                
             }
         }
     }

@@ -47,7 +47,7 @@ namespace XBOOK.Service.Service
                     price = item.price,
                     description = item.description,
                     ID = item.ID,
-                    taxInvoiceID = item.taxInvoiceID,
+                    InvoiceID = item.InvoiceID,
                     productID = item.productID,
                     productName = item.productName.Split("(")[0],
                     vat = item.vat
@@ -62,7 +62,7 @@ namespace XBOOK.Service.Service
                     price = item.price,
                     description = item.description,
                     ID = item.ID,
-                    taxInvoiceID = item.taxInvoiceID,
+                    InvoiceID = item.InvoiceID,
                     productID = item.productID,
                     productName = item.productName,
                     vat = item.vat
@@ -95,7 +95,7 @@ namespace XBOOK.Service.Service
                     price = item.price,
                     description = item.description,
                     ID = item.ID,
-                    taxInvoiceID = item.taxInvoiceID,
+                    InvoiceID = item.InvoiceID,
                     productID = item.productID,
                     productName = item.productName,
                     vat = item.vat
@@ -141,7 +141,7 @@ namespace XBOOK.Service.Service
                         price = item.price,
                         description = item.description,
                         ID = item.ID,
-                        taxInvoiceID = item.taxInvoiceID,
+                        InvoiceID = item.InvoiceID,
                         productID = productModel.productID,
                         productName = item.productName.Split("(")[0],
                         vat = item.vat
@@ -156,7 +156,7 @@ namespace XBOOK.Service.Service
                         price = item.price,
                         description = item.description,
                         ID = item.ID,
-                        taxInvoiceID = item.taxInvoiceID,
+                        InvoiceID = item.InvoiceID,
                         productID = productModel.productID,
                         productName = item.productName,
                         vat = item.vat

@@ -1,0 +1,28 @@
+﻿@using DevExpress.AspNetCore
+@using  XBOOK.Web.Reports
+<link rel="stylesheet" href="~/css/thirdparty.bundle.css" />
+<script src="~/js/thirdparty.bundle.js"></script>
+<link rel="stylesheet" href="~/css/viewer.part.bundle.css" />
+<script src="~/js/viewer.part.bundle.js"></script>
+
+
+
+
+
+<div class="report__container">
+    @Html.DevExpress().WebDocumentViewer("DocumentViewer").Height("1000px").Bind(new XtraReport())
+</div>
+<script type="text/javascript">
+    function OnCustomizeElements(s, e) {
+        var rightPanel = e.GetById(DevExpress.Report.Preview.PreviewElements.RightPanel);
+        var index = e.Elements.indexOf(rightPanel);
+        e.Elements.splice(index, 1);
+    }
+</script>
+<style>
+    .report__container {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+</style>

@@ -10,7 +10,7 @@ namespace Xbook.TaxInvoice.Interfaces
     {
         Task<bool> SaveInvoiceTaxInvoice(Invoice_TaxInvoiceViewModel requestSave, bool isSale);
         Task<bool> UpdateInvoiceTaxInvoice(Invoice_TaxInvoiceViewModel requestSave, string oldTaxInvoice, string oldInvoceNumber);
-        Task<bool> UpdateInvoiceTaxInvoiceRecordInvoice(long invId);
+        Task<bool> UpdateInvoiceTaxInvoiceRecordInvoice(long invId, bool isSale);
 
     }
 }

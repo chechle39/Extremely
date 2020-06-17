@@ -207,6 +207,7 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
 
   selectedItem(item) {
     this.clientSelected = item.item as SupplierSearchModel;
+    this.moneyReceipt.controls.clientId.patchValue(this.clientSelected.supplierID);
     this.moneyReceipt.controls.supplierName.patchValue(this.clientSelected.supplierName);
     this.moneyReceipt.controls.receiverName.patchValue(this.clientSelected.contactName);
     this.moneyReceipt.controls.supplierID.patchValue(this.clientSelected.supplierID);
@@ -230,7 +231,8 @@ export class CreatePaymentReceiptComponent extends AppComponentBase implements O
       id: [0],
       amount: [0, [Validators.required]],
       receiptNumber: ['', [Validators.required]],
-      supplierName: [''],
+      supplierName: ['', [Validators.required]],
+      clientId: 0,
       receiverName: ['', [Validators.required]],
       entryType: [null, Validators.required],
       paymentMethods: [null, [Validators.required]],

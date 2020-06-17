@@ -32,6 +32,7 @@ namespace XBOOK.Service.Service
         public readonly Invoice_TaxInvoiceRepository _invoice_TaxInvoiceRepository;
         private readonly LibTaxSaleDetailInvoiceRepository _libTaxSaleDetailInvoiceRepository;
         public SaleInvoiceService(
+            IBuyInvoiceRepository buyInvoiceRepository,
             IProductRepository iProductRepository, 
             ISaleInvoiceRepository saleInvoiceRepository, 
             XBookContext context, 
@@ -51,7 +52,7 @@ namespace XBOOK.Service.Service
             _SaleInvoiceRepository = saleInvoiceRepository;
             _iProductRepository = iProductRepository;
              _libTaxSaleInvoiceRepository = new LibTaxSaleInvoiceRepository(_context,_uow);
-            _invoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context, _SaleInvoiceRepository);
+            _invoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context, _SaleInvoiceRepository, buyInvoiceRepository);
             _libTaxSaleDetailInvoiceRepository = new LibTaxSaleDetailInvoiceRepository(_context);
         }
 
@@ -669,7 +670,7 @@ namespace XBOOK.Service.Service
                 _SaleInvoiceDetailRepository.RemoveAll(getSaleInVDt);
                 var rmIv = _SaleInvoiceRepository.removeInv(item.id);
                 if (rmIv)
-                   await _invoice_TaxInvoiceRepository.UpdateInvoiceTaxInvoiceRecordInvoice(item.id);
+                   await _invoice_TaxInvoiceRepository.UpdateInvoiceTaxInvoiceRecordInvoice(item.id, true);
                 _uow.SaveChanges();
             }
            

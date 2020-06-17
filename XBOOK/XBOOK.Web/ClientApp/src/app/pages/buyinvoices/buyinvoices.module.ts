@@ -44,6 +44,7 @@ import { MasterParamService } from '../_shared/services/masterparam.service';
 import { CustomDateParserFormatter } from '../../shared/service/datepicker-adapter';
 import {CheckboxModule} from 'primeng/checkbox';
 import {TooltipModule} from 'primeng/tooltip';
+import { GetUnMapToInvoiceService } from '../_shared/services/getunmaptoInvoice.service';
 
 const components = [
   BuyInvoicesComponent,
@@ -84,6 +85,7 @@ const components = [
     TooltipModule,
   ],
   providers: [
+    GetUnMapToInvoiceService,
     PaymentReceiptService,
     BuyInvoiceService,
     EntryBatternService ,

@@ -14,6 +14,9 @@ export const API_URI = {
   updateClient: 'api/client/UpdateClient',
   clientById: 'api/client/GetClientById',
   clientAll: 'api/Client/GetAllClientAsync',
+  GetUn_mapToInvoice: 'api/GetUnmapToInvoice/GetUn_mapToInvoice',
+  checkExist: 'api/GetUnmapToInvoice/CheckExist',
+
   ExportClient: 'api/Client/ExportClient',
   ExportInvoice: 'api/SaleInvoice/ExportInvoice',
   ExportBuyInvoice: 'api/BuyInvoices/ExportBuyInvoice',

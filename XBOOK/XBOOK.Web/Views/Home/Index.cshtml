@@ -1,0 +1,23 @@
+﻿
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+
+
+
+@section scripts {
+    <script src="~/plugins/chart.js/chartjs-plugin-datalabels.js" asp-append-version="true"></script>
+    <script src="~/app/Home/index.js" asp-append-version="true"></script>
+}
+
+@section styles {
+    <link href="~/app/Home/index.css" rel="stylesheet" asp-append-version="true" />
+}
+<script id="delete-confirmation" type="text/x-kendo-template">
+    <p class="delete-message">please! select request </p>
+</script>
+<style>
+    div.k-window {
+        min-width: 15% !important;
+    }
+</style>

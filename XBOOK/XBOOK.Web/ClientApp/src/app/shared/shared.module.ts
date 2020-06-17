@@ -34,10 +34,12 @@ import { validateInputAccDirective } from '../pages/journalentries/validate/vali
 import { InvoiceNumberPipeInv } from './pipe/InvoiceNumberPipe.pipe';
 // tslint:disable-next-line:max-line-length
 import { InvoiceReferenceComponent } from '../pages/taxinvoices/create-tax-invoice/invoice-reference/invoice-reference.component';
+import { clientSelectDirective } from './validators/client-select';
 @NgModule({
   declarations: [
     validateInputAccDirective,
     validateDateDirective,
+    clientSelectDirective,
     validatePasswordDirective,
     validateLengthPasswordDirective,
     validateDirective,
@@ -80,6 +82,7 @@ import { InvoiceReferenceComponent } from '../pages/taxinvoices/create-tax-invoi
   exports: [
     validateInputAccDirective,
     validateDateDirective,
+    clientSelectDirective,
     validatePasswordDirective,
     validateLengthPasswordDirective,
     validateDirective,

@@ -25,7 +25,7 @@ namespace XBOOK.Web.Controllers
         }
 
         [HttpPost("CreateListBuyDetail")]
-        public async Task<IActionResult> CreateListBuyDetail(List<BuyInvDetailViewModel> request)
+        public async Task<IActionResult> CreateListBuyDetail(BuyInvDetailSave request)
         {
             var result = await _authorizationService.AuthorizeAsync(User, "Buy invoice", Operations.Read);
             if (!result.Succeeded)

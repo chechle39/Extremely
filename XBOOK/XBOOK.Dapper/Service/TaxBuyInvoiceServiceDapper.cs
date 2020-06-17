@@ -11,7 +11,6 @@ using XBOOK.Dapper.Interfaces;
 using XBOOK.Dapper.ViewModels;
 using XBOOK.Data.Interfaces;
 using XBOOK.Data.Model;
-using XBOOK.Data.ViewModels;
 
 namespace XBOOK.Dapper.Service
 {

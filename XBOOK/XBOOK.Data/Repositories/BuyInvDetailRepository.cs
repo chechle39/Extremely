@@ -32,9 +32,10 @@ namespace XBOOK.Data.Repositories
             return buyInvoiceDetailCreate;
         }
 
-        public async Task<bool> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel)
+        public List<BuyInvDetail> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel)
         {
             var productUOW = _uow.GetRepository<IRepository<Product>>();
+            var buyInvDetail = new List<BuyInvDetail>();
             foreach (var item in buyInvoiceViewModel)
             {
                 BuyInvDetailViewModel buyDetailData = null;
@@ -71,17 +72,12 @@ namespace XBOOK.Data.Repositories
                 var buyInvoiceDetailCreate = Mapper.Map<BuyInvDetailViewModel, BuyInvDetail>(buyDetailData);
                 if (buyDetailData.productID > 0)
                 {
-                    try
-                    {
-                        _uow.BeginTransaction();
-                        Entities.Add(buyInvoiceDetailCreate);
-                        _uow.SaveChanges();
-                        _uow.CommitTransaction();
-                    } catch (Exception ex)
-                    {
+                    _uow.BeginTransaction();
+                    Entities.Add(buyInvoiceDetailCreate);
+                    _uow.SaveChanges();
+                    buyInvDetail.Add(buyInvoiceDetailCreate);
+                    _uow.CommitTransaction();
 
-                    }
-                   
                 }
                 else
                 if (buyDetailData.productID == 0 && !string.IsNullOrEmpty(buyDetailData.productName))
@@ -163,10 +159,11 @@ namespace XBOOK.Data.Repositories
                     var rs = Mapper.Map<BuyInvDetailViewModel, BuyInvDetail>(buyDetailPrd);
                     Entities.Add(rs);
                     _uow.SaveChanges();
+                    buyInvDetail.Add(rs);
                     _uow.CommitTransaction();
                 }
             }
-            return await Task.FromResult(true);
+            return buyInvDetail;
         }
 
         public async Task<bool> Deleted(List<Deleted> id)

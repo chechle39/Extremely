@@ -72,7 +72,6 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
     private translate: TranslateService,
     private data: DataService,
     injector: Injector,
-    private invoiceService: TaxInvoiceService,
     private router: Router,
     private route: ActivatedRoute,
     private moneyReceiptService: MoneyReceiptService,
@@ -353,7 +352,7 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
       file.push(deleted);
       requestDl.push({ id });
     });
-    this.invoiceService.deleteInvoice(requestDl).subscribe(() => {
+    this.taxBuyInvoiceService.deleteInvoice(requestDl).subscribe(() => {
       this.notify.success('Successfully Deleted');
       file.forEach(element => {
         this.getInFoFile(element);
@@ -365,19 +364,19 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
   private deleteInvoice(id: number): void {
     const request = [{ id }];
 
-    this.invoiceService.deleteInvoice(request).subscribe(() => {
+    this.taxBuyInvoiceService.deleteInvoice(request).subscribe(() => {
       this.notify.success('Successfully Deleted');
       this.refresh();
     });
   }
 
   getInFoFile(request) {
-    this.invoiceService.getInfofile(request).subscribe(rp => {
+    this.taxBuyInvoiceService.getInfofile(request).subscribe(rp => {
       for (let index = 0; index < rp.length; index++) {
         const rs = {
           fileName: rp[index].fileName,
         };
-        this.invoiceService.removeFile(rs).subscribe(() => { });
+        this.taxBuyInvoiceService.removeFile(rs).subscribe(() => { });
       }
     });
   }
@@ -521,7 +520,7 @@ export class ListTaxBuyInvoiceComponent extends PagedListingComponentBase<Invoic
   }
 
   exportInvoive() {
-    this.invoiceService.ExportInvoice();
+    this.taxBuyInvoiceService.ExportInvoice();
   }
   public getTotalTax(): number {
     return _.sumBy(this.invoiceViews, item => {

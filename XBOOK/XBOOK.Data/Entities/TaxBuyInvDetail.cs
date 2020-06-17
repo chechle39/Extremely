@@ -6,6 +6,7 @@ namespace XBOOK.Data.Entities
 {
     public partial class TaxBuyInvDetail
     {
+        public TaxBuyInvDetail() { }
         public TaxBuyInvDetail(decimal? amount, string description, long iD, decimal? price, int productID, string productName, decimal? qty, long saleInvDetailID, long invoiceID, decimal? vat)
         {
             this.amount = amount;

@@ -32,6 +32,7 @@ namespace XBOOK.Service.Service
         private readonly XBookContext _context;
         private readonly ISaleInvoiceRepository _saleInvoiceRepository;
         public TaxSaleInvoiceService(
+             IBuyInvoiceRepository buyInvoiceRepository,
             ITaxSaleInvoiceRepository taxSaleInvoiceRepository,
             ITaxInvDetailRepository taxSaleInvDetailRepository,
             IUnitOfWork uow,
@@ -55,7 +56,7 @@ namespace XBOOK.Service.Service
             _taxInvDetailService = taxInvDetailService;
             _iclientService = clientService;
             _iClientRepository = clientRepository;
-            _iInvoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context, _saleInvoiceRepository);
+            _iInvoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(_context, _saleInvoiceRepository, buyInvoiceRepository);
 
         }
         public async Task<bool> CreateTaxInvoice(TaxSaleInvoiceModelRequest taxInvoiceViewModel)
@@ -170,7 +171,7 @@ namespace XBOOK.Service.Service
 
                 if(remove)
                 {
-                    await _iInvoice_TaxInvoiceRepository.DeleteInvoiceTaxInvoiceByTaxInvoiceNumber(getId[0].TaxInvoiceNumber);
+                    await _iInvoice_TaxInvoiceRepository.DeleteInvoiceTaxInvoiceByTaxInvoiceNumber(getId[0].TaxInvoiceNumber, true);
                 }
                 _uow.SaveChanges();
             }

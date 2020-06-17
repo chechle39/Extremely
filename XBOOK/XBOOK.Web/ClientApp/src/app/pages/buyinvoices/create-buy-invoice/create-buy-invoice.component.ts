@@ -708,8 +708,11 @@ export class CreateBuyInvoiceComponent extends AppComponentBase implements OnIni
             };
             requestInvDt.push(requestInvDetail);
           }
-
-          this.buyInvoiceService.CreateBuyInvDetail(requestInvDt).subscribe(xs => {
+          const requestDetail = {
+            buyInvDetailViewModel: requestInvDt,
+            check: this.invoiceForm.value.checked,
+          };
+          this.buyInvoiceService.CreateBuyInvDetail(requestDetail).subscribe(xs => {
             this.invoiceId = this.saleInvId;
             if (!this.coppyMode) {
               this.invoiceForm.reset();

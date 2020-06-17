@@ -31,7 +31,7 @@ namespace XBOOK.Service.Service
             _productRepository = productRepository;
             _buyInvoiceUowRepository = _uow.GetRepository<IRepository<BuyInvoice>>();
             _libTaxBuyInvoiceRepository = new LibTaxBuyInvoiceRepository(db, _uow);
-            _invoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(db, saleInvoiceRepository);
+            _invoice_TaxInvoiceRepository = new Invoice_TaxInvoiceRepository(db, saleInvoiceRepository, buyInvoiceRepository);
         }
 
         public async Task<bool> CreateBuyInvoice(BuyInvoiceModelRequest BuyInvoiceViewModel)

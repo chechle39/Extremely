@@ -5,11 +5,16 @@ import { PaymentMethod } from '../../../../_shared/models/invoice/payment-method
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentView } from '../../../../_shared/models/invoice/payment-view.model';
 import { PaymentService } from '../../../../_shared/services/payment.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { MoneyReceiptService } from '../../../../_shared/services/money-receipt.service';
 import { AuthenticationService } from '../../../../../coreapp/services/authentication.service';
 import { MasterParamModel } from '../../../../_shared/models/masterparam.model';
 import { MasterParamService } from '../../../../_shared/services/masterparam.service';
+import { GetUnMapToInvoiceService } from '../../../../_shared/services/getunmaptoInvoice.service';
+import { Subject, Observable, merge, of } from 'rxjs';
+// tslint:disable-next-line:max-line-length
+import { GetUnMapToInvoiceReceiptViewModel } from '../../../../_shared/models/getunmaptoinvoice/getunmaptoinvoice.model';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'xb-add-payment',
   templateUrl: './add-payment.component.html',
@@ -24,11 +29,10 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
   @Input() amountPaid: any;
   @Input() invoiceList: any;
   payment: MasterParamModel[];
-  // paymentMethods = [
-  //   new PaymentMethod(1, 'Cash'),
-  //   new PaymentMethod(2, 'Visa card'),
-  //   new PaymentMethod(3, 'Bank transfer'),
-  // ];
+  focusClient$ = new Subject<string>();
+  inMaplientSelected: GetUnMapToInvoiceReceiptViewModel;
+  searchFailed = false;
+
   saving: boolean;
   constructor(
     injector: Injector,
@@ -37,12 +41,20 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     public authenticationService: AuthenticationService,
     private moneyReceiptService: MoneyReceiptService,
     private masterParamService: MasterParamService,
+    private getUnMapToInvoiceService: GetUnMapToInvoiceService,
+    private translate: TranslateService,
     public fb: FormBuilder) {
     super(injector);
     this.paymentForm = this.createPaymentFormGroup();
   }
 
   ngOnInit() {
+    this.inMaplientSelected = {
+      amount: 0,
+      description: '',
+      payDate: '',
+      receiptNumber: '',
+    };
     if (this.id !== undefined || this.id > 0) {
       this.getPaymentDetail(this.id);
     }
@@ -56,6 +68,12 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
   getLastDataMoneyReceipt() {
     this.moneyReceiptService.getLastMoney().subscribe(rp => {
       // this.receiptNumber = rp.receiptNumber;
+      this.inMaplientSelected = {
+        amount: 0,
+        description: '',
+        payDate: '',
+        receiptNumber: rp.receiptNumber,
+      };
       this.paymentForm.controls.bankAccount.patchValue(rp.receiptNumber);
     });
   }
@@ -94,7 +112,8 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
     payment.id = submittedForm.controls.id.value;
     payment.invoiceId = this.invoiceId;
     payment.amount = Number(submittedForm.controls.amount.value.toString().replace(/,/g, ''));
-    payment.receiptNumber = submittedForm.controls.bankAccount.value;
+    payment.receiptNumber =  submittedForm.controls.bankAccount.value.receiptNumber !== undefined ?
+    submittedForm.controls.bankAccount.value.receiptNumber : submittedForm.controls.bankAccount.value;
     const paymentDate = submittedForm.controls.payDate.value;
     payment.payDate = [paymentDate.year, paymentDate.month, paymentDate.day].join('-');
     const paymentMethodId = submittedForm.controls.paymentMethods.value;
@@ -116,6 +135,7 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
             bankAccount: payment.receiptNumber,
             note: payment.note,
           });
+          this.inMaplientSelected.receiptNumber = payment.receiptNumber;
           this.paymentForm.controls.paymentMethods.patchValue(this.payment.filter(x =>
             x.key === payment.payType)[0].key);
           if (payment.payDate !== '') {
@@ -129,38 +149,83 @@ export class AddPaymentComponent extends AppComponentBase implements OnInit {
       });
   }
   savePayment(submittedForm: FormGroup): void {
-    if (!this.paymentForm.valid) {
-      return;
-    }
-     const payment = this.getPaymentToSave(submittedForm);
-    if (this.id !== undefined || this.id > 0) {
-      payment.id = this.id;
-      this.paymentService
-        .updatePayment(payment)
-        .pipe(
-          finalize(() => {
-            this.saving = false;
-          }),
-        )
-        .subscribe(() => {
-          this.notify.info('Updated Successfully');
-          this.close(this.paymentForm.value);
+    this.getUnMapToInvoiceService.checkExist(this.requestClient(
+      submittedForm.controls.bankAccount.value.receiptNumber !== undefined ?
+      submittedForm.controls.bankAccount.value.receiptNumber : submittedForm.controls.bankAccount.value))
+    .subscribe(rp => {
+      if (!rp) {
+        this.translate.get('PAYMENT.EXIST.VALID')
+        .subscribe(text => {
+          this.message.warning(text);
         });
-    } else {
-      this.paymentService
-        .createPayment(payment)
-        .pipe(
-          finalize(() => {
-            this.saving = false;
-          }),
-        )
-        .subscribe(() => {
-          this.notify.info('Saved Successfully');
-          this.close(this.paymentForm.value);
-        });
-    }
+        return;
+      }
+      if (!this.paymentForm.valid ) {
+        return;
+      }
+       const payment = this.getPaymentToSave(submittedForm);
+      if (this.id !== undefined || this.id > 0) {
+        payment.id = this.id;
+        this.paymentService
+          .updatePayment(payment)
+          .pipe(
+            finalize(() => {
+              this.saving = false;
+            }),
+          )
+          .subscribe(() => {
+            this.notify.info('Updated Successfully');
+            this.close(this.paymentForm.value);
+          });
+      } else {
+        this.paymentService
+          .createPayment(payment)
+          .pipe(
+            finalize(() => {
+              this.saving = false;
+            }),
+          )
+          .subscribe(() => {
+            this.notify.info('Saved Successfully');
+            this.close(this.paymentForm.value);
+          });
+      }
+    });
   }
   close(result: boolean): void {
     this.activeModal.close(result);
+  }
+  selectedItem(item) {
+    this.inMaplientSelected = item.item as GetUnMapToInvoiceReceiptViewModel;
+    this.paymentForm.controls.bankAccount.patchValue(this.inMaplientSelected.receiptNumber);
+  }
+
+  searchMapNum = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(500), distinctUntilChanged());
+    const inputFocus$ = this.focusClient$;
+    return merge(debouncedText$, inputFocus$).pipe(
+      switchMap(term =>
+        this.getUnMapToInvoiceService.search(this.requestClient(term)).pipe(
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })),
+      ));
+  }
+
+  requestClient(e: any) {
+    const clientKey = {
+      InvoiveID: this.invoiceId,
+      isSale: 1,
+      key: e,
+    };
+    return clientKey;
+  }
+
+  clientFormatter(value: any) {
+    if (value.receiptNumber) {
+      return value.receiptNumber;
+    }
+    return value;
   }
 }

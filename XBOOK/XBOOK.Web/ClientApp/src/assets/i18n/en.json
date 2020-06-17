@@ -469,5 +469,7 @@
   "DASHBOARD.BAR.LABEL.OCT": "October",
   "DASHBOARD.BAR.LABEL.NOV": "November",
   "DASHBOARD.BAR.LABEL.DEC": "December",
-  "ENTRYPATTERN.TITLE": "Accounting pattern"
+  "ENTRYPATTERN.TITLE": "Accounting pattern",
+  "MONEY.RECEIPT.CREATE.VALIDATE.CLIENT.SL": "Please! select client",
+  "PAYMENT.EXIST.VALID": "receipt do not exits"
 }

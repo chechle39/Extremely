@@ -60,6 +60,7 @@ namespace XBOOK.Data.Repositories
                     Term = BuyInvoiceViewModel.Term,
                     VatTax = BuyInvoiceViewModel.VatTax,
                     supplierID = BuyInvoiceViewModel.supplierID,
+                    TaxInvoiceNumber = BuyInvoiceViewModel.TaxInvoiceNumber
                 };
                 buyInvoiceCreate = Mapper.Map<BuyInvoiceModelRequest, BuyInvoice>(buyInvoiceModelRequest);
                 _uow.BeginTransaction();
@@ -106,6 +107,7 @@ namespace XBOOK.Data.Repositories
                     Term = BuyInvoiceViewModel.Term,
                     VatTax = BuyInvoiceViewModel.VatTax,
                     supplierID = serchData[0].supplierID,
+                    TaxInvoiceNumber = BuyInvoiceViewModel.TaxInvoiceNumber
                 };
                 buyInvoiceCreate = Mapper.Map<BuyInvoiceModelRequest, BuyInvoice>(buyInvoiceModelRequest);
                  Entities.Add(buyInvoiceCreate);
@@ -329,6 +331,33 @@ namespace XBOOK.Data.Repositories
             };
             Entities.Update(saleInRq);
             return true;
+        }
+
+        public async Task<bool> UpdateItemTaxNum(long id, string tax)
+        {
+            var invoiceById = await Entities.AsNoTracking().Where(x => x.invoiceID == id).ToListAsync();
+            var saleInRq = new BuyInvoice()
+            {
+                amountPaid = invoiceById[0].amountPaid,
+                supplierID = invoiceById[0].supplierID,
+                discount = invoiceById[0].discount,
+                discRate = invoiceById[0].discRate,
+                dueDate = invoiceById[0].dueDate,
+                invoiceID = invoiceById[0].invoiceID,
+                invoiceNumber = invoiceById[0].invoiceNumber,
+                invoiceSerial = invoiceById[0].invoiceSerial,
+                issueDate = invoiceById[0].issueDate,
+                note = invoiceById[0].note,
+                reference = invoiceById[0].reference,
+                status = invoiceById[0].status,
+                subTotal = invoiceById[0].subTotal,
+                term = invoiceById[0].term,
+                vatTax = invoiceById[0].vatTax,
+                TaxInvoiceNumber = tax
+            };
+            Entities.Update(saleInRq);
+
+            return await Task.FromResult(true);
         }
 
         public bool UpdateSaleInvEn(Invoice request, decimal sum)

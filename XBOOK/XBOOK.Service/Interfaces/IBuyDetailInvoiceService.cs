@@ -8,7 +8,7 @@ namespace XBOOK.Service.Interfaces
     public interface IBuyDetailInvoiceService
     {
         Task<bool> CreateBuyInvDetail(BuyInvDetailViewModel buyInvoiceViewModel);
-        Task<bool> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
+        Task<bool> CreateListBuyDetail(BuyInvDetailSave buyInvoiceViewModel);
         Task<bool> UpdateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
         Task Deleted(List<Deleted> id);
         Task<IEnumerable<BuyInvDetailViewModel>> getBuyInvoiceDetailByInvoiceId(List<long> listId);

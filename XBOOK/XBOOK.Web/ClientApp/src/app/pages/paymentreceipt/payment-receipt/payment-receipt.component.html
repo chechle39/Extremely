@@ -27,6 +27,7 @@
           autocomplete="none" [ngbTypeahead]="searchClient" [inputFormatter]="clientFormatter" [value]="clientSelected.supplierName" name = "supplierName"
           [resultTemplate]="customItemTemplate" kendoTextBox  id="supplierName"
            (selectItem)="selectedItem($event)"
+           [rowItem]="this.moneyReceipt.controls" clientSelectDirective
           class="form-control" placeholder="{{'INVOICE.FORM.CREATE.CLIENTNAME.PLACEHOLDER' | translate}}" nfNoSpaces
           maxlength="250" #instance="ngbTypeahead" />
 
@@ -41,7 +42,7 @@
               </div>
             </div>
           </ng-template>
-          <small class="form-text text-muted danger" *ngIf="!moneyReceipt.get('supplierName').valid && (moneyReceipt.get('supplierName').dirty || moneyReceipt.get('supplierName').touched)">Please enter a valid client name!</small>
+          <small class="form-text text-muted danger" *ngIf="!moneyReceipt.get('supplierName').valid && (moneyReceipt.get('supplierName').dirty || moneyReceipt.get('supplierName').touched)">{{'MONEY.RECEIPT.CREATE.VALIDATE.CLIENT.SL' | translate}}</small>
       </div>
     </div>
 

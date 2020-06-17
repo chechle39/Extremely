@@ -171,9 +171,9 @@
               <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                 let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
                 <div class="custom-control custom-checkbox m-0">
-                  <input #cb type="checkbox" class="custom-control-input" id="{{row.taxInvoiceId}}" [checked]="isSelected"
+                  <input #cb type="checkbox" class="custom-control-input" id="{{row.invoiceId}}" [checked]="isSelected"
                     (change)="onCheckboxChangeFn($event)" />
-                  <label class="custom-control-label col-form-label" for="{{row.taxInvoiceId}}"></label>
+                  <label class="custom-control-label col-form-label" for="{{row.invoiceId}}"></label>
                 </div>
     
               </ng-template>
@@ -231,12 +231,12 @@
               <ng-template let-row="row" ngx-datatable-cell-template let-isSelected="isSelected">
                 <div class="icon-actions">
                   <div class="actions">
-                    <a class="icon-action" (click)="redirectToEditInvoice(row.taxInvoiceId)">
+                    <a class="icon-action" (click)="redirectToEditInvoice(row.invoiceId)">
                       <span class="icon-edit"></span>
                     </a>
                   </div>
                   <div class="actions">
-                    <a class="icon-action" (click)="delete(row.taxInvoiceId,row.invoiceNumber, row.invoiceSerial)">
+                    <a class="icon-action" (click)="delete(row.invoiceId,row.invoiceNumber, row.invoiceSerial)">
                       <span class="icon-delete"></span>
                     </a>
                   </div>

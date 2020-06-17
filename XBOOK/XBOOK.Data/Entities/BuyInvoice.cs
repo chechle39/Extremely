@@ -20,7 +20,7 @@ namespace XBOOK.Data.Entities
             this.Payments_2 = new HashSet<Payments_2>();
         }
 
-        public BuyInvoice(long invoiceId, string invoiceNumber, string invoiceSerial, DateTime? issueDate, int? supplierID, decimal? discount, decimal? discRate, DateTime? dueDate, string note, string term, string status)
+        public BuyInvoice(long invoiceId, string invoiceNumber, string invoiceSerial, DateTime? issueDate, int supplierID, decimal? discount, decimal? discRate, DateTime? dueDate, string note, string term, string status, string taxInvoiceNumber)
         {
             invoiceID = invoiceId;
             this.invoiceNumber = invoiceNumber;
@@ -33,6 +33,7 @@ namespace XBOOK.Data.Entities
             this.note = note;
             this.term = term;
             this.status = status;
+            TaxInvoiceNumber = taxInvoiceNumber;
         }
 
         public BuyInvoice(decimal? amountPaid, List<BuyInvDetailViewModel> buyInvDetailView, decimal? discount, decimal? discRate, DateTime? dueDate, long invoiceId, string invoiceNumber, string invoiceSerial, DateTime? issueDate, string note, List<Payment2ViewModel> paymentView, string reference, string status, decimal? subTotal, List<SupplierViewModel> supplierData, int? supplierID, string term, decimal? vatTax)
@@ -62,6 +63,7 @@ namespace XBOOK.Data.Entities
         public long invoiceID { get; set; }
         public string invoiceSerial { get; set; }
         public string invoiceNumber { get; set; }
+        public string TaxInvoiceNumber { get; set; }
         public Nullable<System.DateTime> issueDate { get; set; }
         public Nullable<System.DateTime> dueDate { get; set; }
         public Nullable<int> supplierID { get; set; }

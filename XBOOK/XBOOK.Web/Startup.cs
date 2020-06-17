@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using DevExpress.AspNetCore;
-using DevExpress.AspNetCore.Reporting;
-using DevExpress.Security.Resources;
-using DevExpress.XtraReports.Security;
-using DevExpress.XtraReports.Web.ClientControls;
-using DevExpress.XtraReports.Web.WebDocumentViewer;
+//using DevExpress.AspNetCore;
+//using DevExpress.AspNetCore.Reporting;
+//using DevExpress.Security.Resources;
+//using DevExpress.XtraReports.Security;
+//using DevExpress.XtraReports.Web.ClientControls;
+//using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -46,8 +46,8 @@ namespace XBOOK.Web
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
         public Startup(IHostingEnvironment env)
         {
-            ScriptPermissionManager.GlobalInstance = new ScriptPermissionManager(ExecutionMode.Unrestricted);
-            AccessSettings.StaticResources.TrySetRules(DirectoryAccessRule.Allow(@"C:\\uploaded"));
+            //ScriptPermissionManager.GlobalInstance = new ScriptPermissionManager(ExecutionMode.Unrestricted);
+            //AccessSettings.StaticResources.TrySetRules(DirectoryAccessRule.Allow(@"C:\\uploaded"));
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -78,7 +78,7 @@ namespace XBOOK.Web
             );
             services
                 .AddMvc()
-                .AddDefaultReportingControllers()
+               // .AddDefaultReportingControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
             services.Configure<JwtIssuerOptions>(options =>
@@ -128,9 +128,9 @@ namespace XBOOK.Web
                 };
             });
 
-              services.AddDevExpressControls();
-            services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
-            DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
+            //  services.AddDevExpressControls();
+        //    services.AddScoped<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+        //    DefaultWebDocumentViewerContainer.UseCachedReportSourceBuilder();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -161,14 +161,14 @@ namespace XBOOK.Web
                 }));
 
 
-            services.ConfigureReportingServices(configurator => {
-                configurator.ConfigureReportDesigner(designerConfigurator => {
-                    designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
-                });
-                configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
-                    viewerConfigurator.UseCachedReportSourceBuilder();
-                });
-            });
+            //services.ConfigureReportingServices(configurator => {
+            //    configurator.ConfigureReportDesigner(designerConfigurator => {
+            //        designerConfigurator.RegisterDataSourceWizardConfigFileConnectionStringsProvider();
+            //    });
+            //    configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
+            //        viewerConfigurator.UseCachedReportSourceBuilder();
+            //    });
+            //});
 
             services.AddAutoMapper();
             services.AddTransient<IEmailSender, EmailSender>();
@@ -252,8 +252,10 @@ namespace XBOOK.Web
             services.AddTransient<IDashboardServiceDapper, DashboardServiceDapper>();
             services.AddTransient<ITaxInvoiceServiceDapper, TaxInvoiceServiceDapper>();
             services.AddTransient<ITaxBuyInvoiceServiceDapper, TaxBuyInvoiceServiceDapper>();
+            services.AddTransient<IGetUn_mapToInvoiceDapper, GetUn_mapToInvoiceDapper>();
+
             services.AddSingleton<IJwtFactory, JwtFactory>();
-            services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
+          //  services.AddTransient<DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension, XBOOK.Report.Services.ReportStorageWebExtension>();
             services.AddScoped<DbContext, XBookContext>();
             services.AddScoped<DbContext, XBookComonContext>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
@@ -299,12 +301,12 @@ namespace XBOOK.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
             IHttpContextAccessor accessor = svp.GetService<IHttpContextAccessor>();
-            DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
-            app.UseDevExpressControls();
-            DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(ProcessException);
+          //  DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
+          //  app.UseDevExpressControls();
+         //   DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(ProcessException);
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
-            DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(new LoggerService());
-            DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(ProcessException);
+          //  DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(new LoggerService());
+          //  DevExpress.XtraReports.Web.ClientControls.LoggerService.Initialize(ProcessException);
             //--------------------
             app.UseDefaultFiles();
             app.UseAuthentication();

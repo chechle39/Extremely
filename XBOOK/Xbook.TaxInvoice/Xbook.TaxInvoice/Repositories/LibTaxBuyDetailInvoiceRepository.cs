@@ -20,8 +20,19 @@ namespace Xbook.TaxInvoice.Repositories
 
         public async Task<bool> CreateTaxBuyIvDetail(TaxInvDetailViewModel request)
         {
-            var saleInvoiceDetailCreate = Mapper.Map<TaxInvDetailViewModel, TaxBuyInvDetail>(request);
-            var createData = Entities.Add(saleInvoiceDetailCreate);
+            var taxBuyInvDetail = new TaxBuyInvDetail()
+            {
+                amount = request.amount,
+                invoiceID = request.InvoiceID,
+                description = request.description,
+                ID = 0,
+                price = request.price,
+                productID = request.productID,
+                productName = request.productName,
+                qty = request.qty,
+                vat = request.vat
+            };
+            var createData = Entities.Add(taxBuyInvDetail);
             return await Task.FromResult(true);
         }
 

@@ -8,7 +8,7 @@ namespace XBOOK.Data.Interfaces
 {
     public interface IBuyInvDetailRepository
     {
-        Task<bool> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
+        List<BuyInvDetail> CreateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
         Task<bool> UpdateListBuyDetail(List<BuyInvDetailViewModel> buyInvoiceViewModel);
         Task<bool> Deleted(List<Deleted> id);
         Task<bool> UpdateBuyInvDetail(BuyInvDetailViewModel rs);
